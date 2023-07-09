@@ -1,0 +1,1587 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.1 코딩 스타일의 중요성
+// 3.1.1 가늠해보기
+// 3.1.2 바람직한 스타일의 기준
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 세련된 코드를 작성하는 데는 시간이 많이 걸린다. XML 파일을 파싱하는 프로그램을 스타일에 신경 쓰지 않고 만들면
+// 금방 끝낼 수 있다. 하지만 기능별로 분해하고, 주석도 적절히 달고, 구조도 깔끔하게 정리하면서 작성하면 시간이 훨씬 오래걸린다.
+// 그렇다면 코딩 스타일에 시간을 많이 투자할 가치가 있을까?
+
+// 날이 갈수록 지저분해지는 코드를 생판 모르는 인턴이 받는다면 어떻게 될까?
+// 끔찍한 코드를 받은 불쌍한 인턴사원 앞에 고생길이 펼처지는 모습이 쉽게 떠올릴 수 있다.
+
+// 바람직한 코드 작성 스타일의 기준을 정확히 제시하기는 쉽지 않다.
+// 그럼에도 불구하고 잘 작성된 코드에서 볼 수 있는 공통적인 속성을 다음과 같이 골라낼 수 있다.
+// - 문서화
+// - 코드 분해
+// - 명명 규칙
+// - 언어 사용
+// - 코드 서식(포매팅)
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.2 코드 문서화
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 프로그래밍에서 말하는 문서화란 주로 소스 파일에 주석을 다는 것을 의미한다.
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.2 코드 문서화
+// 3.2.1 주석을 작성하는 이유
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 프로그래밍에서 말하는 문서화란 주로 소스 파일에 주석을 다는 것을 의미한다.
+
+// 주석을 작성하면 좋다는 것은 알지만 그 이유에 대해 진지하게 생각해본 적은 별로 없을 것이다.
+// 주석의 필요성을 제대로 파악하지 않은 채 그저 주석이란 마땅히 달아야 한다고만 알고 있는 프로그래머도 많다.
+// 이 장에서는 주석을 작성해야 하는 여러 가지 이유를 하나씩 살펴보자.
+
+// [1] 사용법을 알려주는 주석
+// 주석을 작성하는 한 가지 이유는 클라이언트에서 코드를 사용하는 방법을 알려주기 위해서다.
+// 개발자는 코드로 기능들을 쉽게 파악할 수 있어야 하지만 모든 것을 코드로만 표현 할 수 없다.
+// 때로는 함수를 호출 하기 전과 후에 특정 조건을 만족해야 하는데 이러한 사항은 주석 외에는 표현할 방법이 없다.
+// 함수가 던지는 익셉션도 주석으로 남겨야 한다.
+// 함수에 주석을 달지 결정하는 것은 개발자의 몫이다. 경험이 풍부한 개발자는 이런 결정을 잘 내리지만, 경험이 부족한 개발자는
+// 실수할 때가 많다. 그래서 헤더 파일에 정의된 공용 함수나 메서드만큼은 반드시 주석을 달도록 규칙으로 정해두는 조직도 있다.
+
+// 주석은 코드로 직접 표현하기 힘든 내용을 자연어로 표현하기 좋은 기회다.
+// 익셉션 발생:
+// openDatabase()를 먼저 호출하지 않은 상태에서
+// 이 메서드를 호출하면 DatabaseNotOpenException 익셉션이 발생한다.
+/*
+int saveRecord(Record& record);
+
+// saveRecord() 메서드는 Record 객체를 비 const 레퍼런스 타입으로 받는다. 이를 본 사용자는
+// const 레퍼런스를 사용하지 않은 이유가 궁금할 수 있다. 이런 사항은 다음과 같이 주석으로 전달한다.
+// 매개변수:
+//		record : 주어진 레코드에 데이터베이스 ID가 없다면
+//		데이터베이스로부터 할당된 ID를 저장하도록 레코드 객체를 수정한다.
+// 익셉션 발생:
+//		openDatabase()를 먼저 호출하지 않은 상태에서
+//		이 메서드를 호출하면 DatabaseNotOpenedException 익셉션이 발생한다.
+int saveRecord(Record& record);
+
+// C++에서는 메서드를 선언할 때 반드시 리턴 타입을 지정해야 한다.
+// 하지만 리턴값이 구체적으로 무엇을 가리키는지 표현할 방법은 제공하지 않는다.
+// 위에 saveRecord를 보고 int값이 구체적으로 무엇을 의미하는지 정확히 알 수 없다. 이때 다음과 같이 주석으로 표현하면 된다.
+
+// 주어진 레코드를 데이터베이스에 저장한다.
+//
+// 매개변수:
+//		record : 주어진 레코드에 데이터베이스 ID가 없다면
+//		데이터베이스로부터 할당된 ID를 저장하도록 레코드 객체를 수정한다.
+// 리턴 : int
+//		저장된 레코드의 ID를 표현하는 정수
+// 익셉션 발생:
+//		openDatabase()를 먼저 호출하지 않은 상태에서
+//		이 메서드를 호출하면 DatabaseNotOpenedException 익셉션이 발생한다.
+int saveRecord(Record& record);
+// 이렇게 주석을 달면 saveRecord() 메서드가 하는 일을 비롯한 모든 사항을 문서화할 수 있다.
+// 개인적으로 매번 이런 식으로 구체적으로 작성하는 것을 추천하지는 않는다.
+// 필자가 권장하는 방식으로 주석을 수정하면 이런 식이다.
+// 매개변수:
+//		record : 주어진 레코드에 데이터베이스 ID가 없다면
+//		데이터베이스로부터 할당된 ID를 저장하도록 레코드 객체를 수정한다.
+// 익셉션 발생:
+//		openDatabase()를 먼저 호출하지 않은 상태에서
+//		이 메서드를 호출하면 DatabaseNotOpenedException 익셉션이 발생한다.
+RecordID saveRecord(Record& record);
+
+// 때로는 함수에 전달할 매개변수나 함수가 리턴하는 값이 거의 모든 종류의 정보를 전달할 수 있을 정도로
+// 너무 광범위한 경우도 있다. 이때는 구체적으로 어떤 값을 전달하는지 문서에 남겨야 한다.
+// 예를 들어 윈도우의 메시지 핸들러는 LPARAM과 WPARAM이라는 두 매개변수를 받아서 LRESUT를 리턴한다.
+// 이들 세 타입이 전달할 수 있는 값에는 제한이 없지만 타입은 변경 할 수 없다.
+// 그러므로 간단한 정숫값이나 특정한 객체에 대한 포인터를 전달하려면 타입 캐스팅을 해야 한다.
+// 매개변수:
+//  WPARAM wParam : (WPARAM)(int): ...를 표현하는 정수
+//	LPARAM lParam : (LPARAM)(string*): ...를 표현하는 스트링 포인터
+// Returns: (LRESULT)(Record*)
+//		에러가 발생하면 nullptr을, 그렇지 않으면...를 표현하는
+//		Record Object에 대한 포인터를 리턴함
+LRESULT handleMessage(WPARAM wParam, LPARAM lParam);
+*/
+// 공식 문서에는 구현에 대한 설명이 아니라 코드의 동작에 대한 설명만 나와야 한다.
+// 여기서 동작이란 입력, 출력, 에러 상태와 에러 처리, 용법, 성능 보장들을 말한다.
+// 예를 들어 작동 과정에 문제가 발생하면 발생하는 익셉션을 모조리 나열해야한다.
+// 이 때 알고리즘을 자세히 설명하는 문장이 들어가서는 안된다.
+// 공개 주석을 작성할 때 가장 많이 하는 실수는 코드 사용자를 배려한다는 생각으로 주석에
+// 구현 세부사항을 너무 많이 제공하는 것이다.
+
+
+// [2] 복잡한 코드를 설명하는 주석
+// 코드 중간에 주석을 잘 다는 것도 중요하다.
+// 실전에서 개발하는 드는 알고리즘 자체가 복잡하거나 너무 난해해서 코드만 봐서는 이해하기 힘들 때가 많다.
+// 예를 들면 다음코드를 살펴보자.
+void sort(int data[], size_t size) {
+	for (int i{ 0 }; i < size; i++) {
+		int element{ data[i] };
+		int j{ i };
+		while (j > 0 && data[j - 1] > element) {
+			data[j] = data[j - 1];
+			j--;
+		}
+		data[j] = element;
+	}
+}
+// 구현 자체는 문제가 없지만 코드만 봐서는 구체적으로 무슨 일을 하는지 한눈에 들어오지 않는다.
+
+// 이럴 때는 코드에서 사용하는 알고리즘과 불변 속성에 대한 주석을 추가하면 좋다.
+// 여기서 불변 속성이란 루프와 같은 일정한 코드 영역을 실행하는 동안 반드시 만족해야 할 조건을 말한다.
+
+// 삽입 정렬 알고리즘을 구현한다. 이 알고리즘은 주어진 배열을 두 부분으로 나눈다.
+// 하나는 정렬된 부분이고, 다른 하나는 정렬되지 않은 부분이다. 각 원소의 위치는
+// 1부터 시작하며 모든 원소를 차례대로 검사한다. 이 배열의 앞부분은 모두 정렬된
+// 부분이므로 현재 원소를 삽입할 정확할 지점을 찾을 때까지 각 원소를 하나씩 검사한다.
+// 마지막 원소까지 알고리즘을 수행하고 나면 전체 배열이 정렬된다.
+void sort2(int data[], size_t size) {
+	for (int i{ 0 }; i < size; i++) {
+		// 불변 속성:
+		//		0부터 i-1 사이에 있는 원소(경곗값 포함)는 모두 정렬된 상태다.
+
+
+		int element{ data[i] };
+		// j는 정렬된 부분의 마지막 지점을 가리키며, 그 뒤에 원소를 추가한다.
+		int j{ i };
+		// 정렬된 배열에서 현재 위치가 이 원소보다 높다면 오른쪽 자리에 원소를 삽입할
+		// 자리를 확보하도록 값을 오른쪽으로 이동한다.
+		// (그러므로 삽입 정렬이라 부른다.)
+		while (j > 0 && data[j - 1] > element) {
+			// 불변 속성: j+1부터 i 사이의 원소는 > 원소다.
+			data[j] = data[j - 1];
+			// 불변 속성: j부터 i사이의 원소는 > 원소다.
+			j--;
+		}
+		// 이 시점에서 정렬된 배열의 현재 위치는 현재 원소보다 크지 않다.
+		// 따라서 이 자리가 원소의 새 위치가 된다.
+		data[j] = element;
+	}
+}
+// 이렇게 하면 이전보다 좀 장황해지지만 정렬 알고리즘을 모르는 사람도 주석만 보고 쉽게 이해할 수 있다.
+
+// [3] 메타 정보를 제공하는 주석
+// 코드 내용과는 다른 차원의 정보를 제공하기 위한 목적으로도 주석을 단다. 이러한 
+// 매타 정보는 코드의 구체적인 동작에 대해서는 표현하지 않고, 코드 생성에 따른 세부사항만 표현한다.
+// 예를 들어 현재 팀에서 코드 작성자를 메타 정보에 담아 관리할 수 있다. 또한 코드에서 인용하는
+// 외부 문서나 다른 코드도 메타 정보로 표현할 수 있다.
+
+// 작성자: marcg
+// 작성일: 110412
+// 기능:   PRD 버전 3, 기능 5.10
+/*
+RecordID saveRecord(Record& record) {
+	if (!mDatabaseOpen) { throw DatabaseNoteOpenedException{}; }
+	RecordID id{ getID()->saveRecord(record) };
+	if (id == -1) return -1; // 버그 #142를 해결하도록 추가한 문장 - jsmith 114028
+	record.setId(id);
+	// TODO: setId()에서 익셉션이 발생할 때 대처하기 - akshayr 110501
+	return id;
+}
+*/
+// 각 파일의 앞부분에 변경 내역(change-log)을 추가할 수도 있다.
+// 날짜			| 변경 내역
+// ------------------------------------------------
+// 110413		| REQ #005 : <marcg> 값을 정규화하지 말 것.
+// 110417		| REQ #006 : <marcg> NULL 대신 nullptr을 사용할 것.
+
+// 저작권 문구도 메타 정보로 표현한다. 소스 파일마다 항상 맨 앞에 저작권 문구를 적도록 정해둔 회사도 있다.
+// 주석에 너무 신경쓰다 보면 정도를 넘어가기 쉽다. 따라서 팀에서 규칙으로 삼기에 가장 적합한 주석의 종류는 반드시
+// 팀원과 상의해서 결정한다.
+
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.2 코드 문서화
+// 3.2.2 주석 스타일
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 코드에 주석을 다는 방식은 조직마다 다른다.
+// 이 절에서는 코드에 주석을 다는 다양한 방식을 예제와 함께 살펴본다.
+
+// [1] 문장 단위 주석
+// 문서화에 소홀하지 않는 한가지 방법은 모든 문장에 주석을 작성하는 것이다.
+// 이렇게 문장마다 주석을 작성하면 자연스레 꼭 필요한 코드만 작성하게 된다.
+// 하지만 코드 전체를 이렇게 주석으로 도배하면 복잡하고 지저분해보일 뿐만 아니라
+// 프로그래밍이 단순 노동으로 전락해버릴 수도 있다.
+/*
+int result;						// 결과를 저장할 정수 타입의 변수를 선언한다.
+result = doodad.getResult();    // doodad에 저장된 결과를 가져온다.
+if (result % 2 == 0) {			// 결과에 대한 모듈로 2의 결과가 0이면
+	logError();					// 에러에 대한 로그를 남긴다.
+}
+else {							// 그렇지 않으면...
+	logSuccess();				// 제대로 처리되었다는 로그를 남긴다.
+}
+return result;					// 결과를 리턴한다.
+*/
+// 이 코드의 주석은 각 라인이 무엇을 하는지 이야기 하듯 쉽게 설명하지만
+// C++의 기본을 갖춘사람이라면 굳이 이렇게 설명하지 않아도 쉽게 알 수 있기에 전혀 쓸모가 없다.
+
+// 물론 코드가 난해하다면 장황하더라도 주석을 많이 다는 것이 코드를 이해하지 못하는 것보다는 낫다.
+
+
+// [2] 머리말 주석
+// 소스 파일의 첫머리를 항상 표준 주석으로 정하는 방법도 있다.
+// 소스 파일의 첫머리에 남기면 좋은 정보는 다음과 같다.
+// - 저작권 정보
+// - 파일과 클래스에 대한 간략한 설명
+// - 최종 수정 일자
+// - 최종 작성자
+// - (앞에서 언급한) 변경 내역
+// - 파일에서 구현한 기능의 ID
+// - 미완성 기능
+// - 발견된 버그
+
+// 또한 파일을 새로 생성할 때 자동으로 머리말 주석이 제일 먼저 나오는 템플릿을 작성하게 하는
+// 개발 환경도 있다. 서브버전을 비롯한  몇몇 소스 관리 시스템은 메타데이터를 추가하는 기능도 제공한다.
+// 머리말 주석의 예는 다음과 같다.
+// $Id : Watermelon.cpp, 123 2004/03/10 12:52:33 marcg $
+//
+// 수박의 기본 기능을 구현한다. 모든 단위는 세제곱 센티미터당 씨앗의 수로 표현한다.
+// 여기서 적용한 수박 이론은 '수박 처리에 대한 알고리즘'이란 백서에 나온 내용을 따른다.
+//
+// 이 코드의 저작권: (c) copyright 2017, FruitSoft, Inc. ALL RIGHTS RESERVED
+
+
+// [3] 고정 양식 주석
+// 최근에는 주석을 외부 문서화 도구로 처리할 수 있도록 표준 양식에 따라 작성하는 사례가 늘고 있다.
+// C++ 프로그래머는 HTML기반 문서, 클래스 다이어그램, 유닉스 맨페이지를 비롯한 여러가지 유용한 문서를 자동으로 생성해주는
+// Doxygen이란 무료 툴을 많이 사용한다. Doxygen에서 처리할 수 있는 JavaDoc 스타일 주석의 예를 보여주고 있다.
+
+/**
+* 수박에 대한 기본 기능을 구현한다.
+* TODO: 개선된 알고리즘을 반영한 것
+*/
+
+//export class Watermelon {
+//public:
+//	/**
+//	* @param initialSeeds 씨앗의 시작 번호, 반드시 > 5 이어야함
+//	* @throws initialSeeds <= 5면 invalid_argument를 던진다.
+//	*/
+//	Watermelon(int intitialSeeds);
+//
+//	/**
+//	* 메리골드(Mariglod, 금잔화) 알고리즘으로 씨앗의 비율을 계산한다.
+//	* @param slow 긴(느린) 계산법의 적용 여부
+//	* @return 메리골드 비율
+//	*/
+//	double calcSeedRatio(bool slow);
+//};
+
+// Doxygen은 C++ 문법을 인식할 뿐 아니라 @param, @return 그리고 @throw와 같은
+// 특수한 주석 지시자를 이용하여 출력 형태를 원하는 형태로 꾸밀 수 있다.
+// 당연히 자동으로 생성되지만 쓸데없는 문장은 지워야 한다.
+
+// 자동으로 생성된 문서는 개발 과정에도 유용하다. 클래스마다 하이레벨 관점의 설명을 제공하면
+// 개발자들이 여러 클래스의 관계를 쉽게 파악할 수 있기 때문이다.
+
+
+// [4] 임의 주석
+// 정해진 형식과 관계없이 필요할 때마다 주석을 달 때가 있다. 이런 주석을 작성할 때는 다음과 같은 가이드라인을 따른다.
+// - 주석을 작성하기 전에 굳이 주석을 달 필요가 없도록 코드를 수정할 수 없는지 검토한다.
+// - 누군가 여러분이 작성한 코드를 읽고 있다고 생각하면서 쉽게 이해할 수 없는 부분마다 주석을 남긴다.
+// - 코드에 자기 이름을 남기지 않는다. 이러한 정보는 소스 코드 관리 시스템에서 자동으로 관리해준다.
+// - API를 사용하는 과정이 명확하지 않다면 사용한 API에 대한 참고 문헌을 남긴다.
+// - 코드를 업데이트할 때 반드시 주석도 함께 업데이트한다. 주석이 정확하지 않은 코드만큼 이해하기 힘든 것도 없다.
+// - 한 함수의 주석을 여러 부분으로 나눠서 작성할 때 그 함수를 더 작은 단위의 함수로 나눌 수 없는지 검토한다.
+// - 공격적이거나 무시하는 표현은 삼간다. 여러분이 작성한 코드를 언제든지 다른 사람이 볼 수 있다. 
+// - 팀원끼리만 이해하는 농담을 적어도 문제되진 않지만, 관리자의 검토를 받는 것이 좋다.
+
+
+// [5] 코드가 곧 문서인 코드
+// 잘 작성된 코드는 대체로 주석이 적고 쉽게 이해할 수 있다.
+// 함수, 매개변수, 변수, 클래스의 역할이 잘 드러나도록 이름을 고친다. const도 적절히 활용한다.
+// 함수 안에서 작업을 처리하는 순서도 내부 과정이 명확히 드러나도록 조정한다.
+// 알고리즘을 좀 더 이해하기 쉽도록 이름을 잘 정한 중간 단계의 변수를 추가한다.
+// C++는 일종의 언어다. 주 목적은 컴퓨터가 처리할 일을 알려주는 데 있지만,
+// 코드를 읽는 이에게 어떤 내용을 전달하는 역할도 한다.
+
+// 코드가 문서 역할을 작성하는 또 다른 방법은 코드를 더 작은 단위로 코드 분해하는 것이다.
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.3 코드 분해
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 코드 분해란 코드를 더 작은 단위로 나눠서 작성하는 방식이다.
+
+// 소스 코드 파일을 열어보니 수백 줄에 달하는 함수들로 가득 차 있고, 수많은 블록이 복잡하게
+// 중첩되어 있다면 가슴이 꽉 막힌 기분이 들 것이다. 
+// 가장 바람직한 형태는 함수나 메서드마다 한 가지 작업만 하는 것이다.
+// 한 가지 작업을 처리하는데 필요한 일도 복잡하다면 별도의 함수나 메서드로 분해한다
+
+// 분해의 기준을 명확히 정의하기란 물론 쉽지 않다.
+
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.3 코드 분해
+// 3.3.1 리팩터링을 통한 코드 분해
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 코드 분해란 코드를 더 작은 단위로 나눠서 작성하는 방식이다.
+
+// 소스 코드 파일을 열어보니 수백 줄에 달하는 함수들로 가득 차 있고, 수많은 블록이 복잡하게
+// 중첩되어 있다면 가슴이 꽉 막힌 기분이 들 것이다. 
+// 가장 바람직한 형태는 함수나 메서드마다 한 가지 작업만 하는 것이다.
+// 한 가지 작업을 처리하는데 필요한 일도 복잡하다면 별도의 함수나 메서드로 분해한다
+
+// 분해의 기준을 명확히 정의하기란 물론 쉽지 않다.
+
+
+// 프로그래밍을 하다 보면 카페인 음료의 힘을 빌려 최대 몰입 상태에 빠진 채 엄청난 속도로 코드를 
+// 작성할 때가 있다. 하지만 이렇게 작업한 결과를 보면 의도한 대로 작동하지만 코드의 스타일을 형편없는 경우가 많다.
+// 이렇게 짧은 시간에 엄청난 양의 코드를 작성할 때가 전체 프로젝트 기간 중에서도 가장 생산성이 높은 시점이기도 하다.
+// 하지만 이렇게 작성된 코드를 바탕으로 수정 작업을 하다 보면 금세 코드가 복잡해진다.
+// 여기에 새로운 요구사항이나 버그 픽스가 들어오면 기존 코드에 자잘하게 덧붙이는 부분이 늘어난다.
+// 이렇게 자잘한 코드가 누적되면서 원래 세련되었던 코드가 패치나 특수한 경우를 처리하는 코드로 뒤덮이게 되는 것을
+// 흔히 누더기(크러프트)가 되었다고 표현한다.
+
+// 리팩터링이란 코드의 구조를 재조정하는 작업이다. 코드를 리팩터링하는 데 사용하는 기법의 예로 다음과 같은 것들이 있다.
+// - 추상화 수준을 높이는 기법
+//	- 필드 캡슐화 : 필드를 private으로 설정하고 게터(접근자)나 세터(설정자) 메서드로 접근하게 만든다.
+//  - 타입 일반화 : 코드를 공유하기 좋게 좀 더 일반적인 타입을 사용한다.
+// - 코드를 좀 더 논리적으로 분해하는 기법
+//  - 메서드 추출 : 거대한 메서드를 좀 더 이해하기 쉽도록 일부를 뽑아내서 새로운 메서드로 정의한다.
+//  - 클래스 추출 : 기존 클래스에 있는 코드 중 일부를 새 클래스로 옮긴다.
+// - 명칭과 위치를 개선하는 기법 
+//  - 메서드 및 필드 옮기기 : 좀 더 적합한 클래스나 소스 파일로 이동한다.
+//  - 메서드 및 필드 이름 바꾸기 : 목적이 잘 드러나도록 이름을 바꾼다.
+//  - 올리기 : OOP에서 기본(베이스, base) 클래스로 옮기는 기법
+//  - 내리기 : OOP에서 상속(확장, derived)클래스로 옮기는 기법
+
+// 코드를 처음부터 읽기 힘든 누더기로 작성했거나 원래는 깔끔했는데 갈수록 누더기로 변했다면
+// 주기적으로 리팩터링해서 대충 작성한 코드를 제거한다. 리팩터링할 때 기존 코드를 다시 검토해서
+// 이해하고 유지하기 쉬운 형태로 변환한다.
+
+// 리팩터링할 때는 테스팅 프레임워크를 활용하는 것이 좋다. 리팩터링 과정에서 본의 아니게 버그가 발생하지 않도록 막을 수 있기 때문이다.
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.3 코드 분해
+// 3.3.2 설계 기준으로 코드 분해하기
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 코드 분해란 코드를 더 작은 단위로 나눠서 작성하는 방식이다.
+
+// 소스 코드 파일을 열어보니 수백 줄에 달하는 함수들로 가득 차 있고, 수많은 블록이 복잡하게
+// 중첩되어 있다면 가슴이 꽉 막힌 기분이 들 것이다. 
+// 가장 바람직한 형태는 함수나 메서드마다 한 가지 작업만 하는 것이다.
+// 한 가지 작업을 처리하는데 필요한 일도 복잡하다면 별도의 함수나 메서드로 분해한다
+
+// 분해의 기준을 명확히 정의하기란 물론 쉽지 않다.
+
+
+// 프로그램을 구현 할 때 모든 기능을 빠짐없이 코드로 작성하지 말고, 코드 분해 기법을 적용해서
+// 나중에 모듈, 메서드, 함수에서 구현할 부분을 따로 빼놓는 방식으로 작성하면 코드의 복잡도를 낮추고
+// 구조를 좀 더 체계적으로 만들 수 있다.
+// 그리고 당연한 말이지만 먼저 프로그램 설계부터 하고 나서 코드 작성에 들어가야 한다.
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.3 코드 분해
+// 3.3.3 이 책에 나온 코드 분해 사례
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 코드 분해란 코드를 더 작은 단위로 나눠서 작성하는 방식이다.
+
+// 소스 코드 파일을 열어보니 수백 줄에 달하는 함수들로 가득 차 있고, 수많은 블록이 복잡하게
+// 중첩되어 있다면 가슴이 꽉 막힌 기분이 들 것이다. 
+// 가장 바람직한 형태는 함수나 메서드마다 한 가지 작업만 하는 것이다.
+// 한 가지 작업을 처리하는데 필요한 일도 복잡하다면 별도의 함수나 메서드로 분해한다
+
+// 분해의 기준을 명확히 정의하기란 물론 쉽지 않다.
+
+
+// 이 책에 나온 예제 코드는 모두 코드 분해 기법이 적용되었다.
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.4 명명 규칙
+// 3.4.1 좋은 이름과 나쁜 이름
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// C++ 컴파일러는 다음과 같은 명명 규칙을 따른다.
+// - 이름의 첫 글자로 숫자가 나올수 없다.
+// - 더블 언더스코어는 특정한 용도로 사용되기 때문에 이름을 넣을 수 없다.
+// - 언더스코어가 나온 다음 대문자로 시작하는 것도 특수한 용도로 정해져 있기 때문에 사용하면 안되다.
+// - 글로벌 네임스페이스에서 언더스코어로 시작하는 이름은 용도가 따로 있기 때문에 사용할 수 없다.
+
+
+// 변수, 메서드, 함수, 매개변수, 클래스, 네임스페이스 등에 대한 가장 좋은 이름은 그 용도가 명확히 드러나는 것이다.
+// 또한 타입이나 구체적인 용도와 같은 부가 정보도 이름에 담을 수 있다.
+
+// 명명 규칙에 대해 확실히 정해진 것은 없으나 적절하다고 보기 힘든 이름은 분명 존재한다.
+// 몇가지 제시하면 다음과 같다.
+//      좋은 이름                      |              나쁜 이름
+//    soureName, destinationName					thing1, thing2
+//    g_settings									globalUserSpecificSettingsAndPreferences
+//    m_nameCounter									m_NC
+//    calculateMarigoldOffeset()					doAction()
+//	  m_typeString								    typeSTR256
+//													m_IHateLarry
+//	  errorMessage									string
+//	  sourceFile, desinationFile					srcFile, dstFile
+
+
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.4 명명 규칙
+// 3.4.2 명명 규칙
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// C++ 컴파일러는 다음과 같은 명명 규칙을 따른다.
+// - 이름의 첫 글자로 숫자가 나올수 없다.
+// - 더블 언더스코어는 특정한 용도로 사용되기 때문에 이름을 넣을 수 없다.
+// - 언더스코어가 나온 다음 대문자로 시작하는 것도 특수한 용도로 정해져 있기 때문에 사용하면 안되다.
+// - 글로벌 네임스페이스에서 언더스코어로 시작하는 이름은 용도가 따로 있기 때문에 사용할 수 없다.
+
+
+// 이름 하나 지을 때마다 창의력을 발휘하면서 시간을 너무 많이 쏟을 필요는 없다.
+// 흔히 사용하는 명명규칙을 따르는 것만으로도 좋은 이름을 쉽게 지를 수 있다.
+// 몇가지 관례를 소개한다.
+
+
+// [1] 카운터
+// 2D 데이터를 다룬다면 행과 열에 대한 인덱스로 i와 j보다는 row와 column으로 표현하는 것이 좋다.
+// 중첩된 반복문의 카운터로 i와 j 대신 outerLoopIndext와 innerLoopIndex로 써야 한다는 프로그래머도 있고,
+// 극단적으로 반복문의 카운터로 i와 j를 쓰는 것만 봐도 눈살을 찌푸리는 이도 있다.
+
+
+// [2] 접두어
+// 흔히 사용하는 접두어의 예를 몇 가지 제시하면 다음과 같다.
+// 접두어      예               본래 단어                   용도
+//   m       mData
+//   m_      m_data             member             클래스의 데이터 멤버
+//   s    sLookupTable                    
+//   ms   msLookupTable         static             정적 변수 또는 데이터 멤버
+//   ms_  ms_LookupTable
+//	 k    kmatimumLenght        konstant           상숫값, 접두어를 붙이지 않고 모든 문자를 대문자로 표기하기도 한다.			
+//							(constant의 독일어)
+//	 b     bCompleted           Boolean			   부울값을 의미한다.
+//	 is    isCompleted
+//
+ 
+
+// [3] 헝가리안 표기법
+// 헝가리안 표기법은 마이크로소프트 윈도우 프로그래머 사이에서 변수와 데이터 멤버 이름을 짓는데 널리 사용되던 명명규칙이다.
+// 이건 내(조상준)가 C 인강을 들을 때 사람들이 알아보지 못하게 덧붙여 만들은 표기법이라 쓰지말라고 들었던 기억이 난다.
+
+
+// [4] 게터와 세터
+// 클래스에 m_status라고 정의된 데이터 멤버에 접근할 때는 주로 getStatus()와 같은 게터나
+// setStatus() 같은 세터를 사용한다.
+
+
+// [5] 대소문자 사용
+// 코드에 나온 이름에 대소문자를 표기하는 방법은 여러 가지다.
+// 코딩 스타일에 관련된 다른 규칙과 마찬가지로 대소문자도 모든 팀원이 똑같은 방식으로 표기하도록 표준을 정한다.
+// 변수나 데이터 멤버의 이름을 표기할 때는 소문자로 시작하고 단어 사이는 언더스코어나 대문자로 연결하는 방식을 주로 사용한다.
+
+
+// [6] 네임스페이스를 적용한 상수
+// GUI를 갖춘 프로그램은 작성하는 경우를 생각해보자. GUI는 일반적으로 File(파일), Edit(편집), Help(도움말)와 같은
+// 다양한 메뉴로 구성하는데, 각 메뉴에 대한 ID를 상수로 표현할 때가 많다.
+// 이렇게 메뉴 ID에 대한 상수 이름은 Help와 같이 표기하는 것이 바람직하다.
+
+// Help란 이름도 괜찮지만 메인 윈도우에서 Help란 이름이 이미 있다면 
+// 서로 다른 네임스페이스의 속하게 하면 된다. 이보다 더 좋은 방법은 열거타입을 사용하는 것이다.(1장에서 소개했다.)
+
+
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.5 언어의 기능에 스타일 적용하기
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// C++에서는 가독성이 굉장히 나쁜 코드도 얼마든지 작성할 수 있다.
+// i++ + ++i;
+// 다음과 같은 코드도 반드시 피한다.
+// a[i] = ++i;
+
+// C++17부터는 대입 연산의 오른쪽에 나온 연산을 모두 마치고 나서야 왼쪽을 평가하도록 보장하기 때문에
+// 이 코드의 동작을 명확하게 알 수 있지만, 다른 버전에서는 그렇지 않을 수 있다.
+
+// C++에서 제공하는 강력한 기능을 제대로 활용하려면 언어의 기능을 어떻게 활용해야 바람직한 스타일로 작성할 수 있는지
+// 잘 생각하면서 사용해야 한다.
+
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.5 언어의 기능에 스타일 적용하기
+// 3.5.1 상수 사용법
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// C++에서는 가독성이 굉장히 나쁜 코드도 얼마든지 작성할 수 있다.
+// i++ + ++i;
+// 다음과 같은 코드도 반드시 피한다.
+// a[i] = ++i;
+
+// C++17부터는 대입 연산의 오른쪽에 나온 연산을 모두 마치고 나서야 왼쪽을 평가하도록 보장하기 때문에
+// 이 코드의 동작을 명확하게 알 수 있지만, 다른 버전에서는 그렇지 않을 수 있다.
+
+// C++에서 제공하는 강력한 기능을 제대로 활용하려면 언어의 기능을 어떻게 활용해야 바람직한 스타일로 작성할 수 있는지
+// 잘 생각하면서 사용해야 한다.
+
+
+
+
+int main()
+{
+		
+	// 나쁜 코드는 대부분 매직 넘버를 남발하는 경향이 있다.
+	// 2.71828이란 값을 초월수 e의 근사값인 것을 아는 사람이 있고 모르는 사람이 있다.
+	// C++에서 제공하는 상수 기능을 사용하면 변하지 않는 값에 대해 의미 있는 이름을 붙일 수 있다.
+	const double ApproximationForE{ 2.71828 };
+	const int HoursPerDay{ 24 };
+	const int SecondsPerHour{ 3'600 };
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.5 언어의 기능에 스타일 적용하기
+// 3.5.2 포인터 대신 레퍼런스 사용하기
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// C++에서는 가독성이 굉장히 나쁜 코드도 얼마든지 작성할 수 있다.
+// i++ + ++i;
+// 다음과 같은 코드도 반드시 피한다.
+// a[i] = ++i;
+
+// C++17부터는 대입 연산의 오른쪽에 나온 연산을 모두 마치고 나서야 왼쪽을 평가하도록 보장하기 때문에
+// 이 코드의 동작을 명확하게 알 수 있지만, 다른 버전에서는 그렇지 않을 수 있다.
+
+// C++에서 제공하는 강력한 기능을 제대로 활용하려면 언어의 기능을 어떻게 활용해야 바람직한 스타일로 작성할 수 있는지
+// 잘 생각하면서 사용해야 한다.
+
+
+// 포인터 대신 레퍼런스를 사용하면 좋은 점이 많다.
+// 1. 포인터보다 레퍼런스가 더 안전하다.
+// 2. 코딩 스타일 측면에서 포인터보다 레퍼런스를 사용하는 것이 더 낫다.
+// 3. 메모리의 소유권을 명확히 표현할 수 있다.
+
+
+int main()
+{
+		
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.5 언어의 기능에 스타일 적용하기
+// 3.5.3 사용자 정의 익셉션
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// C++에서는 가독성이 굉장히 나쁜 코드도 얼마든지 작성할 수 있다.
+// i++ + ++i;
+// 다음과 같은 코드도 반드시 피한다.
+// a[i] = ++i;
+
+// C++17부터는 대입 연산의 오른쪽에 나온 연산을 모두 마치고 나서야 왼쪽을 평가하도록 보장하기 때문에
+// 이 코드의 동작을 명확하게 알 수 있지만, 다른 버전에서는 그렇지 않을 수 있다.
+
+// C++에서 제공하는 강력한 기능을 제대로 활용하려면 언어의 기능을 어떻게 활용해야 바람직한 스타일로 작성할 수 있는지
+// 잘 생각하면서 사용해야 한다.
+
+
+// C++에서는 익셉션을 무시하기 쉽다. C++에서는 익셉션을 반드시 처리하라는 규칙이 없을 뿐만 아니라
+// nullptr을 리턴하거나 에러 플래그를 설정하는 기존 방식으로도 얼마든지 에러에 대처할 수 있기 때문이다.
+//
+int main()
+{
+		
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.6 코드 서식
+// 3.6.1 중괄호 정렬 문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 아직 코드 서식에 대한 규정이 없다면 반드시 정하는 것이 좋다.
+// 코딩 가이드라인을 표준으로 정해두면 같은 팀에 있는 프로그래머들이 모두 똑같은 명명 규칙과
+// 서식을 따르기 때문에 코드의 통일성과 가독성을 높일 수 있다.
+
+// 코드 서식을 자동으로 맞춰주는 툴도 있다. 
+// 소스 코드 관리 시스템에 커밋하기 전에 미리 정해둔 규칙에 맞는지 검사해준다.
+
+
+
+// 가장 흔한 논쟁거리 중 하나는 코드 블록을 표시하는 중괄호에 대한 것이다.
+// 이 책에서는 함수, 클래스, 메서드 이름을 제외한 나머지 모든 경우는
+// 첫 문장과 같은 줄에 적는다.
+/*
+void someFunction()
+{
+	if (condition()) {
+		cout << "condition was true" << endl;
+	} else {
+		cout << "condition was false" << endl;
+	}
+}
+
+// 이렇게 위아래 공간을 절약하는 것이 실전에서 큰 의미가 없다고 주장하는 프로그래머도 잇다.
+void someFunction()
+{
+	if (condition()) 
+	{
+		cout << "condition was true" << endl;
+	}
+	else 
+	{
+		cout << "condition was false" << endl;
+	}
+}
+
+// 또한 한 문장만으로 구성된 블록에 중괄호를 적을지에 대한 문제도 흔한 논쟁거리다.
+void someFunction()
+{
+	if (condition())
+		cout << "condition was true" << endl;
+	else
+		cout << "condition was false" << endl;
+}
+*/
+// 저자는 중괄호를 적는편이다.
+
+int main()
+{
+		
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.6 코드 서식
+// 3.6.2 스페이스와 소괄호에 대한 논쟁
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 아직 코드 서식에 대한 규정이 없다면 반드시 정하는 것이 좋다.
+// 코딩 가이드라인을 표준으로 정해두면 같은 팀에 있는 프로그래머들이 모두 똑같은 명명 규칙과
+// 서식을 따르기 때문에 코드의 통일성과 가독성을 높일 수 있다.
+
+// 코드 서식을 자동으로 맞춰주는 툴도 있다. 
+// 소스 코드 관리 시스템에 커밋하기 전에 미리 정해둔 규칙에 맞는지 검사해준다.
+
+// 문장 단위에 적용되는 코드 서식도 흔한 논쟁거리다.
+// 이 책에서는 키워드 뒤에 항상 한 칸 띄운다. 또한 연산자 앞과 뒤에도 한 칸씩 띄운다.
+// 매개변수 리스트나 함수 호출에 나온 콤마 뒤에도 한 칸 띄운다. 
+// 그리고 연산의 순서가 명확히 들어나도록 소괄호를 사용한다.
+/*
+if (i == 2) {
+	j = i + (k / m);
+}
+*/
+
+
+
+
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.6 코드 서식
+// 3.6.3 스페이스, 탭, 줄바꿈
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 아직 코드 서식에 대한 규정이 없다면 반드시 정하는 것이 좋다.
+// 코딩 가이드라인을 표준으로 정해두면 같은 팀에 있는 프로그래머들이 모두 똑같은 명명 규칙과
+// 서식을 따르기 때문에 코드의 통일성과 가독성을 높일 수 있다.
+
+// 코드 서식을 자동으로 맞춰주는 툴도 있다. 
+// 소스 코드 관리 시스템에 커밋하기 전에 미리 정해둔 규칙에 맞는지 검사해준다.
+
+
+// 스페이스와 탭에 대한 서식은 팀에 대한 합의가 이루어져야 한다.
+
+// 대부분 에디터는 스페이스와 탭을 설정하는 기능을 제공한다.
+// 한 가지 명심할 점은 탭과 스페이스는 서로 다르다는 것이다.
+// 탭은 길이에 제한이 없지만 스페이스는 언제나 한 칸이기 때문이다.
+
+// 줄 바꿈도 신경써야 한다.
+// 플랫폼마다 줄바꿈을 표현하는 방식이 다를 수 있기 때문이다.
+
+
+
+
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.7 스타일과 관련하여 해결할 문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 아직 코드 서식에 대한 규정이 없다면 반드시 정하는 것이 좋다.
+// 코딩 가이드라인을 표준으로 정해두면 같은 팀에 있는 프로그래머들이 모두 똑같은 명명 규칙과
+// 서식을 따르기 때문에 코드의 통일성과 가독성을 높일 수 있다.
+
+// 코드 서식을 자동으로 맞춰주는 툴도 있다. 
+// 소스 코드 관리 시스템에 커밋하기 전에 미리 정해둔 규칙에 맞는지 검사해준다.
+
+
+// 개발자들이 프로젝트를 새로 시작할 때마다 이번만큼은 반드시 제대로 해보자고 멩세를 한다.
+// 하지만 스타일에 대한 일관성을 이 정도 수준으로 유지하기란 쉽지 않은데 그 이유는 다양하다.
+// 먼저 const 사용법을 제대로 이해하지 못한 프로그래머가 종종 있다.
+// 때로는 코드 서식 표준이 프로그래머의 취향과 기준에 맞지 않은 경우도 있다.
+// 팀 문화가 코드 서식 가이드라인을 강제하기 힘든 경우가 있다.
+
+// 이럴 때는 반드시 표준화해야 할 요소와 각자 마음대로 정해도 상관없는 요소를 적절히 구분하는 게 좋다.
+
+
+
+
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.8 정리
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// C++는 스타일에 관련된 기능을 다양하게 지원하지만 구체적인 적용 방법에 대해서는 특별히 정해둔 가이드라인이 없다.
+// 결국 코드에 적용할 스타일은 그것이 얼마나 널리 적용되고 있는지 그리고 코드의 가독성을 높이는 데
+// 얼마나 도움이 되는지에 따라 선정해야 한다.
+
+// 무엇보다도 스타일은 프로그래밍에서 굉장히 중요한 요소라고 확실히 인식하는 것이 중요하다.
+// 자신이 작성한 코드를 다른 사람과 공유하기 전에 반드시 스타일에 따라 작성했는지 검토하는 습관을 들인다.
+
+
+
+
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.9 연습 문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 3 - 1
+/*
+//// The above comments are useless.
+//// They simply explain in English what each line of code is doing.
+//// Below is a better use of comments for this code snippet.
+void Database::displayCurrent() const
+{
+	// Display all hired employees.
+	for (const auto& employee : m_employees) {
+		if (employee.isHired()) {
+			employee.display();
+		}
+	}
+}
+
+//// Even that one line of comment is not that usefull.
+//// So, this displayCurrent() method does not really
+//// require any comments, as the code is self-documenting.
+void Database::displayCurrent() const
+{
+	for (const auto& employee : m_employees) {
+		if (employee.isHired()) {
+			employee.display();
+		}
+	}
+}
+*/
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.9 연습 문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 3 - 2
+/**
+ * The Database stores a collection of employees. It supports
+ * adding and retrieving employees, and displaying employees
+ * satisfying certain constraints.
+ */
+//class Database
+//{
+//public:
+//	/**
+//	 * Adds an employee with given name to the database.
+//	 *
+//	 * @param firstName The first name of the employee to add.
+//	 * @param lastName The last name of the employee to add.
+//	 */
+//	Employee& addEmployee(const std::string& firstName,
+//		const std::string& lastName);
+//
+//	/**
+//	 * Finds an employee based on an employee number.
+//	 *
+//	 * @param employeeNumber The employee number to find.
+//	 * @return The employee with given number.
+//	 * @throws logic_error When the requested employee cannot be found.
+//	 */
+//	Employee& getEmployee(int employeeNumber);
+//
+//	/**
+//	 * Finds an employee based on a name.
+//	 *
+//	 * @param firstName The first name of the employee to find.
+//	 * @param lastName The last name of the employee to find.
+//	 * @return The employee with given name.
+//	 * @throws logic_error When the requested employee cannot be found.
+//	 */
+//	Employee& getEmployee(const std::string& firstName,
+//		const std::string& lastName);
+//
+//	// Remainder omitted...
+//};
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.9 연습 문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 3 - 3
+class XrayController                                           //// xrayController: Class names start with an uppercase letter.
+{
+public:
+	// Gets the active X-ray current in µA.
+	double getCurrent() const;
+
+	// Sets the current of the X-rays to the given current in µA.
+	void setCurrent(double currentInMicroAmp);                 //// setIt(): too generic name.
+	//// Val: parameters start with a lowercase letter.
+	////      and should have a meaningful name
+
+// Sets the current to 0 µA.
+	void setZeroCurrent();                                     //// 0Current(): identifiers are not allowed to start with a digit.
+
+	// Gets the X-ray source type.
+	const std::string& getSourceType() const;
+
+	// Sets the X-ray source type.
+	void setSourceType(std::string_view type);                 //// _Type: identifiers should not start with an underscore followed by a capital.
+
+private:
+	double m_current; // The X-ray current in µA.              //// d: too short and meaningless. Data members start with m_
+	std::string m_sourceType; // The type of the X-ray source. //// m_src__type: Double underscores and abbreviations are not allowed. 
+};
+
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.9 연습 문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 3 - 4
+/*
+// Original code snippet.
+Employee& Database::getEmployee(int employeeNumber)
+{
+	for (auto& employee : m_employees) {
+		if (employee.getEmployeeNumber() == employeeNumber) {
+			return employee;
+		}
+	}
+	throw logic_error{ "No employee found." };
+}
+
+// First alternative version.
+// Curly braces on their own lines.
+Employee& Database::getEmployee(int employeeNumber)
+{
+	for (auto& employee : m_employees)
+	{
+		if (employee.getEmployeeNumber() == employeeNumber)
+		{
+			return employee;
+		}
+	}
+	throw logic_error{ "No employee found." };
+}
+
+// Second alternative version.
+// Indent curly braces.
+Employee& Database::getEmployee(int employeeNumber)
+{
+	for (auto& employee : m_employees)
+	{
+		if (employee.getEmployeeNumber() == employeeNumber)
+		{
+			return employee;
+		}
+	}
+	throw logic_error{ "No employee found." };
+}
+
+
+// Third alternative version.
+// Remove curly braces from single-statement code blocks.
+Employee& Database::getEmployee(int employeeNumber)
+{
+	for (auto& employee : m_employees)
+		if (employee.getEmployeeNumber() == employeeNumber)
+			return employee;
+	throw logic_error{ "No employee found." };
+}
+*/
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.07 공부
+// Chapter3 코딩 스타일
+// 3.9 연습 문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+
+// Chapter3 코딩 스타일 完================================================

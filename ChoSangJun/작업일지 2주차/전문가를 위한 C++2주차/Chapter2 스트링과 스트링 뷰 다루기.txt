@@ -1,0 +1,3478 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+import airline_ticket;
+
+#include "save.h"
+
+
+// C와 같은 언어는 스트링을 부가 기능처럼 취급한다.
+// 그러므로 스트링을 언어의 정식 데이터 타입으로 제공하지 않고, 단순히 고정된 크기의 바이트 배열로 처리했다.
+// C언어의 '스트링 라이브러리'는 기본적인 함수로만 구성되어 있고, 경곗값 검사기능조차 없다.
+// 반면에 C++는 스트링을 핵심 데이터 타입으로 제공한다.
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.1 C 스타일 스트링
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+// C 언어는 스트링을 문자 배열로 표현했다. 
+// 스트링 마지막에 널 문자(\0)를 붙여서 스트링이 끝났음을 표현했다.
+
+// ex) 'h' 'e' 'l' 'l' 'o' '\0'
+char* copyString(const char* str) {
+	char* result{ new char[strlen(str)] }; // 버그! 한 칸 부족하다.
+	strcpy_s(result, sizeof(char) *(strlen(str) + 1), str);
+	return result;
+}
+// 위 copyString 함수 코드에는 오류가 있다.
+// strlen 함수는 스트링을 저장하는데 필요한 메모리 크기가 아니라 스트링의 길이를 리턴한다.
+// 따라서 strlen()은 6이 아닌 5를 리턴한다. 따라서 +1을 해줘야 한다.
+// 제대로 작성하면 다음과 같다.
+char* copyString2(const char* str) {
+	char* result{ new char[strlen(str) + 1] }; // 버그! 한 칸 부족하다.
+	strcpy_s(result, sizeof(char) * (strlen(str) + 1), str);
+	return result;
+}
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.1 C 스타일 스트링
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+// C 언어는 스트링을 문자 배열로 표현했다. 
+// 스트링 마지막에 널 문자(\0)를 붙여서 스트링이 끝났음을 표현했다.
+
+// ex) 'h' 'e' 'l' 'l' 'o' '\0'
+char* copyString(const char* str) {
+	char* result{ new char[strlen(str)] }; // 버그! 한 칸 부족하다.
+	strcpy_s(result, sizeof(char) *(strlen(str) + 1), str);
+	return result;
+}
+// 위 copyString 함수 코드에는 오류가 있다.
+// strlen 함수는 스트링을 저장하는데 필요한 메모리 크기가 아니라 스트링의 길이를 리턴한다.
+// 따라서 strlen()은 6이 아닌 5를 리턴한다. 따라서 +1을 해줘야 한다.
+// 제대로 작성하면 다음과 같다.
+char* copyString2(const char* str) {
+	char* result{ new char[strlen(str) + 1] }; // 버그! 한 칸 부족하다.
+	strcpy_s(result, sizeof(char) * (strlen(str) + 1), str);
+	return result;
+}
+
+
+
+int main()
+{
+	// C와 C++에서 제공하는 sizeof() 연산자는 데이터 타입이나 변수의 크기를 구하는데 사용된다.
+	// C 스트링에 적용할 때는 sizeof()와 strlen()의 결과가 다르기에
+	// 스트링의 크기를 구할 때는 sizeof()를 사용하면 안된다.
+
+	char text1[]{ "abcdef" };
+	size_t s1{ sizeof(text1) }; // 7
+	size_t s2{ strlen(text1) }; // 6
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.1 C 스타일 스트링
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+// C 언어는 스트링을 문자 배열로 표현했다. 
+// 스트링 마지막에 널 문자(\0)를 붙여서 스트링이 끝났음을 표현했다.
+
+// ex) 'h' 'e' 'l' 'l' 'o' '\0'
+char* copyString(const char* str) {
+	char* result{ new char[strlen(str)] }; // 버그! 한 칸 부족하다.
+	strcpy_s(result, sizeof(char) *(strlen(str) + 1), str);
+	return result;
+}
+// 위 copyString 함수 코드에는 오류가 있다.
+// strlen 함수는 스트링을 저장하는데 필요한 메모리 크기가 아니라 스트링의 길이를 리턴한다.
+// 따라서 strlen()은 6이 아닌 5를 리턴한다. 따라서 +1을 해줘야 한다.
+// 제대로 작성하면 다음과 같다.
+char* copyString2(const char* str) {
+	char* result{ new char[strlen(str) + 1] }; // 버그! 한 칸 부족하다.
+	strcpy_s(result, sizeof(char) * (strlen(str) + 1), str);
+	return result;
+}
+
+
+
+int main()
+{
+	// C와 C++에서 제공하는 sizeof() 연산자는 데이터 타입이나 변수의 크기를 구하는데 사용된다.
+	// C 스트링에 적용할 때는 sizeof()와 strlen()의 결과가 다르기에
+	// 스트링의 크기를 구할 때는 sizeof()를 사용하면 안된다.
+
+	char text1[]{ "abcdef" };
+	size_t s1{ sizeof(text1) }; // 7 \0를 포함
+	size_t s2{ strlen(text1) }; // 6
+
+	// 반면 C 스타일 스틀링을 char*로 저장했다면 sizeof()는 포인터의 크기를 리턴한다.
+	const char* text2{ "abcdef" };
+	size_t s3{ sizeof(text2) }; // 플랫폼마다 다르다. //32bit - 4 64bit - 8
+	size_t s4{ sizeof(text2) }; // 6
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.2 스트링 리터럴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+
+
+
+int main()
+{
+	// 여기서 "hello"처럼 변수에 담지 않고 곹바로 값으로 표현한 스트링을 스트링 리터럴이라 한다.
+	std::cout << "hello" << std::endl;
+	// 스트링 리터럴은 내부적으로 메모리의 읽기 전용 영역에 저장된다.
+	// 그러므로 컴파일러는 같은 스트링 리터럴이 코드에 여러번 나오면
+	// 이에 대한 레퍼런스를 재활용하는 방식으로 메모리를 절약한다. - 이것을 리터럴 풀링이라 부른다.
+
+	
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.2 스트링 리터럴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+
+
+
+int main()
+{
+	// 여기서 "hello"처럼 변수에 담지 않고 곹바로 값으로 표현한 스트링을 스트링 리터럴이라 한다.
+	std::cout << "hello" << std::endl;
+	// 스트링 리터럴은 내부적으로 메모리의 읽기 전용 영역에 저장된다.
+	// 그러므로 컴파일러는 같은 스트링 리터럴이 코드에 여러번 나오면
+	// 이에 대한 레퍼런스를 재활용하는 방식으로 메모리를 절약한다. - 이것을 리터럴 풀링이라 부른다.
+
+	
+	// 스트링 리터럴을 변수에 대입할 수 있지만 위험하다.(수정시 어떻게 되는지 모름)
+	// 그렇기에 const를 앞에다 붙여줘야 한다. - 지금은 const를 안 붙이면 오류가 난다.
+	const char* ptr{ "hello" };// 변수에 스트링 리터럴을 대입한다.
+	//ptr[1] = 'a'; // 읽기 전용 메모리에 값을 쓰기 때문에 에러가 발생한다.
+
+	// 문자배열의 초깃값을 설정할 때도 스트링 리터럴을 이용한다.
+	// 이건 실제 스트링 값을 복사하기에 스트링 리터럴을 읽기전용 메모리에 넣지 않으면 재활용하지 않는다.
+	char arr[]{ "hello" };
+	arr[1] = 'a';
+	
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.2 스트링 리터럴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+// 1. 로 스트링 리터럴 - 여러 줄에 걸쳐 작성하는 스트링 리터럴
+// 이스케이프 시퀀스가 필요없고 일반텍스트로 취급한다.
+
+int main()
+{
+
+	//const char* str {"Hello" "World"!"}; // 에러가 발생한다.
+	
+	// 이럴 때는 큰따옴표를 다음과 같이 이스케이프 시퀀스로 표현한다.
+	const char* str{ "Hello \"World\"!" };
+
+	// 로 스틀링을 리터럴을 사용하면 이렇게 표현할 수 있다.
+	const char* str1{ R"(Hello "World"!)" };
+
+	std::cout << str1 << std::endl;
+
+	const char* str2{ "Line 1\nLine 2" };
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.2 스트링 리터럴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+// 1. 로 스트링 리터럴 - 여러 줄에 걸쳐 작성하는 스트링 리터럴
+// 이스케이프 시퀀스가 필요없고 일반텍스트로 취급한다.
+
+int main()
+{
+
+	//const char* str {"Hello" "World"!"}; // 에러가 발생한다.
+	
+	// 이럴 때는 큰따옴표를 다음과 같이 이스케이프 시퀀스로 표현한다.
+	const char* str{ "Hello \"World\"!" };
+
+	// 로 스트링을 리터럴을 사용하면 이렇게 표현할 수 있다.
+	const char* str1{ R"(Hello "World"!)" };
+
+	std::cout << str1 << std::endl;
+
+	const char* str2{ "Line 1\nLine 2" };
+	std::cout << str2 << std::endl;
+
+	// 로 스트링 리터럴 - Enter키
+	const char* str3{ R"(Line 1
+	Line 2)" };
+
+	std::cout << str3 << std::endl;
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.2 스트링 리터럴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+// 1. 로 스트링 리터럴 - 여러 줄에 걸쳐 작성하는 스트링 리터럴
+// 이스케이프 시퀀스가 필요없고 일반텍스트로 취급한다.
+
+int main()
+{
+
+	//const char* str {"Hello" "World"!"}; // 에러가 발생한다.
+	
+	// 이럴 때는 큰따옴표를 다음과 같이 이스케이프 시퀀스로 표현한다.
+	const char* str{ "Hello \"World\"!" };
+
+	// 로 스트링을 리터럴을 사용하면 이렇게 표현할 수 있다.
+	const char* str1{ R"(Hello "World"!)" };
+
+	std::cout << str1 << std::endl;
+
+	const char* str2{ "Line 1\nLine 2" };
+	std::cout << str2 << std::endl;
+
+	// 로 스트링 리터럴 - Enter키 == \n
+	const char* str3{ R"(Line 1
+Line 2)" };
+
+	std::cout << str3 << std::endl;
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.2 스트링 리터럴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+// 1. 로 스트링 리터럴 - 여러 줄에 걸쳐 작성하는 스트링 리터럴
+// 이스케이프 시퀀스가 필요없고 일반텍스트로 취급한다.
+
+int main()
+{
+
+	//const char* str {"Hello" "World"!"}; // 에러가 발생한다.
+	
+	// 이럴 때는 큰따옴표를 다음과 같이 이스케이프 시퀀스로 표현한다.
+	const char* str{ "Hello \"World\"!" };
+
+	// 로 스트링을 리터럴을 사용하면 이렇게 표현할 수 있다.
+	const char* str1{ R"(Hello "World"!)" };
+
+	std::cout << str1 << std::endl;
+
+	const char* str2{ "Line 1\nLine 2" };
+	std::cout << str2 << std::endl;
+
+	// 로 스트링 리터럴 - Enter키 == \n
+	const char* str3{ R"(Line 1
+Line 2)" };
+
+	std::cout << str3 << std::endl;
+
+	const char* str4{ R"(Is the following a tab character? \t)" };
+
+	std::cout << str4 << std::endl;
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.2 스트링 리터럴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+
+// 1. 로 스트링 리터럴 - 여러 줄에 걸쳐 작성하는 스트링 리터럴
+// 이스케이프 시퀀스가 필요없고 일반텍스트로 취급한다.
+
+int main()
+{
+
+	//const char* str {"Hello" "World"!"}; // 에러가 발생한다.
+	
+	// 이럴 때는 큰따옴표를 다음과 같이 이스케이프 시퀀스로 표현한다.
+	const char* str{ "Hello \"World\"!" };
+
+	// 로 스트링을 리터럴을 사용하면 이렇게 표현할 수 있다.
+	const char* str1{ R"(Hello "World"!)" };
+
+	std::cout << str1 << std::endl;
+
+	const char* str2{ "Line 1\nLine 2" };
+	std::cout << str2 << std::endl;
+
+	// 로 스트링 리터럴 - Enter키 == \n
+	const char* str3{ R"(Line 1
+Line 2)" };
+
+	std::cout << str3 << std::endl;
+
+	const char* str4{ R"(Is the following a tab character? \t)" };
+
+	std::cout << str4 << std::endl;
+
+	// 로 스트링 리터럴은 )"로 끝나기에 스트링 중간에 )"를 넣을 수 없다.
+	//const char* str{R"(Embedded)"characters)"}; // 에러가 발생
+
+	// )" 추가하려면 이렇게 써야한다.
+	const char* str5{ R"-(Embedded)"characters)-"};  // d-char-sequence
+
+	// 로 스트링 리터럴을 사용하면 데이터베이스 쿼리 스트링이나 정규 표현식, 파일 경로등을
+	// 쉽게 표현할 수 있다.
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 1. C 스타일 스트링의 장단점
+
+// 장점
+// - 간단한다. 내부적으로 기본 문자 타입과 배열 구조체로 처리한다.
+// - 가볍다. 제대로 사용하면 메모리를 꼭 필요한 만큼만 사용한다.
+// - 로우 레벨이다. 따라서 메모리의 실제 상태를 조작하거나 복사하기 쉽다.
+// - C 프로그래머에게 익숙하다. 새로 배울 필요가 없다.
+
+// 단점
+// - 스트링 데이터 타입에 대한 고차원 기능을 구현하려면 상당한 노력이 필요하다.
+// - 찾기 힘든 메모리 버그가 발생하기 쉽다.
+// - C++의 객체지향적인 특성을 제대로 활용하지 못한다.
+// - 프로그래머가 내부 표현 방식을 이해해야 한다.
+
+// C++의 string은 C 스타일의 스트링이 가진 장점은 그대로 남기곡 단점은 없앴다.
+
+int main()
+{
+
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	// string은 실제로는 클래스지만 마치 기본 타입인 것처럼 사용한다.
+	std::string a{ "12" };
+	std::string b{ "34" };
+	std::string c;
+	c = a + b; // c는 "1234"
+	std::cout << c << std::endl;
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	// string은 실제로는 클래스지만 마치 기본 타입인 것처럼 사용한다.
+	std::string a{ "12" };
+	std::string b{ "34" };
+	std::string c;
+	c = a + b; // c는 "1234"
+	std::cout << c << std::endl;
+	a += b;
+	std::cout << a << std::endl;
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	// string은 실제로는 클래스지만 마치 기본 타입인 것처럼 사용한다.
+	std::string a{ "12" };
+	std::string b{ "34" };
+	std::string c;
+	c = a + b; // c는 "1234"
+	std::cout << c << std::endl;
+	a += b;
+	std::cout << a << std::endl;
+
+	// C 스트링은 == 연산자로 비교할 수 없다.
+	const char* a2{ "12" };
+	char b2[]{ "12" };
+	if (a2 == b2) {}// 포인터를 비교하기에 항상 false를 리턴
+	if (strcmp(a2, b2) == 0) {}// 이렇게 해야한다.
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	
+	// C 스트링은 == 연산자로 비교할 수 없다.
+	const char* a2{ "12" };
+	char b2[]{ "12" };
+	if (a2 == b2) {}// 포인터를 비교하기에 항상 false를 리턴
+	if (strcmp(a2, b2) == 0) {}// 이렇게 해야한다.
+
+	// string에서는 == != < 같은 연산자를 적용할 수 있도록 오버로딩 되어있으며
+	// string 클래스는 compare() 메서드도 제공한다.
+	std::string a{ "12" };
+	std::string b{ "34" };
+	auto result{ a.compare(b) };
+	if (result < 0) { std::cout << "less" << std::endl; }
+	if (result > 0) { std::cout << "greater" << std::endl; }
+	if (result == 0) { std::cout << "equal" << std::endl; }
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	
+	// C 스트링은 == 연산자로 비교할 수 없다.
+	const char* a2{ "12" };
+	char b2[]{ "12" };
+	if (a2 == b2) {}// 포인터를 비교하기에 항상 false를 리턴
+	if (strcmp(a2, b2) == 0) {}// 이렇게 해야한다.
+
+	// string에서는 == != < 같은 연산자를 적용할 수 있도록 오버로딩 되어있으며
+	// string 클래스는 compare() 메서드도 제공한다.
+	std::string a{ "12" };
+	std::string b{ "34" };
+	auto result{ a.compare(b) };
+	if (result < 0) { std::cout << "less" << std::endl; }
+	if (result > 0) { std::cout << "greater" << std::endl; }
+	if (result == 0) { std::cout << "equal" << std::endl; }
+
+	// C++20 부터는 3방향 비교 연산자를 사용하도록 개선되었다.
+	auto result2{ a <=> b };
+	if (is_lt(result2)) { std::cout << "less" << std::endl; }
+	if (is_gt(result2)) { std::cout << "greater" << std::endl; }
+	if (is_eq(result2)) { std::cout << "equal" << std::endl; }
+
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	
+	// C 스트링은 == 연산자로 비교할 수 없다.
+	const char* a2{ "12" };
+	char b2[]{ "12" };
+	if (a2 == b2) {}// 포인터를 비교하기에 항상 false를 리턴
+	if (strcmp(a2, b2) == 0) {}// 이렇게 해야한다.
+
+	// string에서는 == != < 같은 연산자를 적용할 수 있도록 오버로딩 되어있으며
+	// string 클래스는 compare() 메서드도 제공한다.
+	std::string a{ "12" };
+	std::string b{ "34" };
+	auto result{ a.compare(b) };
+	if (result < 0) { std::cout << "less" << std::endl; }
+	if (result > 0) { std::cout << "greater" << std::endl; }
+	if (result == 0) { std::cout << "equal" << std::endl; }
+
+	// C++20 부터는 3방향 비교 연산자를 사용하도록 개선되었다.
+	auto result2{ a <=> b };
+	if (is_lt(result2)) { std::cout << "less" << std::endl; }
+	if (is_gt(result2)) { std::cout << "greater" << std::endl; }
+	if (is_eq(result2)) { std::cout << "equal" << std::endl; }
+
+	// 메모리는 string 클래스가 알아서 처리해준다. 따라서 메모리 오버런이 발생할 걱정을 할 필요가 없다.
+	std::string myString{ "hello" };
+	myString = ", there";
+	std::string myOtherString{ myString };
+	if (myString == myOtherString) {
+		myOtherString[0] = 'H';
+	}
+	std::cout << myString << std::endl;
+	std::cout << myOtherString << std::endl;
+
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	
+	// C 스트링은 == 연산자로 비교할 수 없다.
+	const char* a2{ "12" };
+	char b2[]{ "12" };
+	if (a2 == b2) {}// 포인터를 비교하기에 항상 false를 리턴
+	if (strcmp(a2, b2) == 0) {}// 이렇게 해야한다.
+
+	// string에서는 == != < 같은 연산자를 적용할 수 있도록 오버로딩 되어있으며
+	// string 클래스는 compare() 메서드도 제공한다.
+	std::string a{ "12" };
+	std::string b{ "34" };
+	auto result{ a.compare(b) };
+	if (result < 0) { std::cout << "less" << std::endl; }
+	if (result > 0) { std::cout << "greater" << std::endl; }
+	if (result == 0) { std::cout << "equal" << std::endl; }
+
+	// C++20 부터는 3방향 비교 연산자를 사용하도록 개선되었다.
+	auto result2{ a <=> b };
+	if (is_lt(result2)) { std::cout << "less" << std::endl; }
+	if (is_gt(result2)) { std::cout << "greater" << std::endl; }
+	if (is_eq(result2)) { std::cout << "equal" << std::endl; }
+
+	// 메모리는 string 클래스가 알아서 처리해준다. 따라서 메모리 오버런이 발생할 걱정을 할 필요가 없다.
+	std::string myString{ "hello" };
+	myString += ", there";
+	std::string myOtherString{ myString };
+	if (myString == myOtherString) {
+		myOtherString[0] = 'H';
+	}
+	std::cout << myString << std::endl;
+	std::cout << myOtherString << std::endl;
+
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	
+	// C 스트링은 == 연산자로 비교할 수 없다.
+	const char* a2{ "12" };
+	char b2[]{ "12" };
+	if (a2 == b2) {}// 포인터를 비교하기에 항상 false를 리턴
+	if (strcmp(a2, b2) == 0) {}// 이렇게 해야한다.
+
+	// string에서는 == != < 같은 연산자를 적용할 수 있도록 오버로딩 되어있으며
+	// string 클래스는 compare() 메서드도 제공한다.
+	std::string a{ "12" };
+	std::string b{ "34" };
+	auto result{ a.compare(b) };
+	if (result < 0) { std::cout << "less" << std::endl; }
+	if (result > 0) { std::cout << "greater" << std::endl; }
+	if (result == 0) { std::cout << "equal" << std::endl; }
+
+	// C++20 부터는 3방향 비교 연산자를 사용하도록 개선되었다.
+	auto result2{ a <=> b };
+	if (is_lt(result2)) { std::cout << "less" << std::endl; }
+	if (is_gt(result2)) { std::cout << "greater" << std::endl; }
+	if (is_eq(result2)) { std::cout << "equal" << std::endl; }
+
+	// 메모리는 string 클래스가 알아서 처리해준다. 따라서 메모리 오버런이 발생할 걱정을 할 필요가 없다.
+	std::string myString{ "hello" };
+	myString += ", there";
+	std::string myOtherString{ myString };
+	if (myString == myOtherString) {
+		myOtherString[0] = 'H';
+	}
+	std::cout << myString << std::endl;
+	std::cout << myOtherString << std::endl;
+	// 스트링을 할당하거나 크기를 조절하는 코드가 여러 군데 흩어져 있어도 메모리 누수가 발생하지 않는다.
+	// string 객체는 모두 스택 변수로 생성되기 때문
+	// string 객체가 스코프를 벗어나자마나 여기에 할당된 메모리를 string 소멸자가 모두 정리한다.
+
+	// 그리고 연산자를 원하는 방식으로 작동할 수 있게 한다.
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 2. string 클래스 사용법
+
+
+int main()
+{
+	// string 클래스에서 제공하는 c_str() 메서드를 사용하면 C언어에 대한 호환성을 보장할 수 있다.
+
+	// string 클래스는 다음과 같은 몇 가지 연산을 추가로 제공한다.
+	// - substr(pos, len): 인수로 지정한 시작 위치와 길이에 맞는 서브스트링을 리턴한다.
+	// - find(str) : 인수로 지정한 서브스트링이 있는 지점을 리턴한다. 없다면 string::npos를 리턴한다.
+	// - replace(pos,len,str): 스트링에서 인수로 지정한 위치와 길이에 해당하는 부분을 str로 지정한 값으로 교체한다.
+	// - starts_with(str)/ends_with(str): 인수로 지정한 서브스트링으로 시작하거나 끝나면 true를 리턴한다.
+
+	std::string strHello{ "Hello!!" };
+	std::string strWorld{ "The World..." };
+	auto position{ strHello.find("!!") };
+	if (position != std::string::npos) {
+		// "!!" 서브스트링 발견. 이 값을 교체한다.
+		strHello.replace(position, 2, strWorld.substr(3, 6));
+	}
+	std::cout << strHello << std::endl;
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+// 3. std::string 리터럴
+
+using namespace std::literals;
+
+
+int main()
+{
+	auto string1{ "Hello World" }; // string1의 타입은 const char*이다.
+	auto string2{ "Hello World"s }; // string2의 타입은 std::string이다.
+	
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.3 C++ std::string 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std; // 시간을 줄이기 위해 지금부터 사용
+
+
+// 4. std::vector와 스트링 CTAD(클래스 템플릿 인수 추론)
+
+
+int main()
+{
+	vector names{ "John", "Sam", "Joe" }; // 타입이 vector<string>이 아닌 vector<const char*>로 추론해 버린다.
+
+	vector names2{ "John"s, "Sam"s, "Joe"s }; // vector<string>으로 추론
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.4 숫자 변환
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std; // 시간을 줄이기 위해 지금부터 사용
+
+
+// 1. 하이베레 숫자 변환
+
+
+int main()
+{
+	// 숫자를 string으로 변환
+	//string to_string(T val);
+	long double d{ 3.14L };
+	string s{ to_string(d) };
+
+	//string을 숫자로 변환
+	/*
+	int stoi(const string & str, size_t * idx = 0, int base = 10);
+	long stol(const string & str, size_t * idx = 0, int base = 10);
+	unsigned long stoul(const string & str, size_t * idx = 0, int base = 10);
+	long long stoll (const string & str, size_t * idx = 0, int base = 10);
+	unsigned long long stoull(const string & str, size_t * idx = 0, int base = 10);
+	float stof(const string & str, size_t * idx = 0);
+	double stod(const string & str, size_t * idx = 0);
+	long double stold(const string & str, size_t * idx = 0);
+	*/
+
+	const string toParse{ " 123USD" };
+	size_t index{ 0 };
+	int value{ stoi(toParse, &index) };
+	cout << format("Parsed value: {}", value) << endl;
+	cout << format("First non-parsed character: '{}'", toParse[index]) << endl;
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.4 숫자 변환
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std; // 시간을 줄이기 위해 지금부터 사용
+
+
+// 1. 하이베레 숫자 변환
+
+
+int main()
+{
+	// 숫자를 string으로 변환
+	//string to_string(T val);
+	long double d{ 3.14L };
+	string s{ to_string(d) };
+
+	//string을 숫자로 변환
+	/*
+	int stoi(const string & str, size_t * idx = 0, int base = 10);
+	long stol(const string & str, size_t * idx = 0, int base = 10);
+	unsigned long stoul(const string & str, size_t * idx = 0, int base = 10);
+	long long stoll (const string & str, size_t * idx = 0, int base = 10);
+	unsigned long long stoull(const string & str, size_t * idx = 0, int base = 10);
+	float stof(const string & str, size_t * idx = 0);
+	double stod(const string & str, size_t * idx = 0);
+	long double stold(const string & str, size_t * idx = 0);
+	*/
+
+	const string toParse{ " 123USD" };
+	size_t index{ 0 };
+	int value{ stoi(toParse, &index) };
+	cout << format("Parsed value: {}", value) << endl;
+	cout << index << endl;
+	cout << format("First non-parsed character: '{}'", toParse[index]) << endl;
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.4 숫자 변환
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std; // 시간을 줄이기 위해 지금부터 사용
+
+
+// 1. 하이베레 숫자 변환
+
+
+int main()
+{
+	// 숫자를 string으로 변환
+	//string to_string(T val);
+	long double d{ 3.14L };
+	string s{ to_string(d) };
+
+	//string을 숫자로 변환
+	/*
+	int stoi(const string & str, size_t * idx = 0, int base = 10);
+	long stol(const string & str, size_t * idx = 0, int base = 10);
+	unsigned long stoul(const string & str, size_t * idx = 0, int base = 10);
+	long long stoll (const string & str, size_t * idx = 0, int base = 10);
+	unsigned long long stoull(const string & str, size_t * idx = 0, int base = 10);
+	float stof(const string & str, size_t * idx = 0);
+	double stod(const string & str, size_t * idx = 0);
+	long double stold(const string & str, size_t * idx = 0);
+	*/
+	// base는 10진수냐 16진수냐를 정하는 것이다.
+
+	const string toParse{ " 123USD" };
+	size_t index{ 0 };
+	int value{ stoi(toParse, &index) };
+	cout << format("Parsed value: {}", value) << endl;
+	cout << index << endl;
+	cout << format("First non-parsed character: '{}'", toParse[index]) << endl;
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.4 숫자 변환
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <charconv>
+
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std; // 시간을 줄이기 위해 지금부터 사용
+
+
+// 2. 로우레벨 숫자 변환 <charconv>
+// 이 함수는 메모리 할당에 관련된 작업은 전혀 해주지 않고 std::string도 직접 다루지 않기 때문에
+// 호출한 측에서 로 버퍼(원시 버퍼)를 할당하는 방식으로 사용해야 한다.
+// 그러므로 하이레벨 숫자 변환 함수에 비해 처리 속도가 엄청나게 빠르다.
+// 또한 퍼펙트 라운트 트리핑 방식으로 설계되었다.
+// 즉, 숫자값을 스트링 형태로 직렬화한 뒤, 그 결과로 나온 스트링을 다시 숫자값으로 역직렬화하면 원래 값이 나온다.
+
+
+
+
+int main()
+{
+	// 숫자를 스트링으로 변환
+	// to_chars_result to_chars(char* first, char* last, IntegerT value, int base= 10); 을 사용
+	const size_t BufferSize{ 50 };
+	string out{ BufferSize, ' ' }; // BufferSize만큼의 문자로 구성된 스트링
+	auto result{ to_chars(out.data(), out.data() + out.size(), 12345) };
+	if (result.ec == errc{}) { cout << out << endl; /*제대로 변환된 경우*/ }
+
+	// 구조적 바인딩을 적용하면 다음과 같이 표현할 수 있다.
+	string out2{ BufferSize, ' ' };
+	auto [ptr, error] {to_chars(out2.data(), out2.data() + out2.size(), 12345)};
+	if (error == errc{}) { cout << out2 << endl;/*제대로 변환된 경우*/ }
+
+	// 또한 다음과 같이 부동소수점 타입에 대한 변환 함수도 제공한다.
+	// to_chars_result to_chars(char* first, char* last);
+	// to_chars_result to_chars(char* first, char* last, FloatT value, chars_format format);
+	// to_chars_result to_chars(char* first, char* last, FloatT value, chars_format format, int precision);
+
+	double value{ 0.314 };
+	string out3{ BufferSize, ' ' };
+	auto [ptr2, error2] {to_chars(out3.data(), out3.data() + out3.size(), value)};
+	if (error2 == errc{}) { cout << out3 << endl;/*제대로 변환된 경우*/ }
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.4 숫자 변환
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <charconv>
+
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std; // 시간을 줄이기 위해 지금부터 사용
+
+
+// 2. 로우레벨 숫자 변환 <charconv>
+// 이 함수는 메모리 할당에 관련된 작업은 전혀 해주지 않고 std::string도 직접 다루지 않기 때문에
+// 호출한 측에서 로 버퍼(원시 버퍼)를 할당하는 방식으로 사용해야 한다.
+// 그러므로 하이레벨 숫자 변환 함수에 비해 처리 속도가 엄청나게 빠르다.
+// 또한 퍼펙트 라운트 트리핑 방식으로 설계되었다.
+// 즉, 숫자값을 스트링 형태로 직렬화한 뒤, 그 결과로 나온 스트링을 다시 숫자값으로 역직렬화하면 원래 값이 나온다.
+
+
+
+
+int main()
+{
+	// 스트링을 숫자로 변환
+	// from_chars_result from_chars(const char* first, const char* last, IntegerT& value, int base = 10);
+	// from_chars_result from_chars(const char* first, const char* last, FloatT& value,
+								//	chars_format format = chars_format::general);
+	const size_t BufferSize{ 50 };
+	double value1{ 0.314 };
+	string out(BufferSize, ' ');
+	auto [ptr1, error1] {to_chars(out.data(), out.data() + out.size(), value1)};
+	if (error1 == errc{}) { cout << out << endl; }
+
+	double value2;
+	auto [ptr2, error2] {from_chars(out.data(), out.data() + out.size(), value2)};
+	if (error2 == errc{}) {
+		if (value1 == value2) {
+			cout << "Perfect roundtrip" << endl;
+		}
+		else {
+			cout << "No perfect roundtrip?!" << endl;
+		}
+	}
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.5 std::string_view 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// std::string_view는 const string& 대신 사용할 수 있으며 오버헤드가 없다.
+// string_view는 c_str()이 없다는 점을 제외하면 std::string가 같다.
+
+// extractExtension 함수는 주어진 파일명에서 확장자만 뽑아서 리턴한다.
+// 참고로 string_view는 대부분 값(pass-by-value)으로 전달한다.
+string_view extractExtension(string_view filename) {
+	return filename.substr(filename.rfind('.'));
+}
+
+int main()
+{
+
+	string filename{ R"(c:\temp\my file.ext)" };
+	cout << format("C++ string: {}", extractExtension(filename)) << endl;
+
+	const char* cString{ R"(c:\temp\my file.ext)" };
+	cout << format("C++ string: {}", extractExtension(cString)) << endl;
+
+	cout << format("Literal: {}", extractExtension(R"(c:\temp\my file.ext)")) << endl;
+
+	// 여기서 extratExtension() 을 호출하는 부분에서 복제 연산이 하나도 발생하지 않는다.
+	// 그러므로 굉장히 효율적이다.
+	
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.5 std::string_view 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// std::string_view는 const string& 대신 사용할 수 있으며 오버헤드가 없다.
+// string_view는 c_str()이 없다는 점을 제외하면 std::string가 같다.
+
+// extractExtension 함수는 주어진 파일명에서 확장자만 뽑아서 리턴한다.
+// 참고로 string_view는 대부분 값(pass-by-value)으로 전달한다.
+string_view extractExtension(string_view filename) {
+	return filename.substr(filename.rfind('.'));
+}
+
+int main()
+{
+
+	string filename{ R"(c:\temp\my file.ext)" };
+	cout << format("C++ string: {}", extractExtension(filename)) << endl;
+
+	const char* cString{ R"(c:\temp\my file.ext)" };
+	cout << format("C++ string: {}", extractExtension(cString)) << endl;
+
+	cout << format("Literal: {}", extractExtension(R"(c:\temp\my file.ext)")) << endl;
+
+	// 여기서 extratExtension() 을 호출하는 부분에서 복제 연산이 하나도 발생하지 않는다.
+	// 그러므로 굉장히 효율적이다.
+
+
+	// string_view 생성자 중 로 버퍼와 길이를 매개변수로 받는 것도 있다.
+	// 이러한 생성자는 NULL로 끝나지 않는 스트링 버퍼로 string_view를 생성할 때 사용한다.
+	// 또한 NULL로 끝나는 스트링 버퍼를 사용할 때도 유용하다.
+
+	/*
+	const char* raw{};
+	size_t length{};
+
+	cout << format("Raw: {}", extractExtension(string_view{ raw, length })) << endl;
+	*/
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.5 std::string_view 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// std::string_view는 const string& 대신 사용할 수 있으며 오버헤드가 없다.
+// string_view는 c_str()이 없다는 점을 제외하면 std::string가 같다.
+
+// extractExtension 함수는 주어진 파일명에서 확장자만 뽑아서 리턴한다.
+// 참고로 string_view는 대부분 값(pass-by-value)으로 전달한다.
+string_view extractExtension(string_view filename) {
+	return filename.substr(filename.rfind('.'));
+}
+
+// string_view를 사용하는 것만으로는 string이 생성되지는 않는다.
+// string 생성자를 직접 호출 하거나 string_view::data() 멤버로 생성해야 한다.
+
+void handleExtension(const string& extension) {/* */ }
+
+int main()
+{
+	// 다음과 같이 호출하면 제대로 동작 하지 않는다.
+	//handleExtension(extractExtension("my file.ext"));
+	
+
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.5 std::string_view 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// std::string_view는 const string& 대신 사용할 수 있으며 오버헤드가 없다.
+// string_view는 c_str()이 없다는 점을 제외하면 std::string가 같다.
+
+// extractExtension 함수는 주어진 파일명에서 확장자만 뽑아서 리턴한다.
+// 참고로 string_view는 대부분 값(pass-by-value)으로 전달한다.
+string_view extractExtension(string_view filename) {
+	return filename.substr(filename.rfind('.'));
+}
+
+// string_view를 사용하는 것만으로는 string이 생성되지는 않는다.
+// string 생성자를 직접 호출 하거나 string_view::data() 멤버로 생성해야 한다.
+
+void handleExtension(const string& extension) {/* */ }
+
+int main()
+{
+	// 다음과 같이 호출하면 제대로 동작 하지 않는다.
+	//handleExtension(extractExtension("my file.ext"));
+	
+	// 제대로 호출하려면 다음 두 가지 방식 중 하나를 적용한다.
+	handleExtension(extractExtension("my file.ext").data());    // data() 메서드
+	handleExtension(string{ extractExtension("my file.ext") }); // 명시적 ctor
+
+	// 이와 같은 이유로 string과 string_view를 서로 결합할 수 없다.
+	string str{ "Hello" };
+	string_view sv{ " world" };
+	//auto result{ str + sv }; // 컴파일 에러
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.5 std::string_view 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// std::string_view는 const string& 대신 사용할 수 있으며 오버헤드가 없다.
+// string_view는 c_str()이 없다는 점을 제외하면 std::string가 같다.
+
+// extractExtension 함수는 주어진 파일명에서 확장자만 뽑아서 리턴한다.
+// 참고로 string_view는 대부분 값(pass-by-value)으로 전달한다.
+string_view extractExtension(string_view filename) {
+	return filename.substr(filename.rfind('.'));
+}
+
+// string_view를 사용하는 것만으로는 string이 생성되지는 않는다.
+// string 생성자를 직접 호출 하거나 string_view::data() 멤버로 생성해야 한다.
+
+void handleExtension(const string& extension) {/* */ }
+
+int main()
+{
+	// 다음과 같이 호출하면 제대로 동작 하지 않는다.
+	//handleExtension(extractExtension("my file.ext"));
+	
+	// 제대로 호출하려면 다음 두 가지 방식 중 하나를 적용한다.
+	handleExtension(extractExtension("my file.ext").data());    // data() 메서드
+	handleExtension(string{ extractExtension("my file.ext") }); // 명시적 ctor
+
+	// 이와 같은 이유로 string과 string_view를 서로 결합할 수 없다.
+	string str{ "Hello" };
+	string_view sv{ " world" };
+	auto result{ str + sv.data()};
+	//or
+	string result2{ str };
+	result2.append(sv.data(), sv.size());
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.5 std::string_view 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 1. std::string_view와 임시 스트링
+
+
+int main()
+{
+	// string_view는 임시 스트링에 대한 뷰를 저장하는 용도로 사용하면 안된다.
+	string s{ "Hello" };
+	string_view sv{ s + " World" };
+	cout << sv;
+	// 이렇게 작성시 비정상적으로 작동할 수 있다.
+	// 구체적인 동작은 컴파일러의 종류와 설정에 따라 다르다.
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.5 std::string_view 클래스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// 2. std::string_view 리터럴
+
+
+int main()
+{
+	// 표준 사용자 정의 리터럴인 sv를 사용하면 스트링 리터럴을 std::string_view로 만들 수 있다.
+	auto sv{ "My string_view"sv };
+
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.1 동적 스트링
+// - 2.1.6 비표준 스트링
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// C++ 프로그래머 상당수가 C++ 타입 스트링을 잘 사용하지 않는데는 여러가지 이유가 있는데
+// 거기서 가장 큰 이유는 마이크로소프트 MFC의 CString 클래스처럼 개발 프레일워크나
+// 운영체제에서 나름대로 정의한 스트링을 제공하기 때문이다.
+
+// C++로 프로젝트를 시작할 때 구성원이 사용하는 스트링을 미리 결정하는 것은 굉장히 중요하다.
+// 그중에서도 다음 사항은 반드시 명심해야 한다.
+// - C 스트링은 사용하지 않는다.
+// - MFC나 Qt 등에서 기본적으로 제공하는 스트링처럼 현재 사용하는 프레임워크에서 제공하는 
+//  스트링을 프로젝트의 표준 스트링으로 삼는다.
+// - std::string으로 스트링을 표현한다면 함수의 매개변수로 전달한 읽기 전용 스트링은
+//   std::string_view로 지정한다. 스트링을 다른 방식으로 표현한다면 현재 프레임워크에서 제공하는
+//   string_view와 유사한 기능을 활용한다.
+
+
+int main()
+{
+	
+
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// C 함수
+// - 안전하지 않고 커스텀 타입을 지원하도록 확장할 수 없기 때문에 권장하지 않는다.
+// - 포맷 스트링과 인수가 분리되어 있어서 읽기가 쉽다. 따라서 다른 언어로 변환하기 좋다.
+// - ex) printf("x has value %d and y has value %d. \n" , x, y);
+
+// C++ I/O 스트림
+// - 타입에 안전하고 확장할 수 있어서 (C++20 이전 버전에서) 권장하는 방법이다.
+// - 스트링과 인수가 섞여 있어서 읽기 힘들다. 따라서 변환하기도 힘들다.
+// - ex) cout << "x has value" << x << " and y has value" << y << endl;
+
+int main()
+{
+	
+
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// C++20 부터는 <format>에 정의된 std::format()으로 스트링의 포맷을 지정할 수 있다.
+// 이 함수는 C 함수의 장점과 C++ I/O 스트림의 장점을 모두 합친 것이다.
+
+// format()의 첫 번째 인수는 포맷 지정 스트링이다. 그 뒤에 나오는 인수는 포맷 지정 스트링에 있는 빈 칸에 채워질 값이다.
+// 빈칸 중괄호 안에 들어갈 스트링은 [index][:specifier] 형식으로 지정한다.
+// 이때 모든 빈 칸에 index를 생략해도 되고, 모든 빈 칸에 대해 0부터 시작하는 인덱스 값을 두번 째 인수부터
+// 필요한 만큼 지정할 수도 있다. 인덱스를 생략하면 format()의 두번째 인수부터 나오는 값을 빈 칸에 순서대로 집어넣는다.
+// 또한 specifier는 주어진 값을 출력할 때 따를 형식을 변경하는 포맷 지정자다.
+
+int main()
+{
+	int n{ 1 };
+	auto s1{ format("Read {} bytes from {}", n, "file1.txt") };
+	
+	// 인덱스를 직접 지정할 수도 있다.
+	auto s2{ format("Read {0} bytes from {1}", n, "file1.txt") };
+
+	// 순서를 바꿀수 있다.
+	auto s3{ format("Read {1} bytes from {0}", n, "file1.txt") };
+
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	// 1. width - 주어진 값의 포맷을 적용할 필드의 최소 폭(예:5)을 정한다.
+
+	int i{ 42 };
+	cout << format("|{:5}|", i) << endl; // |     42|
+	cout << format("|{:{}}|", i, 7) << endl; // |       42|
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	// 1. width - 주어진 값의 포맷을 적용할 필드의 최소 폭(예:5)을 정한다.
+
+	int i{ 42 };
+	cout << format("|{:5}|", i) << endl; // |     42|
+	cout << format("|{:{}}|", i, 7) << endl; // |       42|
+
+	// 2. [fill]align - 채울 문자와 해달 필드에 값이 정렬되는 방식을 지정한다.
+	// <: 왼쪽정렬
+	// >: 오른쪽정렬
+	// ^: 가운데정렬
+	// 출력될 때 [width]로 지정한 최소 폭에 맞게 채울 문자가 적용된다. 지정하지 않았다면
+	// [fill]align이 적용되지 않는다.
+	int i2{ 42 };
+	cout << format("|{:7}", i) << endl;     // |     42|
+	cout << format("|{:<7}", i) << endl;    // |42     |
+	cout << format("|{:_>7}", i) << endl;   // |____ 42|
+	cout << format("|{:_^7}", i) << endl;   // |__42___|
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	// 1. width - 주어진 값의 포맷을 적용할 필드의 최소 폭(예:5)을 정한다.
+
+	int i{ 42 };
+	cout << format("|{:5}|", i) << endl; // |     42|
+	cout << format("|{:{}}|", i, 7) << endl; // |       42|
+
+	// 2. [fill]align - 채울 문자와 해달 필드에 값이 정렬되는 방식을 지정한다.
+	// <: 왼쪽정렬
+	// >: 오른쪽정렬
+	// ^: 가운데정렬
+	// 출력될 때 [width]로 지정한 최소 폭에 맞게 채울 문자가 적용된다. 지정하지 않았다면
+	// [fill]align이 적용되지 않는다.
+	int i2{ 42 };
+	cout << format("|{:7}|", i2) << endl;     // |     42|
+	cout << format("|{:<7}|", i2) << endl;    // |42     |
+	cout << format("|{:_>7}|", i2) << endl;   // |____ 42|
+	cout << format("|{:_^7}|", i2) << endl;   // |__42___|
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	// 1. width - 주어진 값의 포맷을 적용할 필드의 최소 폭(예:5)을 정한다.
+
+	int i{ 42 };
+	cout << format("|{:5}|", i) << endl; // |     42|
+	cout << format("|{:{}}|", i, 7) << endl; // |       42|
+
+	// 2. [fill]align - 채울 문자와 해달 필드에 값이 정렬되는 방식을 지정한다.
+	// <: 왼쪽정렬
+	// >: 오른쪽정렬
+	// ^: 가운데정렬
+	// 출력될 때 [width]로 지정한 최소 폭에 맞게 채울 문자가 적용된다. 지정하지 않았다면
+	// [fill]align이 적용되지 않는다.
+	int i2{ 42 };
+	cout << format("|{:7}|", i2) << endl;     // |     42|
+	cout << format("|{:<7}|", i2) << endl;    // |42     |
+	cout << format("|{:_>7}|", i2) << endl;   // |____ 42|
+	cout << format("|{:_^7}|", i2) << endl;   // |__42___|
+
+	// 3. sign - 다음 중 하나로 지정한다.
+	// - : 음수에만 부호를 붙인다.
+	// + : 음수와 양수 모두에 부호를 붙인다.
+	// space : 음수에는 마이너스 기호를 붙이고, 양수에는 빈 칸을 적용한다.
+	int i3{ 42 };
+	cout << format("|{:<5}|", i3) << endl;     // |42   |
+	cout << format("|{:<+5}|", i3) << endl;    // |+42  |
+	cout << format("|{:< 5}|", i3) << endl;    // | 42  |
+	cout << format("|{:< 5}|", -i3) << endl;   // |-42  |
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	// 1. width - 주어진 값의 포맷을 적용할 필드의 최소 폭(예:5)을 정한다.
+
+	int i{ 42 };
+	cout << format("|{:5}|", i) << endl; // |     42|
+	cout << format("|{:{}}|", i, 7) << endl; // |       42|
+
+	// 2. [fill]align - 채울 문자와 해달 필드에 값이 정렬되는 방식을 지정한다.
+	// <: 왼쪽정렬
+	// >: 오른쪽정렬
+	// ^: 가운데정렬
+	// 출력될 때 [width]로 지정한 최소 폭에 맞게 채울 문자가 적용된다. 지정하지 않았다면
+	// [fill]align이 적용되지 않는다.
+	int i2{ 42 };
+	cout << format("|{:7}|", i2) << endl;     // |     42|
+	cout << format("|{:<7}|", i2) << endl;    // |42     |
+	cout << format("|{:_>7}|", i2) << endl;   // |____ 42|
+	cout << format("|{:_^7}|", i2) << endl;   // |__42___|
+
+	// 3. sign - 다음 중 하나로 지정한다.
+	// - : 음수에만 부호를 붙인다.
+	// + : 음수와 양수 모두에 부호를 붙인다.
+	// space : 음수에는 마이너스 기호를 붙이고, 양수에는 빈 칸을 적용한다.
+	int i3{ 42 };
+	cout << format("|{:<5}|", i3) << endl;     // |42   |
+	cout << format("|{:<+5}|", i3) << endl;    // |+42  |
+	cout << format("|{:< 5}|", i3) << endl;    // | 42  |
+	cout << format("|{:< 5}|", -i3) << endl;   // |-42  |
+	
+	// 4. # - 얼티네이트 포매팅 규칙을 제공한다. 타입에 따라 0x,0X,0b,0등을 숫자 앞에 붙인다.
+
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	
+	// 4. # - 얼티네이트 포매팅 규칙을 제공한다. 타입에 따라 0x,0X,0b,0등을 숫자 앞에 붙인다.
+
+	// 5. type - 주어진 값을 반드시 따라야 할 타입을 지정한다.
+	// 정수 타입, 부동소수점 타입, 부울타입, 문자 타입, 스트링 타입, 포인터 타입
+	int i{ 42 };
+	cout << format("|{:10d}|", i) << endl;		//|        42|
+	cout << format("|{:10b}|", i) << endl;		//|    101010|
+	cout << format("|{:#10b}|", i) << endl;		//|  0b101010|
+	cout << format("|{:10X}|", i) << endl;		//|        2A|
+	cout << format("|{:#10X}|", i) << endl;		//|      0X2A|
+
+	string s{ "ProCpp" };
+	cout << format("|{:_^10}|", s) << endl; //|__ProCPpp__|
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	
+	// 4. # - 얼티네이트 포매팅 규칙을 제공한다. 타입에 따라 0x,0X,0b,0등을 숫자 앞에 붙인다.
+
+	// 5. type - 주어진 값을 반드시 따라야 할 타입을 지정한다.
+	// 정수 타입, 부동소수점 타입, 부울타입, 문자 타입, 스트링 타입, 포인터 타입
+	int i{ 42 };
+	cout << format("|{:10d}|", i) << endl;		//|        42|
+	cout << format("|{:10b}|", i) << endl;		//|    101010|
+	cout << format("|{:#10b}|", i) << endl;		//|  0b101010|
+	cout << format("|{:10X}|", i) << endl;		//|        2A|
+	cout << format("|{:#10X}|", i) << endl;		//|      0X2A|
+
+	string s{ "ProCpp" };
+	cout << format("|{:_^10}|", s) << endl; //|__ProCPpp__|
+
+	// 6. precision - 부동소수점과 스트링 타입에만 적용된다.
+	// 부동소수점 타입을 표기할 때는 점(.)을 먼저 붙이고 그 뒤에 10진수 숫자를 적고,
+	// 스트링을 표기할 때는 점 뒤에 문자 개수를 적는다.
+	double d{ 3.1415 / 2.3 };
+	cout << format("|{:12g}|", d) << endl;		//|    1.365870|
+	cout << format("|{:12.2}|", d) << endl;
+	cout << format("|{:12e}|", d) << endl;
+
+	int width{ 12 };
+	int percision{ 3 };
+	cout << format("|{2:{0}.{1}f}|", width, percision, d) << endl;
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	
+	// 4. # - 얼티네이트 포매팅 규칙을 제공한다. 타입에 따라 0x,0X,0b,0등을 숫자 앞에 붙인다.
+
+	// 5. type - 주어진 값을 반드시 따라야 할 타입을 지정한다.
+	// 정수 타입, 부동소수점 타입, 부울타입, 문자 타입, 스트링 타입, 포인터 타입
+	int i{ 42 };
+	cout << format("|{:10d}|", i) << endl;		//|        42|
+	cout << format("|{:10b}|", i) << endl;		//|    101010|
+	cout << format("|{:#10b}|", i) << endl;		//|  0b101010|
+	cout << format("|{:10X}|", i) << endl;		//|        2A|
+	cout << format("|{:#10X}|", i) << endl;		//|      0X2A|
+
+	string s{ "ProCpp" };
+	cout << format("|{:_^10}|", s) << endl; //|__ProCPpp__|
+
+	// 6. precision - 부동소수점과 스트링 타입에만 적용된다.
+	// 부동소수점 타입을 표기할 때는 점(.)을 먼저 붙이고 그 뒤에 10진수 숫자를 적고,
+	// 스트링을 표기할 때는 점 뒤에 문자 개수를 적는다.
+	double d{ 3.1415 / 2.3 };
+	cout << format("|{:12g}|", d) << endl;							//|     1.36587|
+	cout << format("|{:12.2}|", d) << endl;							//|         1.4|
+	cout << format("|{:12e}|", d) << endl;							//|1.365870e+00|
+												
+	int width{ 12 };
+	int percision{ 3 };
+	cout << format("|{2:{0}.{1}f}|", width, percision, d) << endl;	//|       1.366|
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	
+	// 4. # - 얼티네이트 포매팅 규칙을 제공한다. 타입에 따라 0x,0X,0b,0등을 숫자 앞에 붙인다.
+
+	// 5. type - 주어진 값을 반드시 따라야 할 타입을 지정한다.
+	// 정수 타입, 부동소수점 타입, 부울타입, 문자 타입, 스트링 타입, 포인터 타입
+	int i{ 42 };
+	cout << format("|{:10d}|", i) << endl;		//|        42|
+	cout << format("|{:10b}|", i) << endl;		//|    101010|
+	cout << format("|{:#10b}|", i) << endl;		//|  0b101010|
+	cout << format("|{:10X}|", i) << endl;		//|        2A|
+	cout << format("|{:#10X}|", i) << endl;		//|      0X2A|
+
+	string s{ "ProCpp" };
+	cout << format("|{:_^10}|", s) << endl; //|__ProCPpp__|
+
+	// 6. precision - 부동소수점과 스트링 타입에만 적용된다.
+	// 부동소수점 타입을 표기할 때는 점(.)을 먼저 붙이고 그 뒤에 10진수 숫자를 적고,
+	// 스트링을 표기할 때는 점 뒤에 문자 개수를 적는다.
+	double d{ 3.1415 / 2.3 };
+	cout << format("|{:12g}|", d) << endl;							//|     1.36587|
+	cout << format("|{:12.2}|", d) << endl;							//|         1.4|
+	cout << format("|{:12e}|", d) << endl;							//|1.365870e+00|
+												
+	int width{ 12 };
+	int percision{ 3 };
+	cout << format("|{2:{0}.{1}f}|", width, percision, d) << endl;	//|       1.366|
+
+	// 7. 0 - 숫자값에 대해 적용할 떄 [width]로 지정한 최소 폭에 맞게 0을 집어넣는다.
+	int i2{ 42 };
+	cout << format("|{:06d}|", i) << endl;		//|000042|
+	cout << format("|{:+06d}|", i) << endl;		//|+00042|
+	cout << format("|{:06X}|", i) << endl;		//|00002A|
+	cout << format("|{:#06X}|", i) << endl;		//|0X002A|
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.1 포맷 지정자
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+
+int main()
+{
+	// 포맷 지정자는 값을 출력할 때 적용할 포맷을 설정한다.
+	// 앞에 콜론 :이 붙고 다음과 같은 형식으로 표기한다.
+	//[[file]align][sign][#][0][width][.percison][type]
+
+	
+	// 4. # - 얼티네이트 포매팅 규칙을 제공한다. 타입에 따라 0x,0X,0b,0등을 숫자 앞에 붙인다.
+
+	// 5. type - 주어진 값을 반드시 따라야 할 타입을 지정한다.
+	// 정수 타입, 부동소수점 타입, 부울타입, 문자 타입, 스트링 타입, 포인터 타입
+	int i{ 42 };
+	cout << format("|{:10d}|", i) << endl;		//|        42|
+	cout << format("|{:10b}|", i) << endl;		//|    101010|
+	cout << format("|{:#10b}|", i) << endl;		//|  0b101010|
+	cout << format("|{:10X}|", i) << endl;		//|        2A|
+	cout << format("|{:#10X}|", i) << endl;		//|      0X2A|
+
+	string s{ "ProCpp" };
+	cout << format("|{:_^10}|", s) << endl; //|__ProCPpp__|
+
+	// 6. precision - 부동소수점과 스트링 타입에만 적용된다.
+	// 부동소수점 타입을 표기할 때는 점(.)을 먼저 붙이고 그 뒤에 10진수 숫자를 적고,
+	// 스트링을 표기할 때는 점 뒤에 문자 개수를 적는다.
+	double d{ 3.1415 / 2.3 };
+	cout << format("|{:12g}|", d) << endl;							//|     1.36587|
+	cout << format("|{:12.2}|", d) << endl;							//|         1.4|
+	cout << format("|{:12e}|", d) << endl;							//|1.365870e+00|
+												
+	int width{ 12 };
+	int percision{ 3 };
+	cout << format("|{2:{0}.{1}f}|", width, percision, d) << endl;	//|       1.366|
+
+	// 7. 0 - 숫자값에 대해 적용할 떄 [width]로 지정한 최소 폭에 맞게 0을 집어넣는다.
+	int i2{ 42 };
+	cout << format("|{:06d}|", i2) << endl;		//|000042|
+	cout << format("|{:+06d}|", i2) << endl;		//|+00042|
+	cout << format("|{:06X}|", i2) << endl;		//|00002A|
+	cout << format("|{:#06X}|", i2) << endl;		//|0X002A|
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.2 포맷 지정자 에러
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+int main()
+{
+
+	// 에러가 있으면 std::format_error 익셉션을 던진다.
+	try {
+		cout << format("An integer: {:.}", 5);
+	}
+	catch (const format_error& caught_exception) {
+		cout << caught_exception.what();
+	}
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.31 커스텀 타입 지원
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// C++20 포맷 지정 라이브러리는 커스텀 타입에 대해 확장할 수 있다.
+// 그러기 위해서는 std::formatter 클래스 템플릿을 특수화해야 한다.
+
+class KeyValue {
+public:
+	KeyValue(string_view key, int value) 
+		: m_key{key}, m_value{value} {
+
+	}
+
+	const string& getKey() const { return m_key; }
+	int getValue() const { return m_value; }
+
+private:
+	string m_key;
+	int m_value;
+};
+
+// {:a}는 키만 출력
+// {:b}는 값만 출력
+// {:c}와 {}는 키와 값 모두 출력
+
+template<>
+class formatter<KeyValue>
+{
+public:
+	constexpr auto parse(auto& context) {
+		auto iter{ context.begin() };
+		const auto end{ context.end() };
+		if (iter == end || *iter == '}') { // {} 포맷 지정자
+			m_outputType = OutputType::KeyAndValue;
+			return iter;
+		}
+
+		switch (*iter) {
+		case 'a': // {:a} 포맷 지정자
+			m_outputType = OutputType::KeyOnly;
+			break;
+		case 'b': // {:b} 포맷 지정자
+			m_outputType = OutputType::ValueOnly;
+			break;
+		case 'c': // {:c} 포맷 지정자
+			m_outputType = OutputType::KeyAndValue;
+			break;
+		default:
+			throw format_error{ "Invalid KeyValue format specifier" };
+		}
+
+		++iter;
+		if (iter != end && *iter != '}') {
+			throw format_error{ "Invalid KeyValue format specifier." };
+		}
+		return iter;
+	}
+
+	auto format(const KeyValue& kv, auto& context) {
+		switch (m_outputType)
+		{
+		case  OutputType::KeyOnly:
+			return format_to(context.out(), "{}", kv.getKey());
+			break;
+		case  OutputType::ValueOnly:
+			return format_to(context.out(), "{}", kv.getValue());
+			break;
+		default:
+			return format_to(context.out(), "{} - {}", kv.getKey(), kv.getValue());
+			break;
+		}
+	}
+
+private:
+	enum class OutputType {
+		KeyOnly,
+		ValueOnly,
+		KeyAndValue
+	};
+	OutputType m_outputType{ OutputType::KeyAndValue };
+};
+
+int main()
+{
+
+	
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.2 스트링 포맷 지정
+// - 2.2.31 커스텀 타입 지원
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// C++20 포맷 지정 라이브러리는 커스텀 타입에 대해 확장할 수 있다.
+// 그러기 위해서는 std::formatter 클래스 템플릿을 특수화해야 한다.
+
+class KeyValue {
+public:
+	KeyValue(string_view key, int value) 
+		: m_key{key}, m_value{value} {
+
+	}
+
+	const string& getKey() const { return m_key; }
+	int getValue() const { return m_value; }
+
+private:
+	string m_key;
+	int m_value;
+};
+
+// {:a}는 키만 출력
+// {:b}는 값만 출력
+// {:c}와 {}는 키와 값 모두 출력
+
+template<>
+class formatter<KeyValue>
+{
+public:
+	constexpr auto parse(auto& context) {
+		auto iter{ context.begin() };
+		const auto end{ context.end() };
+		if (iter == end || *iter == '}') { // {} 포맷 지정자
+			m_outputType = OutputType::KeyAndValue;
+			return iter;
+		}
+
+		switch (*iter) {
+		case 'a': // {:a} 포맷 지정자
+			m_outputType = OutputType::KeyOnly;
+			break;
+		case 'b': // {:b} 포맷 지정자
+			m_outputType = OutputType::ValueOnly;
+			break;
+		case 'c': // {:c} 포맷 지정자
+			m_outputType = OutputType::KeyAndValue;
+			break;
+		default:
+			throw format_error{ "Invalid KeyValue format specifier" };
+		}
+
+		++iter;
+		if (iter != end && *iter != '}') {
+			throw format_error{ "Invalid KeyValue format specifier." };
+		}
+		return iter;
+	}
+
+	auto format(const KeyValue& kv, auto& context) {
+		switch (m_outputType)
+		{
+		case  OutputType::KeyOnly:
+			return format_to(context.out(), "{}", kv.getKey());
+			break;
+		case  OutputType::ValueOnly:
+			return format_to(context.out(), "{}", kv.getValue());
+			break;
+		default:
+			return format_to(context.out(), "{} - {}", kv.getKey(), kv.getValue());
+			break;
+		}
+	}
+
+private:
+	enum class OutputType {
+		KeyOnly,
+		ValueOnly,
+		KeyAndValue
+	};
+	OutputType m_outputType{ OutputType::KeyAndValue };
+};
+
+int main()
+{
+
+	KeyValue keyValue{ "Key1", 11 };
+	cout << format("{}", keyValue) << endl;
+	cout << format("{:a}", keyValue) << endl;
+	cout << format("{:b}", keyValue) << endl;
+	cout << format("{:c}", keyValue) << endl;
+	try { cout << format("{:cd}", keyValue) << endl; }
+	catch (const format_error& caught_exception) { cout << caught_exception.what(); }
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.3 정리
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+// C++에서 제공하는 string과 string_view 클래스를 소개했고,
+// 기존 C언어의 문자 배열의 비해 어떤 장점이 있는지 살펴봤다.
+// 또한 숫자와 string을 쉽게 변화하는 여러 가지 헬퍼 함수도 살펴봤고,
+// 로 스트링 리터럴 개념도 배웠다.
+// 마지막으로 C++20부터 추가된 스트링 포매팅 라이브러리도 소개했다.
+
+
+int main()
+{
+
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.4 연습문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 2-1
+
+
+int main()
+{
+	string strfirst{};
+	string strsecond{};
+
+	cin >> strfirst;
+	cin >> strsecond;
+
+	auto result = strfirst <=> strsecond;
+
+	if (is_lt(result)) {
+		cout << strfirst << endl;
+		cout << strsecond << endl;
+	}
+	else if (is_gt(result)){
+		cout << strsecond << endl;
+		cout << strfirst << endl;
+	}
+	else if (is_eq(result)) {
+		cout << "둘이 같습니다." << endl;
+	}
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.4 연습문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 2-1
+
+
+int main()
+{
+	string strfirst{};
+	string strsecond{};
+
+	cin >> strfirst;
+	cin >> strsecond;
+
+	auto result = strfirst <=> strsecond;
+
+	if (is_lt(result)) {
+		cout << strfirst << endl;
+		cout << strsecond << endl;
+	}
+	else if (is_gt(result)){
+		cout << strsecond << endl;
+		cout << strfirst << endl;
+	}
+	else if (is_eq(result)) {
+		cout << "둘이 같습니다." << endl;
+	}
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.4 연습문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 2-1
+
+
+int main()
+{
+	string strfirst{};
+	string strsecond{};
+
+	cin >> strfirst;
+	cin >> strsecond;
+
+	auto result = strfirst <=> strsecond;
+
+	if (is_lt(result)) {
+		cout << strfirst << endl;
+		cout << strsecond << endl;
+	}
+	else if (is_gt(result)){
+		cout << strsecond << endl;
+		cout << strfirst << endl;
+	}
+	else if (is_eq(result)) {
+		cout << "둘이 같습니다." << endl;
+	}
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.4 연습문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 2-1
+
+
+int main()
+{
+	string strfirst{};
+	string strsecond{};
+
+	cin >> strfirst;
+	cin >> strsecond;
+
+	auto result = strfirst <=> strsecond;
+
+	if (is_lt(result)) {
+		cout << strfirst << endl;
+		cout << strsecond << endl;
+	}
+	else if (is_gt(result)){
+		cout << strsecond << endl;
+		cout << strfirst << endl;
+	}
+	else if (is_eq(result)) {
+		cout << "둘이 같습니다." << endl;
+	}
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.4 연습문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 2-2
+string replace(const string& haystack, const string& needle, const string& replacement)
+{
+	// Make a copy of the haystack.
+	string result{ haystack };
+
+	// Find all needles and replace them with the replacement string.
+	auto position{ result.find(needle) };
+	while (position != string::npos) {
+		result.replace(position, needle.length(), replacement);
+		position = result.find(needle, position + needle.size());
+	}
+
+	return result;
+}
+
+int main()
+{
+	// Ask for the source string (= haystack).
+	string haystack;
+	cout << "Enter source string: ";
+	getline(cin, haystack);
+
+	// Ask for the string to find (= needle).
+	string needle;
+	cout << "Enter string to find: ";
+	getline(cin, needle);
+
+	// Ask for the replacement string.
+	string replacement;
+	cout << "Enter replacement string: ";
+	getline(cin, replacement);
+
+	// Call the replace function.
+	string result{ replace(haystack, needle, replacement) };
+
+	// Print out all the strings for verification.
+	cout << "Haystack: " << haystack << endl;
+	cout << "Needle: " << needle << endl;
+	cout << "Replacment: " << replacement << endl;
+	cout << "Result: " << result << endl;
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.4 연습문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <string_view>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 2-3
+string replace(string_view haystack, string_view needle, string_view replacement)
+{
+	// Make a copy of the haystack.
+	string result{ haystack };
+
+	// Find all needles and replace them with the replacement string.
+	auto position{ result.find(needle) };
+	while (position != string::npos) {
+		result.replace(position, needle.length(), replacement);
+		position = result.find(needle, position + needle.size());
+	}
+
+	return result;
+}
+
+int main()
+{
+	// Ask for the source string (= haystack).
+	string haystack;
+	cout << "Enter source string: ";
+	getline(cin, haystack);
+
+	// Ask for the string to find (= needle).
+	string needle;
+	cout << "Enter string to find: ";
+	getline(cin, needle);
+
+	// Ask for the replacement string.
+	string replacement;
+	cout << "Enter replacement string: ";
+	getline(cin, replacement);
+
+	// Call the replace function.
+	string result{ replace(haystack, needle, replacement) };
+
+	// Print out all the strings for verification.
+	cout << "Haystack: " << haystack << endl;
+	cout << "Needle: " << needle << endl;
+	cout << "Replacment: " << replacement << endl;
+	cout << "Result: " << result << endl;
+
+	save("helloworld.cpp");
+}
+
+================================================
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.03 공부
+// Chapter2 스트링과 스트링 뷰 다루기
+// 2.4 연습문제
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <string>
+#include <format>
+#include <vector>
+
+//import database;
+//import employee;
+
+//import airline_ticket;
+
+#include "save.h"
+
+using namespace std;
+
+
+// 연습문제 2-4
+
+
+int main()
+{
+	// A vector to store all values.
+	vector<double> values;
+
+	// Ask the user to enter values until 0 is entered.
+	cout << "Input values, one at a time followed by Enter:" << endl;
+	while (true) {
+		double value;
+		cin >> value;
+		if (value == 0.0) {
+			break;
+		}
+		values.push_back(value);
+	}
+
+	// Format the values in a table with a couple of columns.
+	for (auto value : values) {
+		cout << format("{0:16e} | {0:12f} | {0:<12g} | {0:#>+12g}", value) << endl;
+	}
+	save("helloworld.cpp");
+}
+
+================================================
