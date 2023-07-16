@@ -1,0 +1,158 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.14 공부
+// Chapter 14 컴포넌트
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+// 한 개체가 여러 분야를 서로 커플링 없이 다룰 수 있게 한다.
+
+
+// 여러 분야를 다루는 하나의 개체가 있다. 분야별로 격리하기 위해, 각각의 코드를 별도의 컴포넌트 클래스에 둔다.
+// 이제 개체 클래스는 단순히 이들 컴포너트들의 컨테이너 역할만 한다.
+
+// 언제 쓰는가?
+// - 한 클래스에서 여러 분야를 건드리고 있어서, 이들을 서로 디커플링하고 싶다.
+// - 클래스가 거대해져서 작업하기가 어렵다.
+// - 여러 다른 기능을 공유하는 다양한 객체를 정의하고 싶다. 단, 상속으로는 딱 원하는 부분만 골라서 재사용 할 수가 없다.
+
+
+// 컴포넌트 패턴 전
+/*
+class Bjorn {
+public:
+	Bjorn() : velcoity(0), x(0), y(0){}
+	void update(World& world, Graphics& graphics);
+
+private:
+	static const int WALK_ACCELERATION = 1;
+
+	int velocity;
+	int x, y;
+	Volume volume;
+
+	Sprite spriteStand;
+	Sprite spriteWalkLeft;
+	Sprite spriteWalkRight;
+};
+
+void Bjorn::update(World& world, Graphics& graphics) {
+	// 입력에 따라 주인공의 속도를 조절한다.
+	switch(Controller::getJoystickDirection()) {
+	case DIR_LEFT:
+		velocity -= WALK_ACCELERATION;
+		break;
+
+	case DIR_RIGHT:
+		velocity += WALK_ACCELERATION;
+		break;
+	}
+
+	// 속도에 따라 위치를 바꾼다.
+	x += velocity;
+	world.resolveCollision(volume, x, y, velocity);
+
+	// 알맞은 스프라이트를 그린다.
+	Sprite* sprite = &spriteStand;
+	if (velocity < 0) { sprite = &spriteWalkLeft; }
+	else if (velocity > 0) { sprite = &spriteWalkRight; }
+	graphics.draw(*sprite, x, y);
+}
+
+
+// 분야별로 나누기
+class InputComponent {
+public:
+	void update(Bjorn* bjorn) {
+		switch (Controller::getJoystickDirection())
+		{
+		case DIR_LEFT:
+			bjorn.velocity -= WALK_ACCELERATION;
+			break;
+		case DIR_RIGHT:
+			bjorn.velocity += WALK_ACCCELERATION;
+		}
+	}
+
+private:
+	static const int  WALK_ACCELERATION = 1;
+};
+
+
+class Bjorn {
+public:
+	int velocity;
+	int x, y;
+
+
+	void update(World& world, Graphics& graphics) {
+
+		input.update(*this);
+
+		// 속도에 따라 위치를 바꾼다.
+		x += velocity;
+		world.resolveCollision(volume, x, y, velocity);
+
+		// 알맞은 스프라이트를 그린다.
+		Sprite* sprite = &spriteStand;
+		if (velocity < 0) { sprite = &spriteWalkLeft; }
+		else if (velocity > 0) { sprite = &spriteWalkRight; }
+		graphics.draw(*sprite, x, y);
+	}
+
+private:
+	InputComponent input;
+
+	Volume volume;
+
+	Sprite spriteStand;
+	Sprite spriteWalkLeft;
+	Sprite spriteWalkRight;
+};
+*/
+// 나머지도 각각 나누면 된다.
+
+
+
+// 객체는 컴포넌트르 어떻게 얻는가?
+
+// 객체가 필요한 컴포넌트를 알아서 생성할 때
+// - 객체는 항상 필요한 컴포넌트를 가지게 된다.
+// - 객체를 변경하기가 어렵다.
+
+// 외부 코드에서 컴포넌트를 제공할 때
+// - 객체가 훨씬 유연해진다.
+// - 객체를 구체 컴포넌트 자료형으로부터 디커플링할 수 있다.
+
+
+// 컴포넌트들끼리는 어떻게 통신할 것인가?
+
+// 컨테이너 객체의 상태를 변경하는 방식
+// - 컴포넌트들은 서로 디커플링 상태를 유지한다.
+// - 컴포넌트들이 공유하는 정보를 컨테이너 객체에 전부 넣어야 한다.
+// - 컴포넌트끼리 암시적으로 통신하다 보니 컴포넌트 실행 순서에 의존하게 된다.
+
+// 컴포넌트가 서로 참조하는 방식
+// - 간단하고 빠르다.
+// - 두 컴포넌트가 강하게 결합된다.
+
+// 메시지를 전달하는 방식
+// - 하위 컴포넌트들은 디커플링된다.
+// - 컨테이너 객체는 단순하다.
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+

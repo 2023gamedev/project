@@ -1,0 +1,167 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.13 공부
+// Chapter 11 바이트코드
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+// 게임 개발이 재미있을진 몰라도, 절대 쉽진 않다. 요즘 게임을 만들려면 엄청난 양의 복잡한 소스코드를 구현해야 한다.
+
+/*
+// 인터프리터 패턴 
+class Expression {
+public:
+	virtual ~Expression(){}
+	virtual double evaluate() = 0;
+};
+
+class NumberExpression : public Expression {
+public:
+	NumberExpression(double value) : value(value){}
+	virtual double evaluate() { return value; }
+
+private:
+	double value;
+};
+
+class AdditionExpression : public Expression {
+public:
+	AdditionExpression(Expression* left, Expression* right) : left(left),right(right){}
+
+	virtual double evaluate() {
+		// 피연산자를 실행한다.
+		double left = left->evaluate();
+		double right = right->evaluate();
+
+		// 피연산자를 더한다.
+		return left + right;
+	}
+
+
+private:
+	Expression* left;
+	Expression* right;
+};
+// 물론 코드를 로딩하면서 작은 객체를 엄청 많이 만들고 연결해야하는등에 단점이 있다. -> 느리다. 엄청
+
+
+// 기계어의 장점
+// - 밀도가 높다. -> 메모리 낭비 x
+// - 선형적이다.
+// - 저수준이다.
+// - 빠르다.
+
+
+// 바이트코드 패턴은 언제 사용하는가
+// - 언어가 너무 저수준이라 만드는 데 손이 많이 가거나 오류가 생기기 쉽다.
+// - 컴파일 시간이나 다른 빌드 환경 때문에 반복 개발하기가 너무 오래 걸린다.
+// - 보안에 취약하다. 정의하려는 행동이 게임을 깨먹지 않게 하고 싶다면 나머지 코드로부터 격리해야 한다.
+// 물론 대부분의 게임이 이에 해당한다.
+
+
+// 주의사항
+// - 프론트엔드가 필요할 것이다.
+// - 디버거가 그리울 것이다.
+
+
+
+void setHealth(int wizard, int amount);
+void setWisdom(int wizard, int amount);
+void setAgility(int wizard, int amount);
+
+
+void playSound(int soundId);
+void spawnParticles(int particleType);
+
+enum Instruction {
+	INST_SET_HEALTH = 0x00,
+	INST_SET_WISDOM = 0x01,
+	INST_SET_AGILITY = 0x02,
+	INST_PLAY_SOUND = 0x03,
+	INST_SPAWN_PARTICLES = 0x04
+};
+
+switch (instruction) {
+case INST_SET_HEALTH:
+	setHealth(0, 100);
+	break;
+case INST_SET_WISDOM:
+	setWisdom(0, 100);
+	break;
+case INST_SET_AGILITY:
+	setAgility(0, 100);
+	break;
+case INST_PLAY_SOUND:
+	playSound(SOUND_BANG);
+	break;
+case INST_SPAWN_PARTICLES:
+	spawnParticles(PARTICLE_FRAME);
+	break;
+}
+
+class VM {
+public:
+	void interpret(char bytecode[], int size) {
+		for (int i = 0; i < size; ++i) {
+			char instruction = bytecode[i];
+			switch (Instruction) {
+				// 각 명령별로 case문이 들어간다.
+			}
+		}
+	}
+};
+
+// 스택을 사용하는 것이 더 좋다.
+
+
+// 바이트코드 VM은 보톤 스택 기반과 레지스터 기반으로 나뉜다.
+
+// 스택기반 VM
+// - 명령어가 짧다.
+// - 코드 생성이 간단하다.
+// - 명령어 개수가 많다.
+
+// 레지스터기반 VM
+// - 명령어가 길다. -> 스택 기반 VM이 구현하기 쉽고 코드 생성도 훨씬 간단하기에 가능하면 스택기반 VM을 쓰는게 좋다.
+// - 명령어 개수는 줄어든다.
+
+
+// 어떤 명령어를 만들어야 하는가
+// - 외부 원시명령
+// - 내부 원시명령
+// - 흐름 제어
+// - 추상화
+
+// 값을 어떻게 표현할 것인가?
+// - 단일 자료형
+// - 태그 붙은 변수
+// - 태그가 붙지 않은 공용체
+// - 인터페이스
+
+// 바이트 코드는 어떻게 만들 것인가?
+// - 텍스트 기반 언어를 정의할 경우
+//   - 문법을 정의해야 한다.
+//   - 파서를 구현해야 한다.
+//   - 문법 오류를 처리해야 한다.
+//   - 비-프로그래머들은 쓰기 어려울 것이다.
+// 
+// - UI가 있는 저작 툴을 만들 경우
+//   - UI를 구현해야 한다.
+//   - 오류가 적다.
+//   - 이식성이 낮다.
+
+*/
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================

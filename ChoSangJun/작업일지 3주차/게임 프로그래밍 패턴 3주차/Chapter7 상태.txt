@@ -1,0 +1,251 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.12 공부
+// Chapter 7 상태
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+// 객체의 내부 상태에 따라 스스로 행동을 변경할 수 있게 허가하는 패턴으로, 이렇게 하면 객체는 마치 자신의 클래스를
+// 바꾸는 것처럼 보인다.
+
+/*
+void Heroine::handleInput(Input input) {
+	if (input == PRESS_B) {
+		yVelocity = JUMP_VELOCITY;
+		setGraphics(IMAGE_JUMP);
+	}
+}
+// 버그 - 연속 점프
+
+void Heroine::handleInput(Input input) {
+	if (input == PRESS_B) {
+		if (!isJumping) {
+			isJumping = true;
+		}
+		// 점프 관련 코드...
+	}
+}
+
+
+void Heroine::handleInput(Input input) {
+	if (input == PRESS_B) {
+		// 점프 중이 아니라면 점프한다.
+	}
+	else if (input == PRESS_DOWN) {
+		if (!isJumping) {
+			setGraphics(IMAGE_DUCK);
+		}
+	}
+	else if (input == RELEASE_DOWN) {
+		setGraphics(IMAGE_STAND);
+	}
+}
+// 버그 - 엎드리고 점프뒤 공중에서 엎드린 것을 떼면 발생
+
+
+void Heroine::handleInput(Input input) {
+	if (input == PRESS_B) {
+		if(!isJumping && !isDucking)
+		// 점프 관련 코드...
+	}
+	else if (input == PRESS_DOWN) {
+		if (!isJumping) {
+			isDucking = true;
+			setGraphics(IMAGE_DUCK);
+		}
+	}
+	else if (input == RELEASE_DOWN) {
+		isDucking = false;
+		setGraphics(IMAGE_STAND);
+	} 
+}
+
+
+void Heroine::handleInput(Input input) {
+	if (input == PRESS_B) {
+		if (!isJumping && !isDucking)
+			// 점프 관련 코드...
+	}
+	else if (input == PRESS_DOWN) {
+		if (!isJumping) {
+			isDucking = true;
+			setGraphics(IMAGE_DUCK);
+		}
+		else {
+			isJumping = false;
+			setGraphics(IMAGE_DIVE);
+
+		}
+	}
+	else if (input == RELEASE_DOWN) {
+		if (isDucking) {
+			// 일어서기 관련 코드
+		}
+	}
+
+}
+// 버그 - 내려찍기 중인지는 검사하지 않는다.
+
+
+
+// FSM
+// - 가질 수 있는 '상태'가 한정된다.
+// - 한 번에 '한 가지' 상태만 될 수 있다.
+// - '입력'이나 '이벤트'가 기계에 전달된다.
+// - 각 상태에는 입력에 따라 다음 상태로 바뀌는 '전이'가 있다.
+
+
+enum State {
+	STATE_STANDING,
+	STATE_JUMPING,
+	STATE_DUCKING,
+	STATE_DIVING,
+};
+
+
+void Heroine::handleInput(Input input) {
+	switch (state)
+	{
+	case STATE_STANDING:
+		if (input == PRESS_B) {
+			state = STATE_JUMPING;
+			yVelocity = JUMP_VELOCITY;
+			setGraphics(IMAGE_JUMP);
+		}
+		else if (input == PRESS_DOWN) {
+			state = STATE_DUCKING; 
+			setGraphics(IMAGE_DUCK);
+
+		}
+		break;
+	case STATE_JUMPING:
+		if(input == PRESS_DOWN){
+			state = STATE_DIVING;
+			setGraphics(IMAGE_DIVE);
+		}
+		break;
+
+	case STATE_DUCKING:
+		if (input == RELEASE_DOWN) {
+			state = STATE_STANDING;
+			setGraphics(IMAGE_DIVE);
+		}
+		break;
+	default:
+		break;
+	}
+
+}
+
+void Heroine::update() {
+	if (state == STATE_DUCKING) { // 엎드리면 기를 모아 특수공격을 쏠 수 있게 만든다.
+		chargeTime++;
+		if (chargeTime > MAX_CHANGE) {
+			superBomb();
+		}
+	}
+}
+
+
+
+void Heroine::handleInput(Input input) {
+	switch (state)
+	{
+	case STATE_STANDING:
+		if (input == PRESS_DOWN) {
+			state = STATE_DUCKING;
+			changeTime = 0;
+			setGraphics(IMAGE_DUCK);
+		}
+		// 다른 입력 처리
+		break;
+
+		// 다른 상태 처리...
+	}
+}
+
+
+
+// 상태 패턴
+
+// 상태 인터페이스
+class HeroineState {
+public:
+	virtual ~HeroineState(){}
+	virtual void handleInput(Heroine& heroine, Input input){}
+	virtual void update(Heroine& heroine) {}
+};
+
+// 상태별 클래스 만들기
+class DuckingState : public HeroineState {
+public:
+	DuckingState() : chargerTime(0){}
+
+	virtual void handleInput(Heroine& heroine, Input input) {
+		if (input == RELEASE_DOWN) {
+			// 일어선 상태로 바꾼다...
+			heroine.setGraphics(IMAGE_STAND);
+		}
+	}
+
+	virtual void update(Heroine& heroine) {
+		chargerTime++;
+
+		if (chargerTime > MAX_CHARGE) {
+			heroine.superBomb();
+		}
+	}
+
+
+private:
+	int chargerTime;
+};
+
+// 동작을 상태에 위임하기
+class Heroine {
+public:
+	virtual void handleInput(Input input) {
+		state->handleInput(*this, input);
+	}
+	virtual void update() { state->update(*this); }
+	// 다른 메서드들...
+	
+private:
+	HeroineState* state;
+};
+
+
+// 입장과 퇴장 
+state -> enter(*this);
+exit();
+*/
+
+// 병행 상태 기계
+// 입력시 상태 양쪽에 다 전달
+
+// 계층형 상태 기계
+
+
+// 푸시다운 오토마타 - 이전 상태를 저장했다가 상태가 끝난 후 이전 상태를 불러올때 사용 - 상태를 스택으로 관리
+// - 새로운 상태를 스택에 넣는다.
+// - 최상위 상태를 스택에서 뺀다.
+
+
+// 요즘 게임 AI는 행동 트리나 계획 시스템을 더 많이 쓰는 추세다.
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+

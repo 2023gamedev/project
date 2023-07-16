@@ -1,0 +1,184 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.14 공부
+// Chapter 13 타입 객체
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+// 클래스 하나를 인스턴스별로 다른 객체형으로 표현할 수 있게 만들어, 새로운 '클래스들'을 유연하게
+// 만들 수 있게 한다.
+
+//
+//class Monster {
+//public:
+//	virtual ~Monster(){}
+//	virtual const char* getAttack() = 0;
+//
+//protected:
+//	Monster(int startingHealth) : health(startingHealth){}
+//
+//private:
+//	int health; // 현재 체력
+//};
+//
+//class Dragon : public Monster {
+//public:
+//	Dragon() : Monster(230) {}
+//	virtual const char* getAttack() {
+//		return "용이 불을 뿜습니다!";
+//	}
+//};
+//
+//class Troll : public Monster {
+//public:
+//	Troll() : Monster(48){}
+//	virtual const char* getAttack() {
+//		return "트롤이 당신을 곤봉으로 내리칩니다!";
+//	}
+//};
+//
+//// 점점 작업이 이상하게 느려질 것이다.
+//// 1. 기획자로부터 트롤의 최대 체력을 48에서 52로 바꿔달라는 이메일을 받는다.
+//// 2. Troll.h 파일을 체크아웃한 뒤에 수정한다.
+//// 3. 컴파일한다.
+//// 4. 변경사항을 체크인한다.
+//// 5. 이메일에 답장한다.
+//// 6. 1부터 5를 반복한다.
+//// 프로그래머들은 데이터 멍키가 되어버린 자기 자신에게 좌절한다.
+//
+//
+//// 이렇게 변경한다.
+//// Monster <> ======= BREED
+////                    타입
+//
+//// 타입 객체 패턴은 코드 수정 없이 새로운 타입을 정의할 수 있다는게 장점이다.
+//
+//// 타입 객체 패턴은 이때 사용한다.
+//// - 나중에 어떠 타입이 필요할 지 알 수 없다.
+//// - 컴파일이나 코드 변경 없이 새로운 타입을 추가하거나 타입을 변경하고 싶다.
+//
+//
+//// 주의사항
+//// - 타입 객체를 직접 관리해야 한다.
+//// - 타입별로 동작을 표현하기가 더 어렵다.
+//
+//
+//class Breed {
+//public:
+//	Breed(int health, const char* attack)
+//		: health(health),
+//		attack(attack) {
+//
+//	}
+//	int getHealth() { return health; }
+//	const char*  getAttack() { return attack; }
+//
+//private:
+//	int health; // 최대(초기) 체력
+//	const char* attack;
+//};
+//
+//class Monster {
+//public:
+//	Monster(Breed& breed)
+//		: health(breed.getHealth()),
+//		breed(breed) {
+//
+//	}
+//	const char* getAttack() { return breed.getAttack(); }
+//
+//private:
+//	int health;  // 현재 체력
+//	Breed& breed;
+//};
+//
+////
+//
+//class Breed {
+//public:
+//	Monster* newMonster() {
+//		return new Monster(*this);
+//	}
+//
+//	// 나머지는 동일하다.
+//};
+//
+//class Monster {
+//	friend class Breed;
+//
+//public:
+//	const char* getAttack() { return breed.getAttack(); }
+//
+//private:
+//	Monster(Breed& breed)
+//		: health(breed.getHealth()),
+//		breed(breed) {
+//
+//	}
+//	int health;  // 현재 체력
+//	Breed& breed;
+//};
+//Monster* monster = new Monster(someBreed);
+//Monster* monster = someBreed.newMonster();
+
+
+// 타입 객체를 숨길 것인가 노출할 것인가
+
+// 타입 객체를 캡슐화하면
+//  - 타입 객체 패턴의 복잡성이 나머지 다른 코드에는 드러나지 않는다.
+//  - 타입 사용 객체는 타입 객체로부터 동작을 선택적으로 오버라이드할 수 있다..
+//  - 타입 객체 메서드를 전부 포워딩해야 한다.
+
+// 타입 객체를 노출하면
+// - 타입 사용 클래스 인스턴스를 통하지 않고도 외부에서 타입 객체에 접근할 수 있다.
+// - 타입 객체가 공개 API의 일부가 된다.
+
+
+// 타입 사용 객체를 어떻게 생성할 것인가?
+
+// 객체를 생성한 뒤에 타입 객체를 넘겨주는 경우
+// - 외부 코드에서 메모리 할당을 제어할 수 있다.
+// 타입 객체의 '생성자' 함수를 호출하는 경우
+// - 타입 객체에서 메모리 할당을 제어한다.
+
+
+// 타입을 바꿀 수 있는가?
+
+// 타입을 바꿀수 없다면
+// - 코드를 구현하기가 이해하기가 더 쉽다.
+// - 디버깅하기 쉽다.
+
+// 타입을 바꿀수 있다면
+// - 객체 생성 횟수가 줄어든다.
+// - 가정을 깨지 않도록 주의해야 한다.
+
+
+// 상속을 어떻게 지원할 것인가?
+// 상속 없음
+// - 단순하다.
+// - 중복 작업을 해야 할 수도 있다.
+
+// 단일 상속
+// - 그나마 단순한 편이다.
+// - 속성 값을 얻는 데 오래 걸린다.
+
+// 다중 상속
+// - 거의 모든 데이터 중복을 피할 수 있다.
+// - 복잡하다.
+
+
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================

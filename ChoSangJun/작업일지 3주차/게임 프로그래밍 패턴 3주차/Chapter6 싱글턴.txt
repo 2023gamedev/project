@@ -1,0 +1,246 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.12 공부
+// Chapter 6 싱글턴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+// 이번 장부터는 일일이 하나하나 적지 말고 간단하게 이해할수 있게 요약 설명하거나 중요한 부분만 적는다.
+// 코드는 대부분 적는다.
+
+// 오직 한개의 클래스 인스턴스만을 갖도록 보장하고, 이에 대한 전역적인 접근점을 제공합니다.
+// 싱글턴은 의도와는 달리 득보다는 실이 많다. - 오직 한 개의 클래스 인스턴스만 갖도록 보장
+
+// 전역에서 접근할 수 있는 메서드를 제공
+/*
+class FileSystem {
+public:
+	static FileSystem instance() {
+		// 게으른 초기화
+		if (instance_ == NULL) {
+			instance_ = new FileSystem();
+		}
+		return *instance_;
+	}
+	
+
+private:
+	FileSystem() {}
+	static FileSystem* instance_;
+};
+// instance_ 전역 멤버 변수는 클래스 인스턴스를 저장한다.
+// publice에 있는 instance() 정적 메서드는 코드 어디에서나 싱글턴 인스턴스에 접근할 수 있게 하고,
+// 싱글턴을 실제로 필요로 할 때까지 인스턴스 초기화를 미루는 역할을 한다.
+
+// 요즘에는 이렇게도 만든다.
+class FileSystem {
+public:
+	static FileSystem& instance() {
+		static FileSystem* instance_ = new FileSystem();
+		return *instance_;
+	}
+
+private:
+	FileSystem() {}
+
+};
+// C++ 11에서는 정적 지역 변수 초기화 코드가 멀티스레드 환경에서도 딱 한 번 실행되어야 한다.
+// 즉 최신 C++ 컴파일러로 컴파일한다면 이 코드는 이전 예제와는 달리 스레드 안전하다.
+
+
+// 장점은 더 있다.
+// - 한 번도 사용하지 않는다면 아예 인스턴스를 생성하지 않는다.
+// - 런타임에 초기화된다. -> 정적 멤버 변수는 자동 초기화되는 문제가 있다.
+// - 싱글턴을 상속할 수 있다. -> 이 방법은 강력함에도 불구하고 잘 알려져 있지 않다.
+
+class FileSystem {
+public:
+	virtual ~FileSystem(){}
+	virtual char* readFile(char* path) = 0;
+	virtual void wirteFile(char* path, char* contents) = 0;
+};
+
+class PS3FileSystem : public FileSystem {
+public:
+	virtual char* readFile(char* path) {
+		// 소니의 파일 IO API를 사용한다...
+	}
+	virtual void writeFile(char* path, char* contents) {
+		// 소니의 파일 IO API를 사용한다...
+	}
+};
+
+class WiiFileSystem : public FileSystem {
+public:
+	virtual char* readFile(char* path) {
+		// 소니의 파일 IO API를 사용한다...
+	}
+	virtual void writeFile(char* path, char* contents) {
+		// 소니의 파일 IO API를 사용한다...
+	}
+};
+
+class FileSystem {
+public:
+	static FileSystem& instance();
+
+	virtual ~FileSystem() {}
+	virtual char* readFile(char* path) = 0;
+	virtual void wirteFile(char* path, char* contents) = 0;
+
+protected:
+	FileSystem() {}
+};
+
+FileSystem& FileSystem::instance() {
+#if PLATFORM == PLAYSTATION3
+	static FileSystem* instance = new PS3FileSystem();
+#elif PLATFORM == WII
+	static FileSystem* instance = new WiiFileSystem();
+#endif
+	return *instance;
+}
+
+
+// 싱글턴이 왜 문제인가 - 전역 변수
+// - 전역 변수는 코드를 이해하기 어렵게 한다.
+// - 전역 변수는 커플링을 조장한다.
+// - 전역 변수는 멀티스레딩 같은 동시성 프로그래밍에 알맞지 않다.
+
+
+// 싱글턴은 문제가 하나뿐일 때도 두 가지 문제를 풀려 든다.
+
+
+// 게으른 초기화는 제어할 수가 없다. - 처음 소리를 재생할 때 게으른 초기화를 하게 만들면 전투 도중에 초기화가 시작되는 바람에
+// 화면 프레임이 떨어지고 게임이 버벅댈 수 있다.
+
+
+// 대안 
+
+class Bullet {
+public:
+	int getX() const { return x; }
+	int getY() const { return y; }
+	void setX(int x) { x = x; }
+	void setY(int y) { y = y; }
+private:
+	int x;
+	int y;
+
+};
+
+
+class BulletManager {
+public:
+	Bullet* create(int x, int y) {
+		Bullet* bullet = new Bullet();
+		bullet->setX(x);
+		bullet->setY(y);
+		return bullet;
+	}
+
+	bool isOnScreen(Bullet& bullet) {
+		return bullet.getX() >= 0 &&
+			bullet.getY() >= 0 &&
+			bullet.getX() < SCREEN_WIDTH &&
+			bullet.getY() < SCREEN_HEIGHT;
+	}
+
+	void move(Bullet& bullet) {
+		bullet.setX(bullet.getX() + 5);
+	}
+
+};
+
+
+// 
+
+class Bullet {
+public:
+	Bullet(int x, int y) : x(x), y(y) {}
+
+	bool isOnScreen() {
+		return x >= 0 &&
+			y >=  0 &&
+			x < SCREEN_WIDTH &&
+			y < SCREEN_HEIGHT;
+	}
+
+	void move() {
+		x += 5;
+	}
+
+private:
+	int x;
+	int y;
+
+};
+
+// 서툴게 만든 싱글턴은 다른 클래스에 기능을 더해주는 '도우미'인 경우가 많다.
+// 가능하다면 도우미 클래스에 있던 작동 코드를 모두 원래 클래스로 옮기자.
+
+
+// 오직 한 개의 클래스 인스턴스만 갖도록 보장하기
+// 인스턴스에 쉽게 접근하기
+// - 넘겨주기
+// - 상위 클래스로부터 얻기 -> 많은 게임에서 클래스를 대부분 한 단계만 상속할 정도로 상속 구조를 얕고 넓게 가져간다.
+class GameObject {
+protected:
+	Log& getLog() { return log; }
+
+private:
+	static Log& log;
+
+};
+
+class Enemy : public GameObject {
+	void doSomething(){
+		getLog().write("I can log!");
+		}
+};
+
+
+
+// - 이미 전역인 객체로부터 얻기
+class Game {
+public:
+	static Game& instance() { return instance; }
+	Log& getLog() { return *log; }
+	FileSystem& getFileSystem() { return *fileSystem; }
+	AudioPlayer& getAudioPlayer() { return *audioPlayer; }
+
+	// log 등을 설정하는 함수들...
+
+private:
+	static Game instance;
+	Log* log;
+	FileSystem* fileSystem;
+	AudioPlayer* audioPlayer;
+};
+
+
+// - 서비스 중개자로부터 얻기
+
+
+// 저자는 싱글턴 패턴을 게임에 그대로 적용한 적이 한번도 없다고 한다.
+// 인스턴스를 하나로 제한하고 싶을 때에는 정적 클래스를 쓰거나, 클래스 생성자에 정적 플래그를 둬서
+// 런타임에 인스턴스 개수를 검사하는 방법을 써왔다.
+*/
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+
+
