@@ -1,0 +1,101 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.14 공부
+// Chapter 12 하위 클래스 샌드박스
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+// 상위 클래스가 제공하는 기능들을 통해서 하위 클래스에서 행동을 정의한다.
+
+
+// 상위 클래스는 추상 샌드박스 메서드와 여러 제공 기능을 정의한다.
+// 제공 기능은 protected로 만들어져 하위 클래스용이라는 걸 분명히 한다.
+
+
+// 하위 클래스 샌드박스 패턴은 이럴 때 사용하면 좋다.
+// - 클래스 하나에 하위 클래스가 많이 있다.
+// - 상위 클래스는 하위 클래스가 필요로 하는 기능을 전부 제공할 수 있다.
+// - 하위 클래스 행동 중에 겹치는 게 많아, 이를 하위 클래스끼리 쉽게 공유하고 싶다.
+// - 하위 클래스들 사이의 커플링 및 하위 클래스와 나머지 코드와의 커플링을 최소화하고 싶다.
+
+
+// 예제
+//
+//class Superpower {
+//public:
+//	virtual ~Superpower(){}
+//
+//protected:
+//	virtual void activate() = 0; // 샌드박스 메서드
+//	void move(double x, double y, double z) {
+//		// 코드...
+//	}
+//	void playSound(SoundId sound, double volume) {
+//		// 코드...
+//	}
+//
+//	void spawnParticles(ParticleType type, int count) {
+//		// 코드...
+//	}
+//};
+//
+//class SkyLaunch : public Superpower {
+//protected:
+//	virtual void activate() {
+//		// 하늘로 뛰어오른다.
+//		playSound(SOUND_SPROING, 1.0f);
+//		spawnParticles(PARTICLE_DUST, 10);
+//		move(0, 0, 20);
+//	}
+//};
+//
+////
+//
+//class Superpower {
+//protected:
+//	double getHeroX() {/* 코드... */ }
+//	double getHeroY() {/* 코드... */ }
+//	double getHeroZ() {/* 코드... */ }
+//	// 나머지 코드...
+//};
+//
+//class SkyLaunch : public Superpower {
+//protected:
+//	virtual void activate() {
+//		if (getHeroZ() == 0) {
+//			// 땅이라면 공중으로 뛴다.
+//			playSound(SOUND_SPROING, 1.0f);
+//			spawnParticles(PARTICLE_DUST, 10);
+//			move(0, 0, 20);
+//		}
+//		else if (getHeroZ() < 10.0f) {
+//			// 거의 땅에 도착했다면 이중 점프를 한다.
+//			playSound(SOUND_SWOOP, 1.0f);
+//			move(0, 0, getHeroZ() - 20);
+//		}
+//		else {
+//			// 공중에 높이 떠 있다면 내려찍기 공격을 한다.
+//			playSound(SOUND_DIVE, 0.7f);
+//			spawnParicles(PARTICLE_SPARKLES, 1);
+//			move(0, 0, -getHeroZ());
+//		}
+//	}
+//};
+
+// 하위 클래스 샌드박스 패턴의 골칫거리 하나는 상위 클래스의 메서드 수가 끔찍하게 늘어난다는 점이다.
+
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================

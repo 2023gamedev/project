@@ -1,0 +1,485 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.02 공부
+// Chapter 2 명령
+/////////////////////////////////////////////////////////////////
+
+
+#include <iostream>
+
+#include "save.h"
+
+// 명령 패턴 - 요청자체를 캡슐화하는 것
+// 이를 통해 요청이 서로 다른 사용자를 매개변수로 만들고 요청을 대기시키거나 로깅하며,
+// 되돌릴 수 있는 연산을 지원합니다.
+
+// 명령 패턴은 메서드 호출을 실체화한 것이다. -> 함수 호출을 객체로 감쌌다는 것 -> 명령 패턴은 Callback을 객체지향적으로 표현한 것
+
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.02 공부
+// Chapter 2 명령
+// 2.1 입력키 변경
+/////////////////////////////////////////////////////////////////
+
+
+#include <iostream>
+
+#include "save.h"
+
+// 모든 게임에는 버튼,키보드,마우스 등을 누르는 등의 유저 입력을 읽는 코드가 있다.
+// ex) x : Jump() , y : Fire_Gun(), b : Lurch(), a : Swap_Weapon()
+/*
+void InputHandler::handleInput() {
+	if (isPressed(BUTTON_X)) jump();
+	else if (isPressed(BUTTON_Y)) fireGun();
+	else if (isPressed(BUTTON_A)) swapWeapon();
+	else if (isPressed(BUTTON_B)) lurchIneffectively();
+}
+*/
+// 일반적으로 이런 함수는 게임 루프에서 매 프레임 호출된다.
+// 키 변경을 지원하려면 jump()나 fireGun() 같은 함수를 직접 호출하지 않고 교체 가능한 무엇인가로 바꿔야 한다.
+
+/*
+class Command {
+public:
+	virtual ~Command() {}
+	virtual void execute() = 0;
+};
+
+class JumpCommand : public Command {
+public:
+	virtual void execute() { jump(); }
+};
+
+class FireCommand : public Command {
+public:
+	virtual void execute() { fireGun(); }
+};
+
+class InputHandler {
+public:
+	void handleInput();
+	// 명령을 바인드할 메서드들
+private:
+	Command* buttonX_;
+	Command* buttonY_;
+	Command* buttonA_;
+	Command* buttonB_;
+};
+
+void InputHandler::handleInput() {
+	if (isPressd(BUTTON_X)) buttonX_->execute();
+	else if (isPressd(BUTTON_Y)) buttonY_->execute();
+	else if (isPressd(BUTTON_A)) buttonA_->execute();
+	else if (isPressd(BUTTON_B)) buttonB_->execute();
+}
+*/
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.02 공부
+// Chapter 2 명령
+// 2.1 입력키 변경
+/////////////////////////////////////////////////////////////////
+
+
+#include <iostream>
+
+#include "save.h"
+
+// 모든 게임에는 버튼,키보드,마우스 등을 누르는 등의 유저 입력을 읽는 코드가 있다.
+// ex) x : Jump() , y : Fire_Gun(), b : Lurch(), a : Swap_Weapon()
+/*
+void InputHandler::handleInput() {
+	if (isPressed(BUTTON_X)) jump();
+	else if (isPressed(BUTTON_Y)) fireGun();
+	else if (isPressed(BUTTON_A)) swapWeapon();
+	else if (isPressed(BUTTON_B)) lurchIneffectively();
+}
+*/
+// 일반적으로 이런 함수는 게임 루프에서 매 프레임 호출된다.
+// 키 변경을 지원하려면 jump()나 fireGun() 같은 함수를 직접 호출하지 않고 교체 가능한 무엇인가로 바꿔야 한다.
+
+/*
+class Command {
+public:
+	virtual ~Command() {}
+	virtual void execute() = 0;
+};
+
+class JumpCommand : public Command {
+public:
+	virtual void execute() { jump(); }
+};
+
+class FireCommand : public Command {
+public:
+	virtual void execute() { fireGun(); }
+};
+
+class InputHandler {
+public:
+	void handleInput();
+	// 명령을 바인드할 메서드들
+private:
+	Command* buttonX_;
+	Command* buttonY_;
+	Command* buttonA_;
+	Command* buttonB_;
+};
+
+void InputHandler::handleInput() {
+	if (isPressd(BUTTON_X)) buttonX_->execute();
+	else if (isPressd(BUTTON_Y)) buttonY_->execute();
+	else if (isPressd(BUTTON_A)) buttonA_->execute();
+	else if (isPressd(BUTTON_B)) buttonB_->execute();
+}
+*/
+
+// 직접 함수를 호출하던 코드 대신에. 한겹 우회하는 계층이 생겼다.
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.02 공부
+// Chapter 2 명령
+// 2.2 액터에게 지시하기
+/////////////////////////////////////////////////////////////////
+
+
+#include <iostream>
+
+#include "save.h"
+
+
+//여기서 GameActor는 게임 월드를 돌아다니는 캐릭터를 대표하는 '게임 객체' 클래스다.
+// excure()가 호출될 때 GameActor 객체를 인수로 받기 때문에 원하는 액터의 메서드를 호출할 수 있다.
+
+/*
+class Command {
+public:
+	virtual ~Command() {}
+	virtual void execute(GameActor& actor) = 0;
+};
+
+
+class JumpCommand : public Command {
+public:
+	virtual void execute(GameActor& actor) { actor.jump(); }
+};
+
+class FireCommand : public Command {
+public:
+	virtual void execute(GameActor& actor) { actor.fireGun(); }
+};
+
+class InputHandler {
+public:
+	void handleInput();
+	// 명령을 바인드할 메서드들
+private:
+	Command* buttonX_;
+	Command* buttonY_;
+	Command* buttonA_;
+	Command* buttonB_;
+};
+
+
+// 어떤 액터를 매개변수로 넘겨줘야 할지 모르기 때문에 handleInpput()에서는
+// 명령을 실행할 수 없다. 여기서는 명령이 실체화된 함수 호출이라는 점을 활용해서, 함수 호출 시점을 지연한다.
+Command* InputHandler::handleInput() {
+	if (isPressd(BUTTON_X)) return buttonX_;
+	else if (isPressd(BUTTON_Y)) return buttonY_;
+	else if (isPressd(BUTTON_A)) return buttonA_;
+	else if (isPressd(BUTTON_B)) return buttonB_;
+
+	// 아무것도 누르지 않았다면, 아무것도 하지 않는다.
+	return NULL;
+}
+
+Command* command = InputHandler.handleInput();
+if (command) {
+	command->execute(actor);
+}
+*/
+
+// 명령을 실행 할 때 액터만 바꾸면 플레이어가 게임에 있는 어떤 액터라도 제어할 수 있게 되었다.
+// 액터를 제어하는 Command 입글 객체를 만든 덕분에, 메서드를 직접 호출하는 형태의 강한 커플링을 제거할 수 있었다.
+
+// AI -> 명령스트림 -> 액터
+
+
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.02 공부
+// Chapter 2 명령
+// 2.3 실행취소와 재실행
+/////////////////////////////////////////////////////////////////
+
+
+#include <iostream>
+
+#include "save.h"
+
+
+
+// 그냥 실행취소 기능을 구현하려면 굉장히 어렵지만, 명령 패턴을 이용하면 쉽게 만들 수 있다.
+
+/*
+class MoveUnitCommand : public Command {
+public:
+	MoveUnitCommand(Unit * unit, int x, int y)
+		: unit_(unit),
+		x_(x), y_(y)
+		xBefore_(0), yBefore_(0),
+		x_(x), y_(y)
+	{
+
+	}
+
+	virtual void execute() {
+		xBefore_ = unit_->x();
+		yBefore_ = unit_->y();
+		unit_->moveTo(x_, y_);
+	}
+
+	virtual void undo() {
+		unit_->moveTo(xBefore_, yBefore_);
+	}
+
+private:
+	Unit* unit_;
+	int x_, y_;
+	int xBefore_, yBefore_;
+};
+// MoveUnitCommand 클래스는 이전 예제와 약간 다르다. 이전 예제에서는 액터와 명령 사이를 추상화로 격리 시켰지만
+// 이번에는 이동하려는 유닛과 위치 값을 생성장에서 받아서 명령과 명시적으로 바인드했다.
+
+// 처음 예제의 경우 어떤 일을 하는지를 정의한 명력 객체 하나가 매번 재사용된다.
+
+// 지금 예제는 특정 시점에 발생될 일을 표현한다는 점에서 좀 더 구체적이다.
+
+Command* handleInput() {
+	Unit* unit = getSelectedUnit();
+	if (isPressed(BUTTON_UP)) {
+		// 유닛을 한 칸 위로 이동한다.
+		int destY = unit()->y() - 1;
+		return new MoveUnitCommand(unit, unit->x(), destY);
+	}
+	if (isPressed(BUTTON_DOWN)) {
+		// 유닛을 한 칸 아래로 이동한다.
+		int destY = unit()->y() + 1;
+		return new MoveUnitCommand(unit, unit->x(), destY);
+	}
+	// 다른 이동들
+	return NULL;
+}
+
+class Command {
+	virtual ~Command(){}
+	virtual void execute() = 0;
+	virtual void undo() = 0;
+};
+*/
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.02 공부
+// Chapter 2 명령
+// 2.3 실행취소와 재실행
+/////////////////////////////////////////////////////////////////
+
+
+#include <iostream>
+
+#include "save.h"
+
+
+
+// 그냥 실행취소 기능을 구현하려면 굉장히 어렵지만, 명령 패턴을 이용하면 쉽게 만들 수 있다.
+
+/*
+class MoveUnitCommand : public Command {
+public:
+	MoveUnitCommand(Unit * unit, int x, int y)
+		: unit_(unit),
+		x_(x), y_(y)
+		xBefore_(0), yBefore_(0),
+		x_(x), y_(y)
+	{
+
+	}
+
+	virtual void execute() {
+		xBefore_ = unit_->x();
+		yBefore_ = unit_->y();
+		unit_->moveTo(x_, y_);
+	}
+
+	virtual void undo() {
+		unit_->moveTo(xBefore_, yBefore_);
+	}
+
+private:
+	Unit* unit_;
+	int x_, y_;
+	int xBefore_, yBefore_;
+};
+// MoveUnitCommand 클래스는 이전 예제와 약간 다르다. 이전 예제에서는 액터와 명령 사이를 추상화로 격리 시켰지만
+// 이번에는 이동하려는 유닛과 위치 값을 생성장에서 받아서 명령과 명시적으로 바인드했다.
+
+// 처음 예제의 경우 어떤 일을 하는지를 정의한 명력 객체 하나가 매번 재사용된다.
+
+// 지금 예제는 특정 시점에 발생될 일을 표현한다는 점에서 좀 더 구체적이다.
+
+Command* handleInput() {
+	Unit* unit = getSelectedUnit();
+	if (isPressed(BUTTON_UP)) {
+		// 유닛을 한 칸 위로 이동한다.
+		int destY = unit()->y() - 1;
+		return new MoveUnitCommand(unit, unit->x(), destY);
+	}
+	if (isPressed(BUTTON_DOWN)) {
+		// 유닛을 한 칸 아래로 이동한다.
+		int destY = unit()->y() + 1;
+		return new MoveUnitCommand(unit, unit->x(), destY);
+	}
+	// 다른 이동들
+	return NULL;
+}
+
+class Command {
+	virtual ~Command(){}
+	virtual void execute() = 0;
+	virtual void undo() = 0;
+};
+*/
+
+
+// <오래된 명령 > 명령 | 명령 | 명령 | 명령 | 명령 | 명령 | <최근 명령>
+//                               ㄴ	  |      ㅅ
+//							실행취소  현재    재실행
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.02 공부
+// Chapter 2 명령
+// 2.4 클래스만 좋고, 함수형은 별로인가?
+/////////////////////////////////////////////////////////////////
+
+
+#include <iostream>
+
+#include "save.h"
+
+
+
+// 앞에서 명령은 일급 함수나 클로저와 비슷하다고 했지만, 지금까지 보여준 예제에서는 전부 클래스만 사용했다.
+// 이유는 C++이 일급 함수를 제대로 지원하지 않기 때문이다. 
+// 명령 패턴 - 클로저를 지원하지 않는 언어에서 클로저를 흉내내는 방법이다.
+
+// 물론 다른 언어에서는 명령 패턴에 함수를 쓰는 것이 가능한데
+// 자바스크립트로 게임을 만든다면 유닛 이동 명령을 다음과 같이 만들 수 있다.
+/*
+function makeMoveUnitCommand(unit, x, y) {
+	// 아래 function이 명령 객체에 해당한다.
+	return function() {
+		unit.moveTo(x, y);
+	}
+}
+
+// 클로저를 여러 개 이용하면 실행취소도 지원할 수 있다.
+function makeMoveUnitCommand(unit, x, y) {
+	var xBefore, yBefore;
+	return {
+		execute:function() {
+		xBefore = unit.x();
+		yBefore = unit.y();
+		unit.moveTo(x, y);
+	},
+	  undo : function() {
+		unit.moveTo(xBefore, yBefore);
+	  }
+	};
+}
+*/
+// 명령 패넡의 유용성은 함수형 패러다임이 얼마나 많은 문제에 효과적인지를 보여주는 예이다.
+
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================

@@ -1,0 +1,94 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.07.13 공부
+// Chapter 10 업데이트 메서드
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+/*
+Entity skeleton;
+bool patrollingLeft = false;
+double x = 0;
+
+// 게임 메인 루프
+while (true) {
+	if (patrollingLeft) {
+		x--;
+		if (x == 0) patrollingLeft = false;
+	} else{
+		x++;
+		if (x == 100) patrollingLeft = true;
+	}
+	skeleton.setX(x);
+
+
+	// 유저 입력을 처리하고 게임을 렌더링한다...
+}
+
+// 해골 병사용 변수들...
+Entity leftStatue;
+Entity rightStatue;
+int leftStatueFrames = 0;
+int rightStatueFrames = 0;
+// 게임 메인 루프
+while (true) {
+	// 해골 병사용 코드...
+
+
+	if (++leftStatueFrames == 90) {
+		leftStatueFrames = 0;
+		leftStatue.shootLightning();
+	}
+	if (++rightStatueFrames == 80) {
+		rightStatueFrames = 0;
+		rightStatue.shootLightning();
+	}
+	skeleton.setX(x);
+
+
+	// 유저 입력을 처리하고 게임을 렌더링한다...
+}
+*/
+// 점점 복잡 -> 모든 개체가 자신의 동작을 캡슐화해 해결
+
+
+// 업데이트 메서드 사용
+// - 동시에 동작해야 하는 객체나 시스템이 게임에 많다.
+// - 각 객체의 동작은 다른 객체와 거의 독립적이다.
+// - 객체는 시간의 흐름에 따라 시뮬레이션되어야 한다.
+
+
+// 주의사항
+// - 코드를 한 프레임 단위로 끊어서 실행하는 게 더 복잡하다.
+// - 다음 프레임에서 다시 시작할 수 있도록 햔재 상태를 저장해야 한다.
+// - 모든 객체는 매 프레임마다 시뮬레이션되지만 진짜로 동시에 되는 건 아니다.
+// - 업데이트 도중에 객체 목록을 바꾸는 건 조심해야 한다.
+
+
+// 업데이트 메서드를 어디에 둘 것인가
+// - 개체 클래스        -> 가장 간단하다.
+// - 컴포넌트 클래스    -> good 
+// - 위임클래스         -> good
+
+
+// 휴면 객체 처리
+// - 업데이트가 필요한 '살아있는' 객체만 따로 컬렉션에 모아둔다. -> 물론 이것도 컬렉션 두 개의 동기화를 유지해야 하는 단점이 있다.
+// 보통 얼마나 많은 객체가 비활성 상태로 남아있는가에 따라 결정한다.
+
+
+int main()
+{
+
+
+
+	save("GameProgrammingPatternStudy.cpp");
+}
+================================================
+
+

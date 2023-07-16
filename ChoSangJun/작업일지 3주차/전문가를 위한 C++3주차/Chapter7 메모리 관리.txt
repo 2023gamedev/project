@@ -1,0 +1,230 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.13 공부
+// Chapter7 메모리 관리
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+
+#include "save.h"
+
+using namespace std;
+
+// C++은 안전성보다는 성능을 추구하기 때문에 문제가 발생하기 쉬운 영역이다.
+
+
+int main()
+{
+	//int i{ 7 }; // i : 자동 변수 - 스택에 저장	
+
+	//int* ptr{ nullptr }; 
+	//ptr = new int; // 프리스토어에 저장
+
+	//int** handle{ nullptr };
+	//handle = new int*;
+	//*handle = new int;
+
+
+	save("helloworld.cpp");
+}
+/*
+void leaky() {
+	// new int; // 버그다. 메모리 누수가 발생한다. - delete 필요
+	cout << "방금 int 하나를 잃어버렸다." << endl;
+}
+
+Foo* myFoo{ (Foo*)malloc(sizeof)(foo) }; // 객체에 관심이 없다.
+Foo* myOtherFoo{ new Foo() };			 // 생성자를 호출해 객체를 생성한다.
+
+
+int* ptr{ new(nothrow) int }; // 익셉션을 던지지 않는다. -> 버그가 더 많아 사용되지 않는다.
+
+// C에서 물려받은 realloc() 절대 사용하지 말기
+
+
+class Simple {
+public:
+	Simple() { cout << "Simple constructor called!" << endl; }
+	~Simple() { cout << "Simple destructor called!" << endl; }
+};
+
+Simple* mySimpleArray{ new Simple[4] };
+
+delete[] mySimpleArray;
+mySimpleArray = nullptr;
+
+
+const size_t size{ 4 };
+Simple** mySimplePtrArray{ new Simple * [size] };
+
+// 포인터마다 객체를 할당한다.
+for (size_t i{ 0 }; i < size; ++i) {
+	mySimplePtrArray[i] = new Simple{};
+}
+
+// mySimplePtrArray 사용
+
+// 할당된 객체를 삭제한다.
+for (size_t i{ 0 }; i < size; ++i) {
+	delete mySimplePtrArray[i];
+	mySimplePtrArray[i] = nullptr;
+}
+
+// 배열을 삭제한다.
+delete[] mySimplePtrArray;
+mySimplePtrArray = nullptr;
+
+
+// C 스타일 배열 대신 std::array나 std::vector와 같은 표준 라이브러리에서 사용하는 컨테이너를 사용한다.
+
+// * -> 앞으로
+// & <- 뒤로
+
+Document* documentPtr{ getDocument() };
+char* myCharPtr{ static_cast<char*>(documentPtr) }; // 버그! 컴파일에러  -- 정적 캐스팅을 사용하는 것이 좋다.
+
+
+// C++이 C보다 훨씬 뛰어난 점 중 하나는 메모리에 대해 신경 쓸 일이 적다는 것이다.
+
+
+const wchar_t* myString{ L"Hello, World" };
+
+wchar_t* toCaps(const wchar_t* text);
+
+toCaps(myString + 7);
+
+
+
+// 가비지 컬렉션 -> 스마트 포인터
+
+// 가비지 컬렉션의 단점
+// - 가비지 컬렉터가 작동하는 동안 프로그램이 응답하지 않을 수 있다.
+// - 가비지 컬렉터는 비결정적 소멸자를 사용한다. 객체는 가비지 컬렉션이 되기 전에는 제거되지 않는다.
+//   그러므로 객체가 스코프를 벗어나더라도 소멸자가 즉시 구동되지 않는다.
+
+
+
+// 흔히 발생하는 메모리 문제
+// - 데이터 버퍼 과소 할당과 경계를 벗어난 메모리 접근
+// - 메모리 누수 - C/C++ 프로그래밍에서 가장 까다로운 문제 중 하나다.
+class Simple {
+public:
+	Simple() { mIntPtr = new Int{}; }
+	~Simple() { delete m_intPtr; }
+	void setValue(int value) { *m_intPtr = value; }
+private:
+	int* m_intPtr;
+};
+
+void doSomething(Simple*& outSimplePtr) {
+	outSimplePtr = new Simple{}; // 버그! 원본 객체를 삭제하지 않았다.
+}
+
+Simple* simplePtr{ new Simple{} }; // Simple 객체 하나를 할당한다.
+doSomething(simplePtr);
+delete simplePtr; // 두 번째 객체만 해제한다.
+
+// 보통 원인은 프로그래머 사이의 커뮤니케이션에 문제가 있거나 문서화가 잘못되었기 때문일 가능성이 높다.
+
+
+// 비주얼 C++를 이용한 윈도우 애플리케이션의 메모리 누수 탐지 및 수정 방법
+#define _CTRDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+
+#ifdef _DEBUG
+	#ifndef DBG_NEW
+		#define DBG_NEW new (_NORMAL_BLOCK, __FILE__, __LINE__)
+		#define new DBG_NEW
+	#endif	
+#endif //_DEBUG
+
+
+_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // main 첫줄
+
+
+// 밸그린드를 이용한 리눅스 애플리케이션의 메모리 누수 탐지가 가능하다.
+
+
+// 스마트 포인터
+// std::unique_ptr - 단독 소유권
+// std::shared_ptr - 공동 소유권
+
+
+// std::unique_ptr -> 메모리나 리소스를 반드시 해제시킬 수 있다
+void notLeaky() {
+	auto mySimpleSmartPtr{ make_unique<Simple>() }; //   make_unique : 값초기화  make_unique_for_overwrite : 디폴트 초기화
+	mySimpleSmartPtr->go();
+}
+
+unique_ptr<Simple> mySimpleSmartPtr {new Simple{}}; // unique_ptr CTAD 사용불가
+
+// unique_ptr을 생성할 때는 항상 make_unique()를 사용한다. 가독성이 좋다.
+
+
+mySimpleSmartPtr.get(); // 내부 포인터에 직접 접근
+
+mySimpleSmartPtr.reset();				 // 리소스 해제 후 nullptr로 초기화
+mySimpleSmartPtr.reset(new Simple{});	 // 리소스 해제 후 새로운 Simple 인스턴스로 설정
+
+// unique_ptr은 복사할 수 없지만 std::move() 등을 이용해 다른 곳으로 이동시킬 수 있다.
+
+
+// shared_ptr
+auto mySimpleSmartPtr{ make_shared<Simple>() }; // make_shared()를 사용한다.
+
+void close(FILE* filePtr) {
+	if (filePtr == nullptr) { return; }
+	fclose(filePtr);
+	cout << "File closed" << endl;
+}
+
+FILE* f{ fopen("data.txt", "w") };
+shared_ptr<FILE> filePtr {f, close };
+if (filePtr == nullptr) {
+	cerr << "Error opening file" << endl;
+}
+else {
+	cout << "File opened" << endl;
+	// filePtr을 사용하는 코드
+}
+
+// 레퍼런스 카운팅을 사용
+auto smartPtr1{ make_shared<Simple>() };
+auto smartPtr2{ smartPtr1 }; // 포인터를 복제한다.
+
+
+// shared_ptr은 앨리어싱을 지원한다.
+class Foo {
+public:
+	Foo(int value) : m_data{value}{}
+	int m_data;
+
+};
+
+auto foo{ make_shared<Foo>(42) };
+auto aliasing{ shared_ptr<int> {foo, & foo->m_data}};
+
+// weak_ptr은 share_ptr의 보조역할하는 포인터다.
+
+
+// 스마트 포인터는 함수에서 값을 리턴하는 것을 쉽고 효율적으로 처리한다.
+
+
+// std::enable_shared_form_this를 상속해서 클래스를 만들면 객체에 대해 호출한 메서드가 
+// 자신에게 shared_ptr이나 weak_ptr을 안전하게 리턴할 수 있다.
+// - shared_from_this() : 객체의 소유권을 공유하는 shared_ptr을 리턴한다.
+// - weak_from_this) : 객체의 소유권을 추적하는 weak_ptr을 리턴한다.
+
+// 정리
+// 1. 포인터의 내부 작동 방식을 이해한다.
+// 2. 소유권과 관련된 부분을 일반 포인터로 구현하지 말고 스마트포인터를 사용한다.
+*/
+
+// Chapter7 메모리 관리 完================================================
