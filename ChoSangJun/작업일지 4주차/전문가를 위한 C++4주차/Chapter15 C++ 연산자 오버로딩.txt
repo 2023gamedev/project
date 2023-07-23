@@ -1,0 +1,93 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.22 공부
+// Chapter15 C++ 연산자 오버로딩
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+
+#include "save.h"
+
+using namespace std;
+
+// 연산자 오버로딩의 용도
+// 연산자마다 다르지만 일반적으로 자신이 정의할 클래스를 기본 타입처럼 다루기 위해서다.
+// 정의한 클래스가 기본 타입에 가까울수록 클라이언트 입장에서는 사용하기 쉽다.
+// 또 다른 이유는 프로그램을 좀 더 세밀하게 제어하기 위해서다.
+
+
+// 연산자 오버로딩에 관련된 결정사항
+// - 메서드와 글로벌 함수
+// - 인수 타입
+// - 리턴 타입
+// - 동작
+
+// -> 주소 연산자(operator&)는 오버로딩해서 좋은 점은 거의 없고, 오히려 더 헷갈리게 한다.
+
+//
+//SpreadSheetCell& SpreadSheetCell::operator()
+//{
+//	set(getValue() + 1);
+//	return *this;
+//}
+//
+//SpreadSheetCell SpreadSheetCell::operator++(int)
+//{
+//	auto oldCell{ *this };	// 증가 전의 값을 저장한다.
+//	++(*this);				// 선행 증가 연산으로 값을 증가시킨다.
+//	return oldCell;			// 증가 전의 값을 리턴한다.
+//}
+//
+//
+//// 비트 연산자, 논리 연산자 오버로딩 - 실제 활용 사례가 드물다.
+//
+//
+//// 함수 호출 연산자 오버로드하기
+//class FunctionObject{
+//public:
+//	int operator() (int param); // 함수 호출 연산자
+//	int doSquare(int param);	// 일반 메서드
+//};
+//
+//// 오버로드할 함수 호출 연산자의 구현 코드
+//int FunctionObject::operator() (int param)
+//{
+//	return doSquare(param);
+//}
+//
+//// 일반 메서드의 구현 코드
+//int FunctionObject::doSquare(int param)
+//{
+//	return param * param;
+//}
+//
+//
+//// 변환 연산자
+//// - auto 연산자
+//operator auto() const { return getValue(); }
+//
+
+
+// operator new와 operator delete 오버로딩
+// '간이 크지 않다면 글로벌 operator new와 operator delete를 바꾸지 말라' - 비야네 스트롭스트룹
+
+int main()
+{
+	
+
+	save("helloworld.cpp");
+}
+
+
+// Chapter15 C++ 연산자 오버로딩 完================================================

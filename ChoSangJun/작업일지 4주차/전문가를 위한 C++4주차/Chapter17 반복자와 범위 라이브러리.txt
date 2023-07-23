@@ -1,0 +1,115 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.23 공부
+// Chapter17 반복자와 범위 라이브러리
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+#include <ranges>
+
+#include "save.h"
+
+using namespace std;
+
+// 반복자
+// 표준 라이브러리는 컨테이너의 원소에 접근하는 기능을 일반화한 반복자 패턴을 사용한다.
+// 컨테이너마다 원소에 대한 반복문을 지우너하는 특수한 스마트 포인터인 반복자가 정의되어 있다.
+
+// 입력 < - 정방향 < - 양방향 < - 임의 접근 < - 연속
+
+// 반복자는 알고리즘과 컨테이너를 중계한다. 반복자는 컨테이너의 원소를 순차적으로 탐색하는 표준 인터페이스를 제공한다.
+// begin, end
+// cbegin, cend
+// rbegin, rend
+// crbeign, crend
+
+
+// iterator_traits - 반복자에 대한 정보를 알려준다.
+//template <typename IteratorType>
+//void iteratorTraitsTest(IteratorType it) {
+//	typename iterator_traits<IteratorType>::value_type temp;
+//	temp = *it;
+//	cout << temp << endl;
+//}
+//
+//template <typename Iter>
+//void myPrint(Iter begin, Iter end) {
+//	for (auto iter{ begin }; iter != end; ++iter) {
+//		cout << *iter << " ";
+//	}
+//}
+//
+//
+//// 스트림 반복자
+//// ostream_iterator: 출력 스트림 반복자
+//// istream_iterator: 입력 스트림 반복자
+//
+//
+//// 이동 반복자 std::move_iterator - 값을 자동으로 r-value 레퍼런스로 변환한다.
+//
+//
+//// 범위(C++20) <ranges>
+//// 반복자 위에 추상화를 한 단계 더해서 반복자가 일치하는 에러를 제거하고,
+//// 범위 어댑터를 통해 원소 시퀀스를 변환하거나 필터링하는 부가 기능도 제공한다.
+//
+//
+//// 뷰
+//
+//void printRange(string_view message, auto& range) {
+//	cout << message;
+//	for (const auto& value : range) { cout << value << " "; }
+//	cout << endl;
+//}
+
+int main()
+{
+	//vector v{ 5 };
+	//iteratorTraitsTest(cbegin(v));
+
+
+	//vector values{ 1,2,3,4,5,6,7,8,9,10 };
+	//for (auto iter{ cbegin(values) }; iter != cend(values); ++iter) {
+	//	cout << *iter << " ";
+	//}
+
+
+
+
+	//vector values{ 1,2,3,4,5,6,7,8,9,10 };
+	//printRange("Original sequence: ", values);
+
+	//// 홀수를 모두 제거해서 짝수만 남긴다.
+	//auto result1{ values
+	//	| views::filter([](const auto& value) {return value % 2 == 0; }) };
+	//printRange("Only even values: ", result1);
+
+	//// 값을 모두 double 타입으로 변환한다.
+	//auto result2{ values
+	//	| views::transform([](const auto& value) {return value * 2.0; }) };
+	//printRange("Values doubled: ", result2);
+
+	//// 첫 두 원소를 제거한다.
+	//auto result3{ result2 | views::drop(2) };
+	//printRange("First two dropped: ", result3);
+
+	//// 뷰를 역순으로 만든다.
+	//auto result4{ result3 | views::reverse };
+	//printRange("Sequence reversed: ", result4);
+
+
+	save("helloworld.cpp");
+}
+
+
+// Chapter17 반복자와 범위 라이브러리 完================================================

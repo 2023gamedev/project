@@ -1,0 +1,311 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.20 공부
+// Chapter10 상속 활용하기
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+
+#include "save.h"
+
+using namespace std;
+
+
+// C++에서 클래스를 정의할 때 컴파일러에 기존 클래스를 상속, 파생, 확장한다고 선언할 수 있다.
+
+//
+//class Base {
+//public:
+//	void someMethod() {}
+//protected:
+//	int m_protectedInt {0};
+//private:
+//	int m_privateInt {0};
+//};
+//
+//class Derived : public Base {
+//public:
+//	void someOtherMethod() {}
+//
+//};
+//
+//void Derived::someOtherMethod()
+//{
+//	cout << "I can access base class data member m_protectedInt." << endl;
+//	cout << "Its value is " << m_protectedInt << endl;
+//}
+//
+//// 접근제한자
+//// public
+//// protected
+//// private
+//
+//
+//// 상속 방지
+//class Base final {}; 
+//
+//
+//// 메서드 오버라이딩
+//// 1. virtual 키워드
+//class Base {
+//public:
+//	virtual void someMethod() {}
+//protected:
+//	int m_protectedInt {0};
+//private:
+//	int m_privateInt {0};
+//};
+//
+//class Derived : public Base {
+//public:
+//	void someMethod() override; // Base의 someMethod() 오버라이딩하기
+//	virtual void someOtherMethod();
+//
+//};
+//
+//void Derived::someMethod() 
+//{
+//	cout << "This is Derived's version of someMethod()." << endl;
+//}
+//
+//// Base에서 호출시와 Derived에서 호출시에 출력이 다름
+//
+//
+//// override 키워드는 작성하는 것을 권장한다. -> virtual 메서드를 새로 정의하는 실수를 저지를 수도 있다.
+//// ex) 매개변수가 double인데 int로 해서 새 메서드가 생성된다.
+//
+//
+//// virtual 메서드의 내부 작동 방식
+//// 클래스에 있는 메서드를 모두 담은 바이너리 객체 생성
+//// virtual로 선언하지 않은 메서드를 호출하는 부분을 컴파일 시간에 결정된 타입의 코드로 교체 - 정적 바인딩, 이른 바인딩
+//// virtual 선언시 vtable이라 부르는 특수 메모리 영역을 활용해서 가장 적합한 구현 코드를 호출
+//// 생성한 객체마다 vtable에 대한 포인터가 담겨있다.
+//// 객체에 대해 메서드를 호출하면 vtable을 보고 그 시점에 적합한 버전의 메서드를 실행 - 동적바인딩, 늦은 바인딩
+//
+//
+//// 소멸자는 무조건 virtual로 선언해야 한다.
+//
+//class Base {
+//public:
+//	Base(){}
+//	~Base(){}
+//};
+//
+//class Derived : public Base {
+//public:
+//	Derived() {
+//		m_string = new char[30];
+//		cout << "m_string allocated" << endl;
+//	}
+//
+//	~Derived() {
+//		delete[] m_string;
+//		cout << "m_string deallocated" << endl;
+//	}
+//
+//private:
+//	char* m_string;
+//};
+//Base* ptr{ new Derived() }; // m_string이 여기서 할당된다.
+//delete ptr; // ~Base는 호출되지만 ~Derived는 호출되지 않는다.
+//            // 소멸자를 virtual로 선언하지 않았기 때문이다.
+//
+//
+//// WeatherPrediction 클래스
+//// 현재 온도, 목성과 화성 사이의 거리를 기반으로 날씨를 예측하는 검증된 최첨단 기술을 구현한다.
+//// 이런 값이 제공되지 않아도 날씨를 예측할 수 있지만 정확도는 99%에 불과하다.
+//class WeatherPrediction {
+//public:
+//	// virtual 소멸자
+//	virtual ~WeatherPrediction();
+//	// 현재 온도를 화씨 단위로 설정한다.
+//	virtual void setCurrentTempFahrenheit(int temp);
+//	// 목성과 화성 사이의 현재 거리를 설정한다.
+//	virtual void setPositionOgJupiter(int distanceFromMars);
+//	// 내일 온도에 대한 예측값을 가져온다.
+//	virtual int getTomorrowTempFahrenheit() const;
+//	// 내일 비가 올 확률을 가져온다. 값이 1이면 확실히 비가 오고, 0이면 비가 오지 않는다는 것을 의미한다.
+//	virtual double getChanceOfRain() const;
+//	// 사용자에게 다음과 같은 포맷으로 결과를 출력한다.
+//	// Result: x.xx chance. Temp, xx
+//	virtual void showResult() const;
+//	// 현재 온도를 스트링값으로 리턴한다.
+//	virtual std::string getTemperature() const;
+//
+//private:
+//	int m_currentTempFahrenheit { 0 };
+//	int m_distanceFromMars{ 0 };
+//};
+//
+//class MyWeatherPrediction : public WeatherPrediction {
+//public:
+//	virtual void setCurrentTempFahrenheit(int temp);
+//	virtual int getTomorrowTempFahrenheit() const;
+//private:
+//	static int convertCelsiusToFahrenheit(int celsius);
+//	static int convertFahrenheitToCelsius(int fahrenheit);
+//};
+//
+//void MyWeatherPrediction::setCurrentTempFahrenheit(int temp) {
+//	int fahrenheitTemp{ convertCelsiusToFahrenheit(temp) };
+//	setCurrentTempFahrenheit(fahrenheitTemp);
+//}
+//
+//int MyWeatherPrediction::getTomorrowTempFahrenheit() const {
+//	int fahrenheitTemp{ getTomorrowTempFahrenheit() };
+//	return convertFahrenheitToCelsius(fahrenheitTemp);
+//}
+//
+//class Something {
+//public:
+//	Something() { cout << "2"; }
+//};
+//
+//class Base {
+//public:
+//	Base() { cout << "1"; }
+//};
+//
+//class Derived : public Base {
+//public:
+//	Derived() { cout << "3"; }
+//private:
+//	Something m_dataMember;
+//};
+//
+//Derived myDerived;
+//
+//
+//// "\u00B0F" 화씨 기호(F)
+//
+//
+//class Book {
+//public:
+//	virtual ~Book() = default;
+//	virtual string getDescription() const { return "Book"; }
+//	virtual int getHeight() const { return 120; }
+//};
+//
+//class Paperback : public Book {
+//public:
+//	string getDescription() const override {
+//		return "Paperback " + Book::getDescription();
+//	}
+//};
+//
+//class Romance : public Paperback {
+//public:
+//	string getDescription() const override {
+//		"Romance " + Book::getDescription();
+//	}
+//	int getHeight() const override { return Paperback::getHeight() / 2; }
+//};
+//
+//class Technical : public Book {
+//public:
+//	string getDescription() const override {
+//		return "Technical " + Book::getDescription();
+//	}
+//};
+//
+//Romance novel;
+//Book book;
+//cout << novel.getDescription() << endl; // 결과: "Romance Paperback Book"
+//cout << book.getDescription() << endl;  // 결과: "Book"
+//cout << novel.getHeight() << endl;		// 결과: "60"
+//cout << book.getHeight() << endl;		// 결과: "120"
+//
+//
+//// 업캐스트  부모 -> 자식   다운캐스트 자식 -> 부모 <-- 다운캐스트는 꼭 필요할 때만 사용하고, 반드시 dynamic_cast()를 활용
+//
+//
+//// 다중 상속
+//class Baz : public Foo, public Bar {/*클래스 선언 코드*/ };
+//
+//// 다이아몬드 형태 -> 맨 위가 순수가상클래스면 괜찮다.  [!]
+//
+//
+//// 오버라이드한 메서드의 리턴 타입 변경하기
+//Cherry* CherryTree::pick() { return new Cherry(); }
+//
+//Cherry* BingCherryTree::pick() {
+//	auto theCherry{ make_unique<BingCherry>() };
+//	theCherry->polish();
+//	return theCherry.release();
+//}
+//
+//// 생성자를 상속할 수도 있다. using
+//
+//
+//// c++에서는 static 메서드를 오버라이드 할 수 없다.
+//
+//// C++에서 디폴트 인수는 상속되지 않는다. int i = 2 ----   int i = 7 <- 뒤에 인수는 상관없이 오버로드한다.
+//
+//
+//// 접근 범위를 좁힐수도 넓힐수도 있는데 널히는 것이 더 쉬울 뿐만 아니라 바람직하다.
+//// -> 베이스 클래스 타입의 레퍼런스나 포인터의 처리 과정이 명확히 드러나기 때문이다.
+//class Secret {
+//protected:
+//	virtual void dontTell() { cout << "I' ll never tell." << endl; }
+//};
+//
+//class Blabber : public Secret {
+//public:
+//	virtual void tell() { dontTell(); }
+//};
+//
+//
+//// 실행 시간에 객체를 들여다보는 기능 - RTTI(실행 시간 타입 정보)
+//
+//
+//// 가상 베이스 클래스
+//class Animal {
+//public:
+//	virtual void eat() = 0;
+//	virtual void sleep() { cout << "zzzz" << endl; }
+//};
+//
+//class Dog : public virtual Animal {
+//public:
+//	virtual void bark() { cout << "Woof!" << endl; }
+//	void eat() override { cout << "The dog ate." << endl; }
+//};
+//
+//class Bird : public virtual Animal {
+//public:
+//	virtual void chirp() { cout << "Chirp!" << endl; }
+//	void eat() override { cout << "The bird ate." << endl; }
+//};
+//
+//class DogBird : public Dog, public Bird {
+//public:
+//	virtual void eat() override { Dog::eat(); }
+//};
+//
+//DogBird myCongusedAnimal;
+//myCongusedAnimal.sleep(); // 베이스 클래스를 virtual로 선언해서 모호함이 발생하지 않음
+//
+
+// static_cast - 명시적 변환
+// reinterpret_cast - static_cast보다 강력하지만 안전성이 좀 떨어진다.
+// bit_cast - 바이너리 I/O에 사용
+// dynamic_cast - 같은 상속 계층 내부에서 캐스트에 대한 실행 시간 검사를 제공
+
+int main()
+{
+	
+	save("helloworld.cpp");
+
+}
+
+
+// Chapter10 상속 활용하기 完================================================

@@ -1,0 +1,211 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.17 공부
+// Chapter8 클래스와 객체 이해
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+#include "save.h"
+
+using namespace std;
+
+// 클래스를 작성하려면 그 클래스의 모든 객체에 대한 동작(메서드)과 각 객체의 속성(데이터 멤버)을 지정한다.
+
+// 이 부분도 대부분 아는 내용이 많은 것 같다.
+//
+//class SpreadsheetCell {
+//public:
+//	void setValue(double value); // 메서드
+//	double getValue() const;     // 메서드
+//private:
+//	double m_value;				 // 데이터 멤버
+//};
+//
+////class SpreadsheetCell {
+////public:
+////	void setValue(double value) { m_value = value; } // 메서드
+////	double getValue() const {
+////		return m_value;
+////	}     // 메서드
+////private:
+////	double m_value {0};				 // 데이터 멤버
+////};
+//
+//void SpreadsheetCell::setValue(double value)
+//{
+//	m_value = value;
+//}
+//
+//double SpreadsheetCell::getValue() const
+//{
+//	return m_value;
+//}
+//
+//
+////
+//
+//
+//class SpreadsheetCell {
+//public:
+//	void setValue(double value); // 메서드
+//	double getValue() const;     // 메서드
+//
+//
+//	void setString(std::string_view inString);
+//	std::string getString() const;
+//private:
+//	std::string doubleToString(double value) const;
+//	double stringToDouble(std::string_view value) const;
+//	double m_value{ 0 };				 // 데이터 멤버
+//};
+//
+//
+//std::string SpreadsheetCell::doubleToString(double value) const
+//{
+//	return to_string(value);
+//}
+//
+//double SpreadsheetCell::stringToDouble(std::string_view value) const
+//{
+//	double number{ 0 };
+//	from_chars(value.data(), value.data() + value.size(), number);
+//	return number;
+//}
+//
+//
+//// this란 객체 자신의 포인터를 넘긴다.
+//
+//
+//// 객체를 스택 또는 프리스토어에 생성할 수 있다.
+//// - 프리스토어에 생성시 스마트포인터를 사용하자
+//
+//
+//// 생성자
+//class SpreadsheetCell {
+//public:
+//	SpreadsheetCell(double initialValue); // 생성자
+//}; 
+//
+//SpreadsheetCell::SpreadsheetCell(double initialValue)
+//{
+//	setValue(initialValue);
+//}
+//
+//
+//auto smartCellp{ make_unique<SpreadsheetCell>(4) };
+//// 셀을 다루는 코드를 작성한다. 스마트포인터라면 직접 삭제하지 않아도 된다.
+//
+//// 일반 포인터를 사용해도 되지만 권장하지 않는다.
+//SpreadsheetCell* myCellp{ new SpreadsheetCell {5} };
+//
+//SpreadsheetCell* anotherCellp{ nullptr };
+//anotherCellp = new SpreadsheetCell{ 4 };
+//// 셀을 다루는 코드를 작성한다.
+//delete myCellp; myCellp = nullptr;
+//delete anotherCellp; anotherCellp = nullptr;
+//
+//
+//// 생성자를 하나라도 만들면 디폴트 생성자를 컴파일러가 생성해주지 않는다.
+//// 명시적 디폴트 생성자 
+//// SpreadsheetCell() = default;
+//// 명시적 삭제 생성자
+//// SperadsheetCell() = delete;
+//
+//
+//// 복사 생성자
+//class SpreadsheetCeil
+//{
+//public:
+//	SpreadsheetCeil(const SpreadsheetCell& src);
+//};
+//
+//SpreadsheetCeil::SpreadsheetCeil(const SpreadsheetCell& src)
+//	: m_value{src.m_value}
+//{
+//	
+//}
+//
+//
+//// 초기자 리스트 생성자 - std::initializer_list<T>를 첫번째 매개변수로 받고, 다른 매개변수는 없거나
+//// 디폴트값을 가진 매개변수를 추가로 받는 생성자를 말한다.
+//
+//class EvenSequence {
+//public:
+//	EvenSequence(initializer_list<double> args)
+//	{
+//		if (args.size() % 2 != 0) {
+//			throw invalid_argument{"initializer_list should " " contain even number of elements"};
+//		}
+//		m_sequence.reserve(args.size());
+//		for (const auto& value : args) {
+//			m_sequence.push_back(value);
+//		}
+//	}
+//
+//	void dump() const
+//	{
+//		for (const auto& value : m_sequence) {
+//			cout << value << ",";
+//		}
+//		cout << endl;
+//	}
+//private:
+//	vector<double>m_sequence;
+//};
+//
+//
+//// 위임 생성자 - 같은 클래스의 생성자끼리 서로 호출할 수 있다. 반드시 생성자 초기자에서 호출해야 한다.
+//SpreadsheetCeil::SpreadsheetCeil(string_view initialValue)
+//	: SpreadsheetCeil{ stringToDouble(initialValue) }
+//{
+//
+//}
+//
+//
+//// 컴파일러가 암묵적으로 변환하지 않게하려면 explicit 사용
+//
+//
+//// 소멸자 - 객체가 제거되는 과정은 소멸자를 호출한 다음 할당 받은 메모리를 반환한다.
+//
+//
+//// 대입 연산자
+//class SpreadsheetCell {
+//public:
+//	SpreadsheetCeil& operator=(const SpreadsheetCell& rhs);
+//};
+//
+//
+//class Person
+//{
+//public:
+//	Person(std::string name, size_t age);
+//
+//
+//	void setName(std::string name);
+//	std::string getName();
+//
+//	void setAge(size_t age);
+//	size_t getAge();
+//
+//private:
+//	std::string m_Name;
+//	size_t m_age;
+//};
+
+int main()
+{
+	
+	save("helloworld.cpp");
+
+}
+
+
+// Chapter8 클래스와 객체 이해 完================================================

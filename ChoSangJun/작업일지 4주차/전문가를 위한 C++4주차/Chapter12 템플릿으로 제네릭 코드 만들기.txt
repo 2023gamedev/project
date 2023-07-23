@@ -1,0 +1,284 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.21 공부
+// Chapter12 템플릿으로 제네릭 코드 만들기
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+
+#include "save.h"
+
+using namespace std;
+
+// 제네릭 프로그래밍 - 재사용 가능한 코드를 작성하는 것 - 템플릿
+
+
+// 타입에 대해서도 매개변수화할 수 있게 만든 것 - 템플릿
+
+
+//
+//class GamePiece {
+//public:
+//	virtual ~GamePiece() = default;
+//	virtual std::unique_ptr<GamePiece> clone() const = 0;
+//};
+//
+//class ChessPiece : public GamePiece {
+//public:
+//	std::unique_ptr<GamePiece> clone() const override {
+//		// 복제 생성자로 이 인스턴스를 복제한다.
+//		return std::make_unique<ChessPiece>(*this);
+//	}
+//};
+//
+//class GameBoard {
+//public:
+//	explicit GameBoard(size_t width = DefaultWidth, size_t height = DefaultHeight);
+//	GameBoard(const GameBoard& src); // 복제 생성자
+//	virtual ~GameBoard() = default; // 가상 디폴트 소멸자
+//	GameBoard& operator=(const GameBoard& rhs); // 대입 연산자
+//
+//	// 이동 생성자와 대입 연산자를 명시적으로 디폴트로 지정한다.
+//	GameBoard(GameBoard&& src) = default;
+//	GameBoard& operator=(GameBoard&& src) = default;
+//
+//	std::unique_ptr<GamePiece>& at(size_t x, size_t y);
+//	const std::unique_ptr<GamePiece>& at(size_t x, size_t y) const;
+//
+//	size_t getHeight() const { return m_height; }
+//	size_t getWidth() const { return m_width; }
+//
+//	static const size_t DefalutWidth{10};
+//	static const size_t DefalutHeight{10};
+//
+//	void swap(GameBoard& other) noexcept;
+//private:
+//	void verifyCoordinate(size_t x, size_t y) const;
+//
+//	std::vector<std::vector<std::unique_ptr<GamePiece>>> m_cells;
+//	size_t m_width{ 0 }, m_height{ 0 };
+//};
+//void swap(GameBoard& first, GameBoard& second) noexcept;
+//
+//
+//GameBoard::GameBoard(size_t width, size_t height) 
+//	: m_width{ width} , m_height {height}
+//{
+//	m_cells.resize(m_width);
+//	for (auto& column : m_cells) {
+//		column.resize(m_height);
+//	}
+//}
+//
+//GameBoard::GameBoard(const GameBoard& src)
+//	: GameBoard{ src.m_width, src.m_height }
+//{
+//	// 여기 나온 생성자 초기자는 메모리를 적절한 크기로 할당하는 작업을
+//	// 비복제 생성자에 위임한다.
+//
+//	// 그러고 나서 데이터를 복제한다.
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		for (size_t j{ 0 }; j < m_height; ++j) {
+//			if (src.m_cells[i][j]) {
+//				m_cells[i][j] = src.m_cells[i][j]->clone();
+//			}
+//		}
+//	}
+//}
+//
+//void GameBoard::verifyCoordinate(size_t x, size_t y) const
+//{
+//	if (x >= m_width) {
+//		throw out_of_range { format("{} must be less than {}.", x, m_width)};
+//	}
+//	if (y >= m_height) {
+//		throw out_of_range { format("{} must be less than {}.", y, m_height)};
+//	}
+//
+//}
+//
+//void GameBoard::swap(GameBoard& other) noexcept
+//{
+//	std::swap(m_width, other.m_width);
+//	std::swap(m_height, other.m_height);
+//	std::swap(m_cells, other.m_cells);
+//}
+//
+//void swap(GameBoard& first, GameBoard& second) noexcept
+//{
+//	first.swap(second);
+//}
+//
+//GameBoard& GameBoard::operator=(const GameBoard& rhs)
+//{
+//	// 복제 후 맞바꾸기
+//	GameBoard temp{ rhs }; // 모든 작업을 임시 인스턴스로 처리한다.
+//	swap(temp);			   // non.throwing 연산으로만 작업 결과를 반영한다.
+//	return *this;
+//}
+//
+//const unique_ptr<GamePiece>& GameBoard::at(size_t x, size_t y) const
+//{
+//	verifyCoordinate(x, y);
+//	return m_cells[x][y];
+//}
+//
+//unique_ptr<GamePiece>& GameBoard::at(size_t x, size_t y)
+//{
+//	return const_cast<unique_ptr<GamePiece>&>(as_const(*this).at(x, y));
+//}
+//
+//GameBoard chessBoard{ 8,8 };
+//auto pawn{ std::make_unique<ChessPiece>() };
+//chessBoard.at(0, 0) = std::move(pawn);
+//chessBoard.at(0, 1) = std::make_unique<ChessPiece>();
+//chessBoard.at(0, 1) = nullptr;
+//
+//
+//// 이렇게 구현해도 좋지만 구현 시 몇가지 아쉬운 점이 있다.
+//// 1. GameBoard는 원소를 값으로 저장할 수 없고 항상 포인터로 저장해야 한다.
+//// 2. 타입 안정성이 떨어진다.
+//// 3. int나 double과 같은 기본 타입으로 저장할 수 없다.
+//
+//
+//
+//
+//// 템플릿으로 수정
+//template <typename T>
+//class Grid {
+//public:
+//	explicit Grid(size_t width = DefaultWidth, size_t height = DefaultHeight);
+//	virtual ~Grid() = default; // 가상 디폴트 소멸자
+//
+//	Grid(const Grid& src); = default; // 복제 생성자
+//	Grid& operator=(const Grid& rhs) = default ; // 대입 연산자
+//
+//	// 이동 생성자와 대입 연산자를 명시적으로 디폴트로 지정한다.
+//	Grid(Grid&& src) = default;
+//	Grid& operator=(Grid&& src) = default;
+//
+//	std::optional<T>& at(size_t x, size_t y);
+//	const std::optional<T>& at(size_t x, size_t y) const;
+//
+//	size_t getHeight() const { return m_height; }
+//	size_t getWidth() const { return m_width; }
+//
+//	static const size_t DefalutWidth{10};
+//	static const size_t DefalutHeight{10};
+//
+//private:
+//	void verifyCoordinate(size_t x, size_t y) const;
+//
+//	std::vector<std::vector<std::optional<T>>> m_cells;
+//	size_t m_width{ 0 }, m_height{ 0 };
+//};
+//
+//template <typename T>
+//Grid<T>::Grid(size_t width, size_t height) // 반드시 Grid가 아닌 Grid<T>로 적어야 한다.
+//	: m_width{ width }, m_height{ height }
+//{
+//	m_cells.resize(m_width);
+//	for (auto& column : m_cells) {
+//		column.resize(m_height);
+//	}
+//}
+//
+//// 템플릿 인스턴스화
+//Grid<int> myIntGrid; // int 값을 저장할 Grid 객체를 선언한다.
+//
+//Grid test; // 컴파일 에러 발생 
+//
+//
+//
+//// 메서드 템플릿 - 템플릿은 메서드단위로 만들 수도 있다.
+//template <typename T>
+//void Grid<T>::swap(T& a, T& b) {
+//
+//}
+//
+//
+//// 중첩된 템플릿 생성자
+//template <typename T>
+//template <typename E> // template <typename T, typename E> 는 불가
+//Grid<T>::Grid(const Grid<E>& src)
+//	: Grid{ src.getWidth(), src.getHeight() }
+//{
+//
+//}
+//
+//
+//// 템플릿 특수화 - 특정한 타입에 대해서는 다른 방식으로 구현한 것을 적용하게 하는 것
+//
+//
+//// 클래스 템플릿도 상속할 수 도 있지만 이때 템플릿을 상속한 파생 클래스도 템플릿이어야 한다.
+//
+//template <typename T>
+//class GameBoard: public Grid<T>
+//{
+//public:
+//	explicit GameBoard(size_t width = Grid<T>::DefalutWidth, size_t height = Grid<T>::DefaultHeight);
+//}
+//
+//
+//// 상속과 특수화 차이점
+////					상속					특수화
+//// 코드 재사용 :      O                    X
+//// 이름 재사용 :      X                    O
+//// 다형성 지원 :      O                    X
+//
+//
+//// 앨리어스 템플릿
+//template <typename T>
+//using OtherName = MyTemplayeClass<T1, double>;
+//
+//
+//// 함수 템플릿 - 함수도 템플릿화할 수 있다. - 클래스 템플릿에서 연산자를 오버로드할 때 유용하다.
+//
+//
+//// C++20 축약 함수 템플릿 구문
+//template <typename T1, typename T2>
+//decltype(auto) add(const T1& t1, const T2& t2) { return t1 + t2; }
+//
+//// 축약 함수 템플릿 구문 이용 시
+//decltype(auto) add(const auto& t1, const auto& t2) { return t1 + t2; }
+//
+//
+//// 변수 템플릿
+//template <typename T>
+//constexpr T pi {T {3.141592}};
+//
+//
+//// C++20 콘셉트 - 템플릿에 관련된 컴파일 에러를 읽기 쉽게 만드는 데 있다. - True나 false로 평가
+//
+//
+//// 제약 표현식
+//template <typename T>
+//concept C = sizeof(T) == 4;
+//// 요구 표현식
+//// - 단순 요구사항 
+//// - 타입 요구사항
+//// - 복합 요구사항
+//// - 중첩 요구사항
+//
+//
+//// 타입 제약 조건이 도입되면서 함수 템플릿과 클래스 템플릿에 대한 제약이 없는 템플릿 타입 매개변수는 구시대의 유뮬이 되었다.
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+
+}
+
+
+// Chapter12 템플릿으로 제네릭 코드 만들기 完================================================

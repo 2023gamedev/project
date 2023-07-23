@@ -1,0 +1,385 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.19 공부
+// Chapter9 클래스와 객체 완전 정복
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+
+#include "save.h"
+
+using namespace std;
+
+
+// 프렌드
+//class Foo {
+//	friend class Bar;
+//	// ...
+//};
+//
+//// 프렌드 특정한 메서드 --- 독립함수도 클래스의 프렌드가 될 수 있다.
+//class Foo {
+//	friend void Bar::processFoo(const Foo&);
+//};
+//
+//
+//
+//class Spreadsheet {
+//public:
+//	Spreadsheet(size_t width, size_t height);
+//	void setCellAt(size_t x, size_t y, const SpreadsheetCell& cell);
+//	SpreadsheetCell& getCellAt(size_t x, size_t y);
+//	void verifyCoordinate(size_t x, size_t y) const;
+//private:
+//	bool inRange(size_t value, size_t upper) const;
+//	size_t m_width{ 0 };
+//	size_t m_height{ 0 };
+//	SoreadshhetCell** m_cells{ nullptr };
+//};
+//
+//Spreadsheet::Spreadsheet(size_t width, size_t height)
+//	: m_width{ width }, m_height{ height }
+//{
+//	m_cells = new SpreadsheetCell * [m_width];
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		m_cells[i] = new SpreadsheetCell{ m_height };
+//	}
+//}
+//
+//void Spreadsheet::setCellAt(size_t x, size_t y, const SpreadsheetCell& cell)
+//{
+//	if (!inRange(x, m_width)) {
+//		throw out_of_range {format("{} must be less than {}.", x, m_width)};
+//	}
+//	if (!inRange(y, m_height)) {
+//		throw out_of_range {format("{} must be less than {}.", y, m_height)};
+//	}
+//	m_cells[x][y] = cell;
+//}
+//
+//
+//
+//SpreadsheetCell& Spreadsheet::getCellAt(size_t x, size_t y)
+//{
+//	if (!inRange(x, m_width)) {
+//		throw out_of_range {format("{} must be less than {}.", x, m_width)};
+//	}
+//	if (!inRange(y, m_height)) {
+//		throw out_of_range {format("{} must be less than {}.", y, m_height)};
+//	}
+//	return m_cells[x][y];
+//}
+//
+//void Spreadsheet::verifyCoordinate(size_t x, size_t y) const
+//{
+//	if (x >= m_width) {
+//		throw out_of_range {format("{} must be less than {}.", x, m_width)};
+//	}
+//	if (y >= m_height) {
+//		throw out_of_range {format("{} must be less than {}.", y, m_height)};
+//	}
+//}
+//
+//void Spreadsheet::setCellAt(size_t x, size_t y, const SpreadsheetCell& cell)
+//{
+//	verifyCoordinate(x, y);
+//	m_cells[x][y] = cell;
+//}
+//
+//SpreadsheetCell& Spreadsheet::getCellAt(size_t x, size_t y)
+//{
+//	verifyCoordinate(x, y);
+//	return m_cells[x][y];
+//}
+//
+//
+//Spreadsheet::~Spreadsheet()
+//{
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		delete[] m_cells[i];
+//	}
+//	delete[] m_cells;
+//	m_cells = nullptr;
+//}
+//
+//// 얕은 복사 X -- 메모리 누수(댕글링 포인터) -> 깊은 복사
+//class Spreadsheet {
+//public:
+//	Spreadsheet(const Spreadsheet& src);
+//	Spreadsheet& operator=(const Spreadsheet& rhs);
+//	// 나머지 코드 생략
+//};
+//
+//// 복사 생성자
+//Spreadsheet::Spreadsheet(const Spreadsheet& src)
+//{
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		for (size_t i{ 0 }; i < m_width; ++i) {
+//			m_cells[i][j] = src.m_cells[i][j];
+//		}
+//	}
+//}
+//
+//// 대입 연산자
+//Spreadsheet& Spreadsheet::operator=(const Spreadsheet& rhs)
+//{
+//	// 자신을 대입하는지 확인한다.
+//	if (this == &rhs) {
+//		return *this;
+//	}
+//
+//	// 기존 메모리를 해제한다.
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		delete[] m_cells[i];
+//	}
+//	delete[] m_cells;
+//	m_cells = nullptr;
+//
+//	
+//	// 메모리를 새로 할당한다.
+//	m_width = rhs.m_width;
+//	m_height = rhs.m_height;
+//	
+//	m_cells = new SpreadsheetCell * [m_width];
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		m_cells[i] = new SpreadsheetCell[m_height];
+//	}
+//
+//	// 데이터를 복제한다.
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		for (size_t j{ 0 }; j < m_height; ++j) {
+//			m_cells[i][j] = rhs.m_cells[i][j];
+//		}
+//	}
+//	return *this;
+//}
+//
+//class Spreadsheet
+//{
+//public:
+//	Spreadsheet& operator=(const Spreadsheet& rhs);
+//	void swap(Spreadsheet& other) noexcept;
+//	// 나머지 코드 생략
+//};
+//
+//
+//void Spreadsheet::swap(Spreadsheet& other) noexcept
+//{
+//	std::swap(m_width, other.m_width);
+//	std::swap(m_height, other.m_height);
+//	std::swap(m_cells, other.m_cells);
+//}
+//// 복제 후 맞바꾸기 copy-and-swap-idiom
+//
+//
+//
+//// 이동 생성자
+//class Spreadsheet {
+//public:
+//	Spreadsheet(Spreadsheet&& src) noexcept; // 이동 생성자
+//	Spreadsheet& operator=(Spreadsheet&& rhs) noexcept;
+//	// 나머지 코드 생략
+//private:
+//	void cleanup() noexcept;
+//	void moveFrom(Spreadsheet& src) noexcept;
+//	// 나머지 코드 생략
+//};
+//
+//void Spreadsheet::cleanup() noexcept
+//{
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		delete[] m_cells[i];
+//	}
+//	delete[] m_cells;
+//	m_cells = nullptr;
+//	m_width = m_height = 0;
+//}
+//
+//void Spreadsheet::moveFrom(Spreadsheet& src) noexcept
+//{
+//	// 데이터에 대한 얕은 복제
+//	m_width = src.m_width;   // std::exchange를 쓰기도 한다.
+//	m_height = src.m_height; // std::exchange를 쓰기도 한다.
+//	m_cells = src.m_cells;   // std::exchange를 쓰기도 한다.
+//
+//	// 데이터 멤버가 객체일 경우에는 std::move를 사용해야 한다.
+//
+//
+//	// 소유권이 이전되었기 때문에 소스 객체를 리셋한다.
+//	src.m_width = 0;
+//	src.m_height = 0;
+//	src.m_cells = nullptr;
+//
+//}
+//
+//// 이동 생성자 
+//Spreadsheet::Spreadsheet(Spreadsheet&& src) noexcept
+//{
+//	moveFrom(src);
+//}
+//
+//// 이동 대입 연산자
+//Spreadsheet& Spreadsheet::operator=(Spreadsheet&& rhs) noexcept
+//{
+//	// 자기 자신을 대입하는지 확인한다.
+//	if (this == &rhs) {
+//		return *this;
+//	}
+//
+//	// 에전 메모리를 해제한다.
+//	cleanup();
+//	moveFrom(rhs);
+//	return *this;
+//}
+//
+//// 이동생성해도 될때 복제생성을 안하고 이동생성을 하여 성능을 높여 준다.
+//
+//
+//template <typename T>
+//void swapCopy(T& a, T& b) {
+//	T temp{ std::move(a) };
+//	a = std::move(b);
+//	b = std::move(temp);
+//}
+//
+//
+//// 0의 규칙 - 다섯가지 특수 멤버 함수 생성을 아예하지 않는 것
+//// Spreadsheet** 데이터 멤버 대신 - >vector<vector<SpreadsheetCell>> 사용
+//
+//
+//// 메서드의 종류
+//// static 메서드
+//class SpreadsheetCell {
+//	// 이전 코드 생략
+//private:
+//	static std::string doubleToString(double value);
+//	static double stringToDouble(std::string_view value);
+//	// 나머지 코드 생략
+//};
+//
+//// const 메서드 - 절대 데이터 멤버를 변경하지 않는다.
+//class SpreadsheetCell {
+//public:
+//	// 이전 코드 생략
+//	double getValue() const;
+//	std::string getString() const;
+//	// 나머지 코드 생략
+//};
+//
+//// mutable -> const 값 변경 가능
+//
+//
+//// 디폴트 인수 size_t s = 5
+//
+//class Spreadsheet {
+//public:
+//	// 코드 생략
+//	size_t getId() const;
+//private:
+//	// 코드 생략
+//	static size_t ms_counter;
+//	size_t m_id{ 0 };
+//};
+//
+//size_t Spreadsheet::ms_counter = 0;
+//
+//
+//// 중첩 클래스 - 클래스안에 클래스를 넣을 수 있다. 코드가 너무 길어진다면 이렇게 쓸수도 있다.
+//class Myclass {
+//
+//	class Littleclass;
+//};
+//
+//class Littelclass {
+//
+//};
+//
+//// 클래스에 열거타입을 데이터 멤버로 만들 수 있다.
+//
+//
+//
+//// 산술 연산자
+//class SpreadsheetCell {
+//public:
+//	SpreadsheetCell& operator+=(const SpreadsheetCell& rhs);
+//	SpreadsheetCell& operator-=(const SpreadsheetCell& rhs);
+//	SpreadsheetCell& operator*=(const SpreadsheetCell& rhs);
+//	SpreadsheetCell& operator/=(const SpreadsheetCell& rhs);
+//};
+//
+//// ====================================중요===========================================
+//// C++20은 클래스에 비교 연산자를 지원하는 과정이 상당히 간절해졌다.
+//// operator== 하나로 다음과 같은 비교연산을 수행 할 수 있다.
+//if (myCell == 10) { cout << "myCell == 10\n"; }
+//if (10 == myCell) { cout << "10 == myCell\n"; }
+//// 또한 operator==을 구현하면 != 도 자동으로 만들어준다.
+//
+//// 그리고 모든 비교연산자를 구현할 때 operator<=>만 쓰면된다.
+//
+//
+//// 브릿지 패턴
+//class Spreadsheet {
+//public:
+//	Spreadsheet(const SpreadsheetApplication& theApp,
+//		size_t width = MaxWidth, size_t height = MaxHeight);
+//	Spreadsheet(const Spreadsheet& src);
+//	Spreadsheet(Spreadsheet&&) noexcept;
+//	~Spreadsheet();
+//
+//	Spreadsheet& operator=(const Spreadsheet& rhs);
+//	Spreadsheet& operator=(Spreadsheet&&) noexcept;
+//
+//	void setCellAt(size_t x, size_t y, const SpreadsheetCell& cell);
+//	SpreadsheetCell& getCellA(size_t x, size_t y);
+//
+//	size_t getId() const;
+//
+//	static const size_t MaxHeight{ 100 };
+//	static const size_t MaxWidth{ 100 };
+//
+//	void swap(Spreadsheet& other) noexcept;
+//
+//private:
+//	class Impl; // 구현 코드 클래스
+//	std::unique_ptr<Impl> m_impl;
+//};
+//void swap(Spreadsheet& first, Spreadsheet& second) noexcept;
+//
+//
+//class Spreadsheet::Impl { /*코드 생략*/ };
+//
+//Spreadsheet::Impl::Impl(const SpreadsheetApplication& theApp, size_t width, size_t height)
+//	: m_id{ ms_counter++ }
+//	, m_width{ min(width, Spreadsheet::MaxWidth) }
+//	, m_height{min(height, Spreadsheet::MaxHeight)}
+//	, m_theApp{ theApp }
+//{
+//
+//
+//	m_cells = new SpreadsheetCell * [m_width];
+//	for (size_t i{ 0 }; i < m_width; ++i) {
+//		m_cells[i] = new SpreadsheetCell[m_height];
+//	}
+//}
+
+// 이제 사용 시 m_Impl->setCellAt() 같이 사용 
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+
+}
+
+
+// Chapter9 클래스와 객체 완전 정복 完================================================

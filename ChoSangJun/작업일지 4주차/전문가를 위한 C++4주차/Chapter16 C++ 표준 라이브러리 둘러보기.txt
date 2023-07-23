@@ -1,0 +1,142 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.23 공부
+// Chapter16 C++ 표준 라이브러리 둘러보기
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+
+#include "save.h"
+
+using namespace std;
+
+// 표준 라이브러리는 C++의 템플릿과 연산자 오버로딩기능을 상당히 많이 사용한다.
+
+
+// 스트링(string) <string>
+// 메모리를 관리해줄 뿐만 아니라 인덱스 경계 검사, 대입과 비교 기능, 스트링 결합, 스트링 추출, 부분 스트링 만들기
+// , 문자 치환등과 같은 다양한 기능도 제공한다.
+
+
+// 정규 표현식 <regex> - 텍스트를 다룰 때 흔히 사용하는 패턴 매칭을 쉽게 구현할 수 있다.
+// 패턴 매칭은 스트링에서 특정한 패턴을 찾거나 새 패턴으로 교체하는데 사용한다.
+
+
+// I/O 스트림 <fstream>, <iomanip>, <ios>, <iosfwd>, <iostream>, <istream>, <ostream>
+// , <sstream>, <streambuf>, <strstream>
+
+
+// 스마트 포인터 - <memory>
+
+
+// 익셉션 <exception> <stdexcept> <system_error>
+
+
+// 수학 연산 관련 유틸리티 <numbers> <bit>
+
+
+// 시간과 날짜 관련 유틸리티 <chrono> - 시간에 관련된 데이터를 쉽게 다룰 수 있다.
+
+
+// 무작위수 <random>
+
+
+// 초기자 리스트 <initializer_list> 인수의 개수를 다양하게 받는 함수를 쉽게 작성할 수 있다.
+//int makeSum(initializer_list<int> values) {
+//	int total{ 0 };
+//	for (int value : values) { total += value; }
+//	return total;
+//}
+//
+//int a{ makeSum({1,2,3}) };
+//int b{ makeSum({10,20,30,40,50,60}) };
+//
+//
+//// 표준 라이브러리 기능 테스트 매크로 - 현재 사용하는 표준 라이브러리 구현에 특정한 기능이 제공되는지 검사할 수 있다.
+//__cpp_lib_concepts
+//__cpp_lib_ranges
+//__cpp_lib_scoped_lock
+//__cpp_lib_atomic_float
+//__cpp_lib_constexpr_vector
+//__cpp_lib_constexpr_tuple
+//__cpp_lib_filesystem
+//__cpp_lib_three_way_comparison
+
+// 크로스 플랫폼 및 크로스 컴파일러 라이브러리와 같은 범용적인 것을 개발하지 않는 한 기능 테스트
+// 매크로를 사용할 일은 거의 없다.
+
+
+// <version> - 현재 사용하는 표준 라이브러리의 구현에 종속적인 정보를 조회하는데 사용한다.
+// - 버전 번호
+// - 릴리즈 날짜
+// - 저작권 정보
+
+
+// 소스 위치 std::soure_locatuon (C++20) <source_location>
+
+
+// 컨테이너
+// [1] vector <vector> - 기본 컨테이너로 사용한다.
+// [2] list <list>
+// [3] forward_list <forward_list>
+// [4] deque
+// [5] array
+// [6] span (C++20) - 연속된 데이터에 대한 뷰를 제공한다.
+// [7] queue
+// [8] priority_queue
+// [9] stack
+// [10]set과 multiset
+// [11]map과 multimap
+// [12]비정렬 연결 컨테이너와 해쉬 테이블
+// [13]bitset
+
+
+// 알고리즘 <algorithm>
+// [1] 불변형 순차 알고리즘 - 원소를 순차적을 조회하여 각 원소에 대한 정보를 리턴하는 알고리즘을 말한다.
+// - 탐색 알고리즘
+// - 비교 알고리즘
+// - 집계 알고리즘
+
+// [2] 가변형 순차 알고리즘 - 시퀀스의 모든 원소나 일부 원소를 수정하는 알고리즘
+
+// [3] 작업 알고리즘
+
+// [4] 교환 알고리즘
+
+// [5] 분할 알고리즘
+
+// [6] 정렬 알고리즘
+
+// [7] 이진 탐색 알고리즘
+
+// [8] 집합 알고리즘
+
+// [9] 힙 알고리즘
+
+// [10] 최대/최소 알고리즘
+
+// [11] 수치 처리 알고리즘
+
+// [12] 순열 알고리즘
+
+
+int main()
+{
+	
+
+	save("helloworld.cpp");
+}
+
+
+// Chapter16 C++ 표준 라이브러리 둘러보기 完================================================
