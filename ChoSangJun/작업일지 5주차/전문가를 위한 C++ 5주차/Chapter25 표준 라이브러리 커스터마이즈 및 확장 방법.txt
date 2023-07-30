@@ -1,0 +1,42 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.27 공부
+// Chapter25 표준 라이브러리 커스터마이즈 및 확장 방법
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+#include <ranges>
+#include <ratio>
+#include <random>
+#include <variant>
+#include <any>
+#include <tuple>
+
+#include "save.h"
+
+using namespace std;
+
+// 표준 라이브러리를 커스터마이즈하고 확장할 일은 드물다. 이 부분은 읽고 넘어간다.
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+
+// Chapter25 표준 라이브러리 커스터마이즈 및 확장 방법 完
+
+
+================================================

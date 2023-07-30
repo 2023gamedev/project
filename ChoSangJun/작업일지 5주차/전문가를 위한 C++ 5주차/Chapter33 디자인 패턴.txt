@@ -1,0 +1,159 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.30 공부
+// Chapter33 디자인 패턴
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <fstream>
+#include <format>
+
+#include "save.h"
+
+using namespace std;
+
+
+// 디자인 패턴 - 다양한 문제를 해결하는 프로그램을 구성하는 표준화된 접근 방법론이다.
+
+// 의존성 주입 - 의존성 역전 원칙(DIP)을 지원하는 방법 중 하나다.
+//				의존성 주입은 의존성 관계를 역전시키는데 인터페이스를 활용한다.
+//class ILogger
+//{
+//public:
+//	virtual ~ILogger() = default;
+//
+//	enum class LogLevel {
+//		Error,
+//		Info,
+//		Debug
+//	};
+//
+//	virtual void setLogLevel(LogLevel level) = 0;
+//
+//	virtual void log(std::string_view message, LogLevel logLevel) = 0;
+//
+//};
+//
+//class Logger : public ILogger
+//{
+//public:
+//	explicit Logger(std::string_view logFilename);
+//	virtual ~Logger();
+//	void setLogLevel(LogLevel level) override;
+//	void log(std::string_view message, LogLevel logLevel) override;
+//private:
+//	std::string_view getLogLevelString(LogLevel level) const;
+//
+//	std::ofstream m_outputStream;
+//	LogLevel m_logLevel{ LogLevel::Error };
+//};
+//
+//Logger::Logger(string_view logFilename)
+//{
+//	m_outputStream.open(logFilename.data(), ios_base::app);
+//	if (!m_outputStream.good()) {
+//		throw runtime_error {"Unable to initialize the Logger!"};
+//	}
+//}
+//
+//Logger::~Logger()
+//{
+//	m_outputStream << "Logger shutting down" << endl;
+//	m_outputStream.close();
+//}
+//
+//void Logger::setLogLevel(LogLevel level)
+//{
+//	m_logLevel = level;
+//}
+//
+//string_view Logger::getLogLevelString(LogLevel level) const
+//{
+//	switch (level)
+//	{
+//	case ILogger::LogLevel::Error:
+//		return "ERROR";
+//
+//	case ILogger::LogLevel::Info:
+//		return "INFO";
+//	case ILogger::LogLevel::Debug:
+//		return "DEBUG";
+//	}
+//
+//	throw runtime_error {"Invalid log level"};
+//}
+//
+//void Logger::log(string_view message, LogLevel logLevel)
+//{
+//	if (m_logLevel < logLevel) { return; }
+//
+//	m_outputStream << format("{} : {}", getLogLevelString(logLevel), message) << endl;
+//}
+//
+//
+//class Foo
+//{
+//public:
+//	explicit Foo(ILogger& logger) : m_logger{ logger } {}
+//	void doSomething() {
+//		m_logger.log("Hello dependency injection!", ILogger::LogLevel::Info);
+//	}
+//private:
+//	ILogger& m_logger;
+//};
+//
+//Logger concreateLogger{ "log.out" };
+//concreateLogger.setLogLevel{ILogger::LogLevel::Debug};
+//
+//Foo f{ concreateLogger };
+//f.doSomething();
+
+
+// 추상 팩토리 패턴 - 객체를 생성할 때 그 객체의 생성자를 직접 호출하지 않고 객체 생성을 담당하는 팩토리에 요청한다.
+// 클래스 타입을 정확히 몰라도 클래스 계층에 맞게 객체를 생성할 수 있다.
+// 그리고 객체를 생성하는 기능을 프로그램의 이곳저곳에 산만하게 흩어두지 않고 한 곳에 모아둘수 있다는 것이다.
+// 게다가 객체 생성 과정을 추상화 할 수 있다.
+// ex) 자동차 공장 시뮬레이션
+
+// 팩토리 메서드 패턴 - 생성할 객체 종류를 전적으로 구체적인 팩토리가 결정한다.
+
+
+// 어댑터 패턴 - 어떤 기능의 구현 코드에 바람직한 추상화를 제공하면서 그 기능의 사용자와 구현 코드를 연결시켜주는
+//				역할을 한다.
+
+
+// 프록시 패턴 - 클래스 추상화를 내부 표현과 분리하는 패턴이다.
+// ex) 네트워크 연결 문제 숨기기
+
+
+// 반복자 패턴 - 알고리즘이나 연산을 데이터와 분리하는 메커니즘을 제공한다.
+
+
+// 옵저버 패턴 - 관찰자 역할을 하는 객체가 관찰 대상 객체로부터 알림을 받도록 구현하는데 사용한다.
+
+
+// 데코레이터 패턴 - 객체를 꾸미는 역할을 한다. 객체의 동작을 실행 시간에 추가하거나 변경하는데 사용한다.
+
+
+// 책임 사슬 패턴 - 특정한 동작을 여러 객체에 엮여서 처리할 때 사용한다.
+// ex) 이벤트 처리
+
+
+// 싱글턴 패턴 - 프로그램에서 클래스의 인스턴스가 딱하나만 존재한다는 것을 표현한다.
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+
+// Chapter33 디자인 패턴 完
+
+
+================================================

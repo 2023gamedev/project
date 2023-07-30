@@ -1,0 +1,52 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.30 공부
+// Chapter32 설계 기법과 프레임워크
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+#include <ranges>
+#include <ratio>
+#include <random>
+#include <variant>
+#include <any>
+#include <tuple>
+#include <queue>
+
+#include "save.h"
+
+using namespace std;
+
+
+// 이 부분은 전체적인 복습부분이라 대부분 생략
+
+
+
+// RAII - 어떤 리소스의 소유권을 획득했다가 RAII 인스턴스가 스코프를 벗어나면 할당했던 리소스를
+//        자동으로 해제하는데 활용된다.
+
+// 객체 지향 프로그래밍
+// MVC - 모델 뷰 컨트롤러
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+
+// Chapter32 설계 기법과 프레임워크 完
+
+
+================================================

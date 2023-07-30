@@ -1,0 +1,119 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.27 공부
+// Chapter26 고급 템플릿
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+#include <ranges>
+#include <ratio>
+#include <random>
+#include <variant>
+#include <any>
+#include <tuple>
+
+#include "save.h"
+
+using namespace std;
+
+//template <typename Container>
+//concept ContainerType = requires(Container c)
+//{
+//	c.resize(1);
+//	typename Container::value_type;
+//}
+//
+//template <typename T, ContainerType Container>
+//class Grid
+//{
+//public:
+//	explicit Grid(size_t width = DefaultWidth, size_t height = DefalutHeight);
+//	virtual ~Grid() = default;
+//
+//	// 복제 생성자와 대입 연산자를 명시적으로 디폴트로 지정한다.
+//	Grid(const Grid& src) = default;
+//	Grid& operator=(cont Grid& rhs) = default;
+//
+//	// 이동 생성자와 대입 연산자를 명시적으로 디폴트로 지정한다.
+//	Grid(Grid&& src) = default;
+//	Grid& operator=(Grid&& rhs) = default;
+//
+//	typename Container::value_type& at(size_t x, size_t y);
+//	const typename Container::value_type& at(size_t x, size_t y) const;
+//
+//	size_t getHeight() const { return m_height; }
+//	size_t getWidth() const { return m_width; }
+//
+//	static const size_t DefaultWidth {10};
+//	static const size_t DefaultHeight {10};
+//
+//private:
+//	void verifyCoordinate(size_t x, size_t y) const;
+//
+//	std::vector<Container> m_cells;
+//	size_t m_width{ 0 }, m_height{ 0 };
+//};
+//
+//template <typename T, ContainerType Container>
+//Grid<T, Container>::Grid(size_t width, size_t height)
+//	: m_width{ width }, m_height{ height }
+//{
+//	m_cells.resize(m_width);
+//	for (auto& column : m_cells) {
+//		column.resize(m_height);
+//	}
+//}
+//
+//template <typename T, ContainerType Container>
+//void Grid<T, Container>::verifyCoordinate(size_t x, size_t y) const
+//{
+//	if (x >= m_width) {
+//		throw std::out_of_range{
+//			std::format("{} must be less than {}.", x, m_width);
+//		}
+//	}
+//	if (y >= m_height) {
+//		throw std::format("{} must be less than {}", y, m_height);
+//	}
+//}
+//
+//
+//// 템플릿 템플릿 매개변수 
+//Grid<int, vector <optional<int>>> myIntGrid;
+//
+//
+//template <typename T,
+//	template<typename E, typename Allocator = std::allocator<E>> class Container = std::vector>
+
+// 템플릿을 다른 템플릿의 매개변수로 전달할 수 있다는 사실만 명심하길 바란다.
+
+
+
+// 이 이후 부분도 읽어보고 생략
+
+
+// 템플릿 메타프로그래밍 - 템플릿 메타프로그래밍은 굉장히 강력한 도구지만 코드가 상당히 난해해질 위험도 있다.
+// 작성할 때는 반드시 주석에 메타프로그래밍을 사용하는 목적과 진행 과정을 명확히 밝히는 것이 좋다.
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+
+// Chapter26 고급 템플릿 完
+
+
+================================================

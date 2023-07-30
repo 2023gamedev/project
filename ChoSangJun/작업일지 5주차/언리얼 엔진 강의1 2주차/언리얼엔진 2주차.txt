@@ -1,0 +1,51 @@
+기억을 못할 것 같은 부분이나 중요해 보이는 부분만 적었습니다.
+
+
+에디터 ---> 게임 에셋 ----> 게임
+
+
+컴파일러 -> 소스코드를 바이너리로 전환
+
+C++는 이데터의 기반이다.
+소스코드 에디터 ---> 소스 코드 --> 컴파일러 ---> 에디터 ---> 게임 에셋 ---> 게임
+
+
+// 주의
+변경사항이 껏다 키니 저장되어 있지 않는다면
+
+언리얼 에디터를 닫은 다음 vs코드에서 빌드를 하고 다시 실행하면 저장이 된다.
+
+
+
+게임 루프
+
+1. Process Input
+2. Update game state
+3. Render to display
+
+Tick - 매 프레임마다 호출되어진다.
+
+EditAnywhere -> 수정이 가능
+VisibleAnywhere -> 보는것만 가능
+
+
+Gamemode - 누가 어디에 스폰해야 하는지 등 수많은 클래스를 사용하는 방법을 알려준다.
+
+
+
+
+UE_LOG(LogTemp, Display, TEXT("Your message"));
+UE_LOG(LogTemp, Warning, TEXT("Your message")); // 노란색
+UE_LOG(LogTemp, Error, TEXT("Your message"));   // 빨간색
+
+
+
+단축키
+~ 두번 - output Log
+Ctrl + Space - Content Drawer
+
+
+FString을 인수로 받을때 *써주기
+
+GetActorRotation -> 반환값 FRotator
+GetActorLocation -> 반환값 FLocation
