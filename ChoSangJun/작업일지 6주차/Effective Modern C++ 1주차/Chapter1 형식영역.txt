@@ -1,0 +1,280 @@
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.08.06 공부
+// Chapter1 형식영역
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+
+// 항목1 :템플릿 형식 연역 규칙을 숙지하라
+//
+//template<typename T>
+//void f(ParamType param);
+//
+//f(expr);    // 어떤 표현식으로 f를 호출
+//
+//
+//template<typename T>
+//void f(const T& param);
+//
+//int x = 0;
+//f(x);
+//// 이 경우 T는 int로 연역되나 ParamType은 const int&로 연역된다.
+//
+//
+//// 세 가지 형식 연역 시나리오가 있다.
+//
+//// 경우1 : ParamType이 포인터 또는 참조형식이지만 보편 참조는 아님
+//// - 1. 만일 expr이 참조 형식이면 참조 부분을 무시한다.
+//// - 2. 그런 다음 expr의 형식을 ParamType에 대해 패턴 부합 방식으로 대응시켜서 T의 형식을 결정한다.
+//
+//template<typename T>
+//void f(T& param); // param은 참조 형식
+//
+//int x = 27;             // x는 int
+//const int cx = x;       // cx는 const int
+//const int& rx = x;      // rx는 const int인 x에 대한 참조
+//
+//f(x);           // T는 int, param의 형식은 int&
+//        
+//f(cx);          // T는 const int,
+//                // param의 형식은 const int&
+//
+//f(rx);          // T는 const int,
+//                // param의 형식은 const int&
+//
+//// cx와 rx에 const 값이 배정되었기 때문에 T가 const int로 연역되었다.
+//// 그래서 매개변수 param의 형식은 const int&가 되었다.
+//
+//
+//// 경우2 : ParamType이 보편 참조임
+//// 템플릿이 보편 참조 매개변수를 받는 경우에는 상황이 조금 불투명해진다.
+//// - 만일 expr이 왼값이면, T와 Paramtype 둘 다 왼값 참조로 연역된다. 이는 이중으로 비정상적인 상황이다.
+//// - 만일 expr이 오른값이면, '정상적인'(즉, 경우 1의) 규칙들이 적용된다.
+//
+//template<typename T>
+//void f(T&& param);          // 이번에는 param의 보편 참조
+//
+//int x = 27;                 // 이전과 동일
+//const int cx = x;           // 이전과 동일
+//const int& rx = x;          // 이전과 동일
+//
+//f(x);               // x는 왼값, 따라서 T는 int&
+//                    // param의 형식 역시 int&
+//
+//f(cx);              // cx는 왼값, 따라서 T는 const int&
+//                    // param의 형식 역시 const int&
+//
+//f(rx);              // rx는 왼값, 따라서 T는 const int&
+//                    // param의 형식 역시 const int&
+//
+//f(27);              // 27은 오른값, 따라서 T는 int,
+//                    // 그러므로 param의 형식은 int&&
+//
+//
+//// 경우3 : ParamType이 포인터도 아니고 참조도 아님
+//// -> 값으로 전달되는 상황인 것이다.
+//
+//template <typename T>
+//void f(T param);        // 이번에는 param이 값으로 전달된다.
+//
+//// 1. 이전처럼, 만일 expr의 형식이 참조이면, 참조 부분은 무시도니다.
+//// 2. expr의 참조성을 무시한 후, 만일 expr이 const이면 그 const 역시 무시한다.
+////    만일 volatile이면 그것도 무시한다.
+//
+//
+//int x = 27;              // 이전과 동일
+//const int x = 27;        // 이전과 동일
+//const int& x = 27;       // 이전과 동일
+//
+//f(x);                    // T와 param의 형식은 둘 다 int
+//
+//f(cx);                   // 여전히 T와 param의 형식은 둘 다 int
+//
+//f(rx);                   // 이번에도 T와 param의 형식은 둘 다 int
+//
+//// cx와 rx가 const 값을 지칭하지만, 그래도 param은 const가 아님을 주목하자.
+//
+//
+//// 여기서 명심할 것은, const 값 전달 매개변수에 대해서만 무시된다는 점이다.
+//template <typename T>
+//void f(T param);            // 인수는 param에 여전히 값으로 전달된다.
+//
+//const char* const ptr =     // ptr는 const 객체를 가리키는 const 포인터
+//"Fun with pointers";
+//
+//f(ptr);                     // const char * const 형식의 인수를 전달
+//                            // param에 대해 연역되는 형식은 const char*dlek.
+//
+//
+//// 배열 인수
+//
+//// 배열의 크기를 컴파일 시점 상수로서 돌려주는 템플릿 함수
+//// (배열 매개변수에 이름을 붙이지 않은 것은, 이 템플릿에
+//// 필요한 것은 배열에 담긴 원소의 개수뿐이기 때문이다.)
+//template<typename T, std::size_t N>                    
+//constexpr std::size_t arraySize(T(&)[N]) noexcept      
+//{                                                     
+//    return N;                                          
+//}
+//// constexpr로 선언하면 함수 호출의 결과를 컴파일 도중에 사용할 수 있게 된다.
+//
+//int keyVals[]{ 1,3,7,9,11,22,35 };
+//std::array<int, arraySize(keyVals)> mappedVals;
+//
+//// 기억해 둘 사항들
+//// - 템플릿 형식 연역 도중에 참조 형식의 인수들은 비참조로 취급된다. 즉 참조성이 무시된다.
+//// - 보편 참조 매개변수에 대한 형식 연역 과정에서 왼값 인수들은 특별하게 취급된다.
+//// - 값 전달 방식의 매개변수에 대한 형식 연역 과정에서 const 또는 volatile 인수는 비 const, 비 volatile인수로 취급된다.
+//// - 템플릿 형식 연역 과정에서 배열이나 함수 이름에 해당하는 인수는 포인터로 붕괴한다.
+//
+//
+//// 항목 2: auto의 형식 연역 규칙을 숙지하라
+//
+//// 경우 1: 형식 지정자가 포인터나 참조 형식이지만 보편 참조는 아닌경우
+//// 경우 3: 형식 지정자가 포인터도 아니고 참조로 아닌 경우
+//auto x = 27;                // 경우 3 (x는 포인터도 아니고 참조도 아님)
+//
+//const auto cx = x;          // 경우 3 (cx 역시 둘 다 아님)
+//
+//const auto& rx = x;         // 경우 1 (rx는 보편 참조가 아닌 참조)
+//
+//// 경우 2: 형식 지정자가 보편 참조인 경우
+//auto&& uref1 = x;           // x는 int이자 왼값이므로
+//                            // uref1의 형식은 int&
+//
+//auto&& uref2 = cx;          // cx는 const int이자 왼값이므로
+//                            // uref2의 형식은 const int&
+//
+//auto&& uref3 = 27;          // 27은 int이자 오른값이므로
+//                            // utref3의 형식은 int&&
+//
+//// 이상의 예들에서 보듯이, auto의 형식 연역은 템플릿 형식 연역과 똑같이 작동한다.
+//
+//
+//auto x1 = 27;               // 형식은 int, 값은 27
+//
+//auto x2(27);                // 마찬가지
+//
+//auto x3 = { 27 };           // 형식은 std::initializer_list<int>,
+//                            // 값은 {27}
+//
+//auto x4{ 27 };              // 마찬가지
+//
+//
+//
+//auto x = { 11,23,9 }; // x의 형식은
+//                      // std::initializer_list<int>
+//
+//template<typename T>  // x의 선언에 해당하는 매개변수
+//void f(T param);      // 선언을 가진 템플릿
+//
+//f({ 11,23,9 });       // 오류! T에 대한 형식을 연역할 수 없음
+//
+//
+//template<typename T>
+//void f(std::initializer_list<T> initList);
+//
+//f({ 11,23,9 });         // T는 int로 연역되며, initList의 형식은
+//                        // std::initializer_list<int>로 연역된다.
+//
+//// 기억해 둘 사항들
+//// - auto 형식 연역은 대체로 템플릿 형식 연역과 같지만, auto 형식 연역은 중괄호 초기치가
+////   std::initializer_list 나타낸다고 가정하는 반면 템플릿 형식 연역은 그렇지 않다는 차이가 있다.
+//// - 함수의 반환 형식이나 람다 매개변수에 쓰인 auto에 대해서는 auto 형식 연역이 아니라 템플릿 형식 연역이 적용된다. 
+//
+//
+//// decltype의 작동 방식을 숙지하라 - decltype은 주어진 이름이나 표현식의 형식을 알려준다.
+//
+//const int i = 0;            // decltype(i)는 const int
+// 
+//bool f(const Widget& w);    // decltype(w)는 const Widget&
+//                            // decltype(f)는 bool(const Widget&)
+//
+//struct Point {
+//    int x, y;               // decltype(Point::x)는 int
+//};                          // decltype(Point::y)는 int
+//
+//Widget w;                   // decltype(w)는 Widget
+//
+//if(f(w))...                 // decltype(f(w))는 bool
+//
+//template<typename T>        // std::vector를 단순화한 버전
+//class vector {
+//public:
+//    ...
+//    T& operator[](std::size_t index);
+//    ...
+//};
+//
+//vector<int> v;              // decltype(v)는 vector<int>
+//...
+//if (v[0] == 0) ...           // decltype(v[0])은 int&
+//
+//
+//Widget w;
+//
+//const Widget& cw = w;
+//
+//auto myWidget1 = cw;                // auto 형식 영역:
+//                                    // myWidget1의 형식은 Widget
+//
+//decltype(auto) myWidget2 = cw;      // decltype 형식 영역:
+//                                    // myWidget2의 형식은
+//                                    // const Widget&
+//
+//
+//
+//int x = 4;
+//decltype(x);     // int;
+//decltype((x));   // int&;
+//
+//
+//decltype(auto) f1()
+//{
+//    int x = 0;
+//    return x;       // decltype(x)는 int이므로 f1은 int를 반환
+//}
+//
+//decltype(auto) f2()
+//{
+//    int x = 0;
+//    return (x);       // decltype((x))는 int&이므로 f1은 int&를 반환
+//}
+//
+
+// 결론 -> decltype(auto)는 아주 조심히 사용해야 한다
+
+
+// 기억해 둘 사항들
+// - decltype은 항상 변수나 표현식의 형식을 아무 수정 없이 보고한다.
+// - decltype은 형식이 T이고 이름이 아닌 왼값 표현식에 대해서는 항상 T& 형식을 보고한다.
+// - C++14는 decltype(auto)를 지원한다. decltype(auto)는 auto처럼 초기치로부터 형식을 연역하지만,
+//   그 형식 연역 과정에서 decltype의 규칙들을 적용한다.
+
+
+// 항목 4: 연역된 형식을 팡가하는 방법을 알아두라
+// 세가지 시점 - 코드를 작성,수정하는 시점, 컴파일 시점, 실행 시점
+
+// IDE 편집기
+// 컴파일러의 진단 메시지
+// 실행시점 출력
+
+// 기억해 둘 사항들
+// - 컴파일러가 연역하는 형식을 IDE 편집기나 컴파일러 오류 메시지, Boost TypeIndex 라이브러리를 이용해서 파악할
+//   수 있는 경우가 많다.
+// - 일부 도구의 결과는 유용하지도 않고 정확하지도 않을 수 있으므로, C++의 형식 연역 규칙들을 제대로
+//   이해하는 것은 여전히 필요한 일이다.
+
+int main()
+{
+
+
+    save("EffectiveModernC++Study.cpp");
+}
+
+
+================================================
