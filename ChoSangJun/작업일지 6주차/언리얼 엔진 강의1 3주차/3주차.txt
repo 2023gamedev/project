@@ -1,0 +1,81 @@
+모듈식 레벨 디자인을 사용해야 한다.
+
+
+마우스 중간 휠을 누르고 드래그 하면 길이를 잴수 있다.
+
+
+조명
+
+Point Light
+
+Spot Light
+
+Rect Light
+
+디렉셔널 라이트
+
+Sky Light - 멀리 떨어진 빛을 캡쳐해준다.
+
+_inst 진짜 머터리얼이 아니다.
+
+
+루멘 - 무버블로 설정했을 때 동작
+
+
+
+상속 vs 컴포지션
+
+상속 -> is-a
+
+컴포지션 -> has - a
+
+
+
+나의 코드 --->
+--> 언리얼 헤더 툴
+
+VInterpConstantTo
+
+
+Line Trace
+
+
+맵 == 레벨
+
+UWorld 안에 ULevel이 여러개 있을 수 있다.
+UWorld -> 최상위 오브젝트
+
+
+DrawDebugLine -> Start 지점과 End 지점을 선으로 나타내준다. 실행후 f8로 추출
+
+
+SweepSingleByChannel
+
+
+UPhysicsHandleComponent
+
+
+UPrimitiveComponent -> 물리 시뮬레이션을 수행한다.
+
+
+
+액터는 디폴트로 Tick이 활성화되어있지만 컴포넌트는 비활성화 되어있다
+
+생성자에다  PrimaryComponentTick.bCanEverTick = true; 필요
+
+
+오버랩 -> 겹쳐진다.
+
+TArray
+
+
+의존성 주입 - 다른 오브젝트가 필요하지만 가지러 가긴 싫은 것
+
+
+AttachToComponent -> 액터와 컴포넌트간 부착을 해준다.
+
+
+
+
+
+

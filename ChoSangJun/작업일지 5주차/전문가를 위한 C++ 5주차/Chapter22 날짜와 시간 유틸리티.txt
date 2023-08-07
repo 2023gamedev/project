@@ -1,0 +1,113 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.26 공부
+// Chapter22 날짜와 시간 유틸리티
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+#include <ranges>
+#include <ratio>
+
+#include "save.h"
+
+using namespace std;
+
+// chrono 라이브러리
+// - 기간
+// - 클럭
+// - 시점
+// - 날짜
+// - 타임존 (C++20)
+
+//
+//// Ratio 라이브러리를 이용하면 유한 유리수 를 컴파일 시간에 정확히 표현할 수 있다.
+//using r1 = ratio<1, 60>; // ratio는 컴파일 시간 상수다. 이는 분자와 분모가 컴파일 시간에 결정된다는 뜻이다.
+//intmax_t n{ 1 };
+//intmax_t d{ 60 };
+//using r1 = ratio<n, d>; // 에러
+//
+//const intmax_t n2{ 1 };
+//const intmax_t d2{ 60 };
+//using r1 = ratio<n2, d2>;
+//
+//// 컴파일 시간 유리수 정의
+//using r1 = ratio<1, 60>;
+//
+//// 분자와 분모를 구한다.
+//intmax_t num = r1::num;
+//intmax_t den = r1::den;
+//cout << format("1) r1 = {}/{}", )
+//
+//// 두 유리수를 더한다.
+//using r2 = ratio<1, 30>;
+//cout << format("2) r2 = {}/{}", r2::num, r2::den) << endl;
+//using result = ratio_add<r1, r2>::type;
+//cout << format("3) sum = {}/{}", result::num, result::den) << endl;
+//
+//// 두 유리수를 비교한다.
+//using res = ratio_less < r2, r1>;
+//cout << format("4) r2 < r1: {}", << res::value) << endl;
+//
+//
+//// duration - 두 시점 사이의 시간 간격을 표현하는 클래스 템플릿으로서 틱과 틱 주기 값을 제공한다.
+//template <class Rep, class Period  = ratio<1>> class duration{...}
+//
+//// 한 틱이 1초
+//duration<long> d1; == duration<long, ratio<1>> d1;
+//
+//// 한 틱이 1ms
+//duration<long long, milli> d4;
+//
+//
+//// C++20부터 다음 타입이 추가
+//// days, weeks, years, months
+//
+//
+//// clock은 time_point와 duration으로 구성된 클래스다.
+//
+//// 현재 시각을 time_point 타입으로 구현된다.
+//system_clock::time_point tpoint { system_clock::now()};
+//// time_t 값으로 변환한다.
+//time_t tt{ system_clock::to_time_t(tpoint) };
+//// 현지 시각으로 변환한다.
+//tm* t{ localtime(&tt) };
+//// 최종 결과를 콘솔에 출력한다.
+//cout << put_time(t, "%H:%M:%S") << endl;
+//
+//
+//// time_point - 특정한 시점을 표현하는 클래스
+//
+//
+//// 타임존
+//
+//// 현재 시스템 시간을 GMT로 변환한다.
+//gmt->to_local(system_clock::now());
+//
+//// UTC 시간을 생성한다.(2022-06-22 09:35:10 UTC)
+//auto t{ sys_days {2020y / June / 22d} + 9h };
+//// UTC 시간을 브뤼셀 지역 시간으로 변환한다.
+//brussels->to_local(t);
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+
+// Chapter22 날짜와 시간 유틸리티 完
+
+
+================================================

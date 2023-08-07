@@ -1,0 +1,73 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.27 공부
+// Chapter23 무작위수 기능
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+#include <ranges>
+#include <ratio>
+#include <random>
+
+#include "save.h"
+
+using namespace std;
+
+// 무작위수 엔진 <random>
+// - random_device
+// - linear_congruential_engine
+// - mersenne_twister_engine
+// - subtract_with_carry_engine
+//
+//random_device rnd;
+//cout << "Entropy: " << rnd.entropy() << endl;
+//cout << "Min value" << rnd.min()
+//	<< ", Max value: " << rnd.max() << endl;
+//cout << "Random number: " << rnd() << endl;
+//
+//
+//// 무작위수 엔진 어댑터 - 무작위수 생성에 사용하는 베이스 엔진의 결과를 수정하는데 사용
+//template<class Engine, size_t p, size_t r> class discard_block_engine{...};
+//template<class Engine, size_t w, class UIntType> class independent_bits_engine{...};
+//template<class Engine, size_t k> class shuffle_order_engine{...};
+//
+//
+//// 무작위수 지정
+//random_device seeder;
+//const auto seed{ seeder.entropy() ? seeder() : time(nullptr) };
+//mt19937 engine{ static_cast<mt19937::result_type>(seed) };
+//
+//uniform_int_distribution<int> distribution {1, 99};
+//cout << distribution(engine) << endl;
+
+
+// 무작위수 분포
+// - 균등 분포
+// - 베르누이 분포
+// - 푸아송 분포
+// - 정규 분포
+// - 표본 분표
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+
+// Chapter23 무작위수 기능 完
+
+
+================================================

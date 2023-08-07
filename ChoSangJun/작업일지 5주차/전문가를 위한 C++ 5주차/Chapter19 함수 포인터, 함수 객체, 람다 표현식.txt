@@ -1,0 +1,152 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.26 공부
+// Chapter19 함수 포인터, 함수 객체, 람다 표현식
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+#include <ranges>
+
+#include "save.h"
+
+using namespace std;
+
+// C++의 함수는 일급 함수라 부른다. 함수를 일반 변수처럼 다른 함수의 인수로 전달하거나,
+// 다른 함수에서 리턴하거나, 변수에 대입할 수 있기 때문이다. - 이렇게 사용하는 함수를 콜백함수라 한다.
+
+// operator() 를 오버라이드한 것을 함수 객체 또는 간단히 펑터라 한다.
+
+//
+//// 함수 포인터
+//using Matcher = bool(*) (int, int);
+//using MatchHandler = void(*)(size_t, int, int);
+//
+//void findMatches(span<const int> values1, span<const int> values2,
+//	Matcher matcher, MatchHandler handler)
+//{
+//	if (values1.size() != values2.size()) { return;} // 크기가 같아야 함
+//
+//	for (size_t i{ 0 }; i < values1.size(); ++i) {
+//		if (matcher(values1[i], values2[i])) {
+//			handler(i, values1[i], values2[i]);
+//		}
+//	}
+//}
+//
+//void printMatch(size_t position, int value1, int value2)
+//{
+//	cout << format("Match found at position {} ({}, {})",
+//		position, value1, value2) << endl;
+//
+//}
+//
+//// 함수 포인터는 주로 동적 링크 라이브러리에 있는 함수에 대한 포인터를 구할 때 사용한다.
+//HMODULE lib{ ::LoadLibrary("hardware.dll") };
+//
+//int __stdcall Connect(bool b, int n, const char* p);
+//
+//using ConnectFunction = int(__stdcall*)(bool, int, const char*);
+//
+//
+//// 메서드 및 데이터 멤버를 가리키는 포인터
+//int (Employee::* methodPtr) () const { &Employee::getSalary };
+//Employee employee{ "John", "Doe" };
+//cout << (employee.*methodPtr)() << endl;
+//
+//using PtrToGet = int (Employee::*) () const;
+//
+//
+//// std::function <function> - 다형성 함수 래퍼
+//// 함수 포인터로 사용할 수도 있고, 콜백을 구현하는 함수를 나타내는 매개변수로 사용할 수 있으며,
+//// 저장,복사,이동 그리고 실행할 수 있다.
+////std::function<R(ArgTypes)> 
+//// R - 리턴타입 ArgTypes - 함수의 매개변수 타입 목록
+//
+//void func(int num, string_view str)
+//{
+//	cout << format("func({}, {})", num, str) << endl;
+//}
+//
+//function<void(int, string_view)> f1 {func};
+//f1(1, "test");
+//
+//
+//// 함수 객체 - 어떤 클래스의 함수 호출 연산자를 오버로드해서 그 클래스의 객체를 함수 포인터처럼
+//// 사용하게 해준다.
+//class IsLargerThan
+//{
+//public:
+//	explicit IsLargerThan(int value) : m_value {value}{}
+//	bool operator() (int value1, int value2) const {
+//		return value1 > m_value && value2 > m_value;
+//	}
+//private:
+//	int m_value;
+//};
+//
+//vector value1{ 2,500, 6, 9, 10, 101, 1 };
+//vector value2{ 4,4,2,9,0,300,1 };
+//
+//findMatches(values1, values2, IsLargerThan{ 100 }, printMatch);
+//
+//// 산술 연산자 객체
+//// accumulateData(values.cbegin, values.cend, 1, multiplies<>{})
+//
+//// 비교 함수 객체 greater<>
+//
+//// 논리 함수 객체 logical_and<>{}
+//
+//// 비트 연산 함수 객체 - bit_and
+//
+//// 어댑터 함수 객체 - 함수 합성을 지원한다.
+//// - 바인더 bind(func, placeholders::_1, myString)
+//// - 부정연산자 not_fn(func) - func가 호출될 때마다 결과를 반전
+//// - 멤버 함수 호출하기
+//
+//
+//// 람다 표현식
+//auto basicLambda{ [] {cout << "Hello from Lambda" << endl; } }
+//
+//
+//// 람다 표현식 템플릿(C++20)
+//[] <typename T> (const vector<T>& values) {
+//	T someValue{};
+//	T::some_static_function();
+//}
+//
+//
+//// 디폴트 생성, 복제, 대입(C++20)
+//auto lambda{ [](int a, int b) {return a + b; } }; // 상태 없는 람다
+//decltype(lambda) lambda2; // 디폴트 생성
+//auto copy{ lambda };	  // 복제 생성
+//copy = lambda2;			  // 복제 대입
+//
+//
+//// std::invoke() - <functional>에 정의된 std::invoke()를 사용하면 모든 종류의 콜러블
+//// 객체에 대해 일련의 매개변수를 지정해서 호출할 수 있다.
+//// - 임의의 콜러블을 호출하는 템플릿 코드를 작성할 때는 굉장히 유용하다.
+//
+
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+
+//  Chapter19 함수 포인터, 함수 객체, 람다 표현식 完
+
+
+================================================

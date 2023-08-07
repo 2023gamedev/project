@@ -1,0 +1,115 @@
+
+
+
+================================================
+﻿// helloworld.cpp
+
+/////////////////////////////////////////////////////////////////
+// 2023.07.27 공부
+// Chapter24 기타 라이브러리 유틸리티
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <format>
+#include <utility>
+#include <fstream>
+#include <filesystem>
+#include <ranges>
+#include <ratio>
+#include <random>
+#include <variant>
+#include <any>
+#include <tuple>
+
+#include "save.h"
+
+using namespace std;
+
+// C++ 표준 라이브러리 중에서 알아두면 좋은 몇 가지 라이브러리 기능을 소개한다.
+
+//
+//// std::variant - 주어진 타입 집합 중에서 어느 한 타입의 값을 가진다. <variant>
+//variant<int, string, float> v;
+//
+//// 이렇게 variant를 디폴트로 생성하려면 반드시 여기에 지정한 첫 번째 타입이 디폴트 생성을 지원해야 한다.
+//class Foo { public: Foo() = delete; Foo(int) {} };
+//class Bar { public: Bar() = delete; Bar(int) {} };
+//
+//variant<Foo, Bar> v; // 컴파일 에러
+//// 그래도 디폴트 생성하고 싶으면
+//variant<monostate, Foo, Bar> v;
+//
+//variant<int, string, float> v2;
+//v2 = 12;
+//v2 = 12.5f;  // 변경
+//v2 = "An std::string s"; // 변경
+//
+//// 현재 지정된 값의 타입을 알고싶다면 v.index()를 호출하면 된다.
+//cout << v.index() << endl;
+//// hols_alternative<int>(v) 시 인수로 지정한 타입의 값을 담고 있는지 확인할 수 있다.
+//
+//// std::get<index>나 std::get<T>() 를 이용하면 variant에 담긴 값을 가져올 수 있다.
+//// index는 검색할 유형의 0기반 인덱스고 T는 검색할 유형이다.
+//
+//// std::visit() 헬퍼 함수도 있는데, varient에 대한 방문자 패턴을 적용할 때 사용한다.
+//
+//
+//// std::any 값 하나를 모든 타입으로 저장할 수 있는 클래스이다. <any>
+//
+//any empty;
+//any anInt{ 3 };
+//any aString{ "An std::string."s };
+//
+//cout << "empty.has_value = " << empty.has_value() << endl;
+//cout << "anInt.has_value = " << anInt.has_value() << endl << endl;
+//
+//cout << "anOnt wrapped type = " << anInt.type().name() << endl;
+//cout << "aString wrapped type = " >> aString.type().name() << endl << endl;
+//
+//int theInt{ any_cast<int> (anInt) };
+//cout << theInt << endl;
+//try {
+//	int test{ any_cast<int>(aString) };
+//	cout << test << endl;
+//}
+//catch(const bad_any_cast& ex){
+//	cout << "Exception: " << ex.what() << endl;
+//}
+//
+//
+//any something{ 3 };
+//something = "An std::string"s; // 이렇게 하면 같은 인스턴스에 스트링이 담긴다.
+//
+//
+//// tuple - pair를 일반화한 클래스 <tuple>
+//using MyTuple = tuple<int, string, bool>;
+//MyTuple t1{ 16, "Test", true };
+//
+//// std::get<i>() tuple에 i번째 원소를 가져온다.
+//
+//
+//// tuple 분리하기 - tuple을 개별원소로 분리하기
+//// - 구조적 바인딩 -> auto [i,str,n] {t1};
+//// - tie -> tie(i,str,b) = t1;
+//
+//// 연결 std::tuple_cat()
+//auto t3{ tuple_cat(t1,t2) };
+//
+//
+//// std::apply - 콜러블을 호출하는데 이때 지정한 tuple의 원소를 인수로 전달한다.
+//int add(int a, int b) { return a + b; }
+//cout << apply(add, tuple{ 39,3 }) << endl;
+
+int main()
+{
+	
+	save("helloworld.cpp");
+}
+
+
+// Chapter24 기타 라이브러리 유틸리티 完
+
+
+================================================
