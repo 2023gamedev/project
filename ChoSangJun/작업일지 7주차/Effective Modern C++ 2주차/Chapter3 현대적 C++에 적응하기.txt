@@ -1,0 +1,357 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.08.09 공부
+// Chapter3 현대적 C++에 적응하기
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <list>
+
+#include "save.h"
+
+// 항목 7: 객체 생성 시 괄호( () )와 중괄호( {} )를 구분하라
+//
+//int x(0);
+//
+//int y = 0;
+//
+//int z{ 0 };     // 균일 초기화
+//
+//int z2 = { 0 };
+//
+//
+//std::vector<int> v{1, 3, 5};    // v의 초기 내용은 1, 3, 5
+//
+//
+//class Widget {
+//private:
+//    int x{0};
+//    int y = 0;
+//    int z(0);       // 오류!
+//};
+//
+//
+//// 반면 복사할 수 있는 객체는 중괄호나 괄호로는 초기화할 수 있지만 "="로는 초기화할 수 없다.
+//std::atomic<int> ali{0};    // OK
+//std::atomic<int> ali2(0);    // OK
+//std::atomic<int> ali3 = 0;    // 오류 ----> 오류가 걸리지 않는 것을 봐선 C++14이후에 바뀐 것 같다.
+//
+//
+//Widget w1(10);
+//
+//Widget w2();    // 가장 성가신 구문 해석! Widget을 돌려주는,
+//                // w2라는 이름의 함수를 선언한다.
+//
+//Widget w3{};    // 인수 없이 Widget의 생성자를 호출;
+//
+//
+//class Widget {
+//public:
+//    Widget(int i, bool b);              // std::initializer_list
+//    Widget(int i, double d);            // 매개변수를 선언하지 않는
+//                                        // 생성자
+//};
+//
+//Widget w1(10, true);                    // 첫 생성자를 호출
+//
+//Widget w2(10, true);                    // 역시 첫 생성자를 호출
+//
+//Widget w3(10, 5.0);                     // 둘째 생성자를 호출
+//
+//Widget w4(10, 5.0);                     // 역시 둘째 생성자를 호출
+//
+//
+//// std::initializer_list 형식의 매개변수를 선언한다면, 중괄호 초기화 구문은 이상하게도
+//// std::initializer_list를 받는 적재 버전을 강하게 선호한다.
+//
+//class Widget {
+//public:
+//    Widget(int i, bool b);              
+//    Widget(int i, double d);            
+//    Widget(std::initializer_list<long double> il);  // 추가됨
+//};
+//
+//
+//Widget w1(10, true);        // 괄호를 사용한 경우; 이전 처럼 첫 생성자를 호출
+//
+//Widget w2{ 10, true };      // 중괄호를 사용한 경우; 이번에는 std::initializer_list 생성자 호출
+//
+//Widget w3(10, 5.0);         // 괄호를 사용한 경우; 이전 처럼 둘째 생성자를 호출한다.
+//
+//Widget w4{ 10, 5.0 };       // 중괄호를 사용한 경우; 이번에는 std::initializer_list 생성자 호출
+//
+//
+//// 중괄호 초기화 장점 - 가장 다양한 문맥에서 사용할 수 있는 구문, 암묵적인 좁히기 변환을 방지,
+////                      C++의 가장 성가신 구문 해석으로부터 자유롭다.
+//
+//// 단점 - 종종 예상치 못한 생동을 보인다.
+//
+//
+//// 기억해 둘 사항들
+//// - 중광호 초기화는 가장 광범위하게 적용할 수 있는 초기화 구문이며, 좁히기 변환을 방지하며,
+////   C++의 가장 성가신 구문해석에 자유롭다.
+//// - 생성자 중복적재 해소과정에서 중괄호 초기화는 가능한 한 std::initializer_list 매개변수가 잇는 생성자와 부합하다.
+//// - 괄호와 중괄호의 선택이 의미 있는 차이를 만드는 예는 인수 두개로 std::vector<수치 형식>을 생성하는 것이다.
+//// - 템플릿 안에서 객체를 생성할 때 괄호를 사용할 것인지 중괄호를 사용할 것인지 선택하기가 어려울 수 있다.
+//
+//
+//// 항목 8: 0과 NULL보다 nullptr를 선호하라
+//
+//// 요점부터 말하면 리터럴 0은 int이지 포인터가 아니다. 포인터만 사용할 수 있는 위치에 0이 있으면
+//// C++은 마지못해 그것을 널 포인터로 해석하긴 하지만, 이는 최후의 수단일 뿐이다.
+//
+//void f(int);    // f의 세가지 중복적재
+//void f(bool);
+//void f(void*);
+//
+//f(0);            // f(void*)가 아니라 f(int)를 호출
+//
+//f(NULL);         // 컴파일되지 않을 수도 있지만, 보통은
+//                 // f(int)를 호출한다. f(void*)를 호출하는 경우는 없다.
+//
+//// nullptr의 장점 - 정수 형식이 아니다. 사실 포인터 형식도 아니다.
+////                  nullptr는 모든 형식의 포인터라고 생각하면 된다.
+//
+//f(nullptr);      // f(void*) 중복적재를 호출
+//
+//
+//auto result = findRecord(/* 인수들 */);
+//
+//if (result == 0) { // 0은 중의성이 있다.
+//
+//}
+//
+//
+//// 기억해 둘 사항들
+//// - 0과 NULL보다 nullptr를 선호하라
+//// - 정수 형식과 포인터 형식에 대한 중복적재를 피하라
+//
+//
+//// 항목 9: typedef보다 별칭 선언을 선호하라 - using을 사용
+//
+//typedef void (*FP)(int, const std::string&);    // typedef
+//
+//using FP = void (*)(int, const std::string&);   // 별칭선언
+//
+//
+//// 강력한 이유는 따로 있다. ---> 바로 템플릿이다.
+//template<typename T>
+//using MyAllocList = std::list<T, MyAlloc<T>>;   // MyAllocList<T>는 std::list<T, MyAlloc<T>>와 동의어이다.
+//
+//MyAllocList<Widget> lw;
+//
+//
+//std::remove_const<T>::type         // const T를 T로 변환
+//
+//std::remove_reference<T>::type     // T&나 T&&를 T로 변환
+//
+//std::add_lvalue_reference<T>::type // T를 T&로 변환
+//
+//
+//
+//std::remove_const_t<T>          // 해당 C++ 14 버전
+//
+//std::remove_reference_t<T>      // 해당 C++ 14 버전
+//
+//std::add_lvalue_reference_t<T>  // 해당 C++ 14 버전
+//
+//
+//template <typename T>
+//using remove_const_t = typename remove_const<T>::type;
+//
+//template <typename T>
+//using remove_reference_t = typename remove_reference<T>::type;
+//
+//template <typename T>
+//using add_lvalue_referenct_t = typename add_lvalue_reference<T>::type;
+//
+//
+//// 기억해 둘 사항들
+//// - tpyedef는 템플릿화를 지원하지 않지만, 별칭 선언은 지원한다.
+//// - 별칭 템플릿에서는 "::type" 접미어를 붙일 필요가 없다. 템플릿 안에서 typedef를 지칭할 때에는
+////   "typename" 접두사를 붙여야 하는 경우가 많다.
+//
+//
+//// 항목 10: 범위 없는 enum보다 범위 있는 enum을 선호하라 -> enum이 아닌 enum class를 사용
+//
+//enum class Color {black, white, red};
+//
+//Color c = Color::red;
+//
+//
+//// 기억해 둘 사항들
+//// - C++98 스타일의 enum을 이제는 범위 없는 enum이라고 부른다.
+//// - 범위 있는 enum의 열거자들은 그 안에서만 보인다. --> Color::red
+//// - 범위 있는 enum과 범위 없는 enum 모두 바탕 형식 지정을 지원한다.
+//// - 범위 있는 enum은 항상 전방 선언이 가능하다.
+//
+//
+//// 항목 11: 정의되지 않은 비공개 함수보다 삭제된 함수를 선호하라
+//template <typename charT, typename traits = char_traits<charT>>
+//class basic_ios : public ios_base {
+//public:
+//    basic_ios(const basic_ios&) = delete;
+//    basic_ios& operator=(const basic_ios&) = delete;
+//};
+//
+//// 삭제된 함수는 private보다 public을 선언하는 것이 관례인데 이유는
+//// 클라이언트 코드가 멤버 함수를 사용하려 할 때 C++은 먼저 그 함수의 접근성을 점검한 후에야
+//// 삭제 여부를 점검하는데 private함수를 사용하는 클라이언트 코드에 대해 그 함수가 private이라는 점을
+//// 문제 삼는 컴파일러들이 있기 때문이다.
+//
+//
+//// 삭제된 함수의 장점은 그 어떤 함수도 삭제할 수 있다는 것이다.
+//
+//// 기억해 둘 사항들
+//// - 정의되지 않은 비공개 함수보다 삭제된 함수를 선호하라.
+//// - 비멤버 함수와 템플릿 인스턴스를 비롯한 그 어떤 함수도 삭제할 수 있다.
+//
+//
+//// 항목 12: 재정의 함수들을 override로 선언하라 
+//
+//// 기억해 둘 사항들
+//// - 재정의 함수는 override로 선언하라
+//// - 멤버 함수 참조 한정사를 이용하면 멤버 함수가 호출되는 객체(*this)의 왼값 버전과 오른값 버전을
+////   다른 방식으로 처리할 수 있다.
+//
+//
+//// 항목 13: iterator보다 const_iterator를 선호하라
+//// const_iterator는 const를 가리키는 포인터의 STL버전이다.
+//
+//std::vector<int> values;
+//
+//auto it = std::find(values.cbegin(), values.cend(), 1983);
+//
+//values.insert(it, 1998);
+//
+//// iterator 보다 const_iterator를 선호하라
+//// 최대한 일반적인 코드에서는 begin, end, rbegin 등의 비멤버 버전들을 해당 멤버 함수들보다 선호하라
+//
+//
+//// 항목 14: 예외를 방출하지 않을 함수는 noexcept로 선언하라
+//
+//int f(int x) throw();  // f는 예외를 방출하지 않음: C++98 방식
+//
+//int f(int x) noexcept; // f는 예외를 방출하지 않음: C++11 방식 --> 최적화 여지가 가장 크다.
+//
+//// 기억해 둘 사항들
+//// - noexcept는 함수의 인터페이스의 일부이다. 이는 호출자가 noexcept 여부에 의존할 수 있음을 뜻한다.
+//// - noexcept 함수는 비 noexcept 함수보다 최적화의 여지가 크다.
+//// - noexcept는 이동 연산들과 swap, 메모리 해제 함수들, 그리고 소멸자들에 특히나 유용하다.
+//// - 대부분의 함수는 noexcept가 아니라 예외에 중립적이다.
+//
+//
+//// 가능하면 항상 constexpr를 사용하라
+//// constexpr - 어떠한 값이 단지 상수일 뿐만 아니라 컴파일 시점에서 알려진다는 점을 나타낸다.
+//
+//// 물론 실제 사용 시 constexpr 함수의 결과가 const가 아닐 수 있다는 점과
+//// 컴파일 시점에서 알려지지 않을 수 있다.
+//
+//// 모든 constexpr 객체는 const이지만 모든 const객체가 constexpr인 것은 아니다.
+//
+//class Point {
+//public:
+//    constexpr Point(double xVal = 0, double yVal = 0) noexcept
+//        : x(xVal), y(yVal) {}
+//
+//    constexpr double xValue() const noexcept { return x; }
+//    constexpr double yValue() const noexcept { return y; }
+//
+//    void setX(double newX) noexcept { x = newX;}
+//    void setY(double newY) noexcept { y = newY; }
+//
+//private:
+//    double x, y;
+//};
+//
+//
+//// 기억해 둘 사항들
+//// - constexpr 객체는 const이며, 컴파일 도중에 알려지는 값들로 초기화된다.
+//// - constexpr 함수는 그 값이 컴파일 도중에 알려지는 인수들로 호출하는 경우에는 컴파일 시점 결과를 산출한다.
+//// - constexpr 객체나 함수는 비constexpr 객체나 함수보다 광범위한 문맥에서 사용할 수 있다.
+//// - constexpr은 객체나 함수의 인터페이스의 일부이다.
+//
+//
+//// 항목 16: const 멤버 함수를 스레드에 안전하게 작성하라
+//class Polynomial {
+//public:
+//    using RootsType = std::vector<double>;
+//
+//    RootsType roots() const {
+//        std::_Atomic_lock_guard<std::mutex> g(m);       // 뮤텍스를 잠근다.
+//        
+//        if (!rootsAreValid) {                           // 캐시가 유효하지 않으면
+//
+//                                                        // 근들을 계산, 저장한다.
+//            rootsAreValid = true;
+//        }
+//        
+//        return rootVals;
+//    }                                                   // 뮤텍스를 푼다.
+//
+//private:
+//    mutable std::mutex m;
+//    mutable bool rootsAreValid{ false };
+//    mutable RootsType rootVals{};
+//};
+
+// 기억해 둘 사항들
+// - 동시적 문맥에서 쓰이지 않을 것이 확실한 경우가 아니라면, const 멤버 함수는 스레드에 안전하게 작성하라
+// - std::atomic 변수는 뮤텍스에 비해 성능상의 이점이 있지만, 하나의 변수 또는 메모리 장소를 다룰때에만 적합하다.
+
+
+
+
+
+
+int main()
+{
+
+
+    save("EffectiveModernC++Study.cpp");
+}
+
+
+================================================
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.08.11 공부
+// Chapter3 현대적 C++에 적응하기
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <list>
+
+#include "save.h"
+
+// 도움이 되는 부분이 적거나 거의 아는내용이라 생각되어(저번책에서 나온 내용) 지금부터 메모는 최대한 생략
+
+
+// 항목 17: 특수 멤버 함수들의 자동 작성 조건을 숙지하라
+// - 기본 생성자, 소멸자, 복사 생성자, 복사 배정 연산자, 이동생성자 와 1이동 복사생성자
+
+
+// 기억해 둘 사항들
+// - 이동 연산들은 이동 연산들이나 복사 연산들, 소멸자가 명시적으로 선언되어 있지 않은 클래스에 대해서만 자동으로 작성된다.
+// - 멤버 함수 템플릿 때문에 특수 멤버 함수의 자동 작성이 금지되는 경우는 전혀 없다.
+
+
+
+
+int main()
+{
+
+
+    save("EffectiveModernC++Study.cpp");
+}
+
+
+================================================

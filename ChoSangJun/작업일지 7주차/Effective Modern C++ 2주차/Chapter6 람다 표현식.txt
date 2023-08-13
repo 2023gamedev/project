@@ -1,0 +1,63 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.08.12 공부
+// Chapter6 람다 표현식
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <vector>
+#include <list>
+
+#include "save.h"
+
+// 항목 31: 기본 갈무리 모드(default capture mode)를 피하라
+//void addDivisorFilter()
+//{
+//    auto calc1 = computeSomeValue1();
+//    auto calc2 = computeSomeValue2();
+//
+//    auto divisor = computDivisor(calc1, calc2);
+//
+//    filters.emplace_back(
+//        [&divisor](int value) {return value % divisor == 0; }
+//    );   // 위험! divisor에 대한 참조가 대상을 잃을 수 있다.
+//
+//
+//    // 물론 이 람다 표현식의 유효성이 divisor의 수명에 의존한다는 점이 명확히 나타난다는 장점이 있다.
+//
+//}
+
+// 기억해 둘 사항들
+// 기본 참조 갈무리는 참조가 대상을 잃을 위험이 있다.
+
+// 항목 32: 객체를 클로저 안으로 이동하려면 초기화 갈무리를 사용하라
+// 클로저 - 람다에 의해 만들어진 실행시점 객체이다.
+
+// 항목 33: std::forward를 통해서 전달할 auto&& 매개변수에는 decltyp을 사용하라
+
+auto f = [](auto&& x){
+    return normalize(std::forward<decltype(x)>(x));
+};
+
+// 기억해 둘 사항들
+// std::forward를 통해서 전달할 auto&& 매개변수에는 decltype을 사용하라
+
+
+// 항목 34: std::bind보다 람다를 선호하라 - 생략
+
+
+
+
+
+int main()
+{
+
+
+    save("EffectiveModernC++Study.cpp");
+}
+
+
+================================================

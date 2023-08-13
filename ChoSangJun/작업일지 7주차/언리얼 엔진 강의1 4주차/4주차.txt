@@ -1,0 +1,137 @@
+BasePawn 클래스
+
+
+Actor -> Pawn -> Character 파생
+
+SetupPlayerInputComponent - 폰의 경우에 나타나는 것으로 이 함수는 입력을 처리할 수 있도록 해준다. 
+ex) 마우스나 키보드 입력같이
+
+USceneComponent ---> UCapsuleComponent(충돌처리)
+---> UStaticMeshComponent(시각적 처리)
+
+RootComponent(트랜스폼)
+
+전방선언 -> 헤더가 너무 크니까 필요한 것만 쓰기 위해 하는 것
+
+
+CreateDefaultSubobject<type>(name) - 하위 오브젝트를 생성
+		   ex)  type - UStatcieMeshComponent  / name - 그것의 이름 
+
+
+VisibleAnywhere
+
+EditAnywhere
+
+VisibleInstanceOnly
+
+VisibleDefaultsOnly
+
+EditDefaultsOnly
+
+EditInstanceOnly
+
+BlueprintReadWrite
+
+
+
+
+BlueprintReadOnly
+
+meta =(AllowPrivateAccess = "true") -> private에서도 사용 가능
+
+Category
+
+
+
+UCameraComponent
+
+USpringArmComponent
+
+
+Possession - Player0 빙의
+
+
+화살표 3개(좌표계)를 기즈모라 부른다.
+
+AddActorLocalOffset - 로컬좌표계에 따라 이동
+
+GetWorldDeltaSeconds(World Context Object)
+
+UGamePlayStatics::GetWorldDeltaSeconds(this)
+
+
+Collision - Sweep
+
+
+Cast<APlayerController>(GetController());
+
+
+GetHitResultUnderCursor
+
+
+RInterpto - Rotation을 보간
+
+
+GetPlayerPawn
+
+
+World Timer Manager -> SetTimer
+
+Timer Handle
+
+TSubclassOf<>() - C++과 블루프린트 사이의 정보를 교환  // UClass 타입을 저장
+
+
+SpawnActor<  >(   )
+//      <AProjcetile>   (UClass, Location, Rotation)
+
+
+UProjcetileMovementComponent
+
+
+Hit Events
+
+UPrimitiveComponent -> UStaticComponent
+
+
+OnComponentHit -> 컴포넌트가 뭔가에 충돌시 발생
+
+
+UActorComponent -> USceneComponet
+
+
+UDamageType - 언리얼 엔진에 데미지 타입이 기본으로 있다.
+
+
+ApplyDamage
+
+
+AGameModeBase -> AGameMode   
+게임의 규칙을 설정할 수 있다.
+
+
+AToonTanksPlayerController
+
+
+UFUNCTION(BlueprintImplementableEvent)
+void StartGame();
+
+
+GetAllActorsOfClass
+
+
+Hit Particles
+
+
+Death Particles
+
+
+PlaySoundAtLocation
+
+
+camerashake - 카메라 흔들림
+
+
+언리얼 관행
+1. auto를 쓰지 않는다.
+2. 함수가 한줄이라도 {}사용한다.
