@@ -1,0 +1,303 @@
+한번에 이해하기 어렵다 생각하는 것들은 중복된 것이 있을 수 있다.
+
+. :  ->, .으로 이어진 것
+
+45. UPROPERTY 변수
+UPROPERTY()
+
+47. C++파일 및 BeginPlay
+BeginPlay()
+
+
+48. C++에서 구조체 사용하기
+FVector
+
+49. C++에서 함수 호출하기
+SetActorLocation()
+
+50. Tick
+Tick()
+
+53. 함수 반환값
+GetActorLocation()
+
+55. 범위 지정 연산자
+FVector::Dist
+
+57.멤버 함수 사용
+.GetSafeNormal()
+
+61. 출력 로그에 기록하기
+UE_LOG() -> ulog
+
+62. FString
+FString
+GetName()
+
+66. FRotator
+FRotator
+GetActorRotation()
+SetActorRotation()
+AddActorLocalRotation()
+
+79. C++ 액터 컴포넌트
+TickComponent()
+
+80. 포인터타입&GetOwner()
+AActor
+GetOwner()
+
+81. 역참조 & 화살표(->) 연산자
+.GetActorNameOrLabel()
+.ToCompactString()
+
+82. 링커, 헤더, 인클루드
+GENERATED_BODY()
+
+83. FMath::VInterpConstantTo
+FMath::VInterpConstantTo()
+FVector::Distance()
+
+84. 씬 컴포넌트
+USceneComponent
+UActorComponent
+GetComponentRotation()
+
+86. GetWorld()
+UWorld
+FCollisionShape
+GetWorld()
+.TimeSeconds
+
+87. DrawDebugLine()
+DrawDebugLine()
+FColor
+GetComponentLocation()
+GetForwardVector()
+
+90. 지오메트리 스위핑
+.SweepSingleByChannel()
+FHitResult
+FQuat
+FCollisionShape
+FCollisionShape::MakeSphere()
+.GetActor()
+
+93. 블루프린트 호출
+UFUNCTION(BlueprintCallable)
+
+94. FindComponentByClass() & nullptr
+UPhysicsHandleComponent
+.FindComponentByClass<>()
+
+95. DrawDebugSphere()
+DrawDebugSphere()
+FHitResult
+.Location
+.ImpactPoint
+
+96. PhysicsHandle로 객체 잡기
+.GetComponent()
+NAME_None
+UPhysicsHandleComponent
+
+97. 물리 오브젝트 깨우기
+UPrimitiveComponent
+.WakeAllRigidBodies()
+GetPhysicsHandle()
+.GetGrabbedComponent()
+.ReleaseComponent()
+
+99. 오버랩 이벤트
+meta=(BlueprintSpawnableComponent)
+
+100. 생성자
+PrimaryComponentTick.bCanEverTick = true;
+
+101. TArray
+TArray<AActor*>
+GetOverlappingActors()
+
+102. While 및  For 반복문
+.Num()
+
+104. 액터 태그
+.ActorHasTag()
+FName
+
+
+107. 캐스팅과 액터 부착
+AActor::AttachToComponent
+.GetRootComponent()
+Cast<>()
+.SetSimulatePhysics()
+FAttachmentTransformRules::KeepWorldTransform
+
+108. 태그 추가 및 삭제
+.Tags.Add()
+.Tags.Remove()
+
+110. 레벨 다듬기
+.DetachFromActor()
+FDetachmentTransformRules::KeepWorldTransform
+.Lenght()
+
+113. 폰 클래스 생성
+Actor,Pawn, Character 설명
+SetupPlayerInputComponent()
+
+114. 컴포넌트 생성
+USceneComponent
+UCapsuleComponent
+ProjctileSpawnPoint
+
+115. 전방 선언
+UCapsuleComponent
+
+116. 캡슐 생성
+CreateDefaultSubobject<>()
+GetDefaultSubobjectByName()
+
+117. 스태틱 메쉬 컴포넌트
+UStaticMeshComponent
+.SetupAttachment()
+
+119. 인스턴스 대 디폴트
+UPROPERTY() 괄호 안 설명1
+
+120. 노출된 변수 편집
+UPROPERTY() 괄호 안 설명2
+
+121. 컴포넌트 노출
+UPROPERTY() 괄호 안 설명3
+
+122. 하위 C++ 클래스 생성하기
+USpringArmComponent
+UCameraComponent
+
+124. 인풋 처리하기
+SetupPlayerInputComponent()
+UInputComponet
+.BindAxis
+
+125. 로컬 오프셋
+AActor::AddActorLocalOffset
+FVecotr::ZeroVector
+
+126. 이동속도
+UGameplayStatics::GetWorldDeltaSceonds()
+
+127. 로컬 회전
+AddActorLocalRotation()
+FRotator::ZeroRotator
+UGameplayStatics::GetWorldDeltaSceonds()
+
+128. 캐스팅
+APlayerController
+Cast<>()
+
+129. 마우스 커서 사용하기
+APlayerController::GetHitResultUnderCursor
+EColiisionChannel::ECC_Visibility
+DrawDebugSphere()
+
+130. 포탑 회전하기
+SetWorldRotation()
+FMath::RInterpTo()
+GetWorldDeltaSceonds()
+
+131. Tower 클래스
+UGameplayStatics::GetPlayerPawn()
+
+132. Fire
+.BindAction()
+
+133. 타이머
+FTimerHandle
+FTimerManager
+GetWorldTimerManager()
+.SetTimer()
+
+134. Projectile 클래스
+UStaticMeshComponent
+
+135. 발사체 생성
+TSubclassOf<>
+UClass
+UWorld::SpawnActor<>()
+
+136. 발사체 이동 컴포넌트
+UProjectileMovementComponent
+
+137. 타격 이벤트
+UPrimitiveComponent
+UStaticMeshComponent
+OnComponentHit
+.AddDynamic()
+
+138. 체력 컴포넌트
+UActorComponent
+USceneComponent
+UGameplayStatics::ApplyDamage
+OnTakeAnyDamage
+.AddDynamic
+UDamageType
+
+139. 데미지 적용
+UGameplayStatics::ApplyDamage
+.SpawnActor<>()
+UDamageType
+UDamageType::StaticClass()
+
+140. Game Mode 클래스
+AGameModeBase
+AGameMode
+
+141. Pawn 죽음 다루기
+.DisableInput()
+UGameplayStatics::GetGameMode()
+
+142. 사용자 지정 플레이어 컨트롤러
+GetPawn()
+.EnableInput()
+.DisableInput()
+UGameplayStatics::GetPlayerController()
+
+143. 게임 시작
+.SetPlayerEnabledState()
+FTimerHandle
+Timer Delegate 설명
+FTimerDelegate
+FTimerDelegate::CreateUObject()
+GetWorldTimerManager()
+.SetTimer()
+
+144. 게임 시작 위젯
+UFUNCTION(BlueprintImplementableEvent)
+
+147. 승패 조건
+UGameplayStatics::GetAllActorsOfClass()
+TArray<>
+
+149. 타격 파티클
+UParticleSystem
+UGameplayStatics::SpawnEmitterAtLocation()
+
+150. 연기 궤적
+UParticleSystemComponent
+
+152. 사운드
+USoundBase
+UGameplayStatics::PlaySoundAtLocation()
+
+153. 카메라 셰이크
+4.25 before - UCameraShake
+3.26 Above - UMartineeCameraShake
+
+UCameraShakeBase
+.GetFirstPlayerController()
+.ClientStartCameraShake()
+
+
+154. 다듬기 및 마무리
+패키징
