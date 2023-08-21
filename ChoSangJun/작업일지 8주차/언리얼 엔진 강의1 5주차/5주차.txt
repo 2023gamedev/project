@@ -1,0 +1,103 @@
+Pawn과 Character의 차이점 - 캐릭터는 블루프린트로 생성시 캡슐 존재
+
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AShooterCharacter::MoveForward);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AShooterCharacter::MoveRight);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this,  &ACharacter::Jump);
+
+Spring Arm
+
+
+Anim graph
+
+
+Blend Space
+
+Global과 Local
+
+Live coding -> 오류가 있다.
+
+Socket
+
+라인 트레이싱 -> DrawDebugHelpers
+
+ECollisionChannel
+
+
+LineTraceSingleByChannel
+
+
+DamageEvent
+
+FPointDamageEvent
+FRadialDamageEvent
+
+
+////////////////////////////////
+Gun.cpp
+#include "Engine/DamageEvents.h"
+///////////////////////////////
+
+
+가상함수
+
+
+BlueprintPure - const 느낌
+
+AI
+SetFocus
+ClearFocus
+
+
+시야에 벗어나면 멈추기
+    if(LineOfSightTo(PlayerPawn)){
+        SetFocus(PlayerPawn);
+        MoveToActor(PlayerPawn, AcceptanceRadius);
+    }
+    else{
+        ClearFocus(EAIFocusPriority::Gameplay);
+        StopMovement();
+    }
+
+
+
+행동트리, 블랙보드
+
+블랙보드 - AI의(행동트리) 메모리 (변수들 정보)
+
+UBehaviorTree
+
+
+
+BTTask
+
+
+BTService
+
+
+
+
+	if(IsDead()){
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
+
+UMG
+
+
+
+    for(AController* Controller : TActorRange<AController>(GetWorld())){
+        
+    }
+
+
+
+
+USoundBase
+
+
+사운드 큐
+
+8주차
