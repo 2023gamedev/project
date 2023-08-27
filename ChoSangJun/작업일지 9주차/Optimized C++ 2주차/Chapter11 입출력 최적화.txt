@@ -1,0 +1,108 @@
+
+
+
+================================================
+﻿/////////////////////////////////////////////////////////////////
+// 2023.08.27 공부
+// Chapter11 입출력 최적화
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "save.h"
+
+//// file_reader() 함수
+//std::string file_reader(char const* fname) {
+//    std::ifstream f;
+//    f.open(fname);
+//    if (!f) {
+//        std::cout << "Can't open " << fname << " for reading" << std::endl;
+//
+//        return " ";
+//    }
+//
+//    std::stringstream s;
+//    std::copy(std::istreambuf_iterator<char>(f.rdbuf()),
+//        std::istreambuf_iterator<char>(),
+//        std::ostreambuf_iterator<char>(s));
+//    return s.str();
+//}
+//
+//
+//// 저렴한 함수 시그니처 만들기
+//void stream_read_streambuf_stringstream(std::istream& f, std::string& result) 
+//{
+//    std::stringstream s;
+//    std::copy(std::istreambuf_iterator<char>(f.rdbuf()),
+//        std::istreambuf_iterator<char>(),
+//        std::ostreambuf_iterator<char>(s));
+//    std::swap(result, s.str());
+//}
+//
+//
+//// 호출 체인 짧게 만들기
+//void stream_read_streambuf(std::istream& f, std::string& result)
+//{
+//    std::stringstream s;
+//    s << f.rdbuf();
+//    std::swap(result, s.str());
+//}
+//
+//
+//// 재할당 줄이기
+//void stream_read_string_reserve(std::istream& f, std::string& result)
+//{
+//    f.seekg(0, std::istream::end);
+//    std::streamoff len = f.tellg();
+//    f.seekg(0);
+//    if (len > 0) {
+//        result.reserve(static_cast<std::string::size_type>(len));
+//    }
+//
+//    result.assign(std::istreambuf_iterator<char>(f.rdbuf()), std::istreambuf_iterator<char>());
+//}
+//
+//
+//// 더 큰 입력 버퍼 사용하기
+//// char buf[8192];
+//
+//
+//// 한 번에 한줄씩 읽기
+//void stream_read_getline(std::istream& f, std::string& result) {
+//    std::string line;
+//    result.clear();
+//    while (getline(f, line)) {
+//        (result += line) += "\n";
+//    }
+//}
+//
+//
+//// 다시 호출 체인 짧게 만들기
+//bool stream_read_string_reserve(std::istream& f, std::string& result)
+//{
+//    std::streamoff len = stream_size(f);
+//    if (len == -1) {
+//        return false;
+//    }
+//
+//    result.resize(static_cast<std::string::size_type>(len));
+//    f.read(&result[0], result.length());
+//    return true;
+//}
+//
+
+// 정리
+// - 인터넷에서 속도가 빠르다고 주장하는 파일 입출력 코득 반드시 빠르지는 않습니다. 사이트에서 여러분에게 
+//   속도가 빠른 코드를 판매한다고 해도 마찬가지입니다.
+// - rdbuf의 크기를 늘리면 파일 읽기 성능이 몇 % 향상됩니다.
+// - 파일을 가장 빨리 읽는 방법은 std::stringbuf::sgenf() 함수를 사용해 파일의 크기만큼 미리
+//   할당된 문자열 버퍼를 채우는 것입니다.
+// - std::endl은 출력을 비웁니다. 콘솔 출력을 하지 않는다면 비용이 꽤 큽니다.
+// - std::cout은 std::cin과 std::out에 묶여 있습니다. 묶여 있는 스트림을 끊으면 성능을 향상할 수 있습니다.
+
+int main()
+{
+    save("Optimized C++study.cpp");
+}
+
+// Chapter11 입출력 최적화 完================================================
