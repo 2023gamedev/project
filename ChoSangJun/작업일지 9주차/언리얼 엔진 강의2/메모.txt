@@ -1,0 +1,99 @@
+두 플레이어를 연결하는 과정
+1. Unreal loads the map
+2. The Map specifies a GameMode
+3. The PlayerController joins the Map
+4. It ask the GameMode to spawn a Pawn
+5. The Pawn is linked to the PlayerController
+
+설정
+Update Unreal
+Create a 3rd person project
+Test With multiple players
+
+
+멀티플레이어 게임 타입 (강의에서 나온)		
+- 턴제						        
+- 실시간 세션 기반 게임		-> 언리얼 서포트가 예 중 가장 적합		
+- 일인칭 슈팅 게임				 
+- MMO 
+
+
+input and State
+
+State #1
+			Tick -->		Stage #2
+Actions
+
+
+Peer to Peer  - 내 상태를 업데이트 하기 위해서는 모든 다른 사람의 입력을 받기 위해 기다려야 한다. --> 느리다.
+
+클라이언트-서버 모델 - 중앙의 서버를 두는 것, 서버에다가 정보를 전달하고 그 서버가 다른 사람들에게 전달해주는 것이라 이해하자
+-> 이 방식으로 할 예정
+
+
+방법 - 명령 프롬포트를 키고 -> 해당 언리얼 프로젝트 win64 들어가서 -> UE.exe 와 uproject 경로를 복사 ->  -game을 뒤에다 추가
+
+-log : 더 많은 정보를 얻을 수 있다.
+
+맵의 주소(경로)를 입력하면 그 맵을 실행한다.
+IP 주소로도 입력이 가능하다.
+
+-game 을 -server로 바꿀 시 서버가 실행된다.
+
+
+SetMobility()
+
+
+서버의 코드와 클라이언트 코드는 동일한 방식으로 작성한다.
+
+대신 몇개의 메서드로 인해 분류 및 확인할 수 있다.
+
+HasAuthority() -> 서버인지 클라이언트인지 알수 있는 메서드 true면 서버 -> 이것을 if 조건에 넣어 사용
+
+
+리플리케이션 - 복사같은 것 (갱신)
+
+리플리케이션 - 클라이언트와 서버 사이에서 최신 상태를 유지하려고 한다.
+
+SetReplicate(true); 
+SetReplicateMovement(true);
+
+
+
+Failling Lateral Friction - 수평 마찰 증감
+
+
+인터넷으로 플레이 -> 강의에서는 Hamachi를 이용 (MineCraft 멀티할 때 썼었던 그 Hamachi가 맞음)
+
+Hamachi에서 생성한 가상 주소를 -game 앞에다 작성후 실행
+
+
+CreateDefaultSubObeject
+
+UBoxComponent
+
+오버랩 이벤트 (트리거) 처리
+
+OnComponentBeginOverlap
+
+OnComponentEndOverlap
+
+
+GameInstance - 게임이 활성화될때 존재하는 핵심
+
+
+Exec을 사용한 콘솔 명령 - MincCraft에서 /sethome 같은 언리얼에디터 내에 치트 구문처럼 쓸 수 있다. C++에서 구문을 직접 설정할 수 도 있다.
+
+영향을 받는 클래스들
+- PlayerController
+- Possessed Pawns
+- HUDs
+- Cheat Managers
+- Gmae Modes
+- Game Instances
+
+
+ServerTravel() - 맵을 이동
+
+ClientTravel() - 개별적인 PlayerController가 맵을 이동
+
