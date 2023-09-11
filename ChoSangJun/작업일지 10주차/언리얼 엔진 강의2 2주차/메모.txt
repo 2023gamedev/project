@@ -1,0 +1,77 @@
+메뉴 블루프린트 생성하기 == 위젯 블루프린트 생성
+
+
+#include "UObject/ConstructorHelpers.h"
+FClassFinder(경로) - 경로에 클래스가 있는지 찾는 기능이 있다.
+
+UUserWedget  
+
+
+CreateWidget<UUserWidget>(this, MenuClass)  - 위젯을 생성
+
+UUserWidget::AddToViewport() -> 뷰포트에 추가
+
+
+APlayerController::SetInputMode - 입력모드를 설정(시멘틱 변수가 있는 것 같다)
+
+
+캔버스 패널 - 모든 자식, 텍스트, 버튼 및 기타 버튼을 배치하는 역할을 한다.
+
+캔버스와 버튼의 차이점은 하나의 자식만 가질 수 있습니다.
+
+Horizontal Box
+
+Vertical Box
+
+Overlay - 배경화면 넣어줄 때 사용
+
+
+Scale to Fill - 드래그로 화면 크기 변경시 가로 세로 비율을 자동으로 유지
+
+
+ UPROPERTY(meta = (BindWidget))
+
+initialize() - 초기화
+
+
+UButton
+
+FOnButtonClickedEvent
+
+OnClicked
+
+DECLARE_DELEGATE - 델리게이트 선언, 인자가 필요하다면 DELEGATE뒤에 _xxxxxx 를 붙이고 인자를 추가
+
+
+종속성 반전 
+                CompileTime 종속성
+Game    --------------------> Menu System
+        <------------------->
+               Runtime
+                                              Interface
+                                                    |
+GameInstance <---------------  MainMenu
+
+
+interface 생성 시 두개의 클래스가 생성
+
+
+UWorld->GetFirstPlayerController
+
+
+RemoveFormViewport() - 뷰포트에서 삭제
+
+#include "Components/WidgetSwitcher.h"
+UWidgetSwitcher - 위젯을 전환할 수 있게 해주는 클래스
+
+::SetActiveWidget(전환할 Widget)
+
+
+#include "Components/EditableTextBox.h"
+UEditableTextBox
+->GetText().ToString()
+
+
+
+
+
