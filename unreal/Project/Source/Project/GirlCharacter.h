@@ -13,5 +13,15 @@ UCLASS()
 class PROJECT_API AGirlCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-	
+public:
+	// Sets default values for this character's properties
+	AGirlCharacter();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 };

@@ -46,12 +46,24 @@ public:
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);
 	void Run();
+	void Jump();
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
 
+	float GetHP() { return m_fHP; }
+	void SetHP(float hp) { m_fHP = hp; }
+
+	float GetSTR() { return m_fSTR; }
+	void SetSTR(float str) { m_fSTR = str; }
 
 	float GetSpeed() { return m_fSpeed; }
 	void SetSpeed(float speed) { m_fSpeed = speed; }
+
+	float GetStamina() { return m_fStamina; }
+	void SetStamina(float stamina) { m_fStamina = stamina; }
+
+	bool IsBleeding() { return m_bBleeding; }
+	void SetBleeding(bool bleeding) { m_bBleeding = bleeding; }
 
 	bool IsSitDown() { return m_bSitDown; }
 	void SetSitDown(bool sitdown) { m_bSitDown = sitdown; }
@@ -59,10 +71,28 @@ public:
 	bool IsRun() { return m_bRun; }
 	void SetRun(bool run) { m_bRun = run; }
 
+	bool IsHandIn() { return m_bHandIn; }
+	void SetHandIn(bool handin) { m_bHandIn = handin; }
+
+	bool IsSpecialEffect() { return m_bSpecialEffect; }
+	void SetSpecialEffect(bool specialeffect) { m_bSpecialEffect = specialeffect; }
+
 
 private:
 	UPROPERTY(EditAnywhere)
+	float m_fHP = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float m_fSTR = 0.f;
+
+	UPROPERTY(EditAnywhere)
 		float m_fSpeed = 0.f;
+
+	UPROPERTY(EditAnywhere)
+		float m_fStamina = 0.f;
+
+	UPROPERTY(EditAnywhere)
+		bool m_bBleeding = false;
 
 	UPROPERTY(EditAnywhere)
 		bool m_bSitDown = false;
@@ -70,4 +100,11 @@ private:
 	UPROPERTY(EditAnywhere)
 		bool m_bRun = false;
 
+	// 인벤토리
+
+	UPROPERTY(EditAnywhere)
+		bool m_bHandIn = false;
+		
+	UPROPERTY(EditAnywhere)
+		bool m_bSpecialEffect = false;
 };

@@ -92,6 +92,8 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ABaseCharacter::LookUp);
 
 	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &ABaseCharacter::Run);
+	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::Jump); // 수정 필요
+
 
 }
 
@@ -128,6 +130,11 @@ void ABaseCharacter::Run()
 	else {
 		m_bRun = true;
 	}
+}
+
+void ABaseCharacter::Jump()
+{
+
 }
 
 void ABaseCharacter::LookUp(float NewAxisValue)
