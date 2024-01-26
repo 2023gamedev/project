@@ -13,5 +13,22 @@ UCLASS()
 class PROJECT_API AZombieAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+public:
+	AZombieAIController();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	virtual void Tick(float DeltaTime) override;
+
+
+private:
+	UPROPERTY(EditAnywhere)
+	class UBehaviorTree* AIBehavior;
+
+	UPROPERTY(EditAnywhere)
+
+	class UBlackboardData* BlackBoardAsset;
+
 };
