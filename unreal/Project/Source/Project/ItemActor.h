@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "ItemActor.generated.h"
 
+
+// 아이템 액터
+
 UCLASS()
 class PROJECT_API AItemActor : public AActor
 {
