@@ -24,6 +24,22 @@ void DummyClient::Init()
 		err_quit("socket()");
 	}
 
+	// connect
+	SOCKADDR_IN serveraddr;
+	ZeroMemory(&serveraddr, sizeof(serveraddr));
+	serveraddr.sin_family = AF_INET;
+	serveraddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	serveraddr.sin_port = htons(7777);
+
+	m_retval = WSAConnect(m_sock, (SOCKADDR*)&serveraddr, 
+						  sizeof(serveraddr), NULL, NULL, NULL, NULL);
+	if (SOCKET_ERROR == m_retval) {
+		// 비동기 소켓이라 그냥 리턴, 검사 해주어야 함
+		if (WSAGetLastError() != WSAEWOULDBLOCK) {
+			err_quit("connect()");
+		}
+	}
+
 }
 
 void DummyClient::err_quit(const char* msg)
