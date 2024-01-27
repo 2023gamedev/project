@@ -7,7 +7,7 @@
 
 ARunningZombie::ARunningZombie()
 {
-	//	AIControllerClass = AZombieAIController::StaticClass();
+	AIControllerClass = AZombieAIController::StaticClass();
 
 	//	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
@@ -15,6 +15,13 @@ ARunningZombie::ARunningZombie()
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
 	}
+
+
+	static ConstructorHelpers::FClassFinder<UAnimInstance> ZOMBIE_ANIM(TEXT("/Game/ZombieAnimBlueprint.ZombieAnimBlueprint_C"));
+	if (ZOMBIE_ANIM.Succeeded()) {
+		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
+	}
+
 
 	SetHP(20);
 	SetSpeed(4);
@@ -25,8 +32,13 @@ ARunningZombie::ARunningZombie()
 
 void ARunningZombie::BeginPlay()
 {
+	Super::BeginPlay();
 }
 
 void ARunningZombie::Tick(float DeltaTime)
 {
+	auto CharactorAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr != CharactorAnimInstance) {
+		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
+	}
 }

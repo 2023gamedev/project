@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+// 무기 액터
+
 UCLASS()
 class PROJECT_API ANormalWeaponActor : public AItemActor
 {

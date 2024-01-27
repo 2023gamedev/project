@@ -9,6 +9,10 @@
 /**
  * 
  */
+
+// 가방 액터
+
+
 UCLASS()
 class PROJECT_API ABagActor : public AItemActor
 {
