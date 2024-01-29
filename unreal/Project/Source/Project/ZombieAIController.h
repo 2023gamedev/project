@@ -16,11 +16,14 @@ class PROJECT_API AZombieAIController : public AAIController
 public:
 	AZombieAIController();
 
+	static const FName TargetKey;
 protected:
 	virtual void BeginPlay() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
+
+
 
 
 private:
