@@ -102,11 +102,13 @@ void ABaseCharacter::MoveForward(float NewAxisValue)
 {
 	if (m_bRun) {
 		SetSpeed(500.f);
+		
 	}
 	else {
 		SetSpeed(200.f);
 	}
 
+	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
 }
 
@@ -119,6 +121,7 @@ void ABaseCharacter::MoveLeft(float NewAxisValue)
 		SetSpeed(200.f);
 	}
 
+	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
 }
 
