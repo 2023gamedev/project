@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\project\unreal\Game Server\Debug\Server.exe</FullPath>
+      <FullPath>D:\project\unreal\Server\Game Server\Debug\Server.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

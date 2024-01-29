@@ -13,19 +13,16 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="헤더 파일\00.ServerClass">
-      <UniqueIdentifier>{f9d38da3-84ca-4581-aa8f-b84bbc12c554}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\00.ServerClass">
+    <Filter Include="소스 파일\ServerClass">
       <UniqueIdentifier>{87a8b892-3a8d-43f1-924f-96746f3a5b3e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="iocpServerClass.cpp">
-      <Filter>소스 파일\00.ServerClass</Filter>
+      <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
-    <ClCompile Include="ProcessPacket_functioncpp.cpp">
-      <Filter>소스 파일\00.ServerClass</Filter>
+    <ClCompile Include="ProcessPacket.cpp">
+      <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
@@ -35,11 +32,11 @@
     <ClInclude Include="protocol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="iocpServerClass.h">
-      <Filter>헤더 파일\00.ServerClass</Filter>
-    </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="iocpServerClass.h">
+      <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

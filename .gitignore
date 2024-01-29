@@ -397,9 +397,9 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-/Saved
-/Intermediate
-/.vs
-/Build
-/Plugins
+Saved/
+Intermediate/
+.vs/
+Build/
+Plugins/
 *_BuiltData.uasset

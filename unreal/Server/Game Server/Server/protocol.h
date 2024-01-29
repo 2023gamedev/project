@@ -1,6 +1,6 @@
 #pragma once
 
-#define SERVERPORT 9000
+#define SERVERPORT 7777
 #define MAX_BUF_SIZE 256
 #define MAX_USER 500
 
