@@ -11,7 +11,7 @@ GameSyncManager::~GameSyncManager()
 {
 }
 
-void GameSyncManager::Player()
+void GameSyncManager::Player(const FVector& NewLocation)
 {
-
+	PlayerLocation = NewLocation;
 }

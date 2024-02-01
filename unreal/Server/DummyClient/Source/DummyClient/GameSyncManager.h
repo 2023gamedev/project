@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DummyClientCharacter.h"
 
 /**
  * 
@@ -13,5 +14,7 @@ public:
 	GameSyncManager();
 	~GameSyncManager();
 
-	void Player();
+	FVector PlayerLocation;
+
+	void Player(const FVector& NewLocation);
 };

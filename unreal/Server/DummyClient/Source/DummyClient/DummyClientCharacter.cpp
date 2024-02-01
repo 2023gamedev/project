@@ -115,6 +115,9 @@ void ADummyClientCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		// 위치 정보를 GameSyncManager로 전송
+		FVector NewLocation = GetActorLocation();
 	}
 }
 

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ClientSocket.h"
+#include "GameSyncManager.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
