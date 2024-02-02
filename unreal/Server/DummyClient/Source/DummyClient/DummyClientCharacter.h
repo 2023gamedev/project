@@ -50,7 +50,22 @@ class ADummyClientCharacter : public ACharacter
 public:
 	ADummyClientCharacter();
 
-	ClientSocket* ClientSocketInstance;
+	void SetClientSocket(ClientSocket* InClientSocket)
+	{
+		ClientSocketPtr = InClientSocket;
+	}
+
+	// Tick 함수 오버라이드
+	virtual void Tick(float DeltaTime) override;
+
+	// 움직임 감지 및 데이터 전송 함수
+	void CheckAndSendMovement();
+
+private:
+	ClientSocket* ClientSocketPtr;
+
+	// 캐릭터의 이전 위치 저장 변수
+	FVector PreviousLocation;
 
 protected:
 

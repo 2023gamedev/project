@@ -59,7 +59,7 @@ void ADummyClientCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	ClientSocketInstance = new ClientSocket();
+	ClientSocket* MyClientSocket = new ClientSocket();
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -115,9 +115,6 @@ void ADummyClientCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
-
-		// 위치 정보를 GameSyncManager로 전송
-		FVector NewLocation = GetActorLocation();
 	}
 }
 
@@ -131,5 +128,32 @@ void ADummyClientCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void ADummyClientCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	// 움직임 감지 및 데이터 전송
+	CheckAndSendMovement();
+}
+
+void ADummyClientCharacter::CheckAndSendMovement()
+{
+	FVector CurrentLocation = GetActorLocation();
+
+	// 이전 위치와 현재 위치 비교 (움직임 감지)
+	if (PreviousLocation != CurrentLocation)
+	{
+		// 움직임 발생: 서버로 위치 정보 전송
+		if (PreviousLocation != CurrentLocation)
+		{
+			FString MoveData = FString::Printf(TEXT("Moved to: X=%f, Y=%f, Z=%f"), CurrentLocation.X, CurrentLocation.Y, CurrentLocation.Z);
+			ClientSocketPtr->Send(MoveData.Len(), &MoveData);
+		}
+		
+		// 현재 위치를 이전 위치로 업데이트
+		PreviousLocation = CurrentLocation;
 	}
 }
