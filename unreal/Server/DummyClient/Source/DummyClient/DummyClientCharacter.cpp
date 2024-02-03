@@ -52,6 +52,8 @@ ADummyClientCharacter::ADummyClientCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	ClientSocketPtr = nullptr;
 }
 
 void ADummyClientCharacter::BeginPlay()
@@ -59,7 +61,8 @@ void ADummyClientCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	ClientSocket* MyClientSocket = new ClientSocket();
+	ClientSocket* SocketInstance = new ClientSocket();
+	this->SetClientSocket(SocketInstance);
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))

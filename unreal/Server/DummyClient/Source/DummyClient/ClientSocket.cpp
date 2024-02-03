@@ -94,7 +94,7 @@ bool ClientSocket::Send(const int SendSize, void* SendData)
 	char buff[BUFSIZE];
 	memcpy(buff, SendData, SendSize);
 
-	int nSendLen = send(Socket, buff, buff[0], 0);
+	int nSendLen = send(Socket, buff, SendSize, 0);
 	UE_LOG(LogNet, Display, TEXT("Send Packet SIZE %d"), nSendLen);
 
 	return true;
