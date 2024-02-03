@@ -10,6 +10,8 @@ AOneGameModeBase::AOneGameModeBase()
 {
 	DefaultPawnClass = ABaseCharacter::StaticClass();
 	PlayerControllerClass = APlayerCharacterController::StaticClass();
+
+	
 }
 
 void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
