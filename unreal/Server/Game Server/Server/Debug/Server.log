@@ -1,7 +1,1 @@
-﻿  iocpServerClass.cpp
-D:\project\unreal\Server\Game Server\Server\iocpServerClass.cpp(33,14): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-D:\project\unreal\Server\Game Server\Server\iocpServerClass.cpp(34,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-D:\project\unreal\Server\Game Server\Server\iocpServerClass.cpp(195,79): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  ProcessPacket.cpp
-  코드를 생성하고 있습니다...
-  Server.vcxproj -> D:\project\unreal\Server\Game Server\Debug\Server.exe
+﻿
