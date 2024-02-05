@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+class ABaseZombie;
+
 UCLASS()
 class PROJECT_API AOneGameModeBase : public AGameModeBase
 {
@@ -17,4 +20,6 @@ public:
 	AOneGameModeBase();
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	void SpawnZombie(ABaseZombie* Zombie, FVector ZombiePos);
 };
