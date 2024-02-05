@@ -4,6 +4,7 @@
 
 #include "ClientSocket.h"
 #include "GameSyncManager.h"
+#include "Gstruct.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -58,7 +59,7 @@ public:
 	// Tick 함수 오버라이드
 	virtual void Tick(float DeltaTime) override;
 
-	// 움직임 감지 및 데이터 전송 함수
+	// 움직임 감지 및 데이터 전송 함수`
 	void CheckAndSendMovement();
 
 private:
