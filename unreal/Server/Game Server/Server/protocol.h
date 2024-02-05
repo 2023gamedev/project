@@ -11,11 +11,19 @@
 #define OP_SERVER_RECV 1
 #define OP_SERVER_SEND 2
 
+typedef unsigned char uint8;
+
 // process protocol
 enum PacketProtocolType {
-	TEST = 1,		// 받은 패킷 그대로 돌려주기용. ( 보낸 내용이 그대로 돌아오지 않는다면, 클라나 서버에 문제가 있다는 뜻 )
-	KEYINPUT,		// 클라이언트에서 키 입력을 받았을 경우
+	TEST = 1
+};
 
-};	
+struct TestPacket {
+    uint8 packet_size;
+    uint8 type;
+    float x;
+    float y;
+    float z;
+};
 
 using Packet = unsigned char;

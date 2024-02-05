@@ -152,8 +152,20 @@ void ADummyClientCharacter::CheckAndSendMovement()
 		// 움직임 발생: 서버로 위치 정보 전송
 		if (PreviousLocation != CurrentLocation)
 		{
-			FString MoveData = FString::Printf(TEXT("Moved to: X=%f, Y=%f, Z=%f"), CurrentLocation.X, CurrentLocation.Y, CurrentLocation.Z);
-			ClientSocketPtr->Send(MoveData.Len(), &MoveData);
+			// FVector를 TestPacket으로 변환하고 직렬화
+			TestPacket packet;
+			packet.packet_size = sizeof(TestPacket);
+			packet.type = 1; // 원하는 유형 설정
+			packet.x = CurrentLocation.X;
+			packet.y = CurrentLocation.Y;
+			packet.z = CurrentLocation.Z;
+
+			TArray<uint8> SerializedData;
+			SerializedData.SetNumUninitialized(sizeof(TestPacket));
+			FMemory::Memcpy(SerializedData.GetData(), &packet, sizeof(TestPacket));
+
+			// 직렬화된 데이터를 서버로 전송
+			ClientSocketPtr->Send(SerializedData.Num(), SerializedData.GetData());
 		}
 		
 		// 현재 위치를 이전 위치로 업데이트

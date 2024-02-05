@@ -16,8 +16,8 @@
     <Filter Include="소스 파일\ServerClass">
       <UniqueIdentifier>{87a8b892-3a8d-43f1-924f-96746f3a5b3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Libraries">
-      <UniqueIdentifier>{11d72a32-56f9-4b15-b698-4e187cdc3046}</UniqueIdentifier>
+    <Filter Include="소스 파일\ServerClass\Protocol">
+      <UniqueIdentifier>{5200a910-95b5-40e1-8d03-44e107563632}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,6 +30,9 @@
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Protocol.pb.cc">
+      <Filter>소스 파일\ServerClass\Protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="protocol.h">
@@ -40,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="iocpServerClass.h">
       <Filter>소스 파일\ServerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol.pb.h">
+      <Filter>소스 파일\ServerClass\Protocol</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
