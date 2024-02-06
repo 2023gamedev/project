@@ -19,10 +19,17 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	void SetCurrentPawnSpeed(float speed) { m_fCurrentPawnSpeed = speed; }
 
+	void PlayAttackMontage();
+	void PlayShoutingMontage();
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllodwPrivateAccess = true))
 	float m_fCurrentPawnSpeed;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category= Attack, Meta=(AllowPrivateAccess = true))
+	UAnimMontage* AttackMontage;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* ShoutingMontage;
 
 };

@@ -17,21 +17,21 @@ public:
 	AZombieAIController();
 
 	static const FName TargetKey;
+	static const FName StartLocationKey;
 protected:
 	virtual void BeginPlay() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
 
-
-
+	//virtual void OnPossess(APawn* aPawn) override;
 
 private:
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* AIBehavior;
 
 	UPROPERTY(EditAnywhere)
-
 	class UBlackboardData* BlackBoardAsset;
+
 
 };

@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+
+
 UCLASS()
 class PROJECT_API ANormalZombie : public ABaseZombie
 {
@@ -22,5 +25,6 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+	//virtual void PossessedBy(AController* NewController) override;
 
 };

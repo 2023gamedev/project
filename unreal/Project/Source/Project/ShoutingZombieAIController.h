@@ -16,14 +16,15 @@ class PROJECT_API AShoutingZombieAIController : public AAIController
 public:
 	AShoutingZombieAIController();
 
+	static const FName TargetKey;
+	static const FName StartLocationKey;
+
 protected:
 	virtual void BeginPlay() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
-
-
-
+	//virtual void OnPossess(APawn* aPawn) override;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -32,5 +33,6 @@ private:
 	UPROPERTY(EditAnywhere)
 
 	class UBlackboardData* ShoutingZombieBlackBoardAsset;
+
 
 };
