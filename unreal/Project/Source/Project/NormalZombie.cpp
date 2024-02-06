@@ -9,7 +9,7 @@ ANormalZombie::ANormalZombie()
 {
 	AIControllerClass = AZombieAIController::StaticClass();
 	
-//	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn"));
 	if (SK_MANNEQUIN.Succeeded()) {
@@ -21,10 +21,14 @@ ANormalZombie::ANormalZombie()
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}
 
+
+
 	SetHP(20);
 	SetSpeed(2);
+	GetCharacterMovement()->MaxWalkSpeed = 200.f;
 	SetSTR(4); // 수정 필요 4 ~ 8
 	SetSpecialAbility(false);
+	SetZombieName("NormalZombie");
 }
 
 void ANormalZombie::BeginPlay()
@@ -39,3 +43,14 @@ void ANormalZombie::Tick(float DeltaTime)
 		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
 	}
 }
+
+//void ANormalZombie::PossessedBy(AController* NewController)
+//{
+//	Super::PossessedBy(NewController);
+//
+//	AZombieAIController* ZombieAIController = Cast<AZombieAIController>(NewController);
+//	if (ZombieAIController)
+//	{
+//		ZombieAIController->Possess(this);
+//	}
+//}

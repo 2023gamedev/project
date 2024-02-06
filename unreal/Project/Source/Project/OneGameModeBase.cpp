@@ -4,7 +4,15 @@
 #include "OneGameModeBase.h"
 #include "BaseCharacter.h"
 #include "BaseZombie.h"
+#include "NormalZombie.h"
+#include "ShoutingZombie.h"
+#include "RunningZombie.h"
+#include "RunningZombieAIController.h"
+#include "ShoutingZombieAIController.h"
+#include "ZombieAIController.h"
+#include "Math/UnrealMathUtility.h"
 #include "PlayerCharacterController.h"
+
 
 
 AOneGameModeBase::AOneGameModeBase()
@@ -12,7 +20,33 @@ AOneGameModeBase::AOneGameModeBase()
 	DefaultPawnClass = ABaseCharacter::StaticClass();
 	PlayerControllerClass = APlayerCharacterController::StaticClass();
 
-	
+    m_iZombieNumber = 0;
+    m_iShoutingZombieNumber = 0;
+    m_iRunningZombieNumber = 0;
+
+    ZombieClasses.Add(ANormalZombie::StaticClass());
+    ZombieAIClasses.Add(AZombieAIController::StaticClass());
+
+    ZombieClasses.Add(AShoutingZombie::StaticClass());
+    ShoutingZombieAIClasses.Add(AShoutingZombieAIController::StaticClass());
+
+    ZombieClasses.Add(ARunningZombie::StaticClass());
+    RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
+
+
+    
+
+}
+
+void AOneGameModeBase::BeginPlay()
+{
+    Super::BeginPlay();
+
+    // BeginPlay에서 SpawnZombies 호출
+    SpawnZombies(0, EZombie::NORMAL, FVector(470.f,1320.f,88.f));
+    SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f,88.f));
+    SpawnZombies(2, EZombie::RUNNING, FVector(470.f, 920.f, 88.f));
+
 }
 
 void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
@@ -20,12 +54,69 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 	Super::PostLogin(NewPlayer);
 }
 
-void AOneGameModeBase::SpawnZombie(ABaseZombie* Zombie, FVector ZombiePos)
+void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos)
 {
-	TSubclassOf<ABaseZombie> ZombieToSpawn;
 
-	ZombieToSpawn = ABaseZombie::StaticClass();
+    TSubclassOf<ABaseZombie> SelectedZombieClass = ZombieClasses[zombieindex];
 
-	ABaseZombie* SpawnZombie = GetWorld()->SpawnActor<ABaseZombie>(ZombieToSpawn, ZombiePos, FRotator::ZeroRotator);
 
+    // 선택된 좀비 클래스로 좀비를 생성
+    ABaseZombie* SpawnedZombie = GetWorld()->SpawnActor<ABaseZombie>(SelectedZombieClass, zombiepos, FRotator::ZeroRotator);
+ 
+
+    UE_LOG(LogTemp, Error, TEXT("111111111111111111111"));
+    if (SpawnedZombie)
+    {
+        UE_LOG(LogTemp, Error, TEXT("2222222222222222222222222222222222222222"));
+        if (zombieaiconindex == EZombie::NORMAL) {
+
+            TSubclassOf<AZombieAIController> SelectedZombieAIClass = ZombieAIClasses[m_iZombieNumber];
+            AZombieAIController* AIZombieController = GetWorld()->SpawnActor<AZombieAIController>(SelectedZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
+
+            if (AIZombieController) {
+                SpawnedZombie->SpawnDefaultController();
+                //SpawnedZombie->PossessedBy(AIZombieController);
+            }
+            else {
+                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
+            }
+
+            m_iZombieNumber++;
+        }
+        else if (zombieaiconindex == EZombie::SHOUTING) {
+            UE_LOG(LogTemp, Error, TEXT("333333333333333333333333333333333333333333"));
+
+            TSubclassOf<AShoutingZombieAIController> SelectedShoutingZombieAIClass = ShoutingZombieAIClasses[m_iShoutingZombieNumber];
+            AShoutingZombieAIController* AIShoutingZombieController = GetWorld()->SpawnActor<AShoutingZombieAIController>(SelectedShoutingZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
+            
+            if (AIShoutingZombieController) {
+                SpawnedZombie->SpawnDefaultController();
+                //SpawnedZombie->PossessedBy(AIShoutingZombieController);
+            }
+            else {
+            UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
+            }
+
+            m_iShoutingZombieNumber++;
+        }
+        else if (zombieaiconindex == EZombie::RUNNING) {
+            UE_LOG(LogTemp, Error, TEXT("4444444444444444444444444444444444444444444"));
+
+            TSubclassOf<ARunningZombieAIController> SelectedRunningZombieAIClass = RunningZombieAIClasses[m_iRunningZombieNumber];
+            ARunningZombieAIController* AIRunningZombieController = GetWorld()->SpawnActor<ARunningZombieAIController>(SelectedRunningZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
+
+            if (AIRunningZombieController) {
+                SpawnedZombie->SpawnDefaultController();
+                //SpawnedZombie->PossessedBy(AIRunningZombieController);
+            }
+            else {
+                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));
+            }
+
+            m_iRunningZombieNumber++;
+        }
+
+    }
 }
+
+// StartLocation 시작지점 

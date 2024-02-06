@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "BaseZombie.generated.h"
+
+DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
+DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
 
 UCLASS()
 class PROJECT_API ABaseZombie : public ACharacter
@@ -22,9 +26,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void PostInitializeComponents() override;
 
-	// Called to bind functionality to input
-	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetZombieName(FString zombiename) { m_sZombieName = zombiename; };
+	FString GetZombieName() { return m_sZombieName; }
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
@@ -45,6 +50,34 @@ public:
 	bool IsSpecialAbility() { return m_bSpecialAbility; }
 	void SetSpecialAbility(bool specialability) { m_bSpecialAbility = specialability; }
 
+	// 변경 필요 각각의 animinstance가 필요할 것 같다.
+	void Attack();
+
+	UFUNCTION()
+	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsAttacking = false;
+
+	FAttackEndDelegate m_DAttackEnd;
+
+	// 같은 이유로 이 부분도 변경 필요
+	void Shouting();
+
+	UFUNCTION()
+	void ShoutingMontageEnded(UAnimMontage* Montage, bool interrup);
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsShouting = false;
+
+	FShoutingEndDelegate m_DShoutingEnd;
+
+
+	UPROPERTY(EditAnywhere)
+	FString m_sZombieName;
+
+	// 수정 필요
+	//virtual void PossessedBy(AController* NewController) override;
 
 private:
 
