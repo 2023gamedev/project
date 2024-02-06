@@ -10,7 +10,12 @@
  * 
  */
 
+
+
 class ABaseZombie;
+class AZombieAIController;
+class AShoutingZombieAIController;
+class ARunningZombieAIController;
 
 UCLASS()
 class PROJECT_API AOneGameModeBase : public AGameModeBase
@@ -21,5 +26,40 @@ public:
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
-	void SpawnZombie(ABaseZombie* Zombie, FVector ZombiePos);
+    virtual void BeginPlay() override;
+
+    // 다양한 종류의 좀비 클래스를 저장할 배열
+    UPROPERTY(EditDefaultsOnly, Category = "Zombies")
+    TArray<TSubclassOf<ABaseZombie>> ZombieClasses;
+
+
+    UPROPERTY(EditDefaultsOnly, Category = "Zombies")
+    TArray<TSubclassOf<AZombieAIController>> ZombieAIClasses;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Zombies")
+    TArray<TSubclassOf<AShoutingZombieAIController>> ShoutingZombieAIClasses;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Zombies")
+    TArray<TSubclassOf<ARunningZombieAIController>> RunningZombieAIClasses;
+
+
+
+    UPROPERTY(VisibleAnywhere, Category = "Zombies")
+    int32 m_iZombieNumber;
+
+    UPROPERTY(VisibleAnywhere, Category = "Zombies")
+    int32 m_iShoutingZombieNumber;
+
+    UPROPERTY(VisibleAnywhere, Category = "Zombies")
+    int32 m_iRunningZombieNumber;
+
+    enum class EZombie
+    {
+        NORMAL,
+        SHOUTING,
+        RUNNING,
+    };
+
+    // 좀비 생성 함수
+    void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos);
 };

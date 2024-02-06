@@ -2,14 +2,14 @@
 
 
 #include "RunningZombie.h"
-#include "ZombieAIController.h"
+#include "RunningZombieAIController.h"
 #include "ZombieAnimInstance.h"
 
 ARunningZombie::ARunningZombie()
 {
-	AIControllerClass = AZombieAIController::StaticClass();
+	AIControllerClass = ARunningZombieAIController::StaticClass();
 
-	//	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn"));
 	if (SK_MANNEQUIN.Succeeded()) {
@@ -17,7 +17,7 @@ ARunningZombie::ARunningZombie()
 	}
 
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> ZOMBIE_ANIM(TEXT("/Game/ZombieAnimBlueprint.ZombieAnimBlueprint_C"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> ZOMBIE_ANIM(TEXT("/Game/RZombieAnimBlueprint.RZombieAnimBlueprint_C"));
 	if (ZOMBIE_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}
@@ -25,8 +25,10 @@ ARunningZombie::ARunningZombie()
 
 	SetHP(20);
 	SetSpeed(4);
+	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	SetSTR(4); // 수정 필요 4 ~ 8
 	SetSpecialAbility(true);
+	SetZombieName("RunningZombie");
 
 }
 
@@ -42,3 +44,15 @@ void ARunningZombie::Tick(float DeltaTime)
 		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
 	}
 }
+
+//void ARunningZombie::PossessedBy(AController* NewController)
+//{
+//	Super::PossessedBy(NewController);
+//
+//	ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(NewController);
+//	if (RunningZombieAIController)
+//	{
+//		RunningZombieAIController->Possess(this);
+//	}
+//}
+

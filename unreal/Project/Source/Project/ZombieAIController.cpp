@@ -8,6 +8,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 const FName AZombieAIController::TargetKey(TEXT("Target"));
+const FName AZombieAIController::StartLocationKey(TEXT("StartLocation"));
 
 AZombieAIController::AZombieAIController()
 {
@@ -20,6 +21,7 @@ AZombieAIController::AZombieAIController()
 	if (BTObject.Succeeded()) {
 		AIBehavior = BTObject.Object;
 	}
+
 }
 
 void AZombieAIController::BeginPlay()
@@ -29,10 +31,24 @@ void AZombieAIController::BeginPlay()
 	if (AIBehavior != nullptr) {
 		RunBehaviorTree(AIBehavior);
 
-		APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+		AActor* OwningPawn = GetPawn();
 
-		GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+		// 수정 필요
+		if (OwningPawn)
+		{
+			// GetPawn()이 유효한 경우 로직을 계속 진행합니다.
+			// ...
+			GetBlackboardComponent()->SetValueAsVector(StartLocationKey, GetPawn()->GetActorLocation());
+			//GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+		}
+		else // gamemode에서(C++코드) 만들어서 적용한 부분은 크래시가 뜬다. GetPawn()에서
+		{
+			UE_LOG(LogTemp, Error, TEXT("Owning pawn is NULL in AZombieAIController::BeginPlay"));
+			return;
+		}
 	}
+
+
 }
 
 void AZombieAIController::Tick(float DeltaTime)
@@ -41,11 +57,33 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
+	//// 수정 필요
+	//if (PlayerPawn)
+	//{
+	//	GetBlackboardComponent()->SetValueAsVector(StartLocationKey, GetPawn()->GetActorLocation());
+	//	//	GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+	//}
+	//else // gamemode에서(C++코드) 만들어서 적용한 부분은 크래시가 뜬다. GetPawn()에서
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("Owning pawn is NULL in AZombieAIController::BeginPlay"));
+	//	return;
+	//}
+
 	if (LineOfSightTo(PlayerPawn)) {
+		GetBlackboardComponent()->SetValueAsVector(StartLocationKey, GetPawn()->GetActorLocation()); // 수정 필요
 		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
 		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsObject(TargetKey, PlayerPawn);
 	}
 	else {
 		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
 	}
 }
+
+//void AZombieAIController::OnPossess(APawn* aPawn)
+//{
+//	OnPossess(aPawn);
+//}
+
+
