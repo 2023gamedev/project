@@ -16,6 +16,7 @@ class ABaseZombie;
 class AZombieAIController;
 class AShoutingZombieAIController;
 class ARunningZombieAIController;
+class AItemBoxActor;
 
 UCLASS()
 class PROJECT_API AOneGameModeBase : public AGameModeBase
@@ -27,6 +28,15 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
     virtual void BeginPlay() override;
+
+
+    // 아이템 박스
+    UPROPERTY(EditDefaultsOnly, Category = "ItemBox")
+    TArray<TSubclassOf<AItemBoxActor>> ItemBoxClasses;
+
+    UPROPERTY(VisibleAnywhere, Category = "ItemBox")
+    int32 m_iItemBoxNumber;
+
 
     // 다양한 종류의 좀비 클래스를 저장할 배열
     UPROPERTY(EditDefaultsOnly, Category = "Zombies")
@@ -41,8 +51,6 @@ public:
 
     UPROPERTY(EditDefaultsOnly, Category = "Zombies")
     TArray<TSubclassOf<ARunningZombieAIController>> RunningZombieAIClasses;
-
-
 
     UPROPERTY(VisibleAnywhere, Category = "Zombies")
     int32 m_iZombieNumber;
@@ -59,6 +67,10 @@ public:
         SHOUTING,
         RUNNING,
     };
+
+
+    // 아이템 생성 함수
+    void SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos);
 
     // 좀비 생성 함수
     void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos);

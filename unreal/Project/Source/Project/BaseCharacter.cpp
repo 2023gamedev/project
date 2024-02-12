@@ -3,6 +3,10 @@
 
 #include "BaseCharacter.h"
 #include "PlayerCharacterAnimInstance.h"
+#include "ItemActor.h"
+#include "ItemBoxActor.h"
+#include "PlayerSight.h"
+#include "NormalWeaponActor.h"
 
 
 
@@ -15,9 +19,13 @@ ABaseCharacter::ABaseCharacter()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
+	PlayerSight = CreateDefaultSubobject<UPlayerSight>(TEXT("PLAYERSIGHT"));
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
+	PlayerSight->SetupAttachment(Camera);
+	PlayerSight->SetRelativeLocation(FVector(150.f, 0.f, 88.f));
+	
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 	SpringArm->TargetArmLength = 400.f;
@@ -94,6 +102,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &ABaseCharacter::Run);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::Jump); // 수정 필요
 
+	PlayerInputComponent->BindAction(TEXT("GetItem"), IE_Pressed, this, &ABaseCharacter::GetItem);
 
 }
 
@@ -149,4 +158,32 @@ void ABaseCharacter::Turn(float NewAxisValue)
 {
 
 	AddControllerYawInput(NewAxisValue);
+}
+// 수정 필요
+void ABaseCharacter::GetItem()
+{
+	if (PlayerSight->GetIsHit()) {
+		
+		auto Itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
+		
+		FString itemid = Itembox->GetInBoxItemId();
+
+		if (itemid == "SquareWood") {
+
+		}
+		PlayerSight->GetHitActor()->Destroy();
+	}
+}
+
+bool ABaseCharacter::CanSetWeapon()
+{
+	return (CurrentWeapon == nullptr);
+}
+
+void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
+{
+	if (NewWeapon != nullptr) {
+		NewWeapon->SetOwner(this);
+		CurrentWeapon = NewWeapon;
+	}
 }

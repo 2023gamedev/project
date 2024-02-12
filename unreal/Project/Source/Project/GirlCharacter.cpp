@@ -23,7 +23,7 @@ AGirlCharacter::AGirlCharacter()
 	SetSpeed(6);
 	SetSTR(3);
 	SetSpecialEffect(false);
-
+	SetCharacterName("GirlCharacter");
 }
 
 void AGirlCharacter::BeginPlay()
