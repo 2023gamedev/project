@@ -23,6 +23,7 @@ AEmployeeCharacter::AEmployeeCharacter()
 	SetSpeed(4);
 	SetSTR(4);
 	SetSpecialEffect(false);
+	SetCharacterName("EmployeeCharacter");
 }
 
 void AEmployeeCharacter::BeginPlay()

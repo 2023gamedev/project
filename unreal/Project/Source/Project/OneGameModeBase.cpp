@@ -12,6 +12,7 @@
 #include "ZombieAIController.h"
 #include "Math/UnrealMathUtility.h"
 #include "PlayerCharacterController.h"
+#include "ItemBoxActor.h"
 
 
 
@@ -20,9 +21,17 @@ AOneGameModeBase::AOneGameModeBase()
 	DefaultPawnClass = ABaseCharacter::StaticClass();
 	PlayerControllerClass = APlayerCharacterController::StaticClass();
 
+    
+    // 변수들
+    m_iItemBoxNumber = 0;
+    
     m_iZombieNumber = 0;
     m_iShoutingZombieNumber = 0;
     m_iRunningZombieNumber = 0;
+
+    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
 
     ZombieClasses.Add(ANormalZombie::StaticClass());
     ZombieAIClasses.Add(AZombieAIController::StaticClass());
@@ -42,6 +51,10 @@ void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
+    SpawnItemBoxes(0, "SquareWood", FVector(2175.f, 2074.f, 30.0626f));
+    SpawnItemBoxes(1, "SquareWood", FVector(2275.f, 2074.f, 30.0626f));
+    SpawnItemBoxes(2, "SquareWood", FVector(2375.f, 2074.f, 30.0626f));
+
     // BeginPlay에서 SpawnZombies 호출
     SpawnZombies(0, EZombie::NORMAL, FVector(470.f,1320.f,88.f));
     SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f,88.f));
@@ -52,6 +65,21 @@ void AOneGameModeBase::BeginPlay()
 void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
+}
+
+
+void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos) {
+
+    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
+
+    // 선택된 아이템 박스 클래스로 아이템 박스 생성
+    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
+    
+    UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
+    if (SpawnedItemBox) {
+        UE_LOG(LogTemp, Error, TEXT("ITEM___222"));
+        SpawnedItemBox->SetInBoxItemId(itemid);
+    }
 }
 
 void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos)

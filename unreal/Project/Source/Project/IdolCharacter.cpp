@@ -23,7 +23,7 @@ AIdolCharacter::AIdolCharacter()
 	SetSpeed(5);
 	SetSTR(5);
 	SetSpecialEffect(true);
-
+	SetCharacterName("IdolCharacter");
 }
 
 void AIdolCharacter::BeginPlay()

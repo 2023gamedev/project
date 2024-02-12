@@ -23,7 +23,7 @@ AFireFighterCharacter::AFireFighterCharacter()
 	SetSpeed(5);
 	SetSTR(7);
 	SetSpecialEffect(true);
-
+	SetCharacterName("FireFighterCharacter");
 }
 
 void AFireFighterCharacter::BeginPlay()
