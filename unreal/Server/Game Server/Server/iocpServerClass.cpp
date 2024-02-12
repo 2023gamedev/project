@@ -84,7 +84,7 @@ void IOCP_CORE::IOCP_WorkerThread()
 		DWORD iosize;
 		OVLP_EX *my_overlap;
 
-		BOOL result = GetQueuedCompletionStatus(g_hIocp, &iosize, &key, reinterpret_cast<LPOVERLAPPED *>(&my_overlap), INFINITE);
+		BOOL result = GetQueuedCompletionStatus(g_hIocp, &iosize, (PULONG_PTR)&key, reinterpret_cast<LPOVERLAPPED *>(&my_overlap), INFINITE);
 
 		// 클라이언트가 접속을 끊었을 경우
 		if (FALSE == result || 0 == iosize) {
@@ -247,7 +247,7 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const Packet *packet)
 }
 
 
-void IOCP_CORE::IOCP_ErrorDisplay(char *msg, int err_no, int line)
+void IOCP_CORE::IOCP_ErrorDisplay(const char *msg, int err_no, int line)
 {
 	WCHAR *lpMsgBuf;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err_no,
@@ -257,7 +257,7 @@ void IOCP_CORE::IOCP_ErrorDisplay(char *msg, int err_no, int line)
 	LocalFree(lpMsgBuf);
 }
 
-void IOCP_CORE::IOCP_ErrorQuit(wchar_t *msg, int err_no)
+void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 {
 	WCHAR *lpMsgBuf;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err_no,
