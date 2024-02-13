@@ -25,6 +25,8 @@ AItemBoxActor::AItemBoxActor()
 
 	Box->SetRelativeLocation(FVector(0.f, -3.5, -30.f));
 
+	Trigger->SetCollisionProfileName(TEXT("ItemBoxPS"));
+
 	NormalWeaponItemClass = ANormalWeaponActor::StaticClass();
 	m_sItemID = "None";
 }
@@ -40,6 +42,8 @@ void AItemBoxActor::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	Trigger->OnComponentBeginOverlap.AddDynamic(this, &AItemBoxActor::OnCharacterOverlap);
+
+	UE_LOG(LogTemp, Error, TEXT("AItemBoxActor::PostInitializeComponents()"));
 }
 
 // Called every frame
@@ -53,9 +57,11 @@ void AItemBoxActor::OnCharacterOverlap(UPrimitiveComponent* OverlappedComp, AAct
 {
 	auto BaseCharacter = Cast<ABaseCharacter>(OtherActor);
 
+	UE_LOG(LogTemp, Error, TEXT("AItemBoxActor::OnCharacterOverlap()"));
 	if (BaseCharacter != nullptr && NormalWeaponItemClass != nullptr) {
 		auto NewWeapon = GetWorld()->SpawnActor<ANormalWeaponActor>(NormalWeaponItemClass, FVector::ZeroVector, FRotator::ZeroRotator);
 		BaseCharacter->SetWeapon(NewWeapon);
+		UE_LOG(LogTemp, Error, TEXT("wEAPONZononononojnZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"));
 	}
 	else {
 

@@ -26,6 +26,7 @@ void ANormalWeaponActor::BeginPlay()
 
 void ANormalWeaponActor::Tick(float DeltaTime)
 {
+
 }
 
 

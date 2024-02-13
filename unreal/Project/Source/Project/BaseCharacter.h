@@ -12,6 +12,7 @@
 #include "BaseCharacter.generated.h"
 
 class UPlayerSight;
+class ANormalWeaponActor;
 
 UCLASS()
 class PROJECT_API ABaseCharacter : public ACharacter
@@ -49,9 +50,8 @@ public:
 		UPlayerSight* PlayerSight;
 
 
-	// ¹«±â
 	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* Weapon;
+	ANormalWeaponActor* CurrentWeapon;
 
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);
@@ -92,7 +92,7 @@ public:
 	FString GetCharacterName() { return m_sCharacterName; }
 
 	bool CanSetWeapon();
-	void SetWeapon(class ANormalWeaponActor* NewWeapon);
+	void SetWeapon(ANormalWeaponActor* NewWeapon);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -124,8 +124,7 @@ private:
 	UPROPERTY(EditAnywhere)
 		bool m_bSpecialEffect = false;
 
-	UPROPERTY(EditAnywhere)
-	class ANormalWeaponActor* CurrentWeapon;
+
 
 	UPROPERTY(EditAnywhere)
 	FString m_sCharacterName;

@@ -42,7 +42,7 @@ void UPlayerSight::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 		Start,
 		End,
 		FQuat::Identity,
-		ECC_GameTraceChannel1,
+		ECC_GameTraceChannel2,
 		Sphere
 	);
 
@@ -56,7 +56,7 @@ void UPlayerSight::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 		else {
 			//UE_LOG(LogTemp, Warning, TEXT("oooooooooooooooooooooooo"));
 		}
-		UE_LOG(LogTemp, Warning, TEXT("oooooooooooooooooooooooo"));
+		//UE_LOG(LogTemp, Warning, TEXT("oooooooooooooooooooooooo"));
 		//UE_LOG(LogTemp, Warning, TEXT("Hit Actor : %s"), *HitActor->GetActorNameOrLabel());
 	}
 	else {
