@@ -41,9 +41,7 @@ void AItemBoxActor::BeginPlay()
 void AItemBoxActor::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	Trigger->OnComponentBeginOverlap.AddDynamic(this, &AItemBoxActor::OnCharacterOverlap);
 
-	UE_LOG(LogTemp, Error, TEXT("AItemBoxActor::PostInitializeComponents()"));
 }
 
 // Called every frame
@@ -53,9 +51,9 @@ void AItemBoxActor::Tick(float DeltaTime)
 
 }
 
-void AItemBoxActor::OnCharacterOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AItemBoxActor::OnChracterOvelapNew(ABaseCharacter* character)
 {
-	auto BaseCharacter = Cast<ABaseCharacter>(OtherActor);
+	auto BaseCharacter = Cast<ABaseCharacter>(character);
 
 	UE_LOG(LogTemp, Error, TEXT("AItemBoxActor::OnCharacterOverlap()"));
 	if (BaseCharacter != nullptr && NormalWeaponItemClass != nullptr) {
@@ -67,4 +65,5 @@ void AItemBoxActor::OnCharacterOverlap(UPrimitiveComponent* OverlappedComp, AAct
 
 	}
 }
+
 
