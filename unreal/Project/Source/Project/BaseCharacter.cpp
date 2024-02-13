@@ -27,7 +27,6 @@ ABaseCharacter::ABaseCharacter()
 	PlayerSight->SetupAttachment(Camera);
 	PlayerSight->SetRelativeLocation(FVector(150.f, 0.f, 88.f));
 	
-
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 	SpringArm->TargetArmLength = 400.f;
 	SpringArm->SetRelativeRotation(FRotator(-30.f, 0.f, 0.f));
@@ -172,6 +171,8 @@ void ABaseCharacter::GetItem()
 		if (itemid == "SquareWood") {
 
 		}
+		
+		Itembox->OnChracterOvelapNew(this);
 
 		PlayerSight->GetHitActor()->Destroy();
 	}
@@ -188,6 +189,10 @@ void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
 		NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 		NewWeapon->SetOwner(this);
 		CurrentWeapon = NewWeapon;
+
+		// 이렇게 하면 안되고 소켓을 만들고 거기다 부착하는 식으로 해야 할 듯 캐릭터랑 무기랑 따로논다.
+		CurrentWeapon->SetActorRelativeLocation(FVector(-20.f, 20.f, 88.f));
+		CurrentWeapon->SetActorRelativeRotation(FRotator(0.f, 0.f, 60.f));                    
 		UE_LOG(LogTemp, Warning, TEXT("wEAPONZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"));
 	}
 }
