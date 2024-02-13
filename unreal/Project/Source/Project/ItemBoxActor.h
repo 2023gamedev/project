@@ -7,6 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "ItemBoxActor.generated.h"
 
+class ANormalWeaponActor;
 
 UCLASS()
 class PROJECT_API AItemBoxActor : public AActor
@@ -38,7 +39,7 @@ public:
 
 	// 수정 필요	
 	UPROPERTY(EditAnywhere, Category = Box)
-	TSubclassOf<class ANormalWeaponActor> NormalWeaponItemClass;
+	TSubclassOf<ANormalWeaponActor> NormalWeaponItemClass;
 
 
 	UPROPERTY(EditAnywhere, Category = Item)
@@ -48,4 +49,6 @@ private:
 	UFUNCTION()
 	void OnCharacterOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
+
+
 };

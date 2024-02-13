@@ -20,6 +20,7 @@ ABaseCharacter::ABaseCharacter()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	PlayerSight = CreateDefaultSubobject<UPlayerSight>(TEXT("PLAYERSIGHT"));
+	CurrentWeapon = CreateDefaultSubobject<ANormalWeaponActor>(TEXT("NORMALWEAPON"));
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
@@ -171,6 +172,7 @@ void ABaseCharacter::GetItem()
 		if (itemid == "SquareWood") {
 
 		}
+
 		PlayerSight->GetHitActor()->Destroy();
 	}
 }
@@ -183,7 +185,9 @@ bool ABaseCharacter::CanSetWeapon()
 void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
 {
 	if (NewWeapon != nullptr) {
+		NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 		NewWeapon->SetOwner(this);
 		CurrentWeapon = NewWeapon;
+		UE_LOG(LogTemp, Warning, TEXT("wEAPONZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"));
 	}
 }
