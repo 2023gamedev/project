@@ -31,7 +31,7 @@ ABaseCharacter::ABaseCharacter()
 	SpringArm->TargetArmLength = 400.f;
 	SpringArm->SetRelativeRotation(FRotator(-30.f, 0.f, 0.f));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/SKM_QuinnNew.SKM_QuinnNew"));
 
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
@@ -186,13 +186,14 @@ bool ABaseCharacter::CanSetWeapon()
 void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
 {
 	if (NewWeapon != nullptr) {
-		NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		FName WeaponSocket = TEXT("middle_01_rSocket");
+		NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket); 
 		NewWeapon->SetOwner(this);
 		CurrentWeapon = NewWeapon;
+		CurrentWeapon->SetActorRelativeRotation(FRotator(0.f, 110.f, 0.f));
+		SetHandIn(true);
 
-		// 이렇게 하면 안되고 소켓을 만들고 거기다 부착하는 식으로 해야 할 듯 캐릭터랑 무기랑 따로논다.
-		CurrentWeapon->SetActorRelativeLocation(FVector(-20.f, 20.f, 88.f));
-		CurrentWeapon->SetActorRelativeRotation(FRotator(0.f, 0.f, 60.f));                    
+        
 		UE_LOG(LogTemp, Warning, TEXT("wEAPONZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"));
 	}
 }
