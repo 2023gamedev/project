@@ -5,7 +5,7 @@
 
 AIdolCharacter::AIdolCharacter()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/SKM_QuinnNew.SKM_QuinnNew"));
 
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
@@ -23,7 +23,7 @@ AIdolCharacter::AIdolCharacter()
 	SetSpeed(5);
 	SetSTR(5);
 	SetSpecialEffect(true);
-
+	SetCharacterName("IdolCharacter");
 }
 
 void AIdolCharacter::BeginPlay()

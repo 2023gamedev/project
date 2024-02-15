@@ -5,7 +5,7 @@
 
 AEmployeeCharacter::AEmployeeCharacter()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/SKM_QuinnNew.SKM_QuinnNew"));
 
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
@@ -23,6 +23,7 @@ AEmployeeCharacter::AEmployeeCharacter()
 	SetSpeed(4);
 	SetSTR(4);
 	SetSpecialEffect(false);
+	SetCharacterName("EmployeeCharacter");
 }
 
 void AEmployeeCharacter::BeginPlay()

@@ -44,6 +44,9 @@
     <ClInclude Include="iocpServerClass.h">
       <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Protocol.pb.h">
       <Filter>소스 파일\ServerClass\Protocol</Filter>
     </ClInclude>

@@ -11,6 +11,9 @@
 
 #include "BaseCharacter.generated.h"
 
+class UPlayerSight;
+class ANormalWeaponActor;
+
 UCLASS()
 class PROJECT_API ABaseCharacter : public ACharacter
 {
@@ -42,6 +45,13 @@ public:
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* Camera;
 
+	// 플레이어가 물체를 바라보는지
+	UPROPERTY(EditAnywhere)
+		UPlayerSight* PlayerSight;
+
+
+	UPROPERTY(EditAnywhere)
+	ANormalWeaponActor* CurrentWeapon;
 
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);
@@ -49,6 +59,7 @@ public:
 	void Jump();
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
+	void GetItem();
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
@@ -77,6 +88,11 @@ public:
 	bool IsSpecialEffect() { return m_bSpecialEffect; }
 	void SetSpecialEffect(bool specialeffect) { m_bSpecialEffect = specialeffect; }
 
+	void SetCharacterName(FString charactername) { m_sCharacterName = charactername; };
+	FString GetCharacterName() { return m_sCharacterName; }
+
+	bool CanSetWeapon();
+	void SetWeapon(ANormalWeaponActor* NewWeapon);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -107,4 +123,10 @@ private:
 		
 	UPROPERTY(EditAnywhere)
 		bool m_bSpecialEffect = false;
+
+
+
+	UPROPERTY(EditAnywhere)
+	FString m_sCharacterName;
+
 };

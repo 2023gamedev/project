@@ -5,7 +5,7 @@
 
 AFireFighterCharacter::AFireFighterCharacter()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/SKM_QuinnNew.SKM_QuinnNew"));
 
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
@@ -23,7 +23,7 @@ AFireFighterCharacter::AFireFighterCharacter()
 	SetSpeed(5);
 	SetSTR(7);
 	SetSpecialEffect(true);
-
+	SetCharacterName("FireFighterCharacter");
 }
 
 void AFireFighterCharacter::BeginPlay()

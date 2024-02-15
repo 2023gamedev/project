@@ -26,4 +26,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetItemName(FString itemname) { m_sItemName = itemname; };
+	FString GetItemName() { return m_sItemName; }
+
+
+
+public:
+	UPROPERTY(EditAnywhere)
+	FString m_sItemName;
 };
