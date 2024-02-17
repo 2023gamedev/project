@@ -43,6 +43,7 @@ void ABaseZombie::PostInitializeComponents()
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::AttackMontageEnded);
+	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::ShoutingMontageEnded);
 }
 
 void ABaseZombie::Attack()
@@ -82,19 +83,17 @@ void ABaseZombie::Shouting()
 	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Blue, false, 0.2f);
 	m_bIsShouting = true;
 
+	
+	UE_LOG(LogTemp, Log, TEXT("Character is Die :: %s"), IsShouted() ? TEXT("true") : TEXT("false"));
 	UE_LOG(LogTemp, Error, TEXT("PLAYSHOUTINHGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
 }
 
 void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bIsShouting = false;
+	SetShouted(true);
+	UE_LOG(LogTemp, Error, TEXT("bIsShouted true"));
 	m_DShoutingEnd.Broadcast();
 }
-
-//void ABaseZombie::PossessedBy(AController* NewController)
-//{
-//	Super::PossessedBy(NewController);
-//}
-
 
 

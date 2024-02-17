@@ -24,7 +24,7 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	//virtual void OnPossess(APawn* aPawn) override;
+	void SetStartLocationValue(FVector startlocation);
 
 private:
 	UPROPERTY(EditAnywhere)
