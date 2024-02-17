@@ -45,14 +45,4 @@ void ARunningZombie::Tick(float DeltaTime)
 	}
 }
 
-//void ARunningZombie::PossessedBy(AController* NewController)
-//{
-//	Super::PossessedBy(NewController);
-//
-//	ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(NewController);
-//	if (RunningZombieAIController)
-//	{
-//		RunningZombieAIController->Possess(this);
-//	}
-//}
 

@@ -42,14 +42,4 @@ void AShoutingZombie::Tick(float DeltaTime)
 		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
 	}
 }
-//
-//void AShoutingZombie::PossessedBy(AController* NewController)
-//{
-//	Super::PossessedBy(NewController);
-//
-//	AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(NewController);
-//	if (ShoutingZombieAIController)
-//	{
-//		ShoutingZombieAIController->Possess(this);
-//	}
-//}
+

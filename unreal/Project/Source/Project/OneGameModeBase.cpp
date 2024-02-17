@@ -103,7 +103,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
 
             if (AIZombieController) {
                 SpawnedZombie->SpawnDefaultController();
-                //SpawnedZombie->PossessedBy(AIZombieController);
+                AIZombieController->SetStartLocationValue(zombiepos);
             }
             else {
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
@@ -119,7 +119,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
             
             if (AIShoutingZombieController) {
                 SpawnedZombie->SpawnDefaultController();
-                //SpawnedZombie->PossessedBy(AIShoutingZombieController);
+                AIShoutingZombieController->SetStartLocationValue(zombiepos);
             }
             else {
             UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
@@ -135,7 +135,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
 
             if (AIRunningZombieController) {
                 SpawnedZombie->SpawnDefaultController();
-                //SpawnedZombie->PossessedBy(AIRunningZombieController);
+                AIRunningZombieController->SetStartLocationValue(zombiepos);
             }
             else {
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));
@@ -146,5 +146,3 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
 
     }
 }
-
-// StartLocation 시작지점 
