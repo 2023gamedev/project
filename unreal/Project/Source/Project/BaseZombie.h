@@ -50,6 +50,11 @@ public:
 	bool IsSpecialAbility() { return m_bSpecialAbility; }
 	void SetSpecialAbility(bool specialability) { m_bSpecialAbility = specialability; }
 
+
+	// 소리쳤는지
+	bool IsShouted() { return m_bIsShouted; }
+	void SetShouted(bool shouted) { m_bIsShouted = shouted; }
+
 	// 변경 필요 각각의 animinstance가 필요할 것 같다.
 	void Attack();
 
@@ -70,14 +75,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bIsShouting = false;
 
+	UPROPERTY(EditAnywhere)
+	bool m_bIsShouted = false; // 소리쳤는지
+
 	FShoutingEndDelegate m_DShoutingEnd;
 
 
 	UPROPERTY(EditAnywhere)
 	FString m_sZombieName;
 
-	// 수정 필요
-	//virtual void PossessedBy(AController* NewController) override;
 
 private:
 
