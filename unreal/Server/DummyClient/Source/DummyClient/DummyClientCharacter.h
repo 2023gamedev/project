@@ -4,7 +4,7 @@
 
 #include "ClientSocket.h"
 #include "GameSyncManager.h"
-#include "Gstruct.h"
+#include "Gstruct.pb.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"

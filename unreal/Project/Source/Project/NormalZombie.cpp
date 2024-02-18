@@ -44,13 +44,4 @@ void ANormalZombie::Tick(float DeltaTime)
 	}
 }
 
-//void ANormalZombie::PossessedBy(AController* NewController)
-//{
-//	Super::PossessedBy(NewController);
-//
-//	AZombieAIController* ZombieAIController = Cast<AZombieAIController>(NewController);
-//	if (ZombieAIController)
-//	{
-//		ZombieAIController->Possess(this);
-//	}
-//}
+

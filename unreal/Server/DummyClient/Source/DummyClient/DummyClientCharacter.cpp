@@ -149,25 +149,21 @@ void ADummyClientCharacter::CheckAndSendMovement()
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
 	if (PreviousLocation != CurrentLocation)
 	{
-		// 움직임 발생: 서버로 위치 정보 전송
-		if (PreviousLocation != CurrentLocation)
-		{
-			// FVector를 TestPacket으로 변환하고 직렬화
-			TestPacket packet;
-			packet.packet_size = sizeof(TestPacket);
-			packet.type = 1; // 원하는 유형 설정
-			packet.x = CurrentLocation.X;
-			packet.y = CurrentLocation.Y;
-			packet.z = CurrentLocation.Z;
+		// Protocol Buffers를 사용하여 TestPacket 생성
+		Protocol::TestPacket packet;
+		packet.set_packet_size(sizeof(Protocol::TestPacket));
+		packet.set_type(1); // 원하는 유형 설정
+		packet.set_x(CurrentLocation.X);
+		packet.set_y(CurrentLocation.Y);
+		packet.set_z(CurrentLocation.Z);
 
-			TArray<uint8> SerializedData;
-			SerializedData.SetNumUninitialized(sizeof(TestPacket));
-			FMemory::Memcpy(SerializedData.GetData(), &packet, sizeof(TestPacket));
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
 
-			// 직렬화된 데이터를 서버로 전송
-			ClientSocketPtr->Send(SerializedData.Num(), SerializedData.GetData());
-		}
-		
+		// 직렬화된 데이터를 서버로 전송
+		bool bIsSent = ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
 		// 현재 위치를 이전 위치로 업데이트
 		PreviousLocation = CurrentLocation;
 	}

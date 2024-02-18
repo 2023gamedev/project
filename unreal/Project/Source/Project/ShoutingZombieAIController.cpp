@@ -38,7 +38,7 @@ void AShoutingZombieAIController::BeginPlay()
 		if (OwningPawn)
 		{
 			APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-			GetBlackboardComponent()->SetValueAsVector(StartLocationKey, GetPawn()->GetActorLocation());
+			//GetBlackboardComponent()->SetValueAsVector(StartLocationKey, GetPawn()->GetActorLocation());
 		//	GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
 
 		}
@@ -56,20 +56,8 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
-	//// 수정 필요
-	//if (PlayerPawn)
-	//{
-	//	GetBlackboardComponent()->SetValueAsVector(StartLocationKey, GetPawn()->GetActorLocation());
-	//	//	GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
-	//}
-	//else // gamemode에서(C++코드) 만들어서 적용한 부분은 크래시가 뜬다. GetPawn()에서
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("Owning pawn is NULL in AZombieAIController::BeginPlay"));
-	//	return;
-	//}
 
 	if (LineOfSightTo(PlayerPawn)) {
-		GetBlackboardComponent()->SetValueAsVector(StartLocationKey, GetPawn()->GetActorLocation()); // 수정 필요
 		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
 		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
 	 	GetBlackboardComponent()->SetValueAsObject(TargetKey, PlayerPawn);
@@ -80,7 +68,8 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 	}
 }
 
-//void AShoutingZombieAIController::OnPossess(APawn* aPawn)
-//{
-//	OnPossess(aPawn);
-//}
+void AShoutingZombieAIController::SetStartLocationValue(FVector startlocation)
+{
+	GetBlackboardComponent()->SetValueAsVector(StartLocationKey, startlocation);
+}
+

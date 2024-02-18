@@ -21,8 +21,10 @@ ABaseCharacter::ABaseCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	PlayerSight = CreateDefaultSubobject<UPlayerSight>(TEXT("PLAYERSIGHT"));
 	CurrentWeapon = CreateDefaultSubobject<ANormalWeaponActor>(TEXT("NORMALWEAPON"));
+	FlashLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("FLASHLIGHT"));
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
+	FlashLight->SetupAttachment(GetCapsuleComponent());
 	Camera->SetupAttachment(SpringArm);
 	PlayerSight->SetupAttachment(Camera);
 	PlayerSight->SetRelativeLocation(FVector(150.f, 0.f, 88.f));
@@ -53,6 +55,14 @@ ABaseCharacter::ABaseCharacter()
 	SpringArm->bInheritYaw = true;
 	SpringArm->bDoCollisionTest = true;
 	bUseControllerRotationYaw = false;
+
+	// 스포트 라이트의 속성 설정 (위치, 회전 등)
+	FlashLight->SetRelativeLocationAndRotation(FVector(7.933304f, -13.981234f, 64.513892f), FRotator( 0.f, 0.f, 0.f));
+	// 기타 설정 (색상, 강도 등)
+	FlashLight->SetLightColor(FLinearColor::White);
+	FlashLight->SetIntensity(1000.f);
+	FlashLight->SetOuterConeAngle(30.f);
+	FlashLight->SetVisibility(true);
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.f, 0.f);
@@ -103,6 +113,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::Jump); // 수정 필요
 
 	PlayerInputComponent->BindAction(TEXT("GetItem"), IE_Pressed, this, &ABaseCharacter::GetItem);
+	PlayerInputComponent->BindAction(TEXT("LightOnOff"), IE_Pressed, this, &ABaseCharacter::LightOnOff);
 
 }
 
@@ -175,6 +186,18 @@ void ABaseCharacter::GetItem()
 		Itembox->OnChracterOvelapNew(this);
 
 		PlayerSight->GetHitActor()->Destroy();
+	}
+}
+
+void ABaseCharacter::LightOnOff()
+{
+	if (IsSpotLight()) {
+		FlashLight->SetVisibility(false);
+		SetSpotLight(false);
+	}
+	else {
+		FlashLight->SetVisibility(true);
+		SetSpotLight(true);
 	}
 }
 
