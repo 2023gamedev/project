@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SpotLightComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "BaseCharacter.generated.h"
@@ -49,9 +50,11 @@ public:
 	UPROPERTY(EditAnywhere)
 		UPlayerSight* PlayerSight;
 
-
 	UPROPERTY(EditAnywhere)
 	ANormalWeaponActor* CurrentWeapon;
+
+	UPROPERTY(EditAnywhere)
+	USpotLightComponent* FlashLight;
 
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);
@@ -60,6 +63,7 @@ public:
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
 	void GetItem();
+	void LightOnOff();
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
@@ -87,6 +91,9 @@ public:
 
 	bool IsSpecialEffect() { return m_bSpecialEffect; }
 	void SetSpecialEffect(bool specialeffect) { m_bSpecialEffect = specialeffect; }
+
+	bool IsSpotLight() { return m_bOnSpotLight; }
+	void SetSpotLight(bool spotlight) { m_bOnSpotLight = spotlight; }
 
 	void SetCharacterName(FString charactername) { m_sCharacterName = charactername; };
 	FString GetCharacterName() { return m_sCharacterName; }
@@ -123,6 +130,10 @@ private:
 		
 	UPROPERTY(EditAnywhere)
 		bool m_bSpecialEffect = false;
+
+	// 손전등이 켜져있는지
+	UPROPERTY(EditAnywhere)
+	bool m_bOnSpotLight = true;
 
 
 
