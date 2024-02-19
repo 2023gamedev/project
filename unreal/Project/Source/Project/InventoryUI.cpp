@@ -2,4 +2,9 @@
 
 
 #include "InventoryUI.h"
+#include "Slot.h"
 
+UInventoryUI::UInventoryUI(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
+{
+}
