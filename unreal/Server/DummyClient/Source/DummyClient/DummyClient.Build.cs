@@ -14,7 +14,7 @@ public class DummyClient : ModuleRules
 
 		PrivateIncludePaths.AddRange(new string[]
 		{
-            "DummyClient/Network/",
+            "DummyClient/Network/"
 		});
 	}
 }
