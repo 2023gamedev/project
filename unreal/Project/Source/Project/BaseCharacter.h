@@ -12,6 +12,7 @@
 
 #include "BaseCharacter.generated.h"
 
+class UGamePlayerUI;
 class UPlayerSight;
 class ANormalWeaponActor;
 
@@ -55,6 +56,16 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* FlashLight;
+
+	// 아이템 데이터 테이블을 만들어야 하는지 고민중 C++에서 구조체를 만들어서 데이터 테이블을 만들지 고민중 ----
+
+	// 게임 전체 UI
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UGamePlayerUI> GameUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UGamePlayerUI* GameUIWidget;
+	
 
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);

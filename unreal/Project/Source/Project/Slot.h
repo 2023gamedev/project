@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BaseUI.h"
+#include "Components/Image.h"
+#include "Components/TextBlock.h"
 #include "Slot.generated.h"
 
 /**
@@ -14,7 +16,28 @@ UCLASS()
 class PROJECT_API USlot : public UBaseUI
 {
 	GENERATED_BODY()
-	
-	// 갯수, 번호, 텍스쳐, ... 퀵슬롯인지 아닌지도 있어야 하는지 고민중
 
+
+public:
+
+
+
+
+public:
+
+	// 갯수, 번호, 텍스쳐 ...
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ItemID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ItemCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ItemIndex;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UImage* Img;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* Text;
 };

@@ -3,3 +3,7 @@
 
 #include "GamePlayerUI.h"
 
+UGamePlayerUI::UGamePlayerUI(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
+{
+}

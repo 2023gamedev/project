@@ -7,7 +7,7 @@
 #include "ItemBoxActor.h"
 #include "PlayerSight.h"
 #include "NormalWeaponActor.h"
-
+#include "GamePlayerUI.h"
 
 
 // Sets default values
@@ -45,6 +45,12 @@ ABaseCharacter::ABaseCharacter()
 
 	if (CHARACTER_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(CHARACTER_ANIM.Class);
+	}
+
+	static ConstructorHelpers::FClassFinder < UGamePlayerUI > PLAYER_GAMEUI(TEXT("/Game/UI/BP_GamePlayerUI.BP_GamePlayerUI_C"));
+
+	if (PLAYER_GAMEUI.Succeeded()) {
+		GameUIClass = PLAYER_GAMEUI.Class;
 	}
 
 	SpringArm->TargetArmLength = 300.f;
