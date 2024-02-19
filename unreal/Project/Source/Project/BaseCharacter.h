@@ -75,6 +75,7 @@ public:
 	void Turn(float NewAxisValue);
 	void GetItem();
 	void LightOnOff();
+	void InventoryOnOff();
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }

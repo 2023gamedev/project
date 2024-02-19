@@ -216,6 +216,12 @@ void ABaseCharacter::LightOnOff()
 	UE_LOG(LogTemp, Warning, TEXT("LifgtOnOff"));
 }
 
+void ABaseCharacter::InventoryOnOff()
+{
+	// 작성 필요
+	UE_LOG(LogTemp, Warning, TEXT("InvenOpen"));
+}
+
 bool ABaseCharacter::CanSetWeapon()
 {
 	return (CurrentWeapon == nullptr);

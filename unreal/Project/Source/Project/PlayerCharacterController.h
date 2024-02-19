@@ -37,6 +37,7 @@ public:
 	//void Jump(const FInputActionValue& Value);
 	void GetItem(const FInputActionValue& Value);
 	void LightOnOff(const FInputActionValue& Value);
+	void InventoryOnOff(const FInputActionValue& Value);
 
 public:
 	virtual void BeginPlay() override;

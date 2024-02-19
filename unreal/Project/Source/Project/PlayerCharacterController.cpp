@@ -83,6 +83,7 @@ void APlayerCharacterController::SetupInputComponent()
 	PEI->BindAction(InputActions->InputRun, ETriggerEvent::Completed, this, &APlayerCharacterController::Run);
 	PEI->BindAction(InputActions->InputGetItem, ETriggerEvent::Completed, this, &APlayerCharacterController::GetItem);
 	PEI->BindAction(InputActions->InputLightOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::LightOnOff);
+	PEI->BindAction(InputActions->InputInventoryOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::InventoryOnOff);
 
 }
 
@@ -164,5 +165,11 @@ void APlayerCharacterController::LightOnOff(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	basecharacter->LightOnOff();
+}
+
+void APlayerCharacterController::InventoryOnOff(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->InventoryOnOff();
 }
 
