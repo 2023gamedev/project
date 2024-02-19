@@ -1,7 +1,48 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "PlayerCharacterController.h"
+
+// Engine
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+// GameMode
+#include "OneGameModeBase.h"
+
+// Character
+#include "BaseCharacter.h"
+#include "EmployeeCharacter.h"
+#include "GirlCharacter.h"
+#include "IdolCharacter.h"
+#include "FireFighterCharacter.h"
+
+
+
+// EnhancedInput
+#include "InputMappingContext.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
+
+
+APlayerCharacterController::APlayerCharacterController(const FObjectInitializer& ObjectInitalizer)
+	:Super(ObjectInitalizer)
+{
+	InputMapping = CreateDefaultSubobject<UInputMappingContext>(TEXT("INPUTMAPPING"));
+	InputActions = CreateDefaultSubobject<UInputDataAsset>(TEXT("INPUTACTIONS"));
+
+	static ConstructorHelpers::FObjectFinder<UInputMappingContext> SK_INPUTMAPPINGCONTEXT(TEXT("/Game/input/IMC_InputMappingCon.IMC_InputMappingCon"));
+
+	if (SK_INPUTMAPPINGCONTEXT.Succeeded()) {
+		InputMapping = SK_INPUTMAPPINGCONTEXT.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputDataAsset> SK_INPUTDATAASSET(TEXT("/Game/input/BP_InputDataAsset.BP_InputDataAsset"));
+
+	if (SK_INPUTDATAASSET.Succeeded()) {
+		InputActions = SK_INPUTDATAASSET.Object;
+	}
+
+}
 
 void APlayerCharacterController::PostInitializeComponents()
 {
@@ -12,3 +53,121 @@ void APlayerCharacterController::OnPossess(APawn* aPawn)
 {
 	Super::OnPossess(aPawn);
 }
+
+void APlayerCharacterController::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void APlayerCharacterController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void APlayerCharacterController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+
+	// Get the local player subsystem
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+	// Clear out existing mapping, and add our mapping
+	Subsystem->ClearAllMappings();
+	Subsystem->AddMappingContext(InputMapping, 0);
+
+	// Get the EnhancedInputComponent
+	UEnhancedInputComponent* PEI = Cast<UEnhancedInputComponent>(InputComponent);
+
+	//Bind the actions
+
+	//// Completed : 눌렀다 뗐을 때, Triggered : 누르고 있을 때 
+	PEI->BindAction(InputActions->InputMoveForward, ETriggerEvent::Triggered, this, &APlayerCharacterController::MoveForward);
+	PEI->BindAction(InputActions->InputMoveLeft, ETriggerEvent::Triggered, this, &APlayerCharacterController::MoveLeft);
+	PEI->BindAction(InputActions->InputTurn, ETriggerEvent::Triggered, this, &APlayerCharacterController::Turn);
+	PEI->BindAction(InputActions->InputLookUp, ETriggerEvent::Triggered, this, &APlayerCharacterController::LookUp);
+	PEI->BindAction(InputActions->InputRun, ETriggerEvent::Completed, this, &APlayerCharacterController::Run);
+	PEI->BindAction(InputActions->InputGetItem, ETriggerEvent::Completed, this, &APlayerCharacterController::GetItem);
+	PEI->BindAction(InputActions->InputLightOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::LightOnOff);
+
+}
+
+void APlayerCharacterController::MoveForward(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	// input is a Vector2D
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+
+	// find out which way is forward
+	const FRotator Rotation = GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// get forward vector
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+	// add movement 
+	basecharacter->MoveForward(MovementVector.Y);
+}
+
+void APlayerCharacterController::MoveLeft(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	// input is a Vector2D
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	// find out which way is forward
+	const FRotator Rotation = GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// get forward vector
+	//const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+	// get right vector 
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+	// add movement 
+	//basecharacter->AddMovementInput(ForwardDirection, MovementVector.Y);
+	basecharacter->MoveLeft(MovementVector.Y);
+
+}
+
+void APlayerCharacterController::Turn(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	basecharacter->Turn(LookAxisVector.Y);
+}
+
+void APlayerCharacterController::LookUp(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	basecharacter->LookUp(LookAxisVector.Y);
+}
+
+void APlayerCharacterController::Run(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->Run();
+}
+
+void APlayerCharacterController::GetItem(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->GetItem();
+}
+
+void APlayerCharacterController::LightOnOff(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->LightOnOff();
+}
+
