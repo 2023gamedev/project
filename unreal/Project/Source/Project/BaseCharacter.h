@@ -34,8 +34,8 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* NewController) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	//// Called to bind functionality to input
+	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
 	// 스프링 암
