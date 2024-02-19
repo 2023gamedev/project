@@ -97,25 +97,25 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 }
-
-// Called to bind functionality to input
-void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABaseCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveLeft"), this, &ABaseCharacter::MoveLeft);
-
-	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ABaseCharacter::Turn);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ABaseCharacter::LookUp);
-
-	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &ABaseCharacter::Run);
-	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::Jump); // 수정 필요
-
-	PlayerInputComponent->BindAction(TEXT("GetItem"), IE_Pressed, this, &ABaseCharacter::GetItem);
-	PlayerInputComponent->BindAction(TEXT("LightOnOff"), IE_Pressed, this, &ABaseCharacter::LightOnOff);
-
-}
+//
+//// Called to bind functionality to input
+//void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//
+//	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABaseCharacter::MoveForward);
+//	PlayerInputComponent->BindAxis(TEXT("MoveLeft"), this, &ABaseCharacter::MoveLeft);
+//
+//	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ABaseCharacter::Turn);
+//	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ABaseCharacter::LookUp);
+//
+//	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &ABaseCharacter::Run);
+//	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::Jump); // 수정 필요
+//
+//	PlayerInputComponent->BindAction(TEXT("GetItem"), IE_Pressed, this, &ABaseCharacter::GetItem);
+//	PlayerInputComponent->BindAction(TEXT("LightOnOff"), IE_Pressed, this, &ABaseCharacter::LightOnOff);
+//
+//}
 
 
 void ABaseCharacter::MoveForward(float NewAxisValue)
@@ -130,6 +130,8 @@ void ABaseCharacter::MoveForward(float NewAxisValue)
 
 	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
+	UE_LOG(LogTemp, Warning, TEXT("MoveFoward"));
+
 }
 
 void ABaseCharacter::MoveLeft(float NewAxisValue)
@@ -143,6 +145,7 @@ void ABaseCharacter::MoveLeft(float NewAxisValue)
 
 	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
+	UE_LOG(LogTemp, Warning, TEXT("MoveLeft"));
 }
 
 void ABaseCharacter::Run()
@@ -153,6 +156,7 @@ void ABaseCharacter::Run()
 	else {
 		m_bRun = true;
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Run"));
 }
 
 void ABaseCharacter::Jump()
@@ -163,12 +167,14 @@ void ABaseCharacter::Jump()
 void ABaseCharacter::LookUp(float NewAxisValue)
 {
 	AddControllerPitchInput(NewAxisValue);
+	UE_LOG(LogTemp, Warning, TEXT("LookUp"));
 }
 
 void ABaseCharacter::Turn(float NewAxisValue)
 {
 
 	AddControllerYawInput(NewAxisValue);
+	UE_LOG(LogTemp, Warning, TEXT("Turn"));
 }
 // 수정 필요
 void ABaseCharacter::GetItem()
@@ -187,6 +193,8 @@ void ABaseCharacter::GetItem()
 
 		PlayerSight->GetHitActor()->Destroy();
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
 }
 
 void ABaseCharacter::LightOnOff()
@@ -199,6 +207,7 @@ void ABaseCharacter::LightOnOff()
 		FlashLight->SetVisibility(true);
 		SetSpotLight(true);
 	}
+	UE_LOG(LogTemp, Warning, TEXT("LifgtOnOff"));
 }
 
 bool ABaseCharacter::CanSetWeapon()
