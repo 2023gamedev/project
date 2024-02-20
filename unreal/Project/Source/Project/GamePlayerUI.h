@@ -21,6 +21,7 @@ class PROJECT_API UGamePlayerUI : public UBaseUI
 public:
 	UGamePlayerUI(const FObjectInitializer& ObjectInitializer);
 
+	virtual void Init() override;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (BintWidget))

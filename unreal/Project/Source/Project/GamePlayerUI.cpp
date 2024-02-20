@@ -7,3 +7,8 @@ UGamePlayerUI::UGamePlayerUI(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
 }
+
+void UGamePlayerUI::Init()
+{
+
+}

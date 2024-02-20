@@ -20,6 +20,7 @@ class PROJECT_API UInventoryUI : public UBaseUI
 public:
 	UInventoryUI(const FObjectInitializer& ObjectInitializer);
 
+	virtual void Init() override;
 
 public:
 	// 텍스쳐 필요
