@@ -8,6 +8,7 @@
 #include "PlayerSight.h"
 #include "NormalWeaponActor.h"
 #include "GamePlayerUI.h"
+#include "PlayerCharacterController.h"
 
 
 // Sets default values
@@ -47,7 +48,7 @@ ABaseCharacter::ABaseCharacter()
 		GetMesh()->SetAnimInstanceClass(CHARACTER_ANIM.Class);
 	}
 
-	static ConstructorHelpers::FClassFinder < UGamePlayerUI > PLAYER_GAMEUI(TEXT("/Game/UI/BP_GamePlayerUI.BP_GamePlayerUI_C"));
+	static ConstructorHelpers::FClassFinder <UGamePlayerUI> PLAYER_GAMEUI(TEXT("/Game/UI/BP_GamePlayerUI.BP_GamePlayerUI_C"));
 
 	if (PLAYER_GAMEUI.Succeeded()) {
 		GameUIClass = PLAYER_GAMEUI.Class;
@@ -78,6 +79,22 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (GameUIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller) {
+			GameUIWidget = CreateWidget<UGamePlayerUI>(controller, GameUIClass);
+
+			GameUIWidget->Character = this;
+			GameUIWidget->Init();
+			GameUIWidget->AddToViewport();
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("NotCreatedGameUI"));
+		}
+
+	}
 }
 
 // Called every frame
@@ -220,6 +237,17 @@ void ABaseCharacter::InventoryOnOff()
 {
 	// 작성 필요
 	UE_LOG(LogTemp, Warning, TEXT("InvenOpen"));
+	if (GameUIWidget != nullptr) {
+		if (IsInventory()) {
+			SetInventory(false);
+			GameUIWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else {
+			SetInventory(true);
+			GameUIWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+
 }
 
 bool ABaseCharacter::CanSetWeapon()

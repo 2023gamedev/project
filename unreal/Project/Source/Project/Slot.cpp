@@ -3,3 +3,6 @@
 
 #include "Slot.h"
 
+void USlot::Init()
+{
+}

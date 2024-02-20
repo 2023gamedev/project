@@ -19,7 +19,7 @@ class PROJECT_API USlot : public UBaseUI
 
 
 public:
-
+	virtual void Init() override;
 
 
 

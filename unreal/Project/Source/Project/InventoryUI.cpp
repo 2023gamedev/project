@@ -8,3 +8,8 @@ UInventoryUI::UInventoryUI(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
 }
+
+void UInventoryUI::Init()
+{
+
+}

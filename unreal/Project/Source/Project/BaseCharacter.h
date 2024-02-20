@@ -107,6 +107,9 @@ public:
 	bool IsSpotLight() { return m_bOnSpotLight; }
 	void SetSpotLight(bool spotlight) { m_bOnSpotLight = spotlight; }
 
+	bool IsInventory() { return m_bInventoryOn; }
+	void SetInventory(bool inven) { m_bInventoryOn = inven; }
+
 	void SetCharacterName(FString charactername) { m_sCharacterName = charactername; };
 	FString GetCharacterName() { return m_sCharacterName; }
 
@@ -146,6 +149,9 @@ private:
 	// 손전등이 켜져있는지
 	UPROPERTY(EditAnywhere)
 	bool m_bOnSpotLight = true;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bInventoryOn = true;
 
 
 
