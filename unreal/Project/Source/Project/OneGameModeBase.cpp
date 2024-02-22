@@ -103,6 +103,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
 
             if (AIZombieController) {
                 SpawnedZombie->SpawnDefaultController();
+                AIZombieController->Possess(SpawnedZombie);
                 AIZombieController->SetStartLocationValue(zombiepos);
             }
             else {
@@ -119,6 +120,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
             
             if (AIShoutingZombieController) {
                 SpawnedZombie->SpawnDefaultController();
+                AIShoutingZombieController->Possess(SpawnedZombie);
                 AIShoutingZombieController->SetStartLocationValue(zombiepos);
             }
             else {
@@ -135,6 +137,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
 
             if (AIRunningZombieController) {
                 SpawnedZombie->SpawnDefaultController();
+                AIRunningZombieController->Possess(SpawnedZombie);
                 AIRunningZombieController->SetStartLocationValue(zombiepos);
             }
             else {

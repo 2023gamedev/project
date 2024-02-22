@@ -27,6 +27,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
+	virtual void PossessedBy(AController* NewController) override;
 
 	void SetZombieName(FString zombiename) { m_sZombieName = zombiename; };
 	FString GetZombieName() { return m_sZombieName; }

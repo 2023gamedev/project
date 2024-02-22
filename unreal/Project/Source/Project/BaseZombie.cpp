@@ -46,6 +46,11 @@ void ABaseZombie::PostInitializeComponents()
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::ShoutingMontageEnded);
 }
 
+void ABaseZombie::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+}
+
 void ABaseZombie::Attack()
 {
 	if (m_bIsAttacking) {

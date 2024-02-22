@@ -7,7 +7,7 @@
 
 ANormalZombie::ANormalZombie()
 {
-	AIControllerClass = AZombieAIController::StaticClass();
+	//AIControllerClass = AZombieAIController::StaticClass();
 	
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
@@ -42,6 +42,12 @@ void ANormalZombie::Tick(float DeltaTime)
 	if (nullptr != CharactorAnimInstance) {
 		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
 	}
+}
+
+void ANormalZombie::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
 }
 
 
