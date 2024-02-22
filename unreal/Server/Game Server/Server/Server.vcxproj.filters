@@ -30,7 +30,7 @@
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Protocol.pb.cc">
+    <ClCompile Include="GStruct.pb.cc">
       <Filter>소스 파일\ServerClass\Protocol</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,8 +47,13 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Protocol.pb.h">
+    <ClInclude Include="GStruct.pb.h">
       <Filter>소스 파일\ServerClass\Protocol</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Gstruct.proto">
+      <Filter>소스 파일\ServerClass\Protocol</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -31,8 +31,8 @@ public:
 	void IOCP_WorkerThread();
 	void IOCP_AcceptThread();
 
-	void IOCP_ProcessPacket(const unsigned int& id, const Packet buf[]);
-	void IOCP_SendPacket(unsigned int id, const Packet *buf);
+	void IOCP_ProcessPacket(const unsigned int& id, const char buf[], size_t bufSize);
+	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);
 
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);

@@ -151,7 +151,6 @@ void ADummyClientCharacter::CheckAndSendMovement()
 	{
 		// Protobuf를 사용하여 TestPacket 생성
 		Protocol::TestPacket packet;
-		packet.set_packet_size(sizeof(Protocol::TestPacket));
 		packet.set_type(1); // 원하는 유형 설정
 		packet.set_x(CurrentLocation.X);
 		packet.set_y(CurrentLocation.Y);
