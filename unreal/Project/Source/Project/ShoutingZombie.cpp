@@ -7,7 +7,7 @@
 
 AShoutingZombie::AShoutingZombie()
 {
-	AIControllerClass = AShoutingZombieAIController::StaticClass();
+	//AIControllerClass = AShoutingZombieAIController::StaticClass();
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
@@ -43,3 +43,8 @@ void AShoutingZombie::Tick(float DeltaTime)
 	}
 }
 
+
+void AShoutingZombie::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+}
