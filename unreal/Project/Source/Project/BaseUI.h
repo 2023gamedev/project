@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "BaseCharacter.h"
 #include "BaseUI.generated.h"
 
 /**
@@ -15,4 +16,11 @@ class PROJECT_API UBaseUI : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UBaseUI(const FObjectInitializer& ObjectInitializer);
+
+	virtual void Init();
+
+public:
+	ABaseCharacter* Character;
 };

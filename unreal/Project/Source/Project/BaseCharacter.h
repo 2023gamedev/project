@@ -12,6 +12,7 @@
 
 #include "BaseCharacter.generated.h"
 
+class UGamePlayerUI;
 class UPlayerSight;
 class ANormalWeaponActor;
 
@@ -56,6 +57,16 @@ public:
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* FlashLight;
 
+	// 아이템 데이터 테이블을 만들어야 하는지 고민중 C++에서 구조체를 만들어서 데이터 테이블을 만들지 고민중 ----
+
+	// 게임 전체 UI
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UGamePlayerUI> GameUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UGamePlayerUI* GameUIWidget;
+	
+
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);
 	void Run();
@@ -64,6 +75,7 @@ public:
 	void Turn(float NewAxisValue);
 	void GetItem();
 	void LightOnOff();
+	void InventoryOnOff();
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
@@ -94,6 +106,9 @@ public:
 
 	bool IsSpotLight() { return m_bOnSpotLight; }
 	void SetSpotLight(bool spotlight) { m_bOnSpotLight = spotlight; }
+
+	bool IsInventory() { return m_bInventoryOn; }
+	void SetInventory(bool inven) { m_bInventoryOn = inven; }
 
 	void SetCharacterName(FString charactername) { m_sCharacterName = charactername; };
 	FString GetCharacterName() { return m_sCharacterName; }
@@ -134,6 +149,9 @@ private:
 	// 손전등이 켜져있는지
 	UPROPERTY(EditAnywhere)
 	bool m_bOnSpotLight = true;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bInventoryOn = true;
 
 
 

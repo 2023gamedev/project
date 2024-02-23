@@ -3,3 +3,12 @@
 
 #include "BaseUI.h"
 
+UBaseUI::UBaseUI(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
+{
+
+}
+
+void UBaseUI::Init()
+{
+}

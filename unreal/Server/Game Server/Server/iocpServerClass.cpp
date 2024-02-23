@@ -100,33 +100,38 @@ void IOCP_CORE::IOCP_WorkerThread()
 			continue;
 		}
 		else if (OP_SERVER_RECV == my_overlap->operation) {
-			// 클라이언트로 부터 데이터를 받았을 경우
-			Packet *buf_ptr = clients[key]->recv_overlap.iocp_buffer;
+			// 클라이언트로부터 데이터를 받았을 경우
+			char* buf_ptr = reinterpret_cast<char*>(clients[key]->recv_overlap.iocp_buffer);
 			int remained = iosize;
+
+			// 남은 데이터를 처리하는 로직
 			while (0 < remained) {
-				if (0 == clients[key]->packet_size) { clients[key]->packet_size = buf_ptr[0]; }
+				// 버퍼에 데이터를 추가
+				int copySize = min(remained, MAX_PACKET_SIZE - clients[key]->previous_size);
+				memcpy(clients[key]->packet_buff + clients[key]->previous_size, buf_ptr, copySize);
+				clients[key]->previous_size += copySize;
+				buf_ptr += copySize;
+				remained -= copySize;
 
-				int required = clients[key]->packet_size - clients[key]->previous_size;
+				// 충분한 데이터가 버퍼에 존재하는지 확인하고 처리
+				if (clients[key]->previous_size >= sizeof(int)) {
+					int messageLength = *reinterpret_cast<int*>(clients[key]->packet_buff);  // 메시지 길이 읽음
+					if (clients[key]->previous_size >= messageLength + sizeof(int)) {  // 길이 정보 + 메시지 전체를 받았는지 확인
+						// 프로토콜 버퍼 메시지를 파싱
+						Protocol::TestPacket testPacket;
+						testPacket.ParseFromArray(clients[key]->packet_buff + sizeof(int), messageLength);
 
-				if (remained >= required) {
-					memcpy(clients[key]->packet_buff + clients[key]->previous_size, buf_ptr, required);
+						// 메시지 처리 로직 (testPacket 사용)
+						// 예: IOCP_ProcessPacket(key, testPacket);
 
-					// 아래 함수에서 패킷을 처리하게 된다.
-					IOCP_ProcessPacket(key, clients[key]->packet_buff);
-
-					buf_ptr += required;
-					remained -= required;
-
-					clients[key]->packet_size = 0;
-					clients[key]->previous_size = 0;
-				}
-				else {
-					memcpy(clients[key]->packet_buff + clients[key]->previous_size, buf_ptr, remained);
-					buf_ptr += remained;
-					clients[key]->previous_size += remained;
-					remained = 0;
+						// 버퍼에서 처리된 메시지 제거
+						memmove(clients[key]->packet_buff, clients[key]->packet_buff + sizeof(int) + messageLength, clients[key]->previous_size - (sizeof(int) + messageLength));
+						clients[key]->previous_size -= (sizeof(int) + messageLength);
+					}
 				}
 			}
+
+			// 다음 데이터를 받기 위한 WSARecv 호출
 			DWORD flags = 0;
 			int retval = WSARecv(clients[key]->s, &clients[key]->recv_overlap.wsabuf, 1, NULL, &flags, &clients[key]->recv_overlap.original_overlap, NULL);
 			if (SOCKET_ERROR == retval) {
@@ -134,9 +139,11 @@ void IOCP_CORE::IOCP_WorkerThread()
 				if (ERROR_IO_PENDING != err_no) {
 					IOCP_ErrorDisplay("WorkerThreadStart::WSARecv", err_no, __LINE__);
 				}
-				continue;
 			}
 		}
+
+
+
 		else if (OP_SERVER_SEND == my_overlap->operation) {
 			// 서버에서 메세지를 보냈으면, 메모리를 해제해 준다.
 			delete my_overlap;
@@ -226,14 +233,14 @@ void IOCP_CORE::IOCP_AcceptThread()
 	}
 }
 
-void IOCP_CORE::IOCP_SendPacket(unsigned int id, const Packet *packet)
+void IOCP_CORE::IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize)
 {
-	OVLP_EX *over = new OVLP_EX;
+	OVLP_EX* over = new OVLP_EX;
 	memset(over, 0, sizeof(OVLP_EX));
 	over->operation = OP_SERVER_SEND;
-	over->wsabuf.buf = reinterpret_cast<char *>(over->iocp_buffer);
-	over->wsabuf.len = packet[0];
-	memcpy(over->iocp_buffer, packet, packet[0]);
+	over->wsabuf.buf = reinterpret_cast<char*>(over->iocp_buffer);
+	over->wsabuf.len = static_cast<ULONG>(dataSize); // dataSize를 ULONG으로 변환하여 할당
+	memcpy(over->iocp_buffer, serializedData, dataSize); // 직렬화된 데이터를 iocp_buffer에 복사
 
 	DWORD flags{ 0 };
 	int retval = WSASend(clients[id]->s, &over->wsabuf, 1, NULL, flags, &over->original_overlap, NULL);
@@ -241,10 +248,10 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const Packet *packet)
 		int err_no = WSAGetLastError();
 		if (ERROR_IO_PENDING != err_no) {
 			IOCP_ErrorDisplay("SendPacket::WSASend", err_no, __LINE__);
-			while (true);
 		}
 	}
 }
+
 
 
 void IOCP_CORE::IOCP_ErrorDisplay(const char *msg, int err_no, int line)

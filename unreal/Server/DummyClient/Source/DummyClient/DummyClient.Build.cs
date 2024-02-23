@@ -9,12 +9,12 @@ public class DummyClient : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
-		
+
 		PrivateDependencyModuleNames.AddRange(new string[] { "ProtobufCore" });
 
 		PrivateIncludePaths.AddRange(new string[]
 		{
-            "DummyClient/Network/"
+			"DummyClient/Network/"
 		});
 	}
 }

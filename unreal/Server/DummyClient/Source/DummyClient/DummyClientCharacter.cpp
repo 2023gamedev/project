@@ -138,33 +138,32 @@ void ADummyClientCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// 움직임 감지 및 데이터 전송
-	//CheckAndSendMovement();
+	//움직임 감지 및 데이터 전송
+	CheckAndSendMovement();
 }
 
-//void ADummyClientCharacter::CheckAndSendMovement()
-//{
-//	FVector CurrentLocation = GetActorLocation();
-//
-//	// 이전 위치와 현재 위치 비교 (움직임 감지)
-//	if (PreviousLocation != CurrentLocation)
-//	{
-//		// Protobuf를 사용하여 TestPacket 생성
-//		Protocol::TestPacket packet;
-//		packet.set_packet_size(sizeof(Protocol::TestPacket));
-//		packet.set_type(1); // 원하는 유형 설정
-//		packet.set_x(CurrentLocation.X);
-//		packet.set_y(CurrentLocation.Y);
-//		packet.set_z(CurrentLocation.Z);
-//
-//		// 직렬화
-//		std::string serializedData;
-//		packet.SerializeToString(&serializedData);
-//
-//		// 직렬화된 데이터를 서버로 전송
-//		bool bIsSent = ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-//
-//		// 현재 위치를 이전 위치로 업데이트
-//		PreviousLocation = CurrentLocation;
-//	}
-//}
+void ADummyClientCharacter::CheckAndSendMovement()
+{
+	FVector CurrentLocation = GetActorLocation();
+
+	// 이전 위치와 현재 위치 비교 (움직임 감지)
+	if (PreviousLocation != CurrentLocation)
+	{
+		// Protobuf를 사용하여 TestPacket 생성
+		Protocol::TestPacket packet;
+		packet.set_type(1); // 원하는 유형 설정
+		packet.set_x(CurrentLocation.X);
+		packet.set_y(CurrentLocation.Y);
+		packet.set_z(CurrentLocation.Z);
+
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+
+		// 직렬화된 데이터를 서버로 전송
+		bool bIsSent = ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+		// 현재 위치를 이전 위치로 업데이트
+		PreviousLocation = CurrentLocation;
+	}
+}

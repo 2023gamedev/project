@@ -2,12 +2,14 @@
 
 #pragma once
 
-#include "ClientSocket.h"
-#include "GameSyncManager.h"
-
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+
+#include "ClientSocket.h"
+#include "GameSyncManager.h"
+#include "GStruct.pb.h"
+
 #include "DummyClientCharacter.generated.h"
 
 class USpringArmComponent;
@@ -64,7 +66,7 @@ public:
 private:
 	ClientSocket* ClientSocketPtr;
 
-	// 캐릭터의 이전 위치 저장 변수
+	//캐릭터의 이전 위치 저장 변수
 	FVector PreviousLocation;
 
 protected:

@@ -21,6 +21,7 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+	virtual void PossessedBy(AController* NewController) override;
 
 	//bool SetIsShouting(bool isshouting) { m_bIsShouting = isshouting; }
 	//bool GetIsShouting() { return m_bIsShouting; }
