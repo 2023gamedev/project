@@ -61,6 +61,10 @@ public:
     UPROPERTY(VisibleAnywhere, Category = "Zombies")
     int32 m_iRunningZombieNumber;
 
+    UPROPERTY(VisibleAnywhere, Category = "Zombies")
+    float m_fPatrolRange;
+
+
     enum class EZombie
     {
         NORMAL,
@@ -73,5 +77,5 @@ public:
     void SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos);
 
     // 좀비 생성 함수
-    void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos);
+    void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, bool ispatrol);
 };
