@@ -9,6 +9,7 @@
 
 const FName AZombieAIController::TargetKey(TEXT("Target"));
 const FName AZombieAIController::StartLocationKey(TEXT("StartLocation"));
+const FName AZombieAIController::PatrolLocationKey(TEXT("PatrolLocation"));
 
 AZombieAIController::AZombieAIController()
 {
@@ -72,6 +73,11 @@ void AZombieAIController::Tick(float DeltaTime)
 void AZombieAIController::SetStartLocationValue(FVector startlocation)
 {
 	GetBlackboardComponent()->SetValueAsVector(StartLocationKey, startlocation);
+}
+
+void AZombieAIController::SetPatrolLocationValue(FVector patrollocation)
+{
+	GetBlackboardComponent()->SetValueAsVector(PatrolLocationKey, patrollocation);
 }
 
 
