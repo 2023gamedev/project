@@ -82,9 +82,9 @@ void IOCP_CORE::IOCP_WorkerThread()
 	while (TRUE == (!ServerShutdown)) {
 		DWORD key;
 		DWORD iosize;
-		OVLP_EX *my_overlap;
+		OVLP_EX* my_overlap;
 
-		BOOL result = GetQueuedCompletionStatus(g_hIocp, &iosize, (PULONG_PTR)&key, reinterpret_cast<LPOVERLAPPED *>(&my_overlap), INFINITE);
+		BOOL result = GetQueuedCompletionStatus(g_hIocp, &iosize, (PULONG_PTR)&key, reinterpret_cast<LPOVERLAPPED*>(&my_overlap), INFINITE);
 
 		// 클라이언트가 접속을 끊었을 경우
 		if (FALSE == result || 0 == iosize) {
@@ -119,38 +119,39 @@ void IOCP_CORE::IOCP_WorkerThread()
 					if (clients[key]->previous_size >= messageLength + sizeof(int)) {  // 길이 정보 + 메시지 전체를 받았는지 확인
 						// 프로토콜 버퍼 메시지를 파싱
 						Protocol::TestPacket testPacket;
-						testPacket.ParseFromArray(clients[key]->packet_buff + sizeof(int), messageLength);
+						if (testPacket.ParseFromArray(clients[key]->packet_buff + sizeof(int), messageLength)) {
+							// 메시지 처리 로직
+							IOCP_CORE::IOCP_ProcessPacket(key, testPacket, messageLength);
 
-						// 메시지 처리 로직 (testPacket 사용)
-						// 예: IOCP_ProcessPacket(key, testPacket);
+							// 버퍼에서 처리된 메시지 제거
+							memmove(clients[key]->packet_buff, clients[key]->packet_buff + sizeof(int) + messageLength, clients[key]->previous_size - (sizeof(int) + messageLength));
+							clients[key]->previous_size -= (sizeof(int) + messageLength);
+						}
+						else {
+							printf("Failed to parse received packet.\n");
+						}
+					}
+				}
 
-						// 버퍼에서 처리된 메시지 제거
-						memmove(clients[key]->packet_buff, clients[key]->packet_buff + sizeof(int) + messageLength, clients[key]->previous_size - (sizeof(int) + messageLength));
-						clients[key]->previous_size -= (sizeof(int) + messageLength);
+
+				// 다음 데이터를 받기 위한 WSARecv 호출
+				DWORD flags = 0;
+				int retval = WSARecv(clients[key]->s, &clients[key]->recv_overlap.wsabuf, 1, NULL, &flags, &clients[key]->recv_overlap.original_overlap, NULL);
+				if (SOCKET_ERROR == retval) {
+					int err_no = WSAGetLastError();
+					if (ERROR_IO_PENDING != err_no) {
+						IOCP_ErrorDisplay("WorkerThreadStart::WSARecv", err_no, __LINE__);
+					}
+					else if (OP_SERVER_SEND == my_overlap->operation) {
+						// 서버에서 메세지를 보냈으면, 메모리를 해제해 준다.
+						delete my_overlap;
+					}
+					else {
+						cout << "Unknown IOCP event !!\n";
+						exit(-1);
 					}
 				}
 			}
-
-			// 다음 데이터를 받기 위한 WSARecv 호출
-			DWORD flags = 0;
-			int retval = WSARecv(clients[key]->s, &clients[key]->recv_overlap.wsabuf, 1, NULL, &flags, &clients[key]->recv_overlap.original_overlap, NULL);
-			if (SOCKET_ERROR == retval) {
-				int err_no = WSAGetLastError();
-				if (ERROR_IO_PENDING != err_no) {
-					IOCP_ErrorDisplay("WorkerThreadStart::WSARecv", err_no, __LINE__);
-				}
-			}
-		}
-
-
-
-		else if (OP_SERVER_SEND == my_overlap->operation) {
-			// 서버에서 메세지를 보냈으면, 메모리를 해제해 준다.
-			delete my_overlap;
-		}
-		else {
-			cout << "Unknown IOCP event !!\n";
-			exit(-1);
 		}
 	}
 }
