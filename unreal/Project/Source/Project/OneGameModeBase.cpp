@@ -28,6 +28,7 @@ AOneGameModeBase::AOneGameModeBase()
     m_iZombieNumber = 0;
     m_iShoutingZombieNumber = 0;
     m_iRunningZombieNumber = 0;
+    m_fPatrolRange = 500.f;
 
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
@@ -56,9 +57,9 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(2, "SquareWood", FVector(2375.f, 2074.f, 30.0626f));
 
     // BeginPlay에서 SpawnZombies 호출
-    SpawnZombies(0, EZombie::NORMAL, FVector(470.f,1320.f,88.f));
-    SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f,88.f));
-    SpawnZombies(2, EZombie::RUNNING, FVector(470.f, 920.f, 88.f));
+    SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f,88.f), true);
+    SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f,88.f), true);
+    SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 88.f), true);
 
 }
 
@@ -82,7 +83,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FString itemid, FVecto
     }
 }
 
-void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos)
+void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, bool ispatrol)
 {
 
     TSubclassOf<ABaseZombie> SelectedZombieClass = ZombieClasses[zombieindex];
@@ -105,6 +106,11 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 SpawnedZombie->SpawnDefaultController();
                 AIZombieController->Possess(SpawnedZombie);
                 AIZombieController->SetStartLocationValue(zombiepos);
+
+                if (ispatrol) {
+                    AIZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + m_fPatrolRange, zombiepos.Z));
+                }
+                
             }
             else {
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
@@ -122,6 +128,10 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 SpawnedZombie->SpawnDefaultController();
                 AIShoutingZombieController->Possess(SpawnedZombie);
                 AIShoutingZombieController->SetStartLocationValue(zombiepos);
+
+                if (ispatrol) {
+                    AIShoutingZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + m_fPatrolRange, zombiepos.Z));
+                }
             }
             else {
             UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
@@ -139,6 +149,11 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 SpawnedZombie->SpawnDefaultController();
                 AIRunningZombieController->Possess(SpawnedZombie);
                 AIRunningZombieController->SetStartLocationValue(zombiepos);
+
+
+                if (ispatrol) {
+                    AIRunningZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + m_fPatrolRange, zombiepos.Z));
+                }
             }
             else {
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));

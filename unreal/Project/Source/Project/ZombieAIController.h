@@ -18,6 +18,8 @@ public:
 
 	static const FName TargetKey;
 	static const FName StartLocationKey;
+	static const FName PatrolLocationKey;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -25,6 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void SetStartLocationValue(FVector startlocation);
+	void SetPatrolLocationValue(FVector patrollocation);
 
 private:
 	UPROPERTY(EditAnywhere)
