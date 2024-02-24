@@ -1,7 +1,7 @@
 #pragma once
 #include"Common.h"
 
-void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::TestPacket testPacket, size_t bufSize)
+void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::TestPacket testPacket)
 {
     // 패킷의 타입을 확인하여 처리
     switch (testPacket.type())

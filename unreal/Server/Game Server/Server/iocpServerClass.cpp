@@ -77,8 +77,7 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 	acceptThread.join();
 }
 
-void IOCP_CORE::IOCP_WorkerThread()
-{
+void IOCP_CORE::IOCP_WorkerThread() {
 	while (TRUE == (!ServerShutdown)) {
 		DWORD key;
 		DWORD iosize;
@@ -113,26 +112,15 @@ void IOCP_CORE::IOCP_WorkerThread()
 				buf_ptr += copySize;
 				remained -= copySize;
 
-				// 충분한 데이터가 버퍼에 존재하는지 확인하고 처리
-				if (clients[key]->previous_size >= sizeof(int)) {
-					int messageLength = *reinterpret_cast<int*>(clients[key]->packet_buff);  // 메시지 길이 읽음
-					if (clients[key]->previous_size >= messageLength + sizeof(int)) {  // 길이 정보 + 메시지 전체를 받았는지 확인
-						// 프로토콜 버퍼 메시지를 파싱
-						Protocol::TestPacket testPacket;
-						if (testPacket.ParseFromArray(clients[key]->packet_buff + sizeof(int), messageLength)) {
-							// 메시지 처리 로직
-							IOCP_CORE::IOCP_ProcessPacket(key, testPacket, messageLength);
+				// 프로토콜 버퍼 메시지를 파싱 시도
+				Protocol::TestPacket testPacket;
+				if (testPacket.ParseFromArray(clients[key]->packet_buff, clients[key]->previous_size)) {
+					// 메시지 처리 로직
+					IOCP_CORE::IOCP_ProcessPacket(key, testPacket);
 
-							// 버퍼에서 처리된 메시지 제거
-							memmove(clients[key]->packet_buff, clients[key]->packet_buff + sizeof(int) + messageLength, clients[key]->previous_size - (sizeof(int) + messageLength));
-							clients[key]->previous_size -= (sizeof(int) + messageLength);
-						}
-						else {
-							printf("Failed to parse received packet.\n");
-						}
-					}
+					// 버퍼 초기화
+					clients[key]->previous_size = 0;
 				}
-
 
 				// 다음 데이터를 받기 위한 WSARecv 호출
 				DWORD flags = 0;
@@ -155,6 +143,7 @@ void IOCP_CORE::IOCP_WorkerThread()
 		}
 	}
 }
+
 
 void IOCP_CORE::IOCP_AcceptThread()
 {

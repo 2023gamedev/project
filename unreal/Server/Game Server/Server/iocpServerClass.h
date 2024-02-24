@@ -31,7 +31,7 @@ public:
 	void IOCP_WorkerThread();
 	void IOCP_AcceptThread();
 
-	void IOCP_ProcessPacket(const unsigned int& id, Protocol::TestPacket testPacket, size_t bufSize);
+	void IOCP_ProcessPacket(const unsigned int& id, Protocol::TestPacket testPacket);
 	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);
 
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
