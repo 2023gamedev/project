@@ -2,6 +2,7 @@
 
 
 #include "ClientSocket.h"
+#include <vector>
 
 ClientSocket::ClientSocket()
 {
@@ -60,15 +61,35 @@ bool ClientSocket::Init()
 
 uint32 ClientSocket::Run()
 {
-	char RecvBuff[BUFSIZE];
+	std::vector<char> buffer; // 수신 데이터를 저장할 버퍼
+
 	while (1)
 	{
-		int RecvLen = recv(Socket, reinterpret_cast<char*>(RecvBuff), BUFSIZE, 0);
-		if (RecvLen > 0) // 데이터를 성공적으로 수신했을 경우
-		{
-			FString ReceivedData = FString(ANSI_TO_TCHAR(RecvBuff)).Left(RecvLen);
+		char tempBuff[BUFSIZE]; // 임시 수신 버퍼
+		int recvLen = recv(Socket, tempBuff, BUFSIZE, 0); // 데이터 수신
 
-			UE_LOG(LogNet, Display, TEXT("Received Data: %s"), *ReceivedData);
+		if (recvLen > 0) // 데이터를 성공적으로 수신했을 경우
+		{
+			// 수신된 데이터를 메인 버퍼에 추가
+			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
+
+			// Protobuf 메시지를 파싱 시도
+			Protocol::TestPacket testPacket;
+			if (testPacket.ParseFromArray(buffer.data(), buffer.size()))
+			{
+				// 메시지 처리 로직
+				FString ReceivedData = FString(ANSI_TO_TCHAR(buffer.data())).Left(recvLen);
+				UE_LOG(LogNet, Display, TEXT("Received Protobuf Message: %s"), *ReceivedData);
+
+				// 메시지 처리 후 버퍼 초기화
+				buffer.clear();
+			}
+			// 파싱 실패 시 더 많은 데이터를 기다림
+		}
+		else if (recvLen == 0) // 연결 종료
+		{
+			UE_LOG(LogNet, Warning, TEXT("Connection closed"));
+			return 0;
 		}
 		else // SOCKET_ERROR 발생했을 경우
 		{
@@ -79,6 +100,7 @@ uint32 ClientSocket::Run()
 
 	return 0;
 }
+
 
 void ClientSocket::Exit()
 {

@@ -136,7 +136,7 @@ void IOCP_CORE::IOCP_WorkerThread() {
 					}
 					else {
 						cout << "Unknown IOCP event !!\n";
-						exit(-1);
+						//exit(-1);
 					}
 				}
 			}
