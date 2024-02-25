@@ -28,8 +28,11 @@ AFireFighterCharacter::AFireFighterCharacter()
 
 void AFireFighterCharacter::BeginPlay()
 {
+	Super::BeginPlay();
 }
 
 void AFireFighterCharacter::Tick(float DeltaTime)
 {
+
+	Super::Tick(DeltaTime);
 }

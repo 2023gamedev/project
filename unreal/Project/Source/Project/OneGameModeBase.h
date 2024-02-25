@@ -10,9 +10,27 @@
  * 
  */
 
+UENUM(BlueprintType)
+enum class EZombie
+{
+    NORMAL,
+    SHOUTING,
+    RUNNING,
+};
 
+// 캐릭터 선택을 위한 enum 클래스
+UENUM(BlueprintType)
+enum class EPlayerCharacter
+{
+    EMPLOYEE,
+    FIREFIGHTER,
+    GIRL,
+    IDOL,
+};
 
+class ABaseCharacter;
 class ABaseZombie;
+class APlayerCharacterController;
 class AZombieAIController;
 class AShoutingZombieAIController;
 class ARunningZombieAIController;
@@ -37,6 +55,13 @@ public:
     UPROPERTY(VisibleAnywhere, Category = "ItemBox")
     int32 m_iItemBoxNumber;
 
+
+    // 캐릭터를 저장할 배열
+    UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter")
+    TArray<TSubclassOf<ABaseCharacter>> PlayerCharacterClasses;
+
+    UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter")
+    TArray<TSubclassOf<APlayerCharacterController>> PlayerCharacterControllerClasses;
 
     // 다양한 종류의 좀비 클래스를 저장할 배열
     UPROPERTY(EditDefaultsOnly, Category = "Zombies")
@@ -65,13 +90,14 @@ public:
     float m_fPatrolRange;
 
 
-    enum class EZombie
-    {
-        NORMAL,
-        SHOUTING,
-        RUNNING,
-    };
+    UPROPERTY(VisibleAnywhere, Category ="PlayerCharacter")
+    EPlayerCharacter CharacterIconIndex;
 
+
+    // 캐릭터 선택 함수
+    void ChoiceCharacter();
+
+    void SpawnCharacter(int32 characterindex, FVector characterpos);
 
     // 아이템 생성 함수
     void SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos);

@@ -28,8 +28,10 @@ AIdolCharacter::AIdolCharacter()
 
 void AIdolCharacter::BeginPlay()
 {
+	Super::BeginPlay();
 }
 
 void AIdolCharacter::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 }
