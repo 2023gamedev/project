@@ -28,8 +28,10 @@ AGirlCharacter::AGirlCharacter()
 
 void AGirlCharacter::BeginPlay()
 {
+	Super::BeginPlay();
 }
 
 void AGirlCharacter::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 }

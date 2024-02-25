@@ -28,8 +28,10 @@ AEmployeeCharacter::AEmployeeCharacter()
 
 void AEmployeeCharacter::BeginPlay()
 {
+	Super::BeginPlay();
 }
 
 void AEmployeeCharacter::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 }

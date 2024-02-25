@@ -3,6 +3,11 @@
 
 #include "OneGameModeBase.h"
 #include "BaseCharacter.h"
+#include "EmployeeCharacter.h"
+#include "FireFighterCharacter.h"
+#include "GirlCharacter.h"
+#include "IdolCharacter.h"
+#include "PlayerCharacterController.h"
 #include "BaseZombie.h"
 #include "NormalZombie.h"
 #include "ShoutingZombie.h"
@@ -18,17 +23,21 @@
 
 AOneGameModeBase::AOneGameModeBase()
 {
-	DefaultPawnClass = ABaseCharacter::StaticClass();
-	PlayerControllerClass = APlayerCharacterController::StaticClass();
+	//DefaultPawnClass = ABaseCharacter::StaticClass();
+	//PlayerControllerClass = APlayerCharacterController::StaticClass();
 
     
     // 변수들
-    m_iItemBoxNumber = 0;
+    m_iItemBoxNumber            = 0;
     
-    m_iZombieNumber = 0;
-    m_iShoutingZombieNumber = 0;
-    m_iRunningZombieNumber = 0;
-    m_fPatrolRange = 500.f;
+    m_iZombieNumber             = 0;
+    m_iShoutingZombieNumber     = 0;
+    m_iRunningZombieNumber      = 0;
+    m_fPatrolRange              = 500.f;
+
+    // 플레이어를 선택한 것을 받아서 넘겨주려고 할 예정
+    CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
+    ChoiceCharacter();
 
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
@@ -56,10 +65,12 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(1, "SquareWood", FVector(2275.f, 2074.f, 30.0626f));
     SpawnItemBoxes(2, "SquareWood", FVector(2375.f, 2074.f, 30.0626f));
 
+    // SpawnCharacter(0, FVector(2215.f, 2282.f, 90.212492f));
+
     // BeginPlay에서 SpawnZombies 호출
-    SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f,88.f), true);
-    SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f,88.f), true);
-    SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 88.f), true);
+    SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
+    SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f, 90.212492f), true);
+    SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 90.212492f), true);
 
 }
 
@@ -68,6 +79,43 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 	Super::PostLogin(NewPlayer);
 }
 
+
+void AOneGameModeBase::ChoiceCharacter()
+{
+        if (CharacterIconIndex == EPlayerCharacter::EMPLOYEE) {
+            DefaultPawnClass = AEmployeeCharacter::StaticClass();
+            //PlayerCharacterClasses.Add(AEmployeeCharacter::StaticClass());
+        }
+        else if (CharacterIconIndex == EPlayerCharacter::FIREFIGHTER) {
+            DefaultPawnClass = AFireFighterCharacter::StaticClass();
+            //PlayerCharacterClasses.Add(AFireFighterCharacter::StaticClass());
+        }
+        else if (CharacterIconIndex == EPlayerCharacter::GIRL) {
+            DefaultPawnClass = AGirlCharacter::StaticClass();
+           //PlayerCharacterClasses.Add(AGirlCharacter::StaticClass());
+        }
+        else if (CharacterIconIndex == EPlayerCharacter::IDOL) {
+            DefaultPawnClass = AIdolCharacter::StaticClass();
+            //PlayerCharacterClasses.Add(AIdolCharacter::StaticClass());
+        }
+
+        PlayerControllerClass = APlayerCharacterController::StaticClass();
+        //PlayerCharacterControllerClasses.Add(APlayerCharacterController::StaticClass());
+
+        // 수정 필요 밑에 주석 처리 내용으로 시도 시 플레이어 컨트롤러 SetInputcomponent부분에서 Localplayer부분에서 문제 발생 
+        // Localplayer부분을 주석처리하면 BRIsinAttackrange부분에서 문제 발생
+}
+
+void AOneGameModeBase::SpawnCharacter(int32 characterindex, FVector characterpos)
+{
+    //TSubclassOf<ABaseCharacter> SelectedCharacterClass = PlayerCharacterClasses[characterindex];
+    //ABaseCharacter* SpawnedCharacter = GetWorld()->SpawnActor<ABaseCharacter>(SelectedCharacterClass, characterpos, FRotator::ZeroRotator);
+    //TSubclassOf<APlayerCharacterController> SelectedPlayerConstrollerClass = PlayerCharacterControllerClasses[0]; // 0을 변수를 바꿀수도 있다.
+    //APlayerCharacterController* AICharacterController = GetWorld()->SpawnActor<APlayerCharacterController>(SelectedPlayerConstrollerClass, FVector::ZeroVector, FRotator::ZeroRotator);
+
+    //SpawnedCharacter->SpawnDefaultController();
+    //AICharacterController->Possess(SpawnedCharacter);
+}
 
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos) {
 
