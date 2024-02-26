@@ -83,16 +83,19 @@ void ABaseCharacter::BeginPlay()
 	if (GameUIClass != nullptr) {
 
 		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
-		if (controller) {
-			GameUIWidget = CreateWidget<UGamePlayerUI>(controller, GameUIClass);
+		if (controller == nullptr) {
+			return;
+		}
+		GameUIWidget = CreateWidget<UGamePlayerUI>(controller, GameUIClass);
 
-			GameUIWidget->Character = this;
-			GameUIWidget->Init();
-			GameUIWidget->AddToViewport();
+		if (!GameUIWidget) {
+			return;
 		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("NotCreatedGameUI"));
-		}
+
+		GameUIWidget->Character = this;
+		GameUIWidget->Init();
+		GameUIWidget->AddToViewport();
+
 
 	}
 }
@@ -120,25 +123,7 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 }
-//
-//// Called to bind functionality to input
-//void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-//{
-//	Super::SetupPlayerInputComponent(PlayerInputComponent);
-//
-//	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABaseCharacter::MoveForward);
-//	PlayerInputComponent->BindAxis(TEXT("MoveLeft"), this, &ABaseCharacter::MoveLeft);
-//
-//	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ABaseCharacter::Turn);
-//	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ABaseCharacter::LookUp);
-//
-//	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &ABaseCharacter::Run);
-//	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ABaseCharacter::Jump); // 수정 필요
-//
-//	PlayerInputComponent->BindAction(TEXT("GetItem"), IE_Pressed, this, &ABaseCharacter::GetItem);
-//	PlayerInputComponent->BindAction(TEXT("LightOnOff"), IE_Pressed, this, &ABaseCharacter::LightOnOff);
-//
-//}
+
 
 
 void ABaseCharacter::MoveForward(float NewAxisValue)
