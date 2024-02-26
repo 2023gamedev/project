@@ -21,13 +21,21 @@ class PROJECT_API USlot : public UBaseUI
 
 public:
 	void Init() override;
-	//void Updata() override;
+	void Update() override;
 	void SetType(ESlotType type);
 	void SetTexture(UTexture2D* tex);
 
 	void Refresh();
 
+
+	void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
+	bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+	FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
 public:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<USlot> DragVisualClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMax = 19, UIMin = -1))
 	int SlotIndex;

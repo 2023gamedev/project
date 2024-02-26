@@ -41,9 +41,18 @@ void UInventoryUI::Init()
 	}
 }
 
-//void UInventoryUI::Update()
-//{
-//	for (int i = 0; i < 20; ++i) {
-//		Slots[i]->Update();
-//	}
-//}
+void UInventoryUI::Update()
+{
+	for (int i = 0; i < 20; ++i) {
+		Slots[i]->Update();
+	}
+}
+
+void UInventoryUI::RefreshSlot(int slotindex)
+{
+	if (Character->Inventory[slotindex].Type == EItemType::ITEM_NONE) {
+		Character->Inventory[slotindex].Texture = DefTex;
+	}
+
+	Slots[slotindex]->Refresh();
+}

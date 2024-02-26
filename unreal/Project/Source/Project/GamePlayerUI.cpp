@@ -17,9 +17,14 @@ void UGamePlayerUI::Init()
 	}
 }
 
-//void UGamePlayerUI::Update()
-//{
-//	if (Inventory) {
-//		Inventory->Update();
-//	}
-//}
+void UGamePlayerUI::Update()
+{
+	if (Inventory) {
+		Inventory->Update();
+	}
+}
+
+void UGamePlayerUI::RefreshInventory(int slotindex)
+{
+	Inventory->RefreshSlot(slotindex);
+}
