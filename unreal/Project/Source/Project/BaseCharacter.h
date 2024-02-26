@@ -60,8 +60,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* FlashLight;
 
-	// 아이템 데이터 테이블을 만들어야 하는지 고민중 C++에서 구조체를 만들어서 데이터 테이블을 만들지 고민중 ----
-
 	// 게임 전체 UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TArray<FItemDataStructure> Inventory;

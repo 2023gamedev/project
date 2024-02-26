@@ -20,7 +20,7 @@ class PROJECT_API UInventoryUI : public UBaseUI
 public:
 	UInventoryUI(const FObjectInitializer& ObjectInitializer);
 
-	virtual void Init() override;
+	void Init() override;
 	//void Update() override;
 
 public:
@@ -28,7 +28,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* DefTex;
 
-	// ½½·Ô ÇÊ¿ä
-	UPROPERTY(EditAnywhere)
+private:
 	TArray<USlot*> Slots;
 };
