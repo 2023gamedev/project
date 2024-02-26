@@ -36,7 +36,6 @@ void USlot::Refresh()
 
 		if (data.Texture != nullptr) {
 			SetTexture(data.Texture);
-
 		}
 
 		ItemCount = data.Count;

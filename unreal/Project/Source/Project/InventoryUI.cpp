@@ -24,6 +24,7 @@ void UInventoryUI::Init()
 
 	Slots.Init(nullptr, 20);
 	TArray<UWidget*> widgets;
+	WidgetTree->GetAllWidgets(widgets);
 
 	USlot* slot = nullptr;
 

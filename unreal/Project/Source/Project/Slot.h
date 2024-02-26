@@ -20,7 +20,7 @@ class PROJECT_API USlot : public UBaseUI
 
 
 public:
-	virtual void Init() override;
+	void Init() override;
 	//void Updata() override;
 	void SetType(ESlotType type);
 	void SetTexture(UTexture2D* tex);
@@ -29,7 +29,7 @@ public:
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMax = 19, UIMin = -1))
 	int SlotIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
