@@ -6,6 +6,7 @@
 #include "BaseUI.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "ItemDataStructure.h"
 #include "Slot.generated.h"
 
 /**
@@ -20,20 +21,22 @@ class PROJECT_API USlot : public UBaseUI
 
 public:
 	virtual void Init() override;
+	//void Updata() override;
+	void SetType(ESlotType type);
+	void SetTexture(UTexture2D* tex);
 
-
+	void Refresh();
 
 public:
 
-	// 갯수, 번호, 텍스쳐 ...
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName ItemID;
+	int SlotIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ItemCount;
+	int ItemCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ItemIndex;
+	TEnumAsByte<ESlotType> Type;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UImage* Img;

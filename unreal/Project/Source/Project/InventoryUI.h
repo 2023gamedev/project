@@ -21,6 +21,7 @@ public:
 	UInventoryUI(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Init() override;
+	//void Update() override;
 
 public:
 	// 텍스쳐 필요

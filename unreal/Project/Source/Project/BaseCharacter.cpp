@@ -86,6 +86,10 @@ void ABaseCharacter::BeginPlay()
 		if (controller) {
 			GameUIWidget = CreateWidget<UGamePlayerUI>(controller, GameUIClass);
 
+			if (!GameUIWidget) {
+				return;
+			}
+
 			GameUIWidget->Character = this;
 			GameUIWidget->Init();
 			GameUIWidget->AddToViewport();
