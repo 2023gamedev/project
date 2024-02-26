@@ -19,7 +19,8 @@ UENUM(BlueprintType)
 enum class EItemType
 {
 	ITEM_NONE			UMETA(DisplayName = "None"),
-	ITEM_EQUIPMENT		UMETA(DisplayName = "EQUIPMENT")
+	ITEM_USEABLE		UMETA(DisplayName = "Useable"),
+	ITEM_EQUIPMENT		UMETA(DisplayName = "Equipment")
 };
 
 USTRUCT(Atomic, BlueprintType)

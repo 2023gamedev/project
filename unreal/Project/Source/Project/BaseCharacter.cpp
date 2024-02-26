@@ -124,6 +124,25 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
+bool ABaseCharacter::DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype)
+{
+	if (fromtype == ESlotType::SLOT_ITEM && (fromtype == totype))
+		return SwapInven(from, to);
+
+	return true;
+}
+
+bool ABaseCharacter::SwapInven(int from, int to)
+{
+	if (from < 0 || to < 0) return false;
+	
+	Inventory.Swap(from, to);
+	GameUIWidget->RefreshInventory(from);
+	GameUIWidget->RefreshInventory(to);
+
+	return true;
+}
+
 
 
 void ABaseCharacter::MoveForward(float NewAxisValue)
@@ -196,9 +215,23 @@ void ABaseCharacter::GetItem()
 		if (itemid == "SquareWood") {
 
 		}
-		
-		Itembox->OnChracterOvelapNew(this);
 
+		// 수정 필요 datatable 필요
+		for (int i = 0; i < 20; ++i) {
+			if (Inventory[i].Type == EItemType::ITEM_NONE) {
+				Inventory[i].Type = EItemType::ITEM_USEABLE;
+				Inventory[i].Name = *itemid;
+				Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL);
+				Inventory[i].Count = 10;
+				GameUIWidget->Update();
+				break;
+			}
+
+		}
+		
+		//수정 필요 Datatable 받아서 아이템에 넣어줘야 하나
+		//Itembox->OnChracterOvelapNew(this);
+		
 		PlayerSight->GetHitActor()->Destroy();
 	}
 

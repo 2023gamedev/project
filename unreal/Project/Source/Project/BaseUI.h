@@ -20,7 +20,7 @@ public:
 	UBaseUI(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Init() {};
-	//virtual void Update();
+	virtual void Update() {};
 
 public:
 	ABaseCharacter* Character;

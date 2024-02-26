@@ -38,9 +38,8 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* NewController) override;
 
-	//// Called to bind functionality to input
-	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	bool DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype);
+	bool SwapInven(int from, int to);
 
 	// 스프링 암
 	UPROPERTY(EditAnywhere)
