@@ -20,14 +20,16 @@ class PROJECT_API UInventoryUI : public UBaseUI
 public:
 	UInventoryUI(const FObjectInitializer& ObjectInitializer);
 
-	virtual void Init() override;
+	void Init() override;
+	void Update() override;
+	
+	void RefreshSlot(int slotindex);
 
 public:
 	// 텍스쳐 필요
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* DefTex;
 
-	// 슬롯 필요
-	UPROPERTY(EditAnywhere)
+private:
 	TArray<USlot*> Slots;
 };

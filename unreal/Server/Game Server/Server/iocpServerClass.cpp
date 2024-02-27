@@ -120,25 +120,26 @@ void IOCP_CORE::IOCP_WorkerThread() {
 					// 버퍼 초기화
 					clients[key]->previous_size = 0;
 				}
-
-				// 다음 데이터를 받기 위한 WSARecv 호출
-				DWORD flags = 0;
-				int retval = WSARecv(clients[key]->s, &clients[key]->recv_overlap.wsabuf, 1, NULL, &flags, &clients[key]->recv_overlap.original_overlap, NULL);
-				if (SOCKET_ERROR == retval) {
-					int err_no = WSAGetLastError();
-					if (ERROR_IO_PENDING != err_no) {
-						IOCP_ErrorDisplay("WorkerThreadStart::WSARecv", err_no, __LINE__);
-					}
-					else if (OP_SERVER_SEND == my_overlap->operation) {
-						// 서버에서 메세지를 보냈으면, 메모리를 해제해 준다.
-						delete my_overlap;
-					}
-					else {
-						cout << "Unknown IOCP event !!\n";
-						exit(-1);
-					}
-				}
 			}
+
+			// 다음 데이터를 받기 위한 WSARecv 호출
+			DWORD flags = 0;
+			int retval = WSARecv(clients[key]->s, &clients[key]->recv_overlap.wsabuf, 1, NULL, &flags, &clients[key]->recv_overlap.original_overlap, NULL);
+			if (SOCKET_ERROR == retval) {
+				int err_no = WSAGetLastError();
+				if (ERROR_IO_PENDING != err_no) {
+					IOCP_ErrorDisplay("WorkerThreadStart::WSARecv", err_no, __LINE__);
+				}
+				continue;
+			}
+		}
+		else if (OP_SERVER_SEND == my_overlap->operation) {
+			// 서버에서 메세지를 보냈으면, 메모리를 해제해 준다.
+			delete my_overlap;
+		}
+		else {
+			cout << "Unknown IOCP event !!\n";
+			exit(-1);
 		}
 	}
 }

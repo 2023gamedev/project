@@ -61,12 +61,12 @@ bool ClientSocket::Init()
 
 uint32 ClientSocket::Run()
 {
-	std::vector<char> buffer; // ¼ö½Å µ¥ÀÌÅÍ¸¦ ÀúÀåÇÒ ¹öÆÛ
+	std::vector<char> buffer; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	while (1)
 	{
-		char tempBuff[BUFSIZE]; // ÀÓ½Ã ¼ö½Å ¹öÆÛ
-		int recvLen = recv(Socket, tempBuff, BUFSIZE, 0); // µ¥ÀÌÅÍ ¼ö½Å
+		char tempBuff[BUFSIZE]; // ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		int recvLen = recv(Socket, tempBuff, BUFSIZE, 0); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 		if (!ReceivedPlayerId && recvLen > 0)
 		{
@@ -74,7 +74,7 @@ uint32 ClientSocket::Run()
 
 			UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId);
 
-			ReceivedPlayerId = true; // PlayerId ¼ö½Å ¿Ï·á
+			ReceivedPlayerId = true; // PlayerId ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½
 
 			buffer.clear();
 
@@ -83,10 +83,10 @@ uint32 ClientSocket::Run()
 
 		else if (recvLen > 0)
 		{
-			// ¼ö½ÅµÈ µ¥ÀÌÅÍ¸¦ ¸ÞÀÎ ¹öÆÛ¿¡ Ãß°¡
+			// ï¿½ï¿½ï¿½Åµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ß°ï¿½
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
 
-			// Protobuf ¸Þ½ÃÁö¸¦ ÆÄ½Ì ½Ãµµ
+			// Protobuf ï¿½Þ½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä½ï¿½ ï¿½Ãµï¿½
 			Protocol::TestPacket testPacket;
 			if (testPacket.ParseFromArray(buffer.data(), buffer.size()))
 			{
@@ -108,12 +108,12 @@ uint32 ClientSocket::Run()
 			}
 			
 		}
-		else if (recvLen == 0) // ¿¬°á Á¾·á
+		else if (recvLen == 0) // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		{
 			UE_LOG(LogNet, Warning, TEXT("Connection closed"));
 			return 0;
 		}
-		else // SOCKET_ERROR ¹ß»ýÇßÀ» °æ¿ì
+		else // SOCKET_ERROR ï¿½ß»ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		{
 			UE_LOG(LogNet, Warning, TEXT("Recv Error"));
 			return 0;
