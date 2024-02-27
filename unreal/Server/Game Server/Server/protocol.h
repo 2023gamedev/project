@@ -1,9 +1,9 @@
 #pragma once
 
 #define SERVERPORT 7777
-#define MAX_BUF_SIZE 1024
+#define MAX_BUF_SIZE 256
 #define MAX_USER 500
-#define MAX_PACKET_SIZE 1024
+#define MAX_PACKET_SIZE 256
 
 // packet[1] operation
 #define DISCONNECTED 0

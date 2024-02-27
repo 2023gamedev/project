@@ -9,3 +9,6 @@ UBaseUI::UBaseUI(const FObjectInitializer& ObjectInitializer)
 
 }
 
+void UBaseUI::Init()
+{
+}
