@@ -19,8 +19,7 @@ class PROJECT_API UBaseUI : public UUserWidget
 public:
 	UBaseUI(const FObjectInitializer& ObjectInitializer);
 
-	virtual void Init() {};
-	virtual void Update() {};
+	virtual void Init();
 
 public:
 	ABaseCharacter* Character;

@@ -10,9 +10,6 @@
 #include "Components/SpotLightComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-// 구조체
-#include "ItemDataStructure.h"
-
 #include "BaseCharacter.generated.h"
 
 class UGamePlayerUI;
@@ -38,8 +35,9 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* NewController) override;
 
-	bool DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype);
-	bool SwapInven(int from, int to);
+	//// Called to bind functionality to input
+	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 
 	// 스프링 암
 	UPROPERTY(EditAnywhere)
@@ -59,10 +57,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* FlashLight;
 
-	// 게임 전체 UI
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	TArray<FItemDataStructure> Inventory;
+	// 아이템 데이터 테이블을 만들어야 하는지 고민중 C++에서 구조체를 만들어서 데이터 테이블을 만들지 고민중 ----
 
+	// 게임 전체 UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UGamePlayerUI> GameUIClass;
 
