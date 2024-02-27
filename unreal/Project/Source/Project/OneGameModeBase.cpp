@@ -60,10 +60,10 @@ AOneGameModeBase::AOneGameModeBase()
 void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
-
-    SpawnItemBoxes(0, "SquareWood", FVector(2175.f, 2074.f, 30.0626f));
-    SpawnItemBoxes(1, "SquareWood", FVector(2275.f, 2074.f, 30.0626f));
-    SpawnItemBoxes(2, "SquareWood", FVector(2375.f, 2074.f, 30.0626f));
+                                                                                                                                                                    //테스트용으로 수 다르게 표시 나중에 변경
+    SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 1, FVector(2175.f, 2074.f, 30.0626f));
+    SpawnItemBoxes(1, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 10, FVector(2275.f, 2074.f, 30.0626f));
+    SpawnItemBoxes(2, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 20, FVector(2375.f, 2074.f, 30.0626f));
 
     // SpawnCharacter(0, FVector(2215.f, 2282.f, 90.212492f));
 
@@ -117,19 +117,35 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex, FVector characterpos
     //AICharacterController->Possess(SpawnedCharacter);
 }
 
-void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos) {
-
-    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
-
-    // 선택된 아이템 박스 클래스로 아이템 박스 생성
-    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
+void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos)
+{
+        TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
     
-    UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
-    if (SpawnedItemBox) {
-        UE_LOG(LogTemp, Error, TEXT("ITEM___222"));
-        SpawnedItemBox->SetInBoxItemId(itemid);
-    }
+        // 선택된 아이템 박스 클래스로 아이템 박스 생성
+        AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
+        
+        UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
+        if (SpawnedItemBox) {
+            SpawnedItemBox->ItemName = itemname;
+            SpawnedItemBox->ItemClassType = itemclass;
+            SpawnedItemBox->Texture = texture;
+            SpawnedItemBox->Count = count;
+        }
 }
+
+//void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos) {
+//
+//    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
+//
+//    // 선택된 아이템 박스 클래스로 아이템 박스 생성
+//    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
+//    
+//    UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
+//    if (SpawnedItemBox) {
+//        UE_LOG(LogTemp, Error, TEXT("ITEM___222"));
+//        //SpawnedItemBox->SetInBoxItemId(itemid);
+//    }
+//}
 
 void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, bool ispatrol)
 {

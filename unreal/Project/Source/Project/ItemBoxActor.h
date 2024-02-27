@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "ItemDataStructure.h"
 #include "ItemBoxActor.generated.h"
 
 class ANormalWeaponActor;
@@ -30,8 +31,8 @@ public:
 
 	void OnChracterOvelapNew(ABaseCharacter* character);  // 이름 수정 필요
 
-	void SetInBoxItemId(FString itemid) { m_sItemID = itemid; };
-	FString GetInBoxItemId() { return m_sItemID; }
+	//void SetInBoxItemId(FString itemid) { m_sItemID = itemid; };
+	//FString GetInBoxItemId() { return m_sItemID; }
 
 public:
 	UPROPERTY(EditAnywhere, Category = Box)
@@ -40,14 +41,29 @@ public:
 	UPROPERTY(EditAnywhere, Category = Box)
 	UStaticMeshComponent* Box;
 
-	// 수정 필요	
-	UPROPERTY(EditAnywhere, Category = Box)
-	TSubclassOf<ANormalWeaponActor> NormalWeaponItemClass;
+	//// 수정 필요	
+	//UPROPERTY(EditAnywhere, Category = Box)
+	//TSubclassOf<ANormalWeaponActor> NormalWeaponItemClass;
 
 
-	UPROPERTY(EditAnywhere, Category = Item)
-	FString m_sItemID;
+	//UPROPERTY(EditAnywhere, Category = Item)
+	//FString m_sItemID;
 
+	// 아이템 이름
+	UPROPERTY(EditAnywhere, Category = item)
+	FName ItemName;
+
+	// 아이템 종류(클래스가 뭔지)
+	UPROPERTY(EditAnywhere, Category = item)
+	TEnumAsByte<EItemClass> ItemClassType;
+
+	// 텍스쳐
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Texture;
+
+	// 들고있는 갯수
+	UPROPERTY(EditAnywhere, Category = item)
+	int Count;
 
 
 };

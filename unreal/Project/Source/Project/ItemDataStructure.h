@@ -23,21 +23,27 @@ enum class EItemType
 	ITEM_EQUIPMENT		UMETA(DisplayName = "Equipment")
 };
 
+UENUM(BlueprintType)
+enum class EItemClass
+{
+	NORMALWEAPON			UMETA(DisplayName = "NormalWeapon"),
+	THROWINGWEAPON			UMETA(DisplayName = "ThrowingWeapon"),
+	HEALINGITEM				UMETA(DisplayName = "HealingItem"),
+	BLEEDINGHEALINGITEM		UMETA(DisplayName = "BleedingHealingItem"),
+};
+
 USTRUCT(Atomic, BlueprintType)
 struct FItemDataStructure
 {
-
+	// 슬롯에 사용되는 구조체
 	GENERATED_USTRUCT_BODY()
-
-public:
-
-
-	// virtual void Clear();
-	// virtual void Use(APlyaerCharacter* player) {};
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) // 무슨 아이템인진 힐링인지 노말무기인지, 투척무기인지
+	TEnumAsByte<EItemClass> ItemClassType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* Texture;

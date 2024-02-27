@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "ItemDataStructure.h"
 #include "OneGameModeBase.generated.h"
 
 /**
@@ -100,7 +101,7 @@ public:
     void SpawnCharacter(int32 characterindex, FVector characterpos);
 
     // 아이템 생성 함수
-    void SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos);
+    void SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos);
 
     // 좀비 생성 함수
     void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, bool ispatrol);
