@@ -177,19 +177,19 @@ class TestPacket final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPacketSizeFieldNumber = 1,
+    kPlayerIdFieldNumber = 1,
     kTypeFieldNumber = 2,
     kXFieldNumber = 3,
     kYFieldNumber = 4,
     kZFieldNumber = 5,
   };
-  // uint32 packet_size = 1;
-  void clear_packet_size();
-  uint32_t packet_size() const;
-  void set_packet_size(uint32_t value);
+  // uint32 PlayerId = 1;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
   private:
-  uint32_t _internal_packet_size() const;
-  void _internal_set_packet_size(uint32_t value);
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
   public:
 
   // uint32 type = 2;
@@ -236,7 +236,7 @@ class TestPacket final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    uint32_t packet_size_;
+    uint32_t playerid_;
     uint32_t type_;
     float x_;
     float y_;
@@ -257,24 +257,24 @@ class TestPacket final :
 #endif  // __GNUC__
 // TestPacket
 
-// uint32 packet_size = 1;
-inline void TestPacket::clear_packet_size() {
-  _impl_.packet_size_ = 0u;
+// uint32 PlayerId = 1;
+inline void TestPacket::clear_playerid() {
+  _impl_.playerid_ = 0u;
 }
-inline uint32_t TestPacket::_internal_packet_size() const {
-  return _impl_.packet_size_;
+inline uint32_t TestPacket::_internal_playerid() const {
+  return _impl_.playerid_;
 }
-inline uint32_t TestPacket::packet_size() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.packet_size)
-  return _internal_packet_size();
+inline uint32_t TestPacket::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.TestPacket.PlayerId)
+  return _internal_playerid();
 }
-inline void TestPacket::_internal_set_packet_size(uint32_t value) {
+inline void TestPacket::_internal_set_playerid(uint32_t value) {
   
-  _impl_.packet_size_ = value;
+  _impl_.playerid_ = value;
 }
-inline void TestPacket::set_packet_size(uint32_t value) {
-  _internal_set_packet_size(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.packet_size)
+inline void TestPacket::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.TestPacket.PlayerId)
 }
 
 // uint32 type = 2;

@@ -117,7 +117,6 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				if (testPacket.ParseFromArray(clients[key]->packet_buff, clients[key]->previous_size)) {
 					// 메시지 처리 로직
 					IOCP_CORE::IOCP_ProcessPacket(key, testPacket);
-
 					// 버퍼 초기화
 					clients[key]->previous_size = 0;
 				}
@@ -192,6 +191,20 @@ void IOCP_CORE::IOCP_AcceptThread()
 		playerIndex += 1;
 		printf("[ No. %3u ] Client IP = %s, Port = %d is Connected\n", playerIndex, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
+		WSABUF wsabuf;
+		wsabuf.buf = reinterpret_cast<char*>(&playerIndex);
+		wsabuf.len = sizeof(playerIndex);
+
+		DWORD sent;
+		OVERLAPPED sendOverlap;
+		ZeroMemory(&sendOverlap, sizeof(sendOverlap));
+
+		retval = WSASend(client_sock, &wsabuf, 1, &sent, 0, &sendOverlap, NULL);
+		if (retval == SOCKET_ERROR) {
+			int err_no = WSAGetLastError();
+			IOCP_ErrorQuit(L"id send()", err_no);
+		}
+
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(client_sock), g_hIocp, playerIndex, 0);
 
 		PLAYER_INFO *user = new PLAYER_INFO;
@@ -242,8 +255,6 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const char* serializedData, siz
 		}
 	}
 }
-
-
 
 void IOCP_CORE::IOCP_ErrorDisplay(const char *msg, int err_no, int line)
 {

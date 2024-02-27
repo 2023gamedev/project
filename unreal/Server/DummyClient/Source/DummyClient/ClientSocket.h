@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GStruct.pb.h"
+#include "DummyClientGameMode.h"
+
 
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include "Windows/prewindowsapi.h"
@@ -27,15 +29,24 @@ public:
 	~ClientSocket() override;
 
 	SOCKET Socket;
+	uint32 MyPlayerId = 0;
+	uint32 PlayerId = 0;
 
 	virtual bool Init() override;
 	virtual uint32 Run() override;
 	virtual void Exit() override;
 	bool Send(const int SendSize, void* SendData);
+	void SetGameModeRef(ADummyClientGameMode* Ref) { GameModeRef = Ref; }
+
+	uint32 GetMyPlayerId() const;
+
 
 
 private:
 
 	FRunnableThread* Thread;
+	bool ReceivedPlayerId = false;
+
+	ADummyClientGameMode* GameModeRef;
 
 };

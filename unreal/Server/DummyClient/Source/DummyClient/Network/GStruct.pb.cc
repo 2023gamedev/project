@@ -23,7 +23,7 @@ namespace _pbi = _pb::internal;
 namespace Protocol {
 PROTOBUF_CONSTEXPR TestPacket::TestPacket(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.packet_size_)*/0u
+    /*decltype(_impl_.playerid_)*/0u
   , /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.x_)*/0
   , /*decltype(_impl_.y_)*/0
@@ -50,7 +50,7 @@ const uint32_t TableStruct_GStruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::TestPacket, _impl_.packet_size_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::TestPacket, _impl_.playerid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::TestPacket, _impl_.type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::TestPacket, _impl_.x_),
   PROTOBUF_FIELD_OFFSET(::Protocol::TestPacket, _impl_.y_),
@@ -65,13 +65,13 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_GStruct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\rGStruct.proto\022\010Protocol\"P\n\nTestPacket\022"
-  "\023\n\013packet_size\030\001 \001(\r\022\014\n\004type\030\002 \001(\r\022\t\n\001x\030"
-  "\003 \001(\002\022\t\n\001y\030\004 \001(\002\022\t\n\001z\030\005 \001(\002b\006proto3"
+  "\n\rGStruct.proto\022\010Protocol\"M\n\nTestPacket\022"
+  "\020\n\010PlayerId\030\001 \001(\r\022\014\n\004type\030\002 \001(\r\022\t\n\001x\030\003 \001"
+  "(\002\022\t\n\001y\030\004 \001(\002\022\t\n\001z\030\005 \001(\002b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GStruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GStruct_2eproto = {
-    false, false, 115, descriptor_table_protodef_GStruct_2eproto,
+    false, false, 112, descriptor_table_protodef_GStruct_2eproto,
     "GStruct.proto",
     &descriptor_table_GStruct_2eproto_once, nullptr, 0, 1,
     schemas, file_default_instances, TableStruct_GStruct_2eproto::offsets,
@@ -102,7 +102,7 @@ TestPacket::TestPacket(const TestPacket& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   TestPacket* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.packet_size_){}
+      decltype(_impl_.playerid_){}
     , decltype(_impl_.type_){}
     , decltype(_impl_.x_){}
     , decltype(_impl_.y_){}
@@ -110,9 +110,9 @@ TestPacket::TestPacket(const TestPacket& from)
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&_impl_.packet_size_, &from._impl_.packet_size_,
+  ::memcpy(&_impl_.playerid_, &from._impl_.playerid_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.z_) -
-    reinterpret_cast<char*>(&_impl_.packet_size_)) + sizeof(_impl_.z_));
+    reinterpret_cast<char*>(&_impl_.playerid_)) + sizeof(_impl_.z_));
   // @@protoc_insertion_point(copy_constructor:Protocol.TestPacket)
 }
 
@@ -121,7 +121,7 @@ inline void TestPacket::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.packet_size_){0u}
+      decltype(_impl_.playerid_){0u}
     , decltype(_impl_.type_){0u}
     , decltype(_impl_.x_){0}
     , decltype(_impl_.y_){0}
@@ -153,9 +153,9 @@ void TestPacket::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&_impl_.packet_size_, 0, static_cast<size_t>(
+  ::memset(&_impl_.playerid_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.z_) -
-      reinterpret_cast<char*>(&_impl_.packet_size_)) + sizeof(_impl_.z_));
+      reinterpret_cast<char*>(&_impl_.playerid_)) + sizeof(_impl_.z_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -165,10 +165,10 @@ const char* TestPacket::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint32 packet_size = 1;
+      // uint32 PlayerId = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _impl_.packet_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.playerid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -234,10 +234,10 @@ uint8_t* TestPacket::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 packet_size = 1;
-  if (this->_internal_packet_size() != 0) {
+  // uint32 PlayerId = 1;
+  if (this->_internal_playerid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_packet_size(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_playerid(), target);
   }
 
   // uint32 type = 2;
@@ -292,9 +292,9 @@ size_t TestPacket::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // uint32 packet_size = 1;
-  if (this->_internal_packet_size() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_size());
+  // uint32 PlayerId = 1;
+  if (this->_internal_playerid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_playerid());
   }
 
   // uint32 type = 2;
@@ -347,8 +347,8 @@ void TestPacket::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_packet_size() != 0) {
-    _this->_internal_set_packet_size(from._internal_packet_size());
+  if (from._internal_playerid() != 0) {
+    _this->_internal_set_playerid(from._internal_playerid());
   }
   if (from._internal_type() != 0) {
     _this->_internal_set_type(from._internal_type());
@@ -394,9 +394,9 @@ void TestPacket::InternalSwap(TestPacket* other) {
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(TestPacket, _impl_.z_)
       + sizeof(TestPacket::_impl_.z_)
-      - PROTOBUF_FIELD_OFFSET(TestPacket, _impl_.packet_size_)>(
-          reinterpret_cast<char*>(&_impl_.packet_size_),
-          reinterpret_cast<char*>(&other->_impl_.packet_size_));
+      - PROTOBUF_FIELD_OFFSET(TestPacket, _impl_.playerid_)>(
+          reinterpret_cast<char*>(&_impl_.playerid_),
+          reinterpret_cast<char*>(&other->_impl_.playerid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata TestPacket::GetMetadata() const {

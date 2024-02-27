@@ -68,7 +68,20 @@ uint32 ClientSocket::Run()
 		char tempBuff[BUFSIZE]; // 임시 수신 버퍼
 		int recvLen = recv(Socket, tempBuff, BUFSIZE, 0); // 데이터 수신
 
-		if (recvLen > 0) // 데이터를 성공적으로 수신했을 경우
+		if (!ReceivedPlayerId && recvLen > 0)
+		{
+			memcpy(&MyPlayerId, tempBuff, sizeof(MyPlayerId));
+
+			UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId);
+
+			ReceivedPlayerId = true; // PlayerId 수신 완료
+
+			buffer.clear();
+
+			continue;
+		}
+
+		else if (recvLen > 0)
 		{
 			// 수신된 데이터를 메인 버퍼에 추가
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
@@ -77,14 +90,23 @@ uint32 ClientSocket::Run()
 			Protocol::TestPacket testPacket;
 			if (testPacket.ParseFromArray(buffer.data(), buffer.size()))
 			{
-				// 메시지 처리 로직
-				FString ReceivedData = FString(ANSI_TO_TCHAR(buffer.data())).Left(recvLen);
-				UE_LOG(LogNet, Display, TEXT("Received Protobuf Message: %s"), *ReceivedData);
+				UE_LOG(LogNet, Display, TEXT("Received: PlayerId=%d, Location=(X=%f, Y=%f, Z=%f)"),
+					testPacket.playerid(),
+					testPacket.x(),
+					testPacket.y(),
+					testPacket.z());
 
-				// 메시지 처리 후 버퍼 초기화
+				PlayerId = testPacket.playerid();
+				FVector NewLocation(testPacket.x(), testPacket.y(), testPacket.z());
+
+				if (GameModeRef && PlayerId != MyPlayerId)
+				{
+					GameModeRef->UpdateOtherPlayer(PlayerId, NewLocation);
+				}
+
 				buffer.clear();
 			}
-			// 파싱 실패 시 더 많은 데이터를 기다림
+			
 		}
 		else if (recvLen == 0) // 연결 종료
 		{
@@ -117,7 +139,13 @@ bool ClientSocket::Send(const int SendSize, void* SendData)
 	memcpy(buff, SendData, SendSize);
 
 	int nSendLen = send(Socket, buff, SendSize, 0);
-	UE_LOG(LogNet, Display, TEXT("Send Packet SIZE %d"), nSendLen);
 
 	return true;
 }
+
+uint32 ClientSocket::GetMyPlayerId() const
+{
+	return MyPlayerId;
+}
+
+

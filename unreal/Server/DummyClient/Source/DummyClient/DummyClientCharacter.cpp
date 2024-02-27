@@ -13,6 +13,7 @@
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
+
 //////////////////////////////////////////////////////////////////////////
 // ADummyClientCharacter
 
@@ -149,8 +150,11 @@ void ADummyClientCharacter::CheckAndSendMovement()
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
 	if (PreviousLocation != CurrentLocation)
 	{
+		uint32 MyPlayerId = ClientSocketPtr->GetMyPlayerId();
+
 		// Protobuf를 사용하여 TestPacket 생성
 		Protocol::TestPacket packet;
+		packet.set_playerid(MyPlayerId);
 		packet.set_type(1); // 원하는 유형 설정
 		packet.set_x(CurrentLocation.X);
 		packet.set_y(CurrentLocation.Y);
