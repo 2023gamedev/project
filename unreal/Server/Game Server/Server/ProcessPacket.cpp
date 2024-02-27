@@ -16,6 +16,7 @@ void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::TestPacket 
         // 서버로 받은 패킷을 그대로 돌려줌
         string serializedData;
         testPacket.SerializeToString(&serializedData);
+        printf("%s", serializedData);
         IOCP_SendPacket(id, serializedData.data(), serializedData.size());
     }
     break;

@@ -2,6 +2,7 @@
 
 
 #include "GamePlayerUI.h"
+#include "InventoryUI.h"
 
 UGamePlayerUI::UGamePlayerUI(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -10,5 +11,20 @@ UGamePlayerUI::UGamePlayerUI(const FObjectInitializer& ObjectInitializer)
 
 void UGamePlayerUI::Init()
 {
+	if (Inventory) {
+		Inventory->Character = this->Character;
+		Inventory->Init();
+	}
+}
 
+void UGamePlayerUI::Update()
+{
+	if (Inventory) {
+		Inventory->Update();
+	}
+}
+
+void UGamePlayerUI::RefreshInventory(int slotindex)
+{
+	Inventory->RefreshSlot(slotindex);
 }

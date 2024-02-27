@@ -103,7 +103,7 @@ void AOneGameModeBase::ChoiceCharacter()
         //PlayerCharacterControllerClasses.Add(APlayerCharacterController::StaticClass());
 
         // 수정 필요 밑에 주석 처리 내용으로 시도 시 플레이어 컨트롤러 SetInputcomponent부분에서 Localplayer부분에서 문제 발생 
-        // Localplayer부분을 주석처리하면 BRIsinAttackrange부분에서 문제 발생
+        // Localplayer부분을 주석처리하면 BTIsinAttackrange부분에서 문제 발생
 }
 
 void AOneGameModeBase::SpawnCharacter(int32 characterindex, FVector characterpos)
