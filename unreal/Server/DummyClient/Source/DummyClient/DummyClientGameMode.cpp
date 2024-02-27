@@ -18,9 +18,8 @@ ADummyClientGameMode::ADummyClientGameMode()
 
 void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocation)
 {
-    AOtherCharacter* ExistingCharacter = nullptr;
-
     UWorld* World = GetWorld();
+
     if (!World)
     {
         UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
@@ -28,33 +27,25 @@ void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocatio
     }
 
     // 캐릭터 검색
-    for (TActorIterator<AOtherCharacter> It(GetWorld()); It; ++It)
+    for (TActorIterator<AOtherCharacter> It(World); It; ++It)
     {
         AOtherCharacter* OtherPlayer = *It;
-
         if (OtherPlayer && OtherPlayer->GetPlayerId() == PlayerId)
         {
+            // 기존 캐릭터 위치 업데이트
             OtherPlayer->SetActorLocation(NewLocation);
-            break;
+            return; // 위치를 업데이트 했으므로 함수 종료
         }
     }
 
-    // 캐릭터가 이미 있으면 위치 업데이트
-    if (ExistingCharacter)
-    {
-        ExistingCharacter->SetActorLocation(NewLocation);
-    }
-    else
-    {
-        // 새 캐릭터 스폰
-        FActorSpawnParameters SpawnParams;
-        SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-        AOtherCharacter* NewCharacter = GetWorld()->SpawnActor<AOtherCharacter>(AOtherCharacter::StaticClass(), NewLocation, FRotator::ZeroRotator, SpawnParams);
+    // 기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+    AOtherCharacter* NewCharacter = World->SpawnActor<AOtherCharacter>(AOtherCharacter::StaticClass(), NewLocation, FRotator::ZeroRotator, SpawnParams);
 
-        if (NewCharacter)
-        {
-            // 새 캐릭터에 PlayerId 설정
-            NewCharacter->SetPlayerId(PlayerId);
-        }
+    if (NewCharacter)
+    {
+        // 새 캐릭터에 PlayerId 설정
+        NewCharacter->SetPlayerId(PlayerId);
     }
 }
