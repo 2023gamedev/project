@@ -208,29 +208,29 @@ void ABaseCharacter::GetItem()
 {
 	if (PlayerSight->GetIsHit()) {
 		
-		auto Itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
-		
-		FString itemid = Itembox->GetInBoxItemId();
+		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
 
-		if (itemid == "SquareWood") {
+		//FString itemid = Itembox->GetInBoxItemId();
 
-		}
+		//if (itemid == "SquareWood") {
 
-		// 수정 필요 datatable 필요
+		//}
+
+		// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 		for (int i = 0; i < 20; ++i) {
 			if (Inventory[i].Type == EItemType::ITEM_NONE) {
 				Inventory[i].Type = EItemType::ITEM_USEABLE;
-				Inventory[i].Name = *itemid;
-				Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL);
-				Inventory[i].Count = 10;
+				Inventory[i].Name = itembox->ItemName;
+				Inventory[i].ItemClassType = itembox->ItemClassType;
+				Inventory[i].Texture = itembox->Texture;
+				Inventory[i].Count = itembox->Count;
 				GameUIWidget->Update();
 				break;
 			}
-
 		}
 		
 		//수정 필요 Datatable 받아서 아이템에 넣어줘야 하나
-		//Itembox->OnChracterOvelapNew(this);
+		//itembox->OnChracterOvelapNew(this);
 		
 		PlayerSight->GetHitActor()->Destroy();
 	}
