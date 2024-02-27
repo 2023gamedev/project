@@ -55,7 +55,7 @@ void AItemBoxActor::OnChracterOvelapNew(ABaseCharacter* character)
 {
 	auto BaseCharacter = Cast<ABaseCharacter>(character);
 
-	UE_LOG(LogTemp, Error, TEXT("AItemBoxActor::OnCharacterOverlap()")); // 수정 필요 
+	UE_LOG(LogTemp, Error, TEXT("AItemBoxActor::OnCharacterOverlap()"));
 	if (BaseCharacter != nullptr && NormalWeaponItemClass != nullptr && !(BaseCharacter->IsHandIn())) {
 		auto NewWeapon = GetWorld()->SpawnActor<ANormalWeaponActor>(NormalWeaponItemClass, FVector::ZeroVector, FRotator::ZeroRotator);
 		BaseCharacter->SetWeapon(NewWeapon);
