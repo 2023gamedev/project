@@ -73,7 +73,7 @@ public:
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);
 	void Run();
-	void Jump();
+	//void Jump();
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
 	void GetItem();

@@ -73,6 +73,7 @@ ABaseCharacter::ABaseCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.f, 0.f);
+	GetCharacterMovement()->JumpZVelocity = 500.f;
 }
 
 // Called when the game starts or when spawned
@@ -186,10 +187,10 @@ void ABaseCharacter::Run()
 	UE_LOG(LogTemp, Warning, TEXT("Run"));
 }
 
-void ABaseCharacter::Jump()
-{
-
-}
+//void ABaseCharacter::Jump()
+//{
+//
+//}
 
 void ABaseCharacter::LookUp(float NewAxisValue)
 {
