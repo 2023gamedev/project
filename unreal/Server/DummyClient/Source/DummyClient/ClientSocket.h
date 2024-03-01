@@ -18,6 +18,8 @@
 
 constexpr int BUFSIZE = 1024;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMyDelegate, uint32, PlayerId, FVector, NewLocation);
+
 /**
  *
  */
@@ -32,11 +34,12 @@ public:
 	uint32 MyPlayerId = 0;
 	uint32 PlayerId = 0;
 
+	FMyDelegate RecvData;
+
 	virtual bool Init() override;
 	virtual uint32 Run() override;
 	virtual void Exit() override;
 	bool Send(const int SendSize, void* SendData);
-	void SetGameModeRef(ADummyClientGameMode* Ref) { GameModeRef = Ref; }
 
 	uint32 GetMyPlayerId() const;
 
@@ -46,7 +49,4 @@ private:
 
 	FRunnableThread* Thread;
 	bool ReceivedPlayerId = false;
-
-	ADummyClientGameMode* GameModeRef;
-
 };

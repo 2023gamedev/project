@@ -4,6 +4,8 @@
 #include "ClientSocket.h"
 #include <vector>
 
+
+
 ClientSocket::ClientSocket()
 {
 	Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
@@ -99,9 +101,10 @@ uint32 ClientSocket::Run()
 				PlayerId = testPacket.playerid();
 				FVector NewLocation(testPacket.x(), testPacket.y(), testPacket.z());
 
-				if (GameModeRef && PlayerId != MyPlayerId)
+				if (testPacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					GameModeRef->UpdateOtherPlayer(PlayerId, NewLocation);
+					FVector NewLocation(testPacket.x(), testPacket.y(), testPacket.z());
+					RecvData.Broadcast(testPacket.playerid(), NewLocation);
 				}
 
 				buffer.clear();
