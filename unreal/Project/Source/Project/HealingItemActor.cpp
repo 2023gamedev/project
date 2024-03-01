@@ -3,3 +3,15 @@
 
 #include "HealingItemActor.h"
 
+AHealingItemActor::AHealingItemActor()
+{
+}
+
+void AHealingItemActor::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AHealingItemActor::Tick(float DeltaTime)
+{
+}

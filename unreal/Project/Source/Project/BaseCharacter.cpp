@@ -7,6 +7,9 @@
 #include "ItemBoxActor.h"
 #include "PlayerSight.h"
 #include "NormalWeaponActor.h"
+#include "ThrowWeaponActor.h"
+#include "HealingItemActor.h"
+#include "BleedingHealingItemActor.h"
 #include "GamePlayerUI.h"
 #include "PlayerCharacterController.h"
 
@@ -238,6 +241,9 @@ void ABaseCharacter::GetItem()
 
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
 }
+
+
+// 추가할 부분 인벤토리에서 우클릭 시 퀵슬롯에 넣기, 그리고 아이템 생성, 그리고 퀵슬롯에 맞게 1,2,3,4번 누르면 손에 부착되게 할 예정 
 
 void ABaseCharacter::LightOnOff()
 {

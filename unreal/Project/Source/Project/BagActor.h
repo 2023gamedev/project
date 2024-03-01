@@ -11,7 +11,7 @@
  */
 
 // 가방 액터
-
+// 획득하면 바로 칸 수 늘리고 사라 질 예정
 
 UCLASS()
 class PROJECT_API ABagActor : public AItemActor

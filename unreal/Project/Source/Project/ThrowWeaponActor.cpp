@@ -3,3 +3,15 @@
 
 #include "ThrowWeaponActor.h"
 
+AThrowWeaponActor::AThrowWeaponActor()
+{
+}
+
+void AThrowWeaponActor::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AThrowWeaponActor::Tick(float DeltaTime)
+{
+}

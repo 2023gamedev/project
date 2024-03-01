@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ItemDataStructure.h"    // 여기다 해도 되겠지..?
 #include "ItemActor.generated.h"
 
 
@@ -26,12 +27,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetItemName(FString itemname) { m_sItemName = itemname; };
-	FString GetItemName() { return m_sItemName; }
-
-
+	//void SetItemName(FString itemname) { m_sItemName = itemname; };
+	//FString GetItemName() { return m_sItemName; }
 
 public:
+	//UPROPERTY(EditAnywhere)
+	//FString m_sItemName;
+
 	UPROPERTY(EditAnywhere)
-	FString m_sItemName;
+	FName ItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) // 무슨 아이템인진 힐링인지 노말무기인지, 투척무기인지 (필요 없을 수도 있어 삭제할 지 고민중)
+	TEnumAsByte<EItemClass> ItemClassType;
+
 };
