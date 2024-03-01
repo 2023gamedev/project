@@ -18,6 +18,9 @@
 class UGamePlayerUI;
 class UPlayerSight;
 class ANormalWeaponActor;
+class AThrowWeaponActor;
+class AHealingItemActor;
+class ABleedingHealingItemActor;
 
 UCLASS()
 class PROJECT_API ABaseCharacter : public ACharacter
@@ -53,8 +56,19 @@ public:
 	UPROPERTY(EditAnywhere)
 		UPlayerSight* PlayerSight;
 
+	// 퀵슬롯에 있는 아이템들 넣을 예정
 	UPROPERTY(EditAnywhere)
 	ANormalWeaponActor* CurrentWeapon;
+
+	UPROPERTY(EditAnywhere)
+	AThrowWeaponActor* CurrentThrowWeapon;
+
+	UPROPERTY(EditAnywhere)
+	AHealingItemActor* CurrentHealingItem;
+
+	UPROPERTY(EditAnywhere)
+	ABleedingHealingItemActor* CurrentBleedingHealingItem;
+	
 
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* FlashLight;

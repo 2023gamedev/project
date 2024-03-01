@@ -32,4 +32,14 @@ public:
 public:
 	UPROPERTY(EditAnywhere, Category= NormalWeapon)
 	USkeletalMeshComponent* NormalWeapon;
+
+	// 무기의 스탯들
+	UPROPERTY(EditAnywhere, Category = "ItemStat")
+	float m_fWeaponSTR;
+
+	UPROPERTY(EditAnywhere, Category = "ItemStat")
+	float m_fWeaponDurability;
+
+	UPROPERTY(EditAnywhere, Category = "ItemStat")
+	float m_fWeaponRange;
 };
