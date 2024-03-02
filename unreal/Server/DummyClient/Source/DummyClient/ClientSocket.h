@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GStruct.pb.h"
 #include "DummyClientGameMode.h"
+#include <concurrent_queue.h>
 
 
 #include "Windows/AllowWindowsPlatformTypes.h"
@@ -18,11 +19,18 @@
 
 constexpr int BUFSIZE = 1024;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMyDelegate, uint32, PlayerId, FVector, NewLocation);
-
 /**
  *
  */
+
+struct PlayerData
+{
+	uint32 PlayerId;
+	FVector Location;
+
+	PlayerData(uint32 InPlayerId, FVector InLocation)
+		: PlayerId(InPlayerId), Location(InLocation) {}
+};
 
 class DUMMYCLIENT_API ClientSocket : public FRunnable
 {
@@ -34,7 +42,7 @@ public:
 	uint32 MyPlayerId = 0;
 	uint32 PlayerId = 0;
 
-	FMyDelegate RecvData;
+	Concurrency::concurrent_queue<PlayerData> Qbuffer;
 
 	virtual bool Init() override;
 	virtual uint32 Run() override;

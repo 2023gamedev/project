@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -141,6 +142,16 @@ void ADummyClientCharacter::Tick(float DeltaTime)
 
 	//움직임 감지 및 데이터 전송
 	CheckAndSendMovement();
+
+	if (ClientSocketPtr->Qbuffer.try_pop(recvPlayerData))
+	{
+		// 현재 GameMode 인스턴스를 얻기
+		if (ADummyClientGameMode* MyGameMode = Cast<ADummyClientGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
+			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location);
+		}
+	}
 }
 
 void ADummyClientCharacter::CheckAndSendMovement()

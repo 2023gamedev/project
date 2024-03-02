@@ -9,6 +9,7 @@
 #include "ClientSocket.h"
 #include "GameSyncManager.h"
 #include "GStruct.pb.h"
+#include "DummyClientGameMode.h"
 
 #include "DummyClientCharacter.generated.h"
 
@@ -90,5 +91,9 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	PlayerData recvPlayerData;
+	uint32 PlayerId;
+	FVector NewLocation;
 };
 

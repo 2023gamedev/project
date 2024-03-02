@@ -49,10 +49,3 @@ void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocatio
         NewCharacter->SetPlayerId(PlayerId);
     }
 }
-
-ClientSocket->OnPlayerLocationReceived.AddDynamic(this, &AGameModeClass::HandlePlayerLocationReceived);
-
-void AGameModeClass::HandlePlayerLocationReceived(uint32 PlayerId, FVector NewLocation)
-{
-    UpdateOtherPlayer(PlayerId, NewLocation);
-}

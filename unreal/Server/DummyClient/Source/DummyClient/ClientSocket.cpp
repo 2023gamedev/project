@@ -3,6 +3,7 @@
 
 #include "ClientSocket.h"
 #include <vector>
+#include <queue>
 
 
 
@@ -101,11 +102,7 @@ uint32 ClientSocket::Run()
 				PlayerId = testPacket.playerid();
 				FVector NewLocation(testPacket.x(), testPacket.y(), testPacket.z());
 
-				if (testPacket.ParseFromArray(buffer.data(), buffer.size()))
-				{
-					FVector NewLocation(testPacket.x(), testPacket.y(), testPacket.z());
-					RecvData.Broadcast(testPacket.playerid(), NewLocation);
-				}
+				Qbuffer.push(PlayerData(PlayerId, NewLocation));
 
 				buffer.clear();
 			}
