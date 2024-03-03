@@ -103,7 +103,9 @@ uint32 ClientSocket::Run()
 				FVector NewLocation(testPacket.x(), testPacket.y(), testPacket.z());
 				FRotator NewRotation(testPacket.pitch(), testPacket.yaw(), testPacket.roll());
 
-				Qbuffer.push(PlayerData(PlayerId, NewLocation, NewRotation));
+				if (PlayerId != MyPlayerId) {
+					Qbuffer.push(PlayerData(PlayerId, NewLocation, NewRotation));
+				}
 
 				buffer.clear();
 			}

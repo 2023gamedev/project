@@ -16,6 +16,10 @@ public:
 	ADummyClientGameMode();
 
 	void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation);
+
+protected:
+	UPROPERTY()
+		TSubclassOf<ACharacter> BP_OtherCharacterClass;
 };
 
 

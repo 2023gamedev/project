@@ -14,6 +14,12 @@ ADummyClientGameMode::ADummyClientGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+    static ConstructorHelpers::FClassFinder<ACharacter> OtherCharacterBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_OtherCharacter"));
+    if (OtherCharacterBPClass.Class != NULL)
+    {
+        BP_OtherCharacterClass = OtherCharacterBPClass.Class;
+    }
 }
 
 void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocation, FRotator NewRotation)
@@ -42,7 +48,7 @@ void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocatio
     // 기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-    AOtherCharacter* NewCharacter = World->SpawnActor<AOtherCharacter>(AOtherCharacter::StaticClass(), NewLocation, NewRotation, SpawnParams);
+    AOtherCharacter* NewCharacter = World->SpawnActor<AOtherCharacter>(BP_OtherCharacterClass, NewLocation, NewRotation, SpawnParams);
 
     if (NewCharacter)
     {
