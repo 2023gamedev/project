@@ -5,6 +5,7 @@
 
 AHealingItemActor::AHealingItemActor()
 {
+
 }
 
 void AHealingItemActor::BeginPlay()
