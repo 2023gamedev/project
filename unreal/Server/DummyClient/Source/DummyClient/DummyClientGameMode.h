@@ -15,7 +15,7 @@ class ADummyClientGameMode : public AGameModeBase
 public:
 	ADummyClientGameMode();
 
-	void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation);
+	void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation);
 };
 
 

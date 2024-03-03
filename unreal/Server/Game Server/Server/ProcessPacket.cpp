@@ -13,11 +13,17 @@ void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::TestPacket 
         printf("Received packet type = %d\n", testPacket.type());
         printf("Received playerID = %d\n", testPacket.playerid());
         printf("Received packet x = %f, y = %f, z = %f\n\n", testPacket.x(), testPacket.y(), testPacket.z());
+        printf("Received packet x = %f, y = %f, z = %f\n\n", testPacket.pitch(), testPacket.yaw(), testPacket.roll());
 
         // 서버로 받은 패킷을 그대로 돌려줌
         string serializedData;
         testPacket.SerializeToString(&serializedData);
-        IOCP_SendPacket(id, serializedData.data(), serializedData.size());
+
+        if (id == 0) {
+            IOCP_SendPacket(1, serializedData.data(), serializedData.size());
+        }
+
+        else IOCP_SendPacket(0, serializedData.data(), serializedData.size());
     }
 
     break;

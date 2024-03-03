@@ -145,11 +145,12 @@ void ADummyClientCharacter::Tick(float DeltaTime)
 
 	if (ClientSocketPtr->Qbuffer.try_pop(recvPlayerData))
 	{
+		UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
 		// 현재 GameMode 인스턴스를 얻기
 		if (ADummyClientGameMode* MyGameMode = Cast<ADummyClientGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location);
+			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation);
 		}
 	}
 }
@@ -157,9 +158,10 @@ void ADummyClientCharacter::Tick(float DeltaTime)
 void ADummyClientCharacter::CheckAndSendMovement()
 {
 	FVector CurrentLocation = GetActorLocation();
+	FRotator CurrentRotation = GetActorRotation();
 
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	if (PreviousLocation != CurrentLocation)
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation)
 	{
 		uint32 MyPlayerId = ClientSocketPtr->GetMyPlayerId();
 
@@ -170,6 +172,9 @@ void ADummyClientCharacter::CheckAndSendMovement()
 		packet.set_x(CurrentLocation.X);
 		packet.set_y(CurrentLocation.Y);
 		packet.set_z(CurrentLocation.Z);
+		packet.set_pitch(CurrentRotation.Pitch);
+		packet.set_yaw(CurrentRotation.Yaw);
+		packet.set_roll(CurrentRotation.Roll);
 
 		// 직렬화
 		std::string serializedData;
@@ -180,5 +185,6 @@ void ADummyClientCharacter::CheckAndSendMovement()
 
 		// 현재 위치를 이전 위치로 업데이트
 		PreviousLocation = CurrentLocation;
+		PreviousRotation = CurrentRotation;
 	}
 }

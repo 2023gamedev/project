@@ -16,7 +16,7 @@ ADummyClientGameMode::ADummyClientGameMode()
 	}
 }
 
-void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocation)
+void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocation, FRotator NewRotation)
 {
     UWorld* World = GetWorld();
 
@@ -34,6 +34,7 @@ void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocatio
         {
             // 기존 캐릭터 위치 업데이트
             OtherPlayer->SetActorLocation(NewLocation);
+            OtherPlayer->SetActorRotation(NewRotation);
             return; // 위치를 업데이트 했으므로 함수 종료
         }
     }
@@ -41,7 +42,7 @@ void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocatio
     // 기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-    AOtherCharacter* NewCharacter = World->SpawnActor<AOtherCharacter>(AOtherCharacter::StaticClass(), NewLocation, FRotator::ZeroRotator, SpawnParams);
+    AOtherCharacter* NewCharacter = World->SpawnActor<AOtherCharacter>(AOtherCharacter::StaticClass(), NewLocation, NewRotation, SpawnParams);
 
     if (NewCharacter)
     {

@@ -27,9 +27,14 @@ struct PlayerData
 {
 	uint32 PlayerId;
 	FVector Location;
+	FRotator Rotation;
 
-	PlayerData(uint32 InPlayerId, FVector InLocation)
-		: PlayerId(InPlayerId), Location(InLocation) {}
+	// 기본 생성자 명시적 정의
+	PlayerData() : PlayerId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator) {}
+
+	// 매개변수가 있는 생성자
+	PlayerData(uint32 InPlayerId, FVector InLocation, FRotator InRotation)
+		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation) {}
 };
 
 class DUMMYCLIENT_API ClientSocket : public FRunnable

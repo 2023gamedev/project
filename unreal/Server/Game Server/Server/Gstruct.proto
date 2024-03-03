@@ -2,9 +2,13 @@ syntax = "proto3";
 package Protocol;
 
 message TestPacket {
-    uint32 PlayerId = 1;
-    uint32 type = 2;
-    float x = 3;
-    float y = 4;
-    float z = 5;
+    uint32 playerid = 1;
+    uint32 packet_size = 2;
+    uint32 type = 3;
+    float x = 4;
+    float y = 5;
+    float z = 6;
+    float pitch = 7;
+    float yaw = 8;
+    float roll = 9;
 };

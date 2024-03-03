@@ -177,13 +177,17 @@ class TestPacket final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayerIdFieldNumber = 1,
-    kTypeFieldNumber = 2,
-    kXFieldNumber = 3,
-    kYFieldNumber = 4,
-    kZFieldNumber = 5,
+    kPlayeridFieldNumber = 1,
+    kPacketSizeFieldNumber = 2,
+    kTypeFieldNumber = 3,
+    kXFieldNumber = 4,
+    kYFieldNumber = 5,
+    kZFieldNumber = 6,
+    kPitchFieldNumber = 7,
+    kYawFieldNumber = 8,
+    kRollFieldNumber = 9,
   };
-  // uint32 PlayerId = 1;
+  // uint32 playerid = 1;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
@@ -192,7 +196,16 @@ class TestPacket final :
   void _internal_set_playerid(uint32_t value);
   public:
 
-  // uint32 type = 2;
+  // uint32 packet_size = 2;
+  void clear_packet_size();
+  uint32_t packet_size() const;
+  void set_packet_size(uint32_t value);
+  private:
+  uint32_t _internal_packet_size() const;
+  void _internal_set_packet_size(uint32_t value);
+  public:
+
+  // uint32 type = 3;
   void clear_type();
   uint32_t type() const;
   void set_type(uint32_t value);
@@ -201,7 +214,7 @@ class TestPacket final :
   void _internal_set_type(uint32_t value);
   public:
 
-  // float x = 3;
+  // float x = 4;
   void clear_x();
   float x() const;
   void set_x(float value);
@@ -210,7 +223,7 @@ class TestPacket final :
   void _internal_set_x(float value);
   public:
 
-  // float y = 4;
+  // float y = 5;
   void clear_y();
   float y() const;
   void set_y(float value);
@@ -219,13 +232,40 @@ class TestPacket final :
   void _internal_set_y(float value);
   public:
 
-  // float z = 5;
+  // float z = 6;
   void clear_z();
   float z() const;
   void set_z(float value);
   private:
   float _internal_z() const;
   void _internal_set_z(float value);
+  public:
+
+  // float pitch = 7;
+  void clear_pitch();
+  float pitch() const;
+  void set_pitch(float value);
+  private:
+  float _internal_pitch() const;
+  void _internal_set_pitch(float value);
+  public:
+
+  // float yaw = 8;
+  void clear_yaw();
+  float yaw() const;
+  void set_yaw(float value);
+  private:
+  float _internal_yaw() const;
+  void _internal_set_yaw(float value);
+  public:
+
+  // float roll = 9;
+  void clear_roll();
+  float roll() const;
+  void set_roll(float value);
+  private:
+  float _internal_roll() const;
+  void _internal_set_roll(float value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.TestPacket)
@@ -237,10 +277,14 @@ class TestPacket final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     uint32_t playerid_;
+    uint32_t packet_size_;
     uint32_t type_;
     float x_;
     float y_;
     float z_;
+    float pitch_;
+    float yaw_;
+    float roll_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -257,7 +301,7 @@ class TestPacket final :
 #endif  // __GNUC__
 // TestPacket
 
-// uint32 PlayerId = 1;
+// uint32 playerid = 1;
 inline void TestPacket::clear_playerid() {
   _impl_.playerid_ = 0u;
 }
@@ -265,7 +309,7 @@ inline uint32_t TestPacket::_internal_playerid() const {
   return _impl_.playerid_;
 }
 inline uint32_t TestPacket::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.PlayerId)
+  // @@protoc_insertion_point(field_get:Protocol.TestPacket.playerid)
   return _internal_playerid();
 }
 inline void TestPacket::_internal_set_playerid(uint32_t value) {
@@ -274,10 +318,30 @@ inline void TestPacket::_internal_set_playerid(uint32_t value) {
 }
 inline void TestPacket::set_playerid(uint32_t value) {
   _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.PlayerId)
+  // @@protoc_insertion_point(field_set:Protocol.TestPacket.playerid)
 }
 
-// uint32 type = 2;
+// uint32 packet_size = 2;
+inline void TestPacket::clear_packet_size() {
+  _impl_.packet_size_ = 0u;
+}
+inline uint32_t TestPacket::_internal_packet_size() const {
+  return _impl_.packet_size_;
+}
+inline uint32_t TestPacket::packet_size() const {
+  // @@protoc_insertion_point(field_get:Protocol.TestPacket.packet_size)
+  return _internal_packet_size();
+}
+inline void TestPacket::_internal_set_packet_size(uint32_t value) {
+  
+  _impl_.packet_size_ = value;
+}
+inline void TestPacket::set_packet_size(uint32_t value) {
+  _internal_set_packet_size(value);
+  // @@protoc_insertion_point(field_set:Protocol.TestPacket.packet_size)
+}
+
+// uint32 type = 3;
 inline void TestPacket::clear_type() {
   _impl_.type_ = 0u;
 }
@@ -297,7 +361,7 @@ inline void TestPacket::set_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.TestPacket.type)
 }
 
-// float x = 3;
+// float x = 4;
 inline void TestPacket::clear_x() {
   _impl_.x_ = 0;
 }
@@ -317,7 +381,7 @@ inline void TestPacket::set_x(float value) {
   // @@protoc_insertion_point(field_set:Protocol.TestPacket.x)
 }
 
-// float y = 4;
+// float y = 5;
 inline void TestPacket::clear_y() {
   _impl_.y_ = 0;
 }
@@ -337,7 +401,7 @@ inline void TestPacket::set_y(float value) {
   // @@protoc_insertion_point(field_set:Protocol.TestPacket.y)
 }
 
-// float z = 5;
+// float z = 6;
 inline void TestPacket::clear_z() {
   _impl_.z_ = 0;
 }
@@ -355,6 +419,66 @@ inline void TestPacket::_internal_set_z(float value) {
 inline void TestPacket::set_z(float value) {
   _internal_set_z(value);
   // @@protoc_insertion_point(field_set:Protocol.TestPacket.z)
+}
+
+// float pitch = 7;
+inline void TestPacket::clear_pitch() {
+  _impl_.pitch_ = 0;
+}
+inline float TestPacket::_internal_pitch() const {
+  return _impl_.pitch_;
+}
+inline float TestPacket::pitch() const {
+  // @@protoc_insertion_point(field_get:Protocol.TestPacket.pitch)
+  return _internal_pitch();
+}
+inline void TestPacket::_internal_set_pitch(float value) {
+  
+  _impl_.pitch_ = value;
+}
+inline void TestPacket::set_pitch(float value) {
+  _internal_set_pitch(value);
+  // @@protoc_insertion_point(field_set:Protocol.TestPacket.pitch)
+}
+
+// float yaw = 8;
+inline void TestPacket::clear_yaw() {
+  _impl_.yaw_ = 0;
+}
+inline float TestPacket::_internal_yaw() const {
+  return _impl_.yaw_;
+}
+inline float TestPacket::yaw() const {
+  // @@protoc_insertion_point(field_get:Protocol.TestPacket.yaw)
+  return _internal_yaw();
+}
+inline void TestPacket::_internal_set_yaw(float value) {
+  
+  _impl_.yaw_ = value;
+}
+inline void TestPacket::set_yaw(float value) {
+  _internal_set_yaw(value);
+  // @@protoc_insertion_point(field_set:Protocol.TestPacket.yaw)
+}
+
+// float roll = 9;
+inline void TestPacket::clear_roll() {
+  _impl_.roll_ = 0;
+}
+inline float TestPacket::_internal_roll() const {
+  return _impl_.roll_;
+}
+inline float TestPacket::roll() const {
+  // @@protoc_insertion_point(field_get:Protocol.TestPacket.roll)
+  return _internal_roll();
+}
+inline void TestPacket::_internal_set_roll(float value) {
+  
+  _impl_.roll_ = value;
+}
+inline void TestPacket::set_roll(float value) {
+  _internal_set_roll(value);
+  // @@protoc_insertion_point(field_set:Protocol.TestPacket.roll)
 }
 
 #ifdef __GNUC__
