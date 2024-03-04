@@ -32,22 +32,6 @@ void AShoutingZombieAIController::BeginPlay()
 	if (ShoutingZombieAIBehavior != nullptr) {
 		RunBehaviorTree(ShoutingZombieAIBehavior);
 
-		AActor* OwningPawn = GetPawn();
-
-
-		// 수정 필요
-		if (OwningPawn)
-		{
-			APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-			//GetBlackboardComponent()->SetValueAsVector(StartLocationKey, GetPawn()->GetActorLocation());
-		//	GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
-
-		}
-		else // gamemode에서(C++코드) 만들어서 적용한 부분은 크래시가 뜬다. GetPawn()에서
-		{
-			UE_LOG(LogTemp, Error, TEXT("Owning pawn is NULL in AZombieAIController::BeginPlay"));
-			return;
-		}
 	}
 }
 
