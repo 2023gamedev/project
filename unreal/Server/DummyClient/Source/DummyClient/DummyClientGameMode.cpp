@@ -38,9 +38,25 @@ void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocatio
         AOtherCharacter* OtherPlayer = *It;
         if (OtherPlayer && OtherPlayer->GetPlayerId() == PlayerId)
         {
+            FVector OldLocation = OtherPlayer->GetActorLocation();
+
             // 기존 캐릭터 위치 업데이트
             OtherPlayer->SetActorLocation(NewLocation);
             OtherPlayer->SetActorRotation(NewRotation);
+
+            float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
+            float DeltaTime = World->DeltaTimeSeconds;
+            float Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
+
+            // 애니메이션 인스턴스에 속도 파라미터 설정
+            UAnimInstance* AnimInstance = OtherPlayer->GetMesh()->GetAnimInstance();
+            if (AnimInstance)
+            {
+                // "Speed" 파라미터가 애니메이션 블루프린트에서 이동 속도를 제어한다고 가정
+                AnimInstance->SetFloatParameterValue(FName("Speed"), Speed);
+            }
+
+
             return; // 위치를 업데이트 했으므로 함수 종료
         }
     }
