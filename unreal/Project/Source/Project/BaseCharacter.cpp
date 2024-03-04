@@ -190,10 +190,6 @@ void ABaseCharacter::Run()
 	UE_LOG(LogTemp, Warning, TEXT("Run"));
 }
 
-//void ABaseCharacter::Jump()
-//{
-//
-//}
 
 void ABaseCharacter::LookUp(float NewAxisValue)
 {
