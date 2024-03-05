@@ -8,6 +8,8 @@
 /**
  * 
  */
+class USlot;
+
 class PROJECT_API ItemDataStructure
 {
 public:
@@ -18,9 +20,11 @@ public:
 UENUM(BlueprintType)
 enum class EItemType
 {
-	ITEM_NONE			UMETA(DisplayName = "None"),
-	ITEM_USEABLE		UMETA(DisplayName = "Useable"),
-	ITEM_EQUIPMENT		UMETA(DisplayName = "Equipment")
+	ITEM_NONE				UMETA(DisplayName = "None"),
+	ITEM_USEABLE			UMETA(DisplayName = "Useable"),
+	ITEM_EQUIPMENT			UMETA(DisplayName = "Equipment"),
+	ITEM_QUICK_NONE			UMETA(DisplayName = "QuickNone"),
+	ITEM_QUICK_EQUIPMENT	UMETA(DisplayName = "QuickEquipment"),
 };
 
 UENUM(BlueprintType)
@@ -30,6 +34,8 @@ enum class EItemClass
 	THROWINGWEAPON			UMETA(DisplayName = "ThrowingWeapon"),
 	HEALINGITEM				UMETA(DisplayName = "HealingItem"),
 	BLEEDINGHEALINGITEM		UMETA(DisplayName = "BleedingHealingItem"),
+	KEYITEM					UMETA(DisplayName = "KeyItem"),
+	NONE					UMETA(DisplayName = "KeyItem"),
 };
 
 USTRUCT(Atomic, BlueprintType)
@@ -53,6 +59,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Count;
+
+
 };
 
 UENUM(BlueprintType)
@@ -61,5 +69,5 @@ enum class ESlotType
 	SLOT_NONE				UMETA(DisplayName = "None"),
 	SLOT_ITEM				UMETA(DisplayName = "Item"),
 	SLOT_QUICK				UMETA(DisplayName = "Quick"),
-	SLOT_QUICK_ITEM			UMETA(DisplayName = "Item"),
+	SLOT_QUICK_ITEM			UMETA(DisplayName = "QuickItem"),
 };

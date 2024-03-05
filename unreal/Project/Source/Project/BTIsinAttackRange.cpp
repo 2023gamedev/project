@@ -53,6 +53,9 @@ bool UBTIsinAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 		return false;
 	}
 
+	if (Target == nullptr) {
+		return false;
+	}
 
 	if (Target->GetDistanceTo(ControllingPawn) <= 200.f) {
 		bResult = true;

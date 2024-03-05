@@ -2,6 +2,7 @@
 
 
 #include "ItemDataStructure.h"
+#include "Slot.h"
 
 ItemDataStructure::ItemDataStructure()
 {
@@ -10,3 +11,4 @@ ItemDataStructure::ItemDataStructure()
 ItemDataStructure::~ItemDataStructure()
 {
 }
+

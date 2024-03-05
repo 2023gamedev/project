@@ -47,7 +47,7 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
     virtual void BeginPlay() override;
-
+    //virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) ov
 
     // 아이템 박스
     UPROPERTY(EditDefaultsOnly, Category = "ItemBox")

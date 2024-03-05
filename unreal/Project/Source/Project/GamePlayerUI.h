@@ -12,6 +12,8 @@
 
 class UInventoryUI;
 class UConditionUI;
+class UQuickSlotUI;
+
 // 캐릭터(플레이어)가 쓰는 모든 UI 들어갈 예정
 UCLASS()
 class PROJECT_API UGamePlayerUI : public UBaseUI
@@ -32,6 +34,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (BindWidget)) // 업데이트 필요
 	UConditionUI* Condition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (BindWidget)) // 업데이트 필요
+	UQuickSlotUI* QuickSlot;
 
 	// 퀵슬롯, 체력바, 스태미나 인벤토리 등등
 };

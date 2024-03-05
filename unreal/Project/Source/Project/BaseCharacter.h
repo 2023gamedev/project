@@ -78,6 +78,9 @@ public:
 	TArray<FItemDataStructure> Inventory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TArray<FItemDataStructure> QuickSlot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UGamePlayerUI> GameUIClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
@@ -129,9 +132,13 @@ public:
 	void SetCharacterName(FString charactername) { m_sCharacterName = charactername; };
 	FString GetCharacterName() { return m_sCharacterName; }
 
+	void SetStartLocation(FVector startlocation) { m_VStartLocation = startlocation; }
+	FVector GetStartLocation() { return m_VStartLocation; }
+
 	bool CanSetWeapon();
 	void SetWeapon(ANormalWeaponActor* NewWeapon);
 
+	void GameUIUpdate();
 private:
 	UPROPERTY(EditAnywhere)
 	float m_fHP = 0.f;
@@ -169,7 +176,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool m_bInventoryOn = true;
 
-
+	UPROPERTY(EditAnywhere)
+	FVector m_VStartLocation;
 
 	UPROPERTY(EditAnywhere)
 	FString m_sCharacterName;

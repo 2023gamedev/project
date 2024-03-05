@@ -34,6 +34,7 @@ void USlot::Refresh()
 {
 	switch (Type) {
 	case ESlotType::SLOT_ITEM:
+	{
 		FItemDataStructure& data = Character->Inventory[SlotIndex];
 
 		if (data.Texture != nullptr) {
@@ -50,6 +51,27 @@ void USlot::Refresh()
 			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
 		}
 		break;
+	}
+	case ESlotType::SLOT_QUICK:
+	{
+
+		FItemDataStructure& dataquick = Character->QuickSlot[SlotIndex];
+
+		if (dataquick.Texture != nullptr) {
+			SetTexture(dataquick.Texture);
+		}
+
+		ItemCount = dataquick.Count;
+
+		if (ItemCount <= 1) {
+			Text->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else {
+			Text->SetVisibility(ESlateVisibility::Visible);
+			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
+		}
+		break;
+	}
 	}
 }
 
@@ -104,7 +126,70 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 	eventreply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
 	if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton) == true) { // 퀵슬롯에 넣어주거나 해제하는 역할 할 예정
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Right Button Down"));
 
+		// 수정 무지막지하게 필요 일단 화면에 뜬다만 보여주는 부분
+		switch (Character->Inventory[SlotIndex].ItemClassType) {
+
+		case EItemClass::BLEEDINGHEALINGITEM:
+			Character->QuickSlot[0].Type = Character->Inventory[SlotIndex].Type;
+			Character->QuickSlot[0].Name = Character->Inventory[SlotIndex].Name;
+			Character->QuickSlot[0].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
+			Character->QuickSlot[0].Texture = Character->Inventory[SlotIndex].Texture;
+			Character->QuickSlot[0].Count = Character->Inventory[SlotIndex].Count;
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("BLEEDINGHEALINGITEM!"));
+			break;
+		case EItemClass::HEALINGITEM:
+			Character->QuickSlot[1].Type = Character->Inventory[SlotIndex].Type;
+			Character->QuickSlot[1].Name = Character->Inventory[SlotIndex].Name;
+			Character->QuickSlot[1].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
+			Character->QuickSlot[1].Texture = Character->Inventory[SlotIndex].Texture;
+			Character->QuickSlot[1].Count = Character->Inventory[SlotIndex].Count;
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEALINGITEM!"));
+			break;
+		case EItemClass::THROWINGWEAPON:
+			Character->QuickSlot[2].Type = Character->Inventory[SlotIndex].Type;
+			Character->QuickSlot[2].Name = Character->Inventory[SlotIndex].Name;
+			Character->QuickSlot[2].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
+			Character->QuickSlot[2].Texture = Character->Inventory[SlotIndex].Texture;
+			Character->QuickSlot[2].Count = Character->Inventory[SlotIndex].Count;
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("THROWINGWEAPON!"));
+			break;
+		case EItemClass::KEYITEM:
+			Character->QuickSlot[3].Type = Character->Inventory[SlotIndex].Type;
+			Character->QuickSlot[3].Name = Character->Inventory[SlotIndex].Name;
+			Character->QuickSlot[3].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
+			Character->QuickSlot[3].Texture = Character->Inventory[SlotIndex].Texture;
+			Character->QuickSlot[3].Count = Character->Inventory[SlotIndex].Count;
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("KEYITEM!"));
+			break;
+		case EItemClass::NORMALWEAPON:
+			if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_NONE) {
+				Character->QuickSlot[4].Type = EItemType::ITEM_QUICK_EQUIPMENT;
+				Character->QuickSlot[4].Name = Character->Inventory[SlotIndex].Name;
+				Character->QuickSlot[4].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
+				Character->QuickSlot[4].Texture = Character->Inventory[SlotIndex].Texture;
+				Character->QuickSlot[4].Count = Character->Inventory[SlotIndex].Count;
+			}
+			else if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_EQUIPMENT) {
+				Character->QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
+				Character->QuickSlot[4].Name = "nullptr";
+				Character->QuickSlot[4].ItemClassType = EItemClass::NONE;
+				Character->QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+				Character->QuickSlot[4].Count = 0;
+			}
+
+			
+			Character->GameUIUpdate();
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Normal Weapon!"));
+			break;
+
+		}
 	}
 	else if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton) == true) {
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Left Button Down"));

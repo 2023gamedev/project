@@ -77,12 +77,16 @@ ABaseCharacter::ABaseCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.f, 0.f);
 	GetCharacterMovement()->JumpZVelocity = 500.f;
+
+	//m_VStartLocation = FVector(2215.f, 2282.f, 90.212492f);
 }
 
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//SetActorLocation(m_VStartLocation);
 
 	if (GameUIClass != nullptr) {
 
@@ -289,4 +293,9 @@ void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
         
 		UE_LOG(LogTemp, Warning, TEXT("wEAPONZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"));
 	}
+}
+
+void ABaseCharacter::GameUIUpdate()
+{
+	GameUIWidget->Update();
 }
