@@ -8,12 +8,17 @@ AOtherCharacter::AOtherCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	ClientSocketPtr = nullptr;
 }
 
 // Called when the game starts or when spawned
 void AOtherCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ClientSocket* SocketInstance = new ClientSocket();
+	this->SetClientSocket(SocketInstance);
 	
 }
 
@@ -21,6 +26,19 @@ void AOtherCharacter::BeginPlay()
 void AOtherCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FVector OldLocation = GetActorLocation();
+	FVector NewLocation = recvPlayerData.Location;
+
+    float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
+    float Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
+
+    // 애니메이션 인스턴스에 속도 파라미터 설정
+    UMyAnimInstance* AnimInstance = Cast<UMyAnimInstance>(GetMesh()->GetAnimInstance());
+    if (AnimInstance)
+    {
+        AnimInstance->UpdateSpeed(Speed);
+    }
 
 }
 

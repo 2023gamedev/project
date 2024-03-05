@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "MyAnimInstance.h"
+#include "ClientSocket.h"
+#include "DummyClientGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "OtherCharacter.generated.h"
 
 UCLASS()
@@ -14,6 +18,11 @@ class DUMMYCLIENT_API AOtherCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AOtherCharacter();
+
+	void SetClientSocket(ClientSocket* InClientSocket)
+	{
+		ClientSocketPtr = InClientSocket;
+	}
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,6 +40,10 @@ public:
 
 private:
 
+	ClientSocket* ClientSocketPtr;
+
 	uint32 PlayerId;
+
+	PlayerData recvPlayerData;
 
 };
