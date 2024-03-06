@@ -7,3 +7,8 @@ UMyAnimInstance::UMyAnimInstance()
 {
 	m_fCurrentPawnSpeed = 0.f;
 }
+
+void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+{
+	Super::NativeUpdateAnimation(DeltaSeconds);
+}

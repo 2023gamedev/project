@@ -44,6 +44,8 @@ void ADummyClientGameMode::UpdateOtherPlayer(uint32 PlayerId, FVector NewLocatio
             OtherPlayer->SetActorLocation(NewLocation);
             OtherPlayer->SetActorRotation(NewRotation);
 
+            OtherPlayer->UpdatePlayerData(NewLocation);
+
             return; // 위치를 업데이트 했으므로 함수 종료
         }
     }

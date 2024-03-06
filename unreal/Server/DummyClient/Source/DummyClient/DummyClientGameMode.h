@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "ClientSocket.h"
+#include "OtherCharacter.h"
 #include "DummyClientGameMode.generated.h"
 
 UCLASS(minimalapi)

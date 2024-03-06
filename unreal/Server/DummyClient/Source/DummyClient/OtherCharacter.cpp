@@ -9,17 +9,14 @@ AOtherCharacter::AOtherCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	ClientSocketPtr = nullptr;
+	Speed = 0;
+	PreviousSpeed = 0;
 }
 
 // Called when the game starts or when spawned
 void AOtherCharacter::BeginPlay()
 {
-	Super::BeginPlay();
-
-	ClientSocket* SocketInstance = new ClientSocket();
-	this->SetClientSocket(SocketInstance);
-	
+	Super::BeginPlay();	
 }
 
 // Called every frame
@@ -27,18 +24,24 @@ void AOtherCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector OldLocation = GetActorLocation();
-	FVector NewLocation = recvPlayerData.Location;
-
-    float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
-    float Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
+	if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
+		float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
+		Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
+	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Current Speed: %f"), Speed);
 
     // 애니메이션 인스턴스에 속도 파라미터 설정
-    UMyAnimInstance* AnimInstance = Cast<UMyAnimInstance>(GetMesh()->GetAnimInstance());
-    if (AnimInstance)
-    {
-        AnimInstance->UpdateSpeed(Speed);
-    }
+	if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
+	{
+		UMyAnimInstance* AnimInstance = Cast<UMyAnimInstance>(GetMesh()->GetAnimInstance());
+		if (AnimInstance) {
+			AnimInstance->SetCurrentPawnSpeed(Speed);
+		}
+	}
+
+	PreviousSpeed = Speed;
+	OldLocation = NewLocation;
 
 }
 
@@ -59,3 +62,7 @@ void AOtherCharacter::SetPlayerId(uint32 NewPlayerId)
 	PlayerId = NewPlayerId;
 }
 
+void AOtherCharacter::UpdatePlayerData(FVector Location)
+{
+	NewLocation = Location;
+}

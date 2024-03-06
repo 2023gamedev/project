@@ -17,10 +17,8 @@ class DUMMYCLIENT_API UMyAnimInstance : public UAnimInstance
 public:
 	UMyAnimInstance();
 
-	void UpdateSpeed(float Speed)
-	{
-		m_fCurrentPawnSpeed = Speed;
-	}
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	void SetCurrentPawnSpeed(float speed) { m_fCurrentPawnSpeed = speed; }
 
 public:
 

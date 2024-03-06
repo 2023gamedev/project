@@ -10,6 +10,7 @@
 #include "GameSyncManager.h"
 #include "GStruct.pb.h"
 #include "DummyClientGameMode.h"
+#include "OtherCharacter.h"
 
 #include "DummyClientCharacter.generated.h"
 
