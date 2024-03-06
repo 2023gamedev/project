@@ -17,7 +17,9 @@
 #include "ZombieAIController.h"
 #include "Math/UnrealMathUtility.h"
 #include "ItemBoxActor.h"
-
+#include "EngineUtils.h"
+#include "GameFramework/DefaultPawn.h"
+#include "GameFramework/PlayerStart.h"
 
 AOneGameModeBase::AOneGameModeBase()
 {
@@ -63,7 +65,7 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(1, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 10, FVector(2275.f, 2074.f, 30.0626f));
     SpawnItemBoxes(2, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 20, FVector(2375.f, 2074.f, 30.0626f));
 
-    SpawnCharacter(0, FVector(2215.f, 2282.f, 90.212492f));
+    SpawnCharacter(0);
 
 
     // BeginPlay에서 SpawnZombies 호출
@@ -78,53 +80,22 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 	Super::PostLogin(NewPlayer);
 }
 
-//void AOneGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
-//{
-//    Super::InitGame(MapName, Options, ErrorMessage);
-//
-//    // Create a local player and assign a player controller
-//    ULocalPlayer* LocalPlayer = UGameplayStatics::CreateLocalPlayer(GetWorld(), 0, true);
-//    if (LocalPlayer)
-//    {
-//        APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-//        if (PlayerController)
-//        {
-//            // Set the player controller's input mode, viewport, etc.
-//            // 이곳에서 로컬 플레이어의 컨트롤러 설정을 수행합니다.
-//            // 예를 들어 입력 모드 설정, 뷰포트 설정 등이 여기에 포함될 수 있습니다.
-//        }
-//        else
-//        {
-//            ErrorMessage = "Failed to get player controller!";
-//        }
-//    }
-//    else
-//    {
-//        ErrorMessage = "Failed to create local player!";
-//    }
-//}
-
 void AOneGameModeBase::ChoiceCharacter()
 {
         if (CharacterIconIndex == EPlayerCharacter::EMPLOYEE) {
-            //DefaultPawnClass = AEmployeeCharacter::StaticClass();
             PlayerCharacterClasses.Add(AEmployeeCharacter::StaticClass());
         }
         else if (CharacterIconIndex == EPlayerCharacter::FIREFIGHTER) {
-            //DefaultPawnClass = AFireFighterCharacter::StaticClass();
             PlayerCharacterClasses.Add(AFireFighterCharacter::StaticClass());
         }
         else if (CharacterIconIndex == EPlayerCharacter::GIRL) {
-            //DefaultPawnClass = AGirlCharacter::StaticClass();
             PlayerCharacterClasses.Add(AGirlCharacter::StaticClass());
         }
         else if (CharacterIconIndex == EPlayerCharacter::IDOL) {
-            //DefaultPawnClass = AIdolCharacter::StaticClass();
             PlayerCharacterClasses.Add(AIdolCharacter::StaticClass());
         }
 
 
-        //PlayerControllerClass = APlayerCharacterController::StaticClass();
         PlayerCharacterControllerClasses.Add(APlayerCharacterController::StaticClass());
 
         DefaultPawnClass = PlayerCharacterClasses[0];
@@ -132,24 +103,37 @@ void AOneGameModeBase::ChoiceCharacter()
 
 }
 
-void AOneGameModeBase::SpawnCharacter(int32 characterindex, FVector characterpos)
+void AOneGameModeBase::SpawnCharacter(int32 characterindex)
 {
-    //TSubclassOf<ABaseCharacter> SelectedCharacterClass = PlayerCharacterClasses[characterindex];
-    //ABaseCharacter* SpawnedCharacter = GetWorld()->SpawnActor<ABaseCharacter>(SelectedCharacterClass, characterpos, FRotator::ZeroRotator);
-    //TSubclassOf<APlayerCharacterController> SelectedPlayerConstrollerClass = PlayerCharacterControllerClasses[0]; // 0을 변수를 바꿀수도 있다.
-    //APlayerCharacterController* AICharacterController = GetWorld()->SpawnActor<APlayerCharacterController>(SelectedPlayerConstrollerClass, characterpos, FRotator::ZeroRotator);
+    // 와 클라분들 너무 감사합니다. 메모메모
+    ADefaultPawn* DefaultPawn = nullptr;
+    APlayerStart* PlayerStart = nullptr;
+    int index = 0;
+    UWorld* World = GetWorld();
+    if (World) {
 
-    //SpawnedCharacter->SpawnDefaultController();
-    //AICharacterController->Possess(SpawnedCharacter);
-   
-    //if (AICharacterController->GetPawn() == nullptr) {
-    //    UE_LOG(LogTemp, Error, TEXT("Possess No!!!!"));
-    //}
-    //else {
-    //    FString PossessedPawnName = AICharacterController->GetPawn()->GetName();
-    //    UE_LOG(LogTemp, Warning, TEXT("Controller is possessing: %s"), *PossessedPawnName);
-    //}
+        for (TActorIterator<APlayerStart> It(World); It; ++It) {
+            APlayerStart* PS = *It;
 
+            if (PlayerStart && index == 1) {
+
+                PlayerStart = PS;
+                break;
+            }
+            index++;
+        }
+ 
+        for (TActorIterator<ADefaultPawn> ActorItr(World); ActorItr; ++ActorItr) {
+            DefaultPawn = *ActorItr;
+            if (DefaultPawn) {
+                break;
+            }
+        }
+
+        if (DefaultPawn && PlayerStart) {
+            DefaultPawn->SetActorLocation(PlayerStart->GetActorLocation());
+        }
+    }
 }
 
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos)

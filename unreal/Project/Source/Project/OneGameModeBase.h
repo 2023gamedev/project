@@ -98,7 +98,7 @@ public:
     // 캐릭터 선택 함수
     void ChoiceCharacter();
 
-    void SpawnCharacter(int32 characterindex, FVector characterpos);
+    void SpawnCharacter(int32 characterindex);
 
     // 아이템 생성 함수
     void SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos);
