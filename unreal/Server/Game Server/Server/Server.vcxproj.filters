@@ -33,6 +33,9 @@
     <ClCompile Include="GStruct.pb.cc">
       <Filter>소스 파일\ServerClass\Protocol</Filter>
     </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="protocol.h">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="GStruct.pb.h">
       <Filter>소스 파일\ServerClass\Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

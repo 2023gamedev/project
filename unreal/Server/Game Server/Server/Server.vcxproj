@@ -166,6 +166,7 @@
     <ClCompile Include="iocpServerClass.cpp" />
     <ClCompile Include="ProcessPacket.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Session.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GStruct.pb.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="protocol.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Session.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Gstruct.proto" />
