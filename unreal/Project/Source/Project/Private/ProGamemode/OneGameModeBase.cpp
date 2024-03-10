@@ -105,25 +105,40 @@ void AOneGameModeBase::ChoiceCharacter()
 
 void AOneGameModeBase::SpawnCharacter(int32 characterindex)
 {
-    // 와 클라분들 너무 감사합니다. 메모메모
-    ADefaultPawn* DefaultPawn = nullptr;
+    // 그 대신 이렇게 하면 PlayerStart 위치들을 따로 적어놔야 할것 같다. 코드상에서는 알 수 없으니까
+    ABaseCharacter* DefaultPawn = nullptr;
     APlayerStart* PlayerStart = nullptr;
-    int index = 0;
+
+    // 이름(Tag)으로 할 시
+    FName PlayerStartTagName = "Start3";
+
+    // 인덱스로 할 시
+    // int index = 0;
+
     UWorld* World = GetWorld();
     if (World) {
 
-        for (TActorIterator<APlayerStart> It(World); It; ++It) {
+        for (TActorIterator<APlayerStart> It(World); It; ++It) { 
             APlayerStart* PS = *It;
 
-            if (PlayerStart && index == 1) {
-
+            // 이름(Tag)으로 할 시
+            if (PS && PS->PlayerStartTag == PlayerStartTagName) { 
+ 
                 PlayerStart = PS;
                 break;
             }
-            index++;
+
+            // 인덱스로 할 시
+            //if (index == 3) {
+
+            //    PlayerStart = PS;
+            //    break;
+            //}
+            //index++;
         }
  
-        for (TActorIterator<ADefaultPawn> ActorItr(World); ActorItr; ++ActorItr) {
+        for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
+            UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
             DefaultPawn = *ActorItr;
             if (DefaultPawn) {
                 break;
@@ -131,6 +146,7 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
         }
 
         if (DefaultPawn && PlayerStart) {
+            UE_LOG(LogTemp, Error, TEXT("DefaultPawn && PlayerStart Complete"));
             DefaultPawn->SetActorLocation(PlayerStart->GetActorLocation());
         }
     }
