@@ -20,6 +20,7 @@
 
 // EnhancedInput
 #include "InputMappingContext.h"
+#include "InputAction.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 
@@ -28,6 +29,7 @@ APlayerCharacterController::APlayerCharacterController(const FObjectInitializer&
 	:Super(ObjectInitalizer)
 {
 	InputMapping = CreateDefaultSubobject<UInputMappingContext>(TEXT("INPUTMAPPING"));
+
 	InputActions = CreateDefaultSubobject<UInputDataAsset>(TEXT("INPUTACTIONS"));
 
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> SK_INPUTMAPPINGCONTEXT(TEXT("/Game/input/IMC_InputMappingCon.IMC_InputMappingCon"));
@@ -79,6 +81,7 @@ void APlayerCharacterController::SetupInputComponent()
 			PlayerSubsystem->ClearAllMappings();
 			PlayerSubsystem->AddMappingContext(InputMapping, 0);
 
+
 			// Bind input actions
 			UEnhancedInputComponent* PEI = Cast<UEnhancedInputComponent>(InputComponent);
 			if (PEI)
@@ -94,11 +97,8 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputInventoryOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::InventoryOnOff);
 				PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &APlayerCharacterController::Jump);
 
-				PEI->BindAction(InputActions->InputNWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickNWeapon);
-				PEI->BindAction(InputActions->InputBHitem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickBHItem);
-				PEI->BindAction(InputActions->InputHitem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickHItem);
-				PEI->BindAction(InputActions->InputTWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickTWeapon);
-				PEI->BindAction(InputActions->InputNWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickKeyItem);
+				PEI->BindAction(InputActions->InputQuick, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickItem);
+				 
 			}
 			else
 			{
@@ -114,24 +114,6 @@ void APlayerCharacterController::SetupInputComponent()
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to get LocalPlayer"));
 	}
-	//UEnhancedInputLocalPlayerSubsystem* PlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-
-	//PlayerSubsystem->ClearAllMappings();
-	//PlayerSubsystem->AddMappingContext(InputMapping, 0);
-
-
-	//UEnhancedInputComponent* PEI = Cast<UEnhancedInputComponent>(InputComponent);
-
-	//PEI->BindAction(InputActions->InputMoveForward, ETriggerEvent::Triggered, this, &APlayerCharacterController::MoveForward);
-	//PEI->BindAction(InputActions->InputMoveLeft, ETriggerEvent::Triggered, this, &APlayerCharacterController::MoveLeft);
-	//PEI->BindAction(InputActions->InputTurn, ETriggerEvent::Triggered, this, &APlayerCharacterController::Turn);
-	//PEI->BindAction(InputActions->InputLookUp, ETriggerEvent::Triggered, this, &APlayerCharacterController::LookUp);
-	//PEI->BindAction(InputActions->InputRun, ETriggerEvent::Completed, this, &APlayerCharacterController::Run);
-	//PEI->BindAction(InputActions->InputGetItem, ETriggerEvent::Completed, this, &APlayerCharacterController::GetItem);
-	//PEI->BindAction(InputActions->InputLightOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::LightOnOff);
-	//PEI->BindAction(InputActions->InputInventoryOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::InventoryOnOff);
-	//PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &APlayerCharacterController::Jump);
-
 }
 
 void APlayerCharacterController::MoveForward(const FInputActionValue& Value)
@@ -226,33 +208,69 @@ void APlayerCharacterController::InventoryOnOff(const FInputActionValue& Value)
 	basecharacter->InventoryOnOff();
 }
 
-void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)
+// mapping이 최대 10개라 수정
+void APlayerCharacterController::QuickItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	
+
+	//// 수정 필요 왜 안되지
+	//if (Value.Get<float>() == 1)
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("QuickNWeapon"));
+
+	//	basecharacter->QuickNWeapon();
+	//}
+	//else if (Value.Get<float>() == 2) {
+	//	UE_LOG(LogTemp, Error, TEXT("QuickBHItem"));
+
+	//	basecharacter->QuickBHItem();
+	//}
+	//else if (Value.Get<float>() == 3) {
+	//	UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
+
+	//	basecharacter->QuickHItem();
+	//}
+
+	//else if (Value.Get<float>() == 4) {
+	//	UE_LOG(LogTemp, Error, TEXT("QuickTWeapon"));
+
+	//	basecharacter->QuickTWeapon();
+	//}
+	//else if (Value.Get<float>() == 5) {
+	//	UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
+
+	//	basecharacter->QuickKeyItem();
+	//}
+
+
+	UE_LOG(LogTemp, Error, TEXT("QuickNWeapon"));
+
 	basecharacter->QuickNWeapon();
-}
 
-void APlayerCharacterController::QuickBHItem(const FInputActionValue& Value)
-{
-	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Error, TEXT("QuickBHItem"));
+
 	basecharacter->QuickBHItem();
-}
 
-void APlayerCharacterController::QuickHItem(const FInputActionValue& Value)
-{
-	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
+
 	basecharacter->QuickHItem();
-}
 
-void APlayerCharacterController::QuickTWeapon(const FInputActionValue& Value)
-{
-	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+
+	UE_LOG(LogTemp, Error, TEXT("QuickTWeapon"));
+
 	basecharacter->QuickTWeapon();
-}
 
-void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
-{
-	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
+
 	basecharacter->QuickKeyItem();
+	
+
+
 }
 
