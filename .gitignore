@@ -402,4 +402,5 @@ Intermediate/
 Build/
 Plugins/
 *_BuiltData.uasset
-unreal/Server/Game Server/.vs/Server/v17/Browse.VC.db
+!Server/Game Server/Libraries/Libs/Protobuf/Debug
+!Server/Game Server/Libraries/Libs/Protobuf/Release

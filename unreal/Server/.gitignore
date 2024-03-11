@@ -398,3 +398,5 @@ FodyWeavers.xsd
 /Build
 /Plugins
 *_BuiltData.uasset
+!Game Server/Libraries/Libs/Protobuf/Debug
+!Game Server/Libraries/Libs/Protobuf/Release
