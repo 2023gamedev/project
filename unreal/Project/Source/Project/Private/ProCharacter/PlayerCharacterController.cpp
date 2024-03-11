@@ -94,6 +94,11 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputInventoryOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::InventoryOnOff);
 				PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &APlayerCharacterController::Jump);
 
+				PEI->BindAction(InputActions->InputNWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickNWeapon);
+				PEI->BindAction(InputActions->InputBHitem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickBHItem);
+				PEI->BindAction(InputActions->InputHitem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickHItem);
+				PEI->BindAction(InputActions->InputTWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickTWeapon);
+				PEI->BindAction(InputActions->InputNWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickKeyItem);
 			}
 			else
 			{
@@ -219,5 +224,35 @@ void APlayerCharacterController::InventoryOnOff(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	basecharacter->InventoryOnOff();
+}
+
+void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->QuickNWeapon();
+}
+
+void APlayerCharacterController::QuickBHItem(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->QuickBHItem();
+}
+
+void APlayerCharacterController::QuickHItem(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->QuickHItem();
+}
+
+void APlayerCharacterController::QuickTWeapon(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->QuickTWeapon();
+}
+
+void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->QuickKeyItem();
 }
 
