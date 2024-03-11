@@ -7,4 +7,5 @@ int main() {
 
 	// IOCP ¼­¹ö class
 	IOCP_CORE iocpServer;
+	Session::GetInstance();
 }
