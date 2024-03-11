@@ -9,6 +9,7 @@
 #include "ProItem/NormalWeaponActor.h"
 #include "ProItem/ThrowWeaponActor.h"
 #include "ProItem/HealingItemActor.h"
+#include "ProItem/KeyActor.h"
 #include "ProItem/BleedingHealingItemActor.h"
 #include "ProUI/GamePlayerUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
@@ -273,6 +274,41 @@ void ABaseCharacter::InventoryOnOff()
 		}
 	}
 
+}
+
+void ABaseCharacter::QuickNWeapon()
+{
+	if (IsBringCurrentWeapon()) {
+
+	}
+}
+
+void ABaseCharacter::QuickBHItem()
+{
+	if (IsBringCurrentBleedingHealingItem()) {
+
+	}
+}
+
+void ABaseCharacter::QuickHItem()
+{
+	if (IsBringCurrentHealingItem()) {
+
+	}
+}
+
+void ABaseCharacter::QuickTWeapon()
+{
+	if (IsBringCurrentThrowWeapon()) {
+
+	}
+}
+
+void ABaseCharacter::QuickKeyItem()
+{
+	if (IsBringCurrentKeyItem()) {
+
+	}
 }
 
 bool ABaseCharacter::CanSetWeapon()

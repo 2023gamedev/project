@@ -21,6 +21,7 @@ class ANormalWeaponActor;
 class AThrowWeaponActor;
 class AHealingItemActor;
 class ABleedingHealingItemActor;
+class AKeyActor;
 
 UCLASS()
 class PROJECT_API ABaseCharacter : public ACharacter
@@ -68,6 +69,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	ABleedingHealingItemActor* CurrentBleedingHealingItem;
+
+	UPROPERTY(EditAnywhere);
+	AKeyActor* CurrentKeyItem;
 	
 
 	UPROPERTY(EditAnywhere)
@@ -86,7 +90,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UGamePlayerUI* GameUIWidget;
 	
-
+	// input
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);
 	void Run();
@@ -95,6 +99,11 @@ public:
 	void GetItem();
 	void LightOnOff();
 	void InventoryOnOff();
+	void QuickNWeapon();
+	void QuickBHItem();
+	void QuickHItem();
+	void QuickTWeapon();
+	void QuickKeyItem();
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
@@ -119,6 +128,23 @@ public:
 
 	bool IsHandIn() { return m_bHandIn; }
 	void SetHandIn(bool handin) { m_bHandIn = handin; }
+
+
+	bool IsBringCurrentWeapon() { return m_bIsBringCurrentWeapon; }
+	void SetBringCurrentWeapon(bool bringcurrentweapon) { m_bIsBringCurrentWeapon = bringcurrentweapon; }
+
+	bool IsBringCurrentBleedingHealingItem() { return m_bIsBringCurrentBleedingHealingItem; }
+	void SetBringCurrentBleedingHealingItem(bool bringcurrentbleedinghealingitem) { m_bIsBringCurrentBleedingHealingItem = bringcurrentbleedinghealingitem; }
+
+	bool IsBringCurrentHealingItem() { return m_bIsBringCurrentHealingItem; }
+	void SetBringCurrentHealingItem(bool bringcurrenthealingitem) { m_bIsBringCurrentHealingItem = bringcurrenthealingitem; }
+
+	bool IsBringCurrentThrowWeapon() { return m_bIsBringCurrentThrowWeapon; }
+	void SetBringCurrentThrowWeapon(bool bringcurrentthrowweapon) { m_bIsBringCurrentThrowWeapon = bringcurrentthrowweapon; }
+
+	bool IsBringCurrentKeyItem() { return m_bIsBringCurrentKeyItem; }
+	void SetBringCurrentKeyItem(bool bringcurrentkeyitem) { m_bIsBringCurrentKeyItem = bringcurrentkeyitem; }
+
 
 	bool IsSpecialEffect() { return m_bSpecialEffect; }
 	void SetSpecialEffect(bool specialeffect) { m_bSpecialEffect = specialeffect; }
@@ -182,4 +208,19 @@ private:
 	UPROPERTY(EditAnywhere)
 	FString m_sCharacterName;
 
+	// ÇöÀç 
+	UPROPERTY(EditAnywhere)
+	bool m_bIsBringCurrentWeapon;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsBringCurrentBleedingHealingItem;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsBringCurrentHealingItem;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsBringCurrentThrowWeapon;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsBringCurrentKeyItem;
 };

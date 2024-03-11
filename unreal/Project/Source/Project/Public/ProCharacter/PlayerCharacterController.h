@@ -39,6 +39,12 @@ public:
 	void LightOnOff(const FInputActionValue& Value);
 	void InventoryOnOff(const FInputActionValue& Value);
 
+	void QuickNWeapon(const FInputActionValue& Value);
+	void QuickBHItem(const FInputActionValue& Value);
+	void QuickHItem(const FInputActionValue& Value);
+	void QuickTWeapon(const FInputActionValue& Value);
+	void QuickKeyItem(const FInputActionValue& Value);
+
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
