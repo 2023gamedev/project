@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -16,7 +12,10 @@
     <Filter Include="소스 파일\ServerClass">
       <UniqueIdentifier>{87a8b892-3a8d-43f1-924f-96746f3a5b3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\ServerClass\Protocol">
+    <Filter Include="소스 파일\Network">
+      <UniqueIdentifier>{6d116cad-1038-4cfa-b531-64eef6fb70fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Protocol">
       <UniqueIdentifier>{5200a910-95b5-40e1-8d03-44e107563632}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -31,35 +30,50 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GStruct.pb.cc">
-      <Filter>소스 파일\ServerClass\Protocol</Filter>
+      <Filter>소스 파일\Protocol</Filter>
     </ClCompile>
     <ClCompile Include="Session.cpp">
       <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
+    <ClCompile Include="NetAddress.cpp">
+      <Filter>소스 파일\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketUtils.cpp">
+      <Filter>소스 파일\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="protocol.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="iocpServerClass.h">
       <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GStruct.pb.h">
-      <Filter>소스 파일\ServerClass\Protocol</Filter>
+      <Filter>소스 파일\Protocol</Filter>
     </ClInclude>
     <ClInclude Include="Session.h">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="NetAddress.h">
+      <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CorePch.h">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol.h">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketUtils.h">
+      <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
       <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Gstruct.proto">
-      <Filter>소스 파일\ServerClass\Protocol</Filter>
+      <Filter>소스 파일\Protocol</Filter>
     </None>
   </ItemGroup>
 </Project>

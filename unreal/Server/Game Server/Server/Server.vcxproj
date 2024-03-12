@@ -164,17 +164,22 @@
   <ItemGroup>
     <ClCompile Include="GStruct.pb.cc" />
     <ClCompile Include="iocpServerClass.cpp" />
+    <ClCompile Include="NetAddress.cpp" />
     <ClCompile Include="ProcessPacket.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Session.cpp" />
+    <ClCompile Include="SocketUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GStruct.pb.h" />
     <ClInclude Include="iocpServerClass.h" />
+    <ClInclude Include="NetAddress.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="protocol.h" />
-    <ClInclude Include="Common.h" />
+    <ClInclude Include="CorePch.h" />
     <ClInclude Include="Session.h" />
+    <ClInclude Include="SocketUtils.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Gstruct.proto" />
