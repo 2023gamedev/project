@@ -25,3 +25,8 @@ void AItemActor::Tick(float DeltaTime)
 
 }
 
+void AItemActor::PlaceItem()
+{
+}
+
+

@@ -4,6 +4,7 @@
 #include "ProUI/Slot.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "ProUI/DragOnSlot.h"
+#include "ProGamemode/OneGameModeBase.h"
 
 void USlot::Init()
 {
@@ -115,10 +116,27 @@ bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDr
 		return true;
 	}
 	else {
+		// fall 드랍하자
+		SpawnOnGround(SlotIndex);
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Fail"));
 		return false;
 	}
+
 }
+
+void USlot::NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
+{
+	Super::NativeOnDragLeave(InDragDropEvent, InOperation);
+
+	SpawnOnGround(SlotIndex);
+}
+
+void USlot::SpawnOnGround(int slotindex)
+{
+	Character->SpawnOnGround(slotindex);
+}
+
+
 
 FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
@@ -130,7 +148,8 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 		// 수정 무지막지하게 필요 일단 화면에 뜬다만 보여주는 부분
 		switch (Character->Inventory[SlotIndex].ItemClassType) {
-
+		
+			// 0번: 출혈회복, 1번: 상처회복 2번: 투척무기 3번: 키 4번: 노말무기
 		case EItemClass::BLEEDINGHEALINGITEM:
 			Character->QuickSlot[0].Type = Character->Inventory[SlotIndex].Type;
 			Character->QuickSlot[0].Name = Character->Inventory[SlotIndex].Name;
@@ -174,6 +193,8 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 				Character->QuickSlot[4].Texture = Character->Inventory[SlotIndex].Texture;
 				Character->QuickSlot[4].Count = Character->Inventory[SlotIndex].Count;
+
+				Character->SpawnNormalWeapon();
 			}
 			else if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_EQUIPMENT) {
 				Character->QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
@@ -209,3 +230,5 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 	return eventreply.NativeReply;
 }
+
+

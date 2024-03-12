@@ -105,4 +105,9 @@ public:
 
     // 좀비 생성 함수
     void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, bool ispatrol);
+
+    int32 GetItemBoxNumber() { return m_iItemBoxNumber; }
+
+    void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
+
 };

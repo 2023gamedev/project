@@ -250,26 +250,26 @@ void APlayerCharacterController::QuickItem(const FInputActionValue& Value)
 	basecharacter->QuickNWeapon();
 
 
-	UE_LOG(LogTemp, Error, TEXT("QuickBHItem"));
+	//UE_LOG(LogTemp, Error, TEXT("QuickBHItem"));
 
-	basecharacter->QuickBHItem();
-
-
-	UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
-
-	basecharacter->QuickHItem();
+	//basecharacter->QuickBHItem();
 
 
+	//UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
 
-	UE_LOG(LogTemp, Error, TEXT("QuickTWeapon"));
-
-	basecharacter->QuickTWeapon();
+	//basecharacter->QuickHItem();
 
 
-	UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
 
-	basecharacter->QuickKeyItem();
-	
+	//UE_LOG(LogTemp, Error, TEXT("QuickTWeapon"));
+
+	//basecharacter->QuickTWeapon();
+
+
+	//UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
+
+	//basecharacter->QuickKeyItem();
+	//
 
 
 }
