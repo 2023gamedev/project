@@ -12,6 +12,9 @@
 /**
  * 
  */
+
+
+
 // ½½·Ô Å¬·¡½º
 UCLASS()
 class PROJECT_API USlot : public UBaseUI
@@ -31,8 +34,14 @@ public:
 	void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
 	bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 	FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	void NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation);
+	
+
+	void SpawnOnGround(int slotindex);
 
 public:
+
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<USlot> DragVisualClass;

@@ -23,6 +23,8 @@ class AHealingItemActor;
 class ABleedingHealingItemActor;
 class AKeyActor;
 
+DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
+
 UCLASS()
 class PROJECT_API ABaseCharacter : public ACharacter
 {
@@ -44,6 +46,10 @@ public:
 
 	bool DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype);
 	bool SwapInven(int from, int to);
+
+	// ¹Ù´Ú¿¡ ¶³¾îÆ®¸®´Â µ¨¸®°ÔÀÌÆ® 
+	FThrowOnGround ThrowOnGround;
+	void SpawnOnGround(int slotindex);
 
 	// ½ºÇÁ¸µ ¾Ï
 	UPROPERTY(EditAnywhere)
@@ -90,6 +96,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UGamePlayerUI* GameUIWidget;
 	
+
+
 	// input
 	void MoveForward(float NewAxisValue);
 	void MoveLeft(float NewAxisValue);
@@ -165,6 +173,21 @@ public:
 	void SetWeapon(ANormalWeaponActor* NewWeapon);
 
 	void GameUIUpdate();
+
+	// Äü½½·Ô ÀåÂø ½Ã »ý¼º
+	void SpawnNormalWeapon();
+	void SpawnThrowWeapon();
+	void SpawnHealingItem();
+	void SpawnBleddingHealingItem();
+	void SpawnKeyItem();
+
+	// Äü½½·Ô ÇØÁ¦ ½Ã »èÁ¦
+	void DestroyNormalWeapon();
+	void DestroyThrowWeapon();
+	void DestroyHealingItem();
+	void DestroyBleddingHealingItem();
+	void DestroyKeyItem();
+
 private:
 	UPROPERTY(EditAnywhere)
 	float m_fHP = 0.f;

@@ -27,6 +27,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void PlaceItem();
+
 	//void SetItemName(FString itemname) { m_sItemName = itemname; };
 	//FString GetItemName() { return m_sItemName; }
 

@@ -39,10 +39,12 @@ AOneGameModeBase::AOneGameModeBase()
     CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
     ChoiceCharacter();
 
-    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
-    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
-    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    // 아이템박스는 도중에 생성되거나 없어질 수 있기에 여기다 쓰면 안된다.
+    //ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    //ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    //ItemBoxClasses.Add(AItemBoxActor::StaticClass());
 
+    // 좀비는 계속 부활하기에 더 생성하거나 삭제할 이유가 없어 이 곳에서 Add가능하다.
     ZombieClasses.Add(ANormalZombie::StaticClass());
     ZombieAIClasses.Add(AZombieAIController::StaticClass());
 
@@ -67,13 +69,30 @@ void AOneGameModeBase::BeginPlay()
 
     SpawnCharacter(0);
 
+ 
 
     // BeginPlay에서 SpawnZombies 호출
     SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
     SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f, 90.212492f), true);
     SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 90.212492f), true);
 
+    ABaseCharacter* DefaultPawn = nullptr;
+
+    UWorld* World = GetWorld();
+    if (World) {
+
+        for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
+            UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
+            DefaultPawn = *ActorItr;
+            if (DefaultPawn) {
+                break;
+            }
+        }
+
+        DefaultPawn->ThrowOnGround.BindUObject(this, &AOneGameModeBase::SpawnOnGroundItem);
+    }
 }
+
 
 void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 {
@@ -127,7 +146,6 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
                 PlayerStart = PS;
                 break;
             }
-
             // 인덱스로 할 시
             //if (index == 3) {
 
@@ -136,7 +154,6 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
             //}
             //index++;
         }
- 
         for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
             UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
             DefaultPawn = *ActorItr;
@@ -154,18 +171,53 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
 
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos)
 {
-        TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
-    
-        // 선택된 아이템 박스 클래스로 아이템 박스 생성
-        AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
-        
-        UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
-        if (SpawnedItemBox) {
-            SpawnedItemBox->ItemName = itemname;
-            SpawnedItemBox->ItemClassType = itemclass;
-            SpawnedItemBox->Texture = texture;
-            SpawnedItemBox->Count = count;
+    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+
+	TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
+
+	// 선택된 아이템 박스 클래스로 아이템 박스 생성
+	AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
+
+	UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
+	if (SpawnedItemBox) {
+		SpawnedItemBox->ItemName = itemname;
+		SpawnedItemBox->ItemClassType = itemclass;
+		SpawnedItemBox->Texture = texture;
+		SpawnedItemBox->Count = count;
+	}
+
+	m_iItemBoxNumber++;
+}
+
+void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count)
+{
+    ABaseCharacter* DefaultPawn = nullptr;
+
+
+    UWorld* World = GetWorld();
+    if (World) {
+        for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
+            DefaultPawn = *ActorItr;
+            if (DefaultPawn) {
+                break;
+            }
         }
+    }
+
+    // 매개변수들을 디버깅하기 위해 출력
+    //FString ItemNameString = itemname.ToString();
+    //FString ItemClassString = UEnum::GetValueAsString(itemclass); // EItemClass의 문자열로 변환
+    //FString TextureName = texture ? texture->GetName() : TEXT("NULL");
+    //FString DefaultPawnLocation = DefaultPawn->GetActorLocation().ToString();
+
+    //FString DebugMessage = FString::Printf(TEXT("Item Name: %s, Item Class: %s, Texture: %s, Count: %d, Location %s, index %d"), *ItemNameString, *ItemClassString, *TextureName, count, *DefaultPawnLocation, GetItemBoxNumber());
+    //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, DebugMessage);
+
+    
+
+
+    FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
+    SpawnItemBoxes(GetItemBoxNumber(), itemname, itemclass, texture, count, DefaultPawn->GetActorLocation() + FVector(DropPos.X, DropPos.Y, -60.149886f) );
 }
 
 //void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos) {
@@ -263,3 +315,4 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
 
     }
 }
+

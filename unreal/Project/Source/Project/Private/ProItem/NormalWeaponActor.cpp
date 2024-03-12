@@ -29,4 +29,8 @@ void ANormalWeaponActor::Tick(float DeltaTime)
 
 }
 
+void ANormalWeaponActor::PlaceItem()
+{
+}
+
 

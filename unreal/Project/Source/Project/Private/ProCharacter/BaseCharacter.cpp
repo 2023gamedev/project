@@ -6,11 +6,53 @@
 #include "ProItem/ItemActor.h"
 #include "ProItem/ItemBoxActor.h"
 #include "ProCharacter/PlayerSight.h"
+
+// 노말 무기
 #include "ProItem/NormalWeaponActor.h"
+#include "ProItem/NWBook.h"
+#include "ProItem/NWBottle.h"
+#include "ProItem/NWButchersKnife.h"
+#include "ProItem/NWFireAxe.h"
+#include "ProItem/NWFireExtinguisher.h"
+#include "ProItem/NWFryingPan.h"
+#include "ProItem/NWGolfClub.h"
+#include "ProItem/NWIron.h"
+#include "ProItem/NWMagicStick.h"
+#include "ProItem/NWMannequinArm.h"
+#include "ProItem/NWMannequinLeg.h"
+#include "ProItem/NWPipe.h"
+#include "ProItem/NWPlunger.h"
+#include "ProItem/NWSashimiKnife.h"
+#include "ProItem/NWScissors.h"
+#include "ProItem/NWShovels.h"
+#include "ProItem/NWSquareWood.h"
+#include "ProItem/NWWoodenBat.h"
+
+// 투척 무기
 #include "ProItem/ThrowWeaponActor.h"
+
+// 상처회복 아이템
 #include "ProItem/HealingItemActor.h"
+#include "ProItem/HCannedTuna.h"
+#include "ProItem/HDisinfectant.h"
+#include "ProItem/HDrink.h"
+#include "ProItem/HOintment.h"
+#include "ProItem/HSmoke.h"
+#include "ProItem/HSnack.h"
+#include "ProItem/HWater.h"
+
+// 키 아이템
 #include "ProItem/KeyActor.h"
+
+
+// 출혈회복 아이템
 #include "ProItem/BleedingHealingItemActor.h"
+#include "ProItem/BHBandage.h"
+#include "ProItem/BHClothes.h"
+#include "ProItem/BHDirtyClothes.h"
+#include "ProItem/BHGauze.h"
+
+
 #include "ProUI/GamePlayerUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
@@ -79,7 +121,11 @@ ABaseCharacter::ABaseCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.f, 0.f);
 	GetCharacterMovement()->JumpZVelocity = 500.f;
 
-	//m_VStartLocation = FVector(2215.f, 2282.f, 90.212492f);
+	CurrentWeapon = nullptr;
+	CurrentThrowWeapon = nullptr;
+	CurrentBleedingHealingItem = nullptr;
+	CurrentHealingItem = nullptr;
+	CurrentKeyItem = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -87,7 +133,6 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//SetActorLocation(m_VStartLocation);
 
 	if (GameUIClass != nullptr) {
 
@@ -150,6 +195,59 @@ bool ABaseCharacter::SwapInven(int from, int to)
 	GameUIWidget->RefreshInventory(to);
 
 	return true;
+}
+
+void ABaseCharacter::SpawnOnGround(int slotindex)
+{
+
+	auto CurrentInvenSlot = this->Inventory[slotindex];
+	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {
+		if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
+			QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[0].Name = "nullptr";
+			QuickSlot[0].ItemClassType = EItemClass::NONE;
+			QuickSlot[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[0].Count = 0;
+		}
+		else if (CurrentInvenSlot.ItemClassType == EItemClass::HEALINGITEM) {
+			QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[1].Name = "nullptr";
+			QuickSlot[1].ItemClassType = EItemClass::NONE;
+			QuickSlot[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[1].Count = 0;
+		}
+		else if (CurrentInvenSlot.ItemClassType == EItemClass::THROWINGWEAPON) {
+			QuickSlot[2].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[2].Name = "nullptr";
+			QuickSlot[2].ItemClassType = EItemClass::NONE;
+			QuickSlot[2].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[2].Count = 0;
+		}
+		else if (CurrentInvenSlot.ItemClassType == EItemClass::KEYITEM) {
+			QuickSlot[3].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[3].Name = "nullptr";
+			QuickSlot[3].ItemClassType = EItemClass::NONE;
+			QuickSlot[3].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[3].Count = 0;
+		}
+		else if (CurrentInvenSlot.ItemClassType == EItemClass::NORMALWEAPON) {
+			QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[4].Name = "nullptr";
+			QuickSlot[4].ItemClassType = EItemClass::NONE;
+			QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[4].Count = 0;
+		}
+
+	}
+	Inventory[slotindex].Type = EItemType::ITEM_NONE;
+	Inventory[slotindex].Name = "nullptr";
+	Inventory[slotindex].ItemClassType = EItemClass::NONE;
+	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	Inventory[slotindex].Count = 0;
+
+	GameUIUpdate();
+
+	ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
 }
 
 
@@ -233,6 +331,8 @@ void ABaseCharacter::GetItem()
 				break;
 			}
 		}
+
+
 		
 		//수정 필요 Datatable 받아서 아이템에 넣어줘야 하나
 		//itembox->OnChracterOvelapNew(this);
@@ -279,7 +379,10 @@ void ABaseCharacter::InventoryOnOff()
 void ABaseCharacter::QuickNWeapon()
 {
 	if (IsBringCurrentWeapon()) {
-
+		FName WeaponSocket = TEXT("middle_01_rSocket");
+		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+		CurrentWeapon->SetActorRelativeRotation(FRotator(0.f, 110.f, 0.f));
+		SetHandIn(true);
 	}
 }
 
@@ -334,4 +437,53 @@ void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
 void ABaseCharacter::GameUIUpdate()
 {
 	GameUIWidget->Update();
+}
+
+//IsValid()로 다 수정하기 오늘 할 일
+void ABaseCharacter::SpawnNormalWeapon()
+{
+	if (CurrentWeapon == nullptr) {
+		if (QuickSlot[4].Name == "SquareWood") {
+			CurrentWeapon = GetWorld()->SpawnActor<ANWSquareWood>(ANWSquareWood::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator); // 어디 퀵슬롯 아이템들은안보이는데에 모아두는 것이 좋을듯
+		}
+	}
+	SetBringCurrentWeapon(true);
+}
+
+
+void ABaseCharacter::SpawnThrowWeapon()
+{
+}
+
+void ABaseCharacter::SpawnHealingItem()
+{
+}
+
+void ABaseCharacter::SpawnBleddingHealingItem()
+{
+}
+
+void ABaseCharacter::SpawnKeyItem()
+{
+}
+
+void ABaseCharacter::DestroyNormalWeapon()
+{
+
+}
+
+void ABaseCharacter::DestroyThrowWeapon()
+{
+}
+
+void ABaseCharacter::DestroyHealingItem()
+{
+}
+
+void ABaseCharacter::DestroyBleddingHealingItem()
+{
+}
+
+void ABaseCharacter::DestroyKeyItem()
+{
 }

@@ -29,6 +29,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void PlaceItem() override;
+
 public:
 	UPROPERTY(EditAnywhere, Category= NormalWeapon)
 	USkeletalMeshComponent* NormalWeapon;

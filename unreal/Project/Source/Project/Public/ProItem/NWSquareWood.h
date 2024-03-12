@@ -15,6 +15,8 @@ class PROJECT_API ANWSquareWood : public ANormalWeaponActor
 {
 	GENERATED_BODY()
 public:
+	virtual void PlaceItem() override;
+
 	// Sets default values for this actor's properties
 	ANWSquareWood();
 
