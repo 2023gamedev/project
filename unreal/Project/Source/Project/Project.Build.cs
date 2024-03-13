@@ -9,5 +9,12 @@ public class Project : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "AIModule", "GameplayTasks"});
-	}
+
+        PrivateDependencyModuleNames.AddRange(new string[] { "ProtobufCore" });
+
+        PrivateIncludePaths.AddRange(new string[]
+        {
+            "Project/Protocol/"
+        });
+    }
 }
