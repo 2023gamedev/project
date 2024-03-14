@@ -220,19 +220,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     SpawnItemBoxes(GetItemBoxNumber(), itemname, itemclass, texture, count, DefaultPawn->GetActorLocation() + FVector(DropPos.X, DropPos.Y, -60.149886f) );
 }
 
-//void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FString itemid, FVector itemboxpos) {
-//
-//    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
-//
-//    // 선택된 아이템 박스 클래스로 아이템 박스 생성
-//    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
-//    
-//    UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
-//    if (SpawnedItemBox) {
-//        UE_LOG(LogTemp, Error, TEXT("ITEM___222"));
-//        //SpawnedItemBox->SetInBoxItemId(itemid);
-//    }
-//}
+
 
 void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, bool ispatrol)
 {

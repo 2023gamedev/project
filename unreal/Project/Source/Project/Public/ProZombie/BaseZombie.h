@@ -55,9 +55,6 @@ public:
 	// 소리쳤는지
 	bool IsShouted() { return m_bIsShouted; }
 	void SetShouted(bool shouted) { m_bIsShouted = shouted; }
-
-	//bool IsPatrolLocation() { return m_bPatrolLocation; }
-	//void SetPatrolLocation(bool patrolLocation) { m_bPatrolLocation = patrolLocation; }
 		 
 	// 변경 필요 각각의 animinstance가 필요할 것 같다.
 	void Attack();
@@ -108,10 +105,5 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	bool m_bSpecialAbility = false;
-
-	//// 패트롤을 하는지 아닌지를 결정하는 변수
-	//UPROPERTY(EditAnywhere)
-	//bool m_bPatrolLocation = true;
-
 
 };

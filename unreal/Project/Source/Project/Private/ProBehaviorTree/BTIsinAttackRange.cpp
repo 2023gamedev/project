@@ -43,13 +43,11 @@ bool UBTIsinAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 	}
 	else {
 		
-		//UE_LOG(LogTemp, Error, TEXT("PROBLEM:: %s"), *ZombieName);
-		//UE_LOG(LogTemp, Error, TEXT("StartLocation-IsintAttackRange Problem"));
+
 		if (Target == nullptr) {
-			//UE_LOG(LogTemp, Error, TEXT("StartLocation-IsintAttackRange Problem11111111"));
+
 			return false;
 		}
-		//UE_LOG(LogTemp, Error, TEXT("StartLocation-IsintAttackRange Problem2222222222222"));
 		return false;
 	}
 
@@ -66,9 +64,6 @@ bool UBTIsinAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 		UE_LOG(LogTemp, Error, TEXT("FALSE"));
 	}
 
-	//UE_LOG(LogTemp, Error, TEXT("PROBLEM:: %f"), Target->GetDistanceTo(ControllingPawn));
-	//UE_LOG(LogTemp, Error, TEXT("PROBLEM_CHAR:: %s"), *Target->GetActorLocation().ToString());
-	//UE_LOG(LogTemp, Error, TEXT("PROBLEM_ZOMBIE:: %s"), *ControllingPawn->GetActorLocation().ToString());
 
 	return bResult;
 }

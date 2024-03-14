@@ -46,7 +46,6 @@ void UPlayerSight::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 		Sphere
 	);
 
-	//UE_LOG(LogTemp, Warning, TEXT("xxxxxxxxxxxxxxxxxxxxx"));
 
 	if (m_bHasHit) { // 충돌 시
 		HitActor = HitResult.GetActor();
@@ -56,8 +55,7 @@ void UPlayerSight::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 		else {
 			//UE_LOG(LogTemp, Warning, TEXT("oooooooooooooooooooooooo"));
 		}
-		//UE_LOG(LogTemp, Warning, TEXT("oooooooooooooooooooooooo"));
-		//UE_LOG(LogTemp, Warning, TEXT("Hit Actor : %s"), *HitActor->GetActorNameOrLabel());
+
 	}
 	else {
 		// 충돌 안함
