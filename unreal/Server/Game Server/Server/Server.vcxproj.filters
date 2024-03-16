@@ -41,6 +41,12 @@
     <ClCompile Include="SocketUtils.cpp">
       <Filter>소스 파일\Network</Filter>
     </ClCompile>
+    <ClCompile Include="IocpCore.cpp">
+      <Filter>소스 파일\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpEvent.cpp">
+      <Filter>소스 파일\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iocpServerClass.h">
@@ -69,6 +75,12 @@
     </ClInclude>
     <ClInclude Include="Types.h">
       <Filter>소스 파일\ServerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpCore.h">
+      <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpEvent.h">
+      <Filter>소스 파일\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
