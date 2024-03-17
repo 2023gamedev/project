@@ -407,12 +407,6 @@ void ABaseCharacter::QuickTWeapon()
 	}
 }
 
-void ABaseCharacter::QuickKeyItem()
-{
-	if (IsBringCurrentKeyItem()) {
-
-	}
-}
 
 bool ABaseCharacter::CanSetWeapon()
 {

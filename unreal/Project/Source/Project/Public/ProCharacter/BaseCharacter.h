@@ -111,7 +111,6 @@ public:
 	void QuickBHItem();
 	void QuickHItem();
 	void QuickTWeapon();
-	void QuickKeyItem();
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
