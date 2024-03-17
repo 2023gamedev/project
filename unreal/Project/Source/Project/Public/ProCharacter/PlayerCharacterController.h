@@ -39,7 +39,11 @@ public:
 	void LightOnOff(const FInputActionValue& Value);
 	void InventoryOnOff(const FInputActionValue& Value);
 
-	void QuickItem(const FInputActionValue& Value);
+	void QuickNWeapon(const FInputActionValue& Value);
+	void QuickTWeapon(const FInputActionValue& Value);
+	void QuickBHItem(const FInputActionValue& Value);
+	void QuickHItem(const FInputActionValue& Value);
+
 
 public:
 	virtual void BeginPlay() override;

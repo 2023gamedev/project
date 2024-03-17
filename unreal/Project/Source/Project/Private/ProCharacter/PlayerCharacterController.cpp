@@ -97,7 +97,10 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputInventoryOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::InventoryOnOff);
 				PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &APlayerCharacterController::Jump);
 
-				PEI->BindAction(InputActions->InputQuick, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickItem);
+				PEI->BindAction(InputActions->InputQuickNWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickNWeapon);
+				PEI->BindAction(InputActions->InputQuickTWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickTWeapon);
+				PEI->BindAction(InputActions->InputQuickBHItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickBHItem);
+				PEI->BindAction(InputActions->InputQuickHItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickHItem);
 				 
 			}
 			else
@@ -208,69 +211,43 @@ void APlayerCharacterController::InventoryOnOff(const FInputActionValue& Value)
 	basecharacter->InventoryOnOff();
 }
 
-// mapping이 최대 10개라 수정
-void APlayerCharacterController::QuickItem(const FInputActionValue& Value)
+void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-
-	
-
-	//// 수정 필요 왜 안되지
-	//if (Value.Get<float>() == 1)
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("QuickNWeapon"));
-
-	//	basecharacter->QuickNWeapon();
-	//}
-	//else if (Value.Get<float>() == 2) {
-	//	UE_LOG(LogTemp, Error, TEXT("QuickBHItem"));
-
-	//	basecharacter->QuickBHItem();
-	//}
-	//else if (Value.Get<float>() == 3) {
-	//	UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
-
-	//	basecharacter->QuickHItem();
-	//}
-
-	//else if (Value.Get<float>() == 4) {
-	//	UE_LOG(LogTemp, Error, TEXT("QuickTWeapon"));
-
-	//	basecharacter->QuickTWeapon();
-	//}
-	//else if (Value.Get<float>() == 5) {
-	//	UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
-
-	//	basecharacter->QuickKeyItem();
-	//}
-
 
 	UE_LOG(LogTemp, Error, TEXT("QuickNWeapon"));
 
 	basecharacter->QuickNWeapon();
+}
+
+void APlayerCharacterController::QuickTWeapon(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
 
-	//UE_LOG(LogTemp, Error, TEXT("QuickBHItem"));
-
-	//basecharacter->QuickBHItem();
+	UE_LOG(LogTemp, Error, TEXT("QuickTWeapon"));
 
 
-	//UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
+	basecharacter->QuickTWeapon();
+}
 
-	//basecharacter->QuickHItem();
+void APlayerCharacterController::QuickBHItem(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
-
-
-	//UE_LOG(LogTemp, Error, TEXT("QuickTWeapon"));
-
-	//basecharacter->QuickTWeapon();
-
-
-	//UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
-
-	//basecharacter->QuickKeyItem();
-	//
+	UE_LOG(LogTemp, Error, TEXT("QuickBHItem"));
 
 
+	basecharacter->QuickBHItem();
+
+}
+
+void APlayerCharacterController::QuickHItem(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
+
+	basecharacter->QuickHItem();
 }
 
