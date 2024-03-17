@@ -18,6 +18,9 @@
     <Filter Include="소스 파일\Protocol">
       <UniqueIdentifier>{5200a910-95b5-40e1-8d03-44e107563632}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Thread">
+      <UniqueIdentifier>{5271b13f-3c8b-46c5-bf97-8a409ebca77d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="iocpServerClass.cpp">
@@ -32,9 +35,6 @@
     <ClCompile Include="GStruct.pb.cc">
       <Filter>소스 파일\Protocol</Filter>
     </ClCompile>
-    <ClCompile Include="Session.cpp">
-      <Filter>소스 파일\ServerClass</Filter>
-    </ClCompile>
     <ClCompile Include="NetAddress.cpp">
       <Filter>소스 파일\Network</Filter>
     </ClCompile>
@@ -47,6 +47,9 @@
     <ClCompile Include="IocpEvent.cpp">
       <Filter>소스 파일\Network</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\rndrn\Desktop\serverstudy\MMO\Server\ServerCore\ThreadManager.cpp">
+      <Filter>소스 파일\Thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iocpServerClass.h">
@@ -54,9 +57,6 @@
     </ClInclude>
     <ClInclude Include="GStruct.pb.h">
       <Filter>소스 파일\Protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="Session.h">
-      <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
     <ClInclude Include="NetAddress.h">
       <Filter>소스 파일\Network</Filter>
@@ -81,6 +81,9 @@
     </ClInclude>
     <ClInclude Include="IocpEvent.h">
       <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rndrn\Desktop\serverstudy\MMO\Server\ServerCore\ThreadManager.h">
+      <Filter>소스 파일\Thread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

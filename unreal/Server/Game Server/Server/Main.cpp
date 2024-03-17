@@ -1,5 +1,5 @@
 #pragma once
-#include"Common.h"
+#include"CorePch.h"
 using namespace std;
 
 int main() {
@@ -7,5 +7,4 @@ int main() {
 
 	// IOCP ¼­¹ö class
 	IOCP_CORE iocpServer;
-	Session::GetInstance();
 }
