@@ -26,3 +26,4 @@ using namespace std;
 
 #include"iocpServerClass.h"
 #include "Session.h"
+#include "CoreMacro.h"

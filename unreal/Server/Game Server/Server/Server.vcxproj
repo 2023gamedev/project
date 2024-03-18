@@ -162,26 +162,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\rndrn\Desktop\serverstudy\MMO\Server\ServerCore\ThreadManager.cpp" />
     <ClCompile Include="GStruct.pb.cc" />
     <ClCompile Include="IocpCore.cpp" />
     <ClCompile Include="IocpEvent.cpp" />
     <ClCompile Include="iocpServerClass.cpp" />
+    <ClCompile Include="Listener.cpp" />
     <ClCompile Include="NetAddress.cpp" />
     <ClCompile Include="ProcessPacket.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Service.cpp" />
+    <ClCompile Include="Session.cpp" />
     <ClCompile Include="SocketUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\rndrn\Desktop\serverstudy\MMO\Server\ServerCore\ThreadManager.h" />
+    <ClInclude Include="CoreMacro.h" />
     <ClInclude Include="GStruct.pb.h" />
     <ClInclude Include="IocpCore.h" />
     <ClInclude Include="IocpEvent.h" />
     <ClInclude Include="iocpServerClass.h" />
+    <ClInclude Include="Listener.h" />
     <ClInclude Include="NetAddress.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="protocol.h" />
     <ClInclude Include="CorePch.h" />
+    <ClInclude Include="Service.h" />
+    <ClInclude Include="Session.h" />
     <ClInclude Include="SocketUtils.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>

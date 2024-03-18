@@ -188,8 +188,7 @@ void IOCP_CORE::IOCP_AcceptThread()
 
 		/* DB 관련 login 기능이 여기에 추가되어야 한다. 로그인이 번호가 제대로 맞으면 통과, 아니면 클라이언트 연결을 끊는다. 로그인을 하면 DB에서 정보를 가져온다 */
 
-		Session* m_pInstance = Session::GetInstance();
-		playerIndex = m_pInstance->getPlayerIndex();
+		playerIndex++;
 		printf("[ No. %3u ] Client IP = %s, Port = %d is Connected\n", playerIndex, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
 		WSABUF wsabuf;
