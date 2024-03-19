@@ -5,18 +5,18 @@
 
 ABHGauze::ABHGauze()
 {
-	//PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = false;
 
-	//NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
-	//RootComponent = NormalWeapon;
+	BleedingHealingItem = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	RootComponent = BleedingHealingItem;
 
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
-	//if (SK_NORMALWEAPON.Succeeded()) {
-	//	NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
-	//}
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_BLEEDINGHEALINGITEM(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
+	if (SK_BLEEDINGHEALINGITEM.Succeeded()) {
+		BleedingHealingItem->SetStaticMesh(SK_BLEEDINGHEALINGITEM.Object);
+	}
 
 
-	//NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
+	BleedingHealingItem->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fHealingSuccessProbability = 0.5f;
 }

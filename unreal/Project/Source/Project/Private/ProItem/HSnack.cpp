@@ -5,18 +5,19 @@
 
 AHSnack::AHSnack()
 {
-	//PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = false;
 
-	//NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
-	//RootComponent = NormalWeapon;
+	HealingItem = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("HEALINGITEM"));
+	RootComponent = HealingItem;
 
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
-	//if (SK_NORMALWEAPON.Succeeded()) {
-	//	NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
-	//}
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_HEALINGITEM(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
+	if (SK_HEALINGITEM.Succeeded()) {
+		HealingItem->SetSkeletalMesh(SK_HEALINGITEM.Object);
+	}
 
 
-	//NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
+	HealingItem->SetCollisionProfileName(TEXT("NoCollision"));
+
 
 	m_fHealingSpeed		= 2.f;
 	m_fHealingDuration  = 10.f;

@@ -7,6 +7,18 @@
 
 ANWSquareWood::ANWSquareWood()
 {
+	PrimaryActorTick.bCanEverTick = false;
+	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
+	RootComponent = NormalWeapon;
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
+	if (SK_NORMALWEAPON.Succeeded()) {
+		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
+	}
+
+
+	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
+
 	m_fWeaponSTR		= 2.f;
 	m_fWeaponDurability = 8.f;
 	m_fWeaponRange		= 3.f;
