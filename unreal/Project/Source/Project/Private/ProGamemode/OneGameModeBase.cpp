@@ -20,6 +20,9 @@
 #include "EngineUtils.h"
 #include "GameFramework/DefaultPawn.h"
 #include "GameFramework/PlayerStart.h"
+#include "ProGamemode/GameModeManager.h"
+#include "ProGamemode/LobbyGameMode.h"
+#include "ProGamemode/ProGameInstance.h"
 
 AOneGameModeBase::AOneGameModeBase()
 {
@@ -37,6 +40,10 @@ AOneGameModeBase::AOneGameModeBase()
 
     // 플레이어를 선택한 것을 받아서 넘겨주려고 할 예정
     CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
+
+
+    // OneGameMode에서 시작할땐 여기서 해야 되고 Lobby에서 시작할 때는 Begin에서 해야하는 문제 발생..
+    ChoiceCharacterBefore();
     ChoiceCharacter();
 
     // 아이템박스는 도중에 생성되거나 없어질 수 있기에 여기다 쓰면 안된다.
@@ -67,9 +74,11 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(1, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 10, FVector(2275.f, 2074.f, 30.0626f));
     SpawnItemBoxes(2, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 20, FVector(2375.f, 2074.f, 30.0626f));
 
+    //ChoiceCharacterBefore();
+    //ChoiceCharacter();
+
     SpawnCharacter(0);
 
- 
 
     // BeginPlay에서 SpawnZombies 호출
     SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
@@ -99,26 +108,57 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 	Super::PostLogin(NewPlayer);
 }
 
+void AOneGameModeBase::ChoiceCharacterBefore()
+{
+    //// 현재 월드의 게임 인스턴스 가져오기
+    //UGameInstance* CurrentGameInstance = GetWorld()->GetGameInstance();
+
+    //if (CurrentGameInstance) {
+    //    UProGameInstance* GameInstance = Cast<UProGameInstance>(CurrentGameInstance);
+    //    if (GameInstance) {
+    //        int CharacterNumber = GameInstance->GetChoicedCharacterNumber();
+    //        if (CharacterNumber == 0) {
+    //            CharacterIconIndex = EPlayerCharacter::GIRL;
+    //        }
+    //        else if (CharacterNumber == 1) {
+    //            CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
+    //        }
+    //        else if (CharacterNumber == 2) {
+    //            CharacterIconIndex = EPlayerCharacter::IDOL;
+    //        }
+    //        else if (CharacterNumber == 3) {
+    //            CharacterIconIndex = EPlayerCharacter::FIREFIGHTER;
+    //        }
+    //    }
+    //    else {
+    //        // 게임 인스턴스가 유효하지 않은 경우에 대한 처리
+    //    }
+    //}
+    //else {
+    //    // 게임 인스턴스가 아직 생성되지 않은 경우에 대한 처리
+    //}
+}
+
 void AOneGameModeBase::ChoiceCharacter()
 {
-        if (CharacterIconIndex == EPlayerCharacter::EMPLOYEE) {
-            PlayerCharacterClasses.Add(AEmployeeCharacter::StaticClass());
-        }
-        else if (CharacterIconIndex == EPlayerCharacter::FIREFIGHTER) {
-            PlayerCharacterClasses.Add(AFireFighterCharacter::StaticClass());
-        }
-        else if (CharacterIconIndex == EPlayerCharacter::GIRL) {
-            PlayerCharacterClasses.Add(AGirlCharacter::StaticClass());
-        }
-        else if (CharacterIconIndex == EPlayerCharacter::IDOL) {
-            PlayerCharacterClasses.Add(AIdolCharacter::StaticClass());
-        }
+	if (CharacterIconIndex == EPlayerCharacter::EMPLOYEE) {
+		PlayerCharacterClasses.Add(AEmployeeCharacter::StaticClass());
+	}
+	else if (CharacterIconIndex == EPlayerCharacter::FIREFIGHTER) {
+		PlayerCharacterClasses.Add(AFireFighterCharacter::StaticClass());
+	}
+	else if (CharacterIconIndex == EPlayerCharacter::GIRL) {
+		PlayerCharacterClasses.Add(AGirlCharacter::StaticClass());
+	}
+	else if (CharacterIconIndex == EPlayerCharacter::IDOL) {
+		PlayerCharacterClasses.Add(AIdolCharacter::StaticClass());
+	}
 
 
-        PlayerCharacterControllerClasses.Add(APlayerCharacterController::StaticClass());
+	PlayerCharacterControllerClasses.Add(APlayerCharacterController::StaticClass());
 
-        DefaultPawnClass = PlayerCharacterClasses[0];
-        PlayerControllerClass = PlayerCharacterControllerClasses[0];
+	DefaultPawnClass = PlayerCharacterClasses[0];
+	PlayerControllerClass = PlayerCharacterControllerClasses[0];
 
 }
 
