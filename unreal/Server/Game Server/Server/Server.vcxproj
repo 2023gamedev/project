@@ -168,7 +168,6 @@
     <ClCompile Include="iocpServerClass.cpp" />
     <ClCompile Include="Listener.cpp" />
     <ClCompile Include="NetAddress.cpp" />
-    <ClCompile Include="ProcessPacket.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="Session.cpp" />
@@ -183,7 +182,6 @@
     <ClInclude Include="Listener.h" />
     <ClInclude Include="NetAddress.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="protocol.h" />
     <ClInclude Include="CorePch.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="Session.h" />
