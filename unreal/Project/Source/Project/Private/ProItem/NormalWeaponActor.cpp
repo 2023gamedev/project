@@ -5,18 +5,7 @@
 
 ANormalWeaponActor::ANormalWeaponActor()
 {
-	PrimaryActorTick.bCanEverTick = false;
-
-	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
-	RootComponent = NormalWeapon;
-
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
-	if (SK_NORMALWEAPON.Succeeded()) {
-		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
-	}
-
-
-	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
+	//PrimaryActorTick.bCanEverTick = false;
 }
 
 void ANormalWeaponActor::BeginPlay()
