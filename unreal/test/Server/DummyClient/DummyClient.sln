@@ -17,9 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{577136
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnrealBuildTool.Plugins", "UnrealBuildTool.Plugins", "{7B5CFB44-F0FB-31DF-AE62-C3C096A29A7B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE5", "Intermediate\ProjectFiles\UE5.vcxproj", "{CF382965-153A-3A2A-8776-13C55E3131D6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE5", "Intermediate\ProjectFiles\UE5.vcxproj", "{BB6CC549-E633-34CB-B7FC-B54AC06EA075}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DummyClient", "Intermediate\ProjectFiles\DummyClient.vcxproj", "{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DummyClient", "Intermediate\ProjectFiles\DummyClient.vcxproj", "{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}"
 	ProjectSection(ProjectDependencies) = postProject
 		{31107EAE-27AB-3054-95D4-BFF9E655E2C3} = {31107EAE-27AB-3054-95D4-BFF9E655E2C3}
 	EndProjectSection
@@ -114,7 +114,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UE5ProgramRules", "C:\UE_5.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UE5Rules", "C:\UE_5.3\Engine\Intermediate\Build\BuildRulesProjects\UE5Rules\UE5Rules.csproj", "{02B5739B-1A57-3D1C-912E-FFF7C3700629}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyClientModuleRules", "Intermediate\Build\BuildRulesProjects\DummyClientModuleRules\DummyClientModuleRules.csproj", "{38F69ECF-22CA-3F12-B1CB-0BF59385928D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyClientModuleRules", "Intermediate\Build\BuildRulesProjects\DummyClientModuleRules\DummyClientModuleRules.csproj", "{19C0BA53-CC7C-3244-BADB-275E3CF620DD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{1CCEC849-CC72-4C59-8C36-2F7C38706D4C}"
 	ProjectSection(SolutionItems) = preProject
@@ -140,34 +140,34 @@ Global
 		AvailablePlatforms=Win64;IOS
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.DebugGame Editor|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.DebugGame Editor|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.DebugGame|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.DebugGame|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.Development Editor|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.Development Editor|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.Development|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.Development|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.Shipping|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{CF382965-153A-3A2A-8776-13C55E3131D6}.Shipping|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.DebugGame Editor|IOS.ActiveCfg = Invalid|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.DebugGame Editor|Win64.ActiveCfg = DebugGame_Editor|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.DebugGame Editor|Win64.Build.0 = DebugGame_Editor|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.DebugGame|IOS.ActiveCfg = IOS_DebugGame|Win64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.DebugGame|IOS.Build.0 = IOS_DebugGame|Win64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.DebugGame|Win64.ActiveCfg = DebugGame|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.DebugGame|Win64.Build.0 = DebugGame|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Development Editor|IOS.ActiveCfg = Invalid|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Development Editor|Win64.ActiveCfg = Development_Editor|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Development Editor|Win64.Build.0 = Development_Editor|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Development|IOS.ActiveCfg = IOS_Development|Win64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Development|IOS.Build.0 = IOS_Development|Win64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Development|Win64.ActiveCfg = Development|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Development|Win64.Build.0 = Development|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Shipping|IOS.ActiveCfg = IOS_Shipping|Win64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Shipping|IOS.Build.0 = IOS_Shipping|Win64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Shipping|Win64.ActiveCfg = Shipping|x64
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4}.Shipping|Win64.Build.0 = Shipping|x64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.DebugGame Editor|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.DebugGame Editor|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.DebugGame|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.DebugGame|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.Development Editor|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.Development Editor|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.Development|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.Development|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.Shipping|IOS.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075}.Shipping|Win64.ActiveCfg = BuiltWithUnrealBuildTool|Win64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.DebugGame Editor|IOS.ActiveCfg = Invalid|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.DebugGame Editor|Win64.ActiveCfg = DebugGame_Editor|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.DebugGame Editor|Win64.Build.0 = DebugGame_Editor|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.DebugGame|IOS.ActiveCfg = IOS_DebugGame|Win64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.DebugGame|IOS.Build.0 = IOS_DebugGame|Win64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.DebugGame|Win64.ActiveCfg = DebugGame|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.DebugGame|Win64.Build.0 = DebugGame|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Development Editor|IOS.ActiveCfg = Invalid|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Development Editor|Win64.ActiveCfg = Development_Editor|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Development Editor|Win64.Build.0 = Development_Editor|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Development|IOS.ActiveCfg = IOS_Development|Win64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Development|IOS.Build.0 = IOS_Development|Win64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Development|Win64.ActiveCfg = Development|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Development|Win64.Build.0 = Development|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Shipping|IOS.ActiveCfg = IOS_Shipping|Win64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Shipping|IOS.Build.0 = IOS_Shipping|Win64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Shipping|Win64.ActiveCfg = Shipping|x64
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9}.Shipping|Win64.Build.0 = Shipping|x64
 		{31107EAE-27AB-3054-95D4-BFF9E655E2C3}.DebugGame Editor|IOS.ActiveCfg = Development|Any CPU
 		{31107EAE-27AB-3054-95D4-BFF9E655E2C3}.DebugGame Editor|IOS.Build.0 = Development|Any CPU
 		{31107EAE-27AB-3054-95D4-BFF9E655E2C3}.DebugGame Editor|Win64.ActiveCfg = Development|Any CPU
@@ -1068,33 +1068,33 @@ Global
 		{02B5739B-1A57-3D1C-912E-FFF7C3700629}.Shipping|IOS.Build.0 = Development|Any CPU
 		{02B5739B-1A57-3D1C-912E-FFF7C3700629}.Shipping|Win64.ActiveCfg = Development|Any CPU
 		{02B5739B-1A57-3D1C-912E-FFF7C3700629}.Shipping|Win64.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.DebugGame Editor|IOS.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.DebugGame Editor|IOS.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.DebugGame Editor|Win64.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.DebugGame Editor|Win64.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.DebugGame|IOS.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.DebugGame|IOS.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.DebugGame|Win64.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.DebugGame|Win64.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Development Editor|IOS.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Development Editor|IOS.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Development Editor|Win64.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Development Editor|Win64.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Development|IOS.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Development|IOS.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Development|Win64.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Development|Win64.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Shipping|IOS.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Shipping|IOS.Build.0 = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Shipping|Win64.ActiveCfg = Development|Any CPU
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D}.Shipping|Win64.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.DebugGame Editor|IOS.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.DebugGame Editor|IOS.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.DebugGame Editor|Win64.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.DebugGame Editor|Win64.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.DebugGame|IOS.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.DebugGame|IOS.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.DebugGame|Win64.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.DebugGame|Win64.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Development Editor|IOS.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Development Editor|IOS.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Development Editor|Win64.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Development Editor|Win64.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Development|IOS.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Development|IOS.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Development|Win64.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Development|Win64.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Shipping|IOS.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Shipping|IOS.Build.0 = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Shipping|Win64.ActiveCfg = Development|Any CPU
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD}.Shipping|Win64.Build.0 = Development|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{CF382965-153A-3A2A-8776-13C55E3131D6} = {233774A8-CC9D-3FA9-86D1-90573E92B704}
-		{7DFE515F-B9D6-3762-AD62-B345AB4BDCC4} = {DE1F8B53-6C02-3C13-9101-A7C8D96F3FF6}
+		{BB6CC549-E633-34CB-B7FC-B54AC06EA075} = {233774A8-CC9D-3FA9-86D1-90573E92B704}
+		{678CB34A-8DCF-3048-8CBE-34494C2D1EA9} = {DE1F8B53-6C02-3C13-9101-A7C8D96F3FF6}
 		{31107EAE-27AB-3054-95D4-BFF9E655E2C3} = {A338B9E2-A559-34BE-A46D-F789DD488FAD}
 		{1FA17D87-6A59-3AAA-9AD8-665850BFF466} = {A338B9E2-A559-34BE-A46D-F789DD488FAD}
 		{0BFBE63A-B98A-3411-8EEB-8918FEC737B3} = {A338B9E2-A559-34BE-A46D-F789DD488FAD}
@@ -1143,6 +1143,6 @@ Global
 		{8B1578E2-993B-3301-980A-6B9F229226B8} = {57713676-9DBE-331C-AD10-26632AC9EE0C}
 		{CFAD826C-0F0E-35E0-AC3D-56184F3741E8} = {C2F57ECE-B26F-39D8-BDA7-C1D40BD8F180}
 		{02B5739B-1A57-3D1C-912E-FFF7C3700629} = {C2F57ECE-B26F-39D8-BDA7-C1D40BD8F180}
-		{38F69ECF-22CA-3F12-B1CB-0BF59385928D} = {C2F57ECE-B26F-39D8-BDA7-C1D40BD8F180}
+		{19C0BA53-CC7C-3244-BADB-275E3CF620DD} = {C2F57ECE-B26F-39D8-BDA7-C1D40BD8F180}
 	EndGlobalSection
 EndGlobal

@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "ProData/InputDataAsset.h"
 #include "InputActionValue.h"
+#include "ClientSocket.h"
 
 #include "PlayerCharacterController.generated.h"
 
@@ -46,8 +47,12 @@ public:
 
 
 public:
+	void SetClientSocket(ClientSocket* InClientSocket){	ClientSocketPtr = InClientSocket; }
+
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+	void CheckAndSendMovement();
 
 	virtual void SetupInputComponent() override;
 
@@ -58,5 +63,17 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	UInputDataAsset* InputActions;
+
+private:
+	ClientSocket* ClientSocketPtr;
+
+	//캐릭터의 이전 위치 저장 변수
+	FVector PreviousLocation;
+	FRotator PreviousRotation;
+
+public:
+	PlayerData recvPlayerData;
+	uint32 PlayerId;
+	FVector NewLocation;
 
 };
