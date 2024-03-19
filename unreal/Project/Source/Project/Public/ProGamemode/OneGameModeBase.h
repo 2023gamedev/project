@@ -23,10 +23,10 @@ enum class EZombie
 UENUM(BlueprintType)
 enum class EPlayerCharacter
 {
-    EMPLOYEE,
-    FIREFIGHTER,
     GIRL,
+    EMPLOYEE,
     IDOL,
+    FIREFIGHTER,
 };
 
 class ABaseCharacter;
@@ -95,6 +95,8 @@ public:
     EPlayerCharacter CharacterIconIndex;
 
 
+    void ChoiceCharacterBefore();
+
     // 캐릭터 선택 함수
     void ChoiceCharacter();
 
@@ -109,5 +111,6 @@ public:
     int32 GetItemBoxNumber() { return m_iItemBoxNumber; }
 
     void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
+
 
 };
