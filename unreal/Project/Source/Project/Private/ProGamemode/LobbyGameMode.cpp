@@ -49,37 +49,44 @@ void ALobbyGameMode::BeginPlay()
 // 이제 메인 맵과 게임모드로 이동
 void ALobbyGameMode::LobbyStageClear()
 {
-    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
-    GameInstance->ChangeOneGameMode();
+   UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
+   GameInstance->ChangeOneGameMode();
 }
 
 void ALobbyGameMode::ChoiceGirl()
 {
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceGirl!");
+
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
 
     GameInstance->SetChoicedCharacterNumber(0);
-
+    LobbyStageClear();
 }
 
 void ALobbyGameMode::ChoiceEmployee()
 {
-    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceEmployee!");
 
+    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(1);
+    LobbyStageClear();
 }
 
 void ALobbyGameMode::ChoiceIdol()
 {
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceIdol!");
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
-
     GameInstance->SetChoicedCharacterNumber(2);
+    LobbyStageClear();
 }
 
 void ALobbyGameMode::ChoiceFireFighter()
 {
-    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceFireFighter!");
 
+    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(3);
+    LobbyStageClear();
 }
 
 void ALobbyGameMode::QuitGame()

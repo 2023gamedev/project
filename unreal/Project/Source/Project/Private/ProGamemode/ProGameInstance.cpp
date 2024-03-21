@@ -31,14 +31,15 @@ TSubclassOf<AGameStateBase> UProGameInstance::GetGameState()
 
 void UProGameInstance::ChangeOneGameMode()
 {
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UProGameInstance::ChangeOneGameMode()");
     // 현재 월드 가져오기
     UWorld* World = GetWorld();
     if (World)
     {
         // 새로운 게임 모드 클래스를 로드할 레벨 이름
-        FString LevelName = "ThirdPersonMap";
+        FString LevelName = "/Game/ThirdPerson/Maps/ThirdPersonMap";
 
         // 새로운 레벨 로드
-        UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=OneGameModeBase");
+        UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=ProGamemode/OneGameModeBase");
     }
 }

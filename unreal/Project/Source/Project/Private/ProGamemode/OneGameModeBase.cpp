@@ -43,7 +43,7 @@ AOneGameModeBase::AOneGameModeBase()
 
 
     // OneGameMode에서 시작할땐 여기서 해야 되고 Lobby에서 시작할 때는 Begin에서 해야하는 문제 발생..
-    ChoiceCharacterBefore();
+    //ChoiceCharacterBefore();
     ChoiceCharacter();
 
     // 아이템박스는 도중에 생성되거나 없어질 수 있기에 여기다 쓰면 안된다.
@@ -110,33 +110,33 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 void AOneGameModeBase::ChoiceCharacterBefore()
 {
-    //// 현재 월드의 게임 인스턴스 가져오기
-    //UGameInstance* CurrentGameInstance = GetWorld()->GetGameInstance();
+    // 현재 월드의 게임 인스턴스 가져오기
+    UGameInstance* CurrentGameInstance = GetGameInstance();
 
-    //if (CurrentGameInstance) {
-    //    UProGameInstance* GameInstance = Cast<UProGameInstance>(CurrentGameInstance);
-    //    if (GameInstance) {
-    //        int CharacterNumber = GameInstance->GetChoicedCharacterNumber();
-    //        if (CharacterNumber == 0) {
-    //            CharacterIconIndex = EPlayerCharacter::GIRL;
-    //        }
-    //        else if (CharacterNumber == 1) {
-    //            CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
-    //        }
-    //        else if (CharacterNumber == 2) {
-    //            CharacterIconIndex = EPlayerCharacter::IDOL;
-    //        }
-    //        else if (CharacterNumber == 3) {
-    //            CharacterIconIndex = EPlayerCharacter::FIREFIGHTER;
-    //        }
-    //    }
-    //    else {
-    //        // 게임 인스턴스가 유효하지 않은 경우에 대한 처리
-    //    }
-    //}
-    //else {
-    //    // 게임 인스턴스가 아직 생성되지 않은 경우에 대한 처리
-    //}
+    if (CurrentGameInstance) {
+        UProGameInstance* GameInstance = Cast<UProGameInstance>(CurrentGameInstance);
+        if (GameInstance) {
+            int CharacterNumber = GameInstance->GetChoicedCharacterNumber();
+            if (CharacterNumber == 0) {
+                CharacterIconIndex = EPlayerCharacter::GIRL;
+            }
+            else if (CharacterNumber == 1) {
+                CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
+            }
+            else if (CharacterNumber == 2) {
+                CharacterIconIndex = EPlayerCharacter::IDOL;
+            }
+            else if (CharacterNumber == 3) {
+                CharacterIconIndex = EPlayerCharacter::FIREFIGHTER;
+            }
+        }
+        else {
+            // 게임 인스턴스가 유효하지 않은 경우에 대한 처리
+        }
+    }
+    else {
+        // 게임 인스턴스가 아직 생성되지 않은 경우에 대한 처리
+    }
 }
 
 void AOneGameModeBase::ChoiceCharacter()

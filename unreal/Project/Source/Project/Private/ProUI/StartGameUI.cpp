@@ -24,7 +24,7 @@ void UStartGameUI::Init()
     {
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartButton Init");
         StartButton->SetClickMethod(EButtonClickMethod::DownAndUp);
-        StartButton->OnClicked.AddUniqueDynamic(this, &UStartGameUI::OnStartButtonClicked);
+        StartButton->OnClicked.AddDynamic(this, &UStartGameUI::OnStartButtonClicked);
 
         StartButton->SetIsEnabled(true);
         //StartButton->SetVisibility(ESlateVisibility::Hidden);
@@ -37,7 +37,7 @@ void UStartGameUI::Init()
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ExitButton Init");
 
         ExitButton->SetClickMethod(EButtonClickMethod::DownAndUp);
-        ExitButton->OnClicked.AddUniqueDynamic(this, &UStartGameUI::OnExitButtonClicked);
+        ExitButton->OnClicked.AddDynamic(this, &UStartGameUI::OnExitButtonClicked);
         ExitButton->SetIsEnabled(true);
 
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ExitButton Init End");

@@ -19,10 +19,6 @@ class PROJECT_API UStartGameUI : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-
-
-	void OnStartButtonClicked();
-	void OnExitButtonClicked();
 	void Init();
 
 
@@ -34,4 +30,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ExitButton;
+
+private:
+	UFUNCTION(BlueprintCallable)
+	void OnStartButtonClicked();
+
+	UFUNCTION(BlueprintCallable)
+	void OnExitButtonClicked();
+
 };

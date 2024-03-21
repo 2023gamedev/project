@@ -10,7 +10,10 @@ ALobbyPlayerController::ALobbyPlayerController(const FObjectInitializer& ObjectI
 	:Super(ObjectInitializer)
 {
 
+	bShowMouseCursor = true;
 	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
+
 }
 
 void ALobbyPlayerController::PostInitializeComponents()

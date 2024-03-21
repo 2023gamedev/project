@@ -80,6 +80,7 @@ void ALobbyPlayer::BeginPlay()
 		StartGameUIWidget->Init();
 		StartGameUIWidget->AddToViewport();
 
+
 		StartGameUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
 	}
 
@@ -129,6 +130,8 @@ void ALobbyPlayer::MoveChoiceCharacterUI()
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!ChoiceCharacterUIWidget");
 			return;
 		}
+
+		//StartGameUIWidget->RemoveFromViewport();
 
 		ChoiceCharacterUIWidget->Init();
 		ChoiceCharacterUIWidget->AddToViewport();

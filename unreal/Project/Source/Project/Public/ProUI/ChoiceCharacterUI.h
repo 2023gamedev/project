@@ -30,11 +30,6 @@ public:
 	FChoicedIdol ChoicedIdol;
 	FChoicedFireFighter ChoicedFireFighter;
 
-	void OnClickedGirlButton();
-	void OnClickedEmployeeButton();
-	void OnClickedIdolButton();
-	void OnClickedFireFighterButton();
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* GirlButton;
 
@@ -46,4 +41,18 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* FireFighterButton;
+
+
+private:
+	UFUNCTION(BlueprintCallable)
+	void OnClickedGirlButton();
+
+	UFUNCTION(BlueprintCallable)
+	void OnClickedEmployeeButton();
+
+	UFUNCTION(BlueprintCallable)
+	void OnClickedIdolButton();
+
+	UFUNCTION(BlueprintCallable)
+	void OnClickedFireFighterButton();
 };
