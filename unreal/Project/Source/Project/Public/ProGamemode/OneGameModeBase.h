@@ -29,6 +29,8 @@ enum class EPlayerCharacter
     FIREFIGHTER,
 };
 
+
+
 class ABaseCharacter;
 class ABaseZombie;
 class APlayerCharacterController;
@@ -47,7 +49,9 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
     virtual void BeginPlay() override;
-    //virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) ov
+    
+    virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+
 
     // 아이템 박스
     UPROPERTY(EditDefaultsOnly, Category = "ItemBox")
@@ -94,6 +98,12 @@ public:
     UPROPERTY(VisibleAnywhere, Category ="PlayerCharacter")
     EPlayerCharacter CharacterIconIndex;
 
+    struct SItemRandomLocation
+    {
+        FVector sLocation;                  // 위치가 어딘가
+        bool    bIsSeatLocation = false;    // 위치에 누가 이미 차지하고 있는가 true 
+        int     iFloor;                     // 몇층인가.
+    };
 
     void ChoiceCharacterBefore();
 
@@ -101,6 +111,14 @@ public:
     void ChoiceCharacter();
 
     void SpawnCharacter(int32 characterindex);
+
+    // 아이템 박스 위치 정해놓고 랜덤으로 정해서 생성
+    void RandomItemBoxLocation();  // 제작 예정
+
+    //// 아이템 랜덤 위치 정해놓는 배열
+    //UPROPERTY(VisibleAnywhere, Category = "ItemBox")
+    //TArray<SItemRandomLocation> ItemBoxRandomLocation;
+    //
 
     // 아이템 생성 함수
     void SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos);

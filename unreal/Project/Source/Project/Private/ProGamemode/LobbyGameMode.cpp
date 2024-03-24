@@ -38,7 +38,6 @@ void ALobbyGameMode::BeginPlay()
             }
         }
 
-        //DefaultPawn->StartGameUIWidget->QuitGame.BindUObject(this, &ALobbyGameMode::QuitGame);
         DefaultPawn->ChoicedGirlCharcaterD.BindUObject(this, &ALobbyGameMode::ChoiceGirl);
         DefaultPawn->ChoicedEmployeeCharcaterD.BindUObject(this, &ALobbyGameMode::ChoiceEmployee);
         DefaultPawn->ChoicedIdolCharcaterD.BindUObject(this, &ALobbyGameMode::ChoiceIdol);
@@ -89,9 +88,6 @@ void ALobbyGameMode::ChoiceFireFighter()
     LobbyStageClear();
 }
 
-void ALobbyGameMode::QuitGame()
-{
-}
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {

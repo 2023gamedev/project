@@ -15,7 +15,14 @@ void UStartGameUI::OnStartButtonClicked()
 void UStartGameUI::OnExitButtonClicked()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnExitButtonClicked");
-    QuitGame.Execute();
+
+    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+    if (PlayerController)
+    {
+        // 'quit' 명령을 실행하여 게임 종료
+        PlayerController->ConsoleCommand("quit");
+    }
+
 }
 
 void UStartGameUI::Init()

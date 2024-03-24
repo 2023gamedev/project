@@ -44,12 +44,9 @@ AOneGameModeBase::AOneGameModeBase()
 
     // OneGameMode에서 시작할땐 여기서 해야 되고 Lobby에서 시작할 때는 Begin에서 해야하는 문제 발생..
     //ChoiceCharacterBefore();
-    ChoiceCharacter();
+    //ChoiceCharacter();
 
     // 아이템박스는 도중에 생성되거나 없어질 수 있기에 여기다 쓰면 안된다.
-    //ItemBoxClasses.Add(AItemBoxActor::StaticClass());
-    //ItemBoxClasses.Add(AItemBoxActor::StaticClass());
-    //ItemBoxClasses.Add(AItemBoxActor::StaticClass());
 
     // 좀비는 계속 부활하기에 더 생성하거나 삭제할 이유가 없어 이 곳에서 Add가능하다.
     ZombieClasses.Add(ANormalZombie::StaticClass());
@@ -100,6 +97,14 @@ void AOneGameModeBase::BeginPlay()
 
         DefaultPawn->ThrowOnGround.BindUObject(this, &AOneGameModeBase::SpawnOnGroundItem);
     }
+}
+
+void AOneGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+    Super::InitGame(MapName, Options, ErrorMessage);
+
+    ChoiceCharacterBefore();
+    ChoiceCharacter();
 }
 
 
@@ -207,6 +212,10 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
             DefaultPawn->SetActorLocation(PlayerStart->GetActorLocation());
         }
     }
+}
+
+void AOneGameModeBase::RandomItemBoxLocation()
+{
 }
 
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos)

@@ -30,6 +30,4 @@ public:
 	void ChoiceEmployee();
 	void ChoiceIdol();
 	void ChoiceFireFighter();
-	void QuitGame();
-
 };
