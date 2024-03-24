@@ -11,7 +11,6 @@
  * 
  */
 DECLARE_DELEGATE(FMoveChoiceCharacterUI);
-DECLARE_DELEGATE(FQuitGame);
 
 UCLASS()
 class PROJECT_API UStartGameUI : public UUserWidget
@@ -23,7 +22,6 @@ public:
 
 
 	FMoveChoiceCharacterUI MoveChoiceCharacterUI;
-	FQuitGame QuitGame;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* StartButton;
