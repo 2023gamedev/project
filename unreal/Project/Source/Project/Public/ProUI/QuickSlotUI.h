@@ -11,7 +11,7 @@
  */
 
 class USlot;
-
+// QuickSlot Å¬·¡½º
 UCLASS()
 class PROJECT_API UQuickSlotUI : public UBaseUI
 {

@@ -34,7 +34,6 @@ void UStartGameUI::Init()
         StartButton->OnClicked.AddDynamic(this, &UStartGameUI::OnStartButtonClicked);
 
         StartButton->SetIsEnabled(true);
-        //StartButton->SetVisibility(ESlateVisibility::Hidden);
 
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartButton Init End");
     }

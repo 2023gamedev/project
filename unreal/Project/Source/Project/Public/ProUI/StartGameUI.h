@@ -12,6 +12,7 @@
  */
 DECLARE_DELEGATE(FMoveChoiceCharacterUI);
 
+// 시작할 때 나타나는 UI Start, Exit가 있다.
 UCLASS()
 class PROJECT_API UStartGameUI : public UUserWidget
 {

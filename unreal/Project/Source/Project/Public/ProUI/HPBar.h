@@ -9,6 +9,7 @@
 /**
  * 
  */
+// HPBar
 UCLASS()
 class PROJECT_API UHPBar : public UBaseUI
 {

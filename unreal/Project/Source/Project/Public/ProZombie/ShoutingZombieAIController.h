@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // ShoutingZombie(소리치는 좀비)를 컨트롤하는 컨트롤러
 UCLASS()
 class PROJECT_API AShoutingZombieAIController : public AAIController
 {

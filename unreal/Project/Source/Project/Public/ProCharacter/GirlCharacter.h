@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // Girl 캐릭터 클래스
 UCLASS()
 class PROJECT_API AGirlCharacter : public ABaseCharacter
 {

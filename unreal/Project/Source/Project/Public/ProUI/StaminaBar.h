@@ -9,6 +9,7 @@
 /**
  * 
  */
+// StaminaBar
 UCLASS()
 class PROJECT_API UStaminaBar : public UBaseUI
 {

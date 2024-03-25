@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // FireFighter 캐릭터 클래스
 UCLASS()
 class PROJECT_API AFireFighterCharacter : public ABaseCharacter
 {

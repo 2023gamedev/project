@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // Zombie가 소리치는가에 Decorator
 UCLASS()
 class PROJECT_API UBTIsShouting : public UBTDecorator
 {

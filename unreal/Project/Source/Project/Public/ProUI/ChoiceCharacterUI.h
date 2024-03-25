@@ -16,7 +16,7 @@ DECLARE_DELEGATE(FChoicedIdol);
 DECLARE_DELEGATE(FChoicedFireFighter);
 
 
-
+// Lobby에서 캐릭터를 선택하는데에 쓰이느 UI
 UCLASS()
 class PROJECT_API UChoiceCharacterUI : public UUserWidget
 {

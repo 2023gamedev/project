@@ -16,6 +16,7 @@ DECLARE_DELEGATE(FChoicedEmployeeCharcaterD);
 DECLARE_DELEGATE(FChoicedIdolCharcaterD);
 DECLARE_DELEGATE(FChoicedFireFighterCharcaterD);
 
+// Lobby에서 UI를 고르는 Player 클래스
 UCLASS()
 class PROJECT_API ALobbyPlayer : public APawn
 {

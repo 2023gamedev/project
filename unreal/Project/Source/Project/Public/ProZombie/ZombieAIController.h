@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // Zombie를 컨트롤하는 컨트롤러의 부모 클래스
 UCLASS()
 class PROJECT_API AZombieAIController : public AAIController
 {

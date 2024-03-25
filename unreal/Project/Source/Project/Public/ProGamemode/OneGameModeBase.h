@@ -11,6 +11,9 @@
  * 
  */
 
+// Main Gamemode Å¬·¡½º
+
+
 UENUM(BlueprintType)
 enum class EZombie
 {

@@ -9,6 +9,7 @@
 /**
  * 
  */
+// Player 캐릭터에 애님인스턴스
 UCLASS()
 class PROJECT_API UPlayerCharacterAnimInstance : public UAnimInstance
 {
