@@ -25,6 +25,7 @@ class AKeyActor;
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
 
+// 플레이어 캐릭터들의 부모클래스
 UCLASS()
 class PROJECT_API ABaseCharacter : public ACharacter
 {

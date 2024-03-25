@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // Blackboard에서 변수를 초기화하는 클래스
 UCLASS()
 class PROJECT_API UBTTask_ClearBlackboardBase : public UBTTask_BlackboardBase
 {

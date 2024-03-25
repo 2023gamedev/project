@@ -6,7 +6,7 @@
 #include "Components/SceneComponent.h"
 #include "PlayerSight.generated.h"
 
-
+// Player 가 아이템 주울 때 시선 역할하는 SceneComponent 클래스
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECT_API UPlayerSight : public USceneComponent
 {

@@ -12,7 +12,7 @@
 
 
 
-
+// LobbyMap에서의 Gamemode 클래스
 UCLASS()
 class PROJECT_API ALobbyGameMode : public AGameModeBase
 {

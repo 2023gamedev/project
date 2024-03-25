@@ -17,6 +17,7 @@
 class UInputMappingContext;
 class UInputDataAsset;
 
+// Player 캐릭터들의 컨트롤러(LobbyPlayer 제외)
 UCLASS()
 class PROJECT_API APlayerCharacterController : public APlayerController
 {

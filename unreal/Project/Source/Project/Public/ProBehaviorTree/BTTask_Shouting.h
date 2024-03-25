@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // Zombie가 소리치는 클래스
 UCLASS()
 class PROJECT_API UBTTask_Shouting : public UBTTaskNode
 {

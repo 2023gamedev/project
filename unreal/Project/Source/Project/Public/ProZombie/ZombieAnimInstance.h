@@ -9,6 +9,7 @@
 /**
  * 
  */
+// ZombieAnimInstance 
 UCLASS()
 class PROJECT_API UZombieAnimInstance : public UAnimInstance
 {

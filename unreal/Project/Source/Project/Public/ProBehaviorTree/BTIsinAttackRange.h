@@ -9,6 +9,7 @@
 /**
  * 
  */
+// Zombie의 공격범위에 Player가 들어와 있는가에 대한 Decorator Class
 UCLASS()
 class PROJECT_API UBTIsinAttackRange : public UBTDecorator
 {

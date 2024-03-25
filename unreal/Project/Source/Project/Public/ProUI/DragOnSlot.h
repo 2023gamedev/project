@@ -11,6 +11,8 @@
  * 
  */
 
+// Slot에 있는 아이템을 Drag하기 위해 있는 Class
+
 UCLASS()
 class PROJECT_API UDragOnSlot : public UDragDropOperation
 {

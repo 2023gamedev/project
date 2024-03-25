@@ -10,6 +10,7 @@
 DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
 
+// Zombie 클래스의 부모 클래스
 UCLASS()
 class PROJECT_API ABaseZombie : public ACharacter
 {

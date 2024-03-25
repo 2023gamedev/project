@@ -41,13 +41,6 @@ AOneGameModeBase::AOneGameModeBase()
     // 플레이어를 선택한 것을 받아서 넘겨주려고 할 예정
     CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
 
-
-    // OneGameMode에서 시작할땐 여기서 해야 되고 Lobby에서 시작할 때는 Begin에서 해야하는 문제 발생..
-    //ChoiceCharacterBefore();
-    //ChoiceCharacter();
-
-    // 아이템박스는 도중에 생성되거나 없어질 수 있기에 여기다 쓰면 안된다.
-
     // 좀비는 계속 부활하기에 더 생성하거나 삭제할 이유가 없어 이 곳에서 Add가능하다.
     ZombieClasses.Add(ANormalZombie::StaticClass());
     ZombieAIClasses.Add(AZombieAIController::StaticClass());

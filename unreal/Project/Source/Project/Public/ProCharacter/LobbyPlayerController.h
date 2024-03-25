@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // Lobby에서 UI를 고르는 Player 클래스를 컨트롤하는 컨트롤러
 UCLASS()
 class PROJECT_API ALobbyPlayerController : public APlayerController
 {

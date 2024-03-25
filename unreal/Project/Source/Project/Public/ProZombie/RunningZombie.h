@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // RunningZombie(달리는 좀비) 클래스
 UCLASS()
 class PROJECT_API ARunningZombie : public ABaseZombie
 {

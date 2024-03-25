@@ -8,6 +8,9 @@
 /**
  * 
  */
+
+// Inventory Slot에 들어있는 속성들(구조체,Enum)이 들어있는 .h
+
 class USlot;
 
 class PROJECT_API ItemDataStructure

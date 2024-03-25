@@ -9,6 +9,7 @@
 /**
  * 
  */
+ // Zombie 감지 범위 클래스
 UCLASS()
 class PROJECT_API UBTService_Detect : public UBTService
 {

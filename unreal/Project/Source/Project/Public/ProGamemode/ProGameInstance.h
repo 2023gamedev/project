@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+// Instance들 (전달하고 싶은(Global 변수처럼) 모은 Class
+
 UCLASS()
 class PROJECT_API UProGameInstance : public UGameInstance
 {

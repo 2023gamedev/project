@@ -11,7 +11,7 @@
  */
 
 
-
+ // NormalZombie(평범한 좀비) 클래스
 UCLASS()
 class PROJECT_API ANormalZombie : public ABaseZombie
 {
