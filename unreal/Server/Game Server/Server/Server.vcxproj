@@ -162,6 +162,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CoreGlobal.cpp" />
+    <ClCompile Include="CoreTLS.cpp" />
     <ClCompile Include="GStruct.pb.cc" />
     <ClCompile Include="IocpCore.cpp" />
     <ClCompile Include="IocpEvent.cpp" />
@@ -178,7 +180,9 @@
     <ClCompile Include="ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CoreGlobal.h" />
     <ClInclude Include="CoreMacro.h" />
+    <ClInclude Include="CoreTLS.h" />
     <ClInclude Include="GStruct.pb.h" />
     <ClInclude Include="IocpCore.h" />
     <ClInclude Include="IocpEvent.h" />

@@ -62,6 +62,12 @@
     <ClCompile Include="ThreadManager.cpp">
       <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
+    <ClCompile Include="CoreGlobal.cpp">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreTLS.cpp">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iocpServerClass.h">
@@ -113,6 +119,12 @@
       <Filter>소스 파일\Network</Filter>
     </ClInclude>
     <ClInclude Include="ThreadManager.h">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreGlobal.h">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreTLS.h">
       <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
   </ItemGroup>
