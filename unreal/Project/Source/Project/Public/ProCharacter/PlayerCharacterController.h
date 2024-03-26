@@ -39,6 +39,7 @@ public:
 	void GetItem(const FInputActionValue& Value);
 	void LightOnOff(const FInputActionValue& Value);
 	void InventoryOnOff(const FInputActionValue& Value);
+	void Attck(const FInputActionValue& Value);
 
 	void QuickNWeapon(const FInputActionValue& Value);
 	void QuickTWeapon(const FInputActionValue& Value);

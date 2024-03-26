@@ -5,6 +5,7 @@
 #include "ProZombie/ZombieAIController.h"
 #include "ProZombie/ZombieAnimInstance.h"
 
+
 ANormalZombie::ANormalZombie()
 {
 	//AIControllerClass = AZombieAIController::StaticClass();
@@ -26,7 +27,7 @@ ANormalZombie::ANormalZombie()
 	SetHP(20);
 	SetSpeed(2);
 	GetCharacterMovement()->MaxWalkSpeed = 200.f;
-	SetSTR(4); // 수정 필요 4 ~ 8
+	SetSTR(FMath::RandRange(4, 8)); // 수정 필요 4 ~ 8
 	SetSpecialAbility(false);
 	SetZombieName("NormalZombie");
 }
@@ -38,6 +39,8 @@ void ANormalZombie::BeginPlay()
 
 void ANormalZombie::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	auto CharactorAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharactorAnimInstance) {
 		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
