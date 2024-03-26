@@ -251,7 +251,7 @@ private:
 	bool m_bIsBringCurrentKeyItem;
 
 private:
-	uint32 PlayerId;
+	uint32 PlayerId = 99;
 
 	FVector NewLocation;
 
