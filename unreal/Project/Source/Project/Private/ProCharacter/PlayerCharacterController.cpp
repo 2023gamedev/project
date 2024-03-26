@@ -152,6 +152,7 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputLightOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::LightOnOff);
 				PEI->BindAction(InputActions->InputInventoryOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::InventoryOnOff);
 				PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &APlayerCharacterController::Jump);
+				PEI->BindAction(InputActions->InputAttack, ETriggerEvent::Completed, this, &APlayerCharacterController::Attck);
 
 				PEI->BindAction(InputActions->InputQuickNWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickNWeapon);
 				PEI->BindAction(InputActions->InputQuickTWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickTWeapon);
@@ -265,6 +266,12 @@ void APlayerCharacterController::InventoryOnOff(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	basecharacter->InventoryOnOff();
+}
+
+void APlayerCharacterController::Attck(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+	basecharacter->Attack();
 }
 
 void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)

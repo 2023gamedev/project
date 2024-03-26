@@ -57,6 +57,9 @@
 #include "ProCharacter/PlayerCharacterController.h"
 
 
+#include "Engine/DamageEvents.h"
+
+
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
@@ -154,6 +157,12 @@ void ABaseCharacter::BeginPlay()
 
 
 	}
+
+
+
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
 }
 
 // Called every frame
@@ -178,6 +187,12 @@ void ABaseCharacter::PostInitializeComponents()
 void ABaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+}
+
+float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	return Damage;
 }
 
 bool ABaseCharacter::DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype)
@@ -254,6 +269,13 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 
 
 
+
+void ABaseCharacter::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
+{
+	m_bIsAttacking = false;
+	m_DAttackEnd.Broadcast();
+}
+
 void ABaseCharacter::MoveForward(float NewAxisValue)
 {
 	if (m_bRun) {
@@ -315,12 +337,6 @@ void ABaseCharacter::GetItem()
 		
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
 
-		//FString itemid = Itembox->GetInBoxItemId();
-
-		//if (itemid == "SquareWood") {
-
-		//}
-
 		// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 		for (int i = 0; i < 20; ++i) {
 			if (Inventory[i].Type == EItemType::ITEM_NONE) {
@@ -344,9 +360,6 @@ void ABaseCharacter::GetItem()
 
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
 }
-
-
-// 추가할 부분 인벤토리에서 우클릭 시 퀵슬롯에 넣기, 그리고 아이템 생성, 그리고 퀵슬롯에 맞게 1,2,3,4번 누르면 손에 부착되게 할 예정 
 
 void ABaseCharacter::LightOnOff()
 {
@@ -376,6 +389,43 @@ void ABaseCharacter::InventoryOnOff()
 		}
 	}
 
+}
+
+void ABaseCharacter::AttackCheck()
+{
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		GetActorLocation(),
+		GetActorLocation() + GetActorForwardVector() * 200.f,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel13,
+		FCollisionShape::MakeSphere(30.0f),
+		Params
+	);
+
+	if (bResult) {
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
+		FDamageEvent DamageEvent;
+		HitResult.GetActor()->TakeDamage(GetSTR() * CurrentWeapon->m_fWeaponSTR, DamageEvent, GetController(), this);
+	}
+}
+
+void ABaseCharacter::Attack()
+{
+	if (m_bIsAttacking) {
+		return;
+	}
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	AnimInstance->PlayAttackMontage();
+	m_bIsAttacking = true;
+	AttackCheck();
+	m_DAttackEnd.AddLambda([this]() -> void {
+		m_bIsAttacking = false;
+		});
 }
 
 void ABaseCharacter::QuickNWeapon()

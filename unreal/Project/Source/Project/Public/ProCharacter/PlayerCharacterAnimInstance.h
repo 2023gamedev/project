@@ -20,6 +20,7 @@ public:
 	void SetCurrentPawnSpeed(float speed) { m_fCurrentPawnSpeed = speed; }
 	void SetIsPawnRun(bool run) { m_bPawnRun = run; }
 
+	void PlayAttackMontage();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
@@ -31,4 +32,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool m_bIsInAir;
 
+	// 局聪皋捞记 根鸥林
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackMontage;
 };

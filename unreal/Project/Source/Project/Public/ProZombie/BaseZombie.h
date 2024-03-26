@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "BaseZombie.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
@@ -29,6 +30,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* NewController) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	void SetZombieName(FString zombiename) { m_sZombieName = zombiename; };
 	FString GetZombieName() { return m_sZombieName; }

@@ -24,6 +24,7 @@ class ABleedingHealingItemActor;
 class AKeyActor;
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
+DECLARE_MULTICAST_DELEGATE(FAttackEndPlayerDelegate);
 
 // 플레이어 캐릭터들의 부모클래스
 UCLASS()
@@ -45,12 +46,16 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* NewController) override;
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	bool DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype);
 	bool SwapInven(int from, int to);
 
 	// 바닥에 떨어트리는 델리게이트 
 	FThrowOnGround ThrowOnGround;
 	void SpawnOnGround(int slotindex);
+
+	void AttackCheck();
 
 	// 스프링 암
 	UPROPERTY(EditAnywhere)
@@ -98,6 +103,8 @@ public:
 	UGamePlayerUI* GameUIWidget;
 	
 
+	UFUNCTION()
+	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
 
 	// input
 	void MoveForward(float NewAxisValue);
@@ -108,6 +115,10 @@ public:
 	void GetItem();
 	void LightOnOff();
 	void InventoryOnOff();
+
+	FAttackEndPlayerDelegate m_DAttackEnd;
+	void Attack();
+
 	void QuickNWeapon();
 	void QuickBHItem();
 	void QuickHItem();
@@ -221,6 +232,10 @@ private:
 		
 	UPROPERTY(EditAnywhere)
 		bool m_bSpecialEffect = false;
+
+	// 어택
+	UPROPERTY(EditAnywhere)
+	bool m_bIsAttacking = false;
 
 	// 손전등이 켜져있는지
 	UPROPERTY(EditAnywhere)

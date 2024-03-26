@@ -14,7 +14,7 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.f, 0.0f);
-
+	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +33,8 @@ void ABaseZombie::Tick(float DeltaTime)
 	if (nullptr != CharacterAnimInstance) {
 		CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
 	}
+
+
 }
 
 void ABaseZombie::PostInitializeComponents()
@@ -51,6 +53,15 @@ void ABaseZombie::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
+float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+	SetHP(GetHP() - Damage);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+	return Damage;
+}
+
 void ABaseZombie::Attack()
 {
 	if (m_bIsAttacking) {
@@ -61,9 +72,9 @@ void ABaseZombie::Attack()
 
 	AnimInstance->PlayAttackMontage();
 	m_bIsAttacking = true;
-	
-
 }
+
+
 
 void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {

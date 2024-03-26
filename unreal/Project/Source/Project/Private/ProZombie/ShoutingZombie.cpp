@@ -25,7 +25,7 @@ AShoutingZombie::AShoutingZombie()
 	SetHP(30);
 	SetSpeed(3);
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
-	SetSTR(4); // 수정 필요 4 ~ 8
+	SetSTR(FMath::RandRange(4, 8)); // 수정 필요 4 ~ 8
 	SetSpecialAbility(true);
 	SetZombieName("ShoutingZombie");
 }
@@ -37,6 +37,8 @@ void AShoutingZombie::BeginPlay()
 
 void AShoutingZombie::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	auto CharactorAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharactorAnimInstance) {
 		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
