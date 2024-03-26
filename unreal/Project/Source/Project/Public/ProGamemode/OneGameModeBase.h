@@ -140,5 +140,6 @@ public:
 
     void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
 
+    void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation);
 
 };

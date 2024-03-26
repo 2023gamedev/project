@@ -188,6 +188,10 @@ public:
 	void DestroyBleddingHealingItem();
 	void DestroyKeyItem();
 
+	virtual uint32 GetPlayerId() const;
+	void SetPlayerId(uint32 NewPlayerId);
+	void UpdatePlayerData(FVector Location);
+
 private:
 	UPROPERTY(EditAnywhere)
 	float m_fHP = 0.f;
@@ -246,4 +250,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsBringCurrentKeyItem;
+
+private:
+	uint32 PlayerId;
+
+	FVector NewLocation;
+
+	FVector OldLocation = FVector(0.0f, 0.0f, 0.0f);
+
 };

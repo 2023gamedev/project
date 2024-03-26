@@ -90,8 +90,8 @@ uint32 ClientSocket::Run()
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
 
 			// Protobuf �޽����� �Ľ� �õ�
-			Protocol::TestPacket testPacket;
-			if (testPacket.ParseFromArray(buffer.data(), buffer.size()))
+			Protocol::Character characterpacket;
+			if (characterpacket.ParseFromArray(buffer.data(), buffer.size()))
 			{
 				UE_LOG(LogNet, Display, TEXT("Received: PlayerId=%d, Location=(X=%f, Y=%f, Z=%f)"),
 					testPacket.playerid(),
@@ -99,9 +99,9 @@ uint32 ClientSocket::Run()
 					testPacket.y(),
 					testPacket.z());
 
-				PlayerId = testPacket.playerid();
-				FVector NewLocation(testPacket.x(), testPacket.y(), testPacket.z());
-				FRotator NewRotation(testPacket.pitch(), testPacket.yaw(), testPacket.roll());
+				PlayerId = characterpacket.playerid();
+				FVector NewLocation(characterpacket.x(), characterpacket.y(), characterpacket.z());
+				FRotator NewRotation(characterpacket.pitch(), characterpacket.yaw(), characterpacket.roll());
 
 				if (PlayerId != MyPlayerId) {
 					Qbuffer.push(PlayerData(PlayerId, NewLocation, NewRotation));

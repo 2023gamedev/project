@@ -126,6 +126,8 @@ ABaseCharacter::ABaseCharacter()
 	CurrentBleedingHealingItem = nullptr;
 	CurrentHealingItem = nullptr;
 	CurrentKeyItem = nullptr;
+
+	PlayerId = 0;
 }
 
 // Called when the game starts or when spawned
@@ -480,4 +482,19 @@ void ABaseCharacter::DestroyBleddingHealingItem()
 
 void ABaseCharacter::DestroyKeyItem()
 {
+}
+
+uint32 ABaseCharacter::GetPlayerId() const
+{
+	return PlayerId;
+}
+
+void ABaseCharacter::SetPlayerId(uint32 NewPlayerId)
+{
+	PlayerId = NewPlayerId;
+}
+
+void ABaseCharacter::UpdatePlayerData(FVector Location)
+{
+	NewLocation = Location;
 }

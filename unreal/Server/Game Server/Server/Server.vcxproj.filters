@@ -23,9 +23,6 @@
     <ClCompile Include="iocpServerClass.cpp">
       <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
-    <ClCompile Include="ProcessPacket.cpp">
-      <Filter>소스 파일\ServerClass</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -83,9 +80,6 @@
       <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>소스 파일\ServerClass</Filter>
-    </ClInclude>
-    <ClInclude Include="protocol.h">
       <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
     <ClInclude Include="SocketUtils.h">

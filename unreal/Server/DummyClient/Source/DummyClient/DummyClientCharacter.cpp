@@ -166,7 +166,7 @@ void ADummyClientCharacter::CheckAndSendMovement()
 		uint32 MyPlayerId = ClientSocketPtr->GetMyPlayerId();
 
 		// Protobuf를 사용하여 TestPacket 생성
-		Protocol::TestPacket packet;
+		Protocol::Character packet;
 		packet.set_playerid(MyPlayerId);
 		packet.set_type(1); // 원하는 유형 설정
 		packet.set_x(CurrentLocation.X);

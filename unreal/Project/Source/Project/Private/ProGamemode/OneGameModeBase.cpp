@@ -17,6 +17,7 @@
 #include "ProZombie/ZombieAIController.h"
 #include "Math/UnrealMathUtility.h"
 #include "ProItem/ItemBoxActor.h"
+#include "ClientSocket.h"
 #include "EngineUtils.h"
 #include "GameFramework/DefaultPawn.h"
 #include "GameFramework/PlayerStart.h"
@@ -384,6 +385,46 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     }
 
     m_iItemBoxNumber++;
+}
+
+void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // 캐릭터 검색
+    for (TActorIterator<ABaseCharacter> It(World); It; ++It)
+    {
+        ABaseCharacter* BasePlayer = *It;
+        if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
+        {
+            FVector OldLocation = BasePlayer->GetActorLocation();
+
+            // 기존 캐릭터 위치 업데이트
+            BasePlayer->SetActorLocation(NewLocation);
+            BasePlayer->SetActorRotation(NewRotation);
+
+            BasePlayer->UpdatePlayerData(NewLocation);
+
+            return; // 위치를 업데이트 했으므로 함수 종료
+        }
+    }
+    
+    // 기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+    ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(DefaultPawnClass, NewLocation, NewRotation, SpawnParams);
+
+    if (NewCharacter)
+    {
+        // 새 캐릭터에 PlayerId 설정
+        NewCharacter->SetPlayerId(PlayerID);
+    }
 }
 
 
