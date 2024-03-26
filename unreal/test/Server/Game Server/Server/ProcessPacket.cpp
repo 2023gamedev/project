@@ -21,9 +21,18 @@ void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::Character C
 
         if (id == 0) {
             IOCP_SendPacket(1, serializedData.data(), serializedData.size());
+            //IOCP_SendPacket(2, serializedData.data(), serializedData.size());
         }
 
-        else IOCP_SendPacket(0, serializedData.data(), serializedData.size());
+        if (id == 1) {
+            IOCP_SendPacket(0, serializedData.data(), serializedData.size());
+            //IOCP_SendPacket(2, serializedData.data(), serializedData.size());
+        }
+
+        if (id == 2) {
+            IOCP_SendPacket(0, serializedData.data(), serializedData.size());
+            IOCP_SendPacket(1, serializedData.data(), serializedData.size());
+        }
     }
 
     break;

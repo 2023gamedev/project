@@ -69,11 +69,12 @@ uint32 ClientSocket::Run()
 
 		if (!ReceivedPlayerId && recvLen > 0)
 		{
+			ReceivedPlayerId = true;
+
 			memcpy(&MyPlayerId, tempBuff, sizeof(MyPlayerId));
 
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MyPlayerId: %d"), MyPlayerId));
 			UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId);
-
-			ReceivedPlayerId = true;
 
 			buffer.clear();
 
@@ -89,11 +90,11 @@ uint32 ClientSocket::Run()
 			Protocol::Character CharacterPacket;
 			if (CharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
 			{
-				UE_LOG(LogNet, Display, TEXT("Received: PlayerId=%d, Location=(X=%f, Y=%f, Z=%f)"),
+				/*UE_LOG(LogNet, Display, TEXT("Received: PlayerId=%d, Location=(X=%f, Y=%f, Z=%f)"),
 					CharacterPacket.playerid(),
 					CharacterPacket.x(),
 					CharacterPacket.y(),
-					CharacterPacket.z());
+					CharacterPacket.z());*/
 
 				PlayerId = CharacterPacket.playerid();
 				FVector NewLocation(CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
