@@ -23,6 +23,7 @@
 #include "ProGamemode/GameModeManager.h"
 #include "ProGamemode/LobbyGameMode.h"
 #include "ProGamemode/ProGameInstance.h"
+#include "Math/UnrealMathUtility.h"
 
 AOneGameModeBase::AOneGameModeBase()
 {
@@ -52,7 +53,95 @@ AOneGameModeBase::AOneGameModeBase()
     RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
 
 
-    
+    // 0~19은 B1 20~39는 F1 40~59는 F2
+// B1
+    ItemRandomLocationStruct[0].sLocation = FVector(2175.f, 2074.f, 30.0626f);
+    ItemRandomLocationStruct[1].sLocation = FVector(2275.f, 2074.f, 30.0626f);
+    ItemRandomLocationStruct[2].sLocation = FVector(2375.f, 2074.f, 30.0626f);
+
+    ItemRandomLocationStruct[3].sLocation = FVector(2175.f, 2774.f, 30.0626f);
+    ItemRandomLocationStruct[4].sLocation = FVector(2275.f, 2974.f, 30.0626f);
+    ItemRandomLocationStruct[5].sLocation = FVector(2375.f, 3174.f, 30.0626f);
+
+    ItemRandomLocationStruct[6].sLocation = FVector(2175.f, 2574.f, 30.0626f);
+    ItemRandomLocationStruct[7].sLocation = FVector(2275.f, 2874.f, 30.0626f);
+    ItemRandomLocationStruct[8].sLocation = FVector(2375.f, 1074.f, 30.0626f);
+
+    ItemRandomLocationStruct[9].sLocation = FVector(2105.f, 1374.f, 30.0626f);
+    ItemRandomLocationStruct[10].sLocation = FVector(2075.f, 1574.f, 30.0626f);
+    ItemRandomLocationStruct[11].sLocation = FVector(2175.f, 3574.f, 30.0626f);
+
+    ItemRandomLocationStruct[12].sLocation = FVector(2105.f, 1374.f, 30.0626f);
+    ItemRandomLocationStruct[13].sLocation = FVector(2075.f, 1574.f, 30.0626f);
+    ItemRandomLocationStruct[14].sLocation = FVector(2175.f, 3574.f, 30.0626f);
+
+    ItemRandomLocationStruct[15].sLocation = FVector(2105.f, 1374.f, 30.0626f);
+    ItemRandomLocationStruct[16].sLocation = FVector(2075.f, 1574.f, 30.0626f);
+    ItemRandomLocationStruct[17].sLocation = FVector(2175.f, 3574.f, 30.0626f);
+
+    ItemRandomLocationStruct[18].sLocation = FVector(2975.f, 2074.f, 30.0626f);
+    ItemRandomLocationStruct[19].sLocation = FVector(2675.f, 2074.f, 30.0626f);
+
+
+    // F1
+    ItemRandomLocationStruct[20].sLocation = FVector(2175.f, 2074.f, 300.0626f);
+    ItemRandomLocationStruct[21].sLocation = FVector(2275.f, 2074.f, 300.0626f);
+    ItemRandomLocationStruct[22].sLocation = FVector(2375.f, 2074.f, 300.0626f);
+
+    ItemRandomLocationStruct[23].sLocation = FVector(2175.f, 2774.f, 300.0626f);
+    ItemRandomLocationStruct[24].sLocation = FVector(2275.f, 2974.f, 300.0626f);
+    ItemRandomLocationStruct[25].sLocation = FVector(2375.f, 3174.f, 300.0626f);
+
+    ItemRandomLocationStruct[26].sLocation = FVector(2175.f, 2574.f, 300.0626f);
+    ItemRandomLocationStruct[27].sLocation = FVector(2275.f, 2874.f, 300.0626f);
+    ItemRandomLocationStruct[28].sLocation = FVector(2375.f, 1074.f, 300.0626f);
+
+    ItemRandomLocationStruct[29].sLocation = FVector(2105.f, 1374.f, 300.0626f);
+    ItemRandomLocationStruct[30].sLocation = FVector(2075.f, 1574.f, 300.0626f);
+    ItemRandomLocationStruct[31].sLocation = FVector(2175.f, 3574.f, 300.0626f);
+
+    ItemRandomLocationStruct[32].sLocation = FVector(2105.f, 1374.f, 300.0626f);
+    ItemRandomLocationStruct[33].sLocation = FVector(2075.f, 1574.f, 300.0626f);
+    ItemRandomLocationStruct[34].sLocation = FVector(2175.f, 3574.f, 300.0626f);
+
+    ItemRandomLocationStruct[35].sLocation = FVector(2105.f, 1374.f, 300.0626f);
+    ItemRandomLocationStruct[36].sLocation = FVector(2075.f, 1574.f, 300.0626f);
+    ItemRandomLocationStruct[37].sLocation = FVector(2175.f, 3574.f, 300.0626f);
+
+    ItemRandomLocationStruct[38].sLocation = FVector(2975.f, 2074.f, 300.0626f);
+    ItemRandomLocationStruct[39].sLocation = FVector(2675.f, 2074.f, 300.0626f);
+
+    // F2
+    ItemRandomLocationStruct[40].sLocation = FVector(2175.f, 2074.f, 600.0626f);
+    ItemRandomLocationStruct[41].sLocation = FVector(2275.f, 2074.f, 600.0626f);
+    ItemRandomLocationStruct[42].sLocation = FVector(2375.f, 2074.f, 600.0626f);
+
+    ItemRandomLocationStruct[43].sLocation = FVector(2175.f, 2774.f, 600.0626f);
+    ItemRandomLocationStruct[44].sLocation = FVector(2275.f, 2974.f, 600.0626f);
+    ItemRandomLocationStruct[45].sLocation = FVector(2375.f, 3174.f, 600.0626f);
+
+    ItemRandomLocationStruct[46].sLocation = FVector(2175.f, 2574.f, 600.0626f);
+    ItemRandomLocationStruct[47].sLocation = FVector(2275.f, 2874.f, 600.0626f);
+    ItemRandomLocationStruct[48].sLocation = FVector(2375.f, 1074.f, 600.0626f);
+
+    ItemRandomLocationStruct[49].sLocation = FVector(2105.f, 1374.f, 600.0626f);
+    ItemRandomLocationStruct[50].sLocation = FVector(2075.f, 1574.f, 600.0626f);
+    ItemRandomLocationStruct[51].sLocation = FVector(2175.f, 3574.f, 600.0626f);
+
+    ItemRandomLocationStruct[52].sLocation = FVector(2105.f, 1374.f, 600.0626f);
+    ItemRandomLocationStruct[53].sLocation = FVector(2075.f, 1574.f, 600.0626f);
+    ItemRandomLocationStruct[54].sLocation = FVector(2175.f, 3574.f, 600.0626f);
+
+    ItemRandomLocationStruct[55].sLocation = FVector(2105.f, 1374.f, 600.0626f);
+    ItemRandomLocationStruct[56].sLocation = FVector(2075.f, 1574.f, 600.0626f);
+    ItemRandomLocationStruct[57].sLocation = FVector(2175.f, 3574.f, 600.0626f);
+
+    ItemRandomLocationStruct[58].sLocation = FVector(2975.f, 2074.f, 600.0626f);
+    ItemRandomLocationStruct[59].sLocation = FVector(2675.f, 2074.f, 600.0626f);
+
+    for (int i = 0; i < 60; ++i) {
+        ItemRandomLocationStruct[i].bIsSeatLocation = false;
+    }
 
 }
 
@@ -60,12 +149,9 @@ void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
                                                                                                                                                                     //테스트용으로 수 다르게 표시 나중에 변경
-    SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 1, FVector(2175.f, 2074.f, 30.0626f));
-    SpawnItemBoxes(1, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 10, FVector(2275.f, 2074.f, 30.0626f));
-    SpawnItemBoxes(2, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 20, FVector(2375.f, 2074.f, 30.0626f));
-
-    //ChoiceCharacterBefore();
-    //ChoiceCharacter();
+    SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 1,  EItemFloor::FLOORB1);
+    SpawnItemBoxes(1, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 10, EItemFloor::FLOOR1);
+    SpawnItemBoxes(2, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 20, EItemFloor::FLOOR2);
 
     SpawnCharacter(0);
 
@@ -98,6 +184,8 @@ void AOneGameModeBase::InitGame(const FString& MapName, const FString& Options, 
 
     ChoiceCharacterBefore();
     ChoiceCharacter();
+
+
 }
 
 
@@ -207,15 +295,48 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
     }
 }
 
-void AOneGameModeBase::RandomItemBoxLocation()
+FVector AOneGameModeBase::RandomItemBoxLocation(EItemFloor itemfloor)
 {
+    int32 RandomNumber = 0;
+
+    int32 MinIndex = 0;
+    int32 MaxIndex = 0;
+
+
+    if (itemfloor == EItemFloor::FLOORB1) {
+        MinIndex = 0;
+        MaxIndex = 19;
+    }
+    else if (itemfloor == EItemFloor::FLOOR1) {
+        MinIndex = 20;
+        MaxIndex = 39;
+    }
+    else if (itemfloor == EItemFloor::FLOOR2) {
+        MinIndex = 40;
+        MaxIndex = 59;
+    }
+
+    while (true) {
+        RandomNumber = FMath::RandRange(MinIndex, MaxIndex);
+
+        if (!ItemRandomLocationStruct[RandomNumber].bIsSeatLocation) {
+            ItemRandomLocationStruct[RandomNumber].bIsSeatLocation = true;
+            return ItemRandomLocationStruct[RandomNumber].sLocation;
+        }
+    }
+
+    return FVector::ZeroVector;
 }
 
-void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos)
+void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, EItemFloor itemfloor)
 {
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
 
 	TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
+
+
+    FVector itemboxpos = RandomItemBoxLocation(itemfloor);
+
 
 	// 선택된 아이템 박스 클래스로 아이템 박스 생성
 	AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
@@ -246,20 +367,23 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         }
     }
 
-    // 매개변수들을 디버깅하기 위해 출력
-    //FString ItemNameString = itemname.ToString();
-    //FString ItemClassString = UEnum::GetValueAsString(itemclass); // EItemClass의 문자열로 변환
-    //FString TextureName = texture ? texture->GetName() : TEXT("NULL");
-    //FString DefaultPawnLocation = DefaultPawn->GetActorLocation().ToString();
-
-    //FString DebugMessage = FString::Printf(TEXT("Item Name: %s, Item Class: %s, Texture: %s, Count: %d, Location %s, index %d"), *ItemNameString, *ItemClassString, *TextureName, count, *DefaultPawnLocation, GetItemBoxNumber());
-    //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, DebugMessage);
-
-    
-
 
     FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
-    SpawnItemBoxes(GetItemBoxNumber(), itemname, itemclass, texture, count, DefaultPawn->GetActorLocation() + FVector(DropPos.X, DropPos.Y, -60.149886f) );
+
+    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[GetItemBoxNumber()];
+    FVector itemboxpos = DefaultPawn->GetActorLocation() + FVector(DropPos.X, DropPos.Y, -60.149886f);
+
+    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
+
+    if (SpawnedItemBox) {
+        SpawnedItemBox->ItemName = itemname;
+        SpawnedItemBox->ItemClassType = itemclass;
+        SpawnedItemBox->Texture = texture;
+        SpawnedItemBox->Count = count;
+    }
+
+    m_iItemBoxNumber++;
 }
 
 

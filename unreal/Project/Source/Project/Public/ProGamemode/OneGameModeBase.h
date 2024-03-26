@@ -32,6 +32,14 @@ enum class EPlayerCharacter
     FIREFIGHTER,
 };
 
+UENUM(BlueprintType)
+enum class EItemFloor
+{
+    FLOORB1, // 지하 1층
+    FLOOR1,  // 1층
+    FLOOR2,  // 2층
+};
+
 
 
 class ABaseCharacter;
@@ -101,12 +109,13 @@ public:
     UPROPERTY(VisibleAnywhere, Category ="PlayerCharacter")
     EPlayerCharacter CharacterIconIndex;
 
+
     struct SItemRandomLocation
     {
         FVector sLocation;                  // 위치가 어딘가
         bool    bIsSeatLocation = false;    // 위치에 누가 이미 차지하고 있는가 true 
-        int     iFloor;                     // 몇층인가.
     };
+
 
     void ChoiceCharacterBefore();
 
@@ -116,15 +125,13 @@ public:
     void SpawnCharacter(int32 characterindex);
 
     // 아이템 박스 위치 정해놓고 랜덤으로 정해서 생성
-    void RandomItemBoxLocation();  // 제작 예정
+    FVector RandomItemBoxLocation(EItemFloor itemfloor);  // 제작 예정
 
-    //// 아이템 랜덤 위치 정해놓는 배열
-    //UPROPERTY(VisibleAnywhere, Category = "ItemBox")
-    //TArray<SItemRandomLocation> ItemBoxRandomLocation;
-    //
+    // 아이템 랜덤 위치 정해놓는 배열
+    SItemRandomLocation ItemRandomLocationStruct[60];
 
     // 아이템 생성 함수
-    void SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector itemboxpos);
+    void SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, EItemFloor itemfloor);
 
     // 좀비 생성 함수
     void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, bool ispatrol);
