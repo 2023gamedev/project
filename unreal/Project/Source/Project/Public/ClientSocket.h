@@ -48,6 +48,7 @@ public:
 	uint32 PlayerId = 0;
 
 	Concurrency::concurrent_queue<PlayerData> Qbuffer;
+	Concurrency::concurrent_queue<uint32> Qbuffer2;
 
 	virtual bool Init() override;
 	virtual uint32 Run() override;

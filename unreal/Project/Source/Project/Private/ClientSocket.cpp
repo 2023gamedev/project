@@ -76,6 +76,8 @@ uint32 ClientSocket::Run()
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MyPlayerId: %d"), MyPlayerId));
 			UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId);
 
+			Qbuffer2.push(MyPlayerId);
+
 			buffer.clear();
 
 			continue;

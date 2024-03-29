@@ -154,13 +154,13 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(1, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 10, EItemFloor::FLOOR1);
     SpawnItemBoxes(2, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/AICON-Red.AICON-Red"), NULL, LOAD_None, NULL), 20, EItemFloor::FLOOR2);
 
-    SpawnCharacter(0);
+    //SpawnCharacter(0);
 
 
     // BeginPlay에서 SpawnZombies 호출
-    SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
-    SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f, 90.212492f), true);
-    SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 90.212492f), true);
+    //SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
+    //SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f, 90.212492f), true);
+    //SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 90.212492f), true);
 
     ABaseCharacter* DefaultPawn = nullptr;
 
@@ -254,6 +254,8 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
     // 그 대신 이렇게 하면 PlayerStart 위치들을 따로 적어놔야 할것 같다. 코드상에서는 알 수 없으니까
     ABaseCharacter* DefaultPawn = nullptr;
     APlayerStart* PlayerStart = nullptr;
+
+    DefaultPawn->SetPlayerId(99);
 
     // 이름(Tag)으로 할 시
     FName PlayerStartTagName = "Start3";
@@ -416,7 +418,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
     }
     
     // 기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
-    FActorSpawnParameters SpawnParams;
+    /*FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
     ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(DefaultPawnClass, NewLocation, NewRotation, SpawnParams);
 
@@ -424,7 +426,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
     {
         // 새 캐릭터에 PlayerId 설정
         NewCharacter->SetPlayerId(PlayerID);
-    }
+    }*/
 }
 
 

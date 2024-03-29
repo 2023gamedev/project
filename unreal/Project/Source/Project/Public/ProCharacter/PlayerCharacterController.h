@@ -58,6 +58,8 @@ public:
 
 	virtual void SetupInputComponent() override;
 
+	ClientSocket* ClientSocketPtr;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	UInputMappingContext* InputMapping;
@@ -67,7 +69,6 @@ protected:
 	UInputDataAsset* InputActions;
 
 private:
-	ClientSocket* ClientSocketPtr;
 
 	//캐릭터의 이전 위치 저장 변수
 	FVector PreviousLocation;
@@ -77,5 +78,6 @@ public:
 	PlayerData recvPlayerData;
 	uint32 PlayerId;
 	FVector NewLocation;
+	bool b_setId = false;
 
 };
