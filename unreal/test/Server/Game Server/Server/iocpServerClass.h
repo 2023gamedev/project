@@ -17,6 +17,8 @@ using PLAYER_INFO = struct Client_INFO {
 	Packet packet_buff[MAX_BUF_SIZE];
 };
 
+extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
+
 class IOCP_CORE
 {
 public:
@@ -31,6 +33,8 @@ public:
 	void IOCP_WorkerThread();
 	void IOCP_AcceptThread();
 
+	void DisconnectClient(unsigned int clientId);
+
 	void IOCP_ProcessPacket(const unsigned int& id, Protocol::Character CharacterPacket);
 	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);
 
@@ -44,6 +48,5 @@ private:
 	vector<thread*> worker_threads;
 	bool ServerShutdown{ false };
 
-	vector<PLAYER_INFO *> clients;
 	unsigned int playerIndex{ UINT_MAX };
 };

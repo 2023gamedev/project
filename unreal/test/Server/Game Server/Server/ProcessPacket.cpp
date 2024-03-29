@@ -1,13 +1,17 @@
 #pragma once
 #include"Common.h"
 
-void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::Character CharacterPacket)
-{
+void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::Character CharacterPacket) {
+    // g_players에서 클라이언트 정보 검색
+    auto it = g_players.find(id);
+    if (it == g_players.end()) {
+        // 유효하지 않은 클라이언트 ID에 대한 처리
+        return;
+    }
+
     // 패킷의 타입을 확인하여 처리
-    switch (CharacterPacket.type())
-    {
-    case 1:
-    {
+    switch (CharacterPacket.type()) {
+    case 1: {
         // TestPacket을 처리하거나 이용
         printf("[ No. %3u ] TEST Packet Received !!\n", id);
         printf("Received packet type = %d\n", CharacterPacket.type());
@@ -19,29 +23,19 @@ void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::Character C
         string serializedData;
         CharacterPacket.SerializeToString(&serializedData);
 
-        if (id == 0) {
-            IOCP_SendPacket(1, serializedData.data(), serializedData.size());
-            //IOCP_SendPacket(2, serializedData.data(), serializedData.size());
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        for (const auto& player : g_players) {
+            // 자신에게는 패킷을 보내지 않음
+            if (player.first != id) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
         }
-
-        if (id == 1) {
-            IOCP_SendPacket(0, serializedData.data(), serializedData.size());
-            //IOCP_SendPacket(2, serializedData.data(), serializedData.size());
-        }
-
-        if (id == 2) {
-            IOCP_SendPacket(0, serializedData.data(), serializedData.size());
-            IOCP_SendPacket(1, serializedData.data(), serializedData.size());
-        }
-    }
-
-    break;
-    default:
-    {
+    } break;
+    default: {
         // 알 수 없는 패킷 타입이 왔을 경우, 처리 방법을 결정하거나 오류 처리
         printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, CharacterPacket.type());
         // 클라이언트나 서버 종료, 로깅 등의 처리 가능
-    }
-    break;
+    } break;
     }
 }
+
