@@ -417,8 +417,8 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         }
     }
     
-    // 기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
-    /*FActorSpawnParameters SpawnParams;
+    //기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
+    FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
     ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(DefaultPawnClass, NewLocation, NewRotation, SpawnParams);
 
@@ -426,7 +426,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
     {
         // 새 캐릭터에 PlayerId 설정
         NewCharacter->SetPlayerId(PlayerID);
-    }*/
+    }
 }
 
 

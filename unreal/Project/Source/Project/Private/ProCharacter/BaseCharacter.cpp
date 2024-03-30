@@ -130,7 +130,6 @@ ABaseCharacter::ABaseCharacter()
 	CurrentHealingItem = nullptr;
 	CurrentKeyItem = nullptr;
 
-	PlayerId = 0;
 }
 
 // Called when the game starts or when spawned
