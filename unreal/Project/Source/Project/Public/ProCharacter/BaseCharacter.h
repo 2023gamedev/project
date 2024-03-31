@@ -273,4 +273,7 @@ private:
 
 	FVector OldLocation = FVector(0.0f, 0.0f, 0.0f);
 
+	float Speed;
+	float PreviousSpeed;
+
 };

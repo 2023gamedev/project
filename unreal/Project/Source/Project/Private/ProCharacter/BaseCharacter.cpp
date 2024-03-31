@@ -169,11 +169,33 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!GetVelocity().Size()) {
+		if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
+			float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
+			Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
+		}
 
-	auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr != CharacterAnimInstance) {
-		CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-		CharacterAnimInstance->SetIsPawnRun(m_bRun);
+		// 애니메이션 인스턴스에 속도 파라미터 설정
+		if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
+		{
+			auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+			if (AnimInstance) {
+				AnimInstance->SetCurrentPawnSpeed(Speed);
+			}
+		}
+
+		PreviousSpeed = Speed;
+		OldLocation = NewLocation;
+	}
+
+	else {
+		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+		if (nullptr != CharacterAnimInstance) {
+			CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
+			CharacterAnimInstance->SetIsPawnRun(m_bRun);
+		}
+
+		PreviousSpeed = GetVelocity().Size();
 	}
 
 }

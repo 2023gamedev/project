@@ -413,7 +413,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
 
             BasePlayer->UpdatePlayerData(NewLocation);
 
-            return; // 위치를 업데이트 했으므로 함수 종료
+            return;
         }
     }
     
