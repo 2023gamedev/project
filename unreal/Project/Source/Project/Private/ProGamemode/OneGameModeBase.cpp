@@ -158,9 +158,9 @@ void AOneGameModeBase::BeginPlay()
 
 
     // BeginPlay에서 SpawnZombies 호출
-    //SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
-    //SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f, 90.212492f), true);
-    //SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 90.212492f), true);
+    SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
+    SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f, 90.212492f), true);
+    SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 90.212492f), true);
 
     ABaseCharacter* DefaultPawn = nullptr;
 

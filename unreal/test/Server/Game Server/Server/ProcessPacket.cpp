@@ -13,11 +13,11 @@ void IOCP_CORE::IOCP_ProcessPacket(const unsigned int& id, Protocol::Character C
     switch (CharacterPacket.type()) {
     case 1: {
         // TestPacket을 처리하거나 이용
-        printf("[ No. %3u ] TEST Packet Received !!\n", id);
-        printf("Received packet type = %d\n", CharacterPacket.type());
-        printf("Received playerID = %d\n", CharacterPacket.playerid());
-        printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
-        printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
+        //printf("[ No. %3u ] TEST Packet Received !!\n", id);
+        //printf("Received packet type = %d\n", CharacterPacket.type());
+        //printf("Received playerID = %d\n", CharacterPacket.playerid());
+        //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
+        //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
         // 서버로 받은 패킷을 그대로 돌려줌
         string serializedData;
