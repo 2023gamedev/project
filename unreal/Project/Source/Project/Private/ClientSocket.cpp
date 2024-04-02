@@ -76,8 +76,6 @@ uint32 ClientSocket::Run()
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MyPlayerId: %d"), MyPlayerId));
 			UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId);
 
-			Qbuffer2.push(MyPlayerId);
-
 			buffer.clear();
 
 			continue;
@@ -88,22 +86,37 @@ uint32 ClientSocket::Run()
 
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
 
-
-			Protocol::Character CharacterPacket;
-			if (CharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
+			Protocol::Character tempCharacterPacket;
+			if (tempCharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
 			{
-				/*UE_LOG(LogNet, Display, TEXT("Received: PlayerId=%d, Location=(X=%f, Y=%f, Z=%f)"),
-					CharacterPacket.playerid(),
-					CharacterPacket.x(),
-					CharacterPacket.y(),
-					CharacterPacket.z());*/
+				// 메시지 타입 확인
+				switch (tempCharacterPacket.type()) {
+				case 1: // Character 메시지 타입 값
+				{
+					Protocol::Character CharacterPacket;
+					if (CharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
+					{
+						PlayerId = CharacterPacket.playerid();
+						FVector NewLocation(CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
+						FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
-				PlayerId = CharacterPacket.playerid();
-				FVector NewLocation(CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
-				FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
+						if (PlayerId != MyPlayerId) {
+							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation));
+						}
+					}
+					break;
+				}
+				case 2: // Zombie 메시지 타입 값
+				{
+					Protocol::Zombie ZombiePacket;
+					if (ZombiePacket.ParseFromArray(buffer.data(), buffer.size()))
+					{
+						FVector NewLocation(ZombiePacket.x(), ZombiePacket.y(), ZombiePacket.z());
+						FRotator NewRotation(ZombiePacket.pitch(), ZombiePacket.yaw(), ZombiePacket.roll());
+						Q_zombie.push(ZombieData(ZombiePacket.zombieid(), NewLocation, NewRotation));
 
-				if (PlayerId != MyPlayerId) {
-					Qbuffer.push(PlayerData(PlayerId, NewLocation, NewRotation));
+					}
+					break;
 				}
 
 				buffer.clear();

@@ -36,6 +36,20 @@ struct PlayerData
 		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation) {}
 };
 
+struct ZombieData
+{
+	uint32 ZombieId;
+	FVector Location;
+	FRotator Rotation;
+
+	// 기본 생성자 명시적 정의
+	ZombieData() : ZombieId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator) {}
+
+	// 매개변수가 있는 생성자
+	ZombieData(uint32 InZombieId, FVector InLocation, FRotator InRotation)
+		: ZombieId(InZombieId), Location(InLocation), Rotation(InRotation) {}
+};
+
 
 class PROJECT_API ClientSocket : public FRunnable
 {
@@ -46,9 +60,10 @@ public:
 	SOCKET Socket;
 	uint32 MyPlayerId = 0;
 	uint32 PlayerId = 0;
+	uint32 ZombieId = 0;
 
-	Concurrency::concurrent_queue<PlayerData> Qbuffer;
-	Concurrency::concurrent_queue<uint32> Qbuffer2;
+	Concurrency::concurrent_queue<PlayerData> Q_player;
+	Concurrency::concurrent_queue<ZombieData> Q_zombie;
 
 	virtual bool Init() override;
 	virtual uint32 Run() override;

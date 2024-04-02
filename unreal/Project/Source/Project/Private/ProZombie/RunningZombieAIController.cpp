@@ -6,6 +6,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GStruct.pb.h"
 
 const FName ARunningZombieAIController::TargetKey(TEXT("Target"));
 const FName ARunningZombieAIController::StartLocationKey(TEXT("StartLocation"));
@@ -54,6 +55,43 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
 
 	}
+
+	CheckAndSendMovement();
+}
+
+void ARunningZombieAIController::CheckAndSendMovement()
+{
+	APawn* ZombiePawn = GetPawn();
+	FVector CurrentLocation = ZombiePawn->GetActorLocation();
+	FRotator CurrentRotation = ZombiePawn->GetActorRotation();
+
+
+	// 이전 위치와 현재 위치 비교 (움직임 감지)
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation)
+	{
+		// Protobuf를 사용하여 TestPacket 생성
+		Protocol::Zombie packet;
+		packet.set_zombieid(ZombieId);
+		packet.set_type(2); // 원하는 유형 설정
+		packet.set_x(CurrentLocation.X);
+		packet.set_y(CurrentLocation.Y);
+		packet.set_z(CurrentLocation.Z);
+		packet.set_pitch(CurrentRotation.Pitch);
+		packet.set_yaw(CurrentRotation.Yaw);
+		packet.set_roll(CurrentRotation.Roll);
+
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+
+		// 직렬화된 데이터를 서버로 전송
+		bool bIsSent = ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+		// 현재 위치를 이전 위치로 업데이트
+		PreviousLocation = CurrentLocation;
+		PreviousRotation = CurrentRotation;
+	}
+
 }
 
 void ARunningZombieAIController::SetStartLocationValue(FVector startlocation)

@@ -78,6 +78,5 @@ public:
 	PlayerData recvPlayerData;
 	uint32 PlayerId;
 	FVector NewLocation;
-	bool b_setId = false;
 
 };

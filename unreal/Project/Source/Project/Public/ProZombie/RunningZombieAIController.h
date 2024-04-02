@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "ClientSocket.h"
 #include "RunningZombieAIController.generated.h"
 
 /**
@@ -26,6 +27,8 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+
+	void CheckAndSendMovement();
 	
 	void SetStartLocationValue(FVector startlocation);
 	void SetPatrolLocationValue(FVector patrollocation);
@@ -38,6 +41,10 @@ private:
 
 	class UBlackboardData* RunningZombieBlackBoardAsset;
 	
+public:
+	PlayerData recvPlayerData;
+	uint32 ZombieId;
+	FVector NewLocation;
 
 
 };

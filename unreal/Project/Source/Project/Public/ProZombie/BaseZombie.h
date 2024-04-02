@@ -76,6 +76,10 @@ public:
 	UFUNCTION()
 	void ShoutingMontageEnded(UAnimMontage* Montage, bool interrup);
 
+	void SetZombieId(uint32 NewPlayerId);
+	uint32 GetZombieId() const;
+	void UpdateZombieData(FVector Location);
+
 	UPROPERTY(EditAnywhere)
 	bool m_bIsShouting = false;
 
@@ -108,5 +112,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	bool m_bSpecialAbility = false;
+
+
+public:
+	uint32 ZombieId;
+	FVector NewLocation;
 
 };

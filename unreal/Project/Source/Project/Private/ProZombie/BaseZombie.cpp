@@ -15,6 +15,8 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.f, 0.0f);
 	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
+
+	ZombieId = 0;
 }
 
 // Called when the game starts or when spawned
@@ -110,6 +112,21 @@ void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 	SetShouted(true);
 	UE_LOG(LogTemp, Error, TEXT("bIsShouted true"));
 	m_DShoutingEnd.Broadcast();
+}
+
+void ABaseZombie::SetZombieId(uint32 NewZombieId)
+{
+	ZombieId = NewZombieId;
+}
+
+uint32 ABaseZombie::GetZombieId() const
+{
+	return ZombieId;
+}
+
+void ABaseZombie::UpdateZombieData(FVector Location)
+{
+	NewLocation = Location;
 }
 
 
