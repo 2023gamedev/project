@@ -7,6 +7,8 @@
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GStruct.pb.h"
+#include "ProGamemode/OneGameModeBase.h"
+#include "ProGamemode/ProGameInstance.h"
 
 const FName ARunningZombieAIController::TargetKey(TEXT("Target"));
 const FName ARunningZombieAIController::StartLocationKey(TEXT("StartLocation"));
@@ -24,6 +26,8 @@ ARunningZombieAIController::ARunningZombieAIController()
 		RunningZombieAIBehavior = BTObject.Object;
 	}
 
+	ClientSocketPtr = nullptr;
+
 }
 
 void ARunningZombieAIController::BeginPlay()
@@ -33,6 +37,12 @@ void ARunningZombieAIController::BeginPlay()
 	if (RunningZombieAIBehavior != nullptr) {
 		RunBehaviorTree(RunningZombieAIBehavior);
 
+	}
+
+	auto GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance)
+	{
+		this->ClientSocketPtr = GameInstance->ClientSocketPtr;
 	}
 
 }
@@ -57,6 +67,17 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 	}
 
 	CheckAndSendMovement();
+
+	if (ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
+	{
+		UE_LOG(LogNet, Display, TEXT("Update Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+		// 현재 GameMode 인스턴스를 얻기
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
+			MyGameMode->UpdateOtherPlayer(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
+		}
+	}
 }
 
 void ARunningZombieAIController::CheckAndSendMovement()

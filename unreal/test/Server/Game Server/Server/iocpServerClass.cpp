@@ -122,12 +122,8 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				buf_ptr += copySize;
 				remained -= copySize;
 
-				// 프로토콜 버퍼 메시지를 파싱 시도
-				Protocol::Character CharacterPacket;
-				if (CharacterPacket.ParseFromArray(user->packet_buff, user->previous_size)) {
-					// 메시지 처리 로직
-					IOCP_CORE::IOCP_ProcessPacket(key, CharacterPacket);
-					// 버퍼 초기화
+				if (IOCP_CORE::IOCP_ProcessPacket(key, user->packet_buff, user->previous_size)) {
+					// 파싱 및 처리가 성공적으로 완료되면 버퍼 초기화
 					user->previous_size = 0;
 				}
 			}

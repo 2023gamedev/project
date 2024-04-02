@@ -35,7 +35,7 @@ public:
 
 	void DisconnectClient(unsigned int clientId);
 
-	void IOCP_ProcessPacket(const unsigned int& id, Protocol::Character CharacterPacket);
+	bool IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize);
 	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);
 
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);

@@ -8,6 +8,7 @@
 
 // GameMode
 #include "ProGamemode/OneGameModeBase.h"
+#include "ProGamemode/ProGameInstance.h"
 
 // Character
 #include "ProCharacter/BaseCharacter.h"
@@ -65,8 +66,11 @@ void APlayerCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ClientSocket* SocketInstance = new ClientSocket();
-	this->SetClientSocket(SocketInstance);
+	auto GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance)
+	{
+		this->ClientSocketPtr = GameInstance->ClientSocketPtr;
+	}
 }
 
 void APlayerCharacterController::Tick(float DeltaTime)

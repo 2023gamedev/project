@@ -49,16 +49,12 @@ public:
 
 
 public:
-	void SetClientSocket(ClientSocket* InClientSocket){	ClientSocketPtr = InClientSocket; }
-
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
 	void CheckAndSendMovement();
 
 	virtual void SetupInputComponent() override;
-
-	ClientSocket* ClientSocketPtr;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
@@ -75,6 +71,7 @@ private:
 	FRotator PreviousRotation;
 
 public:
+	TSharedPtr<ClientSocket> ClientSocketPtr;
 	PlayerData recvPlayerData;
 	uint32 PlayerId;
 	FVector NewLocation;

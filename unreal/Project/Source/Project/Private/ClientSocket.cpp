@@ -90,7 +90,8 @@ uint32 ClientSocket::Run()
 			if (tempCharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
 			{
 				// 메시지 타입 확인
-				switch (tempCharacterPacket.type()) {
+				switch (tempCharacterPacket.type()) 
+				{
 				case 1: // Character 메시지 타입 값
 				{
 					Protocol::Character CharacterPacket;
@@ -120,22 +121,23 @@ uint32 ClientSocket::Run()
 				}
 
 				buffer.clear();
+				}
+
 			}
+			else if (recvLen == 0)
+			{
+				UE_LOG(LogNet, Warning, TEXT("Connection closed"));
+				return 0;
+			}
+			else
+			{
+				UE_LOG(LogNet, Warning, TEXT("Recv Error"));
+				return 0;
+			}
+		}
 
-		}
-		else if (recvLen == 0)
-		{
-			UE_LOG(LogNet, Warning, TEXT("Connection closed"));
-			return 0;
-		}
-		else
-		{
-			UE_LOG(LogNet, Warning, TEXT("Recv Error"));
-			return 0;
-		}
+		return 0;
 	}
-
-	return 0;
 }
 
 void ClientSocket::Exit()

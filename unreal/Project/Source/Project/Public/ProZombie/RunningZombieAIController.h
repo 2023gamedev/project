@@ -33,6 +33,8 @@ public:
 	void SetStartLocationValue(FVector startlocation);
 	void SetPatrolLocationValue(FVector patrollocation);
 
+	TSharedPtr<ClientSocket> ClientSocketPtr;
+
 private:
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* RunningZombieAIBehavior;
@@ -42,9 +44,11 @@ private:
 	class UBlackboardData* RunningZombieBlackBoardAsset;
 	
 public:
-	PlayerData recvPlayerData;
+	ZombieData recvZombieData;
 	uint32 ZombieId;
 	FVector NewLocation;
+	FVector PreviousLocation;
+	FRotator PreviousRotation;
 
 
 };

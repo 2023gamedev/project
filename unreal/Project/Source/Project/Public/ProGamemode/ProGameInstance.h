@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "ClientSocket.h"
 #include "ProGameInstance.generated.h"
 
 /**
@@ -40,5 +41,7 @@ public:
     int m_iChoicedCharacterNumber;
 
     void ChangeOneGameMode();
+
+    TSharedPtr<ClientSocket> ClientSocketPtr;
 
 };
