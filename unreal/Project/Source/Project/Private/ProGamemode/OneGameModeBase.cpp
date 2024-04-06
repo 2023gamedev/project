@@ -439,7 +439,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
 
     // 선택된 좀비 클래스로 좀비를 생성
     ABaseZombie* SpawnedZombie = GetWorld()->SpawnActor<ABaseZombie>(SelectedZombieClass, zombiepos, FRotator::ZeroRotator);
- 
+    
 
     UE_LOG(LogTemp, Error, TEXT("111111111111111111111"));
     if (SpawnedZombie)
@@ -464,6 +464,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
             }
 
+            SpawnedZombie->SetZombieId(m_iZombieNumber);
             m_iZombieNumber++;
         }
         else if (zombieaiconindex == EZombie::SHOUTING) {
@@ -485,6 +486,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
             UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
             }
 
+            SpawnedZombie->SetZombieId(m_iShoutingZombieNumber);
             m_iShoutingZombieNumber++;
         }
         else if (zombieaiconindex == EZombie::RUNNING) {
@@ -507,9 +509,38 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));
             }
 
+            SpawnedZombie->SetZombieId(m_iRunningZombieNumber);
             m_iRunningZombieNumber++;
         }
 
     }
 }
 
+void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotator NewRotation)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateZombie: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // 캐릭터 검색
+    for (TActorIterator<ABaseZombie> It(World); It; ++It)
+    {
+        ABaseZombie* BaseZombie = *It;
+        if (BaseZombie && BaseZombie->GetZombieId() == ZombieID)
+        {
+            FVector OldLocation = BaseZombie->GetActorLocation();
+
+            // 기존 캐릭터 위치 업데이트
+            BaseZombie->SetActorLocation(NewLocation);
+            BaseZombie->SetActorRotation(NewRotation);
+
+            BaseZombie->UpdateZombieData(NewLocation);
+
+            return;
+        }
+    }
+}

@@ -75,7 +75,7 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateOtherPlayer(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
+			MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
 		}
 	}
 }

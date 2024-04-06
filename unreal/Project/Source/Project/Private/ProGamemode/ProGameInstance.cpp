@@ -15,7 +15,6 @@ void UProGameInstance::Init()
 
     m_iChoicedCharacterNumber = 0;
     GameStateClass = nullptr;
-    ClientSocketPtr = nullptr;
 
     ClientSocketPtr = MakeShareable(new ClientSocket());
 }
