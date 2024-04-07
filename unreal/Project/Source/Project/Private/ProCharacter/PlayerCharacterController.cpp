@@ -69,7 +69,7 @@ void APlayerCharacterController::BeginPlay()
 	auto GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance)
 	{
-		this->ClientSocketPtr = GameInstance->ClientSocketPtr;
+		ClientSocketPtr = GameInstance->ClientSocketPtr;
 	}
 }
 

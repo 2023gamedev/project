@@ -84,6 +84,7 @@ uint32 ClientSocket::Run()
 		else if (recvLen > 0)
 		{
 
+			std::lock_guard<std::mutex> lock(bufferMutex);
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
 
 			Protocol::Character tempCharacterPacket;

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GStruct.pb.h"
 #include <concurrent_queue.h>
+#include <mutex>
 
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include "Windows/prewindowsapi.h"
@@ -75,6 +76,8 @@ public:
 
 
 private:
+
+	std::mutex bufferMutex;
 
 	FRunnableThread* Thread;
 	bool ReceivedPlayerId = false;
