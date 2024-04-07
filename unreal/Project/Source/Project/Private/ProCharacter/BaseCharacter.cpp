@@ -74,8 +74,9 @@ ABaseCharacter::ABaseCharacter()
 	FlashLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("FLASHLIGHT"));
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
-	FlashLight->SetupAttachment(GetCapsuleComponent());
+	
 	Camera->SetupAttachment(SpringArm);
+	FlashLight->SetupAttachment(SpringArm);
 	PlayerSight->SetupAttachment(Camera);
 	PlayerSight->SetRelativeLocation(FVector(150.f, 0.f, 88.f));
 	
@@ -113,11 +114,11 @@ ABaseCharacter::ABaseCharacter()
 	bUseControllerRotationYaw = false;
 
 	// 스포트 라이트의 속성 설정 (위치, 회전 등)
-	FlashLight->SetRelativeLocationAndRotation(FVector(7.933304f, -13.981234f, 64.513892f), FRotator( 0.f, 0.f, 0.f));
+	FlashLight->SetRelativeLocationAndRotation(FVector(303.f, -24.f, 117.f), FRotator( 0.f, 0.f, 0.f));
 	// 기타 설정 (색상, 강도 등)
 	FlashLight->SetLightColor(FLinearColor::White);
-	FlashLight->SetIntensity(1000.f);
-	FlashLight->SetOuterConeAngle(30.f);
+	FlashLight->SetIntensity(5000.f);
+	FlashLight->SetOuterConeAngle(60.f);
 	FlashLight->SetVisibility(true);
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -297,7 +298,7 @@ void ABaseCharacter::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 	m_DAttackEnd.Broadcast();
 }
 
-void ABaseCharacter::MoveForward(float NewAxisValue)
+void ABaseCharacter::MoveForward(FVector RotateYaw, float NewAxisValue)
 {
 	if (m_bRun) {
 		SetSpeed(500.f);
@@ -309,11 +310,12 @@ void ABaseCharacter::MoveForward(float NewAxisValue)
 
 	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
+	AddMovementInput(RotateYaw, NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
 	UE_LOG(LogTemp, Warning, TEXT("MoveFoward"));
 
 }
 
-void ABaseCharacter::MoveLeft(float NewAxisValue)
+void ABaseCharacter::MoveLeft(FVector RotateYaw, float NewAxisValue)
 {
 	if (m_bRun) {
 		SetSpeed(500.f);
@@ -323,7 +325,8 @@ void ABaseCharacter::MoveLeft(float NewAxisValue)
 	}
 
 	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
-	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
+	//AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
+	AddMovementInput(RotateYaw, NewAxisValue * m_fSpeed * GetWorld()->DeltaTimeSeconds);
 	UE_LOG(LogTemp, Warning, TEXT("MoveLeft"));
 }
 

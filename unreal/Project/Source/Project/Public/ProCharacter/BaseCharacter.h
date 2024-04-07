@@ -107,8 +107,8 @@ public:
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
 
 	// input
-	void MoveForward(float NewAxisValue);
-	void MoveLeft(float NewAxisValue);
+	void MoveForward(FVector RotateYaw, float NewAxisValue);
+	void MoveLeft(FVector RotateYaw , float NewAxisValue);
 	void Run();
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
