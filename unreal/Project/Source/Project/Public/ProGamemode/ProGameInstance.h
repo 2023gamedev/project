@@ -51,6 +51,6 @@ public:
 
     ClientSocket* ClientSocketPtr;
 
-    bool ConnectNetwork = true;
+    bool ConnectNetwork;
 
 };

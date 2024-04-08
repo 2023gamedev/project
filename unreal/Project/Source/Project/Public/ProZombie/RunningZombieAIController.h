@@ -33,7 +33,7 @@ public:
 	void SetStartLocationValue(FVector startlocation);
 	void SetPatrolLocationValue(FVector patrollocation);
 
-	TSharedPtr<ClientSocket> ClientSocketPtr;
+	UProGameInstance* GameInstance;
 
 private:
 	UPROPERTY(EditAnywhere)

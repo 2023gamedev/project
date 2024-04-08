@@ -71,7 +71,7 @@ private:
 	FRotator PreviousRotation;
 
 public:
-	TSharedPtr<ClientSocket> ClientSocketPtr;
+	UProGameInstance* GameInstance;
 	PlayerData recvPlayerData;
 	uint32 PlayerId;
 	FVector NewLocation;

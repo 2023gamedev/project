@@ -10,6 +10,7 @@
 UProGameInstance::UProGameInstance()
 {
     ClientSocketPtr = nullptr;
+    ConnectNetwork = true;
 }
 
 UProGameInstance::~UProGameInstance()
@@ -19,18 +20,28 @@ UProGameInstance::~UProGameInstance()
 void UProGameInstance::Init()
 {
     Super::Init();
-
+    
     m_iChoicedCharacterNumber = 0;
     GameStateClass = nullptr;
+    InitSocket();
 }
 
 void UProGameInstance::InitSocket()
 {
-	if (!ConnectNetwork) return;
+    if (!ConnectNetwork) return;
+    if (ClientSocketPtr != nullptr) return;
 
-	// ClientSocket 인스턴스 생성 및 초기화
     ClientSocketPtr = new ClientSocket(this);
-    ConnectNetwork = false;
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Success!")));
+  
+    if (ClientSocketPtr->Init())
+    {
+        ConnectNetwork = false;
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to initialize network connection."));
+    }
 }
 
 

@@ -26,8 +26,6 @@ ARunningZombieAIController::ARunningZombieAIController()
 		RunningZombieAIBehavior = BTObject.Object;
 	}
 
-	ClientSocketPtr = nullptr;
-
 }
 
 void ARunningZombieAIController::BeginPlay()
@@ -39,11 +37,8 @@ void ARunningZombieAIController::BeginPlay()
 
 	}
 
-	auto GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (GameInstance)
-	{
-		ClientSocketPtr = GameInstance->ClientSocketPtr;
-	}
+	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
 
 }
 
@@ -68,7 +63,7 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 	CheckAndSendMovement();
 
-	if (ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
+	if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 	{
 		UE_LOG(LogNet, Display, TEXT("Update Zombie: ZombieId=%d"), recvZombieData.ZombieId);
 		// 현재 GameMode 인스턴스를 얻기
@@ -106,7 +101,7 @@ void ARunningZombieAIController::CheckAndSendMovement()
 		packet.SerializeToString(&serializedData);
 
 		// 직렬화된 데이터를 서버로 전송
-		bool bIsSent = ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
 		// 현재 위치를 이전 위치로 업데이트
 		PreviousLocation = CurrentLocation;

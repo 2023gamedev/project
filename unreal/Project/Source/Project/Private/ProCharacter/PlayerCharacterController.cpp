@@ -48,8 +48,6 @@ APlayerCharacterController::APlayerCharacterController(const FObjectInitializer&
 		InputActions = SK_INPUTDATAASSET.Object;
 	}
 
-	ClientSocketPtr = nullptr;
-
 }
 
 void APlayerCharacterController::PostInitializeComponents()
@@ -66,11 +64,7 @@ void APlayerCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (GameInstance)
-	{
-		ClientSocketPtr = GameInstance->ClientSocketPtr;
-	}
+	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 void APlayerCharacterController::Tick(float DeltaTime)
@@ -79,7 +73,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 	CheckAndSendMovement();
 
-	if (ClientSocketPtr->Q_player.try_pop(recvPlayerData))
+	if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 	{
 		UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
 		// 현재 GameMode 인스턴스를 얻기
@@ -101,7 +95,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
 	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation)
 	{
-		uint32 MyPlayerId = ClientSocketPtr->GetMyPlayerId();
+		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 
 		// Protobuf를 사용하여 TestPacket 생성
 		Protocol:: Character packet;
@@ -119,7 +113,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.SerializeToString(&serializedData);
 
 		// 직렬화된 데이터를 서버로 전송
-		bool bIsSent = ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
 		// 현재 위치를 이전 위치로 업데이트
 		PreviousLocation = CurrentLocation;

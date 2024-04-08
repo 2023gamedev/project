@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GStruct.pb.h"
-#include "ProGamemode/ProGameInstance.h"
 #include <concurrent_queue.h>
 #include <mutex>
 
@@ -71,6 +70,7 @@ public:
 	virtual bool Init() override;
 	virtual uint32 Run() override;
 	virtual void Exit() override;
+	bool ConnectServer();
 	bool Send(const int SendSize, void* SendData);
 
 	uint32 GetMyPlayerId() const;

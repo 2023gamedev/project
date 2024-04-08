@@ -2,13 +2,13 @@
 
 
 #include "ClientSocket.h"
+#include "ProGamemode/ProGameInstance.h"
 
-ClientSocket::ClientSocket(UProGameInstance* Inst) : gameInst(Inst)
+ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
 
-	if (Init())
-	{
+	if (ConnectServer()) {
 		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
 	}
 }
@@ -25,42 +25,8 @@ ClientSocket::~ClientSocket()
 
 bool ClientSocket::Init()
 {
-	WSADATA wsaData;
-	int retval = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (retval != 0)
-	{
-		return false;
-	}
-
-	Socket = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
-	if (Socket == INVALID_SOCKET)
-	{
-		return false;
-	}
-
-	SOCKADDR_IN ServerAddr;
-
-	ServerAddr.sin_family = AF_INET;
-	ServerAddr.sin_port = htons(7777);
-
-	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Trying to connect.")));
-
-	if (retval == SOCKET_ERROR)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fail")));
-		return false;
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Success!")));
-
-		UE_LOG(LogNet, Display, TEXT("Socket Initialized"));
-		return true;
-	}
+	UE_LOG(LogNet, Warning, TEXT("Thread has been initialized"));
+	return true;
 }
 
 uint32 ClientSocket::Run()
@@ -157,6 +123,46 @@ void ClientSocket::Exit()
 		Socket = INVALID_SOCKET;
 	}
 
+}
+
+bool ClientSocket::ConnectServer()
+{
+	WSADATA wsaData;
+	int retval = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (retval != 0)
+	{
+		return false;
+	}
+
+	Socket = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+	if (Socket == INVALID_SOCKET)
+	{
+		return false;
+	}
+
+	SOCKADDR_IN ServerAddr;
+
+	ServerAddr.sin_family = AF_INET;
+	ServerAddr.sin_port = htons(7777);
+
+	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Trying to connect.")));
+
+	if (retval == SOCKET_ERROR)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fail")));
+		return false;
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Success!")));
+
+		UE_LOG(LogNet, Display, TEXT("Socket Initialized"));
+		return true;
+	}
 }
 
 bool ClientSocket::Send(const int SendSize, void* SendData)
