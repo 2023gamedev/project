@@ -7,7 +7,14 @@
 #include "Kismet/GameplayStatics.h"
 
 
+UProGameInstance::UProGameInstance()
+{
+    ClientSocketPtr = nullptr;
+}
 
+UProGameInstance::~UProGameInstance()
+{
+}
 
 void UProGameInstance::Init()
 {
@@ -15,9 +22,17 @@ void UProGameInstance::Init()
 
     m_iChoicedCharacterNumber = 0;
     GameStateClass = nullptr;
-
-    ClientSocketPtr = MakeShareable(new ClientSocket());
 }
+
+void UProGameInstance::InitSocket()
+{
+	if (!ConnectNetwork) return;
+
+	// ClientSocket 인스턴스 생성 및 초기화
+    ClientSocketPtr = new ClientSocket(this);
+    ConnectNetwork = false;
+}
+
 
 void UProGameInstance::SetGameState(TSubclassOf<AGameStateBase> gamestate)
 {

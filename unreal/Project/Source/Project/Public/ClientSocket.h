@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GStruct.pb.h"
+#include "ProGamemode/ProGameInstance.h"
 #include <concurrent_queue.h>
 #include <mutex>
 
@@ -51,11 +52,12 @@ struct ZombieData
 		: ZombieId(InZombieId), Location(InLocation), Rotation(InRotation) {}
 };
 
+class UProGameInstance;
 
 class PROJECT_API ClientSocket : public FRunnable
 {
 public:
-	ClientSocket();
+	ClientSocket(UProGameInstance* Inst);
 	~ClientSocket() override;
 
 	SOCKET Socket;
@@ -78,6 +80,9 @@ public:
 private:
 
 	std::mutex bufferMutex;
+	std::mutex socketMutex;
+
+	UProGameInstance* gameInst;
 
 	FRunnableThread* Thread;
 	bool ReceivedPlayerId = false;

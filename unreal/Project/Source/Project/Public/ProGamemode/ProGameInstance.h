@@ -18,7 +18,14 @@ class PROJECT_API UProGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
+public:
+    
+    UProGameInstance();
+    virtual ~UProGameInstance() override;
+
     virtual void Init() override;
+
+    void InitSocket();
 
 public:
 
@@ -42,6 +49,8 @@ public:
 
     void ChangeOneGameMode();
 
-    TSharedPtr<ClientSocket> ClientSocketPtr;
+    ClientSocket* ClientSocketPtr;
+
+    bool ConnectNetwork = true;
 
 };

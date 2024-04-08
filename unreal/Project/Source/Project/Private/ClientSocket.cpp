@@ -3,9 +3,14 @@
 
 #include "ClientSocket.h"
 
-ClientSocket::ClientSocket()
+ClientSocket::ClientSocket(UProGameInstance* Inst) : gameInst(Inst)
 {
-	Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
+	gameInst = Inst;
+
+	if (Init())
+	{
+		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
+	}
 }
 
 ClientSocket::~ClientSocket()
@@ -143,10 +148,13 @@ uint32 ClientSocket::Run()
 
 void ClientSocket::Exit()
 {
+	std::lock_guard<std::mutex> lock(socketMutex);
+
 	if (Socket)
 	{
 		closesocket(Socket);
 		WSACleanup();
+		Socket = INVALID_SOCKET;
 	}
 
 }
