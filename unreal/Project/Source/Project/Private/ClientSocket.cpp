@@ -106,8 +106,6 @@ uint32 ClientSocket::Run()
 				return 0;
 			}
 		}
-
-		return 0;
 	}
 }
 

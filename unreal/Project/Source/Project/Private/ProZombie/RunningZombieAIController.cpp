@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GStruct.pb.h"
+#include "ProZombie/RunningZombie.h"
 #include "ProGamemode/OneGameModeBase.h"
 #include "ProGamemode/ProGameInstance.h"
 
@@ -61,7 +62,7 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 	}
 
-	//CheckAndSendMovement();
+	CheckAndSendMovement();
 
 	if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 	{
@@ -77,36 +78,35 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 void ARunningZombieAIController::CheckAndSendMovement()
 {
-	APawn* ZombiePawn = GetPawn();
+	auto* ZombiePawn = Cast<ARunningZombie>(GetPawn());
 	FVector CurrentLocation = ZombiePawn->GetActorLocation();
 	FRotator CurrentRotation = ZombiePawn->GetActorRotation();
-
+	ZombieId = ZombiePawn->GetZombieId();
 
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation)
-	{
-		// Protobuf를 사용하여 TestPacket 생성
-		Protocol::Zombie packet;
-		packet.set_zombieid(ZombieId);
-		packet.set_type(2); // 원하는 유형 설정
-		packet.set_x(CurrentLocation.X);
-		packet.set_y(CurrentLocation.Y);
-		packet.set_z(CurrentLocation.Z);
-		packet.set_pitch(CurrentRotation.Pitch);
-		packet.set_yaw(CurrentRotation.Yaw);
-		packet.set_roll(CurrentRotation.Roll);
+	//if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation){}
 
-		// 직렬화
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
+	// Protobuf를 사용하여 TestPacket 생성
+	Protocol::Zombie packet;
+	packet.set_zombieid(ZombieId);
+	packet.set_type(2); // 원하는 유형 설정
+	packet.set_x(CurrentLocation.X);
+	packet.set_y(CurrentLocation.Y);
+	packet.set_z(CurrentLocation.Z);
+	packet.set_pitch(CurrentRotation.Pitch);
+	packet.set_yaw(CurrentRotation.Yaw);
+	packet.set_roll(CurrentRotation.Roll);
 
-		// 직렬화된 데이터를 서버로 전송
-		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+	// 직렬화
+	std::string serializedData;
+	packet.SerializeToString(&serializedData);
 
-		// 현재 위치를 이전 위치로 업데이트
-		PreviousLocation = CurrentLocation;
-		PreviousRotation = CurrentRotation;
-	}
+	// 직렬화된 데이터를 서버로 전송
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+	// 현재 위치를 이전 위치로 업데이트
+	PreviousLocation = CurrentLocation;
+	PreviousRotation = CurrentRotation;
 
 }
 

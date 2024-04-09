@@ -158,8 +158,8 @@ void AOneGameModeBase::BeginPlay()
 
 
     // BeginPlay에서 SpawnZombies 호출
-    SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
-    SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f, 90.212492f), true);
+    //SpawnZombies(0, EZombie::NORMAL, FVector(400.f,1320.f, 90.212492f), true);
+    //SpawnZombies(1, EZombie::SHOUTING, FVector(470.f,1120.f, 90.212492f), true);
     SpawnZombies(2, EZombie::RUNNING, FVector(540.f, 920.f, 90.212492f), true);
 
     ABaseCharacter* DefaultPawn = nullptr;
@@ -464,7 +464,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
             }
 
-            SpawnedZombie->SetZombieId(m_iZombieNumber);
+            SpawnedZombie->SetZombieId(zombieindex);
             m_iZombieNumber++;
         }
         else if (zombieaiconindex == EZombie::SHOUTING) {
@@ -486,7 +486,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
             UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
             }
 
-            SpawnedZombie->SetZombieId(m_iShoutingZombieNumber);
+            SpawnedZombie->SetZombieId(zombieindex);
             m_iShoutingZombieNumber++;
         }
         else if (zombieaiconindex == EZombie::RUNNING) {
@@ -509,7 +509,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));
             }
 
-            SpawnedZombie->SetZombieId(m_iRunningZombieNumber);
+            SpawnedZombie->SetZombieId(zombieindex);
             m_iRunningZombieNumber++;
         }
 
@@ -526,19 +526,19 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotat
         return;
     }
 
-    // 캐릭터 검색
-    for (TActorIterator<ABaseZombie> It(World); It; ++It)
+    // RunningZombie 캐릭터 검색
+    for (TActorIterator<ARunningZombie> It(World); It; ++It)
     {
-        ABaseZombie* BaseZombie = *It;
-        if (BaseZombie && BaseZombie->GetZombieId() == ZombieID)
+        ARunningZombie* RunningZombie = *It;
+        if (RunningZombie && RunningZombie->GetZombieId() == ZombieID)
         {
-            FVector OldLocation = BaseZombie->GetActorLocation();
+            FVector OldLocation = RunningZombie->GetActorLocation();
 
             // 기존 캐릭터 위치 업데이트
-            BaseZombie->SetActorLocation(NewLocation);
-            BaseZombie->SetActorRotation(NewRotation);
+            RunningZombie->SetActorLocation(NewLocation);
+            RunningZombie->SetActorRotation(NewRotation);
 
-            BaseZombie->UpdateZombieData(NewLocation);
+            RunningZombie->UpdateZombieData(NewLocation);
 
             return;
         }
