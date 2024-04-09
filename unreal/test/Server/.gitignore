@@ -403,3 +403,8 @@ FodyWeavers.xsd
 /Build
 /Plugins
 *_BuiltData.uasset
+
+!/Libraries/
+!/Libraries/*
+!libprotobuf.dll
+!libprotobufd.dll
