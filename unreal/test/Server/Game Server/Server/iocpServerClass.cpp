@@ -224,6 +224,7 @@ void IOCP_CORE::IOCP_AcceptThread()
 		user->recv_overlap.operation = OP_SERVER_RECV;
 		user->recv_overlap.wsabuf.buf = reinterpret_cast<char*>(&user->recv_overlap.iocp_buffer);
 		user->recv_overlap.wsabuf.len = sizeof(user->recv_overlap.iocp_buffer);
+		user->isInGame = false;
 
 		g_players[user->id] = user;
 

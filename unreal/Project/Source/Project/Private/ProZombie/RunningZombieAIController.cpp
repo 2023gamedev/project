@@ -61,7 +61,7 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 	}
 
-	CheckAndSendMovement();
+	//CheckAndSendMovement();
 
 	if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 	{

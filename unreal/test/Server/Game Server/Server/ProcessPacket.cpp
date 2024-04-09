@@ -9,13 +9,17 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         return false;
     }
 
+    PLAYER_INFO* clientInfo = it->second;
+
     Protocol::Character tempPacket;
     tempPacket.ParseFromArray(buffer, bufferSize);
+
+    if(tempPacket.playerid() == id || tempPacket.isingame()) clientInfo->isInGame = true;
 
     // 패킷의 타입을 확인하여 처리
     switch (tempPacket.type()) {
     case 1: {
-        //printf("[ No. %3u ] TEST Packet Received !!\n", id);
+        printf("[ No. %3u ] character Packet Received !!\n", id);
         //printf("Received packet type = %d\n", CharacterPacket.type());
         //printf("Received playerID = %d\n", CharacterPacket.playerid());
         //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
@@ -29,7 +33,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.first != id) {
+            if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
@@ -37,7 +41,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     } break;
 
     case 2: {
-
+        printf("[ No. %3u ] zombie Packet Received !!\n", id);
         Protocol::Zombie Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -45,7 +49,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         if (id == 0) {
             for (const auto& player : g_players) {
-                if (player.first != id) {
+                if (player.first != id && player.second->isInGame) {
                     IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 }
             }

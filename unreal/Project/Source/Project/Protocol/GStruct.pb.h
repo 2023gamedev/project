@@ -190,6 +190,7 @@ class Character final :
     kPitchFieldNumber = 7,
     kYawFieldNumber = 8,
     kRollFieldNumber = 9,
+    kIsingameFieldNumber = 10,
   };
   // uint32 playerid = 1;
   void clear_playerid();
@@ -272,6 +273,15 @@ class Character final :
   void _internal_set_roll(float value);
   public:
 
+  // bool isingame = 10;
+  void clear_isingame();
+  bool isingame() const;
+  void set_isingame(bool value);
+  private:
+  bool _internal_isingame() const;
+  void _internal_set_isingame(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.Character)
  private:
   class _Internal;
@@ -289,6 +299,7 @@ class Character final :
     float pitch_;
     float yaw_;
     float roll_;
+    bool isingame_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -719,6 +730,26 @@ inline void Character::_internal_set_roll(float value) {
 inline void Character::set_roll(float value) {
   _internal_set_roll(value);
   // @@protoc_insertion_point(field_set:Protocol.Character.roll)
+}
+
+// bool isingame = 10;
+inline void Character::clear_isingame() {
+  _impl_.isingame_ = false;
+}
+inline bool Character::_internal_isingame() const {
+  return _impl_.isingame_;
+}
+inline bool Character::isingame() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.isingame)
+  return _internal_isingame();
+}
+inline void Character::_internal_set_isingame(bool value) {
+  
+  _impl_.isingame_ = value;
+}
+inline void Character::set_isingame(bool value) {
+  _internal_set_isingame(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.isingame)
 }
 
 // -------------------------------------------------------------------

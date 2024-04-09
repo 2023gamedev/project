@@ -32,6 +32,7 @@ PROTOBUF_CONSTEXPR Character::Character(
   , /*decltype(_impl_.pitch_)*/0
   , /*decltype(_impl_.yaw_)*/0
   , /*decltype(_impl_.roll_)*/0
+  , /*decltype(_impl_.isingame_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CharacterDefaultTypeInternal {
   PROTOBUF_CONSTEXPR CharacterDefaultTypeInternal()
@@ -84,6 +85,7 @@ const uint32_t TableStruct_GStruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.pitch_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.yaw_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.roll_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.isingame_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -102,7 +104,7 @@ const uint32_t TableStruct_GStruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::Character)},
-  { 15, -1, -1, sizeof(::Protocol::Zombie)},
+  { 16, -1, -1, sizeof(::Protocol::Zombie)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -111,18 +113,19 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_GStruct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\rGStruct.proto\022\010Protocol\"\213\001\n\tCharacter\022"
+  "\n\rGStruct.proto\022\010Protocol\"\235\001\n\tCharacter\022"
   "\020\n\010playerid\030\001 \001(\r\022\023\n\013packet_size\030\002 \001(\r\022\014"
   "\n\004type\030\003 \001(\r\022\t\n\001x\030\004 \001(\002\022\t\n\001y\030\005 \001(\002\022\t\n\001z\030"
   "\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004rol"
-  "l\030\t \001(\002\"\210\001\n\006Zombie\022\020\n\010zombieid\030\001 \001(\r\022\023\n\013"
-  "packet_size\030\002 \001(\r\022\014\n\004type\030\003 \001(\r\022\t\n\001x\030\004 \001"
-  "(\002\022\t\n\001y\030\005 \001(\002\022\t\n\001z\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022"
-  "\013\n\003yaw\030\010 \001(\002\022\014\n\004roll\030\t \001(\002b\006proto3"
+  "l\030\t \001(\002\022\020\n\010isingame\030\n \001(\010\"\210\001\n\006Zombie\022\020\n\010"
+  "zombieid\030\001 \001(\r\022\023\n\013packet_size\030\002 \001(\r\022\014\n\004t"
+  "ype\030\003 \001(\r\022\t\n\001x\030\004 \001(\002\022\t\n\001y\030\005 \001(\002\022\t\n\001z\030\006 \001"
+  "(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004roll\030\t"
+  " \001(\002b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GStruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GStruct_2eproto = {
-    false, false, 314, descriptor_table_protodef_GStruct_2eproto,
+    false, false, 332, descriptor_table_protodef_GStruct_2eproto,
     "GStruct.proto",
     &descriptor_table_GStruct_2eproto_once, nullptr, 0, 2,
     schemas, file_default_instances, TableStruct_GStruct_2eproto::offsets,
@@ -162,12 +165,13 @@ Character::Character(const Character& from)
     , decltype(_impl_.pitch_){}
     , decltype(_impl_.yaw_){}
     , decltype(_impl_.roll_){}
+    , decltype(_impl_.isingame_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.playerid_, &from._impl_.playerid_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.roll_) -
-    reinterpret_cast<char*>(&_impl_.playerid_)) + sizeof(_impl_.roll_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.isingame_) -
+    reinterpret_cast<char*>(&_impl_.playerid_)) + sizeof(_impl_.isingame_));
   // @@protoc_insertion_point(copy_constructor:Protocol.Character)
 }
 
@@ -185,6 +189,7 @@ inline void Character::SharedCtor(
     , decltype(_impl_.pitch_){0}
     , decltype(_impl_.yaw_){0}
     , decltype(_impl_.roll_){0}
+    , decltype(_impl_.isingame_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -213,8 +218,8 @@ void Character::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.playerid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.roll_) -
-      reinterpret_cast<char*>(&_impl_.playerid_)) + sizeof(_impl_.roll_));
+      reinterpret_cast<char*>(&_impl_.isingame_) -
+      reinterpret_cast<char*>(&_impl_.playerid_)) + sizeof(_impl_.isingame_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -293,6 +298,14 @@ const char* Character::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
           _impl_.roll_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool isingame = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 80)) {
+          _impl_.isingame_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -403,6 +416,12 @@ uint8_t* Character::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_roll(), target);
   }
 
+  // bool isingame = 10;
+  if (this->_internal_isingame() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(10, this->_internal_isingame(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -488,6 +507,11 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
+  // bool isingame = 10;
+  if (this->_internal_isingame() != 0) {
+    total_size += 1 + 1;
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -557,6 +581,9 @@ void Character::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   if (raw_roll != 0) {
     _this->_internal_set_roll(from._internal_roll());
   }
+  if (from._internal_isingame() != 0) {
+    _this->_internal_set_isingame(from._internal_isingame());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -575,8 +602,8 @@ void Character::InternalSwap(Character* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Character, _impl_.roll_)
-      + sizeof(Character::_impl_.roll_)
+      PROTOBUF_FIELD_OFFSET(Character, _impl_.isingame_)
+      + sizeof(Character::_impl_.isingame_)
       - PROTOBUF_FIELD_OFFSET(Character, _impl_.playerid_)>(
           reinterpret_cast<char*>(&_impl_.playerid_),
           reinterpret_cast<char*>(&other->_impl_.playerid_));

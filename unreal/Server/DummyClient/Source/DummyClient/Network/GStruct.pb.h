@@ -45,35 +45,39 @@ struct TableStruct_GStruct_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_GStruct_2eproto;
 namespace Protocol {
-class TestPacket;
-struct TestPacketDefaultTypeInternal;
-extern TestPacketDefaultTypeInternal _TestPacket_default_instance_;
+class Character;
+struct CharacterDefaultTypeInternal;
+extern CharacterDefaultTypeInternal _Character_default_instance_;
+class Zombie;
+struct ZombieDefaultTypeInternal;
+extern ZombieDefaultTypeInternal _Zombie_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
-template<> ::Protocol::TestPacket* Arena::CreateMaybeMessage<::Protocol::TestPacket>(Arena*);
+template<> ::Protocol::Character* Arena::CreateMaybeMessage<::Protocol::Character>(Arena*);
+template<> ::Protocol::Zombie* Arena::CreateMaybeMessage<::Protocol::Zombie>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
 
 // ===================================================================
 
-class TestPacket final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.TestPacket) */ {
+class Character final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Character) */ {
  public:
-  inline TestPacket() : TestPacket(nullptr) {}
-  ~TestPacket() override;
-  explicit PROTOBUF_CONSTEXPR TestPacket(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline Character() : Character(nullptr) {}
+  ~Character() override;
+  explicit PROTOBUF_CONSTEXPR Character(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  TestPacket(const TestPacket& from);
-  TestPacket(TestPacket&& from) noexcept
-    : TestPacket() {
+  Character(const Character& from);
+  Character(Character&& from) noexcept
+    : Character() {
     *this = ::std::move(from);
   }
 
-  inline TestPacket& operator=(const TestPacket& from) {
+  inline Character& operator=(const Character& from) {
     CopyFrom(from);
     return *this;
   }
-  inline TestPacket& operator=(TestPacket&& from) noexcept {
+  inline Character& operator=(Character&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -96,20 +100,20 @@ class TestPacket final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const TestPacket& default_instance() {
+  static const Character& default_instance() {
     return *internal_default_instance();
   }
-  static inline const TestPacket* internal_default_instance() {
-    return reinterpret_cast<const TestPacket*>(
-               &_TestPacket_default_instance_);
+  static inline const Character* internal_default_instance() {
+    return reinterpret_cast<const Character*>(
+               &_Character_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  friend void swap(TestPacket& a, TestPacket& b) {
+  friend void swap(Character& a, Character& b) {
     a.Swap(&b);
   }
-  inline void Swap(TestPacket* other) {
+  inline void Swap(Character* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -122,7 +126,7 @@ class TestPacket final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(TestPacket* other) {
+  void UnsafeArenaSwap(Character* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -130,14 +134,14 @@ class TestPacket final :
 
   // implements Message ----------------------------------------------
 
-  TestPacket* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TestPacket>(arena);
+  Character* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Character>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TestPacket& from);
+  void CopyFrom(const Character& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const TestPacket& from) {
-    TestPacket::MergeImpl(*this, from);
+  void MergeFrom( const Character& from) {
+    Character::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -155,15 +159,15 @@ class TestPacket final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(TestPacket* other);
+  void InternalSwap(Character* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Protocol.TestPacket";
+    return "Protocol.Character";
   }
   protected:
-  explicit TestPacket(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit Character(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -186,6 +190,7 @@ class TestPacket final :
     kPitchFieldNumber = 7,
     kYawFieldNumber = 8,
     kRollFieldNumber = 9,
+    kIsingameFieldNumber = 10,
   };
   // uint32 playerid = 1;
   void clear_playerid();
@@ -268,7 +273,16 @@ class TestPacket final :
   void _internal_set_roll(float value);
   public:
 
-  // @@protoc_insertion_point(class_scope:Protocol.TestPacket)
+  // bool isingame = 10;
+  void clear_isingame();
+  bool isingame() const;
+  void set_isingame(bool value);
+  private:
+  bool _internal_isingame() const;
+  void _internal_set_isingame(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.Character)
  private:
   class _Internal;
 
@@ -277,6 +291,243 @@ class TestPacket final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     uint32_t playerid_;
+    uint32_t packet_size_;
+    uint32_t type_;
+    float x_;
+    float y_;
+    float z_;
+    float pitch_;
+    float yaw_;
+    float roll_;
+    bool isingame_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GStruct_2eproto;
+};
+// -------------------------------------------------------------------
+
+class Zombie final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Zombie) */ {
+ public:
+  inline Zombie() : Zombie(nullptr) {}
+  ~Zombie() override;
+  explicit PROTOBUF_CONSTEXPR Zombie(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Zombie(const Zombie& from);
+  Zombie(Zombie&& from) noexcept
+    : Zombie() {
+    *this = ::std::move(from);
+  }
+
+  inline Zombie& operator=(const Zombie& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Zombie& operator=(Zombie&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Zombie& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Zombie* internal_default_instance() {
+    return reinterpret_cast<const Zombie*>(
+               &_Zombie_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(Zombie& a, Zombie& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Zombie* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Zombie* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Zombie* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Zombie>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Zombie& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Zombie& from) {
+    Zombie::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Zombie* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.Zombie";
+  }
+  protected:
+  explicit Zombie(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kZombieidFieldNumber = 1,
+    kPacketSizeFieldNumber = 2,
+    kTypeFieldNumber = 3,
+    kXFieldNumber = 4,
+    kYFieldNumber = 5,
+    kZFieldNumber = 6,
+    kPitchFieldNumber = 7,
+    kYawFieldNumber = 8,
+    kRollFieldNumber = 9,
+  };
+  // uint32 zombieid = 1;
+  void clear_zombieid();
+  uint32_t zombieid() const;
+  void set_zombieid(uint32_t value);
+  private:
+  uint32_t _internal_zombieid() const;
+  void _internal_set_zombieid(uint32_t value);
+  public:
+
+  // uint32 packet_size = 2;
+  void clear_packet_size();
+  uint32_t packet_size() const;
+  void set_packet_size(uint32_t value);
+  private:
+  uint32_t _internal_packet_size() const;
+  void _internal_set_packet_size(uint32_t value);
+  public:
+
+  // uint32 type = 3;
+  void clear_type();
+  uint32_t type() const;
+  void set_type(uint32_t value);
+  private:
+  uint32_t _internal_type() const;
+  void _internal_set_type(uint32_t value);
+  public:
+
+  // float x = 4;
+  void clear_x();
+  float x() const;
+  void set_x(float value);
+  private:
+  float _internal_x() const;
+  void _internal_set_x(float value);
+  public:
+
+  // float y = 5;
+  void clear_y();
+  float y() const;
+  void set_y(float value);
+  private:
+  float _internal_y() const;
+  void _internal_set_y(float value);
+  public:
+
+  // float z = 6;
+  void clear_z();
+  float z() const;
+  void set_z(float value);
+  private:
+  float _internal_z() const;
+  void _internal_set_z(float value);
+  public:
+
+  // float pitch = 7;
+  void clear_pitch();
+  float pitch() const;
+  void set_pitch(float value);
+  private:
+  float _internal_pitch() const;
+  void _internal_set_pitch(float value);
+  public:
+
+  // float yaw = 8;
+  void clear_yaw();
+  float yaw() const;
+  void set_yaw(float value);
+  private:
+  float _internal_yaw() const;
+  void _internal_set_yaw(float value);
+  public:
+
+  // float roll = 9;
+  void clear_roll();
+  float roll() const;
+  void set_roll(float value);
+  private:
+  float _internal_roll() const;
+  void _internal_set_roll(float value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.Zombie)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t zombieid_;
     uint32_t packet_size_;
     uint32_t type_;
     float x_;
@@ -299,191 +550,397 @@ class TestPacket final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// TestPacket
+// Character
 
 // uint32 playerid = 1;
-inline void TestPacket::clear_playerid() {
+inline void Character::clear_playerid() {
   _impl_.playerid_ = 0u;
 }
-inline uint32_t TestPacket::_internal_playerid() const {
+inline uint32_t Character::_internal_playerid() const {
   return _impl_.playerid_;
 }
-inline uint32_t TestPacket::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.playerid)
+inline uint32_t Character::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.playerid)
   return _internal_playerid();
 }
-inline void TestPacket::_internal_set_playerid(uint32_t value) {
+inline void Character::_internal_set_playerid(uint32_t value) {
   
   _impl_.playerid_ = value;
 }
-inline void TestPacket::set_playerid(uint32_t value) {
+inline void Character::set_playerid(uint32_t value) {
   _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.playerid)
+  // @@protoc_insertion_point(field_set:Protocol.Character.playerid)
 }
 
 // uint32 packet_size = 2;
-inline void TestPacket::clear_packet_size() {
+inline void Character::clear_packet_size() {
   _impl_.packet_size_ = 0u;
 }
-inline uint32_t TestPacket::_internal_packet_size() const {
+inline uint32_t Character::_internal_packet_size() const {
   return _impl_.packet_size_;
 }
-inline uint32_t TestPacket::packet_size() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.packet_size)
+inline uint32_t Character::packet_size() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.packet_size)
   return _internal_packet_size();
 }
-inline void TestPacket::_internal_set_packet_size(uint32_t value) {
+inline void Character::_internal_set_packet_size(uint32_t value) {
   
   _impl_.packet_size_ = value;
 }
-inline void TestPacket::set_packet_size(uint32_t value) {
+inline void Character::set_packet_size(uint32_t value) {
   _internal_set_packet_size(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.packet_size)
+  // @@protoc_insertion_point(field_set:Protocol.Character.packet_size)
 }
 
 // uint32 type = 3;
-inline void TestPacket::clear_type() {
+inline void Character::clear_type() {
   _impl_.type_ = 0u;
 }
-inline uint32_t TestPacket::_internal_type() const {
+inline uint32_t Character::_internal_type() const {
   return _impl_.type_;
 }
-inline uint32_t TestPacket::type() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.type)
+inline uint32_t Character::type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.type)
   return _internal_type();
 }
-inline void TestPacket::_internal_set_type(uint32_t value) {
+inline void Character::_internal_set_type(uint32_t value) {
   
   _impl_.type_ = value;
 }
-inline void TestPacket::set_type(uint32_t value) {
+inline void Character::set_type(uint32_t value) {
   _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.type)
+  // @@protoc_insertion_point(field_set:Protocol.Character.type)
 }
 
 // float x = 4;
-inline void TestPacket::clear_x() {
+inline void Character::clear_x() {
   _impl_.x_ = 0;
 }
-inline float TestPacket::_internal_x() const {
+inline float Character::_internal_x() const {
   return _impl_.x_;
 }
-inline float TestPacket::x() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.x)
+inline float Character::x() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.x)
   return _internal_x();
 }
-inline void TestPacket::_internal_set_x(float value) {
+inline void Character::_internal_set_x(float value) {
   
   _impl_.x_ = value;
 }
-inline void TestPacket::set_x(float value) {
+inline void Character::set_x(float value) {
   _internal_set_x(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.x)
+  // @@protoc_insertion_point(field_set:Protocol.Character.x)
 }
 
 // float y = 5;
-inline void TestPacket::clear_y() {
+inline void Character::clear_y() {
   _impl_.y_ = 0;
 }
-inline float TestPacket::_internal_y() const {
+inline float Character::_internal_y() const {
   return _impl_.y_;
 }
-inline float TestPacket::y() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.y)
+inline float Character::y() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.y)
   return _internal_y();
 }
-inline void TestPacket::_internal_set_y(float value) {
+inline void Character::_internal_set_y(float value) {
   
   _impl_.y_ = value;
 }
-inline void TestPacket::set_y(float value) {
+inline void Character::set_y(float value) {
   _internal_set_y(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.y)
+  // @@protoc_insertion_point(field_set:Protocol.Character.y)
 }
 
 // float z = 6;
-inline void TestPacket::clear_z() {
+inline void Character::clear_z() {
   _impl_.z_ = 0;
 }
-inline float TestPacket::_internal_z() const {
+inline float Character::_internal_z() const {
   return _impl_.z_;
 }
-inline float TestPacket::z() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.z)
+inline float Character::z() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.z)
   return _internal_z();
 }
-inline void TestPacket::_internal_set_z(float value) {
+inline void Character::_internal_set_z(float value) {
   
   _impl_.z_ = value;
 }
-inline void TestPacket::set_z(float value) {
+inline void Character::set_z(float value) {
   _internal_set_z(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.z)
+  // @@protoc_insertion_point(field_set:Protocol.Character.z)
 }
 
 // float pitch = 7;
-inline void TestPacket::clear_pitch() {
+inline void Character::clear_pitch() {
   _impl_.pitch_ = 0;
 }
-inline float TestPacket::_internal_pitch() const {
+inline float Character::_internal_pitch() const {
   return _impl_.pitch_;
 }
-inline float TestPacket::pitch() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.pitch)
+inline float Character::pitch() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.pitch)
   return _internal_pitch();
 }
-inline void TestPacket::_internal_set_pitch(float value) {
+inline void Character::_internal_set_pitch(float value) {
   
   _impl_.pitch_ = value;
 }
-inline void TestPacket::set_pitch(float value) {
+inline void Character::set_pitch(float value) {
   _internal_set_pitch(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.pitch)
+  // @@protoc_insertion_point(field_set:Protocol.Character.pitch)
 }
 
 // float yaw = 8;
-inline void TestPacket::clear_yaw() {
+inline void Character::clear_yaw() {
   _impl_.yaw_ = 0;
 }
-inline float TestPacket::_internal_yaw() const {
+inline float Character::_internal_yaw() const {
   return _impl_.yaw_;
 }
-inline float TestPacket::yaw() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.yaw)
+inline float Character::yaw() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.yaw)
   return _internal_yaw();
 }
-inline void TestPacket::_internal_set_yaw(float value) {
+inline void Character::_internal_set_yaw(float value) {
   
   _impl_.yaw_ = value;
 }
-inline void TestPacket::set_yaw(float value) {
+inline void Character::set_yaw(float value) {
   _internal_set_yaw(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.yaw)
+  // @@protoc_insertion_point(field_set:Protocol.Character.yaw)
 }
 
 // float roll = 9;
-inline void TestPacket::clear_roll() {
+inline void Character::clear_roll() {
   _impl_.roll_ = 0;
 }
-inline float TestPacket::_internal_roll() const {
+inline float Character::_internal_roll() const {
   return _impl_.roll_;
 }
-inline float TestPacket::roll() const {
-  // @@protoc_insertion_point(field_get:Protocol.TestPacket.roll)
+inline float Character::roll() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.roll)
   return _internal_roll();
 }
-inline void TestPacket::_internal_set_roll(float value) {
+inline void Character::_internal_set_roll(float value) {
   
   _impl_.roll_ = value;
 }
-inline void TestPacket::set_roll(float value) {
+inline void Character::set_roll(float value) {
   _internal_set_roll(value);
-  // @@protoc_insertion_point(field_set:Protocol.TestPacket.roll)
+  // @@protoc_insertion_point(field_set:Protocol.Character.roll)
+}
+
+// bool isingame = 10;
+inline void Character::clear_isingame() {
+  _impl_.isingame_ = false;
+}
+inline bool Character::_internal_isingame() const {
+  return _impl_.isingame_;
+}
+inline bool Character::isingame() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.isingame)
+  return _internal_isingame();
+}
+inline void Character::_internal_set_isingame(bool value) {
+  
+  _impl_.isingame_ = value;
+}
+inline void Character::set_isingame(bool value) {
+  _internal_set_isingame(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.isingame)
+}
+
+// -------------------------------------------------------------------
+
+// Zombie
+
+// uint32 zombieid = 1;
+inline void Zombie::clear_zombieid() {
+  _impl_.zombieid_ = 0u;
+}
+inline uint32_t Zombie::_internal_zombieid() const {
+  return _impl_.zombieid_;
+}
+inline uint32_t Zombie::zombieid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.zombieid)
+  return _internal_zombieid();
+}
+inline void Zombie::_internal_set_zombieid(uint32_t value) {
+  
+  _impl_.zombieid_ = value;
+}
+inline void Zombie::set_zombieid(uint32_t value) {
+  _internal_set_zombieid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.zombieid)
+}
+
+// uint32 packet_size = 2;
+inline void Zombie::clear_packet_size() {
+  _impl_.packet_size_ = 0u;
+}
+inline uint32_t Zombie::_internal_packet_size() const {
+  return _impl_.packet_size_;
+}
+inline uint32_t Zombie::packet_size() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.packet_size)
+  return _internal_packet_size();
+}
+inline void Zombie::_internal_set_packet_size(uint32_t value) {
+  
+  _impl_.packet_size_ = value;
+}
+inline void Zombie::set_packet_size(uint32_t value) {
+  _internal_set_packet_size(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.packet_size)
+}
+
+// uint32 type = 3;
+inline void Zombie::clear_type() {
+  _impl_.type_ = 0u;
+}
+inline uint32_t Zombie::_internal_type() const {
+  return _impl_.type_;
+}
+inline uint32_t Zombie::type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.type)
+  return _internal_type();
+}
+inline void Zombie::_internal_set_type(uint32_t value) {
+  
+  _impl_.type_ = value;
+}
+inline void Zombie::set_type(uint32_t value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.type)
+}
+
+// float x = 4;
+inline void Zombie::clear_x() {
+  _impl_.x_ = 0;
+}
+inline float Zombie::_internal_x() const {
+  return _impl_.x_;
+}
+inline float Zombie::x() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.x)
+  return _internal_x();
+}
+inline void Zombie::_internal_set_x(float value) {
+  
+  _impl_.x_ = value;
+}
+inline void Zombie::set_x(float value) {
+  _internal_set_x(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.x)
+}
+
+// float y = 5;
+inline void Zombie::clear_y() {
+  _impl_.y_ = 0;
+}
+inline float Zombie::_internal_y() const {
+  return _impl_.y_;
+}
+inline float Zombie::y() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.y)
+  return _internal_y();
+}
+inline void Zombie::_internal_set_y(float value) {
+  
+  _impl_.y_ = value;
+}
+inline void Zombie::set_y(float value) {
+  _internal_set_y(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.y)
+}
+
+// float z = 6;
+inline void Zombie::clear_z() {
+  _impl_.z_ = 0;
+}
+inline float Zombie::_internal_z() const {
+  return _impl_.z_;
+}
+inline float Zombie::z() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.z)
+  return _internal_z();
+}
+inline void Zombie::_internal_set_z(float value) {
+  
+  _impl_.z_ = value;
+}
+inline void Zombie::set_z(float value) {
+  _internal_set_z(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.z)
+}
+
+// float pitch = 7;
+inline void Zombie::clear_pitch() {
+  _impl_.pitch_ = 0;
+}
+inline float Zombie::_internal_pitch() const {
+  return _impl_.pitch_;
+}
+inline float Zombie::pitch() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.pitch)
+  return _internal_pitch();
+}
+inline void Zombie::_internal_set_pitch(float value) {
+  
+  _impl_.pitch_ = value;
+}
+inline void Zombie::set_pitch(float value) {
+  _internal_set_pitch(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.pitch)
+}
+
+// float yaw = 8;
+inline void Zombie::clear_yaw() {
+  _impl_.yaw_ = 0;
+}
+inline float Zombie::_internal_yaw() const {
+  return _impl_.yaw_;
+}
+inline float Zombie::yaw() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.yaw)
+  return _internal_yaw();
+}
+inline void Zombie::_internal_set_yaw(float value) {
+  
+  _impl_.yaw_ = value;
+}
+inline void Zombie::set_yaw(float value) {
+  _internal_set_yaw(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.yaw)
+}
+
+// float roll = 9;
+inline void Zombie::clear_roll() {
+  _impl_.roll_ = 0;
+}
+inline float Zombie::_internal_roll() const {
+  return _impl_.roll_;
+}
+inline float Zombie::roll() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.roll)
+  return _internal_roll();
+}
+inline void Zombie::_internal_set_roll(float value) {
+  
+  _impl_.roll_ = value;
+}
+inline void Zombie::set_roll(float value) {
+  _internal_set_roll(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.roll)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 

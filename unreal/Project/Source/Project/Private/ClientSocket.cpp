@@ -55,7 +55,6 @@ uint32 ClientSocket::Run()
 		else if (recvLen > 0)
 		{
 
-			std::lock_guard<std::mutex> lock(bufferMutex);
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
 
 			Protocol::Character tempCharacterPacket;
@@ -114,15 +113,12 @@ uint32 ClientSocket::Run()
 
 void ClientSocket::Exit()
 {
-	std::lock_guard<std::mutex> lock(socketMutex);
-
 	if (Socket)
 	{
 		closesocket(Socket);
 		WSACleanup();
 		Socket = INVALID_SOCKET;
 	}
-
 }
 
 bool ClientSocket::ConnectServer()

@@ -107,6 +107,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_pitch(CurrentRotation.Pitch);
 		packet.set_yaw(CurrentRotation.Yaw);
 		packet.set_roll(CurrentRotation.Roll);
+		packet.set_isingame(true);
 
 		// Á÷·ÄÈ­
 		std::string serializedData;
