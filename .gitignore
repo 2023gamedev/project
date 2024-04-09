@@ -402,5 +402,7 @@ Intermediate/
 Build/
 Plugins/
 *_BuiltData.uasset
-!Server/Game Server/Libraries/Libs/Protobuf/Debug
-!Server/Game Server/Libraries/Libs/Protobuf/Release
+!/Libraries/
+!/Libraries/*
+!libprotobuf.dll
+!libprotobufd.dll
