@@ -8,10 +8,10 @@
 #include "OneGameModeBase.generated.h"
 
 /**
- * 
+ *
  */
 
-// Main Gamemode 클래스
+ // Main Gamemode 클래스
 
 
 UENUM(BlueprintType)
@@ -20,6 +20,15 @@ enum class EZombie
     NORMAL,
     SHOUTING,
     RUNNING,
+};
+
+// Zombie는 패트롤을 어느쪽으로 할 것인가
+UENUM(BlueprintType)
+enum class EZombiePatrol
+{
+    NOTPATROL,
+    PATROLX,
+    PATROLY,
 };
 
 // 캐릭터 선택을 위한 enum 클래스
@@ -53,14 +62,14 @@ class AItemBoxActor;
 UCLASS()
 class PROJECT_API AOneGameModeBase : public AGameModeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 public:
-	AOneGameModeBase();
+    AOneGameModeBase();
 
-	virtual void PostLogin(APlayerController* NewPlayer) override;
+    virtual void PostLogin(APlayerController* NewPlayer) override;
 
     virtual void BeginPlay() override;
-    
+
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
 
@@ -102,11 +111,9 @@ public:
     UPROPERTY(VisibleAnywhere, Category = "Zombies")
     int32 m_iRunningZombieNumber;
 
-    UPROPERTY(VisibleAnywhere, Category = "Zombies")
-    float m_fPatrolRange;
 
 
-    UPROPERTY(VisibleAnywhere, Category ="PlayerCharacter")
+    UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter")
     EPlayerCharacter CharacterIconIndex;
 
 
@@ -131,10 +138,12 @@ public:
     SItemRandomLocation ItemRandomLocationStruct[60];
 
     // 아이템 생성 함수
+    void ItemRandomLocationSetting();
     void SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, EItemFloor itemfloor);
 
     // 좀비 생성 함수
-    void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, bool ispatrol);
+    void SpawnZombiesStaticClasses();
+    void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange);
 
     void UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotator NewRotation);
 
