@@ -10,7 +10,7 @@ ABHGauze::ABHGauze()
 	BleedingHealingItem = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = BleedingHealingItem;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_BLEEDINGHEALINGITEM(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_BLEEDINGHEALINGITEM(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
 	if (SK_BLEEDINGHEALINGITEM.Succeeded()) {
 		BleedingHealingItem->SetStaticMesh(SK_BLEEDINGHEALINGITEM.Object);
 	}

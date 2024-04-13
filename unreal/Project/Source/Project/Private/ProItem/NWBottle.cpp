@@ -11,7 +11,7 @@ ANWBottle::ANWBottle()
 	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
 	if (SK_NORMALWEAPON.Succeeded()) {
 		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
 	}
