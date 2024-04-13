@@ -10,7 +10,7 @@ AHDrink::AHDrink()
 	HealingItem = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("HEALINGITEM"));
 	RootComponent = HealingItem;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_HEALINGITEM(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Axes/Blade_Hatchet02/SK_Blade_Hatchet02.SK_Blade_Hatchet02"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_HEALINGITEM(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
 	if (SK_HEALINGITEM.Succeeded()) {
 		HealingItem->SetSkeletalMesh(SK_HEALINGITEM.Object);
 	}

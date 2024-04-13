@@ -18,7 +18,7 @@ AItemBoxActor::AItemBoxActor()
 	Box->SetupAttachment(RootComponent);
 
 	Trigger->SetBoxExtent(FVector(30.f, 42.f, 30.f));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOX(TEXT("/Game/StarterContent/Shapes/Shape_Pipe.Shape_Pipe"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOX(TEXT("/Game/Mesh/SM_ItemBox.SM_ItemBox"));
 	if (SM_BOX.Succeeded()) {
 		Box->SetStaticMesh(SM_BOX.Object);
 	}

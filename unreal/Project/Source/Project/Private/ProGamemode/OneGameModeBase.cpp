@@ -345,7 +345,7 @@ void AOneGameModeBase::ItemRandomLocationSetting()
     ItemRandomLocationStruct[10].sLocation = FVector(270.f, 2000.f, 975.0626f);
     ItemRandomLocationStruct[11].sLocation = FVector(1870.f, 800.f, 975.0626f);
 
-    ItemRandomLocationStruct[12].sLocation = FVector(1200.f, 0.f, 975.0626f);
+    ItemRandomLocationStruct[12].sLocation = FVector(1200.f, 100.f, 975.0626f);
     ItemRandomLocationStruct[13].sLocation = FVector(30.f, 540.f, 975.0626f);
     ItemRandomLocationStruct[14].sLocation = FVector(500.f,  -238.f, 975.0626f);
 
