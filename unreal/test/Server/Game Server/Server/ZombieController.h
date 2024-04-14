@@ -1,4 +1,5 @@
 #pragma once
+#include "Common.h"
 
 struct ZombieData {
 	int zombieID;
@@ -12,11 +13,11 @@ public:
 	ZombieController();
 	~ZombieController();
 
-	vector <ZombieData> zombiedata;
+	vector<ZombieData> zombiedata;
 
 	void addZombie(ZombieData zombie);
 	void removeZombie(int zombieID);
-	void setZombiePosition(int zombieid, float x, float y, float z, float pitch, float yaw, float roll);
+	void setZombiePosition(ZombieData zombie);
 	ZombieData* getZombiePosition(int zombieid);
 };
 

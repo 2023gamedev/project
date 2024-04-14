@@ -1,5 +1,4 @@
 #include "ZombieController.h"
-#include "Common.h"
 
 ZombieController::ZombieController()
 {
@@ -19,16 +18,16 @@ void ZombieController::removeZombie(int zombieID) {
         zombiedata.end());
 }
 
-void ZombieController::setZombiePosition(int zombieid, float x, float y, float z, float pitch, float yaw, float roll)
+void ZombieController::setZombiePosition(ZombieData zombiedata)
 {
-    for (auto& zombie : zombiedata) {
-        if (zombie.zombieID == zombieid) {
-            zombie.x = x;
-            zombie.y = y;
-            zombie.z = z;
-            zombie.pitch = pitch;
-            zombie.yaw = yaw;
-            zombie.roll = roll;
+    for (auto& zombie : this->zombiedata) {
+        if (zombie.zombieID == zombiedata.zombieID) {
+            zombie.x = zombiedata.x;
+            zombie.y = zombiedata.y;
+            zombie.z = zombiedata.z;
+            zombie.pitch = zombiedata.pitch;
+            zombie.yaw = zombiedata.yaw;
+            zombie.roll = zombiedata.roll;
             break;
         }
     }

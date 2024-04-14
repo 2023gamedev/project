@@ -50,4 +50,6 @@ private:
 	bool ServerShutdown{ false };
 
 	unsigned int playerIndex{ UINT_MAX };
+
+	vector<int> m_zombie;
 };

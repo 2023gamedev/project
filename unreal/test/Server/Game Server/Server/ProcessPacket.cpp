@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "algorithm"
+#include "ZombieController.h"
 
 bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     // g_players에서 클라이언트 정보 검색
@@ -52,6 +53,25 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
         Packet.SerializeToString(&serializedData);
+
+        ZombieData zombiedata;
+        zombiedata.zombieID = Packet.zombieid();
+        zombiedata.x = Packet.x();
+        zombiedata.y = Packet.y();
+        zombiedata.z = Packet.z();
+        zombiedata.pitch = Packet.pitch();
+        zombiedata.yaw = Packet.yaw();
+        zombiedata.roll = Packet.roll();
+
+        ZombieController zombiecontroller;
+
+        if (find(m_zombie.begin(), m_zombie.end(), zombiedata.zombieID) == m_zombie.end()) {
+            zombiecontroller.addZombie(zombiedata);
+        }
+        else {
+            zombiecontroller.setZombiePosition(zombiedata);
+        }
+
 
         if (id == min_it->first) {
             for (const auto& player : g_players) {
