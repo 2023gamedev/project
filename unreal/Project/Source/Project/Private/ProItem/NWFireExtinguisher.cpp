@@ -11,7 +11,7 @@ ANWFireExtinguisher::ANWFireExtinguisher()
 	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Showcase/Meshes/SM_Fire_Extinguisher_01a.SM_Fire_Extinguisher_01a"));
 	if (SK_NORMALWEAPON.Succeeded()) {
 		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
 	}
