@@ -10,7 +10,7 @@ ANWPipe::ANWPipe()
 	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Safe_House/meshes/SM_magicstick.SM_magicstick"));
 	if (SK_NORMALWEAPON.Succeeded()) {
 		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
 	}
