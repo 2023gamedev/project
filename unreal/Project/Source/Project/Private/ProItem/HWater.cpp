@@ -10,7 +10,7 @@ AHWater::AHWater()
 	HealingItem = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("HEALINGITEM"));
 	RootComponent = HealingItem;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_HEALINGITEM(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_HEALINGITEM(TEXT("/Game/TMSportsEquipmentPack2/SportsEquipment/meshes/EnergyDrink01Can02/SM_EnergyDrink01Can02.SM_EnergyDrink01Can02"));
 	if (SK_HEALINGITEM.Succeeded()) {
 		HealingItem->SetSkeletalMesh(SK_HEALINGITEM.Object);
 	}
