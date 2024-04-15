@@ -11,7 +11,10 @@ message Character {
     float pitch = 7;
     float yaw = 8;
     float roll = 9;
-    bool isingame = 10;
+    float hp = 10;
+    uint32 weapon = 11;
+    bool attack = 12;
+    bool isingame = 13;
 };
 
 message Zombie {
@@ -24,5 +27,7 @@ message Zombie {
     float pitch = 7;
     float yaw = 8;
     float roll = 9;
+    float hp = 10;
+    bool attack = 11;
 };
 

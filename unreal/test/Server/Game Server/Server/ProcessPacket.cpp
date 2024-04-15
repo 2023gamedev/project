@@ -67,11 +67,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         if (find(m_zombie.begin(), m_zombie.end(), zombiedata.zombieID) == m_zombie.end()) {
             zombiecontroller.addZombie(zombiedata);
+            m_zombie.push_back(zombiedata.zombieID);
         }
         else {
             zombiecontroller.setZombiePosition(zombiedata);
         }
-
 
         if (id == min_it->first) {
             for (const auto& player : g_players) {
