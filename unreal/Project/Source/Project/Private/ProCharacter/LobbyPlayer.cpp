@@ -133,6 +133,8 @@ void ALobbyPlayer::MoveChoiceCharacterUI()
 
 		//StartGameUIWidget->RemoveFromViewport();
 
+
+
 		ChoiceCharacterUIWidget->Init();
 		ChoiceCharacterUIWidget->AddToViewport();
 

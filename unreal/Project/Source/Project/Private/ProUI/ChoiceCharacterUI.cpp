@@ -2,6 +2,7 @@
 
 
 #include "ProUI/ChoiceCharacterUI.h"
+#include "Components/CanvasPanelSlot.h"
 
 void UChoiceCharacterUI::OnClickedGirlButton()
 {
@@ -40,6 +41,8 @@ void UChoiceCharacterUI::OnClickedFireFighterButton()
 
 void UChoiceCharacterUI::Init()
 {
+
+
     if (GirlButton)
     {
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "GirlButton Init");
