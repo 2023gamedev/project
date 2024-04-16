@@ -78,26 +78,6 @@
 			"Type": "RequiredResource"
 		},
 		{
-			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSPlatformEditor.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSRuntimeSettings.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-IOSTargetPlatform.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor-TVOSTargetPlatform.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/Win64/IOS/UnrealEditor.modules",
-			"Type": "RequiredResource"
-		},
-		{
 			"Path": "$(EngineDir)/Binaries/Win64/OpenColorIO_2_2.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1590,13 +1570,8 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-LaunchDaemonMessages.dll",
-			"Type": "DynamicLibrary"
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-LandscapeEditorUtilities.pdb",
 			"Type": "SymbolFile"
->>>>>>> ClientBranch4.16
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-LauncherPlatform.dll",
@@ -1715,13 +1690,8 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MacTargetPlatform.dll",
-			"Type": "DynamicLibrary"
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MRMesh.pdb",
 			"Type": "SymbolFile"
->>>>>>> ClientBranch4.16
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MainFrame.dll",
@@ -1928,13 +1898,8 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MetalShaderFormat.dll",
-			"Type": "DynamicLibrary"
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MessagingRpc.pdb",
 			"Type": "SymbolFile"
->>>>>>> ClientBranch4.16
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MoviePlayer.dll",
