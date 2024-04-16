@@ -11,7 +11,7 @@ ANWBottle::ANWBottle()
 	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOTTLE (TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOTTLE (TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
 	if (SM_BOTTLE.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_BOTTLE.Object);
 	}

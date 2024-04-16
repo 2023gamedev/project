@@ -10,7 +10,7 @@ ANWSashimiKnife::ANWSashimiKnife()
 	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SASIMIKNIFE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SASIMIKNIFE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
 	if (SM_SASIMIKNIFE.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_SASIMIKNIFE.Object);
 	}

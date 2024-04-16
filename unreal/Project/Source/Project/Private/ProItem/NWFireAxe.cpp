@@ -11,7 +11,7 @@ ANWFireAxe::ANWFireAxe()
 	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_FIREAXE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_FIREAXE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
 	if (SM_FIREAXE.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_FIREAXE.Object);
 	}

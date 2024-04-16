@@ -11,7 +11,7 @@ ANWBook::ANWBook()
 	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOOK(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOOK(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
 	if (SM_BOOK.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_BOOK.Object);
 	}

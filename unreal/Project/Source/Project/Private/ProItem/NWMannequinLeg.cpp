@@ -9,8 +9,7 @@ ANWMannequinLeg::ANWMannequinLeg()
 
 	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MANNEQUINLEG(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+ ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MANNEQUINLEG(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
 	if (SM_MANNEQUINLEG.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_MANNEQUINLEG.Object);
 	}

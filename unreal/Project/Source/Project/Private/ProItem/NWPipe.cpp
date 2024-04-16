@@ -10,7 +10,7 @@ ANWPipe::ANWPipe()
 	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_PIPE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+ ConstructorHelpers::FObjectFinder<UStaticMesh> SM_PIPE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
 	if (SM_PIPE.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_PIPE.Object);
 	}

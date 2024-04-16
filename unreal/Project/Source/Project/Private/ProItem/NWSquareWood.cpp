@@ -19,7 +19,7 @@ ANWSquareWood::ANWSquareWood()
 
 
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SQUREWOOD(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	 ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SQUREWOOD(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
 	if (SM_SQUREWOOD.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_SQUREWOOD.Object);
 	}
