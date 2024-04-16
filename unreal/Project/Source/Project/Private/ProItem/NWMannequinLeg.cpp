@@ -7,13 +7,15 @@ ANWMannequinLeg::ANWMannequinLeg()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Mesh/SM_MannequinLeg.SM_MannequinLeg"));
-	if (SK_NORMALWEAPON.Succeeded()) {
-		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MANNEQUINLEG(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	if (SM_MANNEQUINLEG.Succeeded()) {
+		NormalWeapon->SetStaticMesh(SM_MANNEQUINLEG.Object);
 	}
+
+
 
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 

@@ -7,13 +7,14 @@ ANWPlunger::ANWPlunger()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
-	if (SK_NORMALWEAPON.Succeeded()) {
-		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_PLUNGER(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	if (SM_PLUNGER.Succeeded()) {
+		NormalWeapon->SetStaticMesh(SM_PLUNGER.Object);
 	}
+
 
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 

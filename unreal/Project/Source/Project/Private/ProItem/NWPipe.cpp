@@ -7,13 +7,14 @@ ANWPipe::ANWPipe()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Safe_House/meshes/SM_magicstick.SM_magicstick"));
-	if (SK_NORMALWEAPON.Succeeded()) {
-		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_PIPE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	if (SM_PIPE.Succeeded()) {
+		NormalWeapon->SetStaticMesh(SM_PIPE.Object);
 	}
+
 
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 
