@@ -11,7 +11,7 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 	m_fCurrentPawnSpeed = 0.f;
 	m_bPawnRun = false;
 	m_bIsInAir = false;
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/SK_Mannequin_Montage.SK_Mannequin_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployee.BP_AMEmployee"));
 	if (ATTACK_MONTAGE.Succeeded()) {
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}

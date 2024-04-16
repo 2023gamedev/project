@@ -5,7 +5,7 @@
 
 AIdolCharacter::AIdolCharacter()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/SKM_QuinnNew.SKM_QuinnNew"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/CharacterAsset/Idol/IdolCharacter.IdolCharacter"));
 
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
@@ -13,7 +13,7 @@ AIdolCharacter::AIdolCharacter()
 
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> CHARACTER_ANIM(TEXT("/Game/ChAnimBlueprint.ChAnimBlueprint_C"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> CHARACTER_ANIM(TEXT("/Game/CharacterAsset/Animation/BP_EmployeeAnimBlueprint.BP_EmployeeAnimBlueprint_C"));
 
 	if (CHARACTER_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(CHARACTER_ANIM.Class);

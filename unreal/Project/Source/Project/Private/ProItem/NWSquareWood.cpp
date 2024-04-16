@@ -8,7 +8,7 @@
 ANWSquareWood::ANWSquareWood()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
 	
 	RootComponent = NormalWeapon;
@@ -19,9 +19,9 @@ ANWSquareWood::ANWSquareWood()
 
 
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
-	if (SK_NORMALWEAPON.Succeeded()) {
-		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
+	 ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SQUREWOOD(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	if (SM_SQUREWOOD.Succeeded()) {
+		NormalWeapon->SetStaticMesh(SM_SQUREWOOD.Object);
 	}
 
 

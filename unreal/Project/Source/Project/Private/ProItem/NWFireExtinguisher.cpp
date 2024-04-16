@@ -8,13 +8,17 @@ ANWFireExtinguisher::ANWFireExtinguisher()
 
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Showcase/Meshes/SM_Fire_Extinguisher_01a.SM_Fire_Extinguisher_01a"));
-	if (SK_NORMALWEAPON.Succeeded()) {
-		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_FIREEXTINGUISHER(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	if (SM_FIREEXTINGUISHER.Succeeded()) {
+		NormalWeapon->SetStaticMesh(SM_FIREEXTINGUISHER.Object);
 	}
+
+
+
+
 
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 

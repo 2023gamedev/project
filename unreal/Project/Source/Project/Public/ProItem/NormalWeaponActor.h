@@ -33,7 +33,14 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, Category= NormalWeapon)
-	USkeletalMeshComponent* NormalWeapon;
+	UStaticMeshComponent* NormalWeapon;
+
+	UPROPERTY(EditAnywhere, Category = "ItmePos")
+	FVector ItemHandPos;
+
+	UPROPERTY(EditAnywhere, Category = "ItmeRotate")
+	FRotator ItemHandRot;
+
 
 	// 무기의 스탯들
 	UPROPERTY(EditAnywhere, Category = "ItemStat")

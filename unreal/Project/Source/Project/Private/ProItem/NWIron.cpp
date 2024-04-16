@@ -7,13 +7,14 @@ ANWIron::ANWIron()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
 	RootComponent = NormalWeapon;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NORMALWEAPON(TEXT("/Game/Mesh/SM_Iron.SM_Iron"));
-	if (SK_NORMALWEAPON.Succeeded()) {
-		NormalWeapon->SetSkeletalMesh(SK_NORMALWEAPON.Object);
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_IRON(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	if (SM_IRON.Succeeded()) {
+		NormalWeapon->SetStaticMesh(SM_IRON.Object);
 	}
+
 
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 
