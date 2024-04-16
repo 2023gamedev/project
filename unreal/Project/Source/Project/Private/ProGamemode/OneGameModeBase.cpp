@@ -634,7 +634,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
             }
 
-            SpawnedZombie->SetZombieId(m_iZombieNumber);
+            SpawnedZombie->SetZombieId(zombieindex);
             m_iZombieNumber++;
         }
         else if (zombieaiconindex == EZombie::SHOUTING) {
@@ -659,7 +659,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
             }
 
-            SpawnedZombie->SetZombieId(m_iShoutingZombieNumber);
+            SpawnedZombie->SetZombieId(zombieindex);
             m_iShoutingZombieNumber++;
         }
         else if (zombieaiconindex == EZombie::RUNNING) {
@@ -685,7 +685,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
                 UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));
             }
 
-            SpawnedZombie->SetZombieId(m_iRunningZombieNumber);
+            SpawnedZombie->SetZombieId(zombieindex);
             m_iRunningZombieNumber++;
         }
 
@@ -715,6 +715,8 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotat
             BaseZombie->SetActorRotation(NewRotation);
 
             BaseZombie->UpdateZombieData(NewLocation);
+
+            UE_LOG(LogTemp, Warning, TEXT("UpdateZombie: %d "), ZombieID);
 
             return;
         }

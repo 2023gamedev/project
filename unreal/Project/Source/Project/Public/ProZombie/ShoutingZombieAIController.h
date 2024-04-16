@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "ClientSocket.h"
 #include "ShoutingZombieAIController.generated.h"
 
 /**
@@ -27,8 +28,12 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	void CheckAndSendMovement();
+
 	void SetStartLocationValue(FVector startlocation);
 	void SetPatrolLocationValue(FVector patrollocation);
+
+	UProGameInstance* GameInstance;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -37,6 +42,13 @@ private:
 	UPROPERTY(EditAnywhere)
 
 	class UBlackboardData* ShoutingZombieBlackBoardAsset;
+
+public:
+	ZombieData recvZombieData;
+	uint32 ZombieId;
+	FVector NewLocation;
+	FVector PreviousLocation;
+	FRotator PreviousRotation;
 
 
 };
