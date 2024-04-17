@@ -127,8 +127,6 @@ void AOneGameModeBase::BeginPlay()
 
 
     // BeginPlay에서 SpawnZombies 호출
-    //SpawnZombies(1, EZombie::SHOUTING, FVector(1000.f, 600.f, 1035.212f), true);
-    //SpawnZombies(2, EZombie::RUNNING, FVector(600, 600.f, 1035.212f), true);
 
     // 지하 1층 
     SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1035.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
@@ -599,9 +597,6 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
 
 void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange)
 {
-
-
-
     TSubclassOf<ABaseZombie> SelectedZombieClass = ZombieClasses[zombieindex];
 
 
