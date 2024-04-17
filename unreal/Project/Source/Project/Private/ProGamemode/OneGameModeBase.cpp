@@ -129,19 +129,19 @@ void AOneGameModeBase::BeginPlay()
     // BeginPlay¿¡¼­ SpawnZombies È£Ãâ
 
     // ÁöÇÏ 1Ãþ 
-    SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1035.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
-    SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1035.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
-    SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1035.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
+    SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
+    SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
+    SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
 
-    SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1035.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
-    SpawnZombies(4, EZombie::NORMAL, FVector(1200.f, 2710.f, 1035.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -700.f);
-    SpawnZombies(5, EZombie::NORMAL, FVector(400.f, 3800.f, 1035.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, 1200.f);
+    SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
+    SpawnZombies(4, EZombie::NORMAL, FVector(1200.f, 2710.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -700.f);
+    SpawnZombies(5, EZombie::NORMAL, FVector(400.f, 3800.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, 1200.f);
 
 
-    SpawnZombies(6, EZombie::NORMAL, FVector(1320.f, 3100.f, 1035.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(7, EZombie::NORMAL, FVector(1400.f, 2800.f, 1035.212f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(8, EZombie::NORMAL, FVector(1000.f, 3320.f, 1035.212f), FRotator(0.f, 10.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1035.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(6, EZombie::NORMAL, FVector(1320.f, 3100.f, 1035.150024f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(7, EZombie::NORMAL, FVector(1400.f, 2800.f, 1035.150024f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(8, EZombie::NORMAL, FVector(1000.f, 3320.f, 1035.150024f), FRotator(0.f, 10.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1035.150024f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
     // Áö»ó 1Ãþ
