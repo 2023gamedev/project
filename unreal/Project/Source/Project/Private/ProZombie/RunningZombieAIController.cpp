@@ -89,7 +89,7 @@ void ARunningZombieAIController::CheckAndSendMovement()
 	// Protobuf를 사용하여 TestPacket 생성
 	Protocol::Zombie packet;
 	packet.set_zombieid(ZombieId);
-	packet.set_type(2); // 원하는 유형 설정
+	packet.set_packet_type(2); // 원하는 유형 설정
 	packet.set_x(CurrentLocation.X);
 	packet.set_y(CurrentLocation.Y);
 	packet.set_z(CurrentLocation.Z);

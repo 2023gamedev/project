@@ -183,14 +183,18 @@ class Character final :
   enum : int {
     kPlayeridFieldNumber = 1,
     kPacketSizeFieldNumber = 2,
-    kTypeFieldNumber = 3,
-    kXFieldNumber = 4,
-    kYFieldNumber = 5,
-    kZFieldNumber = 6,
-    kPitchFieldNumber = 7,
-    kYawFieldNumber = 8,
-    kRollFieldNumber = 9,
-    kIsingameFieldNumber = 10,
+    kPacketTypeFieldNumber = 3,
+    kCharactertypeFieldNumber = 4,
+    kXFieldNumber = 5,
+    kYFieldNumber = 6,
+    kZFieldNumber = 7,
+    kPitchFieldNumber = 8,
+    kYawFieldNumber = 9,
+    kRollFieldNumber = 10,
+    kHpFieldNumber = 11,
+    kWeaponFieldNumber = 12,
+    kAttackFieldNumber = 13,
+    kIsingameFieldNumber = 14,
   };
   // uint32 playerid = 1;
   void clear_playerid();
@@ -210,16 +214,25 @@ class Character final :
   void _internal_set_packet_size(uint32_t value);
   public:
 
-  // uint32 type = 3;
-  void clear_type();
-  uint32_t type() const;
-  void set_type(uint32_t value);
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
   private:
-  uint32_t _internal_type() const;
-  void _internal_set_type(uint32_t value);
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
   public:
 
-  // float x = 4;
+  // uint32 charactertype = 4;
+  void clear_charactertype();
+  uint32_t charactertype() const;
+  void set_charactertype(uint32_t value);
+  private:
+  uint32_t _internal_charactertype() const;
+  void _internal_set_charactertype(uint32_t value);
+  public:
+
+  // float x = 5;
   void clear_x();
   float x() const;
   void set_x(float value);
@@ -228,7 +241,7 @@ class Character final :
   void _internal_set_x(float value);
   public:
 
-  // float y = 5;
+  // float y = 6;
   void clear_y();
   float y() const;
   void set_y(float value);
@@ -237,7 +250,7 @@ class Character final :
   void _internal_set_y(float value);
   public:
 
-  // float z = 6;
+  // float z = 7;
   void clear_z();
   float z() const;
   void set_z(float value);
@@ -246,7 +259,7 @@ class Character final :
   void _internal_set_z(float value);
   public:
 
-  // float pitch = 7;
+  // float pitch = 8;
   void clear_pitch();
   float pitch() const;
   void set_pitch(float value);
@@ -255,7 +268,7 @@ class Character final :
   void _internal_set_pitch(float value);
   public:
 
-  // float yaw = 8;
+  // float yaw = 9;
   void clear_yaw();
   float yaw() const;
   void set_yaw(float value);
@@ -264,7 +277,7 @@ class Character final :
   void _internal_set_yaw(float value);
   public:
 
-  // float roll = 9;
+  // float roll = 10;
   void clear_roll();
   float roll() const;
   void set_roll(float value);
@@ -273,7 +286,34 @@ class Character final :
   void _internal_set_roll(float value);
   public:
 
-  // bool isingame = 10;
+  // float hp = 11;
+  void clear_hp();
+  float hp() const;
+  void set_hp(float value);
+  private:
+  float _internal_hp() const;
+  void _internal_set_hp(float value);
+  public:
+
+  // uint32 weapon = 12;
+  void clear_weapon();
+  uint32_t weapon() const;
+  void set_weapon(uint32_t value);
+  private:
+  uint32_t _internal_weapon() const;
+  void _internal_set_weapon(uint32_t value);
+  public:
+
+  // bool attack = 13;
+  void clear_attack();
+  bool attack() const;
+  void set_attack(bool value);
+  private:
+  bool _internal_attack() const;
+  void _internal_set_attack(bool value);
+  public:
+
+  // bool isingame = 14;
   void clear_isingame();
   bool isingame() const;
   void set_isingame(bool value);
@@ -292,13 +332,17 @@ class Character final :
   struct Impl_ {
     uint32_t playerid_;
     uint32_t packet_size_;
-    uint32_t type_;
+    uint32_t packet_type_;
+    uint32_t charactertype_;
     float x_;
     float y_;
     float z_;
     float pitch_;
     float yaw_;
     float roll_;
+    float hp_;
+    uint32_t weapon_;
+    bool attack_;
     bool isingame_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -430,13 +474,16 @@ class Zombie final :
   enum : int {
     kZombieidFieldNumber = 1,
     kPacketSizeFieldNumber = 2,
-    kTypeFieldNumber = 3,
-    kXFieldNumber = 4,
-    kYFieldNumber = 5,
-    kZFieldNumber = 6,
-    kPitchFieldNumber = 7,
-    kYawFieldNumber = 8,
-    kRollFieldNumber = 9,
+    kPacketTypeFieldNumber = 3,
+    kZombietypeFieldNumber = 4,
+    kXFieldNumber = 5,
+    kYFieldNumber = 6,
+    kZFieldNumber = 7,
+    kPitchFieldNumber = 8,
+    kYawFieldNumber = 9,
+    kRollFieldNumber = 10,
+    kHpFieldNumber = 11,
+    kAttackFieldNumber = 12,
   };
   // uint32 zombieid = 1;
   void clear_zombieid();
@@ -456,16 +503,25 @@ class Zombie final :
   void _internal_set_packet_size(uint32_t value);
   public:
 
-  // uint32 type = 3;
-  void clear_type();
-  uint32_t type() const;
-  void set_type(uint32_t value);
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
   private:
-  uint32_t _internal_type() const;
-  void _internal_set_type(uint32_t value);
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
   public:
 
-  // float x = 4;
+  // uint32 zombietype = 4;
+  void clear_zombietype();
+  uint32_t zombietype() const;
+  void set_zombietype(uint32_t value);
+  private:
+  uint32_t _internal_zombietype() const;
+  void _internal_set_zombietype(uint32_t value);
+  public:
+
+  // float x = 5;
   void clear_x();
   float x() const;
   void set_x(float value);
@@ -474,7 +530,7 @@ class Zombie final :
   void _internal_set_x(float value);
   public:
 
-  // float y = 5;
+  // float y = 6;
   void clear_y();
   float y() const;
   void set_y(float value);
@@ -483,7 +539,7 @@ class Zombie final :
   void _internal_set_y(float value);
   public:
 
-  // float z = 6;
+  // float z = 7;
   void clear_z();
   float z() const;
   void set_z(float value);
@@ -492,7 +548,7 @@ class Zombie final :
   void _internal_set_z(float value);
   public:
 
-  // float pitch = 7;
+  // float pitch = 8;
   void clear_pitch();
   float pitch() const;
   void set_pitch(float value);
@@ -501,7 +557,7 @@ class Zombie final :
   void _internal_set_pitch(float value);
   public:
 
-  // float yaw = 8;
+  // float yaw = 9;
   void clear_yaw();
   float yaw() const;
   void set_yaw(float value);
@@ -510,13 +566,31 @@ class Zombie final :
   void _internal_set_yaw(float value);
   public:
 
-  // float roll = 9;
+  // float roll = 10;
   void clear_roll();
   float roll() const;
   void set_roll(float value);
   private:
   float _internal_roll() const;
   void _internal_set_roll(float value);
+  public:
+
+  // float hp = 11;
+  void clear_hp();
+  float hp() const;
+  void set_hp(float value);
+  private:
+  float _internal_hp() const;
+  void _internal_set_hp(float value);
+  public:
+
+  // bool attack = 12;
+  void clear_attack();
+  bool attack() const;
+  void set_attack(bool value);
+  private:
+  bool _internal_attack() const;
+  void _internal_set_attack(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.Zombie)
@@ -529,13 +603,16 @@ class Zombie final :
   struct Impl_ {
     uint32_t zombieid_;
     uint32_t packet_size_;
-    uint32_t type_;
+    uint32_t packet_type_;
+    uint32_t zombietype_;
     float x_;
     float y_;
     float z_;
     float pitch_;
     float yaw_;
     float roll_;
+    float hp_;
+    bool attack_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -592,27 +669,47 @@ inline void Character::set_packet_size(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.packet_size)
 }
 
-// uint32 type = 3;
-inline void Character::clear_type() {
-  _impl_.type_ = 0u;
+// uint32 packet_type = 3;
+inline void Character::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
 }
-inline uint32_t Character::_internal_type() const {
-  return _impl_.type_;
+inline uint32_t Character::_internal_packet_type() const {
+  return _impl_.packet_type_;
 }
-inline uint32_t Character::type() const {
-  // @@protoc_insertion_point(field_get:Protocol.Character.type)
-  return _internal_type();
+inline uint32_t Character::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.packet_type)
+  return _internal_packet_type();
 }
-inline void Character::_internal_set_type(uint32_t value) {
+inline void Character::_internal_set_packet_type(uint32_t value) {
   
-  _impl_.type_ = value;
+  _impl_.packet_type_ = value;
 }
-inline void Character::set_type(uint32_t value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.Character.type)
+inline void Character::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.packet_type)
 }
 
-// float x = 4;
+// uint32 charactertype = 4;
+inline void Character::clear_charactertype() {
+  _impl_.charactertype_ = 0u;
+}
+inline uint32_t Character::_internal_charactertype() const {
+  return _impl_.charactertype_;
+}
+inline uint32_t Character::charactertype() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.charactertype)
+  return _internal_charactertype();
+}
+inline void Character::_internal_set_charactertype(uint32_t value) {
+  
+  _impl_.charactertype_ = value;
+}
+inline void Character::set_charactertype(uint32_t value) {
+  _internal_set_charactertype(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.charactertype)
+}
+
+// float x = 5;
 inline void Character::clear_x() {
   _impl_.x_ = 0;
 }
@@ -632,7 +729,7 @@ inline void Character::set_x(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.x)
 }
 
-// float y = 5;
+// float y = 6;
 inline void Character::clear_y() {
   _impl_.y_ = 0;
 }
@@ -652,7 +749,7 @@ inline void Character::set_y(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.y)
 }
 
-// float z = 6;
+// float z = 7;
 inline void Character::clear_z() {
   _impl_.z_ = 0;
 }
@@ -672,7 +769,7 @@ inline void Character::set_z(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.z)
 }
 
-// float pitch = 7;
+// float pitch = 8;
 inline void Character::clear_pitch() {
   _impl_.pitch_ = 0;
 }
@@ -692,7 +789,7 @@ inline void Character::set_pitch(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.pitch)
 }
 
-// float yaw = 8;
+// float yaw = 9;
 inline void Character::clear_yaw() {
   _impl_.yaw_ = 0;
 }
@@ -712,7 +809,7 @@ inline void Character::set_yaw(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.yaw)
 }
 
-// float roll = 9;
+// float roll = 10;
 inline void Character::clear_roll() {
   _impl_.roll_ = 0;
 }
@@ -732,7 +829,67 @@ inline void Character::set_roll(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.roll)
 }
 
-// bool isingame = 10;
+// float hp = 11;
+inline void Character::clear_hp() {
+  _impl_.hp_ = 0;
+}
+inline float Character::_internal_hp() const {
+  return _impl_.hp_;
+}
+inline float Character::hp() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.hp)
+  return _internal_hp();
+}
+inline void Character::_internal_set_hp(float value) {
+  
+  _impl_.hp_ = value;
+}
+inline void Character::set_hp(float value) {
+  _internal_set_hp(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.hp)
+}
+
+// uint32 weapon = 12;
+inline void Character::clear_weapon() {
+  _impl_.weapon_ = 0u;
+}
+inline uint32_t Character::_internal_weapon() const {
+  return _impl_.weapon_;
+}
+inline uint32_t Character::weapon() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.weapon)
+  return _internal_weapon();
+}
+inline void Character::_internal_set_weapon(uint32_t value) {
+  
+  _impl_.weapon_ = value;
+}
+inline void Character::set_weapon(uint32_t value) {
+  _internal_set_weapon(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.weapon)
+}
+
+// bool attack = 13;
+inline void Character::clear_attack() {
+  _impl_.attack_ = false;
+}
+inline bool Character::_internal_attack() const {
+  return _impl_.attack_;
+}
+inline bool Character::attack() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.attack)
+  return _internal_attack();
+}
+inline void Character::_internal_set_attack(bool value) {
+  
+  _impl_.attack_ = value;
+}
+inline void Character::set_attack(bool value) {
+  _internal_set_attack(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.attack)
+}
+
+// bool isingame = 14;
 inline void Character::clear_isingame() {
   _impl_.isingame_ = false;
 }
@@ -796,27 +953,47 @@ inline void Zombie::set_packet_size(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie.packet_size)
 }
 
-// uint32 type = 3;
-inline void Zombie::clear_type() {
-  _impl_.type_ = 0u;
+// uint32 packet_type = 3;
+inline void Zombie::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
 }
-inline uint32_t Zombie::_internal_type() const {
-  return _impl_.type_;
+inline uint32_t Zombie::_internal_packet_type() const {
+  return _impl_.packet_type_;
 }
-inline uint32_t Zombie::type() const {
-  // @@protoc_insertion_point(field_get:Protocol.Zombie.type)
-  return _internal_type();
+inline uint32_t Zombie::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.packet_type)
+  return _internal_packet_type();
 }
-inline void Zombie::_internal_set_type(uint32_t value) {
+inline void Zombie::_internal_set_packet_type(uint32_t value) {
   
-  _impl_.type_ = value;
+  _impl_.packet_type_ = value;
 }
-inline void Zombie::set_type(uint32_t value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.Zombie.type)
+inline void Zombie::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.packet_type)
 }
 
-// float x = 4;
+// uint32 zombietype = 4;
+inline void Zombie::clear_zombietype() {
+  _impl_.zombietype_ = 0u;
+}
+inline uint32_t Zombie::_internal_zombietype() const {
+  return _impl_.zombietype_;
+}
+inline uint32_t Zombie::zombietype() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.zombietype)
+  return _internal_zombietype();
+}
+inline void Zombie::_internal_set_zombietype(uint32_t value) {
+  
+  _impl_.zombietype_ = value;
+}
+inline void Zombie::set_zombietype(uint32_t value) {
+  _internal_set_zombietype(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.zombietype)
+}
+
+// float x = 5;
 inline void Zombie::clear_x() {
   _impl_.x_ = 0;
 }
@@ -836,7 +1013,7 @@ inline void Zombie::set_x(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie.x)
 }
 
-// float y = 5;
+// float y = 6;
 inline void Zombie::clear_y() {
   _impl_.y_ = 0;
 }
@@ -856,7 +1033,7 @@ inline void Zombie::set_y(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie.y)
 }
 
-// float z = 6;
+// float z = 7;
 inline void Zombie::clear_z() {
   _impl_.z_ = 0;
 }
@@ -876,7 +1053,7 @@ inline void Zombie::set_z(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie.z)
 }
 
-// float pitch = 7;
+// float pitch = 8;
 inline void Zombie::clear_pitch() {
   _impl_.pitch_ = 0;
 }
@@ -896,7 +1073,7 @@ inline void Zombie::set_pitch(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie.pitch)
 }
 
-// float yaw = 8;
+// float yaw = 9;
 inline void Zombie::clear_yaw() {
   _impl_.yaw_ = 0;
 }
@@ -916,7 +1093,7 @@ inline void Zombie::set_yaw(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie.yaw)
 }
 
-// float roll = 9;
+// float roll = 10;
 inline void Zombie::clear_roll() {
   _impl_.roll_ = 0;
 }
@@ -934,6 +1111,46 @@ inline void Zombie::_internal_set_roll(float value) {
 inline void Zombie::set_roll(float value) {
   _internal_set_roll(value);
   // @@protoc_insertion_point(field_set:Protocol.Zombie.roll)
+}
+
+// float hp = 11;
+inline void Zombie::clear_hp() {
+  _impl_.hp_ = 0;
+}
+inline float Zombie::_internal_hp() const {
+  return _impl_.hp_;
+}
+inline float Zombie::hp() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.hp)
+  return _internal_hp();
+}
+inline void Zombie::_internal_set_hp(float value) {
+  
+  _impl_.hp_ = value;
+}
+inline void Zombie::set_hp(float value) {
+  _internal_set_hp(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.hp)
+}
+
+// bool attack = 12;
+inline void Zombie::clear_attack() {
+  _impl_.attack_ = false;
+}
+inline bool Zombie::_internal_attack() const {
+  return _impl_.attack_;
+}
+inline bool Zombie::attack() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.attack)
+  return _internal_attack();
+}
+inline void Zombie::_internal_set_attack(bool value) {
+  
+  _impl_.attack_ = value;
+}
+inline void Zombie::set_attack(bool value) {
+  _internal_set_attack(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.attack)
 }
 
 #ifdef __GNUC__

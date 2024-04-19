@@ -24,7 +24,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     if(tempPacket.playerid() == id || tempPacket.isingame()) clientInfo->isInGame = true;
 
     // 패킷의 타입을 확인하여 처리
-    switch (tempPacket.type()) {
+    switch (tempPacket.packet_type()) {
     case 1: {
         printf("[ No. %3u ] character Packet Received !!\n", id);
         //printf("Received packet type = %d\n", CharacterPacket.type());
@@ -84,7 +84,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     } break;
 
     default: {
-        printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.type());
+        printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
         // 클라이언트나 서버 종료, 로깅 등의 처리 가능
         return false;
     } break;

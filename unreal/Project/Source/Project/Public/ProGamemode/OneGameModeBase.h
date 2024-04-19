@@ -88,6 +88,9 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter")
     TArray<TSubclassOf<APlayerCharacterController>> PlayerCharacterControllerClasses;
 
+    UPROPERTY(EditDefaultsOnly, Category = "OtherCharacter")
+    TArray<TSubclassOf<ABaseCharacter>> OtherCharacterClasses;
+
     // 다양한 종류의 좀비 클래스를 저장할 배열
     UPROPERTY(EditDefaultsOnly, Category = "Zombies")
     TArray<TSubclassOf<ABaseZombie>> ZombieClasses;
@@ -151,6 +154,9 @@ public:
 
     void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
 
-    void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation);
+    void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 class_num);
 
+public:
+
+    uint32 my_class_num;
 };

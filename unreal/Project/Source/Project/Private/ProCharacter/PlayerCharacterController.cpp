@@ -75,12 +75,12 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 	if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 	{
-		UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+		//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
 		// 현재 GameMode 인스턴스를 얻기
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation);
+			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype);
 		}
 	}
 }
@@ -95,11 +95,13 @@ void APlayerCharacterController::CheckAndSendMovement()
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
 	//if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation){}
 	uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+	MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
 
 	// Protobuf를 사용하여 TestPacket 생성
 	Protocol::Character packet;
 	packet.set_playerid(MyPlayerId);
-	packet.set_type(1); // 원하는 유형 설정
+	packet.set_packet_type(1); // 원하는 유형 설정
+	packet.set_charactertype(MyCharacterNumber);
 	packet.set_x(CurrentLocation.X);
 	packet.set_y(CurrentLocation.Y);
 	packet.set_z(CurrentLocation.Z);

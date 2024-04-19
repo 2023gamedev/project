@@ -25,13 +25,17 @@ PROTOBUF_CONSTEXPR Character::Character(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.playerid_)*/0u
   , /*decltype(_impl_.packet_size_)*/0u
-  , /*decltype(_impl_.type_)*/0u
+  , /*decltype(_impl_.packet_type_)*/0u
+  , /*decltype(_impl_.charactertype_)*/0u
   , /*decltype(_impl_.x_)*/0
   , /*decltype(_impl_.y_)*/0
   , /*decltype(_impl_.z_)*/0
   , /*decltype(_impl_.pitch_)*/0
   , /*decltype(_impl_.yaw_)*/0
   , /*decltype(_impl_.roll_)*/0
+  , /*decltype(_impl_.hp_)*/0
+  , /*decltype(_impl_.weapon_)*/0u
+  , /*decltype(_impl_.attack_)*/false
   , /*decltype(_impl_.isingame_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CharacterDefaultTypeInternal {
@@ -47,13 +51,16 @@ PROTOBUF_CONSTEXPR Zombie::Zombie(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.zombieid_)*/0u
   , /*decltype(_impl_.packet_size_)*/0u
-  , /*decltype(_impl_.type_)*/0u
+  , /*decltype(_impl_.packet_type_)*/0u
+  , /*decltype(_impl_.zombietype_)*/0u
   , /*decltype(_impl_.x_)*/0
   , /*decltype(_impl_.y_)*/0
   , /*decltype(_impl_.z_)*/0
   , /*decltype(_impl_.pitch_)*/0
   , /*decltype(_impl_.yaw_)*/0
   , /*decltype(_impl_.roll_)*/0
+  , /*decltype(_impl_.hp_)*/0
+  , /*decltype(_impl_.attack_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct ZombieDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ZombieDefaultTypeInternal()
@@ -78,13 +85,17 @@ const uint32_t TableStruct_GStruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.playerid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.packet_size_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.packet_type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.charactertype_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.x_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.y_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.z_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.pitch_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.yaw_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.roll_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.hp_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.weapon_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.attack_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.isingame_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _internal_metadata_),
@@ -94,17 +105,20 @@ const uint32_t TableStruct_GStruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.zombieid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.packet_size_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.packet_type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.zombietype_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.x_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.y_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.z_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.pitch_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.yaw_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.roll_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.hp_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _impl_.attack_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::Character)},
-  { 16, -1, -1, sizeof(::Protocol::Zombie)},
+  { 20, -1, -1, sizeof(::Protocol::Zombie)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -113,19 +127,22 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_GStruct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\rGStruct.proto\022\010Protocol\"\235\001\n\tCharacter\022"
-  "\020\n\010playerid\030\001 \001(\r\022\023\n\013packet_size\030\002 \001(\r\022\014"
-  "\n\004type\030\003 \001(\r\022\t\n\001x\030\004 \001(\002\022\t\n\001y\030\005 \001(\002\022\t\n\001z\030"
-  "\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004rol"
-  "l\030\t \001(\002\022\020\n\010isingame\030\n \001(\010\"\210\001\n\006Zombie\022\020\n\010"
-  "zombieid\030\001 \001(\r\022\023\n\013packet_size\030\002 \001(\r\022\014\n\004t"
-  "ype\030\003 \001(\r\022\t\n\001x\030\004 \001(\002\022\t\n\001y\030\005 \001(\002\022\t\n\001z\030\006 \001"
-  "(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004roll\030\t"
-  " \001(\002b\006proto3"
+  "\n\rGStruct.proto\022\010Protocol\"\347\001\n\tCharacter\022"
+  "\020\n\010playerid\030\001 \001(\r\022\023\n\013packet_size\030\002 \001(\r\022\023"
+  "\n\013packet_type\030\003 \001(\r\022\025\n\rcharactertype\030\004 \001"
+  "(\r\022\t\n\001x\030\005 \001(\002\022\t\n\001y\030\006 \001(\002\022\t\n\001z\030\007 \001(\002\022\r\n\005p"
+  "itch\030\010 \001(\002\022\013\n\003yaw\030\t \001(\002\022\014\n\004roll\030\n \001(\002\022\n\n"
+  "\002hp\030\013 \001(\002\022\016\n\006weapon\030\014 \001(\r\022\016\n\006attack\030\r \001("
+  "\010\022\020\n\010isingame\030\016 \001(\010\"\277\001\n\006Zombie\022\020\n\010zombie"
+  "id\030\001 \001(\r\022\023\n\013packet_size\030\002 \001(\r\022\023\n\013packet_"
+  "type\030\003 \001(\r\022\022\n\nzombietype\030\004 \001(\r\022\t\n\001x\030\005 \001("
+  "\002\022\t\n\001y\030\006 \001(\002\022\t\n\001z\030\007 \001(\002\022\r\n\005pitch\030\010 \001(\002\022\013"
+  "\n\003yaw\030\t \001(\002\022\014\n\004roll\030\n \001(\002\022\n\n\002hp\030\013 \001(\002\022\016\n"
+  "\006attack\030\014 \001(\010b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GStruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GStruct_2eproto = {
-    false, false, 332, descriptor_table_protodef_GStruct_2eproto,
+    false, false, 461, descriptor_table_protodef_GStruct_2eproto,
     "GStruct.proto",
     &descriptor_table_GStruct_2eproto_once, nullptr, 0, 2,
     schemas, file_default_instances, TableStruct_GStruct_2eproto::offsets,
@@ -158,13 +175,17 @@ Character::Character(const Character& from)
   new (&_impl_) Impl_{
       decltype(_impl_.playerid_){}
     , decltype(_impl_.packet_size_){}
-    , decltype(_impl_.type_){}
+    , decltype(_impl_.packet_type_){}
+    , decltype(_impl_.charactertype_){}
     , decltype(_impl_.x_){}
     , decltype(_impl_.y_){}
     , decltype(_impl_.z_){}
     , decltype(_impl_.pitch_){}
     , decltype(_impl_.yaw_){}
     , decltype(_impl_.roll_){}
+    , decltype(_impl_.hp_){}
+    , decltype(_impl_.weapon_){}
+    , decltype(_impl_.attack_){}
     , decltype(_impl_.isingame_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -182,13 +203,17 @@ inline void Character::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.playerid_){0u}
     , decltype(_impl_.packet_size_){0u}
-    , decltype(_impl_.type_){0u}
+    , decltype(_impl_.packet_type_){0u}
+    , decltype(_impl_.charactertype_){0u}
     , decltype(_impl_.x_){0}
     , decltype(_impl_.y_){0}
     , decltype(_impl_.z_){0}
     , decltype(_impl_.pitch_){0}
     , decltype(_impl_.yaw_){0}
     , decltype(_impl_.roll_){0}
+    , decltype(_impl_.hp_){0}
+    , decltype(_impl_.weapon_){0u}
+    , decltype(_impl_.attack_){false}
     , decltype(_impl_.isingame_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -245,65 +270,97 @@ const char* Character::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         } else
           goto handle_unusual;
         continue;
-      // uint32 type = 3;
+      // uint32 packet_type = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          _impl_.type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.packet_type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // float x = 4;
+      // uint32 charactertype = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 37)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.charactertype_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // float x = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
           _impl_.x_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float y = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
+      // float y = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
           _impl_.y_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float z = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
+      // float z = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
           _impl_.z_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float pitch = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
+      // float pitch = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
           _impl_.pitch_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float yaw = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
+      // float yaw = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
           _impl_.yaw_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float roll = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
+      // float roll = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 85)) {
           _impl_.roll_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // bool isingame = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 80)) {
+      // float hp = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 93)) {
+          _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 weapon = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
+          _impl_.weapon_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool attack = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
+          _impl_.attack_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool isingame = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 112)) {
           _impl_.isingame_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
@@ -350,76 +407,104 @@ uint8_t* Character::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_packet_size(), target);
   }
 
-  // uint32 type = 3;
-  if (this->_internal_type() != 0) {
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_type(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
   }
 
-  // float x = 4;
+  // uint32 charactertype = 4;
+  if (this->_internal_charactertype() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_charactertype(), target);
+  }
+
+  // float x = 5;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_x = this->_internal_x();
   uint32_t raw_x;
   memcpy(&raw_x, &tmp_x, sizeof(tmp_x));
   if (raw_x != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(4, this->_internal_x(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_x(), target);
   }
 
-  // float y = 5;
+  // float y = 6;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_y = this->_internal_y();
   uint32_t raw_y;
   memcpy(&raw_y, &tmp_y, sizeof(tmp_y));
   if (raw_y != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_y(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_y(), target);
   }
 
-  // float z = 6;
+  // float z = 7;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_z = this->_internal_z();
   uint32_t raw_z;
   memcpy(&raw_z, &tmp_z, sizeof(tmp_z));
   if (raw_z != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_z(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_z(), target);
   }
 
-  // float pitch = 7;
+  // float pitch = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_pitch = this->_internal_pitch();
   uint32_t raw_pitch;
   memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
   if (raw_pitch != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_pitch(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_pitch(), target);
   }
 
-  // float yaw = 8;
+  // float yaw = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_yaw = this->_internal_yaw();
   uint32_t raw_yaw;
   memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
   if (raw_yaw != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_yaw(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_yaw(), target);
   }
 
-  // float roll = 9;
+  // float roll = 10;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_roll = this->_internal_roll();
   uint32_t raw_roll;
   memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
   if (raw_roll != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_roll(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(10, this->_internal_roll(), target);
   }
 
-  // bool isingame = 10;
+  // float hp = 11;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = this->_internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(11, this->_internal_hp(), target);
+  }
+
+  // uint32 weapon = 12;
+  if (this->_internal_weapon() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(12, this->_internal_weapon(), target);
+  }
+
+  // bool attack = 13;
+  if (this->_internal_attack() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(13, this->_internal_attack(), target);
+  }
+
+  // bool isingame = 14;
   if (this->_internal_isingame() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(10, this->_internal_isingame(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(14, this->_internal_isingame(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -448,12 +533,17 @@ size_t Character::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_size());
   }
 
-  // uint32 type = 3;
-  if (this->_internal_type() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_type());
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
   }
 
-  // float x = 4;
+  // uint32 charactertype = 4;
+  if (this->_internal_charactertype() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_charactertype());
+  }
+
+  // float x = 5;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_x = this->_internal_x();
   uint32_t raw_x;
@@ -462,7 +552,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float y = 5;
+  // float y = 6;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_y = this->_internal_y();
   uint32_t raw_y;
@@ -471,7 +561,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float z = 6;
+  // float z = 7;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_z = this->_internal_z();
   uint32_t raw_z;
@@ -480,7 +570,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float pitch = 7;
+  // float pitch = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_pitch = this->_internal_pitch();
   uint32_t raw_pitch;
@@ -489,7 +579,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float yaw = 8;
+  // float yaw = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_yaw = this->_internal_yaw();
   uint32_t raw_yaw;
@@ -498,7 +588,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float roll = 9;
+  // float roll = 10;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_roll = this->_internal_roll();
   uint32_t raw_roll;
@@ -507,7 +597,26 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // bool isingame = 10;
+  // float hp = 11;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = this->_internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
+    total_size += 1 + 4;
+  }
+
+  // uint32 weapon = 12;
+  if (this->_internal_weapon() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_weapon());
+  }
+
+  // bool attack = 13;
+  if (this->_internal_attack() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool isingame = 14;
   if (this->_internal_isingame() != 0) {
     total_size += 1 + 1;
   }
@@ -536,8 +645,11 @@ void Character::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   if (from._internal_packet_size() != 0) {
     _this->_internal_set_packet_size(from._internal_packet_size());
   }
-  if (from._internal_type() != 0) {
-    _this->_internal_set_type(from._internal_type());
+  if (from._internal_packet_type() != 0) {
+    _this->_internal_set_packet_type(from._internal_packet_type());
+  }
+  if (from._internal_charactertype() != 0) {
+    _this->_internal_set_charactertype(from._internal_charactertype());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_x = from._internal_x();
@@ -580,6 +692,19 @@ void Character::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
   if (raw_roll != 0) {
     _this->_internal_set_roll(from._internal_roll());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = from._internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
+    _this->_internal_set_hp(from._internal_hp());
+  }
+  if (from._internal_weapon() != 0) {
+    _this->_internal_set_weapon(from._internal_weapon());
+  }
+  if (from._internal_attack() != 0) {
+    _this->_internal_set_attack(from._internal_attack());
   }
   if (from._internal_isingame() != 0) {
     _this->_internal_set_isingame(from._internal_isingame());
@@ -633,19 +758,22 @@ Zombie::Zombie(const Zombie& from)
   new (&_impl_) Impl_{
       decltype(_impl_.zombieid_){}
     , decltype(_impl_.packet_size_){}
-    , decltype(_impl_.type_){}
+    , decltype(_impl_.packet_type_){}
+    , decltype(_impl_.zombietype_){}
     , decltype(_impl_.x_){}
     , decltype(_impl_.y_){}
     , decltype(_impl_.z_){}
     , decltype(_impl_.pitch_){}
     , decltype(_impl_.yaw_){}
     , decltype(_impl_.roll_){}
+    , decltype(_impl_.hp_){}
+    , decltype(_impl_.attack_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.zombieid_, &from._impl_.zombieid_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.roll_) -
-    reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.roll_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.attack_) -
+    reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.attack_));
   // @@protoc_insertion_point(copy_constructor:Protocol.Zombie)
 }
 
@@ -656,13 +784,16 @@ inline void Zombie::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.zombieid_){0u}
     , decltype(_impl_.packet_size_){0u}
-    , decltype(_impl_.type_){0u}
+    , decltype(_impl_.packet_type_){0u}
+    , decltype(_impl_.zombietype_){0u}
     , decltype(_impl_.x_){0}
     , decltype(_impl_.y_){0}
     , decltype(_impl_.z_){0}
     , decltype(_impl_.pitch_){0}
     , decltype(_impl_.yaw_){0}
     , decltype(_impl_.roll_){0}
+    , decltype(_impl_.hp_){0}
+    , decltype(_impl_.attack_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -691,8 +822,8 @@ void Zombie::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.zombieid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.roll_) -
-      reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.roll_));
+      reinterpret_cast<char*>(&_impl_.attack_) -
+      reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.attack_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -718,59 +849,83 @@ const char* Zombie::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
         } else
           goto handle_unusual;
         continue;
-      // uint32 type = 3;
+      // uint32 packet_type = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          _impl_.type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.packet_type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // float x = 4;
+      // uint32 zombietype = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 37)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.zombietype_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // float x = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
           _impl_.x_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float y = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
+      // float y = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
           _impl_.y_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float z = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
+      // float z = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
           _impl_.z_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float pitch = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
+      // float pitch = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
           _impl_.pitch_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float yaw = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
+      // float yaw = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
           _impl_.yaw_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float roll = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
+      // float roll = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 85)) {
           _impl_.roll_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float hp = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 93)) {
+          _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool attack = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
+          _impl_.attack_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -815,70 +970,92 @@ uint8_t* Zombie::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_packet_size(), target);
   }
 
-  // uint32 type = 3;
-  if (this->_internal_type() != 0) {
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_type(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
   }
 
-  // float x = 4;
+  // uint32 zombietype = 4;
+  if (this->_internal_zombietype() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_zombietype(), target);
+  }
+
+  // float x = 5;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_x = this->_internal_x();
   uint32_t raw_x;
   memcpy(&raw_x, &tmp_x, sizeof(tmp_x));
   if (raw_x != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(4, this->_internal_x(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_x(), target);
   }
 
-  // float y = 5;
+  // float y = 6;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_y = this->_internal_y();
   uint32_t raw_y;
   memcpy(&raw_y, &tmp_y, sizeof(tmp_y));
   if (raw_y != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_y(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_y(), target);
   }
 
-  // float z = 6;
+  // float z = 7;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_z = this->_internal_z();
   uint32_t raw_z;
   memcpy(&raw_z, &tmp_z, sizeof(tmp_z));
   if (raw_z != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_z(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_z(), target);
   }
 
-  // float pitch = 7;
+  // float pitch = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_pitch = this->_internal_pitch();
   uint32_t raw_pitch;
   memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
   if (raw_pitch != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_pitch(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_pitch(), target);
   }
 
-  // float yaw = 8;
+  // float yaw = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_yaw = this->_internal_yaw();
   uint32_t raw_yaw;
   memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
   if (raw_yaw != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_yaw(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_yaw(), target);
   }
 
-  // float roll = 9;
+  // float roll = 10;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_roll = this->_internal_roll();
   uint32_t raw_roll;
   memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
   if (raw_roll != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_roll(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(10, this->_internal_roll(), target);
+  }
+
+  // float hp = 11;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = this->_internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(11, this->_internal_hp(), target);
+  }
+
+  // bool attack = 12;
+  if (this->_internal_attack() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(12, this->_internal_attack(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -907,12 +1084,17 @@ size_t Zombie::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_size());
   }
 
-  // uint32 type = 3;
-  if (this->_internal_type() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_type());
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
   }
 
-  // float x = 4;
+  // uint32 zombietype = 4;
+  if (this->_internal_zombietype() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_zombietype());
+  }
+
+  // float x = 5;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_x = this->_internal_x();
   uint32_t raw_x;
@@ -921,7 +1103,7 @@ size_t Zombie::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float y = 5;
+  // float y = 6;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_y = this->_internal_y();
   uint32_t raw_y;
@@ -930,7 +1112,7 @@ size_t Zombie::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float z = 6;
+  // float z = 7;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_z = this->_internal_z();
   uint32_t raw_z;
@@ -939,7 +1121,7 @@ size_t Zombie::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float pitch = 7;
+  // float pitch = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_pitch = this->_internal_pitch();
   uint32_t raw_pitch;
@@ -948,7 +1130,7 @@ size_t Zombie::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float yaw = 8;
+  // float yaw = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_yaw = this->_internal_yaw();
   uint32_t raw_yaw;
@@ -957,13 +1139,27 @@ size_t Zombie::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float roll = 9;
+  // float roll = 10;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_roll = this->_internal_roll();
   uint32_t raw_roll;
   memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
   if (raw_roll != 0) {
     total_size += 1 + 4;
+  }
+
+  // float hp = 11;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = this->_internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
+    total_size += 1 + 4;
+  }
+
+  // bool attack = 12;
+  if (this->_internal_attack() != 0) {
+    total_size += 1 + 1;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -990,8 +1186,11 @@ void Zombie::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBU
   if (from._internal_packet_size() != 0) {
     _this->_internal_set_packet_size(from._internal_packet_size());
   }
-  if (from._internal_type() != 0) {
-    _this->_internal_set_type(from._internal_type());
+  if (from._internal_packet_type() != 0) {
+    _this->_internal_set_packet_type(from._internal_packet_type());
+  }
+  if (from._internal_zombietype() != 0) {
+    _this->_internal_set_zombietype(from._internal_zombietype());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_x = from._internal_x();
@@ -1035,6 +1234,16 @@ void Zombie::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBU
   if (raw_roll != 0) {
     _this->_internal_set_roll(from._internal_roll());
   }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = from._internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
+    _this->_internal_set_hp(from._internal_hp());
+  }
+  if (from._internal_attack() != 0) {
+    _this->_internal_set_attack(from._internal_attack());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1053,8 +1262,8 @@ void Zombie::InternalSwap(Zombie* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Zombie, _impl_.roll_)
-      + sizeof(Zombie::_impl_.roll_)
+      PROTOBUF_FIELD_OFFSET(Zombie, _impl_.attack_)
+      + sizeof(Zombie::_impl_.attack_)
       - PROTOBUF_FIELD_OFFSET(Zombie, _impl_.zombieid_)>(
           reinterpret_cast<char*>(&_impl_.zombieid_),
           reinterpret_cast<char*>(&other->_impl_.zombieid_));

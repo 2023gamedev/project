@@ -61,7 +61,7 @@ uint32 ClientSocket::Run()
 			if (tempCharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
 			{
 				// 메시지 타입 확인
-				switch (tempCharacterPacket.type()) 
+				switch (tempCharacterPacket.packet_type()) 
 				{
 				case 1: // Character 메시지 타입 값
 				{
@@ -73,7 +73,7 @@ uint32 ClientSocket::Run()
 						FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
 						if (PlayerId != MyPlayerId) {
-							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation));
+							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype()));
 						}
 					}
 					break;
@@ -85,7 +85,7 @@ uint32 ClientSocket::Run()
 					{
 						FVector NewLocation(ZombiePacket.x(), ZombiePacket.y(), ZombiePacket.z());
 						FRotator NewRotation(ZombiePacket.pitch(), ZombiePacket.yaw(), ZombiePacket.roll());
-						Q_zombie.push(ZombieData(ZombiePacket.zombieid(), NewLocation, NewRotation));
+						Q_zombie.push(ZombieData(ZombiePacket.zombieid(), NewLocation, NewRotation, ZombiePacket.zombietype()));
 
 					}
 					break;

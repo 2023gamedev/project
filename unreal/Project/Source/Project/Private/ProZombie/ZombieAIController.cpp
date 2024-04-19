@@ -47,83 +47,83 @@ void AZombieAIController::BeginPlay()
 
 }
 
-void AZombieAIController::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-
-
-	if (LineOfSightTo(PlayerPawn)) {
-		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
-		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
-		GetBlackboardComponent()->SetValueAsObject(TargetKey, PlayerPawn);
-	}
-	else {
-		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
-	}
-}
-
 //void AZombieAIController::Tick(float DeltaTime)
 //{
 //	Super::Tick(DeltaTime);
 //
-//	static float SearchInterval = 0.5f; // 0.5초마다 플레이어 검색
-//	static float TimeSinceLastSearch = 0.0f;
-//	TimeSinceLastSearch += DeltaTime;
+//	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 //
-//	if (TimeSinceLastSearch >= SearchInterval)
-//	{
-//		TimeSinceLastSearch = 0.0f; // 타이머 리셋
 //
-//		TArray<AActor*> Players;
-//		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
-//
-//		APawn* NearestPawn = nullptr;
-//		float NearestDist = FLT_MAX;
-//
-//		for (AActor* Player : Players)
-//		{
-//			APawn* TestPawn = Cast<APawn>(Player);
-//			if (TestPawn && LineOfSightTo(TestPawn))
-//			{
-//				float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
-//				if (Dist < NearestDist)
-//				{
-//					NearestDist = Dist;
-//					NearestPawn = TestPawn;
-//				}
-//			}
-//		}
-//
-//		// 블랙보드 업데이트
-//		if (NearestPawn)
-//		{
-//			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
-//			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
-//			GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
-//		}
-//		else
-//		{
-//			GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-//			GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
-//		}
+//	if (LineOfSightTo(PlayerPawn)) {
+//		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+//		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
+//		GetBlackboardComponent()->SetValueAsObject(TargetKey, PlayerPawn);
 //	}
-//
-//	CheckAndSendMovement();
-//
-//	if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
-//	{
-//		UE_LOG(LogNet, Display, TEXT("Update Zombie: ZombieId=%d"), recvZombieData.ZombieId);
-//		// 현재 GameMode 인스턴스를 얻기
-//		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-//		{
-//			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-//			MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
-//		}
+//	else {
+//		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+//		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
 //	}
 //}
+
+void AZombieAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	//static float SearchInterval = 0.5f; // 0.5초마다 플레이어 검색
+	//static float TimeSinceLastSearch = 0.0f;
+	//TimeSinceLastSearch += DeltaTime;
+
+	//if (TimeSinceLastSearch >= SearchInterval)
+	{
+		//TimeSinceLastSearch = 0.0f; // 타이머 리셋
+
+		TArray<AActor*> Players;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
+
+		APawn* NearestPawn = nullptr;
+		float NearestDist = FLT_MAX;
+
+		for (AActor* Player : Players)
+		{
+			APawn* TestPawn = Cast<APawn>(Player);
+			if (TestPawn && LineOfSightTo(TestPawn))
+			{
+				float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
+				if (Dist < NearestDist)
+				{
+					NearestDist = Dist;
+					NearestPawn = TestPawn;
+				}
+			}
+		}
+
+		// 블랙보드 업데이트
+		if (NearestPawn)
+		{
+			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
+			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
+			GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
+		}
+		else
+		{
+			GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+			GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
+		}
+	}
+
+	CheckAndSendMovement();
+
+	if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
+	{
+		UE_LOG(LogNet, Display, TEXT("Update Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+		// 현재 GameMode 인스턴스를 얻기
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
+			MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
+		}
+	}
+}
 
 void AZombieAIController::CheckAndSendMovement()
 {
@@ -138,7 +138,7 @@ void AZombieAIController::CheckAndSendMovement()
 	// Protobuf를 사용하여 TestPacket 생성
 	Protocol::Zombie packet;
 	packet.set_zombieid(ZombieId);
-	packet.set_type(2); // 원하는 유형 설정
+	packet.set_packet_type(2); // 원하는 유형 설정
 	packet.set_x(CurrentLocation.X);
 	packet.set_y(CurrentLocation.Y);
 	packet.set_z(CurrentLocation.Z);

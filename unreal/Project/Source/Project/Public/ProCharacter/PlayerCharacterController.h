@@ -74,6 +74,8 @@ public:
 	UProGameInstance* GameInstance;
 	PlayerData recvPlayerData;
 	uint32 PlayerId;
+	uint32 MyCharacterNumber;
+	uint32 OtherCharacterNumber;
 	FVector NewLocation;
 
 };

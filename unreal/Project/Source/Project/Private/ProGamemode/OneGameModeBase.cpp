@@ -557,7 +557,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     m_iItemBoxNumber++;
 }
 
-void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation)
+void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype)
 {
     UWorld* World = GetWorld();
 
@@ -585,10 +585,23 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         }
     }
 
+    if (charactertype == 1) {
+        OtherCharacterClasses.Add(AEmployeeCharacter::StaticClass());
+    }
+    else if (charactertype == 3) {
+        OtherCharacterClasses.Add(AFireFighterCharacter::StaticClass());
+    }
+    else if (charactertype == 0) {
+        OtherCharacterClasses.Add(AGirlCharacter::StaticClass());
+    }
+    else if (charactertype == 2) {
+        OtherCharacterClasses.Add(AIdolCharacter::StaticClass());
+    }
+
     //기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-    ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(DefaultPawnClass, NewLocation, NewRotation, SpawnParams);
+    ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(OtherCharacterClasses[0], NewLocation, NewRotation, SpawnParams);
 
     if (NewCharacter)
     {

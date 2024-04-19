@@ -4,25 +4,32 @@ package Protocol;
 message Character {
     uint32 playerid = 1;
     uint32 packet_size = 2;
-    uint32 type = 3;
-    float x = 4;
-    float y = 5;
-    float z = 6;
-    float pitch = 7;
-    float yaw = 8;
-    float roll = 9;
-    bool isingame = 10;
+    uint32 packet_type = 3;
+    uint32 charactertype = 4;
+    float x = 5;
+    float y = 6;
+    float z = 7;
+    float pitch = 8;
+    float yaw = 9;
+    float roll = 10;
+    float hp = 11;
+    uint32 weapon = 12;
+    bool attack = 13;
+    bool isingame = 14;
 };
 
 message Zombie {
     uint32 zombieid = 1;
     uint32 packet_size = 2;
-    uint32 type = 3;
-    float x = 4;
-    float y = 5;
-    float z = 6;
-    float pitch = 7;
-    float yaw = 8;
-    float roll = 9;
+    uint32 packet_type = 3;
+    uint32 zombietype = 4;
+    float x = 5;
+    float y = 6;
+    float z = 7;
+    float pitch = 8;
+    float yaw = 9;
+    float roll = 10;
+    float hp = 11;
+    bool attack = 12;
 };
 
