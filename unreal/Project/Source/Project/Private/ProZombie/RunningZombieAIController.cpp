@@ -62,18 +62,7 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 	}
 	
-	//CheckAndSendMovement();
-
-	//if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
-	//{
-	//	UE_LOG(LogNet, Display, TEXT("Update Zombie: ZombieId=%d"), recvZombieData.ZombieId);
-	//	// 현재 GameMode 인스턴스를 얻기
-	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-	//	{
-	//		// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-	//		MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
-	//	}
-	//}
+	CheckAndSendMovement();
 }
 
 void ARunningZombieAIController::CheckAndSendMovement()
