@@ -7,9 +7,9 @@ ANWMannequinLeg::ANWMannequinLeg()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MannequinLeg"));
 	RootComponent = NormalWeapon;
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MANNEQUINLEG(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MANNEQUINLEG(TEXT("/Game/Mesh/SM_MannequinLeg.SM_MannequinLeg"));
 	if (SM_MANNEQUINLEG.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_MANNEQUINLEG.Object);
 	}

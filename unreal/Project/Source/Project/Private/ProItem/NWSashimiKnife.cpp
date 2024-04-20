@@ -7,10 +7,10 @@ ANWSashimiKnife::ANWSashimiKnife()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SashimiKnife"));
 	RootComponent = NormalWeapon;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SASIMIKNIFE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SASIMIKNIFE(TEXT("/Game/Mesh/SM_SasimiKnife.SM_SasimiKnife"));
 	if (SM_SASIMIKNIFE.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_SASIMIKNIFE.Object);
 	}

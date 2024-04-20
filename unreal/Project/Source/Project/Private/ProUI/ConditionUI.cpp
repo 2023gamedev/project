@@ -2,6 +2,8 @@
 
 
 #include "ProUI/ConditionUI.h"
+#include "ProUI/HPBar.h"
+#include "ProUI/StaminaBar.h"
 
 UConditionUI::UConditionUI(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)

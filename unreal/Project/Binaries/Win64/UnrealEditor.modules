@@ -2,6 +2,10 @@
 	"BuildId": "27405482",
 	"Modules": 
 	{
+<<<<<<< HEAD
 		"Project": "UnrealEditor-Project-0001.dll"
+=======
+		"Project": "UnrealEditor-Project-5216.dll"
+>>>>>>> ClientBranch4.18
 	}
 }

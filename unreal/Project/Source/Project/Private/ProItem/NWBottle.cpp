@@ -8,10 +8,10 @@ ANWBottle::ANWBottle()
 
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Bottle"));
 	RootComponent = NormalWeapon;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOTTLE (TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOTTLE (TEXT("/Game/Mesh/SM_Bottle.SM_Bottle"));
 	if (SM_BOTTLE.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_BOTTLE.Object);
 	}

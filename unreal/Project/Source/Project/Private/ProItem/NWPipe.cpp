@@ -7,10 +7,10 @@ ANWPipe::ANWPipe()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pipe"));
 	RootComponent = NormalWeapon;
 
- ConstructorHelpers::FObjectFinder<UStaticMesh> SM_PIPE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+ ConstructorHelpers::FObjectFinder<UStaticMesh> SM_PIPE(TEXT("/Game/Safe_House/meshes/SM_Pipe.SM_Pipe"));
 	if (SM_PIPE.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_PIPE.Object);
 	}

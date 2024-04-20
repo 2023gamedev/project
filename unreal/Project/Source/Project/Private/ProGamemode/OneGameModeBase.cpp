@@ -58,8 +58,8 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(1, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
     SpawnItemBoxes(2, "Pipe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPipe.InvenPipe"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
     SpawnItemBoxes(3, "FireAxe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireAxe.InvenFireAxe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(4, "SashimiKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenButherKnife.InvenButherKnife"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
-    SpawnItemBoxes(5, "ButchersKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/Mesh/SM_ButherKnife.SM_ButherKnife"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
+    SpawnItemBoxes(4, "SashimiKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSasimiKnife.InvenSasimiKnife"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
+    SpawnItemBoxes(5, "ButchersKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenButherKnife.InvenButherKnife"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
     SpawnItemBoxes(6, "Bottle", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBottle.InvenBottle"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
     SpawnItemBoxes(7, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth"), NULL, LOAD_None, NULL), 3,EItemFloor::FLOORB1);
     SpawnItemBoxes(8, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);

@@ -7,10 +7,10 @@ ANWScissors::ANWScissors()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Scissors"));
 	RootComponent = NormalWeapon;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SCISSORS(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SCISSORS(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficeSmallProps/SM_Scissors.SM_Scissors"));
 	if (SM_SCISSORS.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_SCISSORS.Object);
 	}

@@ -7,10 +7,10 @@ ANWWoodenBat::ANWWoodenBat()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WoodenBat"));
 	RootComponent = NormalWeapon;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_WODDENBAT(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_WODDENBAT(TEXT("/Game/Safe_House/meshes/SM_woodenbat.SM_woodenbat"));
 	if (SM_WODDENBAT.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_WODDENBAT.Object);
 	}
