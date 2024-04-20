@@ -7,10 +7,10 @@ ANWShovels::ANWShovels()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Shovels"));
 	RootComponent = NormalWeapon;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SHOVELS(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SHOVELS(TEXT("/Game/Safe_House/meshes/SM_shovel.SM_shovel"));
 	if (SM_SHOVELS.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_SHOVELS.Object);
 	}

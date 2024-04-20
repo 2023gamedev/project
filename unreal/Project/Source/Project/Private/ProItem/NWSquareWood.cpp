@@ -8,7 +8,7 @@
 ANWSquareWood::ANWSquareWood()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SquareWood"));
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
 	
 	RootComponent = NormalWeapon;
@@ -19,13 +19,13 @@ ANWSquareWood::ANWSquareWood()
 
 
 
-	 ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SQUREWOOD(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	 ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SQUREWOOD(TEXT("/Game/Mesh/SM_SquareWood.SM_SquareWood"));
 	if (SM_SQUREWOOD.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_SQUREWOOD.Object);
 	}
 
 
-	NormalWeapon->SetCollisionProfileName(TEXT("Attack")); // 충돌 프리셋은 변경될 수도 있다.
+	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision")); // 충돌 프리셋은 변경될 수도 있다.
 
 	m_fWeaponSTR		= 2.f;
 	m_fWeaponDurability = 8.f;

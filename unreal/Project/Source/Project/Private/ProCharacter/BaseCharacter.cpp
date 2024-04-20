@@ -455,7 +455,7 @@ void ABaseCharacter::Attack()
 void ABaseCharacter::QuickNWeapon()
 {
 	if (IsBringCurrentWeapon()) {
-		FName WeaponSocket = TEXT("middle_01_rSocket");
+		FName WeaponSocket = TEXT("RightHandSocket");
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
 		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
 		SetHandIn(true);

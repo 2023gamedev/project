@@ -7,10 +7,10 @@ ANWGolfClub::ANWGolfClub()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GolfClub"));
 	RootComponent = NormalWeapon;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_GOLFCLUB(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_GOLFCLUB(TEXT("/Game/Mesh/SM_GolfClub.SM_GolfClub"));
 	if (SM_GOLFCLUB.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_GOLFCLUB.Object);
 	}

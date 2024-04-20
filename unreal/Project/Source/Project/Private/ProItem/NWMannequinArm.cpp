@@ -7,10 +7,10 @@ ANWMannequinArm::ANWMannequinArm()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MannequinArm"));
 	RootComponent = NormalWeapon;
 
-	 ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MANNEQUINARM(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	 ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MANNEQUINARM(TEXT("/Game/Mesh/SM_MannequinArm.SM_MannequinArm"));
 	if (SM_MANNEQUINARM.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_MANNEQUINARM.Object);
 	}

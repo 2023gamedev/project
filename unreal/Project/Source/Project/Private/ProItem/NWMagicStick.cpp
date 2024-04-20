@@ -7,10 +7,10 @@ ANWMagicStick::ANWMagicStick()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MagicStick"));
 	RootComponent = NormalWeapon;
 
-	 ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MAGICSTICK(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	 ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MAGICSTICK(TEXT("/Game/Safe_House/meshes/SM_magicstick.SM_magicstick"));
 	if (SM_MAGICSTICK.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_MAGICSTICK.Object);
 	}

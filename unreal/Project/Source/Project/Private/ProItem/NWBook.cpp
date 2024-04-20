@@ -8,7 +8,7 @@ ANWBook::ANWBook()
 
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Book"));
 	RootComponent = NormalWeapon;
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_BOOK(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));

@@ -8,10 +8,10 @@ ANWFireAxe::ANWFireAxe()
 
 	PrimaryActorTick.bCanEverTick = false;
 
-	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NORMALWEAPON"));
+	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FireAxe"));
 	RootComponent = NormalWeapon;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_FIREAXE(TEXT("/Game/StorePropsCollection/StaticMeshes/OfficePapers/SM_Book4.SM_Book4"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_FIREAXE(TEXT("/Game/Mesh/SM_FireAxe.SM_FireAxe"));
 	if (SM_FIREAXE.Succeeded()) {
 		NormalWeapon->SetStaticMesh(SM_FIREAXE.Object);
 	}
