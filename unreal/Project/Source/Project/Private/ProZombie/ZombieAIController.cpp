@@ -113,7 +113,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	CheckAndSendMovement();
 
-	if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
+	while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 	{
 		UE_LOG(LogNet, Display, TEXT("Update Zombie: ZombieId=%d"), recvZombieData.ZombieId);
 		// 현재 GameMode 인스턴스를 얻기
@@ -152,7 +152,6 @@ void AZombieAIController::CheckAndSendMovement()
 
 	// 직렬화된 데이터를 서버로 전송
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-
 }
 
 

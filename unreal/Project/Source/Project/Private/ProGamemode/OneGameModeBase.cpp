@@ -730,7 +730,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotat
 
             BaseZombie->UpdateZombieData(NewLocation);
 
-            UE_LOG(LogTemp, Warning, TEXT("UpdateZombie: %d "), ZombieID);
+            //UE_LOG(LogTemp, Warning, TEXT("UpdateZombie: %d "), ZombieID);
 
             return;
         }
