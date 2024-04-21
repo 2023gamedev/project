@@ -11,13 +11,13 @@ ARunningZombie::ARunningZombie()
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/ZombieAsset/NormalZombie/NormalZombie.NormalZombie"));
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
 	}
 
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> ZOMBIE_ANIM(TEXT("/Game/RZombieAnimBlueprint.RZombieAnimBlueprint_C"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> ZOMBIE_ANIM(TEXT("/Game/ZombieAsset/Animation/RunningZombieAnimation/BP_RunningZombieAnimBlueprint.BP_RunningZombieAnimBlueprint_C"));
 	if (ZOMBIE_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}
@@ -26,7 +26,7 @@ ARunningZombie::ARunningZombie()
 	SetHP(20);
 	SetSpeed(4);
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
-	SetSTR(FMath::RandRange(4, 8)); // 수정 필요 4 ~ 8
+	SetSTR(FMath::RandRange(4, 8)); 
 	SetSpecialAbility(true);
 	SetZombieName("RunningZombie");
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "NormalWeaponActor.h"
+#include "Components/BoxComponent.h"
 #include "NWIron.generated.h"
 
 /**

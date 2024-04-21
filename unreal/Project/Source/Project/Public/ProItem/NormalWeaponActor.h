@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ItemActor.h"
+#include "Components/BoxComponent.h"
 #include "NormalWeaponActor.generated.h"
 
 /**
@@ -31,9 +32,18 @@ public:
 
 	virtual void PlaceItem() override;
 
+	UFUNCTION()
+	void WeaponBeginOverlap(UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+		bool bFromSweep, const FHitResult& SweepResult);
+
+
 public:
 	UPROPERTY(EditAnywhere, Category= NormalWeapon)
 	UStaticMeshComponent* NormalWeapon;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* BoxComponent;
 
 	UPROPERTY(EditAnywhere, Category = "ItmePos")
 	FVector ItemHandPos;
@@ -51,4 +61,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fWeaponRange;
+
+	// 무기의 스탯들
+	UPROPERTY(EditAnywhere, Category = "ItemStat")
+	float m_fCharacterSTR;
 };

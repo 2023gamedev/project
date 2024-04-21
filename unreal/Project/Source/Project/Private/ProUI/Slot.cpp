@@ -146,6 +146,11 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 	if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton) == true) { // 퀵슬롯에 넣어주거나 해제하는 역할 할 예정
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Right Button Down"));
 
+		// 빈칸에 마우스 우클릭 시 팅기는 부분 방지
+		if (Character->Inventory[SlotIndex].Type == EItemType::ITEM_NONE) {
+			return eventreply.NativeReply;
+		}
+
 		// 수정 무지막지하게 필요 일단 화면에 뜬다만 보여주는 부분
 		switch (Character->Inventory[SlotIndex].ItemClassType) {
 		

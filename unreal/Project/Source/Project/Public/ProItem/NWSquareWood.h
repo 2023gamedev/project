@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "NormalWeaponActor.h"
-#include "Components/BoxComponent.h"
 #include "NWSquareWood.generated.h"
 
 /**
@@ -21,8 +20,7 @@ public:
 	// Sets default values for this actor's properties
 	ANWSquareWood();
 
-	UPROPERTY(EditAnywhere)
-	UBoxComponent* BoxComponent;
+
 
 
 };

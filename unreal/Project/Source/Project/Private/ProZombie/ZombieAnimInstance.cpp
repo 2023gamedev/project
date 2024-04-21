@@ -7,16 +7,23 @@ UZombieAnimInstance::UZombieAnimInstance()
 {
 	m_fCurrentPawnSpeed = 0.f;
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/SK_Mannequin_Montage.SK_Mannequin_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMAttackZombie.BP_AMAttackZombie"));
 	if (ATTACK_MONTAGE.Succeeded()) {
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SHOUTING_MONTAGE(TEXT("/Game/SK_Mannequin_Montage_Shouting.SK_Mannequin_Montage_Shouting"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SHOUTING_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMShouting.BP_AMShouting"));
 	if (SHOUTING_MONTAGE.Succeeded()) {
 		ShoutingMontage = SHOUTING_MONTAGE.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> BEATTACKED_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMBeAttackedZombie.BP_AMBeAttackedZombie"));
+	if (BEATTACKED_MONTAGE.Succeeded()) {
+		BeAttackedMontage = BEATTACKED_MONTAGE.Object;
+	}
 }
+
+
 
 void UZombieAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -34,5 +41,12 @@ void UZombieAnimInstance::PlayShoutingMontage()
 {
 	if (!Montage_IsPlaying(ShoutingMontage)) {
 		Montage_Play(ShoutingMontage, 1.f);
+	}
+}
+
+void UZombieAnimInstance::PlayBeAttackedMontage()
+{
+	if (!Montage_IsPlaying(BeAttackedMontage)) {
+		Montage_Play(BeAttackedMontage, 1.f);
 	}
 }
