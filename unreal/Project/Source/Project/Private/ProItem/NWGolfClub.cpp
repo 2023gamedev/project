@@ -8,7 +8,14 @@ ANWGolfClub::ANWGolfClub()
 	PrimaryActorTick.bCanEverTick = false;
 
 	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GolfClub"));
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("GolfClubBox"));
+
 	RootComponent = NormalWeapon;
+	BoxComponent->SetupAttachment(NormalWeapon);
+
+	BoxComponent->SetRelativeLocation(FVector(0.f, 90.f, 0.f));
+	BoxComponent->SetRelativeRotation(FRotator(0.f, 0.f, 90.f));
+	BoxComponent->SetRelativeScale3D(FVector(0.25f, 0.1f, 0.75f));
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_GOLFCLUB(TEXT("/Game/Mesh/SM_GolfClub.SM_GolfClub"));
 	if (SM_GOLFCLUB.Succeeded()) {
@@ -17,6 +24,7 @@ ANWGolfClub::ANWGolfClub()
 
 
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
+	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR = 6.f;
 	m_fWeaponDurability = 8.f;

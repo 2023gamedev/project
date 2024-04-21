@@ -16,6 +16,7 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.f, 0.0f);
 	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
 
+	
 	ZombieId = 0;
 }
 
@@ -48,6 +49,7 @@ void ABaseZombie::PostInitializeComponents()
 
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::AttackMontageEnded);
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::ShoutingMontageEnded);
+	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::BeAttackedMontageEnded);
 }
 
 void ABaseZombie::PossessedBy(AController* NewController)
@@ -60,6 +62,7 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	SetHP(GetHP() - Damage);
+	BeAttacked();
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	return Damage;
 }
@@ -112,6 +115,26 @@ void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 	SetShouted(true);
 	UE_LOG(LogTemp, Error, TEXT("bIsShouted true"));
 	m_DShoutingEnd.Broadcast();
+}
+
+void ABaseZombie::BeAttacked()
+{
+	if (m_bBeAttacked) {
+		return;
+	}
+	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+
+
+	AnimInstance->PlayBeAttackedMontage();
+
+	GetCharacterMovement()->MaxWalkSpeed = 1.f;
+	m_bBeAttacked = true;
+}
+
+void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
+{
+	m_bBeAttacked = false;
+	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 }
 
 void ABaseZombie::SetZombieId(uint32 NewZombieId)

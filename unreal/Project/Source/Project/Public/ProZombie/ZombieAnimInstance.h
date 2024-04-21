@@ -17,11 +17,14 @@ class PROJECT_API UZombieAnimInstance : public UAnimInstance
 	
 public:
 	UZombieAnimInstance();
+
+	
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	void SetCurrentPawnSpeed(float speed) { m_fCurrentPawnSpeed = speed; }
 
 	void PlayAttackMontage();
 	void PlayShoutingMontage();
+	void PlayBeAttackedMontage();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllodwPrivateAccess = true))
@@ -32,5 +35,8 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ShoutingMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* BeAttackedMontage;
 
 };

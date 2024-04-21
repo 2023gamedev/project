@@ -11,12 +11,12 @@ AShoutingZombie::AShoutingZombie()
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/ZombieAsset/NormalZombie/NormalZombie.NormalZombie"));
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
 	}
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> ZOMBIE_ANIM(TEXT("/Game/SZombieAnimBlueprint.SZombieAnimBlueprint_C"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> ZOMBIE_ANIM(TEXT("/Game/ZombieAsset/Animation/ShoutingAnimation/BP_ShoutingZombieAnimBlueprint.BP_ShoutingZombieAnimBlueprint_C"));
 	if (ZOMBIE_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}

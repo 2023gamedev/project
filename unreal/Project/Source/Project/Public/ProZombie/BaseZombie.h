@@ -54,12 +54,10 @@ public:
 	bool IsSpecialAbility() { return m_bSpecialAbility; }
 	void SetSpecialAbility(bool specialability) { m_bSpecialAbility = specialability; }
 
-
-	// 소리쳤는지
 	bool IsShouted() { return m_bIsShouted; }
 	void SetShouted(bool shouted) { m_bIsShouted = shouted; }
 		 
-	// 변경 필요 각각의 animinstance가 필요할 것 같다.
+
 	void Attack();
 
 	UFUNCTION()
@@ -70,15 +68,25 @@ public:
 
 	FAttackEndDelegate m_DAttackEnd;
 
-	// 같은 이유로 이 부분도 변경 필요
+
 	void Shouting();
 
 	UFUNCTION()
 	void ShoutingMontageEnded(UAnimMontage* Montage, bool interrup);
 
+	void BeAttacked();
+
+	UFUNCTION()
+	void BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup);
+
+	UPROPERTY(EditAnywhere)
+	bool m_bBeAttacked = false;
+
+
 	void SetZombieId(uint32 NewPlayerId);
 	uint32 GetZombieId() const;
 	void UpdateZombieData(FVector Location);
+
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsShouting = false;
