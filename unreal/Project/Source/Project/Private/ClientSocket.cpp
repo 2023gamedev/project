@@ -86,7 +86,7 @@ uint32 ClientSocket::Run()
 						FVector NewLocation(ZombiePacket.x(), ZombiePacket.y(), ZombiePacket.z());
 						FRotator NewRotation(ZombiePacket.pitch(), ZombiePacket.yaw(), ZombiePacket.roll());
 						Q_zombie.push(ZombieData(ZombiePacket.zombieid(), NewLocation, NewRotation, ZombiePacket.zombietype()));
-
+						UE_LOG(LogNet, Display, TEXT("push Zombie: ZombieId=%d"), ZombiePacket.zombieid());
 					}
 					break;
 				}

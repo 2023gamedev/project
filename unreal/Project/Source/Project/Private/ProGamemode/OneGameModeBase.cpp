@@ -27,6 +27,10 @@
 #include "Math/UnrealMathUtility.h"
 #include "NavigationSystem.h"
 
+
+TMap<uint32, ABaseZombie*> ZombieMap;
+
+
 AOneGameModeBase::AOneGameModeBase()
 {
     //DefaultPawnClass = ABaseCharacter::StaticClass();
@@ -703,6 +707,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
             m_iRunningZombieNumber++;
         }
 
+        ZombieMap.Add(zombieindex, SpawnedZombie);
     }
 }
 
@@ -710,29 +715,30 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotat
 {
     UWorld* World = GetWorld();
 
+    //UE_LOG(LogTemp, Warning, TEXT("Call zombie ID: %d"), ZombieID);
+
     if (!World)
     {
         UE_LOG(LogTemp, Warning, TEXT("UpdateZombie: GetWorld() returned nullptr"));
         return;
     }
 
-    // 캐릭터 검색
-    for (TActorIterator<ABaseZombie> It(World); It; ++It)
+    ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieID);
+    if (ZombiePtr && *ZombiePtr)
     {
-        ABaseZombie* BaseZombie = *It;
-        if (BaseZombie && BaseZombie->GetZombieId() == ZombieID)
-        {
-            FVector OldLocation = BaseZombie->GetActorLocation();
+        ABaseZombie* BaseZombie = *ZombiePtr;
+        FVector OldLocation = BaseZombie->GetActorLocation();
 
-            // 기존 캐릭터 위치 업데이트
-            BaseZombie->SetActorLocation(NewLocation);
-            BaseZombie->SetActorRotation(NewRotation);
+        // 기존 캐릭터 위치 업데이트
+        BaseZombie->SetActorLocation(NewLocation);
+        BaseZombie->SetActorRotation(NewRotation);
 
-            BaseZombie->UpdateZombieData(NewLocation);
+        BaseZombie->UpdateZombieData(NewLocation);
 
-            //UE_LOG(LogTemp, Warning, TEXT("UpdateZombie: %d "), ZombieID);
-
-            return;
-        }
+        //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
+    }
+    else
+    {
+        //UE_LOG(LogTemp, Warning, TEXT("No zombie found with ID: %d"), ZombieID);
     }
 }
