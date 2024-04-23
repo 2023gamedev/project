@@ -16,12 +16,14 @@
 #include "BaseCharacter.generated.h"
 
 class UGamePlayerUI;
+class UConditionUI;
 class UPlayerSight;
 class ANormalWeaponActor;
 class AThrowWeaponActor;
 class AHealingItemActor;
 class ABleedingHealingItemActor;
 class AKeyActor;
+
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
 DECLARE_MULTICAST_DELEGATE(FAttackEndPlayerDelegate);
@@ -101,7 +103,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UGamePlayerUI* GameUIWidget;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UConditionUI> ConditionUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UConditionUI* ConditionUIWidget;
 
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
@@ -126,6 +133,7 @@ public:
 	void QuickBHItem();
 	void QuickHItem();
 	void QuickTWeapon();
+	void QuickKeyItem();
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
@@ -148,9 +156,24 @@ public:
 	bool IsRun() { return m_bRun; }
 	void SetRun(bool run) { m_bRun = run; }
 
-	bool IsHandIn() { return m_bHandIn; }
-	void SetHandIn(bool handin) { m_bHandIn = handin; }
 
+	bool IsNWHandIn() { return m_bNWHandIn; }
+	void SetNWHandIn(bool handin) { m_bNWHandIn = handin; }
+
+	bool IsBHHandIn() { return m_bBHHandIn; }
+	void SetBHHandIn(bool handin) { m_bBHHandIn = handin; }
+
+	bool IsHealHandIn() { return m_bHealHandIn; }
+	void SetHealHandIn(bool handin) { m_bHealHandIn = handin; }
+
+	bool IsKeyHandIn() { return m_bKeyHandIn; }
+	void SetKeyHandIn(bool handin) { m_bKeyHandIn = handin; }
+
+	bool IsThrowWHandIn() { return m_bThrowWHandIn; }
+	void SetThrowWHandIn(bool handin) { m_bThrowWHandIn = handin; }
+
+	bool IsDead() { return m_bIsDead; }
+	void SetDead(bool dead) { m_bIsDead = dead; }
 
 	bool IsBringCurrentWeapon() { return m_bIsBringCurrentWeapon; }
 	void SetBringCurrentWeapon(bool bringcurrentweapon) { m_bIsBringCurrentWeapon = bringcurrentweapon; }
@@ -192,19 +215,23 @@ public:
 	void SpawnNormalWeapon();
 	void SpawnThrowWeapon();
 	void SpawnHealingItem();
-	void SpawnBleddingHealingItem();
+	void SpawnBleedingHealingItem();
 	void SpawnKeyItem();
 
 	// 퀵슬롯 해제 시 삭제
 	void DestroyNormalWeapon();
 	void DestroyThrowWeapon();
 	void DestroyHealingItem();
-	void DestroyBleddingHealingItem();
+	void DestroyBleedingHealingItem();
 	void DestroyKeyItem();
 
 
 	// 슬롯에 아이템 내용 삭제
 	void DestroyNormalWepaonItemSlot();
+	void DestroyThrowWeaponItemSlot();
+	void DestroyHealingItemSlot();
+	void DestroyBleedingHealingItemSlot();
+	void DestroyKeyItemSlot();
 
 
 	virtual uint32 GetPlayerId() const;
@@ -236,7 +263,19 @@ private:
 	// 인벤토리
 
 	UPROPERTY(EditAnywhere)
-		bool m_bHandIn = false;
+	bool m_bNWHandIn = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bBHHandIn = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bHealHandIn = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bKeyHandIn = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bThrowWHandIn = false;
 		
 	UPROPERTY(EditAnywhere)
 		bool m_bSpecialEffect = false;
@@ -250,7 +289,7 @@ private:
 	bool m_bOnSpotLight = true;
 
 	UPROPERTY(EditAnywhere)
-	bool m_bInventoryOn = true;
+	bool m_bInventoryOn = false;
 
 	UPROPERTY(EditAnywhere)
 	FVector m_VStartLocation;
@@ -273,6 +312,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsBringCurrentKeyItem;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsDead;
 
 private:
 	uint32 PlayerId = 99;

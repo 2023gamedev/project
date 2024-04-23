@@ -158,6 +158,7 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputQuickTWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickTWeapon);
 				PEI->BindAction(InputActions->InputQuickBHItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickBHItem);
 				PEI->BindAction(InputActions->InputQuickHItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickHItem);
+				PEI->BindAction(InputActions->InputQuickKeyItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickKeyItem);
 				 
 			}
 			else
@@ -308,5 +309,14 @@ void APlayerCharacterController::QuickHItem(const FInputActionValue& Value)
 	UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
 
 	basecharacter->QuickHItem();
+}
+
+void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
+
+	basecharacter->QuickKeyItem();
 }
 

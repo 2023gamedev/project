@@ -31,7 +31,7 @@ ANWSquareWood::ANWSquareWood()
 	m_fWeaponSTR		= 2.f;
 	m_fWeaponDurability = 8.f;
 	m_fWeaponRange		= 3.f;
-
+	WeaponName = "SquareWood";
 }
 
 void ANWSquareWood::PlaceItem()

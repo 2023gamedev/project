@@ -28,5 +28,5 @@ ANWBottle::ANWBottle()
 	m_fWeaponSTR = 2.f;
 	m_fWeaponDurability = 3.f;
 	m_fWeaponRange = 1.f;
-
+	WeaponName = "Bottle";
 }

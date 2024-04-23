@@ -30,5 +30,5 @@ ANWScissors::ANWScissors()
 	m_fWeaponSTR		= 4.f;
 	m_fWeaponDurability = 5.f;
 	m_fWeaponRange		= 1.f;
-
+	WeaponName = "Scissors";
 }

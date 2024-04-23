@@ -28,5 +28,5 @@ ANWIron::ANWIron()
 	m_fWeaponSTR			= 4.f;
 	m_fWeaponDurability		= 6.f;
 	m_fWeaponRange			= 1.f;
-
+	WeaponName = "Iron";
 }

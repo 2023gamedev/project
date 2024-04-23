@@ -29,5 +29,5 @@ ANWPipe::ANWPipe()
 	m_fWeaponSTR		= 2.f;
 	m_fWeaponDurability = 9.f;
 	m_fWeaponRange		= 3.f;
-
+	WeaponName = "Pipe";
 }

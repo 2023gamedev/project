@@ -32,5 +32,5 @@ ANWFryingPan::ANWFryingPan()
 	m_fWeaponSTR = 4.f;
 	m_fWeaponDurability = 10.f;
 	m_fWeaponRange = 2.f;
-
+	WeaponName = "FryingPan";
 }

@@ -7,13 +7,16 @@ AHOintment::AHOintment()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	HealingItem = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("HEALINGITEM"));
+	HealingItem = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ointment"));
 	RootComponent = HealingItem;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_HEALINGITEM(TEXT("/Game/TMSportsEquipmentPack2/SportsEquipment/meshes/EnergyDrink01Can02/SM_EnergyDrink01Can02.SM_EnergyDrink01Can02"));
-	if (SK_HEALINGITEM.Succeeded()) {
-		HealingItem->SetSkeletalMesh(SK_HEALINGITEM.Object);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_OINTMENT(TEXT("/Game/TMSportsEquipmentPack2/SportsEquipment/meshes/EnergyDrink01Can02/SM_EnergyDrink01Can02.SM_EnergyDrink01Can02"));
+	if (SM_OINTMENT.Succeeded()) {
+		HealingItem->SetStaticMesh(SM_OINTMENT.Object);
 	}
+
+
+
 
 
 	HealingItem->SetCollisionProfileName(TEXT("NoCollision"));
@@ -21,4 +24,6 @@ AHOintment::AHOintment()
 
 	m_fHealingSpeed		= 2.f;
 	m_fHealingDuration  = 15.f;
+
+	HName = "Ointment";
 }

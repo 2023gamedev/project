@@ -19,4 +19,6 @@ ABHDirtyClothes::ABHDirtyClothes()
 	BleedingHealingItem->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fHealingSuccessProbability = 0.3f;
+	
+	BHName = "DirtyClothes";
 }

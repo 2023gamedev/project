@@ -46,6 +46,7 @@ public:
 	void QuickTWeapon(const FInputActionValue& Value);
 	void QuickBHItem(const FInputActionValue& Value);
 	void QuickHItem(const FInputActionValue& Value);
+	void QuickKeyItem(const FInputActionValue& Value);
 
 
 public:

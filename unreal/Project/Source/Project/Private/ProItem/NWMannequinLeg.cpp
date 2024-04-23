@@ -29,5 +29,5 @@ ANWMannequinLeg::ANWMannequinLeg()
 	m_fWeaponSTR		= 2.f;
 	m_fWeaponDurability = 6.f;
 	m_fWeaponRange		= 2.f;
-
+	WeaponName = "MannequinLeg";
 }

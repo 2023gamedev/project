@@ -28,4 +28,7 @@ public:
 public:
 	UPROPERTY(EditAnywhere, Category = ThrowWeaponActor)
 	USkeletalMeshComponent* ThrowWeaponActor;
+
+	UPROPERTY(EditAnywhere)
+	FName TWName;
 };

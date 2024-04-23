@@ -11,6 +11,7 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 	m_fCurrentPawnSpeed = 0.f;
 	m_bPawnRun = false;
 	m_bIsInAir = false;
+	m_bIsDead = false;
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployee.BP_AMEmployee"));
 	if (ATTACK_MONTAGE.Succeeded()) {
 		AttackMontage = ATTACK_MONTAGE.Object;
