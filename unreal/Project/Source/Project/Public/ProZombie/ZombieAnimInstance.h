@@ -10,6 +10,10 @@
  * 
  */
 // ZombieAnimInstance 
+
+DECLARE_MULTICAST_DELEGATE(FOnAttackStartCheckDelegate)
+//DECLARE_MULTICAST_DELEGATE(FOnAttackEndCheckDelegate)
+
 UCLASS()
 class PROJECT_API UZombieAnimInstance : public UAnimInstance
 {
@@ -26,6 +30,9 @@ public:
 	void PlayShoutingMontage();
 	void PlayBeAttackedMontage();
 
+	FOnAttackStartCheckDelegate OnAttackStartCheck;
+	//FOnAttackEndCheckDelegate OnAttackEndCheck;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllodwPrivateAccess = true))
 	float m_fCurrentPawnSpeed;
@@ -39,4 +46,11 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* BeAttackedMontage;
 
+
+private:
+	UFUNCTION()
+	void AnimNotify_AttackStart();
+
+	//UFUNCTION()
+	//void AnimNotify_AttackEnd();
 };

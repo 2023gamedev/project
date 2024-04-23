@@ -202,6 +202,11 @@ public:
 	void DestroyBleddingHealingItem();
 	void DestroyKeyItem();
 
+
+	// 슬롯에 아이템 내용 삭제
+	void DestroyNormalWepaonItemSlot();
+
+
 	virtual uint32 GetPlayerId() const;
 	void SetPlayerId(uint32 NewPlayerId);
 	void UpdatePlayerData(FVector Location);

@@ -2,6 +2,7 @@
 
 
 #include "ProZombie/BaseZombie.h"
+#include "Engine/DamageEvents.h"
 #include "ProZombie/ZombieAnimInstance.h"
 
 // Sets default values
@@ -14,6 +15,7 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.f, 0.0f);
+	GetMesh()->SetCollisionProfileName("Zombie");
 	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
 
 	
@@ -50,6 +52,11 @@ void ABaseZombie::PostInitializeComponents()
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::AttackMontageEnded);
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::ShoutingMontageEnded);
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::BeAttackedMontageEnded);
+
+	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
+		AttackCheck();
+		});
+
 }
 
 void ABaseZombie::PossessedBy(AController* NewController)
@@ -79,12 +86,51 @@ void ABaseZombie::Attack()
 	m_bIsAttacking = true;
 }
 
-
-
 void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bIsAttacking = false;
 	m_DAttackEnd.Broadcast();
+}
+
+void ABaseZombie::AttackCheck()
+{
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		GetActorLocation(),
+		GetActorLocation() + GetActorForwardVector() * m_fAttackRange,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel3,
+		FCollisionShape::MakeSphere(m_fAttackRadius),
+		Params
+		);
+
+
+	// debug 용(충돌 범위 확인 용)
+	//FVector TraceVec = GetActorForwardVector() * m_fAttackRange;
+	//FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	//float HalfHeight = m_fAttackRange * 0.5f + 50.f;
+	//FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	//FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	//float DebugLifeTime = m_fAttackRadius;
+
+
+	//DrawDebugCapsule(GetWorld(),
+	//	Center,
+	//	HalfHeight,
+	//	m_fAttackRadius,
+	//	CapsuleRot,
+	//	DrawColor,
+	//	false,
+	//	DebugLifeTime);
+
+	if (bResult) {
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
+		FDamageEvent DamageEvent;
+		HitResult.GetActor()->TakeDamage(GetSTR(), DamageEvent, GetController(), this);
+	}
 }
 
 void ABaseZombie::Shouting()
