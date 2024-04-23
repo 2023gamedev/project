@@ -80,7 +80,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype);
+			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype, recvPlayerData.b_attack);
 		}
 	}
 }
@@ -90,6 +90,14 @@ void APlayerCharacterController::CheckAndSendMovement()
 	APawn* MyPawn = GetPawn();
 	FVector CurrentLocation = MyPawn->GetActorLocation();
 	FRotator CurrentRotation = MyPawn->GetActorRotation();
+	
+	ABaseCharacter* MyCharacter = Cast<ABaseCharacter>(MyPawn);
+	bool b_attack = false;
+	if (MyCharacter)
+	{
+		b_attack = MyCharacter->GetAttack();
+		UE_LOG(LogNet, Display, TEXT("Update Other Player: b_attack=%d"), b_attack);
+	}
 
 	
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
@@ -108,6 +116,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 	packet.set_pitch(CurrentRotation.Pitch);
 	packet.set_yaw(CurrentRotation.Yaw);
 	packet.set_roll(CurrentRotation.Roll);
+	packet.set_attack(b_attack);
 	packet.set_isingame(true);
 
 	// 직렬화
@@ -268,6 +277,7 @@ void APlayerCharacterController::Attck(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	basecharacter->Attack();
+	basecharacter->SetAttack(true);
 }
 
 void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)

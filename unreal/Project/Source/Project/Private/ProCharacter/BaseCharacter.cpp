@@ -668,3 +668,17 @@ void ABaseCharacter::UpdatePlayerData(FVector Location)
 {
 	NewLocation = Location;
 }
+
+void ABaseCharacter::SetAttack(bool bAttack)
+{
+	b_attack = bAttack;
+	if (b_attack)
+	{
+		Attack();
+	}
+}
+
+bool ABaseCharacter::GetAttack()
+{
+	return b_attack;
+}

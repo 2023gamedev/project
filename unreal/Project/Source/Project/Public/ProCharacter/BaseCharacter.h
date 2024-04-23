@@ -206,6 +206,9 @@ public:
 	void SetPlayerId(uint32 NewPlayerId);
 	void UpdatePlayerData(FVector Location);
 
+	void SetAttack(bool b_attack);
+	bool GetAttack();
+
 private:
 	UPROPERTY(EditAnywhere)
 	float m_fHP = 0.f;
@@ -278,5 +281,7 @@ private:
 
 	float Speed;
 	float PreviousSpeed;
+
+	bool b_attack = false;
 
 };

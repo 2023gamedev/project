@@ -561,7 +561,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     m_iItemBoxNumber++;
 }
 
-void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype)
+void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, bool b_attack)
 {
     UWorld* World = GetWorld();
 
@@ -584,6 +584,9 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
             BasePlayer->SetActorRotation(NewRotation);
 
             BasePlayer->UpdatePlayerData(NewLocation);
+
+            BasePlayer->SetAttack(b_attack);
+            BasePlayer->SetAttack(false);
 
             return;
         }
