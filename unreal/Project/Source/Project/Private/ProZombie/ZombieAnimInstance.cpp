@@ -50,3 +50,13 @@ void UZombieAnimInstance::PlayBeAttackedMontage()
 		Montage_Play(BeAttackedMontage, 1.f);
 	}
 }
+
+void UZombieAnimInstance::AnimNotify_AttackStart()
+{
+	OnAttackStartCheck.Broadcast();
+}
+
+//void UZombieAnimInstance::AnimNotify_AttackEnd()
+//{
+//	OnAttackEndCheck.Broadcast();
+//}

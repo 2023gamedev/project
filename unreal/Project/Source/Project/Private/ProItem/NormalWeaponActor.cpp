@@ -33,6 +33,10 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
 		BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
+		--m_fWeaponDurability;
+		if (m_fWeaponDurability <= 0) {
+			OwnerCharacter->DestroyNormalWepaonItemSlot();
+		}
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Damaged!"));
 	}
 }

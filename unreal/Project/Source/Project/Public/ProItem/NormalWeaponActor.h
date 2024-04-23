@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ItemActor.h"
 #include "Components/BoxComponent.h"
+#include "ProCharacter/BaseCharacter.h"
 #include "NormalWeaponActor.generated.h"
 
 /**
@@ -50,6 +51,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "ItmeRotate")
 	FRotator ItemHandRot;
+
+	UPROPERTY(EditAnywhere)
+	ABaseCharacter* OwnerCharacter;
 
 
 	// 무기의 스탯들
