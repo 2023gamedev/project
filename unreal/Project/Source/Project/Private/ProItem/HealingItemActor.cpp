@@ -2,6 +2,7 @@
 
 
 #include "ProItem/HealingItemActor.h"
+#include "ProCharacter/BaseCharacter.h"
 
 AHealingItemActor::AHealingItemActor()
 {

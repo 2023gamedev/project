@@ -43,6 +43,11 @@
 
 // 키 아이템
 #include "ProItem/KeyActor.h"
+#include "ProItem/KCarkey1.h"
+#include "ProItem/KCarkey2.h"
+#include "ProItem/KCarkey3.h"
+#include "ProItem/KRoofKey1.h"
+#include "ProItem/KRoofKey2.h"
 
 
 // 출혈회복 아이템
@@ -54,6 +59,7 @@
 
 
 #include "ProUI/GamePlayerUI.h"
+#include "ProUI/ConditionUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
 
@@ -102,6 +108,13 @@ ABaseCharacter::ABaseCharacter()
 
 	if (PLAYER_GAMEUI.Succeeded()) {
 		GameUIClass = PLAYER_GAMEUI.Class;
+	}
+
+
+	static ConstructorHelpers::FClassFinder <UConditionUI> PLAYER_CONDITIONUI(TEXT("/Game/UI/Condition.Condition_C"));
+
+	if (PLAYER_CONDITIONUI.Succeeded()) {
+		ConditionUIClass = PLAYER_CONDITIONUI.Class;
 	}
 
 	SpringArm->TargetArmLength = 300.f;
@@ -154,10 +167,26 @@ void ABaseCharacter::BeginPlay()
 		GameUIWidget->Character = this;
 		GameUIWidget->Init();
 		GameUIWidget->AddToViewport();
-
+		GameUIWidget->SetVisibility(ESlateVisibility::Hidden);
 
 	}
 
+	if (ConditionUIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+		
+		ConditionUIWidget = CreateWidget<UConditionUI>(controller, ConditionUIClass);
+
+		if (!ConditionUIWidget) {
+			return;
+		}
+
+		ConditionUIWidget->Character = this;
+		ConditionUIWidget->AddToViewport();
+	}
 
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -232,6 +261,21 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	SetHP(GetHP() - Damage);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+	
+	if (GetHP() <= 0) {
+		SetDead(true);
+		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+		if (nullptr != CharacterAnimInstance) {
+			CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
+			CharacterAnimInstance->SetIsDead(IsDead());
+		}
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller != nullptr) {
+			DisableInput(controller); // 이래도 움직임 좀비 죽었을때 회전이랑 캐릭터 움직이는 거 수정해야 할듯
+		}
+	}
+
+
 	return Damage;
 }
 
@@ -393,11 +437,6 @@ void ABaseCharacter::GetItem()
 			}
 		}
 
-
-		
-		//수정 필요 Datatable 받아서 아이템에 넣어줘야 하나
-		//itembox->OnChracterOvelapNew(this);
-		
 		PlayerSight->GetHitActor()->Destroy();
 	}
 
@@ -424,10 +463,23 @@ void ABaseCharacter::InventoryOnOff()
 		if (IsInventory()) {
 			SetInventory(false);
 			GameUIWidget->SetVisibility(ESlateVisibility::Hidden);
+
+			APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+			controller->bShowMouseCursor = false;
+
+			FInputModeGameOnly InputModeGameOnly;
+			controller->SetInputMode(InputModeGameOnly);
 		}
 		else {
 			SetInventory(true);
 			GameUIWidget->SetVisibility(ESlateVisibility::Visible);
+			APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+			controller->bShowMouseCursor = true;
+
+			FInputModeGameAndUI InputModeUIOnly;
+			//FInputModeUIOnly InputModeUIOnly;
+			controller->SetInputMode(InputModeUIOnly);
+
 		}
 	}
 
@@ -455,7 +507,7 @@ void ABaseCharacter::AttackCheck()
 	//}
 }
 
-void ABaseCharacter::Attack()
+void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
 	if (m_bIsAttacking) {
 		return;
@@ -476,32 +528,157 @@ void ABaseCharacter::Attack()
 
 void ABaseCharacter::QuickNWeapon()
 {
+
+	if (IsBHHandIn()) {
+		CurrentBleedingHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentBleedingHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetBHHandIn(false);
+	}
+	else if (IsHealHandIn()) {
+		CurrentHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetHealHandIn(false);
+	}
+	else if (IsKeyHandIn()) {
+		CurrentKeyItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentKeyItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetKeyHandIn(false);
+	}
+	else if (IsThrowWHandIn()) {
+		CurrentThrowWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentThrowWeapon->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetThrowWHandIn(false);
+	}
+
 	if (IsBringCurrentWeapon()) {
 		FName WeaponSocket = TEXT("RightHandSocket");
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
 		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
-		SetHandIn(true);
+		SetNWHandIn(true);
 	}
 }
 
 void ABaseCharacter::QuickBHItem()
 {
-	if (IsBringCurrentBleedingHealingItem()) {
+	if (IsNWHandIn()) {
+		CurrentWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentWeapon->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetNWHandIn(false);
+	}
+	else if (IsHealHandIn()) {
+		CurrentHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetHealHandIn(false);
+	}
+	else if (IsKeyHandIn()) {
+		CurrentKeyItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentKeyItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetKeyHandIn(false);
+	}
+	else if (IsThrowWHandIn()) {
+		CurrentThrowWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentThrowWeapon->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetThrowWHandIn(false);
+	}
 
+	if (IsBringCurrentBleedingHealingItem()) {
+		FName Socket = TEXT("RightHandSocket");
+		CurrentBleedingHealingItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
+		//CurrentBleedingHealingItem->SetActorRelativeRotation(CurrentBleedingHealingItem->ItemHandRot);
+		SetBHHandIn(true);
 	}
 }
 
 void ABaseCharacter::QuickHItem()
 {
-	if (IsBringCurrentHealingItem()) {
+	if (IsNWHandIn()) {
+		CurrentWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentWeapon->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetNWHandIn(false);
+	}
+	else if (IsBHHandIn()) {
+		CurrentBleedingHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentBleedingHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetBHHandIn(false);
+	}
+	else if (IsKeyHandIn()) {
+		CurrentKeyItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentKeyItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetKeyHandIn(false);
+	}
+	else if (IsThrowWHandIn()) {
+		CurrentThrowWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentThrowWeapon->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetThrowWHandIn(false);
+	}
 
+	if (IsBringCurrentHealingItem()) {
+		FName Socket = TEXT("RightHandSocket");
+		CurrentHealingItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
+		//CurrentBleedingHealingItem->SetActorRelativeRotation(CurrentHealingItem->ItemHandRot);
+		SetHealHandIn(true);
 	}
 }
 
 void ABaseCharacter::QuickTWeapon()
 {
-	if (IsBringCurrentThrowWeapon()) {
+	//if (IsNWHandIn()) {
+	//	CurrentWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	//	CurrentWeapon->SetActorLocation(FVector(0.f, 0.f, 0.f));
+	//  SetNWHandIn(false);
+	//}
+	//else if (IsBHHandIn()) {
+	//	CurrentBleedingHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	//	CurrentBleedingHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+	//  SetBHHandIn(false);
+	//}
+	//else if (IsKeyHandIn()) {
+	//	CurrentKeyItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	//	CurrentKeyItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+	//  SetKeyHandIn(false);
+	//}
+	//else if (IsHealHandIn()) {
+	//	CurrentHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	//	CurrentHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+	// 	SetHealHandIn(false);
+	//}
 
+	if (IsBringCurrentThrowWeapon()) {
+		//FName Socket = TEXT("RightHandSocket");
+		//CurrentThrowWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
+		//CurrentThrowWeapon->SetActorRelativeRotation(CurrentThrowWeapon->ItemHandRot);
+		//SetThrowWHandIn(true);
+	}
+}
+
+void ABaseCharacter::QuickKeyItem()
+{
+	if (IsNWHandIn()) {
+		CurrentWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentWeapon->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetNWHandIn(false);
+	}
+	else if (IsBHHandIn()) {
+		CurrentBleedingHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentBleedingHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetBHHandIn(false);
+	}
+	else if (IsThrowWHandIn()) {
+		CurrentThrowWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentThrowWeapon->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetThrowWHandIn(false);
+	}
+	else if (IsHealHandIn()) {
+		CurrentHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		CurrentHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		SetHealHandIn(false);
+	}
+
+	if (IsBringCurrentKeyItem()) {
+		FName Socket = TEXT("RightHandSocket");
+		CurrentKeyItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
+		//CurrentBleedingHealingItem->SetActorRelativeRotation(CurrentHealingItem->ItemHandRot);
+		SetKeyHandIn(true);
 	}
 }
 
@@ -519,7 +696,7 @@ void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
 		NewWeapon->SetOwner(this);
 		CurrentWeapon = NewWeapon;
 		CurrentWeapon->SetActorRelativeRotation(FRotator(0.f, 110.f, 0.f));
-		SetHandIn(true);
+		//SetHandIn(true);
 
 	}
 }
@@ -643,18 +820,50 @@ void ABaseCharacter::SpawnNormalWeapon()
 
 void ABaseCharacter::SpawnThrowWeapon()
 {
+
 }
 
 void ABaseCharacter::SpawnHealingItem()
 {
+	if (CurrentHealingItem != nullptr) {
+		DestroyHealingItem();
+	}
+	if (CurrentHealingItem == nullptr) {
+		CurrentHealingItem = GetWorld()->SpawnActor<AHDrink>(AHDrink::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		//CurrentHealingItem->ItemHandRot = FRotator(64.077023f, 42.787571f, -169.643854f);
+
+		CurrentHealingItem->OwnerCharacter = this;
+	}
+
+	SetBringCurrentHealingItem(true);
 }
 
-void ABaseCharacter::SpawnBleddingHealingItem()
+void ABaseCharacter::SpawnBleedingHealingItem()
 {
+	if (CurrentBleedingHealingItem != nullptr) {
+		DestroyHealingItem();
+	}
+	if (CurrentBleedingHealingItem == nullptr) {
+		CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHBandage>(ABHBandage::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		//CurrentHealingItem->ItemHandRot = FRotator(64.077023f, 42.787571f, -169.643854f);
+
+		CurrentBleedingHealingItem->OwnerCharacter = this;
+	}
+
+	SetBringCurrentBleedingHealingItem(true);
 }
 
 void ABaseCharacter::SpawnKeyItem()
 {
+	if (CurrentKeyItem != nullptr) {
+		DestroyHealingItem();
+	}
+	if (CurrentKeyItem == nullptr) {
+		CurrentKeyItem = GetWorld()->SpawnActor<AKCarkey1>(AKCarkey1::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		//CurrentHealingItem->ItemHandRot = FRotator(64.077023f, 42.787571f, -169.643854f);
+	}
+
+	SetBringCurrentKeyItem(true);
 }
 
 void ABaseCharacter::DestroyNormalWeapon()
@@ -665,18 +874,26 @@ void ABaseCharacter::DestroyNormalWeapon()
 
 void ABaseCharacter::DestroyThrowWeapon()
 {
+	CurrentThrowWeapon->Destroy();
+	CurrentThrowWeapon = nullptr;
 }
 
 void ABaseCharacter::DestroyHealingItem()
 {
+	CurrentHealingItem->Destroy();
+	CurrentHealingItem = nullptr;
 }
 
-void ABaseCharacter::DestroyBleddingHealingItem()
+void ABaseCharacter::DestroyBleedingHealingItem()
 {
+	CurrentBleedingHealingItem->Destroy();
+	CurrentBleedingHealingItem = nullptr;
 }
 
 void ABaseCharacter::DestroyKeyItem()
 {
+	CurrentKeyItem->Destroy();
+	CurrentKeyItem = nullptr;
 }
 
 void ABaseCharacter::DestroyNormalWepaonItemSlot()
@@ -691,6 +908,94 @@ void ABaseCharacter::DestroyNormalWepaonItemSlot()
 
 	int slotindex = QuickSlot[4].SlotReference;
 	QuickSlot[4].SlotReference = -1;
+
+	Inventory[slotindex].Type = EItemType::ITEM_NONE;
+	Inventory[slotindex].Name = "nullptr";
+	Inventory[slotindex].ItemClassType = EItemClass::NONE;
+	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	Inventory[slotindex].Count = 0;
+
+	GameUIUpdate();
+}
+
+void ABaseCharacter::DestroyThrowWeaponItemSlot()
+{
+	DestroyHealingItem();
+
+	QuickSlot[2].Type = EItemType::ITEM_QUICK_NONE;
+	QuickSlot[2].Name = "nullptr";
+	QuickSlot[2].ItemClassType = EItemClass::NONE;
+	QuickSlot[2].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	QuickSlot[2].Count = 0;
+
+	int slotindex = QuickSlot[2].SlotReference;
+	QuickSlot[2].SlotReference = -1;
+
+	Inventory[slotindex].Type = EItemType::ITEM_NONE;
+	Inventory[slotindex].Name = "nullptr";
+	Inventory[slotindex].ItemClassType = EItemClass::NONE;
+	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	Inventory[slotindex].Count = 0;
+
+	GameUIUpdate();
+}
+
+void ABaseCharacter::DestroyHealingItemSlot()
+{
+	DestroyHealingItem();
+
+	QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
+	QuickSlot[1].Name = "nullptr";
+	QuickSlot[1].ItemClassType = EItemClass::NONE;
+	QuickSlot[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	QuickSlot[1].Count = 0;
+
+	int slotindex = QuickSlot[1].SlotReference;
+	QuickSlot[1].SlotReference = -1;
+
+	Inventory[slotindex].Type = EItemType::ITEM_NONE;
+	Inventory[slotindex].Name = "nullptr";
+	Inventory[slotindex].ItemClassType = EItemClass::NONE;
+	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	Inventory[slotindex].Count = 0;
+
+	GameUIUpdate();
+}
+
+void ABaseCharacter::DestroyBleedingHealingItemSlot()
+{
+	DestroyBleedingHealingItem();
+
+	QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
+	QuickSlot[0].Name = "nullptr";
+	QuickSlot[0].ItemClassType = EItemClass::NONE;
+	QuickSlot[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	QuickSlot[0].Count = 0;
+
+	int slotindex = QuickSlot[0].SlotReference;
+	QuickSlot[0].SlotReference = -1;
+
+	Inventory[slotindex].Type = EItemType::ITEM_NONE;
+	Inventory[slotindex].Name = "nullptr";
+	Inventory[slotindex].ItemClassType = EItemClass::NONE;
+	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	Inventory[slotindex].Count = 0;
+
+	GameUIUpdate();
+}
+
+void ABaseCharacter::DestroyKeyItemSlot()
+{
+	DestroyKeyItem();
+
+	QuickSlot[3].Type = EItemType::ITEM_QUICK_NONE;
+	QuickSlot[3].Name = "nullptr";
+	QuickSlot[3].ItemClassType = EItemClass::NONE;
+	QuickSlot[3].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	QuickSlot[3].Count = 0;
+
+	int slotindex = QuickSlot[3].SlotReference;
+	QuickSlot[3].SlotReference = -1;
 
 	Inventory[slotindex].Type = EItemType::ITEM_NONE;
 	Inventory[slotindex].Name = "nullptr";

@@ -19,4 +19,6 @@ ABHBandage::ABHBandage()
 	BleedingHealingItem->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fHealingSuccessProbability = 0.8f;
+
+	BHName = "Bandage";
 }

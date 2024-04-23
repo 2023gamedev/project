@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "ItemActor.h"
 #include "Components/BoxComponent.h"
-#include "ProCharacter/BaseCharacter.h"
 #include "NormalWeaponActor.generated.h"
 
 /**
@@ -13,6 +12,7 @@
  */
 
 // 무기 액터
+class ABaseCharacter;
 
 UCLASS()
 class PROJECT_API ANormalWeaponActor : public AItemActor
@@ -54,6 +54,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	ABaseCharacter* OwnerCharacter;
+
+	UPROPERTY(EditAnywhere)
+	FName WeaponName;
 
 
 	// 무기의 스탯들

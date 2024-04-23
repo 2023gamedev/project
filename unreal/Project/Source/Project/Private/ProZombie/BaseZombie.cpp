@@ -3,6 +3,7 @@
 
 #include "ProZombie/BaseZombie.h"
 #include "Engine/DamageEvents.h"
+#include "AIController.h"
 #include "ProZombie/ZombieAnimInstance.h"
 
 // Sets default values
@@ -15,7 +16,6 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.f, 0.0f);
-	GetMesh()->SetCollisionProfileName("Zombie");
 	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
 
 	
@@ -70,8 +70,49 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	SetHP(GetHP() - Damage);
 	BeAttacked();
+
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	return Damage;
+}
+
+void ABaseZombie::SetNormalDeadWithAnim()
+{
+	m_bIsNormalDead = true;
+	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr != CharacterAnimInstance) {
+		CharacterAnimInstance->SetIsNormalDead(m_bIsNormalDead);
+	}
+	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+
+	StartResurrectionTimer();
+
+	//// aicontroller 움직임을 멈추기 위해 코딩(회전을 해버려서), 근데도 회전함 수정 필요
+	//auto AIController = Cast<AAIController>(GetController());
+	//if (nullptr != AIController) {
+	//	AIController->StopMovement();
+	//	AIController->bSetControlRotationFromPawnOrientation = false;
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("StopMovement")));
+	//}
+}
+
+void ABaseZombie::SetCuttingDeadWithAnim()
+{
+	m_bIsCuttingDead = true;
+	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr != CharacterAnimInstance) {
+		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
+	}
+	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+
+	StartResurrectionTimer();
+
+	//// aicontroller 움직임을 멈추기 위해 코딩(회전을 해버려서), 근데도 회전함 수정 필요
+	//auto AIController = Cast<AAIController>(GetController());
+	//if (nullptr != AIController) {
+	//	AIController->StopMovement();
+	//	AIController->bSetControlRotationFromPawnOrientation = false;
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("StopMovement")));
+	//}
 }
 
 void ABaseZombie::Attack()
@@ -161,6 +202,7 @@ void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 	SetShouted(true);
 	UE_LOG(LogTemp, Error, TEXT("bIsShouted true"));
 	m_DShoutingEnd.Broadcast();
+
 }
 
 void ABaseZombie::BeAttacked()
@@ -183,6 +225,8 @@ void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 }
 
+
+
 void ABaseZombie::SetZombieId(uint32 NewZombieId)
 {
 	ZombieId = NewZombieId;
@@ -197,5 +241,54 @@ void ABaseZombie::UpdateZombieData(FVector Location)
 {
 	NewLocation = Location;
 }
+
+void ABaseZombie::StartResurrectionTimer()
+{
+
+	if (m_bIsNormalDead) {
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 30.0f, false);
+	}
+	else if (m_bIsCuttingDead) {
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 60.0f, false);
+	}
+
+}
+
+
+void ABaseZombie::ResurrectionTimerElapsed()
+{
+
+	m_bIsCuttingDead = false;
+	m_bIsNormalDead = false;
+
+
+	m_bIsStanding = true;
+	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr != CharacterAnimInstance) {
+		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
+	}
+	StartWatiingTimer();
+}
+
+void ABaseZombie::StartWatiingTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);
+}
+
+void ABaseZombie::WaittingTimerElapsed()
+{
+	m_bIsStanding = false;
+	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr != CharacterAnimInstance) {
+		CharacterAnimInstance->SetIsNormalDead(m_bIsNormalDead);
+		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
+		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
+	}
+	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
+	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
+	SetHP(GetStartHP());
+}
+
+
 
 

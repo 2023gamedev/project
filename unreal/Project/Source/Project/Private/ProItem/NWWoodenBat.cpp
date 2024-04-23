@@ -28,5 +28,5 @@ ANWWoodenBat::ANWWoodenBat()
 	m_fWeaponSTR		= 4.f;
 	m_fWeaponDurability = 8.f;
 	m_fWeaponRange		= 2.f;
-
+	WeaponName = "WoodenBat";
 }

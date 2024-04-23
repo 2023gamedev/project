@@ -9,6 +9,8 @@
 /**
  * 
  */
+class ABaseCharacter;
+
 UCLASS()
 class PROJECT_API AHealingItemActor : public AItemActor
 {
@@ -28,7 +30,7 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, Category = HealingItem)
-	USkeletalMeshComponent* HealingItem;
+	UStaticMeshComponent* HealingItem;
 
 	// 무기의 스탯들
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
@@ -36,4 +38,10 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fHealingDuration;
+
+	UPROPERTY(EditAnywhere)
+	ABaseCharacter* OwnerCharacter;
+
+	UPROPERTY(EditAnywhere)
+	FName HName;
 };

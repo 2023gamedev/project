@@ -25,6 +25,7 @@ ANormalZombie::ANormalZombie()
 
 
 	SetHP(20);
+	SetStartHP(20);
 	SetSpeed(2);
 	GetCharacterMovement()->MaxWalkSpeed = 200.f;
 	SetSTR(FMath::RandRange(4, 8));

@@ -30,5 +30,5 @@ ANWMagicStick::ANWMagicStick()
 	m_fWeaponSTR		= 2.f;
 	m_fWeaponDurability = 5.f;
 	m_fWeaponRange		= 2.f;
-
+	WeaponName = "MagicStick";
 }
