@@ -68,6 +68,8 @@ public:
 
 	FAttackEndDelegate m_DAttackEnd;
 
+	void AttackCheck();
+
 
 	void Shouting();
 
@@ -121,6 +123,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool m_bSpecialAbility = false;
 
+	UPROPERTY(EditAnywhere)
+	float m_fAttackRadius = 50.f;
+
+	UPROPERTY(EditAnywhere)
+	float m_fAttackRange = 100.f;
 
 public:
 	uint32 ZombieId;

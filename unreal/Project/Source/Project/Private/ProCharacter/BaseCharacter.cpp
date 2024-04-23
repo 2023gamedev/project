@@ -57,7 +57,7 @@
 #include "ProCharacter/PlayerCharacterController.h"
 
 
-#include "Engine/DamageEvents.h"
+
 
 
 // Sets default values
@@ -229,6 +229,9 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	SetHP(GetHP() - Damage);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	return Damage;
 }
 
