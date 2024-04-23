@@ -163,6 +163,20 @@ void ABaseCharacter::BeginPlay()
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
+	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
+		if (CurrentWeapon != nullptr) {
+			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
+		}
+		});
+
+	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
+		if (CurrentWeapon != nullptr) {
+			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
+		}
+		});
+
+
+
 }
 
 // Called every frame
@@ -198,6 +212,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 		PreviousSpeed = GetVelocity().Size();
 	}
+
 
 }
 
@@ -247,6 +262,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 			QuickSlot[0].ItemClassType = EItemClass::NONE;
 			QuickSlot[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 			QuickSlot[0].Count = 0;
+			QuickSlot[0].SlotReference = -1;
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::HEALINGITEM) {
 			QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
@@ -254,6 +270,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 			QuickSlot[1].ItemClassType = EItemClass::NONE;
 			QuickSlot[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 			QuickSlot[1].Count = 0;
+			QuickSlot[1].SlotReference = -1;
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::THROWINGWEAPON) {
 			QuickSlot[2].Type = EItemType::ITEM_QUICK_NONE;
@@ -261,6 +278,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 			QuickSlot[2].ItemClassType = EItemClass::NONE;
 			QuickSlot[2].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 			QuickSlot[2].Count = 0;
+			QuickSlot[2].SlotReference = -1;
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::KEYITEM) {
 			QuickSlot[3].Type = EItemType::ITEM_QUICK_NONE;
@@ -268,6 +286,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 			QuickSlot[3].ItemClassType = EItemClass::NONE;
 			QuickSlot[3].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 			QuickSlot[3].Count = 0;
+			QuickSlot[3].SlotReference = -1;
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::NORMALWEAPON) {
 			QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
@@ -275,6 +294,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 			QuickSlot[4].ItemClassType = EItemClass::NONE;
 			QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 			QuickSlot[4].Count = 0;
+			QuickSlot[4].SlotReference = -1;
 		}
 
 	}
@@ -441,12 +461,11 @@ void ABaseCharacter::Attack()
 
 	AnimInstance->PlayAttackMontage();
 	m_bIsAttacking = true;
-	if (CurrentWeapon != nullptr) {
-		CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Attack"));
-	}
+	//if (CurrentWeapon != nullptr) {
+	//	CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Attack"));
+	//}
 
-	// AttackCheck();
 	m_DAttackEnd.AddLambda([this]() -> void {
 		m_bIsAttacking = false;
 		});
@@ -610,6 +629,8 @@ void ABaseCharacter::SpawnNormalWeapon()
 			//CurrentWeapon->ItemHandPos();
 			CurrentWeapon->ItemHandRot = FRotator(10.798949f, 55.030625f, -11.533303f);
 		}
+
+		CurrentWeapon->OwnerCharacter = this;
 		CurrentWeapon->m_fCharacterSTR = m_fSTR;
 	}
 	
@@ -636,6 +657,7 @@ void ABaseCharacter::SpawnKeyItem()
 void ABaseCharacter::DestroyNormalWeapon()
 {
 	CurrentWeapon->Destroy();
+	CurrentWeapon = nullptr;
 }
 
 void ABaseCharacter::DestroyThrowWeapon()
@@ -652,6 +674,28 @@ void ABaseCharacter::DestroyBleddingHealingItem()
 
 void ABaseCharacter::DestroyKeyItem()
 {
+}
+
+void ABaseCharacter::DestroyNormalWepaonItemSlot()
+{
+	DestroyNormalWeapon();
+
+	QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
+	QuickSlot[4].Name = "nullptr";
+	QuickSlot[4].ItemClassType = EItemClass::NONE;
+	QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	QuickSlot[4].Count = 0;
+
+	int slotindex = QuickSlot[4].SlotReference;
+	QuickSlot[4].SlotReference = -1;
+
+	Inventory[slotindex].Type = EItemType::ITEM_NONE;
+	Inventory[slotindex].Name = "nullptr";
+	Inventory[slotindex].ItemClassType = EItemClass::NONE;
+	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	Inventory[slotindex].Count = 0;
+
+	GameUIUpdate();
 }
 
 uint32 ABaseCharacter::GetPlayerId() const

@@ -161,6 +161,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			Character->QuickSlot[0].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 			Character->QuickSlot[0].Texture = Character->Inventory[SlotIndex].Texture;
 			Character->QuickSlot[0].Count = Character->Inventory[SlotIndex].Count;
+			Character->QuickSlot[0].SlotReference = SlotIndex;
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("BLEEDINGHEALINGITEM!"));
 			break;
@@ -170,6 +171,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			Character->QuickSlot[1].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 			Character->QuickSlot[1].Texture = Character->Inventory[SlotIndex].Texture;
 			Character->QuickSlot[1].Count = Character->Inventory[SlotIndex].Count;
+			Character->QuickSlot[1].SlotReference = SlotIndex;
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEALINGITEM!"));
 			break;
@@ -179,6 +181,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			Character->QuickSlot[2].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 			Character->QuickSlot[2].Texture = Character->Inventory[SlotIndex].Texture;
 			Character->QuickSlot[2].Count = Character->Inventory[SlotIndex].Count;
+			Character->QuickSlot[2].SlotReference = SlotIndex;
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("THROWINGWEAPON!"));
 			break;
@@ -188,6 +191,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			Character->QuickSlot[3].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 			Character->QuickSlot[3].Texture = Character->Inventory[SlotIndex].Texture;
 			Character->QuickSlot[3].Count = Character->Inventory[SlotIndex].Count;
+			Character->QuickSlot[3].SlotReference = SlotIndex;
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("KEYITEM!"));
 			break;
@@ -198,6 +202,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 				Character->QuickSlot[4].Texture = Character->Inventory[SlotIndex].Texture;
 				Character->QuickSlot[4].Count = Character->Inventory[SlotIndex].Count;
+				Character->QuickSlot[4].SlotReference = SlotIndex;
 
 				Character->SpawnNormalWeapon();
 			}
@@ -207,6 +212,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].ItemClassType = EItemClass::NONE;
 				Character->QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				Character->QuickSlot[4].Count = 0;
+				Character->QuickSlot[4].SlotReference = -1;
 			}
 
 			

@@ -10,6 +10,10 @@
  * 
  */
 // Player 캐릭터에 애님인스턴스
+
+DECLARE_MULTICAST_DELEGATE(FOnAttackStartCheckDelegate)
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndCheckDelegate)
+
 UCLASS()
 class PROJECT_API UPlayerCharacterAnimInstance : public UAnimInstance
 {
@@ -22,7 +26,15 @@ public:
 
 	void PlayAttackMontage();
 
+	FOnAttackStartCheckDelegate OnAttackStartCheck;
+	FOnAttackEndCheckDelegate OnAttackEndCheck;
 private:
+	UFUNCTION()
+	void AnimNotify_AttackStart();
+
+	UFUNCTION()
+	void AnimNotify_AttackEnd();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float m_fCurrentPawnSpeed;
 

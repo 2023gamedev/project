@@ -40,3 +40,15 @@ void UPlayerCharacterAnimInstance::PlayAttackMontage()
 		Montage_Play(AttackMontage, 1.f);
 	}
 }
+
+void UPlayerCharacterAnimInstance::AnimNotify_AttackStart()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackStart"));
+	OnAttackStartCheck.Broadcast();
+}
+
+void UPlayerCharacterAnimInstance::AnimNotify_AttackEnd()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackEnd"));
+	OnAttackEndCheck.Broadcast();
+}

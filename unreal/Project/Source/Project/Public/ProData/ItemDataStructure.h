@@ -63,7 +63,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Count;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) // Äü½½·Ô¸¸ ÇØ´ç
+	int SlotReference;
 };
 
 UENUM(BlueprintType)
