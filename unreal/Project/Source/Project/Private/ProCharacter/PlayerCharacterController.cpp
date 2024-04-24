@@ -96,7 +96,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 	if (MyCharacter)
 	{
 		b_attack = MyCharacter->GetAttack();
-		UE_LOG(LogNet, Display, TEXT("Update Other Player: b_attack=%d"), b_attack);
+		//UE_LOG(LogNet, Display, TEXT("Update Other Player: b_attack=%d"), b_attack);
 	}
 
 	
@@ -276,8 +276,8 @@ void APlayerCharacterController::InventoryOnOff(const FInputActionValue& Value)
 void APlayerCharacterController::Attck(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	basecharacter->Attack();
 	basecharacter->SetAttack(true);
+	UE_LOG(LogTemp, Warning, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }
 
 void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)

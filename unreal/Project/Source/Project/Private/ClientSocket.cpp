@@ -163,7 +163,6 @@ bool ClientSocket::Send(const int SendSize, void* SendData)
 {
 	char buff[BUFSIZE];
 	memcpy(buff, SendData, SendSize);
-
 	int nSendLen = send(Socket, buff, SendSize, 0);
 
 	return true;

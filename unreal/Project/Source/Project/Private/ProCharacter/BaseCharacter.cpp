@@ -470,7 +470,8 @@ void ABaseCharacter::Attack()
 	//}
 
 	m_DAttackEnd.AddLambda([this]() -> void {
-		m_bIsAttacking = false;
+		SetAttack(false);
+		UE_LOG(LogTemp, Warning, TEXT("AttackEnd: %d"), PlayerId);
 		});
 }
 
@@ -718,10 +719,14 @@ void ABaseCharacter::UpdatePlayerData(FVector Location)
 
 void ABaseCharacter::SetAttack(bool bAttack)
 {
-	b_attack = bAttack;
-	if (b_attack)
+	if (b_attack != bAttack)
 	{
-		Attack();
+		UE_LOG(LogTemp, Warning, TEXT("SetAttack from %d to %d"), b_attack, bAttack);
+		b_attack = bAttack;
+		if (b_attack)
+		{
+			Attack();
+		}
 	}
 }
 
