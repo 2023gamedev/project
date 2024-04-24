@@ -32,11 +32,15 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	void SetZombieName(FString zombiename) { m_sZombieName = zombiename; };
-	FString GetZombieName() { return m_sZombieName; }
+
+	void SetZombieName(FName zombiename) { m_sZombieName = zombiename; };
+	FName GetZombieName() { return m_sZombieName; }
 
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
+
+	float GetStartHP() { return m_fStartHP; }
+	void SetStartHP(float hp) { m_fStartHP = hp; }
 
 	float GetSTR() { return m_fSTR; }
 	void SetSTR(float str) { m_fSTR = str; }
@@ -84,6 +88,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bBeAttacked = false;
 
+	void SetNormalDeadWithAnim();
+	void SetCuttingDeadWithAnim();
+
 
 	void SetZombieId(uint32 NewPlayerId);
 	uint32 GetZombieId() const;
@@ -96,17 +103,42 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bIsShouted = false; // 소리쳤는지
 
+	UPROPERTY(EditAnywhere)
+	bool m_bIsNormalDead = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsCuttingDead = false;
+
 	FShoutingEndDelegate m_DShoutingEnd;
 
 
 	UPROPERTY(EditAnywhere)
-	FString m_sZombieName;
+	FName m_sZombieName;
 
+	// TimerHandle 30초 뒤에 부활하기 위해
+	FTimerHandle ResurrectionHandle;
+
+	void StartResurrectionTimer();
+
+	void ResurrectionTimerElapsed();
+
+
+	FTimerHandle WattingHandle;
+
+	void StartWatiingTimer();
+
+	void WaittingTimerElapsed();
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsStanding = false;
 
 private:
 
 	UPROPERTY(EditAnywhere)
 	float m_fHP = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float m_fStartHP = 0.f;
 	
 	UPROPERTY(EditAnywhere)
 	float m_fSTR = 0.f;
@@ -128,6 +160,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float m_fAttackRange = 100.f;
+
 
 public:
 	uint32 ZombieId;

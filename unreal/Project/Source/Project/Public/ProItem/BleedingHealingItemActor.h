@@ -9,6 +9,8 @@
 /**
  * 
  */
+
+class ABaseCharacter;
 UCLASS()
 class PROJECT_API ABleedingHealingItemActor : public AItemActor
 {
@@ -33,4 +35,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fHealingSuccessProbability;
 
+	UPROPERTY(EditAnywhere)
+	ABaseCharacter* OwnerCharacter;
+
+	UPROPERTY(EditAnywhere)
+	FName BHName;
 };

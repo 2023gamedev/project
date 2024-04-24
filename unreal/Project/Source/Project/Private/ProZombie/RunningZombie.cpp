@@ -24,6 +24,7 @@ ARunningZombie::ARunningZombie()
 
 
 	SetHP(20);
+	SetStartHP(20);
 	SetSpeed(4);
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	SetSTR(FMath::RandRange(4, 8)); 

@@ -19,4 +19,6 @@ ABHGauze::ABHGauze()
 	BleedingHealingItem->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fHealingSuccessProbability = 0.5f;
+
+	BHName = "Gauze";
 }

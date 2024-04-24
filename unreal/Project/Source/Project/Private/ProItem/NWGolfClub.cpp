@@ -29,5 +29,5 @@ ANWGolfClub::ANWGolfClub()
 	m_fWeaponSTR = 6.f;
 	m_fWeaponDurability = 8.f;
 	m_fWeaponRange = 3.f;
-
+	WeaponName = "GolfClub";
 }

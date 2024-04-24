@@ -19,4 +19,6 @@ ABHClothes::ABHClothes()
 	BleedingHealingItem->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fHealingSuccessProbability = 0.5f;
+
+	BHName = "Clothes";
 }

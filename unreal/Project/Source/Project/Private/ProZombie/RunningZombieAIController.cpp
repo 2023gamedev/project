@@ -35,7 +35,6 @@ void ARunningZombieAIController::BeginPlay()
 
 	if (RunningZombieAIBehavior != nullptr) {
 		RunBehaviorTree(RunningZombieAIBehavior);
-
 	}
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));

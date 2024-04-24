@@ -6,6 +6,9 @@
 UZombieAnimInstance::UZombieAnimInstance()
 {
 	m_fCurrentPawnSpeed = 0.f;
+	m_bIsNormalDead = false;
+	m_bIsCuttingDead = false;
+	m_bIsStanding = false;
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMAttackZombie.BP_AMAttackZombie"));
 	if (ATTACK_MONTAGE.Succeeded()) {

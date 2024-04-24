@@ -3,3 +3,11 @@
 
 #include "ProItem/KeyActor.h"
 
+AKeyActor::AKeyActor()
+{
+}
+
+void AKeyActor::BeginPlay()
+{
+	Super::BeginPlay();
+}

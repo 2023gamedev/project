@@ -2,6 +2,7 @@
 
 
 #include "ProItem/BleedingHealingItemActor.h"
+#include "ProCharacter/BaseCharacter.h"
 
 ABleedingHealingItemActor::ABleedingHealingItemActor()
 {

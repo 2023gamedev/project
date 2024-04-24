@@ -28,5 +28,6 @@ ANWBook::ANWBook()
 	m_fWeaponSTR = 3.f;
 	m_fWeaponDurability = 7.f;
 	m_fWeaponRange = 1.f;
+	WeaponName = "Book";
 
 }
