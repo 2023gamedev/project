@@ -55,8 +55,8 @@ void IOCP_CORE::CheckThisCPUcoreCount()
 {
 	SYSTEM_INFO si;
 	GetSystemInfo(&si);
-	cpuCore = static_cast<int>(si.dwNumberOfProcessors) * 2;
-	printf("CPU Core Count = %d, threads = %d\n", cpuCore / 2, cpuCore);
+	cpuCore = static_cast<int>(si.dwNumberOfProcessors);
+	printf("CPU Core Count = %d, threads = %d\n", cpuCore, cpuCore);
 }
 
 void IOCP_CORE::IOCP_MakeWorkerThreads()

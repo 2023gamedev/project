@@ -111,7 +111,14 @@ void AZombieAIController::Tick(float DeltaTime)
 		}
 	}
 
-	CheckAndSendMovement();
+	static const float Timer = 1.0f;
+	static float CheckTime = 0.0f;
+
+	CheckTime += DeltaTime;
+	if(CheckTime >= Timer){
+		CheckTime = 0.0f;
+		CheckAndSendMovement();
+	}
 
 	while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 	{
