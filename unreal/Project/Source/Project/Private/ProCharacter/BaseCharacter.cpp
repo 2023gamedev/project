@@ -192,6 +192,7 @@ void ABaseCharacter::BeginPlay()
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
+
 	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
 		if (CurrentWeapon != nullptr) {
 			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
@@ -363,6 +364,9 @@ void ABaseCharacter::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bIsAttacking = false;
 	m_DAttackEnd.Broadcast();
+
+	m_bIsPickUping = false;
+	m_DPickUpEnd.Broadcast();
 }
 
 
@@ -423,7 +427,7 @@ void ABaseCharacter::GetItem()
 	if (PlayerSight->GetIsHit()) {
 		
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
-
+		PickUp();
 		// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 		for (int i = 0; i < 20; ++i) {
 			if (Inventory[i].Type == EItemType::ITEM_NONE) {
@@ -516,14 +520,25 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링
 
 	AnimInstance->PlayAttackMontage();
 	m_bIsAttacking = true;
-	//if (CurrentWeapon != nullptr) {
-	//	CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Attack"));
-	//}
 
 	m_DAttackEnd.AddLambda([this]() -> void {
 		SetAttack(false);
 		UE_LOG(LogTemp, Warning, TEXT("AttackEnd: %d"), PlayerId);
+		});
+}
+
+void ABaseCharacter::PickUp()
+{
+	if (m_bIsPickUping) {
+		return;
+	}
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	AnimInstance->PlayPickUpMontage();
+	m_bIsPickUping = true;
+
+	m_DPickUpEnd.AddLambda([this]() -> void {
+		m_bIsPickUping = false;
 		});
 }
 
@@ -801,7 +816,7 @@ void ABaseCharacter::SpawnNormalWeapon()
 		if (QuickSlot[4].Name == "SquareWood") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWSquareWood>(ANWSquareWood::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator); 
 			// CurrentWeapon->ItemHandPos();
-			CurrentWeapon->ItemHandRot = FRotator(-79.999863f, 179.99993f, -179.999921f);
+			CurrentWeapon->ItemHandRot = FRotator(-79.094971f, 63.174097f, -97.998577f);
 		}
 		
 

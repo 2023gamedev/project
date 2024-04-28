@@ -24,7 +24,7 @@ ANWSquareWood::ANWSquareWood()
 		NormalWeapon->SetStaticMesh(SM_SQUREWOOD.Object);
 	}
 
-
+	
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision")); // 충돌 프리셋은 변경될 수도 있다.
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 

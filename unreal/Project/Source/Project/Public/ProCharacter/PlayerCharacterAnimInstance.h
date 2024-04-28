@@ -26,6 +26,7 @@ public:
 	void SetIsDead(bool dead) { m_bIsDead = dead; }
 
 	void PlayAttackMontage();
+	void PlayPickUpMontage();
 
 	FOnAttackStartCheckDelegate OnAttackStartCheck;
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
@@ -51,4 +52,8 @@ private:
 	// 局聪皋捞记 根鸥林
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
+
+	// 局聪皋捞记 根鸥林
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* PickUpMontage;
 };

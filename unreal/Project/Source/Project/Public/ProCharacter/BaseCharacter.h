@@ -27,6 +27,7 @@ class AKeyActor;
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
 DECLARE_MULTICAST_DELEGATE(FAttackEndPlayerDelegate);
+DECLARE_MULTICAST_DELEGATE(FPickUpEndPlayerDelegate);
 
 // 플레이어 캐릭터들의 부모클래스
 UCLASS()
@@ -128,6 +129,9 @@ public:
 
 	FAttackEndPlayerDelegate m_DAttackEnd;
 	void Attack();
+
+	FPickUpEndPlayerDelegate m_DPickUpEnd;
+	void PickUp();
 
 	void QuickNWeapon();
 	void QuickBHItem();
@@ -286,6 +290,9 @@ private:
 	// 어택
 	UPROPERTY(EditAnywhere)
 	bool m_bIsAttacking = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsPickUping = false;
 
 	// 손전등이 켜져있는지
 	UPROPERTY(EditAnywhere)
