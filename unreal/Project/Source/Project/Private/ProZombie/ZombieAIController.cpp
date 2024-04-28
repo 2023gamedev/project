@@ -111,7 +111,7 @@ void AZombieAIController::Tick(float DeltaTime)
 		}
 	}
 
-	static const float Timer = 1.0f;
+	static const float Timer = 0.01f;
 	static float CheckTime = 0.0f;
 
 	CheckTime += DeltaTime;

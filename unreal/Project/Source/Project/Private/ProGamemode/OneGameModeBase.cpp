@@ -586,7 +586,6 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
             BasePlayer->UpdatePlayerData(NewLocation);
 
             BasePlayer->SetAttack(b_attack);
-            BasePlayer->SetAttack(false);
             UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), PlayerID, b_attack);
 
             return;

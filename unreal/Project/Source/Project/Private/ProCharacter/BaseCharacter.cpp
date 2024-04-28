@@ -522,7 +522,7 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링
 	m_bIsAttacking = true;
 
 	m_DAttackEnd.AddLambda([this]() -> void {
-		SetAttack(false);
+		m_bIsAttacking = false;
 		UE_LOG(LogTemp, Warning, TEXT("AttackEnd: %d"), PlayerId);
 		});
 }
@@ -1039,14 +1039,12 @@ void ABaseCharacter::UpdatePlayerData(FVector Location)
 
 void ABaseCharacter::SetAttack(bool bAttack)
 {
-	if (b_attack != bAttack)
+	b_attack = bAttack;
+	UE_LOG(LogTemp, Warning, TEXT("SetAttack from %d to %d"), b_attack, bAttack);
+	if (b_attack)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SetAttack from %d to %d"), b_attack, bAttack);
-		b_attack = bAttack;
-		if (b_attack)
-		{
-			Attack();
-		}
+		Attack();
+		b_attack = false;
 	}
 }
 
