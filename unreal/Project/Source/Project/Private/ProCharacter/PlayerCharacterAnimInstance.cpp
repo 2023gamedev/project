@@ -16,6 +16,11 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 	if (ATTACK_MONTAGE.Succeeded()) {
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> PICKUP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeePickup.BP_AMEmployeePickup"));
+	if (PICKUP_MONTAGE.Succeeded()) {
+		PickUpMontage = PICKUP_MONTAGE.Object;
+	}
 }
 
 void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -39,6 +44,13 @@ void UPlayerCharacterAnimInstance::PlayAttackMontage()
 {
 	if (!Montage_IsPlaying(AttackMontage)) {
 		Montage_Play(AttackMontage, 1.f);
+	}
+}
+
+void UPlayerCharacterAnimInstance::PlayPickUpMontage()
+{
+	if (!Montage_IsPlaying(PickUpMontage)) {
+		Montage_Play(PickUpMontage, 3.f);
 	}
 }
 
