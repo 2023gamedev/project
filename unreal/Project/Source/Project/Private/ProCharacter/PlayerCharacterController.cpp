@@ -92,43 +92,43 @@ void APlayerCharacterController::CheckAndSendMovement()
 	FRotator CurrentRotation = MyPawn->GetActorRotation();
 	
 	ABaseCharacter* MyCharacter = Cast<ABaseCharacter>(MyPawn);
-	bool b_attack = false;
 	if (MyCharacter)
 	{
 		b_attack = MyCharacter->GetAttack();
-		//UE_LOG(LogNet, Display, TEXT("Update Other Player: b_attack=%d"), b_attack);
+		UE_LOG(LogNet, Display, TEXT("Update Other Player: b_attack=%d"), b_attack);
 	}
 
 	
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	//if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation){}
-	uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-	MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_attack) {
+		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
 
-	// Protobuf를 사용하여 TestPacket 생성
-	Protocol::Character packet;
-	packet.set_playerid(MyPlayerId);
-	packet.set_packet_type(1); // 원하는 유형 설정
-	packet.set_charactertype(MyCharacterNumber);
-	packet.set_x(CurrentLocation.X);
-	packet.set_y(CurrentLocation.Y);
-	packet.set_z(CurrentLocation.Z);
-	packet.set_pitch(CurrentRotation.Pitch);
-	packet.set_yaw(CurrentRotation.Yaw);
-	packet.set_roll(CurrentRotation.Roll);
-	packet.set_attack(b_attack);
-	packet.set_isingame(true);
+		// Protobuf를 사용하여 TestPacket 생성
+		Protocol::Character packet;
+		packet.set_playerid(MyPlayerId);
+		packet.set_packet_type(1); // 원하는 유형 설정
+		packet.set_charactertype(MyCharacterNumber);
+		packet.set_x(CurrentLocation.X);
+		packet.set_y(CurrentLocation.Y);
+		packet.set_z(CurrentLocation.Z);
+		packet.set_pitch(CurrentRotation.Pitch);
+		packet.set_yaw(CurrentRotation.Yaw);
+		packet.set_roll(CurrentRotation.Roll);
+		packet.set_attack(b_attack);
+		packet.set_isingame(true);
 
-	// 직렬화
-	std::string serializedData;
-	packet.SerializeToString(&serializedData);
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
 
-	// 직렬화된 데이터를 서버로 전송
-	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+		// 직렬화된 데이터를 서버로 전송
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
-	// 현재 위치를 이전 위치로 업데이트
-	PreviousLocation = CurrentLocation;
-	PreviousRotation = CurrentRotation;
+		// 현재 위치를 이전 위치로 업데이트
+		PreviousLocation = CurrentLocation;
+		PreviousRotation = CurrentRotation;
+	}
 }
 
 void APlayerCharacterController::SetupInputComponent()

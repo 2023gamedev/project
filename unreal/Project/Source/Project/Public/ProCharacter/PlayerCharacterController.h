@@ -78,5 +78,6 @@ public:
 	uint32 MyCharacterNumber;
 	uint32 OtherCharacterNumber;
 	FVector NewLocation;
+	bool b_attack = false;
 
 };

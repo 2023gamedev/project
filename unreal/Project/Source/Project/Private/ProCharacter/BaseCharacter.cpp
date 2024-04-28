@@ -1040,7 +1040,7 @@ void ABaseCharacter::UpdatePlayerData(FVector Location)
 void ABaseCharacter::SetAttack(bool bAttack)
 {
 	b_attack = bAttack;
-	UE_LOG(LogTemp, Warning, TEXT("SetAttack from %d to %d"), b_attack, bAttack);
+	//UE_LOG(LogTemp, Warning, TEXT("SetAttack from %d to %d"), b_attack, bAttack);
 	if (b_attack)
 	{
 		Attack();

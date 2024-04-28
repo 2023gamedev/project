@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include <atomic>
 
 // ±¸Á¶Ã¼
 #include "ProData/ItemDataStructure.h"
@@ -336,6 +337,7 @@ private:
 	float Speed;
 	float PreviousSpeed;
 
-	bool b_attack = false;
+public:
+	std::atomic<bool> b_attack{ false };
 
 };
