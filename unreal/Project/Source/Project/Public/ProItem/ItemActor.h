@@ -36,6 +36,12 @@ public:
 	//UPROPERTY(EditAnywhere)
 	//FString m_sItemName;
 
+	UPROPERTY(EditAnywhere, Category = "ItmePos")
+	FVector ItemHandPos;
+
+	UPROPERTY(EditAnywhere, Category = "ItmeRotate")
+	FRotator ItemHandRot;
+
 	UPROPERTY(EditAnywhere)
 	FName ItemName;
 
