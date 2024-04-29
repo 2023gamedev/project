@@ -81,6 +81,10 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		{
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
 			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype, recvPlayerData.b_attack);
+			if (recvPlayerData.b_attack) {
+				//ServerHandleAttack();
+				UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), recvPlayerData.PlayerId, recvPlayerData.b_attack);
+			}
 		}
 	}
 }
@@ -90,14 +94,6 @@ void APlayerCharacterController::CheckAndSendMovement()
 	APawn* MyPawn = GetPawn();
 	FVector CurrentLocation = MyPawn->GetActorLocation();
 	FRotator CurrentRotation = MyPawn->GetActorRotation();
-	
-	ABaseCharacter* MyCharacter = Cast<ABaseCharacter>(MyPawn);
-	if (MyCharacter)
-	{
-		b_attack = MyCharacter->GetAttack();
-		UE_LOG(LogNet, Display, TEXT("Update Other Player: b_attack=%d"), b_attack);
-	}
-
 	
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
 	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_attack) {
@@ -128,6 +124,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		// 현재 위치를 이전 위치로 업데이트
 		PreviousLocation = CurrentLocation;
 		PreviousRotation = CurrentRotation;
+		b_attack = false;
 	}
 }
 
@@ -278,6 +275,7 @@ void APlayerCharacterController::Attck(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	basecharacter->SetAttack(true);
+	b_attack = true;
 	UE_LOG(LogTemp, Warning, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }
 
@@ -330,3 +328,11 @@ void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
 	basecharacter->QuickKeyItem();
 }
 
+void APlayerCharacterController::ServerHandleAttack()
+{
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetCharacter());
+	if (BaseCharacter)
+	{
+		BaseCharacter->SetAttack(true);
+	}
+}

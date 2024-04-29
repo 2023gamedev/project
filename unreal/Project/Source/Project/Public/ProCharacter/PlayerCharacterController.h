@@ -7,6 +7,7 @@
 #include "ProData/InputDataAsset.h"
 #include "InputActionValue.h"
 #include "ClientSocket.h"
+#include <atomic>
 
 #include "PlayerCharacterController.generated.h"
 
@@ -48,6 +49,8 @@ public:
 	void QuickHItem(const FInputActionValue& Value);
 	void QuickKeyItem(const FInputActionValue& Value);
 
+	void ServerHandleAttack();
+
 
 public:
 	virtual void BeginPlay() override;
@@ -78,6 +81,6 @@ public:
 	uint32 MyCharacterNumber;
 	uint32 OtherCharacterNumber;
 	FVector NewLocation;
-	bool b_attack = false;
+	std::atomic <bool> b_attack{ false };
 
 };
