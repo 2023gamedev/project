@@ -172,6 +172,12 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				Character->QuickSlot[0].Count = 0;
 				Character->QuickSlot[0].SlotReference = -1;
+
+				if (Character->IsBringCurrentBleedingHealingItem()) {
+					Character->DestroyBleedingHealingItem();
+					Character->SetBHHandIn(false);
+					Character->SetBringCurrentBleedingHealingItem(false);
+				}
 			}
 			Character->GameUIUpdate();
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("BLEEDINGHEALINGITEM!"));
@@ -195,6 +201,12 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				Character->QuickSlot[1].Count = 0;
 				Character->QuickSlot[1].SlotReference = -1;
+
+				if (Character->IsBringCurrentHealingItem()) {
+					Character->DestroyHealingItem();
+					Character->SetHealHandIn(false);
+					Character->SetBringCurrentHealingItem(false);
+				}
 			}
 			Character->GameUIUpdate();
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEALINGITEM!"));
@@ -217,6 +229,12 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[2].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				Character->QuickSlot[2].Count = 0;
 				Character->QuickSlot[2].SlotReference = -1;
+
+				if (Character->IsBringCurrentThrowWeapon()) {
+					Character->DestroyThrowWeapon();
+					Character->SetThrowWHandIn(false);
+					Character->SetBringCurrentThrowWeapon(false);
+				}
 			}
 			Character->GameUIUpdate();
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("THROWINGWEAPON!"));
@@ -239,6 +257,12 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[3].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				Character->QuickSlot[3].Count = 0;
 				Character->QuickSlot[3].SlotReference = -1;
+
+				if (Character->IsBringCurrentHealingItem()) {
+					Character->DestroyKeyItem();
+					Character->SetKeyHandIn(false);
+					Character->SetBringCurrentKeyItem(false);
+				}
 			}
 
 			Character->GameUIUpdate();
@@ -262,6 +286,12 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				Character->QuickSlot[4].Count = 0;
 				Character->QuickSlot[4].SlotReference = -1;
+
+				if (Character->IsBringCurrentWeapon()) {
+					Character->DestroyNormalWeapon();
+					Character->SetNWHandIn(false);
+					Character->SetBringCurrentWeapon(false);
+				}
 			}
 
 			

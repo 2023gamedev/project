@@ -46,11 +46,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
 
-	UPROPERTY(EditAnywhere, Category = "ItmePos")
-	FVector ItemHandPos;
-
-	UPROPERTY(EditAnywhere, Category = "ItmeRotate")
-	FRotator ItemHandRot;
 
 	UPROPERTY(EditAnywhere)
 	ABaseCharacter* OwnerCharacter;
