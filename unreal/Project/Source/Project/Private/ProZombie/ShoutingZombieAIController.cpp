@@ -8,6 +8,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GStruct.pb.h"
 #include "ProZombie/ShoutingZombie.h"
+#include "ProCharacter/BaseCharacter.h"
 #include "ProGamemode/OneGameModeBase.h"
 #include "ProGamemode/ProGameInstance.h"
 
@@ -106,3 +107,8 @@ void AShoutingZombieAIController::SetPatrolLocationValue(FVector patrollocation)
 	GetBlackboardComponent()->SetValueAsVector(PatrolLocationKey, patrollocation);
 }
 
+void AShoutingZombieAIController::UpdateLastKnownPositionByFootSound(FVector playerlocation)
+{
+	m_bFootSound = true;
+	m_vFootCharacterPos = playerlocation;
+}

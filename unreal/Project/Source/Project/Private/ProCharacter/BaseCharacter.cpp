@@ -7,6 +7,8 @@
 #include "ProItem/ItemBoxActor.h"
 #include "ProCharacter/PlayerSight.h"
 
+#include "ProZombie/BaseZombie.h"
+
 // 노말 무기
 #include "ProItem/NormalWeaponActor.h"
 #include "ProItem/NWBook.h"
@@ -205,7 +207,9 @@ void ABaseCharacter::BeginPlay()
 		}
 		});
 
-
+	AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
+		FootSound();
+		});
 
 }
 
@@ -1057,6 +1061,41 @@ void ABaseCharacter::DestroyKeyItemSlot()
 	Inventory[slotindex].Count = 0;
 
 	GameUIUpdate();
+}
+
+void ABaseCharacter::FootSound()
+{
+
+	UWorld* World = GetWorld();
+	FVector Center = GetActorLocation();
+	float DetectRadius = 500.f;
+
+	if (nullptr == World) return;
+	TArray<FOverlapResult> OverlapResults;
+	FCollisionQueryParams CollisionQueryParam(NAME_None, false, this);
+	bool bResult = World->OverlapMultiByChannel(
+		OverlapResults,
+		Center,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel4,
+		FCollisionShape::MakeSphere(DetectRadius),
+		CollisionQueryParam
+	);
+
+	if (bResult) {
+
+		for (const FOverlapResult& OverlapResult : OverlapResults)
+		{
+			// ABaseZombie인지 확인
+			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
+			if (OverlappedZombie)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("FootSound2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+				OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
+			}
+
+		}
+	}
 }
 
 uint32 ABaseCharacter::GetPlayerId() const

@@ -132,6 +132,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bIsStanding = false;
 
+
+	void UpdateLastKnownPositionByFootSound(FVector playerlocation);
+
+	void UpdateLastKnownPositionByShoutingSound(FVector playerlocation);
+
 private:
 
 	UPROPERTY(EditAnywhere)

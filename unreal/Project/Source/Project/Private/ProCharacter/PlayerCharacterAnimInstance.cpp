@@ -65,3 +65,15 @@ void UPlayerCharacterAnimInstance::AnimNotify_AttackEnd()
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackEnd"));
 	OnAttackEndCheck.Broadcast();
 }
+
+void UPlayerCharacterAnimInstance::AnimNotify_FootSound1()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_FootSound1"));
+	OnFootSoundCheck.Broadcast();
+}
+
+void UPlayerCharacterAnimInstance::AnimNotify_FootSound2()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_FootSound2"));
+	OnFootSoundCheck.Broadcast();
+}

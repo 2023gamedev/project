@@ -56,7 +56,6 @@ AOneGameModeBase::AOneGameModeBase()
 void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
-    //테스트용으로 수 다르게 표시 나중에 변경
     // B1
     SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSquareWood.InvenSquareWood"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
     SpawnItemBoxes(1, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
@@ -149,21 +148,21 @@ void AOneGameModeBase::BeginPlay()
     //SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1035.150024f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
-    // 지상 1층
-   /* SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //// 지상 1층
+    //SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
-    SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(15, EZombie::NORMAL, FVector(2100.f, 3500.f, 1989.212f), FRotator(0.f, 120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(16, EZombie::NORMAL, FVector(200.f, 3200.f, 1989.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(17, EZombie::NORMAL, FVector(800.f, 3600.f, 1989.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(18, EZombie::NORMAL, FVector(800.f, 1600.f, 1989.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(19, EZombie::NORMAL, FVector(200.f, 2200.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);*/
+    //SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(15, EZombie::NORMAL, FVector(2100.f, 3500.f, 1989.212f), FRotator(0.f, 120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(16, EZombie::NORMAL, FVector(200.f, 3200.f, 1989.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(17, EZombie::NORMAL, FVector(800.f, 3600.f, 1989.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(18, EZombie::NORMAL, FVector(800.f, 1600.f, 1989.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(19, EZombie::NORMAL, FVector(200.f, 2200.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
-    // 지상 2층
+    //// 지상 2층
     //SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
     //SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
     //SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);

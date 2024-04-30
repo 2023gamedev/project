@@ -134,6 +134,7 @@ public:
 	FPickUpEndPlayerDelegate m_DPickUpEnd;
 	void PickUp();
 
+
 	void QuickNWeapon();
 	void QuickBHItem();
 	void QuickHItem();
@@ -238,6 +239,8 @@ public:
 	void DestroyBleedingHealingItemSlot();
 	void DestroyKeyItemSlot();
 
+	void FootSound();
+
 
 	virtual uint32 GetPlayerId() const;
 	void SetPlayerId(uint32 NewPlayerId);
@@ -245,6 +248,7 @@ public:
 
 	void SetAttack(bool b_attack);
 	bool GetAttack();
+
 
 private:
 	UPROPERTY(EditAnywhere)

@@ -33,6 +33,9 @@ public:
 	void SetStartLocationValue(FVector startlocation);
 	void SetPatrolLocationValue(FVector patrollocation);
 
+
+	void UpdateLastKnownPositionByFootSound(FVector playerlocation);
+
 	UProGameInstance* GameInstance;
 
 private:
@@ -44,6 +47,19 @@ private:
 	class UBlackboardData* ShoutingZombieBlackBoardAsset;
 
 public:
+	UPROPERTY(EditAnywhere)
+	bool m_bFootSound;
+
+	UPROPERTY(EditAnywhere)
+	FVector m_vFootCharacterPos;
+
+	UPROPERTY(EditAnywhere)
+	FVector m_vShoutingPos;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bShoutingSound;
+
+
 	ZombieData recvZombieData;
 	uint32 ZombieId;
 	FVector NewLocation;
