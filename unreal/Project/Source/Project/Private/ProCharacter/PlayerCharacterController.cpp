@@ -274,7 +274,7 @@ void APlayerCharacterController::InventoryOnOff(const FInputActionValue& Value)
 void APlayerCharacterController::Attck(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	basecharacter->SetAttack(true);
+	//basecharacter->SetAttack(true);
 	b_attack = true;
 	UE_LOG(LogTemp, Warning, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }

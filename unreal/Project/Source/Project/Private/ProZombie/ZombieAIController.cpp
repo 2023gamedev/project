@@ -111,7 +111,7 @@ void AZombieAIController::Tick(float DeltaTime)
 		}
 	}
 
-	static const float Timer = 0.01f;
+	static const float Timer = 0.1f;
 	static float CheckTime = 0.0f;
 
 	CheckTime += DeltaTime;
@@ -146,7 +146,7 @@ void AZombieAIController::CheckAndSendMovement()
 	// Protobuf를 사용하여 TestPacket 생성
 	Protocol::Zombie packet;
 	packet.set_zombieid(ZombieId);
-	packet.set_packet_type(2); // 원하는 유형 설정
+	packet.set_packet_type(2);
 	packet.set_x(CurrentLocation.X);
 	packet.set_y(CurrentLocation.Y);
 	packet.set_z(CurrentLocation.Z);
@@ -160,7 +160,7 @@ void AZombieAIController::CheckAndSendMovement()
 
 	// 직렬화된 데이터를 서버로 전송
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-	//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
+	UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
 }
 
 

@@ -529,6 +529,7 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링
 		m_bIsAttacking = false;
 		UE_LOG(LogTemp, Warning, TEXT("AttackEnd: %d"), PlayerId);
 		});
+	m_bIsAttacking = false;
 }
 
 void ABaseCharacter::PickUp()

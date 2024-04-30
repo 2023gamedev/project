@@ -132,9 +132,9 @@ void AOneGameModeBase::BeginPlay()
 
     // BeginPlay¿¡¼­ SpawnZombies È£Ãâ
 
-    // ÁöÇÏ 1Ãþ 
-    SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
-    SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
+    //// ÁöÇÏ 1Ãþ 
+    //SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
+    //SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
     //SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
 
     //SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
@@ -585,7 +585,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
             BasePlayer->UpdatePlayerData(NewLocation);
 
             BasePlayer->SetAttack(b_attack);
-            UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), PlayerID, b_attack);
+            //UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), PlayerID, b_attack);
 
             return;
         }
