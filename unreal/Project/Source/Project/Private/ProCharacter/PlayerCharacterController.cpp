@@ -80,7 +80,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype, recvPlayerData.b_attack);
+			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype, 
+				recvPlayerData.b_attack, recvPlayerData.ItemId);
 			if (recvPlayerData.b_attack) {
 				//ServerHandleAttack();
 				UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), recvPlayerData.PlayerId, recvPlayerData.b_attack);
@@ -94,9 +95,12 @@ void APlayerCharacterController::CheckAndSendMovement()
 	APawn* MyPawn = GetPawn();
 	FVector CurrentLocation = MyPawn->GetActorLocation();
 	FRotator CurrentRotation = MyPawn->GetActorRotation();
+
+	ABaseCharacter* MyBaseCharacter = Cast<ABaseCharacter>(MyPawn);
+	uint32 ItemBoxId = MyBaseCharacter->ItemBoxId;
 	
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_attack) {
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_attack || b_GetItem) {
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
 
@@ -112,6 +116,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_yaw(CurrentRotation.Yaw);
 		packet.set_roll(CurrentRotation.Roll);
 		packet.set_attack(b_attack);
+		packet.set_getitem(ItemBoxId);
 		packet.set_isingame(true);
 
 		// 직렬화
@@ -125,6 +130,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		PreviousLocation = CurrentLocation;
 		PreviousRotation = CurrentRotation;
 		b_attack = false;
+		b_GetItem = false;
 	}
 }
 
@@ -257,6 +263,7 @@ void APlayerCharacterController::GetItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	basecharacter->GetItem();
+	b_GetItem = true;
 }
 
 void APlayerCharacterController::LightOnOff(const FInputActionValue& Value)

@@ -66,4 +66,14 @@ void AItemBoxActor::OnChracterOvelapNew(ABaseCharacter* character)
 	//}
 }
 
+void AItemBoxActor::SetItemBoxId(uint32 index)
+{
+	ItemBoxId = index;
+}
+
+uint32 AItemBoxActor::GetItemBoxId()
+{
+	return ItemBoxId;
+}
+
 

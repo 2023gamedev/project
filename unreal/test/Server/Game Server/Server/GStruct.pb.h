@@ -193,8 +193,9 @@ class Character final :
     kRollFieldNumber = 10,
     kHpFieldNumber = 11,
     kWeaponFieldNumber = 12,
+    kGetitemFieldNumber = 14,
     kAttackFieldNumber = 13,
-    kIsingameFieldNumber = 14,
+    kIsingameFieldNumber = 15,
   };
   // uint32 playerid = 1;
   void clear_playerid();
@@ -304,6 +305,15 @@ class Character final :
   void _internal_set_weapon(uint32_t value);
   public:
 
+  // uint32 getitem = 14;
+  void clear_getitem();
+  uint32_t getitem() const;
+  void set_getitem(uint32_t value);
+  private:
+  uint32_t _internal_getitem() const;
+  void _internal_set_getitem(uint32_t value);
+  public:
+
   // bool attack = 13;
   void clear_attack();
   bool attack() const;
@@ -313,7 +323,7 @@ class Character final :
   void _internal_set_attack(bool value);
   public:
 
-  // bool isingame = 14;
+  // bool isingame = 15;
   void clear_isingame();
   bool isingame() const;
   void set_isingame(bool value);
@@ -342,6 +352,7 @@ class Character final :
     float roll_;
     float hp_;
     uint32_t weapon_;
+    uint32_t getitem_;
     bool attack_;
     bool isingame_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -889,7 +900,27 @@ inline void Character::set_attack(bool value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.attack)
 }
 
-// bool isingame = 14;
+// uint32 getitem = 14;
+inline void Character::clear_getitem() {
+  _impl_.getitem_ = 0u;
+}
+inline uint32_t Character::_internal_getitem() const {
+  return _impl_.getitem_;
+}
+inline uint32_t Character::getitem() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.getitem)
+  return _internal_getitem();
+}
+inline void Character::_internal_set_getitem(uint32_t value) {
+  
+  _impl_.getitem_ = value;
+}
+inline void Character::set_getitem(uint32_t value) {
+  _internal_set_getitem(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.getitem)
+}
+
+// bool isingame = 15;
 inline void Character::clear_isingame() {
   _impl_.isingame_ = false;
 }

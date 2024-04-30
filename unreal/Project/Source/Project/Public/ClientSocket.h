@@ -30,13 +30,14 @@ struct PlayerData
 	FRotator Rotation;
 	uint32 charactertype;
 	bool b_attack;
+	uint32 ItemId;
 
 	// 기본 생성자 명시적 정의
-	PlayerData() : PlayerId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), charactertype(0), b_attack(false) {}
+	PlayerData() : PlayerId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), charactertype(0), b_attack(false), ItemId(999) {}
 
 	// 매개변수가 있는 생성자
-	PlayerData(uint32 InPlayerId, FVector InLocation, FRotator InRotation, uint32 Incharactertype, bool Inb_attack)
-		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation), charactertype(Incharactertype), b_attack(Inb_attack) {}
+	PlayerData(uint32 InPlayerId, FVector InLocation, FRotator InRotation, uint32 Incharactertype, bool Inb_attack, uint32 InItemId)
+		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation), charactertype(Incharactertype), b_attack(Inb_attack), ItemId(InItemId) {}
 };
 
 struct ZombieData

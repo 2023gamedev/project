@@ -31,6 +31,10 @@ public:
 
 	void OnChracterOvelapNew(ABaseCharacter* character);  // 이름 수정 필요
 
+	void SetItemBoxId(uint32 index);
+
+	uint32 GetItemBoxId();
+
 	//void SetInBoxItemId(FString itemid) { m_sItemID = itemid; };
 	//FString GetInBoxItemId() { return m_sItemID; }
 
@@ -65,5 +69,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = item)
 	int Count;
 
+public:
+	uint32 ItemBoxId = 0;
 
 };

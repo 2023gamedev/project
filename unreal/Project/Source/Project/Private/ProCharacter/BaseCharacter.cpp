@@ -6,6 +6,7 @@
 #include "ProItem/ItemActor.h"
 #include "ProItem/ItemBoxActor.h"
 #include "ProCharacter/PlayerSight.h"
+#include "EngineUtils.h"
 
 #include "ProZombie/BaseZombie.h"
 
@@ -444,11 +445,24 @@ void ABaseCharacter::GetItem()
 				break;
 			}
 		}
-
+		ItemBoxId = itembox->GetItemBoxId();
 		PlayerSight->GetHitActor()->Destroy();
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
+}
+
+void ABaseCharacter::OtherGetItem()
+{
+	if (PlayerSight->GetIsHit()) {
+
+		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
+		PickUp();
+		ItemBoxId = itembox->GetItemBoxId();
+		PlayerSight->GetHitActor()->Destroy();
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("OtherGetItem"));
 }
 
 void ABaseCharacter::LightOnOff()

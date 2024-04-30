@@ -15,7 +15,8 @@ message Character {
     float hp = 11;
     uint32 weapon = 12;
     bool attack = 13;
-    bool isingame = 14;
+    uint32 getitem = 14;
+    bool isingame = 15;
 };
 
 message Zombie {

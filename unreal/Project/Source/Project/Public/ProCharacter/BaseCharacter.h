@@ -125,6 +125,7 @@ public:
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
 	void GetItem();
+	void OtherGetItem();
 	void LightOnOff();
 	void InventoryOnOff();
 
@@ -249,6 +250,8 @@ public:
 	void SetAttack(bool b_attack);
 	bool GetAttack();
 
+	void DestroyItem(uint32 ItemId);
+
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -343,5 +346,7 @@ private:
 
 public:
 	std::atomic<bool> b_attack{ false };
+
+	uint32 ItemBoxId = 999;
 
 };

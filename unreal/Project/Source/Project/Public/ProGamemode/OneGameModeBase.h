@@ -150,9 +150,13 @@ public:
 
     void UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotator NewRotation);
 
+    void DestroyItem(uint32 ItemId);
+
     int32 GetItemBoxNumber() { return m_iItemBoxNumber; }
 
     void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
+
+    void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, bool b_attack, uint32 itemId);
 
     void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, bool b_attack);
 

@@ -35,6 +35,7 @@ PROTOBUF_CONSTEXPR Character::Character(
   , /*decltype(_impl_.roll_)*/0
   , /*decltype(_impl_.hp_)*/0
   , /*decltype(_impl_.weapon_)*/0u
+  , /*decltype(_impl_.getitem_)*/0u
   , /*decltype(_impl_.attack_)*/false
   , /*decltype(_impl_.isingame_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -96,6 +97,7 @@ const uint32_t TableStruct_GStruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.hp_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.weapon_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.attack_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.getitem_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.isingame_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _internal_metadata_),
@@ -118,7 +120,7 @@ const uint32_t TableStruct_GStruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::Character)},
-  { 20, -1, -1, sizeof(::Protocol::Zombie)},
+  { 21, -1, -1, sizeof(::Protocol::Zombie)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -127,22 +129,22 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_GStruct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\rGStruct.proto\022\010Protocol\"\347\001\n\tCharacter\022"
+  "\n\rGStruct.proto\022\010Protocol\"\370\001\n\tCharacter\022"
   "\020\n\010playerid\030\001 \001(\r\022\023\n\013packet_size\030\002 \001(\r\022\023"
   "\n\013packet_type\030\003 \001(\r\022\025\n\rcharactertype\030\004 \001"
   "(\r\022\t\n\001x\030\005 \001(\002\022\t\n\001y\030\006 \001(\002\022\t\n\001z\030\007 \001(\002\022\r\n\005p"
   "itch\030\010 \001(\002\022\013\n\003yaw\030\t \001(\002\022\014\n\004roll\030\n \001(\002\022\n\n"
   "\002hp\030\013 \001(\002\022\016\n\006weapon\030\014 \001(\r\022\016\n\006attack\030\r \001("
-  "\010\022\020\n\010isingame\030\016 \001(\010\"\277\001\n\006Zombie\022\020\n\010zombie"
-  "id\030\001 \001(\r\022\023\n\013packet_size\030\002 \001(\r\022\023\n\013packet_"
-  "type\030\003 \001(\r\022\022\n\nzombietype\030\004 \001(\r\022\t\n\001x\030\005 \001("
-  "\002\022\t\n\001y\030\006 \001(\002\022\t\n\001z\030\007 \001(\002\022\r\n\005pitch\030\010 \001(\002\022\013"
-  "\n\003yaw\030\t \001(\002\022\014\n\004roll\030\n \001(\002\022\n\n\002hp\030\013 \001(\002\022\016\n"
-  "\006attack\030\014 \001(\010b\006proto3"
+  "\010\022\017\n\007getitem\030\016 \001(\r\022\020\n\010isingame\030\017 \001(\010\"\277\001\n"
+  "\006Zombie\022\020\n\010zombieid\030\001 \001(\r\022\023\n\013packet_size"
+  "\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\022\022\n\nzombietyp"
+  "e\030\004 \001(\r\022\t\n\001x\030\005 \001(\002\022\t\n\001y\030\006 \001(\002\022\t\n\001z\030\007 \001(\002"
+  "\022\r\n\005pitch\030\010 \001(\002\022\013\n\003yaw\030\t \001(\002\022\014\n\004roll\030\n \001"
+  "(\002\022\n\n\002hp\030\013 \001(\002\022\016\n\006attack\030\014 \001(\010b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GStruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GStruct_2eproto = {
-    false, false, 461, descriptor_table_protodef_GStruct_2eproto,
+    false, false, 478, descriptor_table_protodef_GStruct_2eproto,
     "GStruct.proto",
     &descriptor_table_GStruct_2eproto_once, nullptr, 0, 2,
     schemas, file_default_instances, TableStruct_GStruct_2eproto::offsets,
@@ -185,6 +187,7 @@ Character::Character(const Character& from)
     , decltype(_impl_.roll_){}
     , decltype(_impl_.hp_){}
     , decltype(_impl_.weapon_){}
+    , decltype(_impl_.getitem_){}
     , decltype(_impl_.attack_){}
     , decltype(_impl_.isingame_){}
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -213,6 +216,7 @@ inline void Character::SharedCtor(
     , decltype(_impl_.roll_){0}
     , decltype(_impl_.hp_){0}
     , decltype(_impl_.weapon_){0u}
+    , decltype(_impl_.getitem_){0u}
     , decltype(_impl_.attack_){false}
     , decltype(_impl_.isingame_){false}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -358,9 +362,17 @@ const char* Character::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         } else
           goto handle_unusual;
         continue;
-      // bool isingame = 14;
+      // uint32 getitem = 14;
       case 14:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 112)) {
+          _impl_.getitem_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool isingame = 15;
+      case 15:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 120)) {
           _impl_.isingame_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
@@ -501,10 +513,16 @@ uint8_t* Character::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteBoolToArray(13, this->_internal_attack(), target);
   }
 
-  // bool isingame = 14;
+  // uint32 getitem = 14;
+  if (this->_internal_getitem() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(14, this->_internal_getitem(), target);
+  }
+
+  // bool isingame = 15;
   if (this->_internal_isingame() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(14, this->_internal_isingame(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(15, this->_internal_isingame(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -611,12 +629,17 @@ size_t Character::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_weapon());
   }
 
+  // uint32 getitem = 14;
+  if (this->_internal_getitem() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_getitem());
+  }
+
   // bool attack = 13;
   if (this->_internal_attack() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool isingame = 14;
+  // bool isingame = 15;
   if (this->_internal_isingame() != 0) {
     total_size += 1 + 1;
   }
@@ -702,6 +725,9 @@ void Character::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   }
   if (from._internal_weapon() != 0) {
     _this->_internal_set_weapon(from._internal_weapon());
+  }
+  if (from._internal_getitem() != 0) {
+    _this->_internal_set_getitem(from._internal_getitem());
   }
   if (from._internal_attack() != 0) {
     _this->_internal_set_attack(from._internal_attack());

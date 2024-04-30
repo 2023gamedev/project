@@ -73,7 +73,7 @@ uint32 ClientSocket::Run()
 						FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
 						if (PlayerId != MyPlayerId) {
-							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.attack()));
+							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.attack(), CharacterPacket.getitem()));
 						}
 					}
 					break;
