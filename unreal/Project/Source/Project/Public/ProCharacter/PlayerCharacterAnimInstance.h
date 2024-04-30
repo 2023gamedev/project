@@ -13,6 +13,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackStartCheckDelegate)
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndCheckDelegate)
+DECLARE_MULTICAST_DELEGATE(FOnFootSoundCheckDelegate)
 
 UCLASS()
 class PROJECT_API UPlayerCharacterAnimInstance : public UAnimInstance
@@ -30,12 +31,19 @@ public:
 
 	FOnAttackStartCheckDelegate OnAttackStartCheck;
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
+	FOnFootSoundCheckDelegate OnFootSoundCheck;
 private:
 	UFUNCTION()
 	void AnimNotify_AttackStart();
 
 	UFUNCTION()
 	void AnimNotify_AttackEnd();
+
+	UFUNCTION()
+	void AnimNotify_FootSound1();
+
+	UFUNCTION()
+	void AnimNotify_FootSound2();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float m_fCurrentPawnSpeed;

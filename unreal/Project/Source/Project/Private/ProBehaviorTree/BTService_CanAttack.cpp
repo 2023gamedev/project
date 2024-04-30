@@ -1,65 +1,66 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ProBehaviorTree/BTIsinAttackRange.h"
-#include "ProZombie//ZombieAIController.h"
+#include "ProBehaviorTree/BTService_CanAttack.h"
+#include "ProZombie/ZombieAIController.h"
 #include "ProZombie//ShoutingZombieAIController.h"
 #include "ProZombie//RunningZombieAIController.h"
 #include "ProCharacter/BaseCharacter.h"
-#include "ProZombie//BaseZombie.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "ProZombie//BaseZombie.h"
+#include "DrawDebugHelpers.h"
 
-UBTIsinAttackRange::UBTIsinAttackRange()
+UBTService_CanAttack::UBTService_CanAttack()
 {
-	NodeName = TEXT("CanAttack");
+	NodeName = "SCanAttack";
+	Interval = 1.f;
 }
 
-bool UBTIsinAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
+void UBTService_CanAttack::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-	bool bResult = Super::CalculateRawConditionValue(OwnerComp, NodeMemory);
+	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	auto ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (ControllingPawn == nullptr) {
-		return false;
+		return;
 	}
 
 	auto ZombieName = Cast<ABaseZombie>(ControllingPawn)->GetZombieName();
 
+	AAIController* aicontroller = Cast<AAIController>(ControllingPawn->GetController());
 
 
 
 	ABaseCharacter* Target = nullptr;
 	if (ZombieName == "NormalZombie") {
 		Target = Cast<ABaseCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AZombieAIController::TargetKey));
-
+		ControllingPawn->GetController()->StopMovement();
 	}
 	else if (ZombieName == "ShoutingZombie") {
 		Target = Cast<ABaseCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AShoutingZombieAIController::TargetKey));
-
+		ControllingPawn->GetController()->StopMovement();
 	}
-	else if (ZombieName == "RunningZombie"){
+	else if (ZombieName == "RunningZombie") {
 		Target = Cast<ABaseCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ARunningZombieAIController::TargetKey));
-		
+		ControllingPawn->GetController()->StopMovement();
 	}
 	else {
-		
+
 
 		if (Target == nullptr) {
 
-			return false;
+			return;
 		}
-		return false;
+		return;
+	}
+
+	if (Target == nullptr) {
+
+		return;
 	}
 
 	if (Target->GetDistanceTo(ControllingPawn) <= 100.f) {
-		bResult = true;
-		UE_LOG(LogTemp, Error, TEXT("TRUE"));
-	}
-	else {
-		bResult = false;
-		UE_LOG(LogTemp, Error, TEXT("FALSE"));
+		ControllingPawn->GetController()->StopMovement();
 	}
 
-
-	return bResult;
 }

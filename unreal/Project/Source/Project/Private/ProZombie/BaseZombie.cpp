@@ -4,6 +4,11 @@
 #include "ProZombie/BaseZombie.h"
 #include "Engine/DamageEvents.h"
 #include "AIController.h"
+#include "BehaviorTree/BlackboardData.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "ProZombie/ZombieAIController.h"
+#include "ProZombie/RunningZombieAIController.h"
+#include "ProZombie/ShoutingZombieAIController.h"
 #include "ProZombie/ZombieAnimInstance.h"
 
 // Sets default values
@@ -184,11 +189,38 @@ void ABaseZombie::Shouting()
 
 	AnimInstance->PlayShoutingMontage();
 
+
 	UWorld* World = GetWorld();
 	FVector Center = GetActorLocation();
-	float DetectRadius = 4000.f;
+	float DetectRadius = 2000.f;
 
-	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Blue, false, 0.2f);
+	if (nullptr == World) return;
+	TArray<FOverlapResult> OverlapResults;
+	FCollisionQueryParams CollisionQueryParam(NAME_None, false, this);
+	bool bResult = World->OverlapMultiByChannel(
+		OverlapResults,
+		Center,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel4,
+		FCollisionShape::MakeSphere(DetectRadius),
+		CollisionQueryParam
+	);
+
+	if (bResult) {
+
+		for (const FOverlapResult& OverlapResult : OverlapResults)
+		{
+			// ABaseZombie인지 확인
+			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
+			if (OverlappedZombie)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("FootSound2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+				OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
+			}
+
+		}
+	}
+
 	m_bIsShouting = true;
 
 	
@@ -289,6 +321,55 @@ void ABaseZombie::WaittingTimerElapsed()
 	SetHP(GetStartHP());
 }
 
+void ABaseZombie::UpdateLastKnownPositionByFootSound(FVector playerlocation)
+{
+	if (GetController()) {
+		if (GetZombieName() == "NormalZombie") {
+			AZombieAIController* AIZombieController = Cast<AZombieAIController>(GetController());
+			if (AIZombieController) {
+				AIZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
+			}
+		}
+		else if (GetZombieName() == "RunningZombie") {
+			ARunningZombieAIController* AIRunningZombieController = Cast<ARunningZombieAIController>(GetController());
+			if (AIRunningZombieController) {
+				AIRunningZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
+			}
+		}
+		else if (GetZombieName() == "ShoutingZombie") {
+			AShoutingZombieAIController* AIShoutingZombieController = Cast<AShoutingZombieAIController>(GetController());
+			if (AIShoutingZombieController) {
+				AIShoutingZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
+			}
+		}
+	}
+
+
+}
+
+void ABaseZombie::UpdateLastKnownPositionByShoutingSound(FVector playerlocation)
+{
+	if (GetController()) {
+		if (GetZombieName() == "NormalZombie") {
+			AZombieAIController* AIZombieController = Cast<AZombieAIController>(GetController());
+			if (AIZombieController) {
+				AIZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
+			}
+		}
+		else if (GetZombieName() == "RunningZombie") {
+			ARunningZombieAIController* AIRunningZombieController = Cast<ARunningZombieAIController>(GetController());
+			if (AIRunningZombieController) {
+				AIRunningZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
+			}
+		}
+		else if (GetZombieName() == "ShoutingZombie") {
+			AShoutingZombieAIController* AIShoutingZombieController = Cast<AShoutingZombieAIController>(GetController());
+			if (AIShoutingZombieController) {
+				AIShoutingZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
+			}
+		}
+	}
+}
 
 
 

@@ -174,5 +174,14 @@ void AZombieAIController::SetPatrolLocationValue(FVector patrollocation)
 	GetBlackboardComponent()->SetValueAsVector(PatrolLocationKey, patrollocation);
 }
 
+void AZombieAIController::UpdateLastKnownPositionByFootSound(FVector playerlocation)
+{
+	m_bFootSound = true;
+	m_vFootCharacterPos = playerlocation;
+}
 
-
+void AZombieAIController::UpdateLastKnownPositionByShoutingSound(FVector playerlocation)
+{
+	m_bShoutingSound = true;
+	m_vShoutingPos = playerlocation;
+}

@@ -25,6 +25,7 @@ bool UBTIsShouting::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp
 
 
 	auto Zombie = Cast<ABaseZombie>(ControllingPawn);
+
 	
 	// ¼öÁ¤ ¿ä¸Á
 	if (Zombie->GetZombieName() == "NormalZombie") {	
