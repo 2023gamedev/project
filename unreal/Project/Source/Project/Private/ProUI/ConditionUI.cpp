@@ -8,6 +8,16 @@
 UConditionUI::UConditionUI(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	HPBar = CreateDefaultSubobject<UHPBar>(TEXT("HPBar"));
-	StaminaBar = CreateDefaultSubobject<UStaminaBar>(TEXT("StaminaBar"));
+}
+
+void UConditionUI::UpdateBar()
+{
+	HPBar->UpdateHealthBar(Character->GetHP(), Character->GetMaxHP());
+	StaminaBar->UpdateStaminaBar(Character->GetStamina());
+}
+
+void UConditionUI::NativeConstruct()
+{
+	Super::NativeConstruct();
+
 }

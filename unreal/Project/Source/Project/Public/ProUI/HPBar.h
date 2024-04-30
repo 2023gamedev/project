@@ -10,6 +10,8 @@
  * 
  */
 // HPBar
+
+
 UCLASS()
 class PROJECT_API UHPBar : public UBaseUI
 {
@@ -18,14 +20,24 @@ class PROJECT_API UHPBar : public UBaseUI
 public:
     UHPBar(const FObjectInitializer& ObjectInitializer);
 
+    virtual void NativeConstruct() override;
+
+
     UFUNCTION(BlueprintCallable, Category = "HealthBar")
-    void UpdateHealthBar(float CurrentHealth);
+    void UpdateHealthBar(float CurrentHealth, float MaxHealth);
+
+
 
     // 현재 체력
-    UPROPERTY(BlueprintReadOnly, Category = "HPBar")
-    float m_fCurrentHealth;
+    UPROPERTY(BlueprintReadWrite, Category = "HPBar")
+    float m_fCurrentHPRatio = 0.f;
+
+
+    // 현재 체력
+    UPROPERTY(BlueprintReadWrite, Category = "HPBar")
+    float m_fCurrentHealth = 0.f;
 
     // 최대 체력
-    UPROPERTY(BlueprintReadOnly, Category = "HPBar")
-    float m_fMaxHealth;
+    UPROPERTY(BlueprintReadWrite, Category = "HPBar")
+    float m_fMaxHealth = 0.f;
 };

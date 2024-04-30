@@ -23,10 +23,13 @@ class PROJECT_API UConditionUI : public UBaseUI
     UConditionUI(const FObjectInitializer& ObjectInitializer);
 
 public:
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UHPBar* HPBar;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UStaminaBar* StaminaBar;
 
+
+    void UpdateBar();
+    virtual void NativeConstruct() override;
 };

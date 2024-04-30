@@ -48,19 +48,16 @@ void UBTService_CanAttack::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 
 
 		if (Target == nullptr) {
-
 			return;
 		}
 		return;
 	}
 
-	if (Target == nullptr) {
-
-		return;
+	if (Target != nullptr) {
+		if (Target->GetDistanceTo(ControllingPawn) <= 150.f) {
+			ControllingPawn->GetController()->StopMovement();
+		}
 	}
 
-	if (Target->GetDistanceTo(ControllingPawn) <= 100.f) {
-		ControllingPawn->GetController()->StopMovement();
-	}
 
 }

@@ -28,6 +28,8 @@ public:
 
 	void PlayAttackMontage();
 	void PlayPickUpMontage();
+	void PlayHealingMontage();
+	void PlayBleedHealingMontage();
 
 	FOnAttackStartCheckDelegate OnAttackStartCheck;
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
@@ -64,4 +66,12 @@ private:
 	// 局聪皋捞记 根鸥林
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* PickUpMontage;
+
+	// 局聪皋捞记 根鸥林
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* HealingMontage;
+
+	// 局聪皋捞记 根鸥林
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* BleedHealingMontage;
 };

@@ -156,6 +156,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			// 0번: 출혈회복, 1번: 상처회복 2번: 투척무기 3번: 키 4번: 노말무기
 		case EItemClass::BLEEDINGHEALINGITEM:
 			if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_NONE) {
+				Character->QuickSlot[0].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[0].Type = Character->Inventory[SlotIndex].Type;
 				Character->QuickSlot[0].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[0].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
@@ -184,6 +185,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			break;
 		case EItemClass::HEALINGITEM:
 			if (Character->QuickSlot[1].Type == EItemType::ITEM_QUICK_NONE) {
+				Character->QuickSlot[1].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[1].Type = Character->Inventory[SlotIndex].Type;
 				Character->QuickSlot[1].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[1].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
@@ -213,6 +215,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			break;
 		case EItemClass::THROWINGWEAPON:
 			if (Character->QuickSlot[2].Type == EItemType::ITEM_QUICK_NONE) {
+				Character->QuickSlot[2].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[2].Type = Character->Inventory[SlotIndex].Type;
 				Character->QuickSlot[2].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[2].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
@@ -241,6 +244,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			break;
 		case EItemClass::KEYITEM:
 			if (Character->QuickSlot[3].Type == EItemType::ITEM_QUICK_NONE) {
+				Character->QuickSlot[3].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[3].Type = Character->Inventory[SlotIndex].Type;
 				Character->QuickSlot[3].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[3].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;

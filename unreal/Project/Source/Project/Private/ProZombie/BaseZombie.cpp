@@ -25,6 +25,9 @@ ABaseZombie::ABaseZombie()
 
 	
 	ZombieId = 0;
+	
+	GetCharacterMovement()->bUseRVOAvoidance = true;
+	GetCharacterMovement()->AvoidanceConsiderationRadius = 400.f;
 }
 
 // Called when the game starts or when spawned

@@ -10,6 +10,7 @@
  * 
  */
 // StaminaBar
+
 UCLASS()
 class PROJECT_API UStaminaBar : public UBaseUI
 {
@@ -18,12 +19,18 @@ class PROJECT_API UStaminaBar : public UBaseUI
 public:
     UStaminaBar(const FObjectInitializer& ObjectInitializer);
 
-    UFUNCTION(BlueprintCallable, Category = "HealthBar")
+    virtual void NativeConstruct() override;
+
+
+    UFUNCTION(BlueprintCallable, Category = "StaminaBar")
     void UpdateStaminaBar(float currenstamina);
 
-    UPROPERTY(BlueprintReadOnly, Category = "HPBar")
+    UPROPERTY(BlueprintReadWrite, Category = "StaminaBar")
+    float m_fCurrentStaminaRatio;
+  
+    UPROPERTY(BlueprintReadWrite, Category = "StaminaBar")
     float m_fCurrentStamina;
 
-    UPROPERTY(BlueprintReadOnly, Category = "HPBar")
+    UPROPERTY(BlueprintReadWrite, Category = "StaminaBar")
     float m_fMaxStamina;
 };

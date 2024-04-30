@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/WidgetComponent.h"
 #include "ProCharacter/BaseCharacter.h"
 #include "BaseUI.generated.h"
 
@@ -21,6 +22,8 @@ public:
 
 	virtual void Init() {};
 	virtual void Update() {};
+
+	virtual void NativeConstruct() override;
 
 public:
 	ABaseCharacter* Character;
