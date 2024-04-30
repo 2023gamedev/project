@@ -247,7 +247,10 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 		PreviousSpeed = GetVelocity().Size();
 	}
-
+	
+	if (ConditionUIWidget) {
+		ConditionUIWidget->UpdateBar();
+	}
 
 }
 
@@ -268,6 +271,9 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	
+
+
+
 	if (GetHP() <= 0) {
 		SetDead(true);
 		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -278,6 +284,15 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 		if (controller != nullptr) {
 			DisableInput(controller); // 이래도 움직임 좀비 죽었을때 회전이랑 캐릭터 움직이는 거 수정해야 할듯
+		}
+	}
+
+	
+	if (!m_bBleeding) {
+		m_bBleeding = RandomBleeding();
+
+		if (m_bBleeding) {
+			StartBleedingTimer();
 		}
 	}
 
@@ -372,6 +387,9 @@ void ABaseCharacter::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 
 	m_bIsPickUping = false;
 	m_DPickUpEnd.Broadcast();
+
+	m_bIsBleedHealing = false;
+	m_DBleedingHealingEnd.Broadcast();
 }
 
 
@@ -379,11 +397,11 @@ void ABaseCharacter::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 void ABaseCharacter::MoveForward(FVector RotateYaw, float NewAxisValue)
 {
 	if (m_bRun) {
-		SetSpeed(500.f);
+		SetSpeed(GetBasicSpeed() * 100.f);
 		
 	}
 	else {
-		SetSpeed(200.f);
+		SetSpeed(GetBasicSpeed() /2 * 100.f);
 	}
 
 	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
@@ -395,10 +413,10 @@ void ABaseCharacter::MoveForward(FVector RotateYaw, float NewAxisValue)
 void ABaseCharacter::MoveLeft(FVector RotateYaw, float NewAxisValue)
 {
 	if (m_bRun) {
-		SetSpeed(500.f);
+		SetSpeed(GetBasicSpeed() * 100.f);
 	}
 	else {
-		SetSpeed(200.f);
+		SetSpeed(GetBasicSpeed() / 2 * 100.f);
 	}
 
 	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
@@ -410,9 +428,15 @@ void ABaseCharacter::Run()
 {
 	if (m_bRun) {
 		m_bRun = false;
+		HealingStamina();
+		GetWorld()->GetTimerManager().ClearTimer(UseStaminaHandle);
 	}
 	else {
-		m_bRun = true;
+		if (!m_bZeroStamina) {
+			m_bRun = true;
+			UseStamina();
+			GetWorld()->GetTimerManager().ClearTimer(HealingStaminaHandle);
+		}
 	}
 }
 
@@ -544,6 +568,90 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링
 		UE_LOG(LogTemp, Warning, TEXT("AttackEnd: %d"), PlayerId);
 		});
 	m_bIsAttacking = false;
+}
+
+void ABaseCharacter::Healing()
+{
+	if (m_bIsHealingTime) {
+		return;
+	}
+
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInstance->PlayHealingMontage();
+	
+	if (CurrentHealingItem != nullptr) {
+		StartHealingTimer(CurrentHealingItem->m_fHealingSpeed, CurrentHealingItem->m_fHealingDuration);
+	}
+	if (CurrentHealingItem->HName == "Smoke") {
+		Smoking();
+	}
+
+
+	UpdateHealingSlot();
+}
+
+void ABaseCharacter::BleedHealing()
+{
+	if (m_bIsBleedHealing || !m_bBleeding) {
+		return;
+	}
+	m_bIsBleedHealing = true;
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInstance->PlayBleedHealingMontage();
+
+	m_DBleedingHealingEnd.AddLambda([this]() -> void {
+		m_bIsBleedHealing = false;
+		if (CurrentBleedingHealingItem != nullptr) {
+			m_bBleeding = RandomBleedHealing(CurrentBleedingHealingItem->m_fHealingSuccessProbability);
+		}
+		UpdateBHealingSlot();
+
+		});
+}
+
+void ABaseCharacter::PlayKey()
+{
+
+}
+
+void ABaseCharacter::Throw()
+{
+
+}
+
+void ABaseCharacter::UpdateHealingSlot()
+{
+	QuickSlot[1].Count = QuickSlot[1].Count - 1;
+	int slotindex = QuickSlot[1].SlotReference;
+	Inventory[slotindex].Count = Inventory[slotindex].Count - 1;
+
+	if (QuickSlot[1].Count <= 0) {
+		DestroyHealingItemSlot();
+	}
+	else {
+		GameUIUpdate();
+	}
+}
+
+void ABaseCharacter::UpdateBHealingSlot()
+{
+	QuickSlot[0].Count = QuickSlot[0].Count - 1;
+	int slotindex = QuickSlot[0].SlotReference;
+	Inventory[slotindex].Count = Inventory[slotindex].Count - 1;
+	if (QuickSlot[0].Count <= 0) {
+		DestroyBleedingHealingItemSlot();
+	}
+	else {
+		GameUIUpdate();
+	}
+}
+
+void ABaseCharacter::UpdateKeySlot()
+{
+}
+
+void ABaseCharacter::UpdateThrowWSlot()
+{
 }
 
 void ABaseCharacter::PickUp()
@@ -894,8 +1002,36 @@ void ABaseCharacter::SpawnHealingItem()
 		DestroyHealingItem();
 	}
 	if (CurrentHealingItem == nullptr) {
-		CurrentHealingItem = GetWorld()->SpawnActor<AHDrink>(AHDrink::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-		
+
+		if (QuickSlot[1].Name == "CannedTuna") {
+			CurrentHealingItem = GetWorld()->SpawnActor<AHCannedTuna>(AHCannedTuna::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+
+		if (QuickSlot[1].Name == "Disinfectant") {
+			CurrentHealingItem = GetWorld()->SpawnActor<AHDisinfectant>(AHDisinfectant::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[1].Name == "Drink") {
+			CurrentHealingItem = GetWorld()->SpawnActor<AHDrink>(AHDrink::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[1].Name == "Ointment") {
+			CurrentHealingItem = GetWorld()->SpawnActor<AHOintment>(AHOintment::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[1].Name == "Smoke") {
+			CurrentHealingItem = GetWorld()->SpawnActor<AHSmoke>(AHSmoke::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[1].Name == "Snack") {
+			CurrentHealingItem = GetWorld()->SpawnActor<AHSnack>(AHSnack::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[1].Name == "Water") {
+			CurrentHealingItem = GetWorld()->SpawnActor<AHWater>(AHWater::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
 		CurrentHealingItem->ItemHandPos = FVector(-0.887761f, -3.927181f, 3.489489f);
 		CurrentHealingItem->ItemHandRot = FRotator(-0.005714f, -70.00028f, 90.03065f);
 
@@ -909,10 +1045,26 @@ void ABaseCharacter::SpawnHealingItem()
 void ABaseCharacter::SpawnBleedingHealingItem()
 {
 	if (CurrentBleedingHealingItem != nullptr) {
-		DestroyHealingItem();
+		DestroyBleedingHealingItem();
 	}
 	if (CurrentBleedingHealingItem == nullptr) {
-		CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHBandage>(ABHBandage::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+
+		if (QuickSlot[0].Name == "Bandage") {
+			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHBandage>(ABHBandage::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[0].Name == "Clothes") {
+			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHClothes>(ABHClothes::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[0].Name == "DirtyClothes") {
+			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHDirtyClothes>(ABHDirtyClothes::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[0].Name == "Gauze") {
+			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHGauze>(ABHGauze::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
 		
 		CurrentBleedingHealingItem->ItemHandPos = FVector(-0.162329f, -2.606654f, 0.f);
 		CurrentBleedingHealingItem->ItemHandRot = FRotator(0.f, 0.f, 0.f);
@@ -926,7 +1078,7 @@ void ABaseCharacter::SpawnBleedingHealingItem()
 void ABaseCharacter::SpawnKeyItem()
 {
 	if (CurrentKeyItem != nullptr) {
-		DestroyHealingItem();
+		DestroyKeyItem();
 	}
 	if (CurrentKeyItem == nullptr) {
 		CurrentKeyItem = GetWorld()->SpawnActor<AKCarkey1>(AKCarkey1::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
@@ -940,31 +1092,49 @@ void ABaseCharacter::SpawnKeyItem()
 
 void ABaseCharacter::DestroyNormalWeapon()
 {
-	CurrentWeapon->Destroy();
+	if (CurrentWeapon != nullptr) {
+		CurrentWeapon->Destroy();
+	}
+
+	SetNWHandIn(false);
 	CurrentWeapon = nullptr;
 }
 
 void ABaseCharacter::DestroyThrowWeapon()
 {
-	CurrentThrowWeapon->Destroy();
+	if (CurrentThrowWeapon != nullptr) {
+		CurrentThrowWeapon->Destroy();
+	}
+
+	SetThrowWHandIn(false);
 	CurrentThrowWeapon = nullptr;
 }
 
 void ABaseCharacter::DestroyHealingItem()
 {
-	CurrentHealingItem->Destroy();
+	if (CurrentHealingItem != nullptr) {
+		CurrentHealingItem->Destroy();
+	}
+
+	SetHealHandIn(false);
 	CurrentHealingItem = nullptr;
 }
 
 void ABaseCharacter::DestroyBleedingHealingItem()
 {
-	CurrentBleedingHealingItem->Destroy();
+	if (CurrentBleedingHealingItem != nullptr) {
+		CurrentBleedingHealingItem->Destroy();
+	}
+	SetBHHandIn(false);
 	CurrentBleedingHealingItem = nullptr;
 }
 
 void ABaseCharacter::DestroyKeyItem()
 {
-	CurrentKeyItem->Destroy();
+	if (CurrentKeyItem != nullptr) {
+		CurrentKeyItem->Destroy();
+	}
+	SetKeyHandIn(false);
 	CurrentKeyItem = nullptr;
 }
 
@@ -987,12 +1157,14 @@ void ABaseCharacter::DestroyNormalWepaonItemSlot()
 	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 	Inventory[slotindex].Count = 0;
 
+
+
 	GameUIUpdate();
 }
 
 void ABaseCharacter::DestroyThrowWeaponItemSlot()
 {
-	DestroyHealingItem();
+	DestroyThrowWeapon();
 
 	QuickSlot[2].Type = EItemType::ITEM_QUICK_NONE;
 	QuickSlot[2].Name = "nullptr";
@@ -1105,11 +1277,126 @@ void ABaseCharacter::FootSound()
 			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
 			if (OverlappedZombie)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("FootSound2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
 				OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
 			}
 
 		}
+	}
+}
+
+void ABaseCharacter::StartHealingTimer(float healingspeed, float healingduration)
+{
+	if (m_bIsHealingTime) {
+		return;
+	}
+	m_bIsHealingTime = true;
+	m_fItemHealingSpeed = healingspeed;
+	m_fItemHealingDuration = healingduration;
+
+	GetWorld()->GetTimerManager().SetTimer(HealingHandle, this, &ABaseCharacter::HealingTimerElapsed, 1.0f, true, 1.0f);
+
+}
+
+void ABaseCharacter::HealingTimerElapsed()
+{
+	m_fHealingCount++;
+	if (m_fHealingCount > m_fItemHealingDuration) {
+		GetWorld()->GetTimerManager().ClearTimer(HealingHandle);
+		m_fHealingCount = 0.f;
+		m_bIsHealingTime = false;
+		return;
+	}
+
+	SetHP(GetHP() + m_fItemHealingSpeed);
+	if (GetHP() + m_fItemHealingSpeed > m_fMaxHP) {
+		SetHP(GetMaxHP());
+	}
+
+}
+
+void ABaseCharacter::StartBleedingTimer()
+{
+	SetSTR(GetSTR() - 2);
+	SetBasicSpeed(GetBasicSpeed() - 1);
+	GetWorld()->GetTimerManager().SetTimer(HealingHandle, this, &ABaseCharacter::BleedingTimerElapsed, 2.0f, true, 1.0f);
+}
+
+void ABaseCharacter::BleedingTimerElapsed()
+{
+	if (!m_bBleeding) {
+		GetWorld()->GetTimerManager().ClearTimer(HealingHandle);
+		SetSTR(GetSTR() + 2);
+		SetBasicSpeed(GetBasicSpeed() + 1);
+		return;
+	}
+	SetHP(GetHP() - 1);
+
+	if (GetHP() <= 0) {
+		SetDead(true);
+		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+		if (nullptr != CharacterAnimInstance) {
+			CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
+			CharacterAnimInstance->SetIsDead(IsDead());
+		}
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller != nullptr) {
+			DisableInput(controller); // 이래도 움직임 좀비 죽었을때 회전이랑 캐릭터 움직이는 거 수정해야 할듯
+		}
+	}
+}
+
+bool ABaseCharacter::RandomBleeding()
+{
+	float RandomValue = FMath::FRand(); 
+	return RandomValue <= m_fBleedPercent; 
+}
+
+bool ABaseCharacter::RandomBleedHealing(float bhpercent)
+{
+	float RandomValue = FMath::FRand();
+	return RandomValue > bhpercent;
+}
+
+void ABaseCharacter::UseStamina()
+{
+	GetWorld()->GetTimerManager().SetTimer(UseStaminaHandle, this, &ABaseCharacter::UseStaminaTimerElapsed, 1.0f, true, 1.0f);
+}
+
+void ABaseCharacter::UseStaminaTimerElapsed()
+{
+	if (GetVelocity().Size() == 0.f && GetStamina() > 0) {
+		SetStamina(GetStamina() + 5);
+		if (GetStamina() > 100) {
+			SetStamina(100);
+		}
+		return;
+	}
+	SetStamina(GetStamina() - 10);
+
+
+	if (GetStamina() <= 0) {
+		m_bZeroStamina = true;
+		m_bRun = false;
+		HealingStamina();
+		GetWorld()->GetTimerManager().SetTimer(UseStaminaHandle, this, &ABaseCharacter::StaminaWaitingByZero, 5.0f, false);
+	}
+}
+
+void ABaseCharacter::StaminaWaitingByZero()
+{
+	m_bZeroStamina = false;
+}
+
+void ABaseCharacter::HealingStamina()
+{
+	GetWorld()->GetTimerManager().SetTimer(HealingStaminaHandle, this, &ABaseCharacter::HealingStaminaTimerElapsed, 1.0f, true, 1.0f);
+}
+
+void ABaseCharacter::HealingStaminaTimerElapsed()
+{
+	SetStamina(GetStamina() + 5);
+	if (GetStamina() > 100) {
+		SetStamina(100);
 	}
 }
 

@@ -20,8 +20,10 @@ AIdolCharacter::AIdolCharacter()
 	}
 
 	SetHP(50);
-	SetSpeed(5);
+	SetMaxHP(50);
+	SetBasicSpeed(5);
 	SetSTR(5);
+	SetStamina(100);
 	SetSpecialEffect(true);
 	SetCharacterName("IdolCharacter");
 }

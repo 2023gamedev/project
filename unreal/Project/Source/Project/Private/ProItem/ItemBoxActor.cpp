@@ -26,6 +26,7 @@ AItemBoxActor::AItemBoxActor()
 	Box->SetRelativeLocation(FVector(0.f, -3.5, -30.f));
 
 	Trigger->SetCollisionProfileName(TEXT("ItemBoxPS"));
+	Box->SetCollisionProfileName(TEXT("NoCollision"));
 
 	//NormalWeaponItemClass = ANormalWeaponActor::StaticClass();
 	//m_sItemID = "None";

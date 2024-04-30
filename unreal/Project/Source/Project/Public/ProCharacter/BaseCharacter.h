@@ -29,6 +29,7 @@ class AKeyActor;
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
 DECLARE_MULTICAST_DELEGATE(FAttackEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FPickUpEndPlayerDelegate);
+DECLARE_MULTICAST_DELEGATE(FBleedHealingEndPlayerDelegate);
 
 // 플레이어 캐릭터들의 부모클래스
 UCLASS()
@@ -132,6 +133,16 @@ public:
 	FAttackEndPlayerDelegate m_DAttackEnd;
 	void Attack();
 
+	void Healing();
+	void BleedHealing();
+	void PlayKey();
+	void Throw();
+
+	void UpdateHealingSlot();
+	void UpdateBHealingSlot();
+	void UpdateKeySlot();
+	void UpdateThrowWSlot();
+
 	FPickUpEndPlayerDelegate m_DPickUpEnd;
 	void PickUp();
 
@@ -145,11 +156,18 @@ public:
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
 
+	float GetMaxHP() { return m_fMaxHP; }
+	void SetMaxHP(float maxhp) { m_fMaxHP = maxhp; }
+
 	float GetSTR() { return m_fSTR; }
 	void SetSTR(float str) { m_fSTR = str; }
 
 	float GetSpeed() { return m_fSpeed; }
 	void SetSpeed(float speed) { m_fSpeed = speed; }
+
+	float GetBasicSpeed() { return m_fBasicSpeed; }
+	void SetBasicSpeed(float speed) { m_fBasicSpeed = speed; }
+
 
 	float GetStamina() { return m_fStamina; }
 	void SetStamina(float stamina) { m_fStamina = stamina; }
@@ -207,8 +225,8 @@ public:
 	bool IsInventory() { return m_bInventoryOn; }
 	void SetInventory(bool inven) { m_bInventoryOn = inven; }
 
-	void SetCharacterName(FString charactername) { m_sCharacterName = charactername; };
-	FString GetCharacterName() { return m_sCharacterName; }
+	void SetCharacterName(FName charactername) { m_nCharacterName = charactername; };
+	FName GetCharacterName() { return m_nCharacterName; }
 
 	void SetStartLocation(FVector startlocation) { m_VStartLocation = startlocation; }
 	FVector GetStartLocation() { return m_VStartLocation; }
@@ -242,7 +260,60 @@ public:
 
 	void FootSound();
 
+	// 체력 Timer
+	void StartHealingTimer(float healingspeed, float healingduration);
+	void HealingTimerElapsed();
 
+	FTimerHandle HealingHandle;
+	UPROPERTY(EditAnywhere)
+	bool m_bIsHealingTime = false;
+
+	UPROPERTY(EditAnywhere)
+	float m_fHealingCount = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float m_fItemHealingSpeed = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float m_fItemHealingDuration = 0.f;
+
+
+	// 소방관
+	virtual void Smoking() {};
+
+	// 출혈 회복
+	FBleedHealingEndPlayerDelegate m_DBleedingHealingEnd;
+	FTimerHandle BleedingHandle;
+	void StartBleedingTimer();
+	void BleedingTimerElapsed();
+
+	bool RandomBleeding();
+	bool RandomBleedHealing(float bhpercent);
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsBleedHealing = false;
+
+	UPROPERTY(EditAnywhere)
+	float m_fBleedPercent = 0.3f;
+
+	// 스태미나 부분
+	FTimerHandle UseStaminaHandle;
+
+	void UseStamina();
+	void UseStaminaTimerElapsed();
+	void StaminaWaitingByZero();
+
+	FTimerHandle HealingStaminaHandle;
+	void HealingStamina();
+	void HealingStaminaTimerElapsed();
+
+
+	UPROPERTY(EditAnywhere)
+	bool m_bZeroStamina = false;
+
+
+
+	
 	virtual uint32 GetPlayerId() const;
 	void SetPlayerId(uint32 NewPlayerId);
 	void UpdatePlayerData(FVector Location);
@@ -254,14 +325,25 @@ public:
 
 
 private:
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsStanding = false;
+
 	UPROPERTY(EditAnywhere)
 	float m_fHP = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float m_fMaxHP = 0.f;
 
 	UPROPERTY(EditAnywhere)
 	float m_fSTR = 0.f;
 
 	UPROPERTY(EditAnywhere)
 		float m_fSpeed = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float m_fBasicSpeed = 0.f;
+		
 
 	UPROPERTY(EditAnywhere)
 		float m_fStamina = 0.f;
@@ -313,7 +395,7 @@ private:
 	FVector m_VStartLocation;
 
 	UPROPERTY(EditAnywhere)
-	FString m_sCharacterName;
+	FName m_nCharacterName;
 
 	// 현재 
 	UPROPERTY(EditAnywhere)

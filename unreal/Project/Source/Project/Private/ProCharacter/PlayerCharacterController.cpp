@@ -164,7 +164,7 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputLightOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::LightOnOff);
 				PEI->BindAction(InputActions->InputInventoryOnOff, ETriggerEvent::Completed, this, &APlayerCharacterController::InventoryOnOff);
 				PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &APlayerCharacterController::Jump);
-				PEI->BindAction(InputActions->InputAttack, ETriggerEvent::Completed, this, &APlayerCharacterController::Attck);
+				PEI->BindAction(InputActions->InputAttack, ETriggerEvent::Completed, this, &APlayerCharacterController::BehaviorToItem);
 
 				PEI->BindAction(InputActions->InputQuickNWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickNWeapon);
 				PEI->BindAction(InputActions->InputQuickTWeapon, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickTWeapon);
@@ -256,7 +256,12 @@ void APlayerCharacterController::Run(const FInputActionValue& Value)
 void APlayerCharacterController::Jump(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	basecharacter->Jump();
+	
+	if (basecharacter->GetStamina() >= 20) {
+		basecharacter->Jump();
+		basecharacter->SetStamina(basecharacter->GetStamina() - 20);
+	}
+
 }
 
 void APlayerCharacterController::GetItem(const FInputActionValue& Value)
@@ -278,13 +283,59 @@ void APlayerCharacterController::InventoryOnOff(const FInputActionValue& Value)
 	basecharacter->InventoryOnOff();
 }
 
-void APlayerCharacterController::Attck(const FInputActionValue& Value)
+void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	if (basecharacter->IsNWHandIn()) {
+		Attack();
+	}
+	else if (basecharacter->IsBHHandIn()) {
+		BleedHealing();
+	}
+	else if (basecharacter->IsHealHandIn()) {
+		Healing();
+	}
+	else if (basecharacter->IsKeyHandIn()) {
+		PlayKey();
+	}
+	else if (basecharacter->IsThrowWHandIn()) {
+		Throw();
+	}
+	
+}
+
+void APlayerCharacterController::Attack()
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	//basecharacter->SetAttack(true);
 	b_attack = true;
 	UE_LOG(LogTemp, Warning, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }
+
+void APlayerCharacterController::Healing()
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	basecharacter->Healing();
+}
+
+void APlayerCharacterController::BleedHealing()
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	basecharacter->BleedHealing();
+}
+
+void APlayerCharacterController::PlayKey()
+{
+}
+
+void APlayerCharacterController::Throw()
+{
+}
+
+
 
 void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)
 {

@@ -9,3 +9,8 @@ UBaseUI::UBaseUI(const FObjectInitializer& ObjectInitializer)
 
 }
 
+void UBaseUI::NativeConstruct()
+{
+	Super::NativeConstruct();
+}
+

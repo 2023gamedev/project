@@ -23,6 +23,14 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+
+	FTimerHandle SmokeHandle;
+	FTimerHandle DyingHandle;
+	void SmokeTimer();
+	void LimitSmoking();
+	void NoSmokeIsDying();
+
+	virtual void Smoking() override;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 };

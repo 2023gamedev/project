@@ -33,7 +33,6 @@ void UPlayerSight::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 	FVector Start = GetComponentLocation();
 	FVector End = Start + GetForwardVector() * m_fMaxSightDistance;
-	DrawDebugLine(GetWorld(), Start, End, FColor::Red);
 
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(m_fRadius);
 	FHitResult HitResult;

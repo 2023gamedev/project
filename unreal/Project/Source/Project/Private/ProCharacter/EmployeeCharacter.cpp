@@ -20,8 +20,10 @@ AEmployeeCharacter::AEmployeeCharacter()
 	}
 
 	SetHP(50);
-	SetSpeed(4);
+	SetMaxHP(50);
+	SetBasicSpeed(4);
 	SetSTR(4);
+	SetStamina(100);
 	SetSpecialEffect(false);
 	SetCharacterName("EmployeeCharacter");
 }

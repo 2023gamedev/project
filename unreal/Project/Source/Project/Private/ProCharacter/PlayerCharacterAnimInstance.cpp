@@ -21,6 +21,17 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 	if (PICKUP_MONTAGE.Succeeded()) {
 		PickUpMontage = PICKUP_MONTAGE.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> HEALING_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeeHealing.BP_AMEmployeeHealing"));
+	if (HEALING_MONTAGE.Succeeded()) {
+		HealingMontage = HEALING_MONTAGE.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> BH_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeeBleedHealing.BP_AMEmployeeBleedHealing"));
+	if (BH_MONTAGE.Succeeded()) {
+		BleedHealingMontage = BH_MONTAGE.Object;
+	}
+
 }
 
 void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -54,6 +65,20 @@ void UPlayerCharacterAnimInstance::PlayPickUpMontage()
 	}
 }
 
+void UPlayerCharacterAnimInstance::PlayHealingMontage()
+{
+	if (!Montage_IsPlaying(HealingMontage)) {
+		Montage_Play(HealingMontage, 3.f);
+	}
+}
+
+void UPlayerCharacterAnimInstance::PlayBleedHealingMontage()
+{
+	if (!Montage_IsPlaying(BleedHealingMontage)) {
+		Montage_Play(BleedHealingMontage, 3.f);
+	}
+}
+
 void UPlayerCharacterAnimInstance::AnimNotify_AttackStart()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackStart"));
@@ -77,3 +102,5 @@ void UPlayerCharacterAnimInstance::AnimNotify_FootSound2()
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_FootSound2"));
 	OnFootSoundCheck.Broadcast();
 }
+
+

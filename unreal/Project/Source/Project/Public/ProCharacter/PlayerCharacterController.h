@@ -41,7 +41,13 @@ public:
 	void GetItem(const FInputActionValue& Value);
 	void LightOnOff(const FInputActionValue& Value);
 	void InventoryOnOff(const FInputActionValue& Value);
-	void Attck(const FInputActionValue& Value);
+
+	void BehaviorToItem(const FInputActionValue& Value);
+	void Attack();
+	void Healing();
+	void BleedHealing();
+	void PlayKey();
+	void Throw();
 
 	void QuickNWeapon(const FInputActionValue& Value);
 	void QuickTWeapon(const FInputActionValue& Value);
