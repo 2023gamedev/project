@@ -42,6 +42,8 @@ public:
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
+	void Timer_Thread();
+
 private:
 	HANDLE g_hIocp;	
 	int cpuCore;
@@ -52,4 +54,6 @@ private:
 	unsigned int playerIndex{ UINT_MAX };
 
 	vector<int> m_zombie;
+
+	int GameTime;
 };
