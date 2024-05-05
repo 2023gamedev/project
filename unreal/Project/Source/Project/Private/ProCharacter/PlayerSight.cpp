@@ -49,15 +49,12 @@ void UPlayerSight::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	if (m_bHasHit) { // 충돌 시
 		HitActor = HitResult.GetActor();
 		if (HitActor == nullptr) {
-			//UE_LOG(LogTemp, Warning, TEXT("xxxxxxxxxxxxxxxxxxxxx"));
 		}
 		else {
-			//UE_LOG(LogTemp, Warning, TEXT("oooooooooooooooooooooooo"));
 		}
 
 	}
 	else {
-		// 충돌 안함
 	}
 
 

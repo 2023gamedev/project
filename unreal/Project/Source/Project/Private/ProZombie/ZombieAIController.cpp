@@ -47,23 +47,7 @@ void AZombieAIController::BeginPlay()
 
 }
 
-//void AZombieAIController::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-//
-//
-//	if (LineOfSightTo(PlayerPawn)) {
-//		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
-//		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
-//		GetBlackboardComponent()->SetValueAsObject(TargetKey, PlayerPawn);
-//	}
-//	else {
-//		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-//		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
-//	}
-//}
+
 
 void AZombieAIController::Tick(float DeltaTime)
 {
