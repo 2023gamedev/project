@@ -5,7 +5,6 @@
 
 void UStartGameUI::OnStartButtonClicked()
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnStartButtonClicked");
 
     MoveChoiceCharacterUI.Execute();
 
@@ -14,7 +13,6 @@ void UStartGameUI::OnStartButtonClicked()
 
 void UStartGameUI::OnExitButtonClicked()
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnExitButtonClicked");
 
     APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
     if (PlayerController)
@@ -29,23 +27,19 @@ void UStartGameUI::Init()
 {
     if (StartButton)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartButton Init");
         StartButton->SetClickMethod(EButtonClickMethod::DownAndUp);
         StartButton->OnClicked.AddDynamic(this, &UStartGameUI::OnStartButtonClicked);
 
         StartButton->SetIsEnabled(true);
 
-        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartButton Init End");
     }
 
     if (ExitButton)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ExitButton Init");
 
         ExitButton->SetClickMethod(EButtonClickMethod::DownAndUp);
         ExitButton->OnClicked.AddDynamic(this, &UStartGameUI::OnExitButtonClicked);
         ExitButton->SetIsEnabled(true);
 
-        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ExitButton Init End");
     }
 }
