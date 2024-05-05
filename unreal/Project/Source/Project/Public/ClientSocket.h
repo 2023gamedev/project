@@ -80,6 +80,8 @@ public:
 
 	uint32 GetMyPlayerId() const;
 
+	uint32 Timer = 0;
+
 
 
 private:

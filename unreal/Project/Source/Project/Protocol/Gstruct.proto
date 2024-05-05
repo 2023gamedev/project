@@ -34,3 +34,7 @@ message Zombie {
     bool attack = 12;
 };
 
+message Time {
+    uint32 timer = 1;
+    uint32 packet_type = 2;
+}

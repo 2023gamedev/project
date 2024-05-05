@@ -90,6 +90,14 @@ uint32 ClientSocket::Run()
 					}
 					break;
 				}
+				case 3:
+				{
+					Protocol::Time TimePacket;
+					if (TimePacket.ParseFromArray(buffer.data(), buffer.size()))
+					{
+						Timer = TimePacket.timer();
+					}
+				}
 
 				buffer.clear();
 				}

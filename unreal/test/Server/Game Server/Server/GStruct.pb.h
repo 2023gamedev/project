@@ -48,12 +48,16 @@ namespace Protocol {
 class Character;
 struct CharacterDefaultTypeInternal;
 extern CharacterDefaultTypeInternal _Character_default_instance_;
+class Time;
+struct TimeDefaultTypeInternal;
+extern TimeDefaultTypeInternal _Time_default_instance_;
 class Zombie;
 struct ZombieDefaultTypeInternal;
 extern ZombieDefaultTypeInternal _Zombie_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::Character* Arena::CreateMaybeMessage<::Protocol::Character>(Arena*);
+template<> ::Protocol::Time* Arena::CreateMaybeMessage<::Protocol::Time>(Arena*);
 template<> ::Protocol::Zombie* Arena::CreateMaybeMessage<::Protocol::Zombie>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
@@ -629,6 +633,165 @@ class Zombie final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_GStruct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Time final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Time) */ {
+ public:
+  inline Time() : Time(nullptr) {}
+  ~Time() override;
+  explicit PROTOBUF_CONSTEXPR Time(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Time(const Time& from);
+  Time(Time&& from) noexcept
+    : Time() {
+    *this = ::std::move(from);
+  }
+
+  inline Time& operator=(const Time& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Time& operator=(Time&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Time& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Time* internal_default_instance() {
+    return reinterpret_cast<const Time*>(
+               &_Time_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(Time& a, Time& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Time* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Time* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Time* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Time>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Time& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Time& from) {
+    Time::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Time* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.Time";
+  }
+  protected:
+  explicit Time(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTimerFieldNumber = 1,
+    kPacketTypeFieldNumber = 2,
+  };
+  // uint32 timer = 1;
+  void clear_timer();
+  uint32_t timer() const;
+  void set_timer(uint32_t value);
+  private:
+  uint32_t _internal_timer() const;
+  void _internal_set_timer(uint32_t value);
+  public:
+
+  // uint32 packet_type = 2;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.Time)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t timer_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GStruct_2eproto;
+};
 // ===================================================================
 
 
@@ -1184,9 +1347,55 @@ inline void Zombie::set_attack(bool value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie.attack)
 }
 
+// -------------------------------------------------------------------
+
+// Time
+
+// uint32 timer = 1;
+inline void Time::clear_timer() {
+  _impl_.timer_ = 0u;
+}
+inline uint32_t Time::_internal_timer() const {
+  return _impl_.timer_;
+}
+inline uint32_t Time::timer() const {
+  // @@protoc_insertion_point(field_get:Protocol.Time.timer)
+  return _internal_timer();
+}
+inline void Time::_internal_set_timer(uint32_t value) {
+  
+  _impl_.timer_ = value;
+}
+inline void Time::set_timer(uint32_t value) {
+  _internal_set_timer(value);
+  // @@protoc_insertion_point(field_set:Protocol.Time.timer)
+}
+
+// uint32 packet_type = 2;
+inline void Time::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t Time::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t Time::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Time.packet_type)
+  return _internal_packet_type();
+}
+inline void Time::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void Time::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Time.packet_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 
