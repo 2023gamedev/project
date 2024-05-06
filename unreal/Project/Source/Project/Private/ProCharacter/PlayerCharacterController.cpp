@@ -418,6 +418,11 @@ void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
 	basecharacter->QuickKeyItem();
 }
 
+void APlayerCharacterController::DisabledControllerInput()
+{
+	DisableInput(this);
+}
+
 void APlayerCharacterController::ServerHandleAttack()
 {
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetCharacter());

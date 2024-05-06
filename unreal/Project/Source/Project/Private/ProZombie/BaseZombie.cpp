@@ -94,13 +94,14 @@ void ABaseZombie::SetNormalDeadWithAnim()
 
 	StartResurrectionTimer();
 
-	//// aicontroller 움직임을 멈추기 위해 코딩(회전을 해버려서), 근데도 회전함 수정 필요
-	//auto AIController = Cast<AAIController>(GetController());
-	//if (nullptr != AIController) {
-	//	AIController->StopMovement();
-	//	AIController->bSetControlRotationFromPawnOrientation = false;
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("StopMovement")));
-	//}
+	// aicontroller 움직임을 멈추기 위해 코딩(회전을 해버려서), 근데도 회전함 수정 필요
+
+	auto AIController = Cast<AAIController>(GetController());
+	if (nullptr != AIController) {
+		AIController->StopMovement();
+		AIController->bSetControlRotationFromPawnOrientation = false;
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("StopMovement")));
+	}
 }
 
 void ABaseZombie::SetCuttingDeadWithAnim()

@@ -55,6 +55,9 @@ public:
 	void QuickHItem(const FInputActionValue& Value);
 	void QuickKeyItem(const FInputActionValue& Value);
 
+	void DisabledControllerInput();
+
+
 	void ServerHandleAttack();
 
 
