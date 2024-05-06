@@ -94,13 +94,47 @@ void ABaseZombie::SetNormalDeadWithAnim()
 
 	StartResurrectionTimer();
 
-	// aicontroller 움직임을 멈추기 위해 코딩(회전을 해버려서), 근데도 회전함 수정 필요
+	StopAITree();
+}
 
-	auto AIController = Cast<AAIController>(GetController());
-	if (nullptr != AIController) {
-		AIController->StopMovement();
-		AIController->bSetControlRotationFromPawnOrientation = false;
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("StopMovement")));
+void ABaseZombie::StopAITree()
+{
+	if (GetZombieName() == "NormalZombie") {
+		AZombieAIController* NormalZombieAIController = Cast<AZombieAIController>(GetController());
+
+		NormalZombieAIController->StopAI();
+
+	}
+	else if (GetZombieName() == "RunningZombie") {
+		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
+
+		RunningZombieAIController->StopAI();
+	}
+	else if (GetZombieName() == "ShoutingZombie") {
+		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
+
+		ShoutingZombieAIController->StopAI();
+	}
+
+}
+
+void ABaseZombie::StartAITree()
+{
+	if (GetZombieName() == "NormalZombie") {
+		AZombieAIController* NormalZombieAIController = Cast<AZombieAIController>(GetController());
+
+		NormalZombieAIController->StartAI();
+
+	}
+	else if (GetZombieName() == "RunningZombie") {
+		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
+
+		RunningZombieAIController->StartAI();
+	}
+	else if (GetZombieName() == "ShoutingZombie") {
+		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
+
+		ShoutingZombieAIController->StartAI();
 	}
 }
 
@@ -115,13 +149,7 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 
 	StartResurrectionTimer();
 
-	//// aicontroller 움직임을 멈추기 위해 코딩(회전을 해버려서), 근데도 회전함 수정 필요
-	//auto AIController = Cast<AAIController>(GetController());
-	//if (nullptr != AIController) {
-	//	AIController->StopMovement();
-	//	AIController->bSetControlRotationFromPawnOrientation = false;
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("StopMovement")));
-	//}
+	StopAITree();
 }
 
 void ABaseZombie::Attack()
@@ -133,13 +161,25 @@ void ABaseZombie::Attack()
 
 
 	AnimInstance->PlayAttackMontage();
+	
 	m_bIsAttacking = true;
+
+
+	if (!IsDie()) {
+		StopAITree();
+	}
+
 }
 
 void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bIsAttacking = false;
+
 	m_DAttackEnd.Broadcast();
+
+	if (!IsDie()) {
+		StartAITree();
+	}
 }
 
 void ABaseZombie::AttackCheck()
@@ -323,6 +363,20 @@ void ABaseZombie::WaittingTimerElapsed()
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
 	SetHP(GetStartHP());
+
+	SetDie(true);
+	StartAITree();
+}
+
+void ABaseZombie::StartAttackedStunHandle()
+{
+	StopAITree();
+	GetWorld()->GetTimerManager().SetTimer(AttakcedStunHandle, this, &ABaseZombie::AttackedStunTimerElapsed, 2.0f, false);
+}
+
+void ABaseZombie::AttackedStunTimerElapsed()
+{
+	StartAITree();
 }
 
 void ABaseZombie::UpdateLastKnownPositionByFootSound(FVector playerlocation)
@@ -374,6 +428,8 @@ void ABaseZombie::UpdateLastKnownPositionByShoutingSound(FVector playerlocation)
 		}
 	}
 }
+
+
 
 
 

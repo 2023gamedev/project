@@ -171,7 +171,6 @@ void ABaseCharacter::BeginPlay()
 		GameUIWidget->Init();
 		GameUIWidget->AddToViewport();
 		GameUIWidget->SetVisibility(ESlateVisibility::Hidden);
-
 	}
 
 	if (ConditionUIClass != nullptr) {
@@ -331,54 +330,27 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 	auto CurrentInvenSlot = this->Inventory[slotindex];
 	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {
 		if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
-			QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
-			QuickSlot[0].Name = "nullptr";
-			QuickSlot[0].ItemClassType = EItemClass::NONE;
-			QuickSlot[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
-			QuickSlot[0].Count = 0;
-			QuickSlot[0].SlotReference = -1;
+
+			DestroyBleedingHealingItemSlot();
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::HEALINGITEM) {
-			QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
-			QuickSlot[1].Name = "nullptr";
-			QuickSlot[1].ItemClassType = EItemClass::NONE;
-			QuickSlot[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
-			QuickSlot[1].Count = 0;
-			QuickSlot[1].SlotReference = -1;
+
+			DestroyHealingItemSlot();
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::THROWINGWEAPON) {
-			QuickSlot[2].Type = EItemType::ITEM_QUICK_NONE;
-			QuickSlot[2].Name = "nullptr";
-			QuickSlot[2].ItemClassType = EItemClass::NONE;
-			QuickSlot[2].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
-			QuickSlot[2].Count = 0;
-			QuickSlot[2].SlotReference = -1;
+
+			DestroyThrowWeaponItemSlot();
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::KEYITEM) {
-			QuickSlot[3].Type = EItemType::ITEM_QUICK_NONE;
-			QuickSlot[3].Name = "nullptr";
-			QuickSlot[3].ItemClassType = EItemClass::NONE;
-			QuickSlot[3].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
-			QuickSlot[3].Count = 0;
-			QuickSlot[3].SlotReference = -1;
+
+			DestroyKeyItemSlot();
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::NORMALWEAPON) {
-			QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
-			QuickSlot[4].Name = "nullptr";
-			QuickSlot[4].ItemClassType = EItemClass::NONE;
-			QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
-			QuickSlot[4].Count = 0;
-			QuickSlot[4].SlotReference = -1;
+
+			DestroyNormalWepaonItemSlot();
 		}
 
 	}
-	Inventory[slotindex].Type = EItemType::ITEM_NONE;
-	Inventory[slotindex].Name = "nullptr";
-	Inventory[slotindex].ItemClassType = EItemClass::NONE;
-	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
-	Inventory[slotindex].Count = 0;
-
-	GameUIUpdate();
 
 	ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
 }
@@ -994,6 +966,7 @@ void ABaseCharacter::SpawnNormalWeapon()
 	}
 	
 	SetBringCurrentWeapon(true);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnNormalWeapon"));
 }
 
 
@@ -1046,6 +1019,7 @@ void ABaseCharacter::SpawnHealingItem()
 	}
 
 	SetBringCurrentHealingItem(true);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnHealingItem"));
 }
 
 void ABaseCharacter::SpawnBleedingHealingItem()
@@ -1079,6 +1053,7 @@ void ABaseCharacter::SpawnBleedingHealingItem()
 	}
 
 	SetBringCurrentBleedingHealingItem(true);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnBleedingHealingItem"));
 }
 
 void ABaseCharacter::SpawnKeyItem()
@@ -1094,6 +1069,7 @@ void ABaseCharacter::SpawnKeyItem()
 	}
 
 	SetBringCurrentKeyItem(true);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnKeyItem"));
 }
 
 void ABaseCharacter::DestroyNormalWeapon()

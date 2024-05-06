@@ -114,3 +114,21 @@ void ARunningZombieAIController::UpdateLastKnownPositionByFootSound(FVector play
 	m_bFootSound = true;
 	m_vFootCharacterPos = playerlocation;
 }
+
+void ARunningZombieAIController::StopAI()
+{
+	auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
+	if (nullptr != BehaviorTreeComponent)
+	{
+		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+	}
+}
+
+void ARunningZombieAIController::StartAI()
+{
+	auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
+	if (nullptr != BehaviorTreeComponent)
+	{
+		BehaviorTreeComponent->StartTree(*this->RunningZombieAIBehavior, EBTExecutionMode::Looped);
+	}
+}
