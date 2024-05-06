@@ -308,7 +308,7 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 void APlayerCharacterController::Attack()
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	//basecharacter->SetAttack(true);
+	basecharacter->SetAttack(true);
 	b_attack = true;
 	UE_LOG(LogTemp, Warning, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }
@@ -384,6 +384,11 @@ void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
 	UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
 
 	basecharacter->QuickKeyItem();
+}
+
+void APlayerCharacterController::DisabledControllerInput()
+{
+	DisableInput(this);
 }
 
 void APlayerCharacterController::ServerHandleAttack()
