@@ -61,7 +61,7 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
 
 	}
-	
+
 	CheckAndSendMovement();
 }
 

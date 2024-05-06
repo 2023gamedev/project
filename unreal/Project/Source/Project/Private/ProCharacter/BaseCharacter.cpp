@@ -276,15 +276,21 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 	if (GetHP() <= 0) {
 		SetDead(true);
-		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-		if (nullptr != CharacterAnimInstance) {
-			CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-			CharacterAnimInstance->SetIsDead(IsDead());
-		}
+
 		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 		if (controller != nullptr) {
-			DisableInput(controller); // 이래도 움직임 좀비 죽었을때 회전이랑 캐릭터 움직이는 거 수정해야 할듯
+			controller->DisabledControllerInput(); // controller에서 직접 하니까 해결
+			//DisableInput(controller); // 이래도 움직임 좀비 죽었을때 회전이랑 캐릭터 움직이는 거 수정해야 할듯
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("disabled input")));
+
 		}
+
+		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+		if (nullptr != CharacterAnimInstance) {
+			CharacterAnimInstance->SetCurrentPawnSpeed(0);
+			CharacterAnimInstance->SetIsDead(IsDead());
+		}
+
 	}
 
 	
