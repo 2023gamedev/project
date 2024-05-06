@@ -157,12 +157,13 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 		case EItemClass::BLEEDINGHEALINGITEM:
 			if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_NONE) {
 				Character->QuickSlot[0].Type = EItemType::ITEM_QUICK_EQUIPMENT;
-				Character->QuickSlot[0].Type = Character->Inventory[SlotIndex].Type;
 				Character->QuickSlot[0].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[0].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 				Character->QuickSlot[0].Texture = Character->Inventory[SlotIndex].Texture;
 				Character->QuickSlot[0].Count = Character->Inventory[SlotIndex].Count;
 				Character->QuickSlot[0].SlotReference = SlotIndex;
+
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_EQUIPMENT;
 
 				Character->SpawnBleedingHealingItem();
 			}
@@ -174,10 +175,13 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[0].Count = 0;
 				Character->QuickSlot[0].SlotReference = -1;
 
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
+
 				if (Character->IsBringCurrentBleedingHealingItem()) {
 					Character->DestroyBleedingHealingItem();
 					Character->SetBHHandIn(false);
 					Character->SetBringCurrentBleedingHealingItem(false);
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: BLEEDINGHEALINGITEM"));
 				}
 			}
 			Character->GameUIUpdate();
@@ -186,13 +190,13 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 		case EItemClass::HEALINGITEM:
 			if (Character->QuickSlot[1].Type == EItemType::ITEM_QUICK_NONE) {
 				Character->QuickSlot[1].Type = EItemType::ITEM_QUICK_EQUIPMENT;
-				Character->QuickSlot[1].Type = Character->Inventory[SlotIndex].Type;
 				Character->QuickSlot[1].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[1].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 				Character->QuickSlot[1].Texture = Character->Inventory[SlotIndex].Texture;
 				Character->QuickSlot[1].Count = Character->Inventory[SlotIndex].Count;
 				Character->QuickSlot[1].SlotReference = SlotIndex;
 
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_EQUIPMENT;
 
 				Character->SpawnHealingItem();
 			}
@@ -204,24 +208,31 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[1].Count = 0;
 				Character->QuickSlot[1].SlotReference = -1;
 
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
+
+
 				if (Character->IsBringCurrentHealingItem()) {
 					Character->DestroyHealingItem();
 					Character->SetHealHandIn(false);
 					Character->SetBringCurrentHealingItem(false);
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: HEALINGITEM"));
 				}
 			}
+
 			Character->GameUIUpdate();
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEALINGITEM!"));
 			break;
 		case EItemClass::THROWINGWEAPON:
 			if (Character->QuickSlot[2].Type == EItemType::ITEM_QUICK_NONE) {
 				Character->QuickSlot[2].Type = EItemType::ITEM_QUICK_EQUIPMENT;
-				Character->QuickSlot[2].Type = Character->Inventory[SlotIndex].Type;
 				Character->QuickSlot[2].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[2].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 				Character->QuickSlot[2].Texture = Character->Inventory[SlotIndex].Texture;
 				Character->QuickSlot[2].Count = Character->Inventory[SlotIndex].Count;
 				Character->QuickSlot[2].SlotReference = SlotIndex;
+
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_EQUIPMENT;
+
 
 				Character->SpawnThrowWeapon();
 			}
@@ -233,10 +244,14 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[2].Count = 0;
 				Character->QuickSlot[2].SlotReference = -1;
 
+
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
+				
 				if (Character->IsBringCurrentThrowWeapon()) {
 					Character->DestroyThrowWeapon();
 					Character->SetThrowWHandIn(false);
 					Character->SetBringCurrentThrowWeapon(false);
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: THROWINGWEAPON"));
 				}
 			}
 			Character->GameUIUpdate();
@@ -245,12 +260,13 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 		case EItemClass::KEYITEM:
 			if (Character->QuickSlot[3].Type == EItemType::ITEM_QUICK_NONE) {
 				Character->QuickSlot[3].Type = EItemType::ITEM_QUICK_EQUIPMENT;
-				Character->QuickSlot[3].Type = Character->Inventory[SlotIndex].Type;
 				Character->QuickSlot[3].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[3].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
 				Character->QuickSlot[3].Texture = Character->Inventory[SlotIndex].Texture;
 				Character->QuickSlot[3].Count = Character->Inventory[SlotIndex].Count;
 				Character->QuickSlot[3].SlotReference = SlotIndex;
+
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_EQUIPMENT;
 
 				Character->SpawnKeyItem();
 			}
@@ -262,10 +278,14 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[3].Count = 0;
 				Character->QuickSlot[3].SlotReference = -1;
 
-				if (Character->IsBringCurrentHealingItem()) {
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
+
+
+				if (Character->IsBringCurrentKeyItem()) {
 					Character->DestroyKeyItem();
 					Character->SetKeyHandIn(false);
 					Character->SetBringCurrentKeyItem(false);
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: KEYITEM"));
 				}
 			}
 
@@ -281,6 +301,8 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].Count = Character->Inventory[SlotIndex].Count;
 				Character->QuickSlot[4].SlotReference = SlotIndex;
 
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_EQUIPMENT;
+
 				Character->SpawnNormalWeapon();
 			}
 			else if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_EQUIPMENT) {
@@ -291,10 +313,14 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].Count = 0;
 				Character->QuickSlot[4].SlotReference = -1;
 
+				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
+
+
 				if (Character->IsBringCurrentWeapon()) {
 					Character->DestroyNormalWeapon();
 					Character->SetNWHandIn(false);
 					Character->SetBringCurrentWeapon(false);
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: NORMALWEAPON"));
 				}
 			}
 
