@@ -169,3 +169,22 @@ void AZombieAIController::UpdateLastKnownPositionByShoutingSound(FVector playerl
 	m_bShoutingSound = true;
 	m_vShoutingPos = playerlocation;
 }
+
+void AZombieAIController::StopAI()
+{
+	auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
+	if (nullptr != BehaviorTreeComponent)
+	{
+		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+	}
+}
+
+void AZombieAIController::StartAI()
+{
+	auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
+	if (nullptr != BehaviorTreeComponent)
+	{
+		BehaviorTreeComponent->StartTree(*this->AIBehavior, EBTExecutionMode::Looped);
+	}
+}
+

@@ -132,10 +132,18 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bIsStanding = false;
 
+	FTimerHandle AttakcedStunHandle;
+
+	void StartAttackedStunHandle();
+
+	void AttackedStunTimerElapsed();
 
 	void UpdateLastKnownPositionByFootSound(FVector playerlocation);
 
 	void UpdateLastKnownPositionByShoutingSound(FVector playerlocation);
+
+	void StopAITree();
+	void StartAITree();
 
 private:
 

@@ -32,13 +32,19 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 	if(Zombie){
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
-		if (Zombie->GetHP() <= 0) {			
+		if (Zombie->GetHP() <= 0) {
+			Zombie->SetDie(true);
 			if (WeaponName == "ButchersKnife" || WeaponName == "FireAxe" || WeaponName == "SashimiKnife") {
 				Zombie->SetCuttingDeadWithAnim();
 			}
 			else {
 				Zombie->SetNormalDeadWithAnim();
 			}
+		}
+		else {
+
+			Zombie->StartAttackedStunHandle();
+
 		}
 		BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 		--m_fWeaponDurability;

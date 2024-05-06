@@ -35,6 +35,9 @@ public:
 
 	void UpdateLastKnownPositionByFootSound(FVector playerlocation);
 
+	void StopAI();
+	void StartAI();
+
 	UProGameInstance* GameInstance;
 
 private:
