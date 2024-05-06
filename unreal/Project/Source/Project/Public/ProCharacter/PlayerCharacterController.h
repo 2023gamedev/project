@@ -87,7 +87,8 @@ public:
 	uint32 MyCharacterNumber;
 	uint32 OtherCharacterNumber;
 	FVector NewLocation;
-	std::atomic <bool> b_attack{ false };
+	//std::atomic <bool> b_attack{ false };
+	bool b_attack = false;
 	std::atomic <bool> b_GetItem{ false };
 
 };

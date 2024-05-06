@@ -84,7 +84,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				recvPlayerData.b_attack, recvPlayerData.ItemId);
 			if (recvPlayerData.b_attack) {
 				//ServerHandleAttack();
-				UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), recvPlayerData.PlayerId, recvPlayerData.b_attack);
+				//UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), recvPlayerData.PlayerId, recvPlayerData.b_attack);
 			}
 		}
 	}
@@ -100,7 +100,39 @@ void APlayerCharacterController::CheckAndSendMovement()
 	uint32 ItemBoxId = MyBaseCharacter->ItemBoxId;
 	
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_attack || b_GetItem) {
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_GetItem) {
+		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
+
+		// Protobuf를 사용하여 TestPacket 생성
+		Protocol::Character packet;
+		packet.set_playerid(MyPlayerId);
+		packet.set_packet_type(1); // 원하는 유형 설정
+		packet.set_charactertype(MyCharacterNumber);
+		packet.set_x(CurrentLocation.X);
+		packet.set_y(CurrentLocation.Y);
+		packet.set_z(CurrentLocation.Z);
+		packet.set_pitch(CurrentRotation.Pitch);
+		packet.set_yaw(CurrentRotation.Yaw);
+		packet.set_roll(CurrentRotation.Roll);
+		packet.set_attack(false);
+		packet.set_getitem(ItemBoxId);
+		packet.set_isingame(true);
+
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+
+		// 직렬화된 데이터를 서버로 전송
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+		// 현재 위치를 이전 위치로 업데이트
+		PreviousLocation = CurrentLocation;
+		PreviousRotation = CurrentRotation;
+		b_GetItem = false;
+	}
+
+	else if (b_attack) {
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
 
@@ -308,7 +340,7 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 void APlayerCharacterController::Attack()
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	//basecharacter->SetAttack(true);
+	basecharacter->SetAttack(true);
 	b_attack = true;
 	UE_LOG(LogTemp, Warning, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }
