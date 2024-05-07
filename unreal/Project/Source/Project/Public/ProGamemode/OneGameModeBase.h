@@ -58,6 +58,7 @@ class AZombieAIController;
 class AShoutingZombieAIController;
 class ARunningZombieAIController;
 class AItemBoxActor;
+class AInterActor;
 
 UCLASS()
 class PROJECT_API AOneGameModeBase : public AGameModeBase
@@ -114,6 +115,10 @@ public:
     UPROPERTY(VisibleAnywhere, Category = "Zombies")
     int32 m_iRunningZombieNumber;
 
+    // InterActor 배열 
+    UPROPERTY(EditDefaultsOnly, Category = "Inter")
+    TArray<TSubclassOf<AInterActor>> InterActorClasses;
+
 
 
     UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter")
@@ -126,6 +131,18 @@ public:
         bool    bIsSeatLocation = false;    // 위치에 누가 이미 차지하고 있는가 true 
     };
 
+    struct SCarActorRandomLocation
+    {
+        FVector sLocation;
+        FRotator sRotation;
+        bool bIsSeatLocation = false;
+    };
+
+    struct SCarKeyRandom
+    {
+        FName CarKeyName;
+        bool bIsSeatCarKey = false;
+    };
 
     void ChoiceCharacterBefore();
 
@@ -135,10 +152,20 @@ public:
     void SpawnCharacter(int32 characterindex);
 
     // 아이템 박스 위치 정해놓고 랜덤으로 정해서 생성
-    FVector RandomItemBoxLocation(EItemFloor itemfloor);  // 제작 예정
+    FVector RandomItemBoxLocation(EItemFloor itemfloor);
+
+    // 카 액터 위치 정해놓고 랜덤으로 정해서 생성
+    int32 RandomCarActorLocation();
+
+    int32 RandomCarKey();
 
     // 아이템 랜덤 위치 정해놓는 배열
     SItemRandomLocation ItemRandomLocationStruct[60];
+
+    // Car 랜덤 위치 정해놓는 배열
+    SCarActorRandomLocation CarActorRandomLocationStruct[7];
+
+    SCarKeyRandom CarKeyRandom[7];
 
     // 아이템 생성 함수
     void ItemRandomLocationSetting();
@@ -155,6 +182,14 @@ public:
     int32 GetItemBoxNumber() { return m_iItemBoxNumber; }
 
     void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
+
+    void CarActorRandomLocationSetting();
+
+    void CarKeyRandomSetting();
+
+    void SpawnInterItem(int32 InterActorindex, FName InterName);
+    void SpawnInterActorStaticClasses();
+
 
     void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, bool b_attack, uint32 itemId);
 

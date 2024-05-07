@@ -17,6 +17,9 @@
 #include "ProZombie/ZombieAIController.h"
 #include "Math/UnrealMathUtility.h"
 #include "ProItem/ItemBoxActor.h"
+#include "ProItem/InterActor.h"
+#include "ProItem/CarActor.h"
+#include "ProItem/RoofTopDoorActor.h"
 #include "ClientSocket.h"
 #include "EngineUtils.h"
 #include "GameFramework/DefaultPawn.h"
@@ -51,6 +54,12 @@ AOneGameModeBase::AOneGameModeBase()
     SpawnZombiesStaticClasses();
 
     ItemRandomLocationSetting();
+
+    CarActorRandomLocationSetting();
+
+    CarKeyRandomSetting();
+
+    SpawnInterActorStaticClasses();
 }
 
 void AOneGameModeBase::BeginPlay()
@@ -74,8 +83,8 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(13, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
     SpawnItemBoxes(14, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
     SpawnItemBoxes(15, "Drink", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDrink.InvenDrink"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
-    SpawnItemBoxes(16, "BagActor", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1); // 수정 필요
-    SpawnItemBoxes(17, "BigBagActor", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
+    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1); // 수정 필요
+    SpawnItemBoxes(17, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
                                                                                                                                                                            
     SpawnItemBoxes(18, "CarKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
     SpawnItemBoxes(19, "RoofKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
@@ -99,7 +108,7 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(34, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR1);
     SpawnItemBoxes(35, "Disinfectant", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDisinfectant.InvenDisinfectant"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR1);
     SpawnItemBoxes(36, "Ointment", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenOintment.InvenOintment"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR1);
-    SpawnItemBoxes(37, "BigBagActor", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
+    SpawnItemBoxes(37, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
 
     SpawnItemBoxes(38, "CarKey2", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
     SpawnItemBoxes(39, "RoofKey2", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey2.InvenRoofKey2"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
@@ -122,11 +131,20 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(53, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOOR2);
     SpawnItemBoxes(54, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOOR2);
     SpawnItemBoxes(55, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOOR2);
-    SpawnItemBoxes(56, "BagActor", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOOR2);
-    SpawnItemBoxes(57, "BigBagActor", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
+    SpawnItemBoxes(56, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOOR2);
+    SpawnItemBoxes(57, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
 
     SpawnItemBoxes(58, "CarKey3", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey2.InvenCarKey2"), NULL, LOAD_None, NULL), 10,EItemFloor::FLOOR2);
     SpawnItemBoxes(59, "CarKey4", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey2.InvenCarKey2"), NULL, LOAD_None, NULL), 20,EItemFloor::FLOOR2);
+
+    SpawnInterItem(0, "CarActor");
+    SpawnInterItem(1, "CarActor");
+    SpawnInterItem(2, "CarActor");
+    SpawnInterItem(3, "CarActor");
+    SpawnInterItem(4, "CarActor");
+    SpawnInterItem(5, "CarActor");
+    SpawnInterItem(6, "CarActor");
+    SpawnInterItem(7, "RoofTopDoorActor");
 
 
 
@@ -137,44 +155,44 @@ void AOneGameModeBase::BeginPlay()
     SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
     SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
 
-    //SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
-    //SpawnZombies(4, EZombie::NORMAL, FVector(1200.f, 2710.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -700.f);
-    //SpawnZombies(5, EZombie::NORMAL, FVector(400.f, 3800.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, 1200.f);
+    SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
+    SpawnZombies(4, EZombie::NORMAL, FVector(1200.f, 2710.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -700.f);
+    SpawnZombies(5, EZombie::NORMAL, FVector(400.f, 3800.f, 1035.150024f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, 1200.f);
 
 
-    //SpawnZombies(6, EZombie::NORMAL, FVector(1320.f, 3100.f, 1035.150024f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(7, EZombie::NORMAL, FVector(1400.f, 2800.f, 1035.150024f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(8, EZombie::NORMAL, FVector(1000.f, 3320.f, 1035.150024f), FRotator(0.f, 10.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1035.150024f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(6, EZombie::NORMAL, FVector(1320.f, 3100.f, 1035.150024f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(7, EZombie::NORMAL, FVector(1400.f, 2800.f, 1035.150024f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(8, EZombie::NORMAL, FVector(1000.f, 3320.f, 1035.150024f), FRotator(0.f, 10.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1035.150024f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
-    //// 지상 1층
-    //SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    // 지상 1층
+    SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
-    //SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(15, EZombie::NORMAL, FVector(2100.f, 3500.f, 1989.212f), FRotator(0.f, 120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(16, EZombie::NORMAL, FVector(200.f, 3200.f, 1989.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(17, EZombie::NORMAL, FVector(800.f, 3600.f, 1989.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(18, EZombie::NORMAL, FVector(800.f, 1600.f, 1989.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(19, EZombie::NORMAL, FVector(200.f, 2200.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-
-
-    //// 지상 2층
-    //SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
-    //SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
-    //SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(15, EZombie::NORMAL, FVector(2100.f, 3500.f, 1989.212f), FRotator(0.f, 120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(16, EZombie::NORMAL, FVector(200.f, 3200.f, 1989.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(17, EZombie::NORMAL, FVector(800.f, 3600.f, 1989.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(18, EZombie::NORMAL, FVector(800.f, 1600.f, 1989.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(19, EZombie::NORMAL, FVector(200.f, 2200.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
-    //SpawnZombies(23, EZombie::NORMAL, FVector(580.f, 2170.f, 2947.212f), FRotator(0.f, -180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(24, EZombie::NORMAL, FVector(1850.f, 2300.f, 2947.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(25, EZombie::NORMAL, FVector(2000.f, 2800.f, 2947.212f), FRotator(0.f, -130.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(26, EZombie::NORMAL, FVector(1400.f, 3000.f, 2947.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -800.f);
-    //SpawnZombies(27, EZombie::NORMAL, FVector(870.f, 3660.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(28, EZombie::NORMAL, FVector(2241.f, 3500.f, 2947.212f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(29, EZombie::NORMAL, FVector(190.f, 2600.f, 2947.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    // 지상 2층
+    SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
+    SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
+    SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+
+
+    SpawnZombies(23, EZombie::NORMAL, FVector(580.f, 2170.f, 2947.212f), FRotator(0.f, -180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(24, EZombie::NORMAL, FVector(1850.f, 2300.f, 2947.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(25, EZombie::NORMAL, FVector(2000.f, 2800.f, 2947.212f), FRotator(0.f, -130.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(26, EZombie::NORMAL, FVector(1400.f, 3000.f, 2947.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -800.f);
+    SpawnZombies(27, EZombie::NORMAL, FVector(870.f, 3660.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(28, EZombie::NORMAL, FVector(2241.f, 3500.f, 2947.212f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(29, EZombie::NORMAL, FVector(190.f, 2600.f, 2947.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
     //
     // 지하 2층
@@ -500,6 +518,41 @@ FVector AOneGameModeBase::RandomItemBoxLocation(EItemFloor itemfloor)
     return FVector::ZeroVector;
 }
 
+int32 AOneGameModeBase::RandomCarActorLocation()
+{
+    int32 RandomNumber = 0;
+
+    while (true) {
+        RandomNumber = FMath::RandRange(0, 6);
+
+        if (!CarActorRandomLocationStruct[RandomNumber].bIsSeatLocation) {
+            CarActorRandomLocationStruct[RandomNumber].bIsSeatLocation = true;
+            return RandomNumber;
+        }
+    }
+
+
+    return -1;
+}
+
+int32 AOneGameModeBase::RandomCarKey()
+{
+    int32 RandomNumber = 0;
+
+    while (true) {
+        RandomNumber = FMath::RandRange(0, 6);
+
+        if (!CarKeyRandom[RandomNumber].bIsSeatCarKey) {
+            CarKeyRandom[RandomNumber].bIsSeatCarKey = true;
+            return RandomNumber;
+        }
+    }
+
+    return -1;
+}
+
+
+
 
 
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, EItemFloor itemfloor)
@@ -558,6 +611,86 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     }
 
     m_iItemBoxNumber++;
+}
+
+void AOneGameModeBase::CarActorRandomLocationSetting()
+{
+    CarActorRandomLocationStruct[0].sLocation = FVector(1772.f, 978.f, 60.f);
+    CarActorRandomLocationStruct[1].sLocation = FVector(1662.f, 1678.f, 60.f);
+    CarActorRandomLocationStruct[2].sLocation = FVector(722.f, 978.f,  60.f);
+    CarActorRandomLocationStruct[3].sLocation = FVector(1142.f,2068.f, 60.f);
+    CarActorRandomLocationStruct[4].sLocation = FVector(632.f, 2688.f, 60.f);
+    CarActorRandomLocationStruct[5].sLocation = FVector(1492.f, 2680.f, 60.f);
+    CarActorRandomLocationStruct[6].sLocation = FVector(1122.f, 3468.f,  60.f);
+
+    CarActorRandomLocationStruct[0].sRotation = FRotator(0.f, -30.f, 0.f);
+    CarActorRandomLocationStruct[1].sRotation = FRotator(0.f, 30.f, 0.f);
+    CarActorRandomLocationStruct[2].sRotation = FRotator(0.f, -50.f, 0.f);
+    CarActorRandomLocationStruct[3].sRotation = FRotator(0.f, 30.f, 0.f);
+    CarActorRandomLocationStruct[4].sRotation = FRotator(0.f, -30.f, 0.f);
+    CarActorRandomLocationStruct[5].sRotation = FRotator(0.f, -130.f, 0.f);
+    CarActorRandomLocationStruct[6].sRotation = FRotator(0.f, -70.f, 0.f);
+
+    for (int i = 0; i < 7; ++i) {
+        CarActorRandomLocationStruct[i].bIsSeatLocation = false;
+    }
+
+}
+
+void AOneGameModeBase::CarKeyRandomSetting()
+{
+    CarKeyRandom[0].CarKeyName = "CarKey1";
+    CarKeyRandom[1].CarKeyName = "CarKey2";
+    CarKeyRandom[2].CarKeyName = "CarKey3";
+    CarKeyRandom[3].CarKeyName = "CarKey4";
+    CarKeyRandom[4].CarKeyName = "None";
+    CarKeyRandom[5].CarKeyName = "None";
+    CarKeyRandom[6].CarKeyName = "None";
+
+    for (int i = 0; i < 7; ++i) {
+        CarKeyRandom[i].bIsSeatCarKey = false;
+    }
+}
+
+void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName)
+{
+
+    TSubclassOf<AInterActor> SelectedInterActorClass = InterActorClasses[InterActorindex];
+
+
+    FVector Location;
+    FRotator Rotation;
+    if (InterName == "CarActor") {
+        int RandomValue = RandomCarActorLocation();
+        int Randomkey = RandomCarKey();
+        Location = CarActorRandomLocationStruct[RandomValue].sLocation;
+        Rotation = CarActorRandomLocationStruct[RandomValue].sRotation;
+        
+        FName CarKey = CarKeyRandom[Randomkey].CarKeyName;
+
+        // 선택된 아이템 박스 클래스로 아이템 박스 생성
+        ACarActor* SpawnedCarActor = GetWorld()->SpawnActor<ACarActor>(SelectedInterActorClass, Location, Rotation);
+        SpawnedCarActor->CarKeyName = CarKey;
+    }
+    else if (InterName == "RoofTopDoorActor") {
+
+        ARoofTopDoorActor* SpawnedRoofTopDoor = GetWorld()->SpawnActor<ARoofTopDoorActor>(SelectedInterActorClass, FVector(2410.f, 200.f, 3940.f), FRotator::ZeroRotator);
+    }
+
+
+}
+
+void AOneGameModeBase::SpawnInterActorStaticClasses()
+{
+    InterActorClasses.Add(ACarActor::StaticClass());
+    InterActorClasses.Add(ACarActor::StaticClass());
+    InterActorClasses.Add(ACarActor::StaticClass());
+    InterActorClasses.Add(ACarActor::StaticClass());
+    InterActorClasses.Add(ACarActor::StaticClass());
+    InterActorClasses.Add(ACarActor::StaticClass());
+    InterActorClasses.Add(ACarActor::StaticClass());
+    InterActorClasses.Add(ARoofTopDoorActor::StaticClass());
+
 }
 
 void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, bool b_attack, uint32 ItemId)

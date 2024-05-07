@@ -355,6 +355,9 @@ void APlayerCharacterController::BleedHealing()
 
 void APlayerCharacterController::PlayKey()
 {
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	basecharacter->PlayKey();
 }
 
 void APlayerCharacterController::Throw()

@@ -38,7 +38,8 @@ enum class EItemClass
 	HEALINGITEM				UMETA(DisplayName = "HealingItem"),
 	BLEEDINGHEALINGITEM		UMETA(DisplayName = "BleedingHealingItem"),
 	KEYITEM					UMETA(DisplayName = "KeyItem"),
-	NONE					UMETA(DisplayName = "KeyItem"),
+	BAGITEM					UMETA(DisplayName = "BagItem"),
+	NONE					UMETA(DisplayName = "None"),
 };
 
 USTRUCT(Atomic, BlueprintType)

@@ -49,6 +49,7 @@ public:
 
     void ChangeOneGameMode();
 
+
     ClientSocket* ClientSocketPtr;
 
     bool ConnectNetwork;

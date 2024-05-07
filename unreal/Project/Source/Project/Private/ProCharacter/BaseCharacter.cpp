@@ -49,6 +49,7 @@
 #include "ProItem/KCarkey1.h"
 #include "ProItem/KCarkey2.h"
 #include "ProItem/KCarkey3.h"
+#include "ProItem/KCarKey4.h"
 #include "ProItem/KRoofKey1.h"
 #include "ProItem/KRoofKey2.h"
 
@@ -60,9 +61,13 @@
 #include "ProItem/BHDirtyClothes.h"
 #include "ProItem/BHGauze.h"
 
+#include "ProItem/InterActor.h"
+#include "ProItem/CarActor.h"
+#include "ProItem/RoofTopDoorActor.h"
 
 #include "ProUI/GamePlayerUI.h"
 #include "ProUI/ConditionUI.h"
+#include "ProUI/ProGameClearUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
 
@@ -119,6 +124,13 @@ ABaseCharacter::ABaseCharacter()
 	if (PLAYER_CONDITIONUI.Succeeded()) {
 		ConditionUIClass = PLAYER_CONDITIONUI.Class;
 	}
+
+	static ConstructorHelpers::FClassFinder <UProGameClearUI> PLAYER_GAMECLEARUI(TEXT("/Game/UI/BP_ClearUI.BP_ClearUI_C"));
+
+	if (PLAYER_GAMECLEARUI.Succeeded()) {
+		ProGameClearUIClass = PLAYER_GAMECLEARUI.Class;
+	}
+
 
 	SpringArm->TargetArmLength = 300.f;
 	SpringArm->SetRelativeRotation(FRotator::ZeroRotator);
@@ -328,29 +340,95 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 {
 
 	auto CurrentInvenSlot = this->Inventory[slotindex];
-	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {
+	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT || CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
 		if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
+			DestroyBleedingHealingItem();
+			QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[0].Name = "nullptr";
+			QuickSlot[0].ItemClassType = EItemClass::NONE;
+			QuickSlot[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[0].Count = 0;
+			QuickSlot[0].SlotReference = -1;
 
-			DestroyBleedingHealingItemSlot();
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::HEALINGITEM) {
+			DestroyHealingItem();
+			QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[1].Name = "nullptr";
+			QuickSlot[1].ItemClassType = EItemClass::NONE;
+			QuickSlot[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[1].Count = 0;
+			QuickSlot[1].SlotReference = -1;
 
-			DestroyHealingItemSlot();
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::THROWINGWEAPON) {
+			DestroyThrowWeapon();
+			QuickSlot[2].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[2].Name = "nullptr";
+			QuickSlot[2].ItemClassType = EItemClass::NONE;
+			QuickSlot[2].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[2].Count = 0;
+			QuickSlot[2].SlotReference = -1;
 
-			DestroyThrowWeaponItemSlot();
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::KEYITEM) {
+			DestroyKeyItem();
 
-			DestroyKeyItemSlot();
+			QuickSlot[3].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[3].Name = "nullptr";
+			QuickSlot[3].ItemClassType = EItemClass::NONE;
+			QuickSlot[3].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[3].Count = 0;
+			QuickSlot[3].SlotReference = -1;
+
 		}
 		else if (CurrentInvenSlot.ItemClassType == EItemClass::NORMALWEAPON) {
+			DestroyNormalWeapon();
 
-			DestroyNormalWepaonItemSlot();
+			QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
+			QuickSlot[4].Name = "nullptr";
+			QuickSlot[4].ItemClassType = EItemClass::NONE;
+			QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+			QuickSlot[4].Count = 0;
+			QuickSlot[4].SlotReference = -1;
+
 		}
 
 	}
+	Inventory[slotindex].Type = EItemType::ITEM_NONE;
+	Inventory[slotindex].Name = "nullptr";
+	Inventory[slotindex].ItemClassType = EItemClass::NONE;
+	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+	Inventory[slotindex].Count = 0;
+
+	GameUIUpdate();
+	//if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT || CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
+	//	if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
+
+
+	//		DestroyBleedingHealingItemSlot();
+	//	}
+	//	else if (CurrentInvenSlot.ItemClassType == EItemClass::HEALINGITEM) {
+
+
+	//		DestroyHealingItemSlot();
+	//	}
+	//	else if (CurrentInvenSlot.ItemClassType == EItemClass::THROWINGWEAPON) {
+
+
+	//		DestroyThrowWeaponItemSlot();
+	//	}
+	//	else if (CurrentInvenSlot.ItemClassType == EItemClass::KEYITEM) {
+
+	//		DestroyKeyItemSlot();
+	//	}
+	//	else if (CurrentInvenSlot.ItemClassType == EItemClass::NORMALWEAPON) {
+
+
+	//		DestroyNormalWepaonItemSlot();
+	//	}
+
+	//}
 
 	ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
 }
@@ -434,21 +512,24 @@ void ABaseCharacter::GetItem()
 	if (PlayerSight->GetIsHit()) {
 		
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
-		PickUp();
-		// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
-		for (int i = 0; i < 20; ++i) {
-			if (Inventory[i].Type == EItemType::ITEM_NONE) {
-				Inventory[i].Type = EItemType::ITEM_USEABLE;
-				Inventory[i].Name = itembox->ItemName;
-				Inventory[i].ItemClassType = itembox->ItemClassType;
-				Inventory[i].Texture = itembox->Texture;
-				Inventory[i].Count = itembox->Count;
-				GameUIWidget->Update();
-				break;
+		if (itembox) {
+			PickUp();
+			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
+			for (int i = 0; i < 20; ++i) {
+				if (Inventory[i].Type == EItemType::ITEM_NONE) {
+					Inventory[i].Type = EItemType::ITEM_USEABLE;
+					Inventory[i].Name = itembox->ItemName;
+					Inventory[i].ItemClassType = itembox->ItemClassType;
+					Inventory[i].Texture = itembox->Texture;
+					Inventory[i].Count = itembox->Count;
+					GameUIWidget->Update();
+					break;
+				}
 			}
+			ItemBoxId = itembox->GetItemBoxId();
+			PlayerSight->GetHitActor()->Destroy();
 		}
-		ItemBoxId = itembox->GetItemBoxId();
-		PlayerSight->GetHitActor()->Destroy();
+
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
@@ -590,6 +671,47 @@ void ABaseCharacter::BleedHealing()
 void ABaseCharacter::PlayKey()
 {
 
+
+	if (PlayerSight->GetIsHit()) {
+
+		AInterActor* InterActor = Cast<AInterActor>(PlayerSight->GetHitActor());
+		if (InterActor) {
+			PickUp();
+			if (InterActor->InterActorName == "CarActor") {
+				ACarActor* CarActor = Cast<ACarActor>(InterActor);
+
+				if (CurrentKeyItem->KeyName == CarActor->CarKeyName) {
+					CarActor->UnLock();
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
+					UpdateKeySlot();
+				}
+				else {
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
+				}
+			}
+			else if (InterActor->InterActorName == "RoofTopDoorActor") {
+
+				ARoofTopDoorActor* RoofTopDoorActor = Cast<ARoofTopDoorActor>(InterActor);
+
+				if (CurrentKeyItem->KeyName == "RoofKey1") {
+					RoofTopDoorActor->UnlockKey1();
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
+					UpdateKeySlot();
+				}
+				else if (CurrentKeyItem->KeyName == "RoofKey2") {
+					RoofTopDoorActor->UnlockKey2();
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
+					UpdateKeySlot();
+				}
+
+			}
+
+
+		}
+	}
+
+
+
 }
 
 void ABaseCharacter::Throw()
@@ -626,6 +748,15 @@ void ABaseCharacter::UpdateBHealingSlot()
 
 void ABaseCharacter::UpdateKeySlot()
 {
+	QuickSlot[3].Count = QuickSlot[3].Count - 1;
+	int slotindex = QuickSlot[3].SlotReference;
+	Inventory[slotindex].Count = Inventory[slotindex].Count - 1;
+	if (QuickSlot[3].Count <= 0) {
+		DestroyKeyItemSlot();
+	}
+	else {
+		GameUIUpdate();
+	}
 }
 
 void ABaseCharacter::UpdateThrowWSlot()
@@ -1062,8 +1193,31 @@ void ABaseCharacter::SpawnKeyItem()
 		DestroyKeyItem();
 	}
 	if (CurrentKeyItem == nullptr) {
-		CurrentKeyItem = GetWorld()->SpawnActor<AKCarkey1>(AKCarkey1::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-		
+
+		if (QuickSlot[3].Name == "CarKey1") {
+			CurrentKeyItem = GetWorld()->SpawnActor<AKCarkey1>(AKCarkey1::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[3].Name == "CarKey2") {
+			CurrentKeyItem = GetWorld()->SpawnActor<AKCarKey2>(AKCarKey2::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[3].Name == "CarKey3") {
+			CurrentKeyItem = GetWorld()->SpawnActor<AKCarKey3>(AKCarKey3::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[3].Name == "CarKey4") {
+			CurrentKeyItem = GetWorld()->SpawnActor<AKCarKey4>(AKCarKey4::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[3].Name == "RoofKey1") {
+			CurrentKeyItem = GetWorld()->SpawnActor<AKRoofKey1>(AKRoofKey1::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		if (QuickSlot[3].Name == "RoofKey2") {
+			CurrentKeyItem = GetWorld()->SpawnActor<AKRoofKey2>(AKRoofKey2::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
 		CurrentKeyItem->ItemHandPos = FVector(2.595437f, 1.093417f, 2.838135f);
 		CurrentKeyItem->ItemHandRot = FRotator(69.997202f, -20.036148f, 29.978793f);
 	}
@@ -1294,6 +1448,47 @@ void ABaseCharacter::HealingTimerElapsed()
 		SetHP(GetMaxHP());
 	}
 
+}
+
+void ABaseCharacter::AddScore(int32 score)
+{
+	m_iClearScore = score;
+	// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Score added: %d"), m_iClearScore));
+
+
+	if (ProGameClearUIClass != nullptr) {
+
+		APlayerCharacterController* PlayerController = Cast<APlayerCharacterController>(this->GetController());
+		if (PlayerController)
+		{
+			ProGameClearUIWidget = CreateWidget<UProGameClearUI>(PlayerController, ProGameClearUIClass);
+			if (ProGameClearUIWidget)
+			{
+				ProGameClearUIWidget->SetMessage("GAME CLEAR!");
+				ProGameClearUIWidget->SetScore(m_iClearScore);
+
+				ProGameClearUIWidget->AddToViewport();
+			}
+		}
+	}
+
+	ProStartGameEnd();
+
+}
+
+void ABaseCharacter::ProStartGameEnd()
+{
+	GetWorld()->GetTimerManager().SetTimer(GameEndHandle, this, &ABaseCharacter::ProGameEnd, 5.0f, false);
+}
+
+void ABaseCharacter::ProGameEnd()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (PlayerController)
+	{
+		// 'quit' 명령을 실행하여 게임 종료
+		PlayerController->ConsoleCommand("quit");
+	}
 }
 
 void ABaseCharacter::StartBleedingTimer()

@@ -147,7 +147,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Right Button Down"));
 
 		// 빈칸에 마우스 우클릭 시 팅기는 부분 방지
-		if (Character->Inventory[SlotIndex].Type == EItemType::ITEM_NONE) {
+		if (Character->Inventory[SlotIndex].Type == EItemType::ITEM_NONE || Character->Inventory[SlotIndex].ItemClassType == EItemClass::BAGITEM) {
 			return eventreply.NativeReply;
 		}
 

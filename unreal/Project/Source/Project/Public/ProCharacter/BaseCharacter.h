@@ -18,6 +18,7 @@
 
 class UGamePlayerUI;
 class UConditionUI;
+class UProGameClearUI;
 class UPlayerSight;
 class ANormalWeaponActor;
 class AThrowWeaponActor;
@@ -112,6 +113,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UConditionUI* ConditionUIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UProGameClearUI> ProGameClearUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UProGameClearUI* ProGameClearUIWidget;
 
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
@@ -277,6 +284,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	float m_fItemHealingDuration = 0.f;
 
+	void AddScore(int32 score);
+
+	UPROPERTY(EditAnywhere)
+	int32 m_iClearScore = 0;
+
+
+	FTimerHandle GameEndHandle;
+	void ProStartGameEnd();
+	void ProGameEnd();
 
 	// ¼Ò¹æ°ü
 	virtual void Smoking() {};
