@@ -61,7 +61,7 @@ uint32 ClientSocket::Run()
 			if (tempCharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
 			{
 				// 메시지 타입 확인
-				switch (tempCharacterPacket.packet_type()) 
+				switch (tempCharacterPacket.packet_type())
 				{
 				case 1: // Character 메시지 타입 값
 				{
@@ -99,6 +99,15 @@ uint32 ClientSocket::Run()
 					}
 				}
 
+				case 4:
+				{
+					Protocol::Character_Attack AttackPacket;
+					if (AttackPacket.ParseFromArray(buffer.data(), buffer.size()))
+					{
+						Q_pattack.push(PlayerAttack(AttackPacket.playerid(), AttackPacket.attack()));
+					}
+				}
+				
 				buffer.clear();
 				}
 

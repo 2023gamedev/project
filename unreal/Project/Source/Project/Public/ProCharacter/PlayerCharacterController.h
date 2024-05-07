@@ -67,6 +67,8 @@ public:
 
 	void CheckAndSendMovement();
 
+	void Send_Attack();
+
 	virtual void SetupInputComponent() override;
 
 protected:
@@ -86,6 +88,7 @@ private:
 public:
 	UProGameInstance* GameInstance;
 	PlayerData recvPlayerData;
+	PlayerAttack recvPlayerAttack;
 	uint32 PlayerId;
 	uint32 MyCharacterNumber;
 	uint32 OtherCharacterNumber;

@@ -11,6 +11,8 @@ IOCP_CORE::IOCP_CORE()
 	IOCP_Initialize();
 	
 	IOCP_MakeWorkerThreads();
+
+	playerIndex = 1;
 }
 
 IOCP_CORE::~IOCP_CORE()

@@ -619,6 +619,30 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
     }
 }
 
+void AOneGameModeBase::UpdatePlayerAttack(uint32 PlayerID, bool battack)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // 캐릭터 검색
+    for (TActorIterator<ABaseCharacter> It(World); It; ++It)
+    {
+        ABaseCharacter* BasePlayer = *It;
+        if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
+        {
+            BasePlayer->SetAttack(battack);
+            //UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), PlayerID, b_attack);
+
+            return;
+        }
+    }
+}
+
 
 
 

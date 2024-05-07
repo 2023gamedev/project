@@ -26,7 +26,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     // 패킷의 타입을 확인하여 처리
     switch (tempPacket.packet_type()) {
     case 1: {
-        printf("[ No. %3u ] character Packet Received !!\n", id);
+        //printf("[ No. %3u ] character Packet Received !!\n", id);
         //printf("Received packet type = %d\n", CharacterPacket.type());
         //printf("Received playerID = %d\n", CharacterPacket.playerid());
         //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
@@ -48,7 +48,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     } break;
 
     case 2: {
-        printf("[ No. %3u ] zombie Packet Received !!\n", id);
+        //printf("[ No. %3u ] zombie Packet Received !!\n", id);
         Protocol::Zombie Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -65,7 +65,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         ZombieController zombiecontroller;
 
-        printf("zombie id: %d \n", Packet.zombieid());
+        //printf("zombie id: %d \n", Packet.zombieid());
 
         if (find(m_zombie.begin(), m_zombie.end(), zombiedata.zombieID) == m_zombie.end()) {
             zombiecontroller.addZombie(zombiedata);
@@ -84,6 +84,23 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
         return true;
     } break;
+
+    case 4:
+    {
+        printf("[ No. %3u ] character Packet Received !!\n", id);
+        Protocol::Character_Attack Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }
+        return true;
+    }
 
     default: {
         printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());

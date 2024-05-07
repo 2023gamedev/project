@@ -56,6 +56,17 @@ struct ZombieData
 		: ZombieId(InZombieId), Location(InLocation), Rotation(InRotation), zombietype(Inzombietype), b_attack(Inb_attack) {}
 };
 
+struct PlayerAttack
+{
+	uint32 PlayerId;
+	bool b_attack;
+
+	PlayerAttack() : PlayerId(0), b_attack(false) {}
+
+	PlayerAttack(uint32 InPlayerId, bool Inb_attack)
+		: PlayerId(InPlayerId), b_attack(Inb_attack) {}
+};
+
 class UProGameInstance;
 
 class PROJECT_API ClientSocket : public FRunnable
@@ -70,6 +81,7 @@ public:
 	uint32 ZombieId = 0;
 
 	Concurrency::concurrent_queue<PlayerData> Q_player;
+	Concurrency::concurrent_queue<PlayerAttack> Q_pattack;
 	Concurrency::concurrent_queue<ZombieData> Q_zombie;
 
 	virtual bool Init() override;

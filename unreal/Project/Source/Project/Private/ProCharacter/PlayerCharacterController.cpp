@@ -72,6 +72,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CheckAndSendMovement();
+	Send_Attack();
 
 	if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 	{
@@ -82,10 +83,15 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
 			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype, 
 				recvPlayerData.b_attack, recvPlayerData.ItemId);
-			if (recvPlayerData.b_attack) {
-				//ServerHandleAttack();
-				//UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), recvPlayerData.PlayerId, recvPlayerData.b_attack);
-			}
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_pattack.try_pop(recvPlayerAttack))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdatePlayerAttack(recvPlayerAttack.PlayerId, recvPlayerAttack.b_attack);
+			UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
 		}
 	}
 }
@@ -115,7 +121,6 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_pitch(CurrentRotation.Pitch);
 		packet.set_yaw(CurrentRotation.Yaw);
 		packet.set_roll(CurrentRotation.Roll);
-		packet.set_attack(false);
 		packet.set_getitem(ItemBoxId);
 		packet.set_isingame(true);
 
@@ -129,43 +134,32 @@ void APlayerCharacterController::CheckAndSendMovement()
 		// 현재 위치를 이전 위치로 업데이트
 		PreviousLocation = CurrentLocation;
 		PreviousRotation = CurrentRotation;
-		b_GetItem = false;
-	}
-
-	else if (b_attack) {
-		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
-
-		// Protobuf를 사용하여 TestPacket 생성
-		Protocol::Character packet;
-		packet.set_playerid(MyPlayerId);
-		packet.set_packet_type(1); // 원하는 유형 설정
-		packet.set_charactertype(MyCharacterNumber);
-		packet.set_x(CurrentLocation.X);
-		packet.set_y(CurrentLocation.Y);
-		packet.set_z(CurrentLocation.Z);
-		packet.set_pitch(CurrentRotation.Pitch);
-		packet.set_yaw(CurrentRotation.Yaw);
-		packet.set_roll(CurrentRotation.Roll);
-		packet.set_attack(b_attack);
-		packet.set_getitem(ItemBoxId);
-		packet.set_isingame(true);
-
-		// 직렬화
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
-
-		// 직렬화된 데이터를 서버로 전송
-		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-
-		// 현재 위치를 이전 위치로 업데이트
-		PreviousLocation = CurrentLocation;
-		PreviousRotation = CurrentRotation;
-		b_attack = false;
 		b_GetItem = false;
 	}
 }
 
+void APlayerCharacterController::Send_Attack()
+{
+	if (b_attack) {
+		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+
+		Protocol::Character_Attack packet;
+		packet.set_playerid(MyPlayerId);
+		packet.set_packet_type(4);
+		packet.set_attack(b_attack);
+
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+		b_attack = false;
+
+		UE_LOG(LogNet, Display, TEXT("Send Attack: PlayerId=%d"), recvPlayerData.PlayerId);
+	}
+}
+ 
 void APlayerCharacterController::SetupInputComponent()
 {
 	Super::SetupInputComponent();

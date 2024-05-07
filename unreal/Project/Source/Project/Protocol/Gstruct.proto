@@ -38,3 +38,9 @@ message Time {
     uint32 timer = 1;
     uint32 packet_type = 2;
 }
+
+message Character_Attack {
+    uint32 playerid = 1;
+    bool attack = 2;
+    uint32 packet_type = 3;
+}
