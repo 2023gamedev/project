@@ -159,6 +159,53 @@ void APlayerCharacterController::Send_Attack()
 		UE_LOG(LogNet, Display, TEXT("Send Attack: PlayerId=%d"), recvPlayerData.PlayerId);
 	}
 }
+
+void APlayerCharacterController::Send_Equipment()
+{
+	if (e_NWeapon || e_TWeapon || e_BHItem || e_HItem || e_KeyItem)
+	{
+		APawn* MyPawn = GetPawn();
+		ABaseCharacter* MyBaseCharacter = Cast<ABaseCharacter>(MyPawn);
+		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+
+		if (e_NWeapon)
+		{
+			if (MyBaseCharacter)
+			{
+				//uint32 ItemId = MyBaseCharacter->QuickSlot[4]
+			}
+			if (e_TWeapon)
+			{
+
+			}
+			if (e_BHItem)
+			{
+
+			}
+			if (e_HItem)
+			{
+
+			}
+			if (e_KeyItem)
+			{
+
+			}
+
+			Protocol::Equip_Item packet;
+			packet.set_playerid(MyPlayerId);
+			packet.set_packet_type(5);
+			//packet.set_itemid();
+
+			// Á÷·ÄÈ­
+			std::string serializedData;
+			packet.SerializeToString(&serializedData);
+
+			bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+		}
+
+		
+	}
+}
  
 void APlayerCharacterController::SetupInputComponent()
 {
@@ -373,6 +420,8 @@ void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)
 	UE_LOG(LogTemp, Error, TEXT("QuickNWeapon"));
 
 	basecharacter->QuickNWeapon();
+
+	e_NWeapon = true;
 }
 
 void APlayerCharacterController::QuickTWeapon(const FInputActionValue& Value)
@@ -384,6 +433,8 @@ void APlayerCharacterController::QuickTWeapon(const FInputActionValue& Value)
 
 
 	basecharacter->QuickTWeapon();
+
+	e_TWeapon = true;
 }
 
 void APlayerCharacterController::QuickBHItem(const FInputActionValue& Value)
@@ -395,6 +446,8 @@ void APlayerCharacterController::QuickBHItem(const FInputActionValue& Value)
 
 	basecharacter->QuickBHItem();
 
+	e_BHItem = true;
+
 }
 
 void APlayerCharacterController::QuickHItem(const FInputActionValue& Value)
@@ -404,6 +457,8 @@ void APlayerCharacterController::QuickHItem(const FInputActionValue& Value)
 	UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
 
 	basecharacter->QuickHItem();
+
+	e_HItem = true;
 }
 
 void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
@@ -413,6 +468,8 @@ void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
 	UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
 
 	basecharacter->QuickKeyItem();
+
+	e_KeyItem = true;
 }
 
 void APlayerCharacterController::DisabledControllerInput()

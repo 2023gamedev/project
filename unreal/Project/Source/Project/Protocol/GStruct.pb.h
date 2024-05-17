@@ -51,6 +51,9 @@ extern CharacterDefaultTypeInternal _Character_default_instance_;
 class Character_Attack;
 struct Character_AttackDefaultTypeInternal;
 extern Character_AttackDefaultTypeInternal _Character_Attack_default_instance_;
+class Equip_Item;
+struct Equip_ItemDefaultTypeInternal;
+extern Equip_ItemDefaultTypeInternal _Equip_Item_default_instance_;
 class Time;
 struct TimeDefaultTypeInternal;
 extern TimeDefaultTypeInternal _Time_default_instance_;
@@ -61,6 +64,7 @@ extern ZombieDefaultTypeInternal _Zombie_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::Character* Arena::CreateMaybeMessage<::Protocol::Character>(Arena*);
 template<> ::Protocol::Character_Attack* Arena::CreateMaybeMessage<::Protocol::Character_Attack>(Arena*);
+template<> ::Protocol::Equip_Item* Arena::CreateMaybeMessage<::Protocol::Equip_Item>(Arena*);
 template<> ::Protocol::Time* Arena::CreateMaybeMessage<::Protocol::Time>(Arena*);
 template<> ::Protocol::Zombie* Arena::CreateMaybeMessage<::Protocol::Zombie>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -966,6 +970,176 @@ class Character_Attack final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_GStruct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Equip_Item final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Equip_Item) */ {
+ public:
+  inline Equip_Item() : Equip_Item(nullptr) {}
+  ~Equip_Item() override;
+  explicit PROTOBUF_CONSTEXPR Equip_Item(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Equip_Item(const Equip_Item& from);
+  Equip_Item(Equip_Item&& from) noexcept
+    : Equip_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline Equip_Item& operator=(const Equip_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Equip_Item& operator=(Equip_Item&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Equip_Item& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Equip_Item* internal_default_instance() {
+    return reinterpret_cast<const Equip_Item*>(
+               &_Equip_Item_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(Equip_Item& a, Equip_Item& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Equip_Item* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Equip_Item* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Equip_Item* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Equip_Item>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Equip_Item& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Equip_Item& from) {
+    Equip_Item::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Equip_Item* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.Equip_Item";
+  }
+  protected:
+  explicit Equip_Item(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayeridFieldNumber = 1,
+    kItemidFieldNumber = 2,
+    kPacketTypeFieldNumber = 3,
+  };
+  // uint32 playerid = 1;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
+  public:
+
+  // uint32 itemid = 2;
+  void clear_itemid();
+  uint32_t itemid() const;
+  void set_itemid(uint32_t value);
+  private:
+  uint32_t _internal_itemid() const;
+  void _internal_set_itemid(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.Equip_Item)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t playerid_;
+    uint32_t itemid_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GStruct_2eproto;
+};
 // ===================================================================
 
 
@@ -1629,9 +1803,75 @@ inline void Character_Attack::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Character_Attack.packet_type)
 }
 
+// -------------------------------------------------------------------
+
+// Equip_Item
+
+// uint32 playerid = 1;
+inline void Equip_Item::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t Equip_Item::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t Equip_Item::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Equip_Item.playerid)
+  return _internal_playerid();
+}
+inline void Equip_Item::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void Equip_Item::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Equip_Item.playerid)
+}
+
+// uint32 itemid = 2;
+inline void Equip_Item::clear_itemid() {
+  _impl_.itemid_ = 0u;
+}
+inline uint32_t Equip_Item::_internal_itemid() const {
+  return _impl_.itemid_;
+}
+inline uint32_t Equip_Item::itemid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Equip_Item.itemid)
+  return _internal_itemid();
+}
+inline void Equip_Item::_internal_set_itemid(uint32_t value) {
+  
+  _impl_.itemid_ = value;
+}
+inline void Equip_Item::set_itemid(uint32_t value) {
+  _internal_set_itemid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Equip_Item.itemid)
+}
+
+// uint32 packet_type = 3;
+inline void Equip_Item::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t Equip_Item::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t Equip_Item::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Equip_Item.packet_type)
+  return _internal_packet_type();
+}
+inline void Equip_Item::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void Equip_Item::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Equip_Item.packet_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -69,6 +69,8 @@ public:
 
 	void Send_Attack();
 
+	void Send_Equipment();
+
 	virtual void SetupInputComponent() override;
 
 protected:
@@ -96,5 +98,11 @@ public:
 	//std::atomic <bool> b_attack{ false };
 	bool b_attack = false;
 	std::atomic <bool> b_GetItem{ false };
+	bool e_NWeapon = false;
+	bool e_TWeapon = false;
+	bool e_BHItem = false;
+	bool e_HItem = false;
+	bool e_KeyItem = false;
+
 
 };
