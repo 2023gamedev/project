@@ -44,3 +44,9 @@ message Character_Attack {
     bool attack = 2;
     uint32 packet_type = 3;
 }
+
+message Equip_Item{
+    uint32 playerid = 1;
+    uint32 itemid = 2;
+    uint32 packet_type = 3;
+}
