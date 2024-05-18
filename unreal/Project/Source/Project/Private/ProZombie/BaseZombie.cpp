@@ -258,7 +258,7 @@ void ABaseZombie::Shouting()
 			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
 			if (OverlappedZombie)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("FootSound2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEAR"));
 				OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
 			}
 

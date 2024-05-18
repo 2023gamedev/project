@@ -53,7 +53,7 @@ public:
 	int ItemCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TEnumAsByte<ESlotType> Type;
+	ESlotType Type;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UImage* Img;

@@ -46,6 +46,6 @@ public:
 	FName ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) // 무슨 아이템인진 힐링인지 노말무기인지, 투척무기인지 (필요 없을 수도 있어 삭제할 지 고민중)
-	TEnumAsByte<EItemClass> ItemClassType;
+	EItemClass ItemClassType;
 
 };

@@ -60,6 +60,8 @@ TSubclassOf<AGameStateBase> UProGameInstance::GetGameState()
 void UProGameInstance::ChangeOneGameMode()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UProGameInstance::ChangeOneGameMode()");
+    
+    
     // 현재 월드 가져오기
     UWorld* World = GetWorld();
     if (World)

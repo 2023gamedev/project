@@ -49,10 +49,18 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
+	ARunningZombie* RunningZombie = Cast<ARunningZombie>(GetPawn());
+
+	FVector ZombieForward = RunningZombie->GetActorForwardVector(); // 좀비의 전방 벡터
+	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
+
+
+	FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
 
 
 	if (LineOfSightTo(PlayerPawn)) {
-		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
+		//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
 		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
 		GetBlackboardComponent()->SetValueAsObject(TargetKey, PlayerPawn);
 	}
