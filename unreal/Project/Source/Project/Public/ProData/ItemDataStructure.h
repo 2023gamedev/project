@@ -53,13 +53,13 @@ public:
 	FName Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) // 무슨 아이템인진 힐링인지 노말무기인지, 투척무기인지
-	TEnumAsByte<EItemClass> ItemClassType;
+	EItemClass ItemClassType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* Texture;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TEnumAsByte<EItemType> Type;
+	EItemType Type;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Count;

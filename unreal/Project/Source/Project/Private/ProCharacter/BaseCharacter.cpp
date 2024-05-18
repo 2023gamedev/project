@@ -68,6 +68,7 @@
 #include "ProUI/GamePlayerUI.h"
 #include "ProUI/ConditionUI.h"
 #include "ProUI/ProGameClearUI.h"
+#include "ProUI/GameTimerUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
 
@@ -131,6 +132,12 @@ ABaseCharacter::ABaseCharacter()
 		ProGameClearUIClass = PLAYER_GAMECLEARUI.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder <UGameTimerUI> PLAYER_GAMETIMERUI(TEXT("/Game/UI/BP_GameTimerUI.BP_GameTimerUI_C"));
+
+	if (PLAYER_GAMETIMERUI.Succeeded()) {
+		GameTimerUIClass = PLAYER_GAMETIMERUI.Class;
+	}
+
 
 	SpringArm->TargetArmLength = 300.f;
 	SpringArm->SetRelativeRotation(FRotator::ZeroRotator);
@@ -140,6 +147,8 @@ ABaseCharacter::ABaseCharacter()
 	SpringArm->bInheritYaw = true;
 	SpringArm->bDoCollisionTest = true;
 	bUseControllerRotationYaw = false;
+
+
 
 	// 스포트 라이트의 속성 설정 (위치, 회전 등)
 	FlashLight->SetRelativeLocationAndRotation(FVector(303.f, -24.f, 117.f), FRotator( 0.f, 0.f, 0.f));
@@ -200,6 +209,23 @@ void ABaseCharacter::BeginPlay()
 
 		ConditionUIWidget->Character = this;
 		ConditionUIWidget->AddToViewport();
+	}
+
+	if (GameTimerUIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+
+		GameTimerUIWidget = CreateWidget<UGameTimerUI>(controller, GameTimerUIClass);
+
+		if (!GameTimerUIWidget) {
+			return;
+		}
+
+		GameTimerUIWidget->Character = this;
+		GameTimerUIWidget->AddToViewport();
 	}
 
 
@@ -263,6 +289,13 @@ void ABaseCharacter::Tick(float DeltaTime)
 		ConditionUIWidget->UpdateBar();
 	}
 
+	if (GameTimerUIWidget) {
+		if (GameTimerUIWidget->IsTimeUp()) {
+			ProStartGameTimerEnd();
+		}
+		GameTimerUIWidget->UpdateTimer();
+	}
+
 }
 
 void ABaseCharacter::PostInitializeComponents()
@@ -278,31 +311,23 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	SetHP(GetHP() - Damage);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
-	
 
 
+	if (GetHP() > 0) {
 
-	if (GetHP() <= 0) {
-		SetDead(true);
-
-		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
-		if (controller != nullptr) {
-			controller->DisabledControllerInput(); // controller에서 직접 하니까 해결
-			//DisableInput(controller); // 이래도 움직임 좀비 죽었을때 회전이랑 캐릭터 움직이는 거 수정해야 할듯
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("disabled input")));
-
-		}
-
-		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-		if (nullptr != CharacterAnimInstance) {
-			CharacterAnimInstance->SetCurrentPawnSpeed(0);
-			CharacterAnimInstance->SetIsDead(IsDead());
-		}
-
+		SetHP(GetHP() - Damage);
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	}
+	else if (GetHP() <= 0 && !IsDeadPlay()) {
+		SetDeadPlay(true);
+	}
+
+
+	if (IsDeadPlay() && !IsDead()) {
+		PlayDead();
+	}
+
 
 	
 	if (!m_bBleeding) {
@@ -316,6 +341,25 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 	return Damage;
 }
+
+void ABaseCharacter::PlayDead()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("DEAD")));
+	SetDead(true);
+	auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr != CharacterAnimInstance) {
+		CharacterAnimInstance->SetCurrentPawnSpeed(0.f);
+		CharacterAnimInstance->SetIsDead(IsDead());
+	}
+
+	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+	if (controller != nullptr) {
+		controller->DisabledControllerInput();
+	}
+
+	ProStartGameDeadEnd();
+}
+
 
 bool ABaseCharacter::DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype)
 {
@@ -1508,17 +1552,14 @@ void ABaseCharacter::BleedingTimerElapsed()
 	}
 	SetHP(GetHP() - 1);
 
-	if (GetHP() <= 0) {
-		SetDead(true);
-		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-		if (nullptr != CharacterAnimInstance) {
-			CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-			CharacterAnimInstance->SetIsDead(IsDead());
-		}
-		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
-		if (controller != nullptr) {
-			DisableInput(controller); // 이래도 움직임 좀비 죽었을때 회전이랑 캐릭터 움직이는 거 수정해야 할듯
-		}
+
+	if (GetHP() <= 0 && !IsDeadPlay()) {
+		SetDeadPlay(true);
+	}
+
+
+	if (IsDeadPlay() && !IsDead()) {
+		PlayDead();
 	}
 }
 
@@ -1574,6 +1615,38 @@ void ABaseCharacter::HealingStaminaTimerElapsed()
 	SetStamina(GetStamina() + 5);
 	if (GetStamina() > 100) {
 		SetStamina(100);
+	}
+}
+
+
+
+void ABaseCharacter::ProStartGameDeadEnd()
+{
+	GetWorld()->GetTimerManager().SetTimer(GameDeadEndHandle, this, &ABaseCharacter::ProGameDeadEnd, 10.0f, false);
+}
+
+void ABaseCharacter::ProGameDeadEnd()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (PlayerController)
+	{
+		// 'quit' 명령을 실행하여 게임 종료
+		PlayerController->ConsoleCommand("quit");
+	}
+}
+
+void ABaseCharacter::ProStartGameTimerEnd()
+{
+	GetWorld()->GetTimerManager().SetTimer(GameTimerEndHandle, this, &ABaseCharacter::ProGameTimerEnd, 1.0f, false);
+}
+
+void ABaseCharacter::ProGameTimerEnd()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (PlayerController)
+	{
+		// 'quit' 명령을 실행하여 게임 종료
+		PlayerController->ConsoleCommand("quit");
 	}
 }
 

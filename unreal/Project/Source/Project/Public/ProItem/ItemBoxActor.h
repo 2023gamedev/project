@@ -59,7 +59,7 @@ public:
 
 	// 아이템 종류(클래스가 뭔지)
 	UPROPERTY(EditAnywhere, Category = item)
-	TEnumAsByte<EItemClass> ItemClassType;
+	EItemClass ItemClassType;
 
 	// 텍스쳐
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

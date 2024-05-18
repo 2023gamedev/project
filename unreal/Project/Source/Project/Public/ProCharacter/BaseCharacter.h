@@ -25,6 +25,7 @@ class AThrowWeaponActor;
 class AHealingItemActor;
 class ABleedingHealingItemActor;
 class AKeyActor;
+class UGameTimerUI;
 
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
@@ -120,6 +121,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UProGameClearUI* ProGameClearUIWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UGameTimerUI> GameTimerUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UGameTimerUI* GameTimerUIWidget;
+
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
 
@@ -206,6 +213,9 @@ public:
 
 	bool IsDead() { return m_bIsDead; }
 	void SetDead(bool dead) { m_bIsDead = dead; }
+
+	bool IsDeadPlay() { return m_bIsDeadPlay; }
+	void SetDeadPlay(bool deadplay) { m_bIsDeadPlay = deadplay; }
 
 	bool IsBringCurrentWeapon() { return m_bIsBringCurrentWeapon; }
 	void SetBringCurrentWeapon(bool bringcurrentweapon) { m_bIsBringCurrentWeapon = bringcurrentweapon; }
@@ -327,7 +337,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bZeroStamina = false;
 
+	void PlayDead();
 
+	FTimerHandle GameDeadEndHandle;
+	void ProStartGameDeadEnd();
+	void ProGameDeadEnd();
+
+	FTimerHandle GameTimerEndHandle;
+	void ProStartGameTimerEnd();
+	void ProGameTimerEnd();
 
 	
 	virtual uint32 GetPlayerId() const;
@@ -431,6 +449,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsDead;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsDeadPlay;
 
 private:
 	uint32 PlayerId = 99;

@@ -47,5 +47,5 @@ void ALobbyPlayerController::OnMouseLeftClick()
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Left Mouse Button Clicked");
 	ALobbyPlayer* LobbyPlayer = Cast<ALobbyPlayer> (GetPawn());
 
-	LobbyPlayer->OnMouseLeftClick();
+	// LobbyPlayer->OnMouseLeftClick();
 }

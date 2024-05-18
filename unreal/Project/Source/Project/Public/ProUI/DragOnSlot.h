@@ -25,5 +25,5 @@ public:
 	int SlotIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TEnumAsByte<ESlotType> Type;
+	ESlotType Type;
 };

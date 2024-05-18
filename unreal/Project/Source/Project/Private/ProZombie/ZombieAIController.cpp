@@ -10,6 +10,7 @@
 #include "GStruct.pb.h"
 #include "ProZombie/BaseZombie.h"
 #include "ProGamemode/OneGameModeBase.h"
+#include "ProZombie/NormalZombie.h"
 #include "ProGamemode/ProGameInstance.h"
 
 const FName AZombieAIController::TargetKey(TEXT("Target"));
@@ -81,10 +82,23 @@ void AZombieAIController::Tick(float DeltaTime)
 			}
 		}
 
+		APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+
+		ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
+
+		FVector ZombieForward = NormalZombie->GetActorForwardVector(); // 좀비의 전방 벡터
+		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
+
+
+		FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
+
+
+
 		// 블랙보드 업데이트
 		if (NearestPawn)
 		{
-			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
+			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
+			//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
 			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
 			GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
 		}

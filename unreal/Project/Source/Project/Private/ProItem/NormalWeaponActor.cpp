@@ -14,7 +14,9 @@ ANormalWeaponActor::ANormalWeaponActor()
 void ANormalWeaponActor::BeginPlay()
 {
 	Super::BeginPlay();
-	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ANormalWeaponActor::WeaponBeginOverlap);
+	if (BoxComponent) {
+		BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ANormalWeaponActor::WeaponBeginOverlap);
+	}
 }
 
 void ANormalWeaponActor::Tick(float DeltaTime)
