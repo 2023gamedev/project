@@ -62,6 +62,33 @@ void AZombieAIController::Tick(float DeltaTime)
 	{
 		//TimeSinceLastSearch = 0.0f; // 타이머 리셋
 
+
+
+		APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+
+		ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
+
+		if (PlayerPawn == nullptr || NormalZombie == nullptr) {
+			return;
+		}
+
+		FVector ZombieForward = NormalZombie->GetActorForwardVector(); // 좀비의 전방 벡터
+		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
+		FVector ZombieLocation = NormalZombie->GetActorLocation(); // 좀비의 위치
+
+		FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+
+		float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
+		float MaxSightRange = 1000.f; // 원하는 최대 시야 범위를 설정하세요.
+		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+
+		// 시야각을 90도로 설정 (전방 180도)
+		float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // 전방 90도
+
+
+		FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
+
+
 		TArray<AActor*> Players;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
 
@@ -71,7 +98,7 @@ void AZombieAIController::Tick(float DeltaTime)
 		for (AActor* Player : Players)
 		{
 			APawn* TestPawn = Cast<APawn>(Player);
-			if (TestPawn && LineOfSightTo(TestPawn))
+			if (TestPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(TestPawn))
 			{
 				float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
 				if (Dist < NearestDist)
@@ -81,18 +108,6 @@ void AZombieAIController::Tick(float DeltaTime)
 				}
 			}
 		}
-
-		APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-
-		ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
-
-		FVector ZombieForward = NormalZombie->GetActorForwardVector(); // 좀비의 전방 벡터
-		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
-
-
-		FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
-
-
 
 		// 블랙보드 업데이트
 		if (NearestPawn)

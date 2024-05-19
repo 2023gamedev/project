@@ -51,14 +51,28 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 
 	AShoutingZombie* ShoutingZombie = Cast<AShoutingZombie>(GetPawn());
 
+
+	if (PlayerPawn == nullptr || ShoutingZombie == nullptr) {
+		return;
+	}
+
 	FVector ZombieForward = ShoutingZombie->GetActorForwardVector(); // 좀비의 전방 벡터
 	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
+	FVector ZombieLocation = ShoutingZombie->GetActorLocation(); // 좀비의 위치
+
+	FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+
+	float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
+	float MaxSightRange = 1000.f; // 원하는 최대 시야 범위를 설정하세요.
+	float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+
+	// 시야각을 90도로 설정 (전방 180도)
+	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // 전방 90도
 
 
 	FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
 
-
-	if (LineOfSightTo(PlayerPawn)) {
+	if (Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(PlayerPawn)) {
 		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
 		//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
 		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
