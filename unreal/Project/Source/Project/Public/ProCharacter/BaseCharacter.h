@@ -355,6 +355,8 @@ public:
 	void SetAttack(bool b_attack);
 	bool GetAttack();
 
+	void OtherSpawnNormalWeapon(const FString& WeaponName);
+
 	void DestroyItem(uint32 ItemId);
 
 

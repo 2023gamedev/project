@@ -103,6 +103,7 @@ public:
 	bool e_BHItem = false;
 	bool e_HItem = false;
 	bool e_KeyItem = false;
+	std::string ItemName;
 
 
 };

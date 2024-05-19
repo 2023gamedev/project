@@ -1093,10 +1093,24 @@ class Equip_Item final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kItemnameFieldNumber = 2,
     kPlayeridFieldNumber = 1,
-    kItemidFieldNumber = 2,
     kPacketTypeFieldNumber = 3,
   };
+  // string itemname = 2;
+  void clear_itemname();
+  const std::string& itemname() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_itemname(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_itemname();
+  PROTOBUF_NODISCARD std::string* release_itemname();
+  void set_allocated_itemname(std::string* itemname);
+  private:
+  const std::string& _internal_itemname() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_itemname(const std::string& value);
+  std::string* _internal_mutable_itemname();
+  public:
+
   // uint32 playerid = 1;
   void clear_playerid();
   uint32_t playerid() const;
@@ -1104,15 +1118,6 @@ class Equip_Item final :
   private:
   uint32_t _internal_playerid() const;
   void _internal_set_playerid(uint32_t value);
-  public:
-
-  // uint32 itemid = 2;
-  void clear_itemid();
-  uint32_t itemid() const;
-  void set_itemid(uint32_t value);
-  private:
-  uint32_t _internal_itemid() const;
-  void _internal_set_itemid(uint32_t value);
   public:
 
   // uint32 packet_type = 3;
@@ -1132,8 +1137,8 @@ class Equip_Item final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr itemname_;
     uint32_t playerid_;
-    uint32_t itemid_;
     uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -1827,24 +1832,54 @@ inline void Equip_Item::set_playerid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Equip_Item.playerid)
 }
 
-// uint32 itemid = 2;
-inline void Equip_Item::clear_itemid() {
-  _impl_.itemid_ = 0u;
+// string itemname = 2;
+inline void Equip_Item::clear_itemname() {
+  _impl_.itemname_.ClearToEmpty();
 }
-inline uint32_t Equip_Item::_internal_itemid() const {
-  return _impl_.itemid_;
+inline const std::string& Equip_Item::itemname() const {
+  // @@protoc_insertion_point(field_get:Protocol.Equip_Item.itemname)
+  return _internal_itemname();
 }
-inline uint32_t Equip_Item::itemid() const {
-  // @@protoc_insertion_point(field_get:Protocol.Equip_Item.itemid)
-  return _internal_itemid();
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void Equip_Item::set_itemname(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.itemname_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.Equip_Item.itemname)
 }
-inline void Equip_Item::_internal_set_itemid(uint32_t value) {
+inline std::string* Equip_Item::mutable_itemname() {
+  std::string* _s = _internal_mutable_itemname();
+  // @@protoc_insertion_point(field_mutable:Protocol.Equip_Item.itemname)
+  return _s;
+}
+inline const std::string& Equip_Item::_internal_itemname() const {
+  return _impl_.itemname_.Get();
+}
+inline void Equip_Item::_internal_set_itemname(const std::string& value) {
   
-  _impl_.itemid_ = value;
+  _impl_.itemname_.Set(value, GetArenaForAllocation());
 }
-inline void Equip_Item::set_itemid(uint32_t value) {
-  _internal_set_itemid(value);
-  // @@protoc_insertion_point(field_set:Protocol.Equip_Item.itemid)
+inline std::string* Equip_Item::_internal_mutable_itemname() {
+  
+  return _impl_.itemname_.Mutable(GetArenaForAllocation());
+}
+inline std::string* Equip_Item::release_itemname() {
+  // @@protoc_insertion_point(field_release:Protocol.Equip_Item.itemname)
+  return _impl_.itemname_.Release();
+}
+inline void Equip_Item::set_allocated_itemname(std::string* itemname) {
+  if (itemname != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.itemname_.SetAllocated(itemname, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.itemname_.IsDefault()) {
+    _impl_.itemname_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Equip_Item.itemname)
 }
 
 // uint32 packet_type = 3;

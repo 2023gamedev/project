@@ -103,8 +103,8 @@ struct Character_AttackDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 Character_AttackDefaultTypeInternal _Character_Attack_default_instance_;
 PROTOBUF_CONSTEXPR Equip_Item::Equip_Item(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.playerid_)*/0u
-  , /*decltype(_impl_.itemid_)*/0u
+    /*decltype(_impl_.itemname_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.playerid_)*/0u
   , /*decltype(_impl_.packet_type_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct Equip_ItemDefaultTypeInternal {
@@ -185,7 +185,7 @@ const uint32_t TableStruct_GStruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::Equip_Item, _impl_.playerid_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::Equip_Item, _impl_.itemid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Equip_Item, _impl_.itemname_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Equip_Item, _impl_.packet_type_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -219,13 +219,13 @@ const char descriptor_table_protodef_GStruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "(\002\022\n\n\002hp\030\013 \001(\002\022\016\n\006attack\030\014 \001(\010\"*\n\004Time\022\r"
   "\n\005timer\030\001 \001(\r\022\023\n\013packet_type\030\002 \001(\r\"I\n\020Ch"
   "aracter_Attack\022\020\n\010playerid\030\001 \001(\r\022\016\n\006atta"
-  "ck\030\002 \001(\010\022\023\n\013packet_type\030\003 \001(\r\"C\n\nEquip_I"
-  "tem\022\020\n\010playerid\030\001 \001(\r\022\016\n\006itemid\030\002 \001(\r\022\023\n"
-  "\013packet_type\030\003 \001(\rb\006proto3"
+  "ck\030\002 \001(\010\022\023\n\013packet_type\030\003 \001(\r\"E\n\nEquip_I"
+  "tem\022\020\n\010playerid\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022"
+  "\023\n\013packet_type\030\003 \001(\rb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GStruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GStruct_2eproto = {
-    false, false, 666, descriptor_table_protodef_GStruct_2eproto,
+    false, false, 668, descriptor_table_protodef_GStruct_2eproto,
     "GStruct.proto",
     &descriptor_table_GStruct_2eproto_once, nullptr, 0, 5,
     schemas, file_default_instances, TableStruct_GStruct_2eproto::offsets,
@@ -1844,12 +1844,20 @@ Equip_Item::Equip_Item(const Equip_Item& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   Equip_Item* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.playerid_){}
-    , decltype(_impl_.itemid_){}
+      decltype(_impl_.itemname_){}
+    , decltype(_impl_.playerid_){}
     , decltype(_impl_.packet_type_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.itemname_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.itemname_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_itemname().empty()) {
+    _this->_impl_.itemname_.Set(from._internal_itemname(), 
+      _this->GetArenaForAllocation());
+  }
   ::memcpy(&_impl_.playerid_, &from._impl_.playerid_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.packet_type_) -
     reinterpret_cast<char*>(&_impl_.playerid_)) + sizeof(_impl_.packet_type_));
@@ -1861,11 +1869,15 @@ inline void Equip_Item::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.playerid_){0u}
-    , decltype(_impl_.itemid_){0u}
+      decltype(_impl_.itemname_){}
+    , decltype(_impl_.playerid_){0u}
     , decltype(_impl_.packet_type_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
+  _impl_.itemname_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.itemname_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 Equip_Item::~Equip_Item() {
@@ -1879,6 +1891,7 @@ Equip_Item::~Equip_Item() {
 
 inline void Equip_Item::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.itemname_.Destroy();
 }
 
 void Equip_Item::SetCachedSize(int size) const {
@@ -1891,6 +1904,7 @@ void Equip_Item::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.itemname_.ClearToEmpty();
   ::memset(&_impl_.playerid_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.packet_type_) -
       reinterpret_cast<char*>(&_impl_.playerid_)) + sizeof(_impl_.packet_type_));
@@ -1911,11 +1925,13 @@ const char* Equip_Item::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
         } else
           goto handle_unusual;
         continue;
-      // uint32 itemid = 2;
+      // string itemname = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.itemid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_itemname();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "Protocol.Equip_Item.itemname"));
         } else
           goto handle_unusual;
         continue;
@@ -1962,10 +1978,14 @@ uint8_t* Equip_Item::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_playerid(), target);
   }
 
-  // uint32 itemid = 2;
-  if (this->_internal_itemid() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_itemid(), target);
+  // string itemname = 2;
+  if (!this->_internal_itemname().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_itemname().data(), static_cast<int>(this->_internal_itemname().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.Equip_Item.itemname");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_itemname(), target);
   }
 
   // uint32 packet_type = 3;
@@ -1990,14 +2010,16 @@ size_t Equip_Item::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  // string itemname = 2;
+  if (!this->_internal_itemname().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_itemname());
+  }
+
   // uint32 playerid = 1;
   if (this->_internal_playerid() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_playerid());
-  }
-
-  // uint32 itemid = 2;
-  if (this->_internal_itemid() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_itemid());
   }
 
   // uint32 packet_type = 3;
@@ -2023,11 +2045,11 @@ void Equip_Item::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_itemname().empty()) {
+    _this->_internal_set_itemname(from._internal_itemname());
+  }
   if (from._internal_playerid() != 0) {
     _this->_internal_set_playerid(from._internal_playerid());
-  }
-  if (from._internal_itemid() != 0) {
-    _this->_internal_set_itemid(from._internal_itemid());
   }
   if (from._internal_packet_type() != 0) {
     _this->_internal_set_packet_type(from._internal_packet_type());
@@ -2048,7 +2070,13 @@ bool Equip_Item::IsInitialized() const {
 
 void Equip_Item::InternalSwap(Equip_Item* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.itemname_, lhs_arena,
+      &other->_impl_.itemname_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(Equip_Item, _impl_.packet_type_)
       + sizeof(Equip_Item::_impl_.packet_type_)

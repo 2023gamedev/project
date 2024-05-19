@@ -172,7 +172,7 @@ void APlayerCharacterController::Send_Equipment()
 		{
 			if (MyBaseCharacter)
 			{
-				//uint32 ItemId = MyBaseCharacter->QuickSlot[4]
+				ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[4].Name.ToString()));
 			}
 			if (e_TWeapon)
 			{
@@ -194,7 +194,7 @@ void APlayerCharacterController::Send_Equipment()
 			Protocol::Equip_Item packet;
 			packet.set_playerid(MyPlayerId);
 			packet.set_packet_type(5);
-			//packet.set_itemid();
+			packet.set_itemname(ItemName);
 
 			// Á÷·ÄÈ­
 			std::string serializedData;
