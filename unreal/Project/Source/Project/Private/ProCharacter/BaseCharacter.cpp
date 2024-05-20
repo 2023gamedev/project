@@ -69,6 +69,7 @@
 #include "ProUI/ConditionUI.h"
 #include "ProUI/ProGameClearUI.h"
 #include "ProUI/GameTimerUI.h"
+#include "ProUI/PickUpUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
 
@@ -136,6 +137,13 @@ ABaseCharacter::ABaseCharacter()
 
 	if (PLAYER_GAMETIMERUI.Succeeded()) {
 		GameTimerUIClass = PLAYER_GAMETIMERUI.Class;
+	}
+
+
+	static ConstructorHelpers::FClassFinder <UPickUpUI> PLAYER_PICKUPUI(TEXT("/Game/UI/BP_PickUpUI.BP_PickUpUI_C"));
+
+	if (PLAYER_PICKUPUI.Succeeded()) {
+		PickUpUIClass = PLAYER_PICKUPUI.Class;
 	}
 
 
@@ -227,6 +235,26 @@ void ABaseCharacter::BeginPlay()
 		GameTimerUIWidget->Character = this;
 		GameTimerUIWidget->AddToViewport();
 	}
+
+	if (PickUpUIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+
+		PickUpUIWidget = CreateWidget<UPickUpUI>(controller, PickUpUIClass);
+
+		if (!PickUpUIWidget) {
+			return;
+		}
+
+		PickUpUIWidget->Character = this;
+		PickUpUIWidget->Init();
+		PickUpUIWidget->AddToViewport();
+		PickUpUIWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
 
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -480,6 +508,8 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 
 
 
+
+
 void ABaseCharacter::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bIsAttacking = false;
@@ -570,6 +600,15 @@ void ABaseCharacter::GetItem()
 					break;
 				}
 			}
+
+			PickUpSlot[0].Type = EItemType::ITEM_USEABLE;
+			PickUpSlot[0].Name = itembox->ItemName;
+			PickUpSlot[0].ItemClassType = itembox->ItemClassType;
+			PickUpSlot[0].Texture = itembox->Texture;
+			PickUpSlot[0].Count = itembox->Count;
+			PickUpUIWidget->Update();
+			OnPickUPUISlot();
+
 			ItemBoxId = itembox->GetItemBoxId();
 			PlayerSight->GetHitActor()->Destroy();
 		}
@@ -577,6 +616,17 @@ void ABaseCharacter::GetItem()
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
+}
+
+void ABaseCharacter::OnPickUPUISlot()
+{
+	PickUpUIWidget->SetVisibility(ESlateVisibility::Visible);
+	GetWorld()->GetTimerManager().SetTimer(PickUpUIHandle, this, &ABaseCharacter::ProStartPickUpUI, 3.0f, false);
+}
+
+void ABaseCharacter::ProStartPickUpUI()
+{
+	PickUpUIWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ABaseCharacter::OtherGetItem()
@@ -1524,6 +1574,8 @@ void ABaseCharacter::ProStartGameEnd()
 {
 	GetWorld()->GetTimerManager().SetTimer(GameEndHandle, this, &ABaseCharacter::ProGameEnd, 5.0f, false);
 }
+
+
 
 void ABaseCharacter::ProGameEnd()
 {
