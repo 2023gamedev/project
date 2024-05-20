@@ -73,6 +73,26 @@ void USlot::Refresh()
 		}
 		break;
 	}
+	case ESlotType::SLOT_PICK_UP:
+	{
+
+		FItemDataStructure& dataquick = Character->PickUpSlot[0];
+
+		if (dataquick.Texture != nullptr) {
+			SetTexture(dataquick.Texture);
+		}
+
+		ItemCount = dataquick.Count;
+
+		if (ItemCount <= 1) {
+			Text->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else {
+			Text->SetVisibility(ESlateVisibility::Visible);
+			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
+		}
+		break;
+	}
 	}
 }
 

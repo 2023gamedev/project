@@ -75,4 +75,5 @@ enum class ESlotType
 	SLOT_ITEM				UMETA(DisplayName = "Item"),
 	SLOT_QUICK				UMETA(DisplayName = "Quick"),
 	SLOT_QUICK_ITEM			UMETA(DisplayName = "QuickItem"),
+	SLOT_PICK_UP			UMETA(DisplayName = "PickUpItem"),
 };

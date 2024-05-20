@@ -26,6 +26,7 @@ class AHealingItemActor;
 class ABleedingHealingItemActor;
 class AKeyActor;
 class UGameTimerUI;
+class UPickUpUI;
 
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
@@ -126,6 +127,22 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UGameTimerUI* GameTimerUIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TArray<FItemDataStructure> PickUpSlot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UPickUpUI> PickUpUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UPickUpUI* PickUpUIWidget;
+
+	void OnPickUPUISlot();
+
+	FTimerHandle PickUpUIHandle;
+	void ProStartPickUpUI();
+
+
 
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
