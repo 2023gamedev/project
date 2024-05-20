@@ -108,8 +108,18 @@ uint32 ClientSocket::Run()
 					}
 				}
 				
+				case 5:
+				{
+					Protocol::Equip_Item EquipPacket;
+					if (EquipPacket.ParseFromArray(buffer.data(), buffer.size()))
+					{
+						Q_eitem.push(EquipItem(EquipPacket.playerid(), EquipPacket.itemname()));
+					}
+				}
+				
 				buffer.clear();
 				}
+
 
 			}
 			else if (recvLen == 0)

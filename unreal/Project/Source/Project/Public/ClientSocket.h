@@ -67,6 +67,17 @@ struct PlayerAttack
 		: PlayerId(InPlayerId), b_attack(Inb_attack) {}
 };
 
+struct EquipItem
+{
+	uint32 PlayerId;
+	std::string Itemname;
+
+	EquipItem() : PlayerId(0), Itemname(NULL) {}
+
+	EquipItem(uint32 InPlayerId, std::string InItemname)
+		: PlayerId(InPlayerId), Itemname(InItemname) {}
+};
+
 class UProGameInstance;
 
 class PROJECT_API ClientSocket : public FRunnable
@@ -83,6 +94,7 @@ public:
 	Concurrency::concurrent_queue<PlayerData> Q_player;
 	Concurrency::concurrent_queue<PlayerAttack> Q_pattack;
 	Concurrency::concurrent_queue<ZombieData> Q_zombie;
+	Concurrency::concurrent_queue<EquipItem> Q_eitem;
 
 	virtual bool Init() override;
 	virtual uint32 Run() override;

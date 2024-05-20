@@ -73,6 +73,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 	CheckAndSendMovement();
 	Send_Attack();
+	Send_Equipment();
 
 	if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 	{
@@ -170,11 +171,8 @@ void APlayerCharacterController::Send_Equipment()
 
 		if (e_NWeapon)
 		{
-			if (MyBaseCharacter)
-			{
-				ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[4].Name.ToString()));
-			}
-			if (e_TWeapon)
+			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[4].Name.ToString()));
+			/*if (e_TWeapon)
 			{
 
 			}
@@ -189,7 +187,7 @@ void APlayerCharacterController::Send_Equipment()
 			if (e_KeyItem)
 			{
 
-			}
+			}*/
 
 			Protocol::Equip_Item packet;
 			packet.set_playerid(MyPlayerId);
@@ -201,6 +199,8 @@ void APlayerCharacterController::Send_Equipment()
 			packet.SerializeToString(&serializedData);
 
 			bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+			UE_LOG(LogNet, Display, TEXT("Send Equip: PlayerId=%d"), recvPlayerData.PlayerId);
+			e_NWeapon = false;
 		}
 
 		
