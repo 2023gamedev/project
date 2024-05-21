@@ -72,7 +72,7 @@ struct EquipItem
 	uint32 PlayerId;
 	std::string Itemname;
 
-	EquipItem() : PlayerId(0), Itemname(NULL) {}
+	EquipItem() : PlayerId(0), Itemname("") {}
 
 	EquipItem(uint32 InPlayerId, std::string InItemname)
 		: PlayerId(InPlayerId), Itemname(InItemname) {}

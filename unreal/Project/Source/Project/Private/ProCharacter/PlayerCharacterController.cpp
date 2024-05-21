@@ -92,7 +92,17 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
 			MyGameMode->UpdatePlayerAttack(recvPlayerAttack.PlayerId, recvPlayerAttack.b_attack);
-			UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+			//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_eitem.try_pop(recvEquipItem))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			FString EquipItem = *FString(recvEquipItem.Itemname.c_str());
+			MyGameMode->UpdateEquipItem(recvEquipItem.PlayerId, EquipItem);
+			UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvEquipItem.PlayerId);
 		}
 	}
 }
@@ -202,8 +212,6 @@ void APlayerCharacterController::Send_Equipment()
 			UE_LOG(LogNet, Display, TEXT("Send Equip: PlayerId=%d"), recvPlayerData.PlayerId);
 			e_NWeapon = false;
 		}
-
-		
 	}
 }
  

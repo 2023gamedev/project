@@ -776,6 +776,30 @@ void AOneGameModeBase::UpdatePlayerAttack(uint32 PlayerID, bool battack)
     }
 }
 
+void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // 캐릭터 검색
+    for (TActorIterator<ABaseCharacter> It(World); It; ++It)
+    {
+        ABaseCharacter* BasePlayer = *It;
+        if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
+        {
+            BasePlayer->OtherSpawnNormalWeapon(Itemname);
+            UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
+
+            return;
+        }
+    }
+}
+
 
 
 
