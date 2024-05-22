@@ -178,40 +178,43 @@ void APlayerCharacterController::Send_Equipment()
 		APawn* MyPawn = GetPawn();
 		ABaseCharacter* MyBaseCharacter = Cast<ABaseCharacter>(MyPawn);
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-
+		if (e_BHItem)
+		{
+			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[0].Name.ToString()));
+		}
+		if (e_HItem)
+		{
+			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[1].Name.ToString()));
+		}
+		if (e_TWeapon)
+		{
+			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[2].Name.ToString()));
+		}
+		if (e_KeyItem)
+		{
+			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[3].Name.ToString()));
+		}
 		if (e_NWeapon)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[4].Name.ToString()));
-			/*if (e_TWeapon)
-			{
-
-			}
-			if (e_BHItem)
-			{
-
-			}
-			if (e_HItem)
-			{
-
-			}
-			if (e_KeyItem)
-			{
-
-			}*/
-
-			Protocol::Equip_Item packet;
-			packet.set_playerid(MyPlayerId);
-			packet.set_packet_type(5);
-			packet.set_itemname(ItemName);
-
-			// 직렬화
-			std::string serializedData;
-			packet.SerializeToString(&serializedData);
-
-			bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-			UE_LOG(LogNet, Display, TEXT("Send Equip: PlayerId=%d"), recvPlayerData.PlayerId);
-			e_NWeapon = false;
 		}
+
+		Protocol::Equip_Item packet;
+		packet.set_playerid(MyPlayerId);
+		packet.set_packet_type(5);
+		packet.set_itemname(ItemName);
+
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+		UE_LOG(LogNet, Display, TEXT("Send Equip: PlayerId=%d"), recvPlayerData.PlayerId);
+		e_NWeapon = false;
+		e_TWeapon = false;
+		e_BHItem = false; 
+		e_HItem = false;
+		e_KeyItem = false;
 	}
 }
  

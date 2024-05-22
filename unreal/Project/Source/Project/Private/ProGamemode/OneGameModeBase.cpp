@@ -792,9 +792,10 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname)
         ABaseCharacter* BasePlayer = *It;
         if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
         {
-            BasePlayer->OtherSpawnNormalWeapon(Itemname);
-            UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
-
+            if (Itemname != "") {
+                BasePlayer->OtherSpawnNormalWeapon(Itemname);
+                UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
+            }
             return;
         }
     }
