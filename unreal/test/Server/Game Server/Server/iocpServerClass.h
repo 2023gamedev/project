@@ -49,6 +49,8 @@ private:
 	int cpuCore;
 
 	vector<thread*> worker_threads;
+	thread timer_thread;
+
 	bool ServerShutdown{ false };
 
 	unsigned int playerIndex{ UINT_MAX };

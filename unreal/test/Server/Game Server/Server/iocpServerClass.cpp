@@ -13,6 +13,8 @@ IOCP_CORE::IOCP_CORE()
 	IOCP_MakeWorkerThreads();
 
 	playerIndex = 1;
+
+	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 }
 
 IOCP_CORE::~IOCP_CORE()
@@ -324,5 +326,7 @@ void IOCP_CORE::Timer_Thread()
 				IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
 			}
 		}
+
+		printf("Send Timer");
 	}
 }

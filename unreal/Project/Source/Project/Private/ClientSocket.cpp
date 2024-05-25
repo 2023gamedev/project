@@ -96,6 +96,7 @@ uint32 ClientSocket::Run()
 					if (TimePacket.ParseFromArray(buffer.data(), buffer.size()))
 					{
 						Timer = TimePacket.timer();
+						UE_LOG(LogNet, Display, TEXT("Timer: %d"), Timer);
 					}
 				}
 
