@@ -16,7 +16,7 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 	if (ATTACK_MONTAGE.Succeeded()) {
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
-
+	
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> PICKUP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeePickup.BP_AMEmployeePickup"));
 	if (PICKUP_MONTAGE.Succeeded()) {
 		PickUpMontage = PICKUP_MONTAGE.Object;
