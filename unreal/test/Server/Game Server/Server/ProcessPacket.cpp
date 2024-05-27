@@ -21,7 +21,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     Protocol::Character tempPacket;
     tempPacket.ParseFromArray(buffer, bufferSize);
 
-    if(tempPacket.playerid() == id || tempPacket.isingame()) clientInfo->isInGame = true;
+    if (tempPacket.playerid() == id || tempPacket.isingame()) {
+        clientInfo->isInGame = true;
+    }
 
     // 패킷의 타입을 확인하여 처리
     switch (tempPacket.packet_type()) {

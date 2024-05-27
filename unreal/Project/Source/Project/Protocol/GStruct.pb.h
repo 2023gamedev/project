@@ -765,7 +765,7 @@ class Time final :
 
   enum : int {
     kTimerFieldNumber = 1,
-    kPacketTypeFieldNumber = 2,
+    kPacketTypeFieldNumber = 3,
   };
   // uint32 timer = 1;
   void clear_timer();
@@ -776,7 +776,7 @@ class Time final :
   void _internal_set_timer(uint32_t value);
   public:
 
-  // uint32 packet_type = 2;
+  // uint32 packet_type = 3;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
@@ -1724,7 +1724,7 @@ inline void Time::set_timer(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Time.timer)
 }
 
-// uint32 packet_type = 2;
+// uint32 packet_type = 3;
 inline void Time::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }

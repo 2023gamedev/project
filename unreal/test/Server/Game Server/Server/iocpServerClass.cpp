@@ -5,16 +5,15 @@ std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 
 IOCP_CORE::IOCP_CORE()
 {	
+	playerIndex = 0;
+	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
+
 	IOCP_GetServerIpAddress();
 	CheckThisCPUcoreCount();
 
 	IOCP_Initialize();
 	
 	IOCP_MakeWorkerThreads();
-
-	playerIndex = 1;
-
-	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 }
 
 IOCP_CORE::~IOCP_CORE()
@@ -81,6 +80,8 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 	}
 
 	acceptThread.join();
+
+	timer_thread.join();
 }
 
 void IOCP_CORE::IOCP_WorkerThread() {
@@ -304,6 +305,7 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 
 void IOCP_CORE::Timer_Thread()
 {
+	printf("Timer Thread Started\n");
 	while (!ServerShutdown)
 	{
 		Protocol::Time packet;

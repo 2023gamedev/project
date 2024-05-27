@@ -217,7 +217,7 @@ const char descriptor_table_protodef_GStruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "e\030\004 \001(\r\022\t\n\001x\030\005 \001(\002\022\t\n\001y\030\006 \001(\002\022\t\n\001z\030\007 \001(\002"
   "\022\r\n\005pitch\030\010 \001(\002\022\013\n\003yaw\030\t \001(\002\022\014\n\004roll\030\n \001"
   "(\002\022\n\n\002hp\030\013 \001(\002\022\016\n\006attack\030\014 \001(\010\"*\n\004Time\022\r"
-  "\n\005timer\030\001 \001(\r\022\023\n\013packet_type\030\002 \001(\r\"I\n\020Ch"
+  "\n\005timer\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\r\"I\n\020Ch"
   "aracter_Attack\022\020\n\010playerid\030\001 \001(\r\022\016\n\006atta"
   "ck\030\002 \001(\010\022\023\n\013packet_type\030\003 \001(\r\"E\n\nEquip_I"
   "tem\022\020\n\010playerid\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022"
@@ -1463,9 +1463,9 @@ const char* Time::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
         } else
           goto handle_unusual;
         continue;
-      // uint32 packet_type = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+      // uint32 packet_type = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.packet_type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
@@ -1506,10 +1506,10 @@ uint8_t* Time::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_timer(), target);
   }
 
-  // uint32 packet_type = 2;
+  // uint32 packet_type = 3;
   if (this->_internal_packet_type() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_packet_type(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1533,7 +1533,7 @@ size_t Time::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_timer());
   }
 
-  // uint32 packet_type = 2;
+  // uint32 packet_type = 3;
   if (this->_internal_packet_type() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
   }

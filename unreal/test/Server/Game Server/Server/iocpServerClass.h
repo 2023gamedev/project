@@ -57,5 +57,5 @@ private:
 
 	vector<int> m_zombie;
 
-	int GameTime;
+	int GameTime = 0;
 };
