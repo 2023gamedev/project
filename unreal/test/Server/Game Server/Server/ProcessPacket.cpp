@@ -68,7 +68,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         ZombieController zombiecontroller;
 
-        //printf("zombie id: %d \n", Packet.zombieid());
+        printf("zombie id: %d \n", Packet.zombieid());
 
         if (find(m_zombie.begin(), m_zombie.end(), zombiedata.zombieID) == m_zombie.end()) {
             zombiecontroller.addZombie(zombiedata);

@@ -58,7 +58,7 @@ void AZombieAIController::Tick(float DeltaTime)
 	//static float TimeSinceLastSearch = 0.0f;
 	//TimeSinceLastSearch += DeltaTime;
 
-	//if (TimeSinceLastSearch >= SearchInterval)
+	if (GameInstance->ClientSocketPtr->GetMyPlayerId() == 1)
 	{
 		//TimeSinceLastSearch = 0.0f; // 타이머 리셋
 
