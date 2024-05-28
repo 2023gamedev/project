@@ -317,7 +317,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 		ConditionUIWidget->UpdateBar();
 	}
 
-	if (GameTimerUIWidget) {
+	if (GameUIWidget) {
 		if (GameTimerUIWidget->IsTimeUp()) {
 			ProStartGameTimerEnd();
 		}

@@ -308,27 +308,30 @@ void IOCP_CORE::Timer_Thread()
 	printf("Timer Thread Started\n");
 	while (!ServerShutdown)
 	{
-		Protocol::Time packet;
-
-		std::this_thread::sleep_for(std::chrono::seconds(1)); // 1초마다 타이머
-		GameTime++;
-
-		std::string gameTimeStr = std::to_string(GameTime);
-
-		packet.set_timer(GameTime);
-		packet.set_packet_type(3);
-
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
-
-		for (auto& playerPair : g_players)
+		if (b_Timer) 
 		{
-			PLAYER_INFO* player = playerPair.second;
-			if (player->connected) {
-				IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
-			}
-		}
+			Protocol::Time packet;
 
-		printf("Send Timer");
+			std::this_thread::sleep_for(std::chrono::seconds(1)); // 1초마다 타이머
+			GameTime++;
+
+			std::string gameTimeStr = std::to_string(GameTime);
+
+			packet.set_timer(GameTime);
+			packet.set_packet_type(3);
+
+			std::string serializedData;
+			packet.SerializeToString(&serializedData);
+
+			for (auto& playerPair : g_players)
+			{
+				PLAYER_INFO* player = playerPair.second;
+				if (player->connected) {
+					IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
+				}
+			}
+
+			printf("Send Timer");
+		}
 	}
 }

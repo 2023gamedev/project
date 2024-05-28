@@ -58,4 +58,6 @@ private:
 	vector<int> m_zombie;
 
 	int GameTime = 0;
+
+	bool b_Timer = false;
 };

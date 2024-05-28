@@ -23,6 +23,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     if (tempPacket.playerid() == id || tempPacket.isingame()) {
         clientInfo->isInGame = true;
+        b_Timer = true;
     }
 
     // 패킷의 타입을 확인하여 처리
