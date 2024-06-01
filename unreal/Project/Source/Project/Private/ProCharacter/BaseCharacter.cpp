@@ -621,7 +621,7 @@ void ABaseCharacter::GetItem()
 void ABaseCharacter::OnPickUPUISlot()
 {
 	PickUpUIWidget->SetVisibility(ESlateVisibility::Visible);
-	GetWorld()->GetTimerManager().SetTimer(PickUpUIHandle, this, &ABaseCharacter::ProStartPickUpUI, 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(PickUpUIHandle, this, &ABaseCharacter::ProStartPickUpUI, 1.5f, false);
 }
 
 void ABaseCharacter::ProStartPickUpUI()
@@ -1069,7 +1069,7 @@ void ABaseCharacter::SpawnNormalWeapon()
 			CurrentWeapon = GetWorld()->SpawnActor<ANWBook>(ANWBook::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(0.f, -8.394180f, 0.f);
 			CurrentWeapon->ItemHandRot = FRotator(-0.000076f, -20.000723f, 0.000053f);
-			//
+			
 			//// 기존 본 변환을 저장
 			//FTransform OriginalTransform = SkeletalMesh->GetBoneTransform(SkeletalMesh->GetBoneIndex("thumb_01_r"));
 			//
@@ -1078,8 +1078,7 @@ void ABaseCharacter::SpawnNormalWeapon()
 			//FRotator NewRotation(2.931057f, 26.780522f, 21.615626f);
 			//NewTransform.SetRotation(NewRotation.Quaternion());
 
-			//SkeletalMesh->TransformToBoneSpace("thumb_01_r", NewTransform, EBoneSpaces::WorldSpace);
-
+			//SkeletalMesh->SetBoneTransform("thumb_01_r", NewTransform, EBoneSpaces::WorldSpace)
 		}
 
 		if (QuickSlot[4].Name == "Bottle") {
