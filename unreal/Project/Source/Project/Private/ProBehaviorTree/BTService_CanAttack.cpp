@@ -45,8 +45,6 @@ void UBTService_CanAttack::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 		ControllingPawn->GetController()->StopMovement();
 	}
 	else {
-
-
 		if (Target == nullptr) {
 			return;
 		}

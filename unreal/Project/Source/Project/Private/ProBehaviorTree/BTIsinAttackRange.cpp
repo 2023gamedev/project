@@ -51,7 +51,20 @@ bool UBTIsinAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 		return false;
 	}
 
-	if (Target->GetDistanceTo(ControllingPawn) <= 150.f) {
+	FVector ToTarget = Target->GetActorLocation() - ControllingPawn->GetActorLocation();
+	float DistanceToTarget = ToTarget.Size();
+
+	if (DistanceToTarget > 150.f)
+	{
+		return false;
+	}
+
+	ToTarget.Normalize();
+	FVector Forward = ControllingPawn->GetActorForwardVector();
+	float DotProduct = FVector::DotProduct(Forward, ToTarget);
+	float CosineOfAngle = FMath::Cos(FMath::DegreesToRadians(60.f/2.f));
+
+	if (DotProduct >= CosineOfAngle) {
 		bResult = true;
 		UE_LOG(LogTemp, Error, TEXT("TRUE"));
 	}
@@ -59,6 +72,16 @@ bool UBTIsinAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 		bResult = false;
 		UE_LOG(LogTemp, Error, TEXT("FALSE"));
 	}
+
+
+	//if (Target->GetDistanceTo(ControllingPawn) <= 150.f) {
+	//	bResult = true;
+	//	UE_LOG(LogTemp, Error, TEXT("TRUE"));
+	//}
+	//else {
+	//	bResult = false;
+	//	UE_LOG(LogTemp, Error, TEXT("FALSE"));
+	//}
 
 
 	return bResult;

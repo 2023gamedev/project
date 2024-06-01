@@ -72,7 +72,7 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 
 	FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
 
-	if (Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(PlayerPawn)) {
+	if (Distance <= MaxSightRange && LineOfSightTo(PlayerPawn)) {
 		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
 		//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
 		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());

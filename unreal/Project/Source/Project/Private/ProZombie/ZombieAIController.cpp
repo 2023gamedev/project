@@ -58,8 +58,8 @@ void AZombieAIController::Tick(float DeltaTime)
 	//static float TimeSinceLastSearch = 0.0f;
 	//TimeSinceLastSearch += DeltaTime;
 
-	if (GameInstance->ClientSocketPtr->GetMyPlayerId() == 1)
-	{
+	//if (GameInstance->ClientSocketPtr->GetMyPlayerId() == 1)
+	//{
 		//TimeSinceLastSearch = 0.0f; // 타이머 리셋
 
 
@@ -73,20 +73,21 @@ void AZombieAIController::Tick(float DeltaTime)
 		}
 
 		FVector ZombieForward = NormalZombie->GetActorForwardVector(); // 좀비의 전방 벡터
-		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
 		FVector ZombieLocation = NormalZombie->GetActorLocation(); // 좀비의 위치
 
-		FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-
-		float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
-		float MaxSightRange = 1000.f; // 원하는 최대 시야 범위를 설정하세요.
+		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
+		//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+		FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
+		//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
+		float MaxSightRange = 1000.f; // 원하는 최대 시야 범위를 설정하세요.
+
+
 		// 시야각을 90도로 설정 (전방 180도)
-		float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // 전방 90도
+		//float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // 전방 90도
 
 
-		FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
 
 
 		TArray<AActor*> Players;
@@ -98,7 +99,14 @@ void AZombieAIController::Tick(float DeltaTime)
 		for (AActor* Player : Players)
 		{
 			APawn* TestPawn = Cast<APawn>(Player);
-			if (TestPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(TestPawn))
+
+			PlayerLocation = TestPawn->GetActorLocation(); // 플레이어의 위치
+			// DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+			TargetLocation = PlayerLocation + (ZombieForward * 100.f);
+			// DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
+			Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+
+			if (TestPawn && Distance <= MaxSightRange && LineOfSightTo(TestPawn))
 			{
 				float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
 				if (Dist < NearestDist)
@@ -107,6 +115,16 @@ void AZombieAIController::Tick(float DeltaTime)
 					NearestPawn = TestPawn;
 				}
 			}
+
+			//if (TestPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(TestPawn))
+			//{
+			//	float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
+			//	if (Dist < NearestDist)
+			//	{
+			//		NearestDist = Dist;
+			//		NearestPawn = TestPawn;
+			//	}
+			//}
 		}
 
 		// 블랙보드 업데이트
@@ -122,28 +140,28 @@ void AZombieAIController::Tick(float DeltaTime)
 			GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
 			GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
 		}
-	}
+	//}
 
-	static const float Timer = 0.1f;
-	static float CheckTime = 0.0f;
+	//static const float Timer = 0.1f;
+	//static float CheckTime = 0.0f;
 
-	CheckTime += DeltaTime;
-	if(CheckTime >= Timer){
-		CheckTime = 0.0f;
-		CheckAndSendMovement();
-	}
+	//CheckTime += DeltaTime;
+	//if(CheckTime >= Timer){
+	//	CheckTime = 0.0f;
+	//	CheckAndSendMovement();
+	//}
 
-	while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
-	{
-		//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
-		// 현재 GameMode 인스턴스를 얻기
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		{
-			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
-			//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
-		}
-	}
+	//while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
+	//{
+	//	//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+	//	// 현재 GameMode 인스턴스를 얻기
+	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+	//	{
+	//		// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
+	//		MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
+	//		//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+	//	}
+	//}
 }
 
 void AZombieAIController::CheckAndSendMovement()

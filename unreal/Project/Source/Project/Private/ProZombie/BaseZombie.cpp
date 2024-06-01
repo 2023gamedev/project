@@ -157,6 +157,11 @@ void ABaseZombie::Attack()
 	if (m_bIsAttacking) {
 		return;
 	}
+
+	if (m_bBeAttacked) {
+		return;
+	}
+
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
 
@@ -288,6 +293,9 @@ void ABaseZombie::BeAttacked()
 	}
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
+	if (m_bIsAttacking) {
+		AnimInstance->Montage_Stop(0.5f);
+	}
 
 	AnimInstance->PlayBeAttackedMontage();
 
