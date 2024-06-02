@@ -3,7 +3,8 @@
 
 #include "ProItem/NormalWeaponActor.h"
 #include "ProZombie/BaseZombie.h"
-#include "Engine/DamageEvents.h" 
+#include "Engine/DamageEvents.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "ProCharacter/BaseCharacter.h"
 
 ANormalWeaponActor::ANormalWeaponActor()
@@ -37,6 +38,37 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		if (Zombie->GetHP() <= 0) {
 			Zombie->SetDie(true);
 			if (WeaponName == "ButchersKnife" || WeaponName == "FireAxe" || WeaponName == "SashimiKnife") {
+
+				USkeletalMeshComponent* Skeleton = Zombie->GetMesh();
+				if (Skeleton)
+				{
+
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("ClosetBone!"));
+					FName ClosestBoneName;
+					float ClosestBoneDistance = TNumericLimits<float>::Max();
+
+					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Impact Point: %f, %f, %f"), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
+					TArray<FName> BoneNames;
+					Skeleton->GetBoneNames(BoneNames);
+					for (const FName& BoneName : BoneNames)
+					{
+						FVector BoneLocation = Skeleton->GetBoneLocation(BoneName);
+						FVector BoneLocationIgnoreZ = FVector(BoneLocation.X, 0, BoneLocation.Z);
+
+						float DistanceSquared = FVector::DistSquared(BoneLocation, GetActorLocation());
+						if (DistanceSquared < ClosestBoneDistance)
+						{
+							ClosestBoneDistance = DistanceSquared;
+							ClosestBoneName = BoneName;
+						}
+					}
+
+					if (Skeleton->GetBoneIndex(ClosestBoneName) != INDEX_NONE)
+					{
+
+						Zombie->CutZombie(ClosestBoneName);
+					}
+				}
 				Zombie->SetCuttingDeadWithAnim();
 			}
 			else {
