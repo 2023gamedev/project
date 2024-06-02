@@ -374,6 +374,14 @@ public:
 
 	void OtherSpawnNormalWeapon(const FString& WeaponName);
 
+	void OtherSpawnBleedingHealingItem(const FString& ItemName);
+
+	void OtherSpawnHealingItem(const FString& ItemName);
+
+	void OtherSpawnThrowWeapon(const FString& ItemName);
+
+	void OtherSpawnKeyItem(const FString& ItemName);
+
 	void OtherPlayerDead();
 
 	void DestroyItem(uint32 ItemId);

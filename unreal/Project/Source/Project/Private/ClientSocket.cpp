@@ -114,7 +114,7 @@ uint32 ClientSocket::Run()
 					Protocol::Equip_Item EquipPacket;
 					if (EquipPacket.ParseFromArray(buffer.data(), buffer.size()))
 					{
-						Q_eitem.push(EquipItem(EquipPacket.playerid(), EquipPacket.itemname()));
+						Q_eitem.push(EquipItem(EquipPacket.playerid(), EquipPacket.itemname(), EquipPacket.itemtype()));
 					}
 				}
 				
@@ -167,7 +167,7 @@ bool ClientSocket::ConnectServer()
 	ServerAddr.sin_family = AF_INET;
 	ServerAddr.sin_port = htons(8888);
 
-	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	ServerAddr.sin_addr.s_addr = inet_addr("192.168.233.1");
 
 	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
 

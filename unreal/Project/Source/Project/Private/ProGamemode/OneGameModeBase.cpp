@@ -778,7 +778,7 @@ void AOneGameModeBase::UpdatePlayerAttack(uint32 PlayerID, bool battack)
     }
 }
 
-void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname)
+void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname, uint32 itemtype)
 {
     UWorld* World = GetWorld();
 
@@ -795,7 +795,21 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname)
         if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
         {
             if (Itemname != "") {
-                BasePlayer->OtherSpawnNormalWeapon(Itemname);
+                if (itemtype == 0) {
+                    BasePlayer->OtherSpawnBleedingHealingItem(Itemname);
+                }
+                else if (itemtype == 1) {
+                    BasePlayer->OtherSpawnHealingItem(Itemname);
+                }
+                else if (itemtype == 2) {
+                    BasePlayer->OtherSpawnThrowWeapon(Itemname);
+                }
+                else if (itemtype == 3) {
+                    BasePlayer->OtherSpawnKeyItem(Itemname);
+                }
+                else if(itemtype == 4) {
+                    BasePlayer->OtherSpawnNormalWeapon(Itemname);
+                }
                 UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
             }
             return;

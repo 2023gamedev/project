@@ -331,7 +331,7 @@ void IOCP_CORE::Timer_Thread()
 				}
 			}
 
-			printf("Send Timer");
+			//printf("Send Timer");
 		}
 	}
 }

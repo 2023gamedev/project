@@ -72,11 +72,12 @@ struct EquipItem
 {
 	uint32 PlayerId;
 	std::string Itemname;
+	uint32 Itemtype;
 
-	EquipItem() : PlayerId(0), Itemname("") {}
+	EquipItem() : PlayerId(0), Itemname(""), Itemtype(0) {}
 
-	EquipItem(uint32 InPlayerId, std::string InItemname)
-		: PlayerId(InPlayerId), Itemname(InItemname) {}
+	EquipItem(uint32 InPlayerId, std::string InItemname, uint32 InItemtype)
+		: PlayerId(InPlayerId), Itemname(InItemname), Itemtype(InItemtype) {}
 };
 
 class UProGameInstance;

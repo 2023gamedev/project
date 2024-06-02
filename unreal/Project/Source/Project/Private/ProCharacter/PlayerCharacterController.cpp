@@ -101,7 +101,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
 			FString EquipItem = *FString(recvEquipItem.Itemname.c_str());
-			MyGameMode->UpdateEquipItem(recvEquipItem.PlayerId, EquipItem);
+			MyGameMode->UpdateEquipItem(recvEquipItem.PlayerId, EquipItem, recvEquipItem.Itemtype);
 			UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvEquipItem.PlayerId);
 		}
 	}
@@ -181,30 +181,38 @@ void APlayerCharacterController::Send_Equipment()
 		APawn* MyPawn = GetPawn();
 		ABaseCharacter* MyBaseCharacter = Cast<ABaseCharacter>(MyPawn);
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+		uint32 ItemType; // 0 = BHItem, 1 = HItem, 2 = TWeapon, 3 = KeyItem, 4 = NWeapon
+
 		if (e_BHItem)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[0].Name.ToString()));
+			ItemType = 0;
 		}
 		if (e_HItem)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[1].Name.ToString()));
+			ItemType = 1;
 		}
 		if (e_TWeapon)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[2].Name.ToString()));
+			ItemType = 2;
 		}
 		if (e_KeyItem)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[3].Name.ToString()));
+			ItemType = 3;
 		}
 		if (e_NWeapon)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[4].Name.ToString()));
+			ItemType = 4;
 		}
 
 		Protocol::Equip_Item packet;
 		packet.set_playerid(MyPlayerId);
 		packet.set_packet_type(5);
+		packet.set_itemtype(ItemType);
 		packet.set_itemname(ItemName);
 
 		// Á÷·ÄÈ­

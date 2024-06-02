@@ -195,8 +195,8 @@ public:
 
     void UpdatePlayerAttack(uint32 PlayerID, bool battack);
 
-    void UpdateEquipItem(uint32 PlayerID, const FString& Itemname);
-
+    void UpdateEquipItem(uint32 PlayerID, const FString& Itemname, uint32 itemtype);
+    
     void UpdatePlayerAttack(bool battack);
 
     void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, bool b_attack);
