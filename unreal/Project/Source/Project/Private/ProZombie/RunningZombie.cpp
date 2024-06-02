@@ -10,6 +10,8 @@ ARunningZombie::ARunningZombie()
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
+	CopyStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CopyStaticMeshR"));
+
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie"));
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
@@ -20,6 +22,26 @@ ARunningZombie::ARunningZombie()
 	if (ZOMBIE_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}
+	
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_RUNNINGSTATIC(TEXT("/Game/ZombieAsset/RunningZombie/RunningZombieStaticMesh.RunningZombieStaticMesh"));
+	if (SM_RUNNINGSTATIC.Succeeded()) {
+		CopyStaticMesh->SetStaticMesh(SM_RUNNINGSTATIC.Object);
+	}
+
+	
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/ZombieAsset/RunningZombie/body_M.body_M"));
+	if (MaterialFinder.Succeeded())
+	{
+		Material = MaterialFinder.Object;
+	}
+	
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder2(TEXT("/Game/ZombieAsset/RunningZombie/body_M1.body_M1"));
+	if (MaterialFinder2.Succeeded())
+	{
+		Material2 = MaterialFinder2.Object;
+	}
+
+
 
 
 	SetHP(20);

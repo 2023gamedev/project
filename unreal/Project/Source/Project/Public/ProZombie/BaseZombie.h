@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "ProceduralMeshComponent.h"
 #include "BaseZombie.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
@@ -107,7 +108,12 @@ public:
 	bool m_bIsNormalDead = false;
 
 	UPROPERTY(EditAnywhere)
+	bool m_bIsCuttingOverlapOn = false;
+
+	UPROPERTY(EditAnywhere)
 	bool m_bIsCuttingDead = false;
+
+
 
 	FShoutingEndDelegate m_DShoutingEnd;
 
@@ -144,6 +150,39 @@ public:
 
 	void StopAITree();
 	void StartAITree();
+
+
+	UFUNCTION(BlueprintCallable)
+	void CutZombie(FName bonename);
+
+	// Procedural mesh component for the cut part
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
+	UProceduralMeshComponent* CutProceduralMesh;
+
+	void CreativeProceduralMesh(FName bonename);
+
+	UPROPERTY(EditAnywhere, Category = StaticMesh)
+	UStaticMeshComponent* CopyStaticMesh;
+
+	void GetBoneInfluencedVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, TArray<int32>& OutVertexIndices);
+	void CreateProceduralMeshFromBoneVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, UProceduralMeshComponent* ProceduralMeshComp);
+
+
+	void FillCutMeshGap(USkeletalMeshComponent* SkeletalMeshComp, const TArray<FVector>& CutVertices);
+	void FindVertexIndices(USkeletalMeshComponent* SkeletalMeshComp, const TArray<FVector>& CutVertices, TArray<int32>& OutVertexIndices);
+	void FindAdjacentVertices(USkeletalMeshComponent* SkeletalMeshComp, const TArray<int32>& VertexIndices, TArray<int32>& OutAdjacentVertices);
+	void GenerateNewVertices(USkeletalMeshComponent* SkeletalMeshComp, const TArray<int32>& VertexIndices, const TArray<int32>& AdjacentVertices, TArray<FVector>& OutNewVertices);
+	void GenerateNewTriangles(const TArray<int32>& VertexIndices, const TArray<int32>& AdjacentVertices, TArray<int32>& OutNewTriangles);
+	void AddNewGeometryToMesh(UProceduralMeshComponent* ProceduralMeshComp, const TArray<FVector>& NewVertices, const TArray<int32>& NewTriangles);
+
+	UPROPERTY(EditAnywhere, Category = "Materials")
+	UMaterialInterface* Material;
+
+	UPROPERTY(EditAnywhere, Category = "Materials")
+	UMaterialInterface* Material2;
+
+	UPROPERTY(EditAnywhere, Category = "Materials")
+	UMaterialInterface* Material3;
 
 private:
 

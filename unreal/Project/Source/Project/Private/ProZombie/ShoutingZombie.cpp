@@ -10,6 +10,8 @@ AShoutingZombie::AShoutingZombie()
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 
+	CopyStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CopyStaticMeshS"));
+
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/ZombieAsset/ShoutingZombie/ShoutingZombie.ShoutingZombie"));
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
@@ -19,6 +21,24 @@ AShoutingZombie::AShoutingZombie()
 	if (ZOMBIE_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SHOUTINGSTATIC(TEXT("/Game/ZombieAsset/ShoutingZombie/ShoutingZombieStaticMesh.ShoutingZombieStaticMesh"));
+	if (SM_SHOUTINGSTATIC.Succeeded()) {
+		CopyStaticMesh->SetStaticMesh(SM_SHOUTINGSTATIC.Object);
+	}
+	
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/ZombieAsset/ShoutingZombie/parasitezombie_Material.parasitezombie_Material"));
+	if (MaterialFinder.Succeeded())
+	{
+		Material = MaterialFinder.Object;
+	}
+	
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder2(TEXT("/Game/ZombieAsset/ShoutingZombie/parasitezombie_Material1.parasitezombie_Material1"));
+	if (MaterialFinder2.Succeeded())
+	{
+		Material2 = MaterialFinder2.Object;
+	}
+
 
 
 	SetHP(30);
