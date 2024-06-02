@@ -1,6 +1,6 @@
 #pragma once
 
-#define SERVERPORT 7777
+#define SERVERPORT 8888
 #define MAX_BUF_SIZE 1024
 #define MAX_USER 500
 #define MAX_PACKET_SIZE 1024

@@ -142,56 +142,60 @@ void AZombieAIController::Tick(float DeltaTime)
 		}
 	//}
 
-	//static const float Timer = 0.1f;
-	//static float CheckTime = 0.0f;
+	static const float Timer = 0.1f;
+	static float CheckTime = 0.0f;
 
-	//CheckTime += DeltaTime;
-	//if(CheckTime >= Timer){
-	//	CheckTime = 0.0f;
-	//	CheckAndSendMovement();
-	//}
+	CheckTime += DeltaTime;
+	if(CheckTime >= Timer){
+		CheckTime = 0.0f;
+		CheckAndSendMovement();
+	}
 
-	//while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
-	//{
-	//	//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
-	//	// 현재 GameMode 인스턴스를 얻기
-	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-	//	{
-	//		// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-	//		MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
-	//		//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
-	//	}
-	//}
+	while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
+	{
+		//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+		// 현재 GameMode 인스턴스를 얻기
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
+			MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
+			//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+		}
+	}
 }
 
 void AZombieAIController::CheckAndSendMovement()
 {
-	auto* ZombiePawn = Cast<ABaseZombie>(GetPawn());
+	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
 	FVector CurrentLocation = ZombiePawn->GetActorLocation();
 	FRotator CurrentRotation = ZombiePawn->GetActorRotation();
 	ZombieId = ZombiePawn->GetZombieId();
 
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	//if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation){}
+	//if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
 
-	// Protobuf를 사용하여 TestPacket 생성
-	Protocol::Zombie packet;
-	packet.set_zombieid(ZombieId);
-	packet.set_packet_type(2);
-	packet.set_x(CurrentLocation.X);
-	packet.set_y(CurrentLocation.Y);
-	packet.set_z(CurrentLocation.Z);
-	packet.set_pitch(CurrentRotation.Pitch);
-	packet.set_yaw(CurrentRotation.Yaw);
-	packet.set_roll(CurrentRotation.Roll);
+		// Protobuf를 사용하여 TestPacket 생성
+		Protocol::Zombie packet;
+		packet.set_zombieid(ZombieId);
+		packet.set_packet_type(2);
+		packet.set_x(CurrentLocation.X);
+		packet.set_y(CurrentLocation.Y);
+		packet.set_z(CurrentLocation.Z);
+		packet.set_pitch(CurrentRotation.Pitch);
+		packet.set_yaw(CurrentRotation.Yaw);
+		packet.set_roll(CurrentRotation.Roll);
 
-	// 직렬화
-	std::string serializedData;
-	packet.SerializeToString(&serializedData);
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
 
-	// 직렬화된 데이터를 서버로 전송
-	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-	//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
+		// 직렬화된 데이터를 서버로 전송
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+		//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
+
+		PreviousLocation = CurrentLocation;
+		PreviousRotation = CurrentRotation;
+	//}
 }
 
 

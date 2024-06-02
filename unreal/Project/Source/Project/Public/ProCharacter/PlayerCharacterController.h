@@ -86,6 +86,7 @@ private:
 	//캐릭터의 이전 위치 저장 변수
 	FVector PreviousLocation;
 	FRotator PreviousRotation;
+	float PreviouHP;
 
 public:
 	UProGameInstance* GameInstance;

@@ -1874,10 +1874,20 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 			CurrentWeapon->ItemHandRot = FRotator(6.286317f, 78.810309f, -21.478568f);
 		}
 
+		UE_LOG(LogTemp, Log, TEXT("Weapon Position: %s"), *CurrentWeapon->ItemHandPos.ToString());
+		UE_LOG(LogTemp, Log, TEXT("Weapon Rotation: %s"), *CurrentWeapon->ItemHandRot.ToString());
+
 		CurrentWeapon->OwnerCharacter = this;
 		CurrentWeapon->m_fCharacterSTR = m_fSTR;
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OtherSpawnNormalWeapon"));
+
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+		CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("hand_r"));
+
+		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
+		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
+
 	}
 
 	SetBringCurrentWeapon(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OtherSpawnNormalWeapon"));
 }

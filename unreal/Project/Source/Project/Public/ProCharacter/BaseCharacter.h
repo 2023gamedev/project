@@ -374,6 +374,8 @@ public:
 
 	void OtherSpawnNormalWeapon(const FString& WeaponName);
 
+	void OtherPlayerDead();
+
 	void DestroyItem(uint32 ItemId);
 
 

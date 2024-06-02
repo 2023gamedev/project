@@ -73,7 +73,7 @@ uint32 ClientSocket::Run()
 						FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
 						if (PlayerId != MyPlayerId) {
-							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.attack(), CharacterPacket.getitem()));
+							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.attack(), CharacterPacket.hp(), CharacterPacket.getitem()));
 						}
 					}
 					break;
@@ -96,7 +96,7 @@ uint32 ClientSocket::Run()
 					if (TimePacket.ParseFromArray(buffer.data(), buffer.size()))
 					{
 						Timer = TimePacket.timer();
-						UE_LOG(LogNet, Display, TEXT("Timer: %d"), Timer);
+						//UE_LOG(LogNet, Display, TEXT("Timer: %d"), Timer);
 					}
 				}
 
@@ -165,7 +165,7 @@ bool ClientSocket::ConnectServer()
 	SOCKADDR_IN ServerAddr;
 
 	ServerAddr.sin_family = AF_INET;
-	ServerAddr.sin_port = htons(7777);
+	ServerAddr.sin_port = htons(8888);
 
 	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
