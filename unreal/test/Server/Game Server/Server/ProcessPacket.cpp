@@ -57,26 +57,26 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        ZombieData zombiedata;
+        /*ZombieData zombiedata;
         zombiedata.zombieID = Packet.zombieid();
         zombiedata.x = Packet.x();
         zombiedata.y = Packet.y();
         zombiedata.z = Packet.z();
         zombiedata.pitch = Packet.pitch();
         zombiedata.yaw = Packet.yaw();
-        zombiedata.roll = Packet.roll();
+        zombiedata.roll = Packet.roll();*/
 
-        ZombieController zombiecontroller;
+        //ZombieController zombiecontroller;
 
         printf("zombie id: %d \n", Packet.zombieid());
 
-        if (find(m_zombie.begin(), m_zombie.end(), zombiedata.zombieID) == m_zombie.end()) {
+        /*if (find(m_zombie.begin(), m_zombie.end(), zombiedata.zombieID) == m_zombie.end()) {
             zombiecontroller.addZombie(zombiedata);
             m_zombie.push_back(zombiedata.zombieID);
         }
         else {
             zombiecontroller.setZombiePosition(zombiedata);
-        }
+        }*/
 
         if (id == min_it->first) {
             for (const auto& player : g_players) {
@@ -125,7 +125,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     default: {
         printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
         // 클라이언트나 서버 종료, 로깅 등의 처리 가능
-        return false;
+        return true;
     } break;
     }
 }
