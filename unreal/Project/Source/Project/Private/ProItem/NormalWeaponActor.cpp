@@ -62,10 +62,11 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							ClosestBoneName = BoneName;
 						}
 					}
-
-					if (Skeleton->GetBoneIndex(ClosestBoneName) != INDEX_NONE)
+					int32 BoneIndex = Skeleton->GetBoneIndex(ClosestBoneName);
+					if (BoneIndex != INDEX_NONE)
 					{
 
+						GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("ClosestBone: %s, BoneIndex: %d"), *ClosestBoneName.ToString(), BoneIndex));
 						Zombie->CutZombie(ClosestBoneName);
 					}
 				}
