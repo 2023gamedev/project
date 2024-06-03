@@ -77,7 +77,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
 		//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-		FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
+		FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
 		//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
@@ -102,7 +102,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 			PlayerLocation = TestPawn->GetActorLocation(); // 플레이어의 위치
 			// DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-			TargetLocation = PlayerLocation + (ZombieForward * 100.f);
+			TargetLocation = PlayerLocation + (ZombieForward * 150.f);
 			// DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 			Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
