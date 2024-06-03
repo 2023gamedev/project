@@ -83,7 +83,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		{
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
 			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype, 
-				recvPlayerData.b_attack, recvPlayerData.hp, recvPlayerData.ItemId);
+				recvPlayerData.hp);
 		}
 	}
 
@@ -134,7 +134,6 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_yaw(CurrentRotation.Yaw);
 		packet.set_roll(CurrentRotation.Roll);
 		packet.set_hp(hp);
-		packet.set_getitem(ItemBoxId);
 		packet.set_isingame(true);
 
 		// 직렬화
