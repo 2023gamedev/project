@@ -197,14 +197,14 @@ class Character final :
     kPlayeridFieldNumber = 1,
     kCharactertypeFieldNumber = 2,
     kPacketTypeFieldNumber = 3,
-    kXFieldNumber = 5,
-    kYFieldNumber = 6,
-    kZFieldNumber = 7,
-    kPitchFieldNumber = 8,
-    kYawFieldNumber = 9,
-    kRollFieldNumber = 10,
-    kHpFieldNumber = 11,
-    kIsingameFieldNumber = 12,
+    kXFieldNumber = 4,
+    kYFieldNumber = 5,
+    kZFieldNumber = 6,
+    kPitchFieldNumber = 7,
+    kYawFieldNumber = 8,
+    kRollFieldNumber = 9,
+    kHpFieldNumber = 10,
+    kIsingameFieldNumber = 11,
   };
   // uint32 playerid = 1;
   void clear_playerid();
@@ -233,7 +233,7 @@ class Character final :
   void _internal_set_packet_type(uint32_t value);
   public:
 
-  // float x = 5;
+  // float x = 4;
   void clear_x();
   float x() const;
   void set_x(float value);
@@ -242,7 +242,7 @@ class Character final :
   void _internal_set_x(float value);
   public:
 
-  // float y = 6;
+  // float y = 5;
   void clear_y();
   float y() const;
   void set_y(float value);
@@ -251,7 +251,7 @@ class Character final :
   void _internal_set_y(float value);
   public:
 
-  // float z = 7;
+  // float z = 6;
   void clear_z();
   float z() const;
   void set_z(float value);
@@ -260,7 +260,7 @@ class Character final :
   void _internal_set_z(float value);
   public:
 
-  // float pitch = 8;
+  // float pitch = 7;
   void clear_pitch();
   float pitch() const;
   void set_pitch(float value);
@@ -269,7 +269,7 @@ class Character final :
   void _internal_set_pitch(float value);
   public:
 
-  // float yaw = 9;
+  // float yaw = 8;
   void clear_yaw();
   float yaw() const;
   void set_yaw(float value);
@@ -278,7 +278,7 @@ class Character final :
   void _internal_set_yaw(float value);
   public:
 
-  // float roll = 10;
+  // float roll = 9;
   void clear_roll();
   float roll() const;
   void set_roll(float value);
@@ -287,7 +287,7 @@ class Character final :
   void _internal_set_roll(float value);
   public:
 
-  // float hp = 11;
+  // float hp = 10;
   void clear_hp();
   float hp() const;
   void set_hp(float value);
@@ -296,7 +296,7 @@ class Character final :
   void _internal_set_hp(float value);
   public:
 
-  // bool isingame = 12;
+  // bool isingame = 11;
   void clear_isingame();
   bool isingame() const;
   void set_isingame(bool value);
@@ -1151,7 +1151,7 @@ inline void Character::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.packet_type)
 }
 
-// float x = 5;
+// float x = 4;
 inline void Character::clear_x() {
   _impl_.x_ = 0;
 }
@@ -1171,7 +1171,7 @@ inline void Character::set_x(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.x)
 }
 
-// float y = 6;
+// float y = 5;
 inline void Character::clear_y() {
   _impl_.y_ = 0;
 }
@@ -1191,7 +1191,7 @@ inline void Character::set_y(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.y)
 }
 
-// float z = 7;
+// float z = 6;
 inline void Character::clear_z() {
   _impl_.z_ = 0;
 }
@@ -1211,7 +1211,7 @@ inline void Character::set_z(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.z)
 }
 
-// float pitch = 8;
+// float pitch = 7;
 inline void Character::clear_pitch() {
   _impl_.pitch_ = 0;
 }
@@ -1231,7 +1231,7 @@ inline void Character::set_pitch(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.pitch)
 }
 
-// float yaw = 9;
+// float yaw = 8;
 inline void Character::clear_yaw() {
   _impl_.yaw_ = 0;
 }
@@ -1251,7 +1251,7 @@ inline void Character::set_yaw(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.yaw)
 }
 
-// float roll = 10;
+// float roll = 9;
 inline void Character::clear_roll() {
   _impl_.roll_ = 0;
 }
@@ -1271,7 +1271,7 @@ inline void Character::set_roll(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.roll)
 }
 
-// float hp = 11;
+// float hp = 10;
 inline void Character::clear_hp() {
   _impl_.hp_ = 0;
 }
@@ -1291,7 +1291,7 @@ inline void Character::set_hp(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.hp)
 }
 
-// bool isingame = 12;
+// bool isingame = 11;
 inline void Character::clear_isingame() {
   _impl_.isingame_ = false;
 }

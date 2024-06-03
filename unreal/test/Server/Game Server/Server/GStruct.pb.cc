@@ -195,10 +195,10 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_GStruct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\rGStruct.proto\022\010Protocol\"\262\001\n\tCharacter\022"
   "\020\n\010playerid\030\001 \001(\r\022\025\n\rcharactertype\030\002 \001(\r"
-  "\022\023\n\013packet_type\030\003 \001(\r\022\t\n\001x\030\005 \001(\002\022\t\n\001y\030\006 "
-  "\001(\002\022\t\n\001z\030\007 \001(\002\022\r\n\005pitch\030\010 \001(\002\022\013\n\003yaw\030\t \001"
-  "(\002\022\014\n\004roll\030\n \001(\002\022\n\n\002hp\030\013 \001(\002\022\020\n\010isingame"
-  "\030\014 \001(\010\"\216\001\n\006Zombie\022\020\n\010zombieid\030\001 \001(\r\022\022\n\nz"
+  "\022\023\n\013packet_type\030\003 \001(\r\022\t\n\001x\030\004 \001(\002\022\t\n\001y\030\005 "
+  "\001(\002\022\t\n\001z\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001"
+  "(\002\022\014\n\004roll\030\t \001(\002\022\n\n\002hp\030\n \001(\002\022\020\n\010isingame"
+  "\030\013 \001(\010\"\216\001\n\006Zombie\022\020\n\010zombieid\030\001 \001(\r\022\022\n\nz"
   "ombietype\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\022\t\n\001"
   "x\030\004 \001(\002\022\t\n\001y\030\005 \001(\002\022\t\n\001z\030\006 \001(\002\022\r\n\005pitch\030\007"
   " \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004roll\030\t \001(\002\"*\n\004Time\022"
@@ -341,65 +341,65 @@ const char* Character::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         } else
           goto handle_unusual;
         continue;
-      // float x = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
+      // float x = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 37)) {
           _impl_.x_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float y = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
+      // float y = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
           _impl_.y_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float z = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
+      // float z = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
           _impl_.z_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float pitch = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
+      // float pitch = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
           _impl_.pitch_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float yaw = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
+      // float yaw = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
           _impl_.yaw_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float roll = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 85)) {
+      // float roll = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
           _impl_.roll_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float hp = 11;
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 93)) {
+      // float hp = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 85)) {
           _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // bool isingame = 12;
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
+      // bool isingame = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
           _impl_.isingame_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
@@ -452,80 +452,80 @@ uint8_t* Character::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
   }
 
-  // float x = 5;
+  // float x = 4;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_x = this->_internal_x();
   uint32_t raw_x;
   memcpy(&raw_x, &tmp_x, sizeof(tmp_x));
   if (raw_x != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_x(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(4, this->_internal_x(), target);
   }
 
-  // float y = 6;
+  // float y = 5;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_y = this->_internal_y();
   uint32_t raw_y;
   memcpy(&raw_y, &tmp_y, sizeof(tmp_y));
   if (raw_y != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_y(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_y(), target);
   }
 
-  // float z = 7;
+  // float z = 6;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_z = this->_internal_z();
   uint32_t raw_z;
   memcpy(&raw_z, &tmp_z, sizeof(tmp_z));
   if (raw_z != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_z(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_z(), target);
   }
 
-  // float pitch = 8;
+  // float pitch = 7;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_pitch = this->_internal_pitch();
   uint32_t raw_pitch;
   memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
   if (raw_pitch != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_pitch(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_pitch(), target);
   }
 
-  // float yaw = 9;
+  // float yaw = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_yaw = this->_internal_yaw();
   uint32_t raw_yaw;
   memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
   if (raw_yaw != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_yaw(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_yaw(), target);
   }
 
-  // float roll = 10;
+  // float roll = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_roll = this->_internal_roll();
   uint32_t raw_roll;
   memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
   if (raw_roll != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(10, this->_internal_roll(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_roll(), target);
   }
 
-  // float hp = 11;
+  // float hp = 10;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_hp = this->_internal_hp();
   uint32_t raw_hp;
   memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
   if (raw_hp != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(11, this->_internal_hp(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(10, this->_internal_hp(), target);
   }
 
-  // bool isingame = 12;
+  // bool isingame = 11;
   if (this->_internal_isingame() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(12, this->_internal_isingame(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(11, this->_internal_isingame(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -559,7 +559,7 @@ size_t Character::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
   }
 
-  // float x = 5;
+  // float x = 4;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_x = this->_internal_x();
   uint32_t raw_x;
@@ -568,7 +568,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float y = 6;
+  // float y = 5;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_y = this->_internal_y();
   uint32_t raw_y;
@@ -577,7 +577,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float z = 7;
+  // float z = 6;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_z = this->_internal_z();
   uint32_t raw_z;
@@ -586,7 +586,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float pitch = 8;
+  // float pitch = 7;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_pitch = this->_internal_pitch();
   uint32_t raw_pitch;
@@ -595,7 +595,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float yaw = 9;
+  // float yaw = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_yaw = this->_internal_yaw();
   uint32_t raw_yaw;
@@ -604,7 +604,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float roll = 10;
+  // float roll = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_roll = this->_internal_roll();
   uint32_t raw_roll;
@@ -613,7 +613,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float hp = 11;
+  // float hp = 10;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_hp = this->_internal_hp();
   uint32_t raw_hp;
@@ -622,7 +622,7 @@ size_t Character::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // bool isingame = 12;
+  // bool isingame = 11;
   if (this->_internal_isingame() != 0) {
     total_size += 1 + 1;
   }
