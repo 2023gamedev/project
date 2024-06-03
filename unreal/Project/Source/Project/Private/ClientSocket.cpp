@@ -73,7 +73,7 @@ uint32 ClientSocket::Run()
 						FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
 						if (PlayerId != MyPlayerId) {
-							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.attack(), CharacterPacket.hp(), CharacterPacket.getitem()));
+							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.hp()));
 						}
 					}
 					break;
@@ -85,7 +85,7 @@ uint32 ClientSocket::Run()
 					{
 						FVector NewLocation(ZombiePacket.x(), ZombiePacket.y(), ZombiePacket.z());
 						FRotator NewRotation(ZombiePacket.pitch(), ZombiePacket.yaw(), ZombiePacket.roll());
-						Q_zombie.push(ZombieData(ZombiePacket.zombieid(), NewLocation, NewRotation, ZombiePacket.zombietype(), ZombiePacket.attack()));
+						Q_zombie.push(ZombieData(ZombiePacket.zombieid(), NewLocation, NewRotation, ZombiePacket.zombietype()));
 						//UE_LOG(LogNet, Display, TEXT("push Zombie: ZombieId=%d"), ZombiePacket.zombieid());
 					}
 					break;

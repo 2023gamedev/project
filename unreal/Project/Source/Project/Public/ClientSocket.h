@@ -29,16 +29,14 @@ struct PlayerData
 	FVector Location;
 	FRotator Rotation;
 	uint32 charactertype;
-	bool b_attack;
 	float hp;
-	uint32 ItemId;
 
 	// 기본 생성자 명시적 정의
-	PlayerData() : PlayerId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), charactertype(0), b_attack(false), hp(100), ItemId(999) {}
+	PlayerData() : PlayerId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), charactertype(0), hp(100) {}
 
 	// 매개변수가 있는 생성자
-	PlayerData(uint32 InPlayerId, FVector InLocation, FRotator InRotation, uint32 Incharactertype, bool Inb_attack, float Inhp, uint32 InItemId)
-		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation), charactertype(Incharactertype), b_attack(Inb_attack), hp(Inhp), ItemId(InItemId) {}
+	PlayerData(uint32 InPlayerId, FVector InLocation, FRotator InRotation, uint32 Incharactertype, float Inhp)
+		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation), charactertype(Incharactertype), hp(Inhp) {}
 };
 
 struct ZombieData
@@ -47,14 +45,13 @@ struct ZombieData
 	FVector Location;
 	FRotator Rotation;
 	uint32 zombietype;
-	bool b_attack;
 
 	// 기본 생성자 명시적 정의
-	ZombieData() : ZombieId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), zombietype(0), b_attack(false) {}
+	ZombieData() : ZombieId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), zombietype(0) {}
 
 	// 매개변수가 있는 생성자
-	ZombieData(uint32 InZombieId, FVector InLocation, FRotator InRotation, uint32 Inzombietype, bool Inb_attack)
-		: ZombieId(InZombieId), Location(InLocation), Rotation(InRotation), zombietype(Inzombietype), b_attack(Inb_attack) {}
+	ZombieData(uint32 InZombieId, FVector InLocation, FRotator InRotation, uint32 Inzombietype)
+		: ZombieId(InZombieId), Location(InLocation), Rotation(InRotation), zombietype(Inzombietype) {}
 };
 
 struct PlayerAttack

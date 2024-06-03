@@ -693,7 +693,7 @@ void AOneGameModeBase::SpawnInterActorStaticClasses()
 
 }
 
-void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, bool b_attack, float hp, uint32 ItemId)
+void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, float hp)
 {
     UWorld* World = GetWorld();
 
@@ -717,13 +717,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
 
             BasePlayer->UpdatePlayerData(NewLocation);
 
-            BasePlayer->SetAttack(b_attack);
-            //UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %d"), PlayerID, b_attack);
-
             BasePlayer->SetHP(hp);
-
-            BasePlayer->OtherGetItem();
-            UE_LOG(LogTemp, Warning, TEXT("real update DestroyItem: %d, %d"), PlayerID, ItemId);
 
             return;
         }
