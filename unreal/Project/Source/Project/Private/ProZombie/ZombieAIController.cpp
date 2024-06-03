@@ -77,7 +77,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
 		//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-		FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
+		FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
 		//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
@@ -102,7 +102,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 			PlayerLocation = TestPawn->GetActorLocation(); // 플레이어의 위치
 			// DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-			TargetLocation = PlayerLocation + (ZombieForward * 100.f);
+			TargetLocation = PlayerLocation + (ZombieForward * 150.f);
 			// DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 			Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
@@ -165,7 +165,7 @@ void AZombieAIController::CheckAndSendMovement()
 	ZombieId = ZombiePawn->GetZombieId();
 
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	//if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
 
 		// Protobuf를 사용하여 TestPacket 생성
 		Protocol::Zombie packet;
@@ -184,11 +184,11 @@ void AZombieAIController::CheckAndSendMovement()
 
 		// 직렬화된 데이터를 서버로 전송
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-		//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
+		UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
 
 		PreviousLocation = CurrentLocation;
 		PreviousRotation = CurrentRotation;
-	//}
+	}
 }
 
 
