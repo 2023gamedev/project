@@ -165,7 +165,7 @@ void AZombieAIController::CheckAndSendMovement()
 	ZombieId = ZombiePawn->GetZombieId();
 
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	//if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
 
 		// Protobuf를 사용하여 TestPacket 생성
 		Protocol::Zombie packet;
@@ -184,11 +184,11 @@ void AZombieAIController::CheckAndSendMovement()
 
 		// 직렬화된 데이터를 서버로 전송
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-		//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
+		UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
 
 		PreviousLocation = CurrentLocation;
 		PreviousRotation = CurrentRotation;
-	//}
+	}
 }
 
 

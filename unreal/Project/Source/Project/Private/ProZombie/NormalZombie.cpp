@@ -71,6 +71,8 @@ void ANormalZombie::Tick(float DeltaTime)
 	if (nullptr != CharactorAnimInstance) {
 		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
 	}
+
+
 }
 
 void ANormalZombie::PossessedBy(AController* NewController)
