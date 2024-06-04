@@ -3,6 +3,7 @@
 
 #include "ProCharacter/PlayerCharacterAnimInstance.h"
 #include "GameFramework/Character.h"
+#include "ProCharacter/BaseCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 
@@ -41,9 +42,10 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	auto pawn = TryGetPawnOwner();
 
 	if (::IsValid(pawn)) {
-		auto character = Cast<ACharacter>(pawn);
+		auto character = Cast<ABaseCharacter>(pawn);
 		if (character) {
 			m_bIsInAir = character->GetMovementComponent()->IsFalling();
+			m_bIsHandInWeapon = character->IsNWHandIn();
 		}
 
 	}
@@ -68,7 +70,7 @@ void UPlayerCharacterAnimInstance::PlayPickUpMontage()
 void UPlayerCharacterAnimInstance::PlayHealingMontage()
 {
 	if (!Montage_IsPlaying(HealingMontage)) {
-		Montage_Play(HealingMontage, 3.f);
+		Montage_Play(HealingMontage, 1.f);
 	}
 }
 
