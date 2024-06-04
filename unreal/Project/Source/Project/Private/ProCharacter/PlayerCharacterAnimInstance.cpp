@@ -70,7 +70,7 @@ void UPlayerCharacterAnimInstance::PlayPickUpMontage()
 void UPlayerCharacterAnimInstance::PlayHealingMontage()
 {
 	if (!Montage_IsPlaying(HealingMontage)) {
-		Montage_Play(HealingMontage, 3.f);
+		Montage_Play(HealingMontage, 1.f);
 	}
 }
 
