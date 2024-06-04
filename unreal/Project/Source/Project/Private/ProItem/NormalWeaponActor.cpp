@@ -33,6 +33,33 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 {
 	ABaseZombie* Zombie = Cast<ABaseZombie>(OtherActor);
 	if(Zombie){
+
+
+		if(OtherComp)
+		{
+			FString HitResult;
+			if (OtherComp->IsA(USkeletalMeshComponent::StaticClass()))
+			{
+				// 메쉬와 충돌
+				HitResult = "Hit Skeletal Mesh";
+			}
+			else if (OtherComp->IsA(UCapsuleComponent::StaticClass()))
+			{
+				// 캡슐 컴포넌트와 충돌
+				HitResult = "Hit Capsule Component";
+			}
+			else
+			{
+				// 다른 컴포넌트와 충돌
+				HitResult = "Hit Other Component";
+			}
+
+			// GEngine을 사용하여 화면에 디버그 메시지 출력
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, HitResult);
+			}
+		}
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
 		if (Zombie->GetHP() <= 0) {

@@ -267,7 +267,7 @@ void ABaseCharacter::BeginPlay()
 		}
 		});
 
-	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
+	AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
 		if (CurrentWeapon != nullptr) {
 			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 		}
