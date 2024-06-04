@@ -30,6 +30,7 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.f, 0.0f);
 	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
+	GetMesh()->SetCollisionProfileName("Zombie");
 
 	
 	ZombieId = 0;
