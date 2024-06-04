@@ -167,7 +167,7 @@ bool ClientSocket::ConnectServer()
 	ServerAddr.sin_family = AF_INET;
 	ServerAddr.sin_port = htons(8888);
 
-	ServerAddr.sin_addr.s_addr = inet_addr("121.140.79.235");
+	ServerAddr.sin_addr.s_addr = inet_addr("192.168.161.107");
 
 	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
 
