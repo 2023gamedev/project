@@ -184,7 +184,7 @@ void AZombieAIController::CheckAndSendMovement()
 
 		// 직렬화된 데이터를 서버로 전송
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-		UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
+		//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
 
 		PreviousLocation = CurrentLocation;
 		PreviousRotation = CurrentRotation;

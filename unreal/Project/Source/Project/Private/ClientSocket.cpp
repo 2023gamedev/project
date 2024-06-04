@@ -98,6 +98,7 @@ uint32 ClientSocket::Run()
 						Timer = TimePacket.timer();
 						//UE_LOG(LogNet, Display, TEXT("Timer: %d"), Timer);
 					}
+					break;
 				}
 
 				case 4:
@@ -107,6 +108,7 @@ uint32 ClientSocket::Run()
 					{
 						Q_pattack.push(PlayerAttack(AttackPacket.playerid(), AttackPacket.attack()));
 					}
+					break;
 				}
 				
 				case 5:
@@ -116,6 +118,7 @@ uint32 ClientSocket::Run()
 					{
 						Q_eitem.push(EquipItem(EquipPacket.playerid(), EquipPacket.itemname(), EquipPacket.itemtype()));
 					}
+					break;
 				}
 
 				case 6:
@@ -125,6 +128,7 @@ uint32 ClientSocket::Run()
 					{
 						Q_run.push(PlayerRun(runPacket.playerid(), runPacket.b_run()));
 					}
+					break;
 				}
 
 				case 7:
@@ -134,6 +138,7 @@ uint32 ClientSocket::Run()
 					{
 						Q_jump.push(PlayerJump(jumpPacket.playerid()));
 					}
+					break;
 				}
 				
 				buffer.clear();
@@ -185,7 +190,7 @@ bool ClientSocket::ConnectServer()
 	ServerAddr.sin_family = AF_INET;
 	ServerAddr.sin_port = htons(8888);
 
-	ServerAddr.sin_addr.s_addr = inet_addr("192.168.161.107");
+	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
 	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
 
