@@ -44,3 +44,14 @@ message Equip_Item{
     uint32 packet_type = 3;
     uint32 itemtype = 4;
 }
+
+message run{
+    uint32 playerid = 1;
+    bool b_run = 2;
+    uint32 packet_type = 3;
+}
+
+message jump{
+    uint32 playerid = 1;
+    uint32 packet_type = 3;
+}

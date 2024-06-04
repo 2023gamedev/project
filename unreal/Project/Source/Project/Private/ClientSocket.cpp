@@ -117,6 +117,24 @@ uint32 ClientSocket::Run()
 						Q_eitem.push(EquipItem(EquipPacket.playerid(), EquipPacket.itemname(), EquipPacket.itemtype()));
 					}
 				}
+
+				case 6:
+				{
+					Protocol::run runPacket;
+					if (runPacket.ParseFromArray(buffer.data(), buffer.size()))
+					{
+						Q_run.push(PlayerRun(runPacket.playerid(), runPacket.b_run()));
+					}
+				}
+
+				case 7:
+				{
+					Protocol::jump jumpPacket;
+					if (jumpPacket.ParseFromArray(buffer.data(), buffer.size()))
+					{
+						Q_jump.push(PlayerJump(jumpPacket.playerid()));
+					}
+				}
 				
 				buffer.clear();
 				}

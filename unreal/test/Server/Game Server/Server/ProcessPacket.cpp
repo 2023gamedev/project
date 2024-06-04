@@ -68,7 +68,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         //ZombieController zombiecontroller;
 
-        printf("zombie id: %d \n", Packet.zombieid());
+        //printf("zombie id: %d \n", Packet.zombieid());
 
         /*if (find(m_zombie.begin(), m_zombie.end(), zombiedata.zombieID) == m_zombie.end()) {
             zombiecontroller.addZombie(zombiedata);
@@ -109,6 +109,39 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("[ No. %3u ] Equip Packet Received !!\n", id);
         Protocol::Equip_Item Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }
+        return true;
+    }
+    case 6:
+    {
+        printf("[ No. %3u ] Run Packet Received !!\n", id);
+        Protocol::run Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }
+        return true;
+    }
+
+    case 7:
+    {
+        printf("[ No. %3u ] Jump Packet Received !!\n", id);
+        Protocol::jump Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
         Packet.SerializeToString(&serializedData);

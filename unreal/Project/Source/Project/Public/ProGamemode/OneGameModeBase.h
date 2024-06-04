@@ -196,8 +196,10 @@ public:
     void UpdatePlayerAttack(uint32 PlayerID, bool battack);
 
     void UpdateEquipItem(uint32 PlayerID, const FString& Itemname, uint32 itemtype);
-    
-    void UpdatePlayerAttack(bool battack);
+
+    void UpdatePlayerRun(uint32 PlayerID, bool b_run);
+
+    void UpdatePlayerJump(uint32 PlayerID);
 
 public:
 

@@ -71,6 +71,10 @@ public:
 
 	void Send_Equipment();
 
+	void Send_run();
+
+	void Send_jump();
+
 	virtual void SetupInputComponent() override;
 
 protected:
@@ -93,6 +97,9 @@ public:
 	PlayerData recvPlayerData;
 	PlayerAttack recvPlayerAttack;
 	EquipItem recvEquipItem;
+	PlayerRun recvRun;
+	PlayerJump recvJump;
+
 	uint32 PlayerId;
 	uint32 MyCharacterNumber;
 	uint32 OtherCharacterNumber;
@@ -106,6 +113,9 @@ public:
 	bool e_HItem = false;
 	bool e_KeyItem = false;
 	std::string ItemName;
+	bool b_run = false;
+	bool sendRun = false;
+	bool sendjump = false;
 
 
 };

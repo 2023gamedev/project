@@ -74,6 +74,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	CheckAndSendMovement();
 	Send_Attack();
 	Send_Equipment();
+	Send_run();
+	Send_jump();
 
 	if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 	{
@@ -82,7 +84,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
 			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype, 
+			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
 				recvPlayerData.hp);
 		}
 	}
@@ -105,6 +107,24 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvEquipItem.PlayerId);
 		}
 	}
+
+	if (GameInstance->ClientSocketPtr->Q_run.try_pop(recvRun))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdatePlayerRun(recvRun.PlayerId, recvRun.b_run);
+			//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_jump.try_pop(recvJump)) {
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdatePlayerJump(recvJump.PlayerId);
+		}
+	}
+
+
 }
 
 void APlayerCharacterController::CheckAndSendMovement()
@@ -227,6 +247,41 @@ void APlayerCharacterController::Send_Equipment()
 		e_KeyItem = false;
 	}
 }
+
+void APlayerCharacterController::Send_run() {
+	if (sendRun) {
+		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+
+		Protocol::run packet;
+		packet.set_playerid(MyPlayerId);
+		packet.set_b_run(b_run);
+		packet.set_packet_type(6);
+
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+		sendRun = false;
+	}
+}
+
+void APlayerCharacterController::Send_jump() {
+	if (sendjump) {
+		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+
+		Protocol::jump packet;
+		packet.set_playerid(MyPlayerId);
+		packet.set_packet_type(7);
+
+		// 직렬화
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+		sendjump = false;
+	}
+}
  
 void APlayerCharacterController::SetupInputComponent()
 {
@@ -345,6 +400,12 @@ void APlayerCharacterController::Run(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	basecharacter->Run();
+	sendRun = true;
+
+	if (!b_run) {
+		b_run = true;
+	}
+	else b_run = false;
 }
 
 void APlayerCharacterController::Jump(const FInputActionValue& Value)
@@ -354,6 +415,7 @@ void APlayerCharacterController::Jump(const FInputActionValue& Value)
 	if (basecharacter->GetStamina() >= 20) {
 		basecharacter->Jump();
 		basecharacter->SetStamina(basecharacter->GetStamina() - 20);
+		sendjump = true;
 	}
 
 }

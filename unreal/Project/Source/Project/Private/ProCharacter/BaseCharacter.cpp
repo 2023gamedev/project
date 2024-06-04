@@ -296,6 +296,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 			auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 			if (AnimInstance) {
 				AnimInstance->SetCurrentPawnSpeed(Speed);
+				AnimInstance->SetIsPawnRun(m_bRun);
 			}
 		}
 
@@ -1738,6 +1739,16 @@ void ABaseCharacter::SetAttack(bool bAttack)
 		Attack();
 		b_attack = false;
 	}
+}
+
+void ABaseCharacter::SetPlayerRun()
+{
+	Run();
+}
+
+void ABaseCharacter::SetPlayerJump()
+{
+	Jump();
 }
 
 bool ABaseCharacter::GetAttack()

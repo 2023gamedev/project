@@ -370,6 +370,8 @@ public:
 	void UpdatePlayerData(FVector Location);
 
 	void SetAttack(bool b_attack);
+	void SetPlayerRun();
+	void SetPlayerJump();
 	bool GetAttack();
 
 	void OtherSpawnNormalWeapon(const FString& WeaponName);
@@ -494,6 +496,7 @@ private:
 
 public:
 	std::atomic<bool> b_attack{ false };
+	bool b_run = false;
 
 	uint32 ItemBoxId = 999;
 

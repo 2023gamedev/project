@@ -811,6 +811,54 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
     }
 }
 
+void AOneGameModeBase::UpdatePlayerRun(uint32 PlayerID, bool b_run)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // 캐릭터 검색
+    for (TActorIterator<ABaseCharacter> It(World); It; ++It)
+    {
+        ABaseCharacter* BasePlayer = *It;
+        if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
+        {
+            BasePlayer->SetPlayerRun();
+            UE_LOG(LogTemp, Warning, TEXT("real update run: %d, %d"), PlayerID, b_run);
+
+            return;
+        }
+    }
+}
+
+void AOneGameModeBase::UpdatePlayerJump(uint32 PlayerID)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // 캐릭터 검색
+    for (TActorIterator<ABaseCharacter> It(World); It; ++It)
+    {
+        ABaseCharacter* BasePlayer = *It;
+        if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
+        {
+            BasePlayer->SetPlayerJump();
+            UE_LOG(LogTemp, Warning, TEXT("real update jump: %d"), PlayerID);
+
+            return;
+        }
+    }
+}
+
 
 
 

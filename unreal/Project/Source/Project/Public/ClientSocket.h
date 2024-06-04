@@ -77,6 +77,28 @@ struct EquipItem
 		: PlayerId(InPlayerId), Itemname(InItemname), Itemtype(InItemtype) {}
 };
 
+struct PlayerRun
+{
+	uint32 PlayerId;
+	bool b_run;
+
+	PlayerRun() : PlayerId(0), b_run(false) {}
+
+	PlayerRun(uint32 InPlayerId, bool Inb_run)
+		: PlayerId(InPlayerId), b_run(Inb_run) {}
+};
+
+struct PlayerJump
+{
+	uint32 PlayerId;
+
+	PlayerJump() : PlayerId(0) {}
+
+	PlayerJump(uint32 InPlayerId)
+		: PlayerId(InPlayerId) {}
+};
+
+
 class UProGameInstance;
 
 class PROJECT_API ClientSocket : public FRunnable
@@ -94,6 +116,9 @@ public:
 	Concurrency::concurrent_queue<PlayerAttack> Q_pattack;
 	Concurrency::concurrent_queue<ZombieData> Q_zombie;
 	Concurrency::concurrent_queue<EquipItem> Q_eitem;
+	Concurrency::concurrent_queue<PlayerRun> Q_run;
+	Concurrency::concurrent_queue<PlayerJump> Q_jump;
+	
 
 	virtual bool Init() override;
 	virtual uint32 Run() override;
@@ -104,6 +129,8 @@ public:
 	uint32 GetMyPlayerId() const;
 
 	uint32 Timer = 0;
+
+	bool b_run = false;
 
 
 
