@@ -97,8 +97,11 @@ ABaseCharacter::ABaseCharacter()
 	PlayerSight->SetRelativeLocation(FVector(150.f, 0.f, 88.f));
 	
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
-	SpringArm->TargetArmLength = 400.f;
+	SpringArm->TargetArmLength = 300.f;
 	SpringArm->SetRelativeRotation(FRotator(-30.f, 0.f, 0.f));
+	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 30.f));
+
+
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/CharacterAsset/Employee/EmployeeCharacter_UE.EmployeeCharacter_UE"));
 
@@ -146,8 +149,8 @@ ABaseCharacter::ABaseCharacter()
 		PickUpUIClass = PLAYER_PICKUPUI.Class;
 	}
 
-
-	SpringArm->TargetArmLength = 300.f;
+	//SpringArm->TargetArmLength = 300.f;
+	SpringArm->TargetArmLength = 170.f;
 	SpringArm->SetRelativeRotation(FRotator::ZeroRotator);
 	SpringArm->bUsePawnControlRotation = true;
 	SpringArm->bInheritPitch = true;
@@ -588,6 +591,20 @@ void ABaseCharacter::GetItem()
 		
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
 		if (itembox) {
+
+			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
+			for (int i = 0; i < 20; ++i) {
+				if (Inventory[i].Type == EItemType::ITEM_NONE) {
+					if (i >= GetInvenSize()) {
+						GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
+						return;
+					}
+					else {
+						break;
+					}
+				}
+			}
+
 			PickUp();
 			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 			for (int i = 0; i < 20; ++i) {
