@@ -1749,6 +1749,8 @@ void ABaseCharacter::SetPlayerRun()
 void ABaseCharacter::SetPlayerJump()
 {
 	Jump();
+	StopJumping();
+	UE_LOG(LogTemp, Warning, TEXT("SetJump "));
 }
 
 bool ABaseCharacter::GetAttack()
