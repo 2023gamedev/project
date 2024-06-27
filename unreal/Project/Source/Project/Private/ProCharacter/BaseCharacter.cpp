@@ -1748,7 +1748,8 @@ void ABaseCharacter::SetPlayerRun()
 
 void ABaseCharacter::SetPlayerJump()
 {
-	Jump();
+	//Jump();
+	bPressedJump = true;
 	StopJumping();
 	UE_LOG(LogTemp, Warning, TEXT("SetJump "));
 }
