@@ -262,6 +262,12 @@ public:
 	void SetCharacterName(FName charactername) { m_nCharacterName = charactername; };
 	FName GetCharacterName() { return m_nCharacterName; }
 
+	void SetCarryBagName(FName carrybagname) { m_nCarryBagName = carrybagname; };
+	FName GetCarryBagName() { return m_nCarryBagName; }
+
+	void SetInvenSize(int invensize) { m_iInvenSize = invensize; };
+	int GetInvenSize() { return m_iInvenSize; }
+
 	void SetStartLocation(FVector startlocation) { m_VStartLocation = startlocation; }
 	FVector GetStartLocation() { return m_VStartLocation; }
 
@@ -440,7 +446,13 @@ private:
 	bool m_bThrowWHandIn = false;
 		
 	UPROPERTY(EditAnywhere)
-		bool m_bSpecialEffect = false;
+	bool m_bSpecialEffect = false;
+
+	UPROPERTY(EditAnywhere)
+	FName m_nCarryBagName;
+
+	UPROPERTY(EditAnywhere)
+	int m_iInvenSize = 5;
 
 	// ╬Нец
 	UPROPERTY(EditAnywhere)

@@ -393,7 +393,7 @@ void APlayerCharacterController::LookUp(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	basecharacter->LookUp(LookAxisVector.Y);
+	basecharacter->LookUp(-LookAxisVector.Y);
 }
 
 void APlayerCharacterController::Run(const FInputActionValue& Value)

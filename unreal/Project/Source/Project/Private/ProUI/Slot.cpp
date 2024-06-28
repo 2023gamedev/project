@@ -167,7 +167,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Right Button Down"));
 
 		// 빈칸에 마우스 우클릭 시 팅기는 부분 방지
-		if (Character->Inventory[SlotIndex].Type == EItemType::ITEM_NONE || Character->Inventory[SlotIndex].ItemClassType == EItemClass::BAGITEM) {
+		if (Character->Inventory[SlotIndex].Type == EItemType::ITEM_NONE) {
 			return eventreply.NativeReply;
 		}
 
@@ -343,14 +343,56 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: NORMALWEAPON"));
 				}
 			}
+		case EItemClass::BAGITEM:
+			if (Character->GetCarryBagName() == "BigBagActor") {
 
-			
+				break;
+			}
+			else if (Character->GetCarryBagName() == "BagActor") {
+
+				if (Character->Inventory[SlotIndex].Name == "BigBagActor") {
+					Character->Inventory[SlotIndex].Name = "BagActor";
+					Character->Inventory[SlotIndex].ItemClassType = EItemClass::BAGITEM;
+					Character->Inventory[SlotIndex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"));
+					Character->Inventory[SlotIndex].Count = 1;
+
+					Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
+
+					Character->SetCarryBagName("BigBagActor");
+					Character->SetInvenSize(20);
+				}
+			}
+			else {
+				if (Character->Inventory[SlotIndex].Name == "BigBagActor") {
+					Character->Inventory[SlotIndex].Name = "nullptr";
+					Character->Inventory[SlotIndex].ItemClassType = EItemClass::NONE;
+					Character->Inventory[SlotIndex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+					Character->Inventory[SlotIndex].Count = 0;
+
+					Character->Inventory[SlotIndex].Type = EItemType::ITEM_NONE;
+
+					Character->SetCarryBagName("BigBagActor");
+					Character->SetInvenSize(20);
+				}
+				else if (Character->Inventory[SlotIndex].Name == "BagActor") {
+					Character->Inventory[SlotIndex].Name = "nullptr";
+					Character->Inventory[SlotIndex].ItemClassType = EItemClass::NONE;
+					Character->Inventory[SlotIndex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+					Character->Inventory[SlotIndex].Count = 0;
+
+					Character->Inventory[SlotIndex].Type = EItemType::ITEM_NONE;
+
+					Character->SetCarryBagName("BagActor");
+					Character->SetInvenSize(10);
+				}
+			}
 
 			Character->GameUIUpdate();
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Normal Weapon!"));
 			break;
 
 		}
+
 
 
 	}
