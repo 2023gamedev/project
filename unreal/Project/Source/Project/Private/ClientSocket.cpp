@@ -7,8 +7,9 @@
 ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
+	CurrentServerType = ServerType::LOBBY_SERVER;
 
-	if (ConnectServer()) {
+	if (ConnectServer(ServerType::LOBBY_SERVER)) {
 		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
 	}
 }
@@ -57,94 +58,118 @@ uint32 ClientSocket::Run()
 
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
 
-			Protocol::Character tempCharacterPacket;
-			if (tempCharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
+			if (CurrentServerType == ServerType::LOBBY_SERVER)
 			{
-				// 메시지 타입 확인
-				switch (tempCharacterPacket.packet_type())
-				{
-				case 1: // Character 메시지 타입 값
-				{
-					Protocol::Character CharacterPacket;
-					if (CharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
+				Protocol::SC_Ready Packet;
+				if (Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					if (Packet.allready())
 					{
-						PlayerId = CharacterPacket.playerid();
-						FVector NewLocation(CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
-						FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
+						// 로비 서버 연결 종료
+						Exit();
 
-						if (PlayerId != MyPlayerId) {
-							Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.hp()));
+						// 게임 서버에 연결
+						if (ConnectServer(ServerType::GAME_SERVER))
+						{
+							CurrentServerType = ServerType::GAME_SERVER;
+							UE_LOG(LogNet, Display, TEXT("Connected to Game Server"));
+						}
+						else
+						{
+							UE_LOG(LogNet, Warning, TEXT("Failed to connect to Game Server"));
 						}
 					}
-					break;
+					buffer.clear();
 				}
-				case 2: // Zombie 메시지 타입 값
-				{
-					Protocol::Zombie ZombiePacket;
-					if (ZombiePacket.ParseFromArray(buffer.data(), buffer.size()))
-					{
-						FVector NewLocation(ZombiePacket.x(), ZombiePacket.y(), ZombiePacket.z());
-						FRotator NewRotation(ZombiePacket.pitch(), ZombiePacket.yaw(), ZombiePacket.roll());
-						Q_zombie.push(ZombieData(ZombiePacket.zombieid(), NewLocation, NewRotation, ZombiePacket.zombietype()));
-						//UE_LOG(LogNet, Display, TEXT("push Zombie: ZombieId=%d"), ZombiePacket.zombieid());
-					}
-					break;
-				}
-				case 3:
-				{
-					Protocol::Time TimePacket;
-					if (TimePacket.ParseFromArray(buffer.data(), buffer.size()))
-					{
-						Timer = TimePacket.timer();
-						//UE_LOG(LogNet, Display, TEXT("Timer: %d"), Timer);
-					}
-					break;
-				}
+			}
 
-				case 4:
+			else if (CurrentServerType == ServerType::GAME_SERVER) {
+				Protocol::Character tempCharacterPacket;
+				if (tempCharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					Protocol::Character_Attack AttackPacket;
-					if (AttackPacket.ParseFromArray(buffer.data(), buffer.size()))
+					// 메시지 타입 확인
+					switch (tempCharacterPacket.packet_type())
 					{
-						Q_pattack.push(PlayerAttack(AttackPacket.playerid(), AttackPacket.attack()));
-					}
-					break;
-				}
-				
-				case 5:
-				{
-					Protocol::Equip_Item EquipPacket;
-					if (EquipPacket.ParseFromArray(buffer.data(), buffer.size()))
+					case 1: // Character 메시지 타입 값
 					{
-						Q_eitem.push(EquipItem(EquipPacket.playerid(), EquipPacket.itemname(), EquipPacket.itemtype()));
-					}
-					break;
-				}
+						Protocol::Character CharacterPacket;
+						if (CharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							PlayerId = CharacterPacket.playerid();
+							FVector NewLocation(CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
+							FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
-				case 6:
-				{
-					Protocol::run runPacket;
-					if (runPacket.ParseFromArray(buffer.data(), buffer.size()))
+							if (PlayerId != MyPlayerId) {
+								Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.hp()));
+							}
+						}
+						break;
+					}
+					case 2: // Zombie 메시지 타입 값
 					{
-						Q_run.push(PlayerRun(runPacket.playerid(), runPacket.b_run()));
+						Protocol::Zombie ZombiePacket;
+						if (ZombiePacket.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							FVector NewLocation(ZombiePacket.x(), ZombiePacket.y(), ZombiePacket.z());
+							FRotator NewRotation(ZombiePacket.pitch(), ZombiePacket.yaw(), ZombiePacket.roll());
+							Q_zombie.push(ZombieData(ZombiePacket.zombieid(), NewLocation, NewRotation, ZombiePacket.zombietype()));
+							//UE_LOG(LogNet, Display, TEXT("push Zombie: ZombieId=%d"), ZombiePacket.zombieid());
+						}
+						break;
 					}
-					break;
-				}
-
-				case 7:
-				{
-					Protocol::jump jumpPacket;
-					if (jumpPacket.ParseFromArray(buffer.data(), buffer.size()))
+					case 3:
 					{
-						Q_jump.push(PlayerJump(jumpPacket.playerid()));
+						Protocol::Time TimePacket;
+						if (TimePacket.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							Timer = TimePacket.timer();
+							//UE_LOG(LogNet, Display, TEXT("Timer: %d"), Timer);
+						}
+						break;
 					}
-					break;
-				}
-				
-				buffer.clear();
-				}
 
+					case 4:
+					{
+						Protocol::Character_Attack AttackPacket;
+						if (AttackPacket.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							Q_pattack.push(PlayerAttack(AttackPacket.playerid(), AttackPacket.attack()));
+						}
+						break;
+					}
 
+					case 5:
+					{
+						Protocol::Equip_Item EquipPacket;
+						if (EquipPacket.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							Q_eitem.push(EquipItem(EquipPacket.playerid(), EquipPacket.itemname(), EquipPacket.itemtype()));
+						}
+						break;
+					}
+
+					case 6:
+					{
+						Protocol::run runPacket;
+						if (runPacket.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							Q_run.push(PlayerRun(runPacket.playerid(), runPacket.b_run()));
+						}
+						break;
+					}
+
+					case 7:
+					{
+						Protocol::jump jumpPacket;
+						if (jumpPacket.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							Q_jump.push(PlayerJump(jumpPacket.playerid()));
+						}
+						break;
+					}
+
+					buffer.clear();
+					}
+				}
 			}
 			else if (recvLen == 0)
 			{
@@ -170,8 +195,10 @@ void ClientSocket::Exit()
 	}
 }
 
-bool ClientSocket::ConnectServer()
+bool ClientSocket::ConnectServer(ServerType serverType)
 {
+	ReceivedPlayerId = false;
+
 	WSADATA wsaData;
 	int retval = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (retval != 0)
@@ -188,7 +215,15 @@ bool ClientSocket::ConnectServer()
 	SOCKADDR_IN ServerAddr;
 
 	ServerAddr.sin_family = AF_INET;
-	ServerAddr.sin_port = htons(8888);
+	if (serverType == ServerType::LOBBY_SERVER)
+	{
+		ServerAddr.sin_port = htons(7777);
+	}
+
+	if (serverType == ServerType::GAME_SERVER)
+	{
+		ServerAddr.sin_port = htons(8888);
+	}
 
 	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 

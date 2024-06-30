@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GStruct.pb.h"
+#include "LStruct.pb.h"
 #include <concurrent_queue.h>
 #include <mutex>
 
@@ -18,6 +19,8 @@
 
 
 constexpr int BUFSIZE = 1024;
+
+enum class ServerType { LOBBY_SERVER, GAME_SERVER };
 
 /**
  *
@@ -123,7 +126,7 @@ public:
 	virtual bool Init() override;
 	virtual uint32 Run() override;
 	virtual void Exit() override;
-	bool ConnectServer();
+	bool ConnectServer(ServerType serverType);
 	bool Send(const int SendSize, void* SendData);
 
 	uint32 GetMyPlayerId() const;
@@ -131,6 +134,8 @@ public:
 	uint32 Timer = 0;
 
 	bool b_run = false;
+
+	ServerType CurrentServerType;
 
 
 

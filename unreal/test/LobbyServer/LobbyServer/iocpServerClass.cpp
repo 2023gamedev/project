@@ -2,11 +2,12 @@
 #include"Common.h"
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
+std::unordered_map<unsigned int, bool> players_ready;
+std::mutex g_players_mutex;
 
 IOCP_CORE::IOCP_CORE()
 {	
 	playerIndex = 0;
-	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 
 	IOCP_GetServerIpAddress();
 	CheckThisCPUcoreCount();
@@ -39,6 +40,7 @@ void IOCP_CORE::IOCP_GetServerIpAddress()
 		strcpy(ipaddr, inet_ntoa(*reinterpret_cast<struct in_addr*>(hostinfo->h_addr_list[0])));
 	}
 	WSACleanup();
+	printf("*/LOBBY SERVER/*\n");
 	printf("This Server's IP address : %s\n", ipaddr);
 }
 
@@ -106,9 +108,7 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				IOCP_ErrorDisplay("WorkerThreadStart::GetQueuedCompletionStatus", err_no, __LINE__);
 			}
 
-			closesocket(user->s);
-			user->connected = false;
-			DisconnectClient(user->id);
+			DisconnectClient(key);
 			printf("[ No. %3u ] Disconnected\n", key);
 
 			continue;
@@ -133,6 +133,22 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				}
 			}
 
+			if (CheckAllPlayersReady()) {
+				Protocol::SC_Ready Packet;
+
+				Packet.set_allready(true);
+
+				string serializedData;
+				Packet.SerializeToString(&serializedData);
+				{
+					std::lock_guard<std::mutex> lock(g_players_mutex);
+					for (const auto& player : g_players) {
+						IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+						printf("send allready packet\n");
+					}
+				}
+			}
+
 			// 다음 데이터를 받기 위한 WSARecv 호출
 			DWORD flags = 0;
 			int retval = WSARecv(user->s, &user->recv_overlap.wsabuf, 1, NULL, &flags, &user->recv_overlap.original_overlap, NULL);
@@ -150,7 +166,6 @@ void IOCP_CORE::IOCP_WorkerThread() {
 		}
 		else {
 			cout << "Unknown IOCP event !!\n";
-			exit(-1);
 		}
 	}
 }
@@ -248,12 +263,15 @@ void IOCP_CORE::IOCP_AcceptThread()
 }
 
 void IOCP_CORE::DisconnectClient(unsigned int id) {
-    if (g_players.find(id) != g_players.end()) {
-        PLAYER_INFO *user = g_players[id];
+	std::lock_guard<std::mutex> lock(g_players_mutex);
+	auto it = g_players.find(id);
+	if (it != g_players.end()) {
+		PLAYER_INFO* user = it->second;
 
-        delete user;
-        g_players.erase(id);
-    }
+		closesocket(user->s);
+		delete user;
+		g_players.erase(it);
+	}
 }
 
 
@@ -300,38 +318,18 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
 	MessageBox(NULL, (LPCTSTR)lpMsgBuf, msg, MB_ICONERROR);
 	LocalFree(lpMsgBuf);
-	exit(-1);
 }
 
-void IOCP_CORE::Timer_Thread()
+bool IOCP_CORE::CheckAllPlayersReady() 
 {
-	printf("Timer Thread Started\n");
-	while (!ServerShutdown)
-	{
-		if (b_Timer) 
-		{
-			Protocol::Time packet;
+	if (players_ready.size() != 2) {
+		return false;
+	}
 
-			std::this_thread::sleep_for(std::chrono::seconds(1)); // 1초마다 타이머
-			GameTime++;
-
-			std::string gameTimeStr = std::to_string(GameTime);
-
-			packet.set_timer(GameTime);
-			packet.set_packet_type(3);
-
-			std::string serializedData;
-			packet.SerializeToString(&serializedData);
-
-			for (auto& playerPair : g_players)
-			{
-				PLAYER_INFO* player = playerPair.second;
-				if (player->connected) {
-					IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
-				}
-			}
-
-			//printf("Send Timer");
+	for (const auto& player : players_ready) {
+		if (!player.second) {
+			return false;
 		}
 	}
+	return true;
 }

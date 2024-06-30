@@ -19,6 +19,8 @@ using PLAYER_INFO = struct Client_INFO {
 };
 
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
+extern std::unordered_map<unsigned int, bool> players_ready;
+extern std::mutex g_players_mutex;
 
 class IOCP_CORE
 {
@@ -42,7 +44,7 @@ public:
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
-	void Timer_Thread();
+	bool CheckAllPlayersReady();
 
 private:
 	HANDLE g_hIocp;	
@@ -54,10 +56,4 @@ private:
 	bool ServerShutdown{ false };
 
 	unsigned int playerIndex{ UINT_MAX };
-
-	vector<int> m_zombie;
-
-	int GameTime = 0;
-
-	bool b_Timer = false;
 };
