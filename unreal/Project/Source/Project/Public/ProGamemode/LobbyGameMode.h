@@ -23,11 +23,17 @@ public:
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
+	void SendReady();
+
 	virtual void BeginPlay() override;
 	void LobbyStageClear();
+
+	void CheckServerType();
 
 	void ChoiceGirl();
 	void ChoiceEmployee();
 	void ChoiceIdol();
 	void ChoiceFireFighter();
+
+	FTimerHandle TimerHandle;
 };

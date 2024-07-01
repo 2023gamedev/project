@@ -1,0 +1,17 @@
+syntax = "proto3";
+package Protocol;
+
+message CS_Login {
+};
+
+message SC_Login {
+};
+
+message CS_Ready{
+    uint32 playerid = 1;
+    bool ready = 2;
+}
+
+message SC_Ready{
+    bool allready = 1;
+}

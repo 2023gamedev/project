@@ -39,6 +39,7 @@ void IOCP_CORE::IOCP_GetServerIpAddress()
 		strcpy(ipaddr, inet_ntoa(*reinterpret_cast<struct in_addr*>(hostinfo->h_addr_list[0])));
 	}
 	WSACleanup();
+	printf("*/GAME SERVER/*\n");
 	printf("This Server's IP address : %s\n", ipaddr);
 }
 
