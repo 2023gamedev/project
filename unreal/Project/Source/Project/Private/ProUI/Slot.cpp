@@ -360,6 +360,12 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 					Character->SetCarryBagName("BigBagActor");
 					Character->SetInvenSize(20);
+
+
+					for (int i = 10; i < 20; ++i) {
+						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+					}
+
 				}
 			}
 			else {
@@ -373,6 +379,10 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 					Character->SetCarryBagName("BigBagActor");
 					Character->SetInvenSize(20);
+
+					for (int i = 5; i < 20; ++i) {
+						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+					}
 				}
 				else if (Character->Inventory[SlotIndex].Name == "BagActor") {
 					Character->Inventory[SlotIndex].Name = "nullptr";
@@ -384,6 +394,11 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 					Character->SetCarryBagName("BagActor");
 					Character->SetInvenSize(10);
+
+					for (int i = 5; i < 10; ++i) {
+						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+					}
+
 				}
 			}
 
