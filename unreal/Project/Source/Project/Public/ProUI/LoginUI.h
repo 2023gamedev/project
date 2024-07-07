@@ -1,39 +1,44 @@
+#pragma once
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/EditableTextBox.h"
 #include "Components/Button.h"
-#include "StartGameUI.generated.h"
+#include "LoginUI.generated.h"
 
 /**
  * 
  */
-DECLARE_DELEGATE(FMoveChoiceCharacterUI);
 
-// 시작할 때 나타나는 UI Start, Exit가 있다.
+
+
 UCLASS()
-class PROJECT_API UStartGameUI : public UUserWidget
+class ULoginUI : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
-	void Init();
-
-
-	FMoveChoiceCharacterUI MoveChoiceCharacterUI;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UButton* StartButton;
+	UButton* LoginButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UButton* ExitButton;
+	UButton* RegisterButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UEditableTextBox* UsernameTextBox;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UEditableTextBox* PasswordTextBox;
 
 private:
-	UFUNCTION(BlueprintCallable)
-	void OnStartButtonClicked();
 
 	UFUNCTION(BlueprintCallable)
-	void OnExitButtonClicked();
+	void OnLoginButtonClicked();
+
+	UFUNCTION(BlueprintCallable)
+	void OnRegisterButtonClicked();	
 };
