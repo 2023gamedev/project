@@ -2,9 +2,12 @@ syntax = "proto3";
 package Protocol;
 
 message CS_Login {
+    string id;
+    uint32 password;
 };
 
 message SC_Login {
+    bool b_login;
 };
 
 message CS_Ready{

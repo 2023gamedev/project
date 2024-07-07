@@ -16,9 +16,14 @@ void UInventoryUI::Init()
 		Character->Inventory.Add(FItemDataStructure());
 	}
 
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 5; ++i) {
 		if (Character->Inventory[i].Type == EItemType::ITEM_NONE) {
 			Character->Inventory[i].Texture = DefTex;
+		}
+	}
+	for (int i = 5; i < 20; ++i) {
+		if (Character->Inventory[i].Type == EItemType::ITEM_NONE) {
+			Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/EngineResources/Black.Black"));
 		}
 	}
 

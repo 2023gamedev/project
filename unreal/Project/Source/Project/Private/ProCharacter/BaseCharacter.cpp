@@ -416,7 +416,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 {
 
 	auto CurrentInvenSlot = this->Inventory[slotindex];
-	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT || CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
+	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {
 		if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
 			DestroyBleedingHealingItem();
 			QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
@@ -470,14 +470,28 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 
 		}
 
-	}
-	Inventory[slotindex].Type = EItemType::ITEM_NONE;
-	Inventory[slotindex].Name = "nullptr";
-	Inventory[slotindex].ItemClassType = EItemClass::NONE;
-	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
-	Inventory[slotindex].Count = 0;
+		Inventory[slotindex].Type = EItemType::ITEM_NONE;
+		Inventory[slotindex].Name = "nullptr";
+		Inventory[slotindex].ItemClassType = EItemClass::NONE;
+		Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+		Inventory[slotindex].Count = 0;
 
-	GameUIUpdate();
+		GameUIUpdate();
+		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
+	}
+	else if (CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
+		Inventory[slotindex].Type = EItemType::ITEM_NONE;
+		Inventory[slotindex].Name = "nullptr";
+		Inventory[slotindex].ItemClassType = EItemClass::NONE;
+		Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+		Inventory[slotindex].Count = 0;
+
+		GameUIUpdate();
+		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
+	}
+
+
+
 	//if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT || CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
 	//	if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
 
@@ -506,7 +520,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 
 	//}
 
-	ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
+
 }
 
 
