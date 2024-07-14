@@ -27,6 +27,7 @@ class ABleedingHealingItemActor;
 class AKeyActor;
 class UGameTimerUI;
 class UPickUpUI;
+class UCircularPB_UI;
 
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
@@ -141,6 +142,12 @@ public:
 
 	FTimerHandle PickUpUIHandle;
 	void ProStartPickUpUI();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UCircularPB_UI> CircularPB_Class;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UCircularPB_UI* CircularPB_Widget;
 
 
 

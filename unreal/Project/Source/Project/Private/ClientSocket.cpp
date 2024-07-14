@@ -58,25 +58,54 @@ uint32 ClientSocket::Run()
 
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
 
-			if (CurrentServerType == ServerType::LOBBY_SERVER)
-			{
+			if (CurrentServerType == ServerType::LOBBY_SERVER){
 				Protocol::SC_Ready Packet;
-				if (Packet.ParseFromArray(buffer.data(), buffer.size())) {
-					if (Packet.allready())
+				if (Packet.ParseFromArray(buffer.data(), buffer.size())) 
+				{
+					switch (Packet.type())
 					{
-						// 로비 서버 연결 종료
-						Exit();
+					case 3:
+					{
+						Protocol::SC_Login Login_Packet;
+						if (Login_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+							b_login = Login_Packet.b_login();
+							recv_login = true;
+						}
+						break;
+					}
+					case 4:
+					{
+						Protocol::SC_Register Register_Packet;
+						if (Register_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+							b_register = Register_Packet.b_register();
+							recv_register = true;
+						}
+						break;
+					}
 
-						// 게임 서버에 연결
-						if (ConnectServer(ServerType::GAME_SERVER))
-						{
-							CurrentServerType = ServerType::GAME_SERVER;
-							UE_LOG(LogNet, Display, TEXT("Connected to Game Server"));
+					case 6:
+					{
+						Protocol::SC_Ready Ready_Packet;
+						if (Packet.ParseFromArray(buffer.data(), buffer.size())) {
+							if (Ready_Packet.allready())
+							{
+								// 로비 서버 연결 종료
+								Exit();
+
+								// 게임 서버에 연결
+								if (ConnectServer(ServerType::GAME_SERVER))
+								{
+									CurrentServerType = ServerType::GAME_SERVER;
+									UE_LOG(LogNet, Display, TEXT("Connected to Game Server"));
+								}
+								else
+								{
+									UE_LOG(LogNet, Warning, TEXT("Failed to connect to Game Server"));
+								}
+							}
 						}
-						else
-						{
-							UE_LOG(LogNet, Warning, TEXT("Failed to connect to Game Server"));
-						}
+						break;
+					}
 					}
 					buffer.clear();
 				}

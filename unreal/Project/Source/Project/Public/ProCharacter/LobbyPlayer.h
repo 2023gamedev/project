@@ -10,6 +10,7 @@
 
 class UStartGameUI;
 class UChoiceCharacterUI;
+class ULoginUI;
 
 DECLARE_DELEGATE(FChoicedGirlCharcaterD);
 DECLARE_DELEGATE(FChoicedEmployeeCharcaterD);
@@ -46,6 +47,7 @@ public:
 	void ChoicedFireFighterCharacter();
 	
 	void MoveChoiceCharacterUI();
+	void MoveStartGameUI();
 	void OnMouseLeftClick();
 
 	
@@ -68,5 +70,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UChoiceCharacterUI* ChoiceCharacterUIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<ULoginUI> LoginUI;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	ULoginUI* LoginUIWidget;
+
 
 };

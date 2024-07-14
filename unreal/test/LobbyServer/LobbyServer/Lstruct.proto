@@ -2,19 +2,34 @@ syntax = "proto3";
 package Protocol;
 
 message CS_Login {
-    string id;
-    uint32 password;
+    uint32 type = 1;
+    string id = 2;
+    string password = 3;
 };
+
+message CS_Register {
+    uint32 type = 1;
+    string id = 2;
+    string password = 3;
+}
 
 message SC_Login {
-    bool b_login;
+    uint32 type = 1;
+    bool b_login = 2;
 };
 
+message SC_Register {
+    uint32 type = 1;
+    bool b_register = 2;
+}
+
 message CS_Ready{
-    uint32 playerid = 1;
-    bool ready = 2;
+    uint32 type = 1;
+    uint32 playerid = 2;
+    bool ready = 3;
 }
 
 message SC_Ready{
-    bool allready = 1;
+    uint32 type = 1;
+    bool allready = 2;
 }

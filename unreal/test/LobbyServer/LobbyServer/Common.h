@@ -2,15 +2,16 @@
 #pragma warning(disable: 4996)
 #pragma comment(lib, "ws2_32")
 
-#include<WinSock2.h>
-#include<Windows.h>
+#include <WinSock2.h>
+#include <Windows.h>
 #include "pch.h"
 
-#include<iostream>
-#include<thread>
-#include<vector>
-#include<cstdlib>
-#include<mutex>
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <cstdlib>
+#include <mutex>
+#include <fstream>
 using namespace std;
 
 
@@ -19,4 +20,6 @@ using namespace std;
 #include "LStruct.pb.h"
 
 // iocp 서버의 몸통이 되는 가장 핵심적인 클래스의 선언이 들어 있다.
-#include"iocpServerClass.h"
+#include "iocpServerClass.h"
+
+#include "LoginManager.h"

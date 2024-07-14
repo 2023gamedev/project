@@ -70,6 +70,7 @@
 #include "ProUI/ProGameClearUI.h"
 #include "ProUI/GameTimerUI.h"
 #include "ProUI/PickUpUI.h"
+#include "ProUI/CircularPB_UI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
 
@@ -148,6 +149,13 @@ ABaseCharacter::ABaseCharacter()
 	if (PLAYER_PICKUPUI.Succeeded()) {
 		PickUpUIClass = PLAYER_PICKUPUI.Class;
 	}
+	
+	static ConstructorHelpers::FClassFinder <UCircularPB_UI> PLAYER_CIRCULARPB_UI(TEXT("/Game/UI/Widget_CicularPB.Widget_CicularPB_C"));
+
+	if (PLAYER_CIRCULARPB_UI.Succeeded()) {
+		CircularPB_Class = PLAYER_CIRCULARPB_UI.Class;
+	}
+
 
 	//SpringArm->TargetArmLength = 300.f;
 	SpringArm->TargetArmLength = 170.f;
@@ -256,6 +264,28 @@ void ABaseCharacter::BeginPlay()
 		PickUpUIWidget->Init();
 		PickUpUIWidget->AddToViewport();
 		PickUpUIWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	if (CircularPB_Class != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+
+		CircularPB_Widget = CreateWidget<UCircularPB_UI>(controller, CircularPB_Class);
+
+		if (!CircularPB_Widget) {
+			return;
+		}
+
+		//CircularPB_Widget->Character = this;
+		//CircularPB_Widget->Init();
+		
+		CircularPB_Widget->AddToViewport();
+		CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
+
+		//CircularPB_Widget->PlayAnimation(*WidgetAnim, StartAtTime, NumLoopsToPlay, PlayMode, PlaybackSpeed);
 	}
 
 
@@ -757,13 +787,19 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링
 
 void ABaseCharacter::Healing()
 {
+	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
+
 	if (m_bIsHealingTime) {
 		return;
 	}
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	AnimInstance->PlayHealingMontage();
-	
+
+	/*if (AnimInstance->PlayHealingMontage()) {
+		CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
+	}*/
+
 	if (CurrentHealingItem != nullptr) {
 		StartHealingTimer(CurrentHealingItem->m_fHealingSpeed, CurrentHealingItem->m_fHealingDuration);
 	}
