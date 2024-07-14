@@ -4,6 +4,7 @@
 #include "ProCharacter/LobbyPlayer.h"
 #include "ProUI/StartGameUI.h"
 #include "ProUI/ChoiceCharacterUI.h"
+#include "ProUI/LoginUI.h"
 #include "ProCharacter/LobbyPlayerController.h"
 
 // Sets default values
@@ -19,6 +20,11 @@ ALobbyPlayer::ALobbyPlayer()
 	RootComponent = Capsule;
 	Camera->SetupAttachment(Capsule);
 
+	static ConstructorHelpers::FClassFinder <ULoginUI> PLAYER_LOGINUI(TEXT("/Game/UI/BP_LoginUI.BP_LoginUI_C"));
+
+	if (PLAYER_LOGINUI.Succeeded()) {
+		LoginUI = PLAYER_LOGINUI.Class;
+	}
 
 	static ConstructorHelpers::FClassFinder <UStartGameUI> PLAYER_STARTUI(TEXT("/Game/UI/BP_StartGameUI.BP_StartGameUI_C"));
 
@@ -63,25 +69,48 @@ void ALobbyPlayer::BeginPlay()
 
 	//}
 	 
-	if (StartGameUI != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartGameUI != nullptr");
+	//if (StartGameUI != nullptr) {
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartGameUI != nullptr");
+	//	ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
+	//	if (controller == nullptr) {
+	//		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
+	//		return;
+	//	}
+	//	StartGameUIWidget = CreateWidget<UStartGameUI>(controller, StartGameUI);
+
+	//	if (!StartGameUIWidget) {
+	//		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!StartGameUIWidget");
+	//		return;
+	//	}
+
+	//	StartGameUIWidget->Init();
+	//	StartGameUIWidget->AddToViewport();
+
+
+	//	StartGameUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
+	//}
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "LoginUI 123");
+
+
+	if (LoginUI != nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "LoginUI != nullptr");
 		ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
 		if (controller == nullptr) {
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
 			return;
 		}
-		StartGameUIWidget = CreateWidget<UStartGameUI>(controller, StartGameUI);
+		LoginUIWidget = CreateWidget<ULoginUI>(controller, LoginUI);
 
-		if (!StartGameUIWidget) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!StartGameUIWidget");
+		if (!LoginUIWidget) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!LoginUIWidget");
 			return;
 		}
 
-		StartGameUIWidget->Init();
-		StartGameUIWidget->AddToViewport();
+		LoginUIWidget->Init();
+		LoginUIWidget->AddToViewport();
 
 
-		StartGameUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
+		LoginUIWidget->MoveStartGameUI.BindUObject(this, &ALobbyPlayer::MoveStartGameUI);
 	}
 
 
@@ -142,6 +171,35 @@ void ALobbyPlayer::MoveChoiceCharacterUI()
 		ChoiceCharacterUIWidget->ChoicedEmployee.BindUObject(this, &ALobbyPlayer::ChoicedEmployeeCharacter);
 		ChoiceCharacterUIWidget->ChoicedIdol.BindUObject(this, &ALobbyPlayer::ChoicedIdolCharacter);
 		ChoiceCharacterUIWidget->ChoicedFireFighter.BindUObject(this, &ALobbyPlayer::ChoicedFireFighterCharacter);
+
+	}
+
+}
+
+void ALobbyPlayer::MoveStartGameUI()
+{
+	if (StartGameUI != nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartGameUI != nullptr");
+		ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
+		if (controller == nullptr) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
+			return;
+		}
+		StartGameUIWidget = CreateWidget<UStartGameUI>(controller, StartGameUI);
+
+		if (!StartGameUIWidget) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!StartGameUIWidget");
+			return;
+		}
+
+		//StartGameUIWidget->RemoveFromViewport();
+
+
+
+		StartGameUIWidget->Init();
+		StartGameUIWidget->AddToViewport();
+
+		StartGameUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
 
 	}
 

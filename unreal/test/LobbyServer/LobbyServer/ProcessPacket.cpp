@@ -17,21 +17,68 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     PLAYER_INFO* clientInfo = it->second;
 
-    Protocol::CS_Ready Packet;
-    Packet.ParseFromArray(buffer, bufferSize);
+    Protocol::CS_Login tempPacket;
+    tempPacket.ParseFromArray(buffer, bufferSize);
 
-    players_ready[Packet.playerid()] = Packet.ready();
+    // 패킷의 타입을 확인하여 처리
+    switch (tempPacket.type()) {
+    case 1: {
+        printf("[ No. %3u ] Login Packet Received !!\n", id);
 
-    printf("receive ready packet\n");
+        Protocol::CS_Login CS_Packet;
 
-    return true;
+        CS_Packet.ParseFromArray(buffer, bufferSize);
 
-    //string serializedData;
-    //Packet.SerializeToString(&serializedData);
-    /*for (const auto& player : g_players) {
-        if (player.first != id && player.second->isInGame) {
-            IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-        }
-    }*/
+        Protocol::SC_Login SC_Packet;
+
+        SC_Packet.set_type(3);
+        SC_Packet.set_b_login(loginmanager.Login(CS_Packet.id(), CS_Packet.password()));
+
+        string serializedData;
+        SC_Packet.SerializeToString(&serializedData);
+
+        IOCP_SendPacket(id, serializedData.data(), serializedData.size());
+
+        return true;
+
+    } break;
+
+    case 2: {
+        printf("[ No. %3u ] Register Packet Received !!\n", id);
+        Protocol::CS_Register CS_Packet;
+        CS_Packet.ParseFromArray(buffer, bufferSize);
+
+        Protocol::SC_Register SC_Packet;
+
+        SC_Packet.set_type(4);
+        SC_Packet.set_b_register(loginmanager.RegisterName(CS_Packet.id(), CS_Packet.password()));
+
+        string serializedData;
+        SC_Packet.SerializeToString(&serializedData);
+
+        IOCP_SendPacket(id, serializedData.data(), serializedData.size());
+
+        return true;
+
+    } break;
+
+    case 5: {
+        printf("[ No. %3u ] Ready Packet Received !!\n", id);
+
+        Protocol::CS_Ready CS_Packet;
+        CS_Packet.ParseFromArray(buffer, bufferSize);
+
+        players_ready[CS_Packet.playerid()] = CS_Packet.ready();
+
+        return true;
+
+    } break;
+
+    default: {
+        printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.type());
+        // 클라이언트나 서버 종료, 로깅 등의 처리 가능
+        return true;
+    } break;
+    }
 }
 

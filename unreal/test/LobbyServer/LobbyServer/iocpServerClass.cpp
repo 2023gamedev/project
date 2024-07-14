@@ -134,12 +134,13 @@ void IOCP_CORE::IOCP_WorkerThread() {
 			}
 
 			if (CheckAllPlayersReady()) {
-				Protocol::SC_Ready Packet;
+				Protocol::SC_Ready SC_Packet;
 
-				Packet.set_allready(true);
+				SC_Packet.set_type(6);
+				SC_Packet.set_allready(true);
 
 				string serializedData;
-				Packet.SerializeToString(&serializedData);
+				SC_Packet.SerializeToString(&serializedData);
 				{
 					std::lock_guard<std::mutex> lock(g_players_mutex);
 					for (const auto& player : g_players) {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include"LoginManager.h"
+
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;
 	int operation;
@@ -49,6 +51,8 @@ public:
 private:
 	HANDLE g_hIocp;	
 	int cpuCore;
+
+	LoginManager loginmanager;
 
 	vector<thread*> worker_threads;
 	thread timer_thread;

@@ -137,6 +137,11 @@ public:
 
 	ServerType CurrentServerType;
 
+	bool recv_login = false;
+	bool recv_register = false;
+	bool b_login = false;
+	bool b_register = false;
+
 
 
 private:

@@ -1,19 +1,21 @@
 #pragma once
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#pragma once
-
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/EditableTextBox.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
+#include "ProGamemode/ProGameInstance.h"
 #include "LoginUI.generated.h"
 
 /**
  * 
  */
 
+class UAlertUI;
 
+DECLARE_DELEGATE(FMoveStartGameUI);
 
 UCLASS()
 class ULoginUI : public UUserWidget
@@ -22,6 +24,14 @@ class ULoginUI : public UUserWidget
 
 public:
 
+	void Init();
+
+	//void ShowAlert(const FString& Message);
+
+	FMoveStartGameUI MoveStartGameUI;
+
+	UProGameInstance* GameInstance;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* LoginButton;
 
@@ -29,10 +39,16 @@ public:
 	UButton* RegisterButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UEditableTextBox* UsernameTextBox;
+	UEditableTextBox* IDBox;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UEditableTextBox* PasswordTextBox;
+	UEditableTextBox* PasswordBox;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	//TSubclassOf<UAlertUI> AlertUI;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	//UAlertUI* AlertUIWidget;
 
 private:
 
@@ -40,5 +56,6 @@ private:
 	void OnLoginButtonClicked();
 
 	UFUNCTION(BlueprintCallable)
-	void OnRegisterButtonClicked();	
+	void OnRegisterButtonClicked();
+
 };

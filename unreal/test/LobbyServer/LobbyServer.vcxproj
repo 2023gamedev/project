@@ -145,12 +145,14 @@
   <ItemGroup>
     <ClInclude Include="LobbyServer\Common.h" />
     <ClInclude Include="LobbyServer\iocpServerClass.h" />
+    <ClInclude Include="LobbyServer\LoginManager.h" />
     <ClInclude Include="LobbyServer\LStruct.pb.h" />
     <ClInclude Include="LobbyServer\pch.h" />
     <ClInclude Include="LobbyServer\protocol.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LobbyServer\iocpServerClass.cpp" />
+    <ClCompile Include="LobbyServer\LoginManager.cpp" />
     <ClCompile Include="LobbyServer\LStruct.pb.cc" />
     <ClCompile Include="LobbyServer\Main.cpp" />
     <ClCompile Include="LobbyServer\ProcessPacket.cpp" />
