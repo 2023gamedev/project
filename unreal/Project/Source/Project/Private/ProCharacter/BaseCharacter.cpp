@@ -73,6 +73,15 @@
 #include "ProUI/CircularPB_UI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
+#define default_circularPB_widget_anim_playtime 5.f
+#define default_healing_anim_playtime 4.57f
+#define default_bleedhealing_anim_playtime 9.f
+#define playtime_8_sec 8.f			// 키 사용시간
+#define playtime_4_sec 4.f			// 참치캔, 소독약, 연고 사용시간
+#define playtime_3_5_sec 3.5f		// 과자 사용시간
+#define playtime_3_sec 3.f			// 음료수, 담배, 물 사용시 & 출혈 회복용 아이템 사용시간
+
+
 
 
 
@@ -278,14 +287,9 @@ void ABaseCharacter::BeginPlay()
 		if (!CircularPB_Widget) {
 			return;
 		}
-
-		//CircularPB_Widget->Character = this;
-		//CircularPB_Widget->Init();
 		
 		CircularPB_Widget->AddToViewport();
 		CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
-
-		//CircularPB_Widget->PlayAnimation(*WidgetAnim, StartAtTime, NumLoopsToPlay, PlayMode, PlaybackSpeed);
 	}
 
 
@@ -787,26 +791,54 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링
 
 void ABaseCharacter::Healing()
 {
-	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
-
 	if (m_bIsHealingTime) {
 		return;
 	}
 
-	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-	AnimInstance->PlayHealingMontage();
+	if (CurrentHealingItem != nullptr) {
+		CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
-	/*if (AnimInstance->PlayHealingMontage()) {
-		CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
-	}*/
+		auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
+		float WidgetPlaySpeed = 1.f;
+		float AnimPlaySpeed = 1.f;
+
+		if (CurrentHealingItem->HName == "CannedTuna" || CurrentHealingItem->HName == "Ointment" || CurrentHealingItem->HName == "Disinfectant") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_4_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_healing_anim_playtime / playtime_4_sec;
+			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
+		}
+		else if (CurrentHealingItem->HName == "Snack") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_5_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_healing_anim_playtime / playtime_3_5_sec;
+			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
+		}
+		else if (CurrentHealingItem->HName == "Drink" || CurrentHealingItem->HName == "Smoke" || CurrentHealingItem->HName == "Water") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_healing_anim_playtime / playtime_3_sec;
+			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
+		}
+		
+		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::HealingMontageEnded);
+	}
+}
+
+void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
+{
+	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
+	
 	if (CurrentHealingItem != nullptr) {
 		StartHealingTimer(CurrentHealingItem->m_fHealingSpeed, CurrentHealingItem->m_fHealingDuration);
 	}
-	if (CurrentHealingItem->HName == "Smoke") {
-		Smoking();
-	}
-
+	//if (CurrentHealingItem->HName == "Smoke") {
+	//	Smoking();
+	//}
 
 	UpdateHealingSlot();
 }
@@ -816,23 +848,50 @@ void ABaseCharacter::BleedHealing()
 	if (m_bIsBleedHealing || !m_bBleeding) {
 		return;
 	}
-	m_bIsBleedHealing = true;
-	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-	AnimInstance->PlayBleedHealingMontage();
+
+	if (CurrentBleedingHealingItem != nullptr) {
+		m_bIsBleedHealing = true;
+
+		CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
+
+		auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+		float WidgetPlaySpeed = 1.f;
+		float AnimPlaySpeed = 1.f;
+
+		WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
+		CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+		AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
+		AnimInstance->PlayBleedHealingMontage(AnimPlaySpeed);
+
+		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::BleedHealingMontageEnded);
+	}
+}
+
+void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interrup)
+{
+	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
 
 	m_DBleedingHealingEnd.AddLambda([this]() -> void {
 		m_bIsBleedHealing = false;
+
 		if (CurrentBleedingHealingItem != nullptr) {
 			m_bBleeding = RandomBleedHealing(CurrentBleedingHealingItem->m_fHealingSuccessProbability);
 		}
-		UpdateBHealingSlot();
 
+		UpdateBHealingSlot();
 		});
 }
 
 void ABaseCharacter::PlayKey()
 {
+	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
+	float WidgetPlaySpeed = 1.f;
+
+	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_8_sec;
+	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
 	if (PlayerSight->GetIsHit()) {
 

@@ -154,7 +154,11 @@ public:
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
 
+	UFUNCTION()
+	void HealingMontageEnded(UAnimMontage* Montage, bool interrup);
 
+	UFUNCTION()
+	void BleedHealingMontageEnded(UAnimMontage* Montage, bool interrup);
 
 
 	// input

@@ -16,25 +16,8 @@ class PROJECT_API UCircularPB_UI : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	//UCircularPB_UI(const FObjectInitializer& ObjectInitializer);
+	void StartVisibleAnimation(float PlaySpeed);
 
-	virtual void NativeConstruct() override;
-
-	void FillAnimationsMap();
-
-	UFUNCTION(BlueprintCallable)
-	UWidgetAnimation* GetAnimationByName(FName AnimationName) const;
-	
-	UFUNCTION(BlueprintCallable)
-	bool PlayAnimationByName(
-		FName AnimationName,
-		float StartAtTime = 0.f,
-		int32 NumLoopsToPlay = 1,
-		EUMGSequencePlayMode::Type PlayMode = EUMGSequencePlayMode::Forward,
-		float PlaybackSpeed = 1.f);
-
-protected:
-	//virtual void BeginPlay() override;
-
-	TMap<FName, UWidgetAnimation*> AnimationsMap;
+	UPROPERTY(Meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* CircularPB_ANIM;
 };

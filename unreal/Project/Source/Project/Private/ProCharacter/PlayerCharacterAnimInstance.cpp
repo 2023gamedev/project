@@ -6,6 +6,10 @@
 #include "ProCharacter/BaseCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
 
+#define default_healing_anim_playtime 4.57f
+#define pb_anim_4_sec 4.f
+#define pb_anim_3_5_sec 3.5f
+#define pb_anim_3_sec 3.f
 
 UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 {
@@ -67,17 +71,17 @@ void UPlayerCharacterAnimInstance::PlayPickUpMontage()
 	}
 }
 
-void UPlayerCharacterAnimInstance::PlayHealingMontage()
+void UPlayerCharacterAnimInstance::PlayHealingMontage(float PlaySpeed)
 {
 	if (!Montage_IsPlaying(HealingMontage)) {
-		Montage_Play(HealingMontage, 1.f);
+		Montage_Play(HealingMontage, PlaySpeed);
 	}
 }
 
-void UPlayerCharacterAnimInstance::PlayBleedHealingMontage()
+void UPlayerCharacterAnimInstance::PlayBleedHealingMontage(float PlaySpeed)
 {
 	if (!Montage_IsPlaying(BleedHealingMontage)) {
-		Montage_Play(BleedHealingMontage, 3.f);
+		Montage_Play(BleedHealingMontage, PlaySpeed);
 	}
 }
 

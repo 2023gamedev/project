@@ -28,8 +28,8 @@ public:
 
 	void PlayAttackMontage();
 	void PlayPickUpMontage();
-	void PlayHealingMontage();
-	void PlayBleedHealingMontage();
+	void PlayHealingMontage(float PlaySpeed);
+	void PlayBleedHealingMontage(float PlaySpeed);
 
 	FOnAttackStartCheckDelegate OnAttackStartCheck;
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
