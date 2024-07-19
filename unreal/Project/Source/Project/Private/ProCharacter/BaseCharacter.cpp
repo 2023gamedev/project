@@ -840,7 +840,7 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 	//	Smoking();
 	//}
 
-	UpdateHealingSlot();
+	//UpdateHealingSlot();
 }
 
 void ABaseCharacter::BleedHealing()
@@ -1673,14 +1673,19 @@ void ABaseCharacter::HealingTimerElapsed()
 		GetWorld()->GetTimerManager().ClearTimer(HealingHandle);
 		m_fHealingCount = 0.f;
 		m_bIsHealingTime = false;
+
+		SetHealing(0.f);
+		
 		return;
 	}
 
 	SetHP(GetHP() + m_fItemHealingSpeed);
+
+	SetHealing(m_fHealingCount / m_fItemHealingDuration * 100.f);
+
 	if (GetHP() + m_fItemHealingSpeed > m_fMaxHP) {
 		SetHP(GetMaxHP());
 	}
-
 }
 
 void ABaseCharacter::AddScore(int32 score)

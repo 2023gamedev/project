@@ -17,11 +17,6 @@ void UStaminaBar::NativeConstruct()
 
 void UStaminaBar::UpdateStaminaBar(float currenstamina)
 {
-
-	m_fCurrentStamina = currenstamina;
-
-
 	m_fCurrentStamina = currenstamina;
 	m_fCurrentStaminaRatio = FMath::Clamp(m_fCurrentStamina / m_fMaxStamina, 0.0f, 1.0f);
-
 }

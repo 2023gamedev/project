@@ -12,6 +12,7 @@
 
 class UHPBar;
 class UStaminaBar;
+class UHealingPB;
 
 // Player 캐릭터의 컨디션을 나타내는 Class
 
@@ -24,11 +25,13 @@ class PROJECT_API UConditionUI : public UBaseUI
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UHealingPB* HealingPB;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UHPBar* HPBar;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UStaminaBar* StaminaBar;
-
 
     void UpdateBar();
     virtual void NativeConstruct() override;

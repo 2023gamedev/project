@@ -214,6 +214,9 @@ public:
 	float GetStamina() { return m_fStamina; }
 	void SetStamina(float stamina) { m_fStamina = stamina; }
 
+	float GetHealing() { return m_fHealing; }
+	void SetHealing(float Healing) { m_fHealing = Healing; }
+
 	bool IsBleeding() { return m_bBleeding; }
 	void SetBleeding(bool bleeding) { m_bBleeding = bleeding; }
 
@@ -428,16 +431,19 @@ private:
 		
 
 	UPROPERTY(EditAnywhere)
-		float m_fStamina = 0.f;
+	float m_fStamina = 0.f;
 
 	UPROPERTY(EditAnywhere)
-		bool m_bBleeding = false;
+	float m_fHealing = 0.f;
 
 	UPROPERTY(EditAnywhere)
-		bool m_bSitDown = false;
+	bool m_bBleeding = false;
 
 	UPROPERTY(EditAnywhere)
-		bool m_bRun = false;
+	bool m_bSitDown = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bRun = false;
 
 	// 인벤토리
 
