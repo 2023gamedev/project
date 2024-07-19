@@ -825,7 +825,10 @@ void ABaseCharacter::Healing()
 			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
 		}
 		
-		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::HealingMontageEnded);
+		if (m_iHealingMontageFlag == 0) {
+			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::HealingMontageEnded);
+			++m_iHealingMontageFlag;
+		}
 	}
 }
 
@@ -840,6 +843,7 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 	//	Smoking();
 	//}
 
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	UpdateHealingSlot();
 }
 
@@ -865,7 +869,11 @@ void ABaseCharacter::BleedHealing()
 		AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
 		AnimInstance->PlayBleedHealingMontage(AnimPlaySpeed);
 
-		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::BleedHealingMontageEnded);
+		if (m_iBleedHealingMontageFlag == 0) {
+			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::BleedHealingMontageEnded);
+			++m_iBleedHealingMontageFlag;
+		}
+
 	}
 }
 
@@ -942,11 +950,15 @@ void ABaseCharacter::Throw()
 
 void ABaseCharacter::UpdateHealingSlot()
 {
-	QuickSlot[1].Count = QuickSlot[1].Count - 1;
-	int slotindex = QuickSlot[1].SlotReference;
-	Inventory[slotindex].Count = Inventory[slotindex].Count - 1;
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UpdateHealingSlot");
+	if (QuickSlot[1].Count > 0) {
+		QuickSlot[1].Count = QuickSlot[1].Count - 1;
+		int slotindex = QuickSlot[1].SlotReference;
+		Inventory[slotindex].Count = Inventory[slotindex].Count - 1;
+	}
 
-	if (QuickSlot[1].Count <= 0) {
+
+	if (QuickSlot[1].Count == 0) {
 		DestroyHealingItemSlot();
 	}
 	else {
