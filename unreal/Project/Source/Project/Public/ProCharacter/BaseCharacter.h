@@ -513,6 +513,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool m_bIsDeadPlay;
 
+	UPROPERTY(EditAnywhere)
+	int m_iHealingMontageFlag;
+
+	UPROPERTY(EditAnywhere)
+	int m_iBleedHealingMontageFlag;
+
 private:
 	uint32 PlayerId = 99;
 
