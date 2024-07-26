@@ -26,7 +26,7 @@ public:
 
 	void Init();
 
-	//void ShowAlert(const FString& Message);
+	void ShowAlert(const FString& Message);
 
 	FMoveStartGameUI MoveStartGameUI;
 
@@ -44,11 +44,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UEditableTextBox* PasswordBox;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	//TSubclassOf<UAlertUI> AlertUI;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UAlertUI> AlertUI;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	//UAlertUI* AlertUIWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UAlertUI* AlertUIWidget;
 
 private:
 

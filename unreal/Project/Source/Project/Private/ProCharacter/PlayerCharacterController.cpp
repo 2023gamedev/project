@@ -413,9 +413,17 @@ void APlayerCharacterController::Jump(const FInputActionValue& Value)
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	
 	if (basecharacter->GetStamina() >= 20) {
-		basecharacter->Jump();
-		basecharacter->SetStamina(basecharacter->GetStamina() - 20);
-		sendjump = true;
+		if (!basecharacter->GetMovementComponent()->IsFalling()) {
+			basecharacter->Jump();
+			basecharacter->SetStamina(basecharacter->GetStamina() - 20);
+			sendjump = true;
+
+			// 플레이어가 처음에 뛰는 키보다 jump키를 먼저 눌렀을 경우 예외상황 IF문
+			if (!basecharacter->IsRun()) {
+
+				basecharacter->HealingStamina();
+			}
+		}
 	}
 
 }
