@@ -6,32 +6,32 @@
 #include "ProUI/AlertUI.h"
 #include "LStruct.pb.h"
 
-//void ULoginUI::ShowAlert(const FString& Message)
-//{
-//    if (AlertUI == nullptr)
-//    {
-//        static ConstructorHelpers::FClassFinder<UAlertUI> PLAYER_ALERTUI(TEXT("/Game/UI/WBP_Alert"));
-//        if (PLAYER_ALERTUI.Succeeded()) {
-//            AlertUI = PLAYER_ALERTUI.Class;
-//        }
-//    }
-//
-//    if (!AlertUIWidget)
-//    {
-//        AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
-//        if (AlertUIWidget != nullptr)
-//        {
-//            AlertUIWidget->AddToViewport();
-//
-//            // AlertText 설정
-//            UTextBlock* AlertText = Cast<UTextBlock>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-//            if (AlertText != nullptr)
-//            {
-//                AlertText->SetText(FText::FromString(Message));
-//            }
-//        }
-//    }
-//}
+void ULoginUI::ShowAlert(const FString& Message)
+{
+    if (AlertUI == nullptr)
+    {
+        static ConstructorHelpers::FClassFinder<UAlertUI> PLAYER_ALERTUI(TEXT("/Game/UI/WBP_Alert"));
+        if (PLAYER_ALERTUI.Succeeded()) {
+            AlertUI = PLAYER_ALERTUI.Class;
+        }
+    }
+
+    if (!AlertUIWidget)
+    {
+        AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
+        if (AlertUIWidget != nullptr)
+        {
+            AlertUIWidget->AddToViewport();
+
+            // AlertText 설정
+            UTextBlock* AlertText = Cast<UTextBlock>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
+            if (AlertText != nullptr)
+            {
+                AlertText->SetText(FText::FromString(Message));
+            }
+        }
+    }
+}
 
 void ULoginUI::OnLoginButtonClicked()
 {
@@ -54,7 +54,13 @@ void ULoginUI::OnLoginButtonClicked()
     // 직렬화된 데이터를 서버로 전송
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
-    while (!GameInstance->ClientSocketPtr->recv_login) { FPlatformProcess::Sleep(0.01f); }
+    float timeout = 5.0f;
+    float elapsedTime = 0.0f;
+
+    while (!GameInstance->ClientSocketPtr->recv_login && elapsedTime < timeout) {
+        FPlatformProcess::Sleep(0.01f);
+        elapsedTime += 0.01f;
+    }
 
     if (GameInstance->ClientSocketPtr->b_login) {
         MoveStartGameUI.Execute();
@@ -62,7 +68,7 @@ void ULoginUI::OnLoginButtonClicked()
         RemoveFromParent();
     }
     else {
-        //ShowAlert(TEXT("로그인 실패"));
+        ShowAlert(TEXT("Login Fail"));
     }
 
     GameInstance->ClientSocketPtr->recv_login = false;
@@ -89,14 +95,21 @@ void ULoginUI::OnRegisterButtonClicked()
     // 직렬화된 데이터를 서버로 전송
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
-    while (!GameInstance->ClientSocketPtr->recv_register) { FPlatformProcess::Sleep(0.01f); }
+    float timeout = 5.0f;
+    float elapsedTime = 0.0f;
+
+    while (!GameInstance->ClientSocketPtr->recv_register && elapsedTime < timeout) {
+        FPlatformProcess::Sleep(0.01f);
+        elapsedTime += 0.01f;
+    }
+
     GameInstance->ClientSocketPtr->recv_register = false;
 
     if (GameInstance->ClientSocketPtr->b_register) {
-        //ShowAlert(TEXT("회원가입 성공"));
+        ShowAlert(TEXT("Register Success"));
     }
     else {
-        //ShowAlert(TEXT("회원가입 실패"));
+        ShowAlert(TEXT("Register Fail"));
     }
 }
 
