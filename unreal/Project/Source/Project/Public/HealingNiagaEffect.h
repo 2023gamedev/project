@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
 #include "HealingNiagaEffect.generated.h"
 
 UCLASS()
@@ -12,15 +14,13 @@ class PROJECT_API AHealingNiagaEffect : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
-	AHealingNiagaEffect();
+	UPROPERTY()
+	UStaticMeshComponent* Mesh;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
+	UNiagaraSystem* HealingFXSystem;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
+	UNiagaraComponent* HealingFXComponent;
 
 };
