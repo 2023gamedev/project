@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
-#include "Components/TextBlock.h"
+#include "Components/EditableTextBox.h"
 #include "AlertUI.generated.h"
 
 /**
@@ -37,7 +37,7 @@ public:
 	}
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UTextBlock* AlertText;
+	UEditableTextBox* AlertText;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* CloseButton;

@@ -10,28 +10,43 @@ void ULoginUI::ShowAlert(const FString& Message)
 {
     if (AlertUI == nullptr)
     {
-        static ConstructorHelpers::FClassFinder<UAlertUI> PLAYER_ALERTUI(TEXT("/Game/UI/WBP_Alert"));
-        if (PLAYER_ALERTUI.Succeeded()) {
-            AlertUI = PLAYER_ALERTUI.Class;
+        // Load the UAlertUI class at runtime
+        AlertUI = LoadClass<UAlertUI>(nullptr, TEXT("/Game/UI/BP_Alert.BP_Alert_C"));
+        if (AlertUI == nullptr)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Could not load AlertUI class"));
+            return;
         }
     }
 
-    if (!AlertUIWidget)
+    if (AlertUIWidget == nullptr)
     {
         AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
         if (AlertUIWidget != nullptr)
         {
             AlertUIWidget->AddToViewport();
 
-            // AlertText ¼³Á¤
             UTextBlock* AlertText = Cast<UTextBlock>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
             if (AlertText != nullptr)
             {
                 AlertText->SetText(FText::FromString(Message));
             }
         }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Could not create AlertUIWidget"));
+        }
+    }
+    else
+    {
+        UTextBlock* AlertText = Cast<UTextBlock>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
+        if (AlertText != nullptr)
+        {
+            AlertText->SetText(FText::FromString(Message));
+        }
     }
 }
+
 
 void ULoginUI::OnLoginButtonClicked()
 {
