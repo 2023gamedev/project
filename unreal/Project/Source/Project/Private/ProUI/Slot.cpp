@@ -163,6 +163,11 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 	FEventReply eventreply;
 	eventreply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
+	// QuickSlot을 클릭하면 아무 동작도 하지 않도록 처리
+	if (Type == ESlotType::SLOT_QUICK) {
+		return FReply::Handled();
+	}
+
 	if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton) == true) { // 퀵슬롯에 넣어주거나 해제하는 역할 할 예정
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Right Button Down"));
 
