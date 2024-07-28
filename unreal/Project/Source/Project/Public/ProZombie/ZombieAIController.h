@@ -7,10 +7,13 @@
 #include "ClientSocket.h"
 #include "ZombieAIController.generated.h"
 
+
+
 /**
  * 
  */
  // Zombie를 컨트롤하는 컨트롤러의 부모 클래스
+// AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API AZombieAIController : public AAIController
 {

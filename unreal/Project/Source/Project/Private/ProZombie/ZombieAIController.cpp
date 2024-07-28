@@ -13,6 +13,8 @@
 #include "ProZombie/NormalZombie.h"
 #include "ProGamemode/ProGameInstance.h"
 
+// AI 추가되면 수정될 것 같은 것!!
+
 const FName AZombieAIController::TargetKey(TEXT("Target"));
 const FName AZombieAIController::StartLocationKey(TEXT("StartLocation"));
 const FName AZombieAIController::PatrolLocationKey(TEXT("PatrolLocation"));

@@ -6,10 +6,13 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_Attack.generated.h"
 
+// AI 추가되면 수정될 것 같은 것!!
+
 /**
  * 
  */
  // Zombie 어택 클래스
+ // AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API UBTTask_Attack : public UBTTaskNode
 {

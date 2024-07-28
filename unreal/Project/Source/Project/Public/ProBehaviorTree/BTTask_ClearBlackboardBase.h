@@ -6,10 +6,13 @@
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "BTTask_ClearBlackboardBase.generated.h"
 
+
+
 /**
  * 
  */
  // Blackboard에서 변수를 초기화하는 클래스
+ // AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API UBTTask_ClearBlackboardBase : public UBTTask_BlackboardBase
 {

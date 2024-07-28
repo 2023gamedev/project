@@ -10,6 +10,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 
+// AI 추가되면 수정될 것 같은 것!!
+
 UBTService_Detect::UBTService_Detect()
 {
 	NodeName = "Detect";

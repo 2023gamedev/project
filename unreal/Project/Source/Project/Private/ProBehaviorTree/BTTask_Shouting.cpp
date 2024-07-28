@@ -5,6 +5,8 @@
 #include "ProZombie/ShoutingZombieAIController.h"
 #include "ProZombie/BaseZombie.h"
 
+// AI 추가되면 수정될 것 같은 것!!
+
 UBTTask_Shouting::UBTTask_Shouting()
 {
 	bNotifyTick = true;

@@ -10,6 +10,8 @@
 #include "ProZombie//BaseZombie.h"
 #include "DrawDebugHelpers.h"
 
+// AI 추가되면 수정될 것 같은 것!!
+
 UBTService_CanAttack::UBTService_CanAttack()
 {
 	NodeName = "SCanAttack";

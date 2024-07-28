@@ -9,6 +9,8 @@
 #include "ProZombie//BaseZombie.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+// AI 추가되면 수정될 것 같은 것!!
+
 UBTIsinAttackRange::UBTIsinAttackRange()
 {
 	NodeName = TEXT("CanAttack");
