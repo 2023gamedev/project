@@ -5,6 +5,7 @@
 
 void UAlertUI::OnCloseButtonClicked()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Close button clicked"));
 	RemoveFromParent();
 }
 

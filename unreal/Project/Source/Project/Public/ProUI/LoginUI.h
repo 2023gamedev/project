@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "ProUI/AlertUI.h"
 #include "Components/EditableTextBox.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
@@ -27,6 +28,8 @@ public:
 	void Init();
 
 	void ShowAlert(const FString& Message);
+
+	void OnCloseAlert();
 
 	FMoveStartGameUI MoveStartGameUI;
 

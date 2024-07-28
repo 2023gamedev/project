@@ -3,47 +3,51 @@
 
 #include "ProUI/LoginUI.h"
 #include "Kismet/GameplayStatics.h"
-#include "ProUI/AlertUI.h"
 #include "LStruct.pb.h"
 
 void ULoginUI::ShowAlert(const FString& Message)
 {
-    if (AlertUI == nullptr)
+    if (!AlertUI)
     {
-        // Load the UAlertUI class at runtime
-        AlertUI = LoadClass<UAlertUI>(nullptr, TEXT("/Game/UI/BP_Alert.BP_Alert_C"));
-        if (AlertUI == nullptr)
-        {
-            UE_LOG(LogTemp, Warning, TEXT("Could not load AlertUI class"));
-            return;
-        }
+        UE_LOG(LogTemp, Warning, TEXT("AlertUIClass is not set"));
+        return;
     }
 
-    if (AlertUIWidget == nullptr)
+    if (!AlertUIWidget)
     {
         AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
-        if (AlertUIWidget != nullptr)
+        if (AlertUIWidget)
         {
             AlertUIWidget->AddToViewport();
-
-            UTextBlock* AlertText = Cast<UTextBlock>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-            if (AlertText != nullptr)
+            UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
+            if (AlertText)
             {
                 AlertText->SetText(FText::FromString(Message));
             }
-        }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("Could not create AlertUIWidget"));
+
+            // Add Close button click event binding
+            if (AlertUIWidget->CloseButton)
+            {
+                AlertUIWidget->CloseButton->OnClicked.AddDynamic(this, &ULoginUI::OnCloseAlert);
+            }
         }
     }
     else
     {
-        UTextBlock* AlertText = Cast<UTextBlock>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-        if (AlertText != nullptr)
+        UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
+        if (AlertText)
         {
             AlertText->SetText(FText::FromString(Message));
         }
+    }
+}
+
+void ULoginUI::OnCloseAlert()
+{
+    if (AlertUIWidget)
+    {
+        AlertUIWidget->RemoveFromParent();
+        AlertUIWidget = nullptr;
     }
 }
 

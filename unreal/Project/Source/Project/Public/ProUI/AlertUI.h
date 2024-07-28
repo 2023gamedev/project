@@ -19,22 +19,11 @@ class PROJECT_API UAlertUI : public UUserWidget
 private:
 
 	UFUNCTION(BlueprintCallable)
-	void OnCloseButtonClicked()
-	{
-		RemoveFromParent();
-	}
+	void OnCloseButtonClicked();
 
 public:
 
-	void Init()
-	{
-		if (CloseButton)
-		{
-			CloseButton->SetClickMethod(EButtonClickMethod::DownAndUp);
-			CloseButton->OnClicked.AddDynamic(this, &UAlertUI::OnCloseButtonClicked);
-			CloseButton->SetIsEnabled(true);
-		}
-	}
+	void Init();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UEditableTextBox* AlertText;
