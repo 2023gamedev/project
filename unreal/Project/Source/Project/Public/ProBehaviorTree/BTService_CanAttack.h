@@ -6,9 +6,11 @@
 #include "BehaviorTree/BTService.h"
 #include "BTService_CanAttack.generated.h"
 
+
 /**
  * 
  */
+ // AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API UBTService_CanAttack : public UBTService
 {

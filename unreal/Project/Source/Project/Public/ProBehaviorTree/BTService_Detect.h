@@ -6,10 +6,13 @@
 #include "BehaviorTree/BTService.h"
 #include "BTService_Detect.generated.h"
 
+
+
 /**
  * 
  */
  // Zombie 감지 범위 클래스
+ // AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API UBTService_Detect : public UBTService
 {

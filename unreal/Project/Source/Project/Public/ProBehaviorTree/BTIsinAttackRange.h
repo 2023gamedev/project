@@ -6,10 +6,12 @@
 #include "BehaviorTree/BTDecorator.h"
 #include "BTIsinAttackRange.generated.h"
 
+
 /**
  * 
  */
 // Zombie의 공격범위에 Player가 들어와 있는가에 대한 Decorator Class
+// AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API UBTIsinAttackRange : public UBTDecorator
 {
