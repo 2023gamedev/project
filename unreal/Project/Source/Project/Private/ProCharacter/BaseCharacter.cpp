@@ -73,6 +73,8 @@
 #include "ProUI/CircularPB_UI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
+#include "HealingNiagaEffect.h"
+
 #define default_circularPB_widget_anim_playtime 5.f
 #define default_healing_anim_playtime 4.57f
 #define default_bleedhealing_anim_playtime 9.f
@@ -291,8 +293,6 @@ void ABaseCharacter::BeginPlay()
 		CircularPB_Widget->AddToViewport();
 		CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
 	}
-
-
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -1667,6 +1667,8 @@ void ABaseCharacter::FootSound()
 
 void ABaseCharacter::StartHealingTimer(float healingspeed, float healingduration)
 {
+	//HealingFX->BeginPlay();
+
 	if (m_bIsHealingTime) {
 		return;
 	}
