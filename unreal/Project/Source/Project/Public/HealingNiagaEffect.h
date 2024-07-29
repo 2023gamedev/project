@@ -14,6 +14,12 @@ class PROJECT_API AHealingNiagaEffect : public AActor
 	GENERATED_BODY()
 	
 public:	
+	AHealingNiagaEffect();
+
+	void BeginPlay();
+
+	void Interaction();
+
 	UPROPERTY()
 	UStaticMeshComponent* Mesh;
 

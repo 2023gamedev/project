@@ -11,7 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <atomic>
 
-// ±¸Á¶Ã¼
+// ï¿½ï¿½ï¿½ï¿½Ã¼
 #include "ProData/ItemDataStructure.h"
 
 #include "BaseCharacter.generated.h"
@@ -35,7 +35,7 @@ DECLARE_MULTICAST_DELEGATE(FAttackEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FPickUpEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FBleedHealingEndPlayerDelegate);
 
-// ÇÃ·¹ÀÌ¾î Ä³¸¯ÅÍµéÀÇ ºÎ¸ðÅ¬·¡½º
+// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ä³ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ ï¿½Î¸ï¿½Å¬ï¿½ï¿½ï¿½ï¿½
 UCLASS()
 class PROJECT_API ABaseCharacter : public ACharacter
 {
@@ -60,25 +60,25 @@ public:
 	bool DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype);
 	bool SwapInven(int from, int to);
 
-	// ¹Ù´Ú¿¡ ¶³¾îÆ®¸®´Â µ¨¸®°ÔÀÌÆ® 
+	// ï¿½Ù´Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® 
 	FThrowOnGround ThrowOnGround;
 	void SpawnOnGround(int slotindex);
 
 	void AttackCheck();
 
-	// ½ºÇÁ¸µ ¾Ï
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
 		USpringArmComponent* SpringArm;
 
-	// Ä«¸Þ¶ó
+	// Ä«ï¿½Þ¶ï¿½
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* Camera;
 
-	// ÇÃ·¹ÀÌ¾î°¡ ¹°Ã¼¸¦ ¹Ù¶óº¸´ÂÁö
+	// ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ù¶óº¸´ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
 		UPlayerSight* PlayerSight;
 
-	// Äü½½·Ô¿¡ ÀÖ´Â ¾ÆÀÌÅÛµé ³ÖÀ» ¿¹Á¤
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ûµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
 	ANormalWeaponActor* CurrentWeapon;
 
@@ -98,7 +98,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* FlashLight;
 
-	// °ÔÀÓ ÀüÃ¼ UI
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TArray<FItemDataStructure> Inventory;
 
@@ -290,14 +290,14 @@ public:
 
 	void GameUIUpdate();
 
-	// Äü½½·Ô ÀåÂø ½Ã »ý¼º
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	void SpawnNormalWeapon();
 	void SpawnThrowWeapon();
 	void SpawnHealingItem();
 	void SpawnBleedingHealingItem();
 	void SpawnKeyItem();
 
-	// Äü½½·Ô ÇØÁ¦ ½Ã »èÁ¦
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	void DestroyNormalWeapon();
 	void DestroyThrowWeapon();
 	void DestroyHealingItem();
@@ -305,7 +305,7 @@ public:
 	void DestroyKeyItem();
 
 
-	// ½½·Ô¿¡ ¾ÆÀÌÅÛ ³»¿ë »èÁ¦
+	// ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	void DestroyNormalWepaonItemSlot();
 	void DestroyThrowWeaponItemSlot();
 	void DestroyHealingItemSlot();
@@ -314,7 +314,7 @@ public:
 
 	void FootSound();
 
-	// Ã¼·Â Timer
+	// Ã¼ï¿½ï¿½ Timer
 	void StartHealingTimer(float healingspeed, float healingduration);
 	void HealingTimerElapsed();
 
@@ -341,10 +341,10 @@ public:
 	void ProStartGameEnd();
 	void ProGameEnd();
 
-	// ¼Ò¹æ°ü
+	// ï¿½Ò¹ï¿½ï¿½
 	virtual void Smoking() {};
 
-	// ÃâÇ÷ È¸º¹
+	// ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½
 	FBleedHealingEndPlayerDelegate m_DBleedingHealingEnd;
 	FTimerHandle BleedingHandle;
 	void StartBleedingTimer();
@@ -359,7 +359,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	float m_fBleedPercent = 0.3f;
 
-	// ½ºÅÂ¹Ì³ª ºÎºÐ
+	// ï¿½ï¿½ï¿½Â¹Ì³ï¿½ ï¿½Îºï¿½
 	FTimerHandle UseStaminaHandle;
 
 	void UseStamina();
@@ -445,7 +445,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool m_bRun = false;
 
-	// ÀÎº¥Åä¸®
+	// ï¿½Îºï¿½ï¿½ä¸®
 
 	UPROPERTY(EditAnywhere)
 	bool m_bNWHandIn = false;
@@ -471,14 +471,14 @@ private:
 	UPROPERTY(EditAnywhere)
 	int m_iInvenSize = 5;
 
-	// ¾îÅÃ
+	// ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
 	bool m_bIsAttacking = false;
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsPickUping = false;
 
-	// ¼ÕÀüµîÀÌ ÄÑÁ®ÀÖ´ÂÁö
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere)
 	bool m_bOnSpotLight = true;
 
@@ -491,7 +491,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	FName m_nCharacterName;
 
-	// ÇöÀç 
+	// ï¿½ï¿½ï¿½ï¿½ 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsBringCurrentWeapon;
 

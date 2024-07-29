@@ -10,7 +10,7 @@
 
 #include "ProZombie/BaseZombie.h"
 
-// ³ë¸» ¹«±â
+// ï¿½ë¸» ï¿½ï¿½ï¿½ï¿½
 #include "ProItem/NormalWeaponActor.h"
 #include "ProItem/NWBook.h"
 #include "ProItem/NWBottle.h"
@@ -31,10 +31,10 @@
 #include "ProItem/NWSquareWood.h"
 #include "ProItem/NWWoodenBat.h"
 
-// ÅõÃ´ ¹«±â
+// ï¿½ï¿½Ã´ ï¿½ï¿½ï¿½ï¿½
 #include "ProItem/ThrowWeaponActor.h"
 
-// »óÃ³È¸º¹ ¾ÆÀÌÅÛ
+// ï¿½ï¿½Ã³È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #include "ProItem/HealingItemActor.h"
 #include "ProItem/HCannedTuna.h"
 #include "ProItem/HDisinfectant.h"
@@ -44,7 +44,7 @@
 #include "ProItem/HSnack.h"
 #include "ProItem/HWater.h"
 
-// Å° ¾ÆÀÌÅÛ
+// Å° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #include "ProItem/KeyActor.h"
 #include "ProItem/KCarkey1.h"
 #include "ProItem/KCarkey2.h"
@@ -54,7 +54,7 @@
 #include "ProItem/KRoofKey2.h"
 
 
-// ÃâÇ÷È¸º¹ ¾ÆÀÌÅÛ
+// ï¿½ï¿½ï¿½ï¿½È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #include "ProItem/BleedingHealingItemActor.h"
 #include "ProItem/BHBandage.h"
 #include "ProItem/BHClothes.h"
@@ -76,10 +76,10 @@
 #define default_circularPB_widget_anim_playtime 5.f
 #define default_healing_anim_playtime 4.57f
 #define default_bleedhealing_anim_playtime 9.f
-#define playtime_8_sec 8.f			// Å° »ç¿ë½Ã°£
-#define playtime_4_sec 4.f			// ÂüÄ¡Äµ, ¼Òµ¶¾à, ¿¬°í »ç¿ë½Ã°£
-#define playtime_3_5_sec 3.5f		// °úÀÚ »ç¿ë½Ã°£
-#define playtime_3_sec 3.f			// À½·á¼ö, ´ã¹è, ¹° »ç¿ë½Ã & ÃâÇ÷ È¸º¹¿ë ¾ÆÀÌÅÛ »ç¿ë½Ã°£
+#define playtime_8_sec 8.f			// Å° ï¿½ï¿½ï¿½Ã°ï¿½
+#define playtime_4_sec 4.f			// ï¿½ï¿½Ä¡Äµ, ï¿½Òµï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½
+#define playtime_3_5_sec 3.5f		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½
+#define playtime_3_sec 3.f			// ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ & ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½
 
 
 
@@ -178,9 +178,9 @@ ABaseCharacter::ABaseCharacter()
 
 
 
-	// ½ºÆ÷Æ® ¶óÀÌÆ®ÀÇ ¼Ó¼º ¼³Á¤ (À§Ä¡, È¸Àü µî)
+	// ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ó¼ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Ä¡, È¸ï¿½ï¿½ ï¿½ï¿½)
 	FlashLight->SetRelativeLocationAndRotation(FVector(303.f, -24.f, 117.f), FRotator( 0.f, 0.f, 0.f));
-	// ±âÅ¸ ¼³Á¤ (»ö»ó, °­µµ µî)
+	// ï¿½ï¿½Å¸ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½)
 	FlashLight->SetLightColor(FLinearColor::White);
 	FlashLight->SetIntensity(5000.f);
 	FlashLight->SetOuterConeAngle(60.f);
@@ -327,7 +327,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 			Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
 		}
 
-		// ¾Ö´Ï¸ÞÀÌ¼Ç ÀÎ½ºÅÏ½º¿¡ ¼Óµµ ÆÄ¶ó¹ÌÅÍ ¼³Á¤
+		// ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
 		{
 			auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -632,7 +632,7 @@ void ABaseCharacter::Turn(float NewAxisValue)
 {
 	AddControllerYawInput(NewAxisValue);
 }
-// ¼öÁ¤ ÇÊ¿ä
+// ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 void ABaseCharacter::GetItem()
 {
 	if (PlayerSight->GetIsHit()) {
@@ -640,7 +640,7 @@ void ABaseCharacter::GetItem()
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
 		if (itembox) {
 
-			// ¾ÆÀÌÅÛ¹Ú½º¿¡ ÀÖ´Â ¾ÆÀÌÅÛ¿¡ ´ëÇÑ Á¤º¸¸¦ °¡Á®¿Â´Ù.
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Û¹Ú½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
 					if (i >= GetInvenSize()) {
@@ -654,7 +654,7 @@ void ABaseCharacter::GetItem()
 			}
 
 			PickUp();
-			// ¾ÆÀÌÅÛ¹Ú½º¿¡ ÀÖ´Â ¾ÆÀÌÅÛ¿¡ ´ëÇÑ Á¤º¸¸¦ °¡Á®¿Â´Ù.
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Û¹Ú½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
 					Inventory[i].Type = EItemType::ITEM_USEABLE;
@@ -722,7 +722,7 @@ void ABaseCharacter::LightOnOff()
 
 void ABaseCharacter::InventoryOnOff()
 {
-	// ÀÛ¼º ÇÊ¿ä
+	// ï¿½Û¼ï¿½ ï¿½Ê¿ï¿½
 	UE_LOG(LogTemp, Warning, TEXT("InvenOpen"));
 	if (GameUIWidget != nullptr) {
 		if (IsInventory()) {
@@ -772,7 +772,7 @@ void ABaseCharacter::AttackCheck()
 	//}
 }
 
-void ABaseCharacter::Attack() // ´Ù¸¥ ÇÔ¼ö µÖ¼­ ¾î¶² ¹«±â µé¾úÀ»¶§´Â attack Èú¸µ ¾ÆÀÌÅÛÀº ¸Ô´Â µ¿ÀÛ ÀÌ·±°Íµé ÇÔ¼ö È£ÃâÇÏµµ·Ï ÇÏ¸é µÉµí
+void ABaseCharacter::Attack() // ï¿½Ù¸ï¿½ ï¿½Ô¼ï¿½ ï¿½Ö¼ï¿½ ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ attack ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·ï¿½ï¿½Íµï¿½ ï¿½Ô¼ï¿½ È£ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½Éµï¿½
 {
 	if (m_bIsAttacking) {
 		return;
@@ -1209,10 +1209,10 @@ void ABaseCharacter::SpawnNormalWeapon()
 			CurrentWeapon->ItemHandPos = FVector(0.f, -8.394180f, 0.f);
 			CurrentWeapon->ItemHandRot = FRotator(-0.000076f, -20.000723f, 0.000053f);
 			
-			//// ±âÁ¸ º» º¯È¯À» ÀúÀå
+			//// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			//FTransform OriginalTransform = SkeletalMesh->GetBoneTransform(SkeletalMesh->GetBoneIndex("thumb_01_r"));
 			//
-			//// »õ È¸ÀüÀ¸·Î º» È¸Àü º¯°æ
+			//// ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			//FTransform NewTransform = OriginalTransform;
 			//FRotator NewRotation(2.931057f, 26.780522f, 21.615626f);
 			//NewTransform.SetRotation(NewRotation.Quaternion());
@@ -1654,7 +1654,7 @@ void ABaseCharacter::FootSound()
 
 		for (const FOverlapResult& OverlapResult : OverlapResults)
 		{
-			// ABaseZombieÀÎÁö È®ÀÎ
+			// ABaseZombieï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
 			if (OverlappedZombie)
 			{
@@ -1738,7 +1738,7 @@ void ABaseCharacter::ProGameEnd()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if (PlayerController)
 	{
-		// 'quit' ¸í·ÉÀ» ½ÇÇàÇÏ¿© °ÔÀÓ Á¾·á
+		// 'quit' ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		PlayerController->ConsoleCommand("quit");
 	}
 }
@@ -1838,7 +1838,7 @@ void ABaseCharacter::ProGameDeadEnd()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if (PlayerController)
 	{
-		// 'quit' ¸í·ÉÀ» ½ÇÇàÇÏ¿© °ÔÀÓ Á¾·á
+		// 'quit' ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		PlayerController->ConsoleCommand("quit");
 	}
 }
@@ -1853,7 +1853,7 @@ void ABaseCharacter::ProGameTimerEnd()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if (PlayerController)
 	{
-		// 'quit' ¸í·ÉÀ» ½ÇÇàÇÏ¿© °ÔÀÓ Á¾·á
+		// 'quit' ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		PlayerController->ConsoleCommand("quit");
 	}
 }

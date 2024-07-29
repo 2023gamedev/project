@@ -17,7 +17,7 @@ AHealingNiagaEffect::AHealingNiagaEffect()
 	RootComponent = Mesh;
 
 
-	static ConstructorHelpers:FObjectFinder<UNiagaraSystem> NE(TEXT("NiagaraSystem'2024_project/unreal/Project/Content/HealingEffect'"));
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NE(TEXT("NiagaraSystem'2024_project/unreal/Project/Content/HealingEffect'"));
 	if (NE.Succeeded())
 	{
 		HealingFXSystem = NE.Object;
