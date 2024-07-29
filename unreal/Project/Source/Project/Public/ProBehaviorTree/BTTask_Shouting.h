@@ -6,10 +6,13 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_Shouting.generated.h"
 
+
+
 /**
  * 
  */
  // Zombie가 소리치는 클래스
+ // AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API UBTTask_Shouting : public UBTTaskNode
 {

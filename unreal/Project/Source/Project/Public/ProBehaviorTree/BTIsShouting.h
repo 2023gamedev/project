@@ -6,10 +6,14 @@
 #include "BehaviorTree/BTDecorator.h"
 #include "BTIsShouting.generated.h"
 
+
+
 /**
  * 
  */
  // Zombie가 소리치는가에 Decorator
+ // AI 추가되면 수정될 것 같은 것!!
+
 UCLASS()
 class PROJECT_API UBTIsShouting : public UBTDecorator
 {

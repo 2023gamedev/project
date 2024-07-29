@@ -12,6 +12,8 @@
 #include "ProGamemode/OneGameModeBase.h"
 #include "ProGamemode/ProGameInstance.h"
 
+// AI 추가되면 수정될 것 같은 것!!
+
 const FName ARunningZombieAIController::TargetKey(TEXT("Target"));
 const FName ARunningZombieAIController::StartLocationKey(TEXT("StartLocation"));
 const FName ARunningZombieAIController::PatrolLocationKey(TEXT("PatrolLocation"));

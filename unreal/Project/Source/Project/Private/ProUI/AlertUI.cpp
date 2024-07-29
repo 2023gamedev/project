@@ -5,6 +5,10 @@
 
 void UAlertUI::OnCloseButtonClicked()
 {
+<<<<<<< HEAD
+=======
+	UE_LOG(LogTemp, Warning, TEXT("Close button clicked"));
+>>>>>>> 524c51fb7f427e390d4f5a16137597dfd8bcf475
 	RemoveFromParent();
 }
 

@@ -7,10 +7,12 @@
 #include "ClientSocket.h"
 #include "RunningZombieAIController.generated.h"
 
+
 /**
  * 
  */
  // RunningZombie(달리는 좀비)를 컨트롤하는 컨트롤러
+// AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API ARunningZombieAIController : public AAIController
 {
