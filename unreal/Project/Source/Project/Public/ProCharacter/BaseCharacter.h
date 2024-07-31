@@ -11,7 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <atomic>
 
-// ����ü
+// 구조체
 #include "ProData/ItemDataStructure.h"
 
 #include "BaseCharacter.generated.h"
@@ -35,7 +35,7 @@ DECLARE_MULTICAST_DELEGATE(FAttackEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FPickUpEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FBleedHealingEndPlayerDelegate);
 
-// �÷��̾� ĳ���͵��� �θ�Ŭ����
+// 플레이어 캐릭터들의 부모클래스
 UCLASS()
 class PROJECT_API ABaseCharacter : public ACharacter
 {
@@ -60,25 +60,25 @@ public:
 	bool DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype);
 	bool SwapInven(int from, int to);
 
-	// �ٴڿ� ����Ʈ���� ��������Ʈ 
+	// 바닥에 떨어트리는 델리게이트 
 	FThrowOnGround ThrowOnGround;
 	void SpawnOnGround(int slotindex);
 
 	void AttackCheck();
 
-	// ������ ��
+	// 스프링 암
 	UPROPERTY(EditAnywhere)
-		USpringArmComponent* SpringArm;
+	USpringArmComponent* SpringArm;
 
-	// ī�޶�
+	// 카메라
 	UPROPERTY(EditAnywhere)
-		UCameraComponent* Camera;
+	UCameraComponent* Camera;
 
-	// �÷��̾ ��ü�� �ٶ󺸴���
+	// 플레이어가 물체를 바라보는지
 	UPROPERTY(EditAnywhere)
-		UPlayerSight* PlayerSight;
+	UPlayerSight* PlayerSight;
 
-	// �����Կ� �ִ� �����۵� ���� ����
+	// 퀵슬롯에 있는 아이템들 넣을 예정
 	UPROPERTY(EditAnywhere)
 	ANormalWeaponActor* CurrentWeapon;
 
@@ -91,17 +91,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	ABleedingHealingItemActor* CurrentBleedingHealingItem;
 
-	UPROPERTY(EditAnywhere);
+	UPROPERTY(EditAnywhere)
 	AKeyActor* CurrentKeyItem;
-	
-	//UPROPERTY(EditAnywhere)
-	//AHealingNiagaEffect* HealingFX;
 
 
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* FlashLight;
 
-	// ���� ��ü UI
+	// 게임 전체 UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TArray<FItemDataStructure> Inventory;
 
@@ -166,7 +163,7 @@ public:
 
 	// input
 	void MoveForward(FVector RotateYaw, float NewAxisValue);
-	void MoveLeft(FVector RotateYaw , float NewAxisValue);
+	void MoveLeft(FVector RotateYaw, float NewAxisValue);
 	void Run();
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
@@ -293,14 +290,14 @@ public:
 
 	void GameUIUpdate();
 
-	// ������ ���� �� ����
+	// 퀵슬롯 장착 시 생성
 	void SpawnNormalWeapon();
 	void SpawnThrowWeapon();
 	void SpawnHealingItem();
 	void SpawnBleedingHealingItem();
 	void SpawnKeyItem();
 
-	// ������ ���� �� ����
+	// 퀵슬롯 해제 시 삭제
 	void DestroyNormalWeapon();
 	void DestroyThrowWeapon();
 	void DestroyHealingItem();
@@ -308,7 +305,7 @@ public:
 	void DestroyKeyItem();
 
 
-	// ���Կ� ������ ���� ����
+	// 슬롯에 아이템 내용 삭제
 	void DestroyNormalWepaonItemSlot();
 	void DestroyThrowWeaponItemSlot();
 	void DestroyHealingItemSlot();
@@ -317,7 +314,7 @@ public:
 
 	void FootSound();
 
-	// ü�� Timer
+	// 체력 Timer
 	void StartHealingTimer(float healingspeed, float healingduration);
 	void HealingTimerElapsed();
 
@@ -344,10 +341,10 @@ public:
 	void ProStartGameEnd();
 	void ProGameEnd();
 
-	// �ҹ��
+	// 소방관
 	virtual void Smoking() {};
 
-	// ���� ȸ��
+	// 출혈 회복
 	FBleedHealingEndPlayerDelegate m_DBleedingHealingEnd;
 	FTimerHandle BleedingHandle;
 	void StartBleedingTimer();
@@ -362,7 +359,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	float m_fBleedPercent = 0.3f;
 
-	// ���¹̳� �κ�
+	// 스태미나 부분
 	FTimerHandle UseStaminaHandle;
 
 	void UseStamina();
@@ -387,7 +384,7 @@ public:
 	void ProStartGameTimerEnd();
 	void ProGameTimerEnd();
 
-	
+
 	virtual uint32 GetPlayerId() const;
 	void SetPlayerId(uint32 NewPlayerId);
 	void UpdatePlayerData(FVector Location);
@@ -427,11 +424,11 @@ private:
 	float m_fSTR = 0.f;
 
 	UPROPERTY(EditAnywhere)
-		float m_fSpeed = 0.f;
+	float m_fSpeed = 0.f;
 
 	UPROPERTY(EditAnywhere)
 	float m_fBasicSpeed = 0.f;
-		
+
 
 	UPROPERTY(EditAnywhere)
 	float m_fStamina = 0.f;
@@ -448,7 +445,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool m_bRun = false;
 
-	// �κ��丮
+	// 인벤토리
 
 	UPROPERTY(EditAnywhere)
 	bool m_bNWHandIn = false;
@@ -464,7 +461,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	bool m_bThrowWHandIn = false;
-		
+
 	UPROPERTY(EditAnywhere)
 	bool m_bSpecialEffect = false;
 
@@ -474,14 +471,14 @@ private:
 	UPROPERTY(EditAnywhere)
 	int m_iInvenSize = 5;
 
-	// ����
+	// 어택
 	UPROPERTY(EditAnywhere)
 	bool m_bIsAttacking = false;
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsPickUping = false;
 
-	// �������� �����ִ���
+	// 손전등이 켜져있는지
 	UPROPERTY(EditAnywhere)
 	bool m_bOnSpotLight = true;
 
@@ -494,7 +491,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	FName m_nCharacterName;
 
-	// ���� 
+	// 현재 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsBringCurrentWeapon;
 

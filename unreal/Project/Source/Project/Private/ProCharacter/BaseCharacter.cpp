@@ -10,7 +10,7 @@
 
 #include "ProZombie/BaseZombie.h"
 
-// �븻 ����
+// 노말 무기
 #include "ProItem/NormalWeaponActor.h"
 #include "ProItem/NWBook.h"
 #include "ProItem/NWBottle.h"
@@ -31,10 +31,10 @@
 #include "ProItem/NWSquareWood.h"
 #include "ProItem/NWWoodenBat.h"
 
-// ��ô ����
+// 투척 무기
 #include "ProItem/ThrowWeaponActor.h"
 
-// ��óȸ�� ������
+// 상처회복 아이템
 #include "ProItem/HealingItemActor.h"
 #include "ProItem/HCannedTuna.h"
 #include "ProItem/HDisinfectant.h"
@@ -44,7 +44,7 @@
 #include "ProItem/HSnack.h"
 #include "ProItem/HWater.h"
 
-// Ű ������
+// 키 아이템
 #include "ProItem/KeyActor.h"
 #include "ProItem/KCarkey1.h"
 #include "ProItem/KCarkey2.h"
@@ -54,7 +54,7 @@
 #include "ProItem/KRoofKey2.h"
 
 
-// ����ȸ�� ������
+// 출혈회복 아이템
 #include "ProItem/BleedingHealingItemActor.h"
 #include "ProItem/BHBandage.h"
 #include "ProItem/BHClothes.h"
@@ -73,15 +73,13 @@
 #include "ProUI/CircularPB_UI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 
-#include "HealingNiagaEffect.h"
-
 #define default_circularPB_widget_anim_playtime 5.f
 #define default_healing_anim_playtime 4.57f
 #define default_bleedhealing_anim_playtime 9.f
-#define playtime_8_sec 8.f			// Ű ���ð�
-#define playtime_4_sec 4.f			// ��ġĵ, �ҵ���, ���� ���ð�
-#define playtime_3_5_sec 3.5f		// ���� ���ð�
-#define playtime_3_sec 3.f			// �����, ���, �� ���� & ���� ȸ���� ������ ���ð�
+#define playtime_8_sec 8.f			// 키 사용시간
+#define playtime_4_sec 4.f			// 참치캔, 소독약, 연고 사용시간
+#define playtime_3_5_sec 3.5f		// 과자 사용시간
+#define playtime_3_sec 3.f			// 음료수, 담배, 물 사용시 & 출혈 회복용 아이템 사용시간
 
 
 
@@ -102,12 +100,12 @@ ABaseCharacter::ABaseCharacter()
 	FlashLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("FLASHLIGHT"));
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
-	
+
 	Camera->SetupAttachment(SpringArm);
 	FlashLight->SetupAttachment(SpringArm);
 	PlayerSight->SetupAttachment(Camera);
 	PlayerSight->SetRelativeLocation(FVector(150.f, 0.f, 88.f));
-	
+
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.f), FRotator(0.f, -90.f, 0.f));
 	SpringArm->TargetArmLength = 300.f;
 	SpringArm->SetRelativeRotation(FRotator(-30.f, 0.f, 0.f));
@@ -160,7 +158,7 @@ ABaseCharacter::ABaseCharacter()
 	if (PLAYER_PICKUPUI.Succeeded()) {
 		PickUpUIClass = PLAYER_PICKUPUI.Class;
 	}
-	
+
 	static ConstructorHelpers::FClassFinder <UCircularPB_UI> PLAYER_CIRCULARPB_UI(TEXT("/Game/UI/Widget_CicularPB.Widget_CicularPB_C"));
 
 	if (PLAYER_CIRCULARPB_UI.Succeeded()) {
@@ -180,9 +178,9 @@ ABaseCharacter::ABaseCharacter()
 
 
 
-	// ����Ʈ ����Ʈ�� �Ӽ� ���� (��ġ, ȸ�� ��)
-	FlashLight->SetRelativeLocationAndRotation(FVector(303.f, -24.f, 117.f), FRotator( 0.f, 0.f, 0.f));
-	// ��Ÿ ���� (����, ���� ��)
+	// 스포트 라이트의 속성 설정 (위치, 회전 등)
+	FlashLight->SetRelativeLocationAndRotation(FVector(303.f, -24.f, 117.f), FRotator(0.f, 0.f, 0.f));
+	// 기타 설정 (색상, 강도 등)
 	FlashLight->SetLightColor(FLinearColor::White);
 	FlashLight->SetIntensity(5000.f);
 	FlashLight->SetOuterConeAngle(60.f);
@@ -230,7 +228,7 @@ void ABaseCharacter::BeginPlay()
 		if (controller == nullptr) {
 			return;
 		}
-		
+
 		ConditionUIWidget = CreateWidget<UConditionUI>(controller, ConditionUIClass);
 
 		if (!ConditionUIWidget) {
@@ -289,10 +287,12 @@ void ABaseCharacter::BeginPlay()
 		if (!CircularPB_Widget) {
 			return;
 		}
-		
+
 		CircularPB_Widget->AddToViewport();
 		CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -327,7 +327,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 			Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
 		}
 
-		// �ִϸ��̼� �ν��Ͻ��� �ӵ� �Ķ���� ����
+		// 애니메이션 인스턴스에 속도 파라미터 설정
 		if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
 		{
 			auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -350,7 +350,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 		PreviousSpeed = GetVelocity().Size();
 	}
-	
+
 	if (ConditionUIWidget) {
 		ConditionUIWidget->UpdateBar();
 	}
@@ -395,7 +395,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	}
 
 
-	
+
 	if (!m_bBleeding) {
 		m_bBleeding = RandomBleeding();
 
@@ -438,7 +438,7 @@ bool ABaseCharacter::DraggingSwap(int from, ESlotType fromtype, int to, ESlotTyp
 bool ABaseCharacter::SwapInven(int from, int to)
 {
 	if (from < 0 || to < 0) return false;
-	
+
 	Inventory.Swap(from, to);
 	GameUIWidget->RefreshInventory(from);
 	GameUIWidget->RefreshInventory(to);
@@ -580,10 +580,10 @@ void ABaseCharacter::MoveForward(FVector RotateYaw, float NewAxisValue)
 {
 	if (m_bRun) {
 		SetSpeed(GetBasicSpeed() * 100.f);
-		
+
 	}
 	else {
-		SetSpeed(GetBasicSpeed() /2 * 100.f);
+		SetSpeed(GetBasicSpeed() / 2 * 100.f);
 	}
 
 	GetCharacterMovement()->MaxWalkSpeed = m_fSpeed;
@@ -632,15 +632,15 @@ void ABaseCharacter::Turn(float NewAxisValue)
 {
 	AddControllerYawInput(NewAxisValue);
 }
-// ���� �ʿ�
+// 수정 필요
 void ABaseCharacter::GetItem()
 {
 	if (PlayerSight->GetIsHit()) {
-		
+
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
 		if (itembox) {
 
-			// �����۹ڽ��� �ִ� �����ۿ� ���� ������ �����´�.
+			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
 					if (i >= GetInvenSize()) {
@@ -654,7 +654,7 @@ void ABaseCharacter::GetItem()
 			}
 
 			PickUp();
-			// �����۹ڽ��� �ִ� �����ۿ� ���� ������ �����´�.
+			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
 					Inventory[i].Type = EItemType::ITEM_USEABLE;
@@ -722,7 +722,7 @@ void ABaseCharacter::LightOnOff()
 
 void ABaseCharacter::InventoryOnOff()
 {
-	// �ۼ� �ʿ�
+	// 작성 필요
 	UE_LOG(LogTemp, Warning, TEXT("InvenOpen"));
 	if (GameUIWidget != nullptr) {
 		if (IsInventory()) {
@@ -772,7 +772,7 @@ void ABaseCharacter::AttackCheck()
 	//}
 }
 
-void ABaseCharacter::Attack() // �ٸ� �Լ� �ּ� � ���� ��������� attack ���� �������� �Դ� ���� �̷��͵� �Լ� ȣ���ϵ��� �ϸ� �ɵ�
+void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
 	if (m_bIsAttacking) {
 		return;
@@ -824,7 +824,7 @@ void ABaseCharacter::Healing()
 			AnimPlaySpeed = default_healing_anim_playtime / playtime_3_sec;
 			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
 		}
-		
+
 		if (m_iHealingMontageFlag == 0) {
 			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::HealingMontageEnded);
 			++m_iHealingMontageFlag;
@@ -835,7 +835,7 @@ void ABaseCharacter::Healing()
 void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
-	
+
 	if (CurrentHealingItem != nullptr) {
 		StartHealingTimer(CurrentHealingItem->m_fHealingSpeed, CurrentHealingItem->m_fHealingDuration);
 	}
@@ -1134,7 +1134,7 @@ void ABaseCharacter::QuickTWeapon()
 	if (IsBringCurrentThrowWeapon()) {
 		//FName Socket = TEXT("RightHandSocket");
 		//CurrentThrowWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
-        //CurrentThrowWeapon->SetActorRelativeRotation(CurrentThrowWeapon->ItemHandRot);
+		//CurrentThrowWeapon->SetActorRelativeRotation(CurrentThrowWeapon->ItemHandRot);
 		//CurrentThrowWeapon->SetActorRelativeLocation(CurrentThrowWeapon->ItemHandPos);
 		//SetThrowWHandIn(true);
 	}
@@ -1208,11 +1208,11 @@ void ABaseCharacter::SpawnNormalWeapon()
 			CurrentWeapon = GetWorld()->SpawnActor<ANWBook>(ANWBook::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(0.f, -8.394180f, 0.f);
 			CurrentWeapon->ItemHandRot = FRotator(-0.000076f, -20.000723f, 0.000053f);
-			
-			//// ���� �� ��ȯ�� ����
+
+			//// 기존 본 변환을 저장
 			//FTransform OriginalTransform = SkeletalMesh->GetBoneTransform(SkeletalMesh->GetBoneIndex("thumb_01_r"));
 			//
-			//// �� ȸ������ �� ȸ�� ����
+			//// 새 회전으로 본 회전 변경
 			//FTransform NewTransform = OriginalTransform;
 			//FRotator NewRotation(2.931057f, 26.780522f, 21.615626f);
 			//NewTransform.SetRotation(NewRotation.Quaternion());
@@ -1325,14 +1325,14 @@ void ABaseCharacter::SpawnNormalWeapon()
 
 
 		if (QuickSlot[4].Name == "SquareWood") {
-			CurrentWeapon = GetWorld()->SpawnActor<ANWSquareWood>(ANWSquareWood::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator); 
+			CurrentWeapon = GetWorld()->SpawnActor<ANWSquareWood>(ANWSquareWood::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-11.797672f, 0.419462f, 7.687267f);
 			CurrentWeapon->ItemHandRot = FRotator(-6.285888f, -101.190543f, 111.478725f);
 		}
 
 
 		if (QuickSlot[4].Name == "WoodenBat") {
-			CurrentWeapon = GetWorld()->SpawnActor<ANWWoodenBat>(ANWWoodenBat::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator); 
+			CurrentWeapon = GetWorld()->SpawnActor<ANWWoodenBat>(ANWWoodenBat::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(24.767272f, -5.275784f, -6.783428f);
 			CurrentWeapon->ItemHandRot = FRotator(6.286317f, 78.810309f, -21.478568f);
 		}
@@ -1340,7 +1340,7 @@ void ABaseCharacter::SpawnNormalWeapon()
 		CurrentWeapon->OwnerCharacter = this;
 		CurrentWeapon->m_fCharacterSTR = m_fSTR;
 	}
-	
+
 	SetBringCurrentWeapon(true);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnNormalWeapon"));
 }
@@ -1421,7 +1421,7 @@ void ABaseCharacter::SpawnBleedingHealingItem()
 		if (QuickSlot[0].Name == "Gauze") {
 			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHGauze>(ABHGauze::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
-		
+
 		CurrentBleedingHealingItem->ItemHandPos = FVector(-0.162329f, -2.606654f, 0.f);
 		CurrentBleedingHealingItem->ItemHandRot = FRotator(0.f, 0.f, 0.f);
 
@@ -1654,7 +1654,7 @@ void ABaseCharacter::FootSound()
 
 		for (const FOverlapResult& OverlapResult : OverlapResults)
 		{
-			// ABaseZombie���� Ȯ��
+			// ABaseZombie인지 확인
 			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
 			if (OverlappedZombie)
 			{
@@ -1667,8 +1667,6 @@ void ABaseCharacter::FootSound()
 
 void ABaseCharacter::StartHealingTimer(float healingspeed, float healingduration)
 {
-	//HealingFX->BeginPlay();
-
 	if (m_bIsHealingTime) {
 		return;
 	}
@@ -1689,7 +1687,7 @@ void ABaseCharacter::HealingTimerElapsed()
 		m_bIsHealingTime = false;
 
 		SetHealing(0.f);
-		
+
 		return;
 	}
 
@@ -1740,7 +1738,7 @@ void ABaseCharacter::ProGameEnd()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if (PlayerController)
 	{
-		// 'quit' ����� �����Ͽ� ���� ����
+		// 'quit' 명령을 실행하여 게임 종료
 		PlayerController->ConsoleCommand("quit");
 	}
 }
@@ -1775,8 +1773,8 @@ void ABaseCharacter::BleedingTimerElapsed()
 
 bool ABaseCharacter::RandomBleeding()
 {
-	float RandomValue = FMath::FRand(); 
-	return RandomValue <= m_fBleedPercent; 
+	float RandomValue = FMath::FRand();
+	return RandomValue <= m_fBleedPercent;
 }
 
 bool ABaseCharacter::RandomBleedHealing(float bhpercent)
@@ -1840,7 +1838,7 @@ void ABaseCharacter::ProGameDeadEnd()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if (PlayerController)
 	{
-		// 'quit' ����� �����Ͽ� ���� ����
+		// 'quit' 명령을 실행하여 게임 종료
 		PlayerController->ConsoleCommand("quit");
 	}
 }
@@ -1855,7 +1853,7 @@ void ABaseCharacter::ProGameTimerEnd()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if (PlayerController)
 	{
-		// 'quit' ����� �����Ͽ� ���� ����
+		// 'quit' 명령을 실행하여 게임 종료
 		PlayerController->ConsoleCommand("quit");
 	}
 }

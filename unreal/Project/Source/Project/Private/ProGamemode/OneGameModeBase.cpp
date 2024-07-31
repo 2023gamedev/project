@@ -40,14 +40,14 @@ AOneGameModeBase::AOneGameModeBase()
     //PlayerControllerClass = APlayerCharacterController::StaticClass();
 
 
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // º¯¼öµé
     m_iItemBoxNumber = 0;
 
     m_iZombieNumber = 0;
     m_iShoutingZombieNumber = 0;
     m_iRunningZombieNumber = 0;
 
-    // ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½Ñ°ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ÇÃ·¹ÀÌ¾î¸¦ ¼±ÅÃÇÑ °ÍÀ» ¹Þ¾Æ¼­ ³Ñ°ÜÁÖ·Á°í ÇÒ ¿¹Á¤
     CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
 
 
@@ -67,27 +67,27 @@ void AOneGameModeBase::BeginPlay()
     Super::BeginPlay();
     // B1
     SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSquareWood.InvenSquareWood"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(1, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
-    SpawnItemBoxes(2, "Pipe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPipe.InvenPipe"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
+    SpawnItemBoxes(1, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
+    SpawnItemBoxes(2, "Pipe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPipe.InvenPipe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
     SpawnItemBoxes(3, "FireAxe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireAxe.InvenFireAxe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(4, "SashimiKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSasimiKnife.InvenSasimiKnife"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
-    SpawnItemBoxes(5, "ButchersKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenButherKnife.InvenButherKnife"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
+    SpawnItemBoxes(4, "SashimiKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSasimiKnife.InvenSasimiKnife"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
+    SpawnItemBoxes(5, "ButchersKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenButherKnife.InvenButherKnife"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
     SpawnItemBoxes(6, "Bottle", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBottle.InvenBottle"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(7, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth"), NULL, LOAD_None, NULL), 3,EItemFloor::FLOORB1);
-    SpawnItemBoxes(8, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
+    SpawnItemBoxes(7, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOORB1);
+    SpawnItemBoxes(8, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
     SpawnItemBoxes(9, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-                                                                                                                                                                           
-    SpawnItemBoxes(10, "Drink", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDrink.InvenDrink"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
-    SpawnItemBoxes(11, "Snack", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSnack.InvenSnack"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
+
+    SpawnItemBoxes(10, "Drink", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDrink.InvenDrink"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
+    SpawnItemBoxes(11, "Snack", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSnack.InvenSnack"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
     SpawnItemBoxes(12, "CannedTuna", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCannedTuna.InvenCannedTuna"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(13, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
-    SpawnItemBoxes(14, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
-    SpawnItemBoxes(15, "Drink", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDrink.InvenDrink"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOORB1);
-    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
+    SpawnItemBoxes(13, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
+    SpawnItemBoxes(14, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
+    SpawnItemBoxes(15, "Drink", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDrink.InvenDrink"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
+    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1); // ¼öÁ¤ ÇÊ¿ä
     SpawnItemBoxes(17, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-                                                                                                                                                                           
-    SpawnItemBoxes(18, "CarKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
-    SpawnItemBoxes(19, "RoofKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOORB1);
+
+    SpawnItemBoxes(18, "CarKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
+    SpawnItemBoxes(19, "RoofKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
 
     // F1
     SpawnItemBoxes(20, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSquareWood.InvenSquareWood"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
@@ -115,27 +115,27 @@ void AOneGameModeBase::BeginPlay()
 
     // F2
     SpawnItemBoxes(40, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSquareWood.InvenSquareWood"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(41, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOOR2);
-    SpawnItemBoxes(42, "Pipe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPipe.InvenPipe"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOOR2);
+    SpawnItemBoxes(41, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
+    SpawnItemBoxes(42, "Pipe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPipe.InvenPipe"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
     SpawnItemBoxes(43, "FireAxe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireAxe.InvenFireAxe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(44, "Plunger", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPlunger.InvenPlunger"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOOR2);
-    SpawnItemBoxes(45, "FryingPan", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFryingPan.InvenFryingPan"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOOR2);
+    SpawnItemBoxes(44, "Plunger", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPlunger.InvenPlunger"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
+    SpawnItemBoxes(45, "FryingPan", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFryingPan.InvenFryingPan"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
     SpawnItemBoxes(46, "Iron", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenIron.InvenIron"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(47, "Shovels", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenShovel.InvenShovel"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOOR2);
-    SpawnItemBoxes(48, "GolfClub", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenGolfClub.InvenGolfClub"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOOR2);
+    SpawnItemBoxes(47, "Shovels", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenShovel.InvenShovel"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
+    SpawnItemBoxes(48, "GolfClub", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenGolfClub.InvenGolfClub"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
     SpawnItemBoxes(49, "WoodenBat", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWoodenBat.InvenWoodenBat"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
 
-    SpawnItemBoxes(50, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth"), NULL, LOAD_None, NULL), 3,EItemFloor::FLOOR2);
-    SpawnItemBoxes(51, "Clothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCloth.InvenCloth"), NULL, LOAD_None, NULL), 3,EItemFloor::FLOOR2);
+    SpawnItemBoxes(50, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOOR2);
+    SpawnItemBoxes(51, "Clothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCloth.InvenCloth"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOOR2);
     SpawnItemBoxes(52, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
-    SpawnItemBoxes(53, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOOR2);
-    SpawnItemBoxes(54, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOOR2);
-    SpawnItemBoxes(55, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2,EItemFloor::FLOOR2);
-    SpawnItemBoxes(56, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1,EItemFloor::FLOOR2);
+    SpawnItemBoxes(53, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
+    SpawnItemBoxes(54, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
+    SpawnItemBoxes(55, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
+    SpawnItemBoxes(56, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
     SpawnItemBoxes(57, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
 
-    SpawnItemBoxes(58, "CarKey3", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey2.InvenCarKey2"), NULL, LOAD_None, NULL), 10,EItemFloor::FLOOR2);
-    SpawnItemBoxes(59, "CarKey4", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey2.InvenCarKey2"), NULL, LOAD_None, NULL), 20,EItemFloor::FLOOR2);
+    SpawnItemBoxes(58, "CarKey3", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey2.InvenCarKey2"), NULL, LOAD_None, NULL), 10, EItemFloor::FLOOR2);
+    SpawnItemBoxes(59, "CarKey4", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey2.InvenCarKey2"), NULL, LOAD_None, NULL), 20, EItemFloor::FLOOR2);
 
     SpawnInterItem(0, "CarActor");
     SpawnInterItem(1, "CarActor");
@@ -148,9 +148,9 @@ void AOneGameModeBase::BeginPlay()
 
 
 
-    // BeginPlayï¿½ï¿½ï¿½ï¿½ SpawnZombies È£ï¿½ï¿½
+    // BeginPlay¿¡¼­ SpawnZombies È£Ãâ
 
-    // ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ 
+    // ÁöÇÏ 1Ãþ 
     SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
     SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
     SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
@@ -166,7 +166,7 @@ void AOneGameModeBase::BeginPlay()
     SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1040.275f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
-    //// ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½
+    //// Áö»ó 1Ãþ
 
     //SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -181,7 +181,7 @@ void AOneGameModeBase::BeginPlay()
     //SpawnZombies(19, EZombie::NORMAL, FVector(200.f, 2200.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
-    ////ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½
+    ////Áö»ó 2Ãþ
     //SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
     //SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
     //SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -195,7 +195,7 @@ void AOneGameModeBase::BeginPlay()
     //SpawnZombies(28, EZombie::NORMAL, FVector(2241.f, 3500.f, 2947.212f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(29, EZombie::NORMAL, FVector(190.f, 2600.f, 2947.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
-    //// ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½
+    //// ÁöÇÏ 2Ãþ
     //SpawnZombies(30, EZombie::RUNNING, FVector(600.f, 500.f, 90.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(31, EZombie::RUNNING, FVector(2000.f, 1340.f, 90.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -1200.f);
     //SpawnZombies(32, EZombie::RUNNING, FVector(2000.f, 3600.f, 90.212f), FRotator(0.f, -50.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -247,7 +247,7 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 void AOneGameModeBase::ChoiceCharacterBefore()
 {
-    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ÇöÀç ¿ùµåÀÇ °ÔÀÓ ÀÎ½ºÅÏ½º °¡Á®¿À±â
     UGameInstance* CurrentGameInstance = GetGameInstance();
 
     if (CurrentGameInstance) {
@@ -268,11 +268,11 @@ void AOneGameModeBase::ChoiceCharacterBefore()
             }
         }
         else {
-            // ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+            // °ÔÀÓ ÀÎ½ºÅÏ½º°¡ À¯È¿ÇÏÁö ¾ÊÀº °æ¿ì¿¡ ´ëÇÑ Ã³¸®
         }
     }
     else {
-        // ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+        // °ÔÀÓ ÀÎ½ºÅÏ½º°¡ ¾ÆÁ÷ »ý¼ºµÇÁö ¾ÊÀº °æ¿ì¿¡ ´ëÇÑ Ã³¸®
     }
 }
 
@@ -302,16 +302,16 @@ void AOneGameModeBase::ChoiceCharacter()
 
 void AOneGameModeBase::SpawnCharacter(int32 characterindex)
 {
-    // ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ PlayerStart ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½Úµï¿½ó¿¡¼ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
+    // ±× ´ë½Å ÀÌ·¸°Ô ÇÏ¸é PlayerStart À§Ä¡µéÀ» µû·Î Àû¾î³ö¾ß ÇÒ°Í °°´Ù. ÄÚµå»ó¿¡¼­´Â ¾Ë ¼ö ¾øÀ¸´Ï±î
     ABaseCharacter* DefaultPawn = nullptr;
     APlayerStart* PlayerStart = nullptr;
 
     DefaultPawn->SetPlayerId(99);
 
-    // ï¿½Ì¸ï¿½(Tag)ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
+    // ÀÌ¸§(Tag)À¸·Î ÇÒ ½Ã
     FName PlayerStartTagName = "Start3";
 
-    // ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
+    // ÀÎµ¦½º·Î ÇÒ ½Ã
     // int index = 0;
 
     UWorld* World = GetWorld();
@@ -320,13 +320,13 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
         for (TActorIterator<APlayerStart> It(World); It; ++It) {
             APlayerStart* PS = *It;
 
-            // ï¿½Ì¸ï¿½(Tag)ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
+            // ÀÌ¸§(Tag)À¸·Î ÇÒ ½Ã
             if (PS && PS->PlayerStartTag == PlayerStartTagName) {
 
                 PlayerStart = PS;
                 break;
             }
-            // ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
+            // ÀÎµ¦½º·Î ÇÒ ½Ã
             //if (index == 3) {
 
             //    PlayerStart = PS;
@@ -352,7 +352,7 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
 
 void AOneGameModeBase::ItemRandomLocationSetting()
 {
-    // 0~19ï¿½ï¿½ B1 20~39ï¿½ï¿½ F1 40~59ï¿½ï¿½ F2
+    // 0~19Àº B1 20~39´Â F1 40~59´Â F2
 // B1
     ItemRandomLocationStruct[0].sLocation = FVector(2330.f, 3200.f, 975.0626f);
     ItemRandomLocationStruct[1].sLocation = FVector(1880.f, 3870.f, 975.0626f);
@@ -372,9 +372,9 @@ void AOneGameModeBase::ItemRandomLocationSetting()
 
     ItemRandomLocationStruct[12].sLocation = FVector(1200.f, 100.f, 975.0626f);
     ItemRandomLocationStruct[13].sLocation = FVector(30.f, 540.f, 975.0626f);
-    ItemRandomLocationStruct[14].sLocation = FVector(500.f,  -238.f, 975.0626f);
+    ItemRandomLocationStruct[14].sLocation = FVector(500.f, -238.f, 975.0626f);
 
-    ItemRandomLocationStruct[15].sLocation = FVector(1200.f,  -976.f, 975.0626f);
+    ItemRandomLocationStruct[15].sLocation = FVector(1200.f, -976.f, 975.0626f);
     ItemRandomLocationStruct[16].sLocation = FVector(480.f, 800.f, 975.0626f);
     ItemRandomLocationStruct[17].sLocation = FVector(2330.f, 400.f, 975.0626f);
 
@@ -385,57 +385,57 @@ void AOneGameModeBase::ItemRandomLocationSetting()
     // F1
     ItemRandomLocationStruct[20].sLocation = FVector(1200.f, 70.f, 1929.0626f);
     ItemRandomLocationStruct[21].sLocation = FVector(180.f, 520.f, 1929.0626f);
-    ItemRandomLocationStruct[22].sLocation = FVector(1200.f, - 817.f, 1929.0626f);
-                                                                     
-    ItemRandomLocationStruct[23].sLocation = FVector(800.f, - 817.f, 1929.0626f);
+    ItemRandomLocationStruct[22].sLocation = FVector(1200.f, -817.f, 1929.0626f);
+
+    ItemRandomLocationStruct[23].sLocation = FVector(800.f, -817.f, 1929.0626f);
     ItemRandomLocationStruct[24].sLocation = FVector(165.f, 960.f, 1929.0626f);
     ItemRandomLocationStruct[25].sLocation = FVector(1980.f, 1100.f, 1929.0626f);
-                                                                     
+
     ItemRandomLocationStruct[26].sLocation = FVector(1390.f, 800.f, 1929.0626f);
     ItemRandomLocationStruct[27].sLocation = FVector(400.f, 1680.f, 1929.0626f);
     ItemRandomLocationStruct[28].sLocation = FVector(1100.f, 1260.f, 1929.0626f);
-                                                                     
+
     ItemRandomLocationStruct[29].sLocation = FVector(70.f, 2390.f, 1929.0626f);
     ItemRandomLocationStruct[30].sLocation = FVector(550.f, 2520.f, 1929.0626f);
     ItemRandomLocationStruct[31].sLocation = FVector(200.f, 2800.f, 1929.0626f);
-                                                                        
+
     ItemRandomLocationStruct[32].sLocation = FVector(1600.f, 3050.f, 1929.0626f);
     ItemRandomLocationStruct[33].sLocation = FVector(1530.f, 3900.f, 1929.0626f);
     ItemRandomLocationStruct[34].sLocation = FVector(2340.f, 3850.f, 1929.0626f);
-                                                                        
+
     ItemRandomLocationStruct[35].sLocation = FVector(290.f, 3020.f, 1929.0626f);
     ItemRandomLocationStruct[36].sLocation = FVector(90.f, 3770.f, 1929.0626f);
     ItemRandomLocationStruct[37].sLocation = FVector(1050.f, 3350.f, 1929.0626f);
-                                                                        
+
     ItemRandomLocationStruct[38].sLocation = FVector(50.f, 1740.f, 1929.0626f);
     ItemRandomLocationStruct[39].sLocation = FVector(2280.f, 2620.f, 1929.0626f);
 
 
     // F2                                                              
-    ItemRandomLocationStruct[40].sLocation = FVector(870.f, - 926.f, 2888.0626f);
-    ItemRandomLocationStruct[41].sLocation = FVector(1260.f, - 467.f, 2888.0626f);
+    ItemRandomLocationStruct[40].sLocation = FVector(870.f, -926.f, 2888.0626f);
+    ItemRandomLocationStruct[41].sLocation = FVector(1260.f, -467.f, 2888.0626f);
     ItemRandomLocationStruct[42].sLocation = FVector(2170.f, 60.f, 2888.0626f);
-                                                                    
+
     ItemRandomLocationStruct[43].sLocation = FVector(460.f, 800.f, 2888.0626f);
     ItemRandomLocationStruct[44].sLocation = FVector(1100.f, 600.f, 2888.0626f);
     ItemRandomLocationStruct[45].sLocation = FVector(1600.f, 1140.f, 2888.0626f);
-                                                                     
+
     ItemRandomLocationStruct[46].sLocation = FVector(1200.f, 1300.f, 2888.0626f);
     ItemRandomLocationStruct[47].sLocation = FVector(1980.f, 1600.f, 2888.0626f);
     ItemRandomLocationStruct[48].sLocation = FVector(550.f, 1770.f, 2888.0626f);
-                                                                     
+
     ItemRandomLocationStruct[49].sLocation = FVector(170.f, 1120.f, 2888.0626f);
     ItemRandomLocationStruct[50].sLocation = FVector(1240.f, 2270.f, 2888.0626f);
     ItemRandomLocationStruct[51].sLocation = FVector(1410.f, 2650.f, 2888.0626f);
-                                                                     
+
     ItemRandomLocationStruct[52].sLocation = FVector(410.f, 3030.f, 2888.0626f);
     ItemRandomLocationStruct[53].sLocation = FVector(801.f, 3780.f, 2888.0626f);
     ItemRandomLocationStruct[54].sLocation = FVector(2001.f, 3470.f, 2888.0626f);
-                                                                     
+
     ItemRandomLocationStruct[55].sLocation = FVector(1730.f, 1200.f, 2888.0626f);
     ItemRandomLocationStruct[56].sLocation = FVector(260.f, 3780.f, 2888.0626f);
     ItemRandomLocationStruct[57].sLocation = FVector(2310.f, 2040.f, 2888.0626f);
-                                                                     
+
     ItemRandomLocationStruct[58].sLocation = FVector(869.f, 3120.f, 2888.0626f);
     ItemRandomLocationStruct[59].sLocation = FVector(1140.f, 1460.f, 2888.0626f);
 
@@ -448,13 +448,13 @@ void AOneGameModeBase::ItemRandomLocationSetting()
 void AOneGameModeBase::SpawnZombiesStaticClasses()
 {
 
-    // ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½
+    // ÁöÇÏ 1Ãþ
     for (int i = 0; i < 10; ++i) {
         ZombieClasses.Add(ANormalZombie::StaticClass());
         ZombieAIClasses.Add(AZombieAIController::StaticClass());
     }
 
-    // ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½
+    // Áö»ó 1Ãþ
     for (int i = 10; i < 12; ++i) {
         ZombieClasses.Add(AShoutingZombie::StaticClass());
         ShoutingZombieAIClasses.Add(AShoutingZombieAIController::StaticClass());
@@ -464,7 +464,7 @@ void AOneGameModeBase::SpawnZombiesStaticClasses()
         ZombieAIClasses.Add(AZombieAIController::StaticClass());
     }
 
-    // ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½
+    // Áö»ó 2Ãþ
     for (int i = 20; i < 23; ++i) {
         ZombieClasses.Add(ARunningZombie::StaticClass());
         RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
@@ -474,7 +474,7 @@ void AOneGameModeBase::SpawnZombiesStaticClasses()
         ZombieAIClasses.Add(AZombieAIController::StaticClass());
     }
 
-    // ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½
+    // ÁöÇÏ 2Ãþ
     for (int i = 30; i < 35; ++i) {
         ZombieClasses.Add(ARunningZombie::StaticClass());
         RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
@@ -565,7 +565,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemC
     FVector itemboxpos = RandomItemBoxLocation(itemfloor);
 
 
-    // ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ¼±ÅÃµÈ ¾ÆÀÌÅÛ ¹Ú½º Å¬·¡½º·Î ¾ÆÀÌÅÛ ¹Ú½º »ý¼º
     AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
 
     UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
@@ -617,11 +617,11 @@ void AOneGameModeBase::CarActorRandomLocationSetting()
 {
     CarActorRandomLocationStruct[0].sLocation = FVector(1772.f, 978.f, 60.f);
     CarActorRandomLocationStruct[1].sLocation = FVector(1662.f, 1678.f, 60.f);
-    CarActorRandomLocationStruct[2].sLocation = FVector(722.f, 978.f,  60.f);
-    CarActorRandomLocationStruct[3].sLocation = FVector(1142.f,2068.f, 60.f);
+    CarActorRandomLocationStruct[2].sLocation = FVector(722.f, 978.f, 60.f);
+    CarActorRandomLocationStruct[3].sLocation = FVector(1142.f, 2068.f, 60.f);
     CarActorRandomLocationStruct[4].sLocation = FVector(632.f, 2688.f, 60.f);
     CarActorRandomLocationStruct[5].sLocation = FVector(1492.f, 2680.f, 60.f);
-    CarActorRandomLocationStruct[6].sLocation = FVector(1122.f, 3468.f,  60.f);
+    CarActorRandomLocationStruct[6].sLocation = FVector(1122.f, 3468.f, 60.f);
 
     CarActorRandomLocationStruct[0].sRotation = FRotator(0.f, -30.f, 0.f);
     CarActorRandomLocationStruct[1].sRotation = FRotator(0.f, 30.f, 0.f);
@@ -665,10 +665,10 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName)
         int Randomkey = RandomCarKey();
         Location = CarActorRandomLocationStruct[RandomValue].sLocation;
         Rotation = CarActorRandomLocationStruct[RandomValue].sRotation;
-        
+
         FName CarKey = CarKeyRandom[Randomkey].CarKeyName;
 
-        // ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // ¼±ÅÃµÈ ¾ÆÀÌÅÛ ¹Ú½º Å¬·¡½º·Î ¾ÆÀÌÅÛ ¹Ú½º »ý¼º
         ACarActor* SpawnedCarActor = GetWorld()->SpawnActor<ACarActor>(SelectedInterActorClass, Location, Rotation);
         SpawnedCarActor->CarKeyName = CarKey;
     }
@@ -703,7 +703,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         return;
     }
 
-    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
+    // Ä³¸¯ÅÍ °Ë»ö
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -711,7 +711,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         {
             FVector OldLocation = BasePlayer->GetActorLocation();
 
-            // ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+            // ±âÁ¸ Ä³¸¯ÅÍ À§Ä¡ ¾÷µ¥ÀÌÆ®
             BasePlayer->SetActorLocation(NewLocation);
             BasePlayer->SetActorRotation(NewRotation);
 
@@ -736,14 +736,14 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         OtherCharacterClasses.Add(AIdolCharacter::StaticClass());
     }
 
-    //ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    //±âÁ¸ Ä³¸¯ÅÍ¸¦ Ã£Áö ¸øÇÑ °æ¿ì¿¡¸¸ »õ Ä³¸¯ÅÍ ½ºÆù
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
     ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(OtherCharacterClasses[0], NewLocation, NewRotation, SpawnParams);
 
     if (NewCharacter)
     {
-        // ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¿ï¿½ PlayerId ï¿½ï¿½ï¿½ï¿½
+        // »õ Ä³¸¯ÅÍ¿¡ PlayerId ¼³Á¤
         NewCharacter->SetPlayerId(PlayerID);
     }
 }
@@ -758,7 +758,7 @@ void AOneGameModeBase::UpdatePlayerAttack(uint32 PlayerID, bool battack)
         return;
     }
 
-    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
+    // Ä³¸¯ÅÍ °Ë»ö
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -782,7 +782,7 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
         return;
     }
 
-    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
+    // Ä³¸¯ÅÍ °Ë»ö
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -801,7 +801,7 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
                 else if (itemtype == 3) {
                     BasePlayer->OtherSpawnKeyItem(Itemname);
                 }
-                else if(itemtype == 4) {
+                else if (itemtype == 4) {
                     BasePlayer->OtherSpawnNormalWeapon(Itemname);
                 }
                 UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
@@ -821,7 +821,7 @@ void AOneGameModeBase::UpdatePlayerRun(uint32 PlayerID, bool b_run)
         return;
     }
 
-    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
+    // Ä³¸¯ÅÍ °Ë»ö
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -845,7 +845,7 @@ void AOneGameModeBase::UpdatePlayerJump(uint32 PlayerID)
         return;
     }
 
-    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
+    // Ä³¸¯ÅÍ °Ë»ö
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -868,7 +868,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
     TSubclassOf<ABaseZombie> SelectedZombieClass = ZombieClasses[zombieindex];
 
 
-    // ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ¼±ÅÃµÈ Á»ºñ Å¬·¡½º·Î Á»ºñ¸¦ »ý¼º
     ABaseZombie* SpawnedZombie = GetWorld()->SpawnActor<ABaseZombie>(SelectedZombieClass, zombiepos, zombieroatate);
 
 
@@ -974,7 +974,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotat
         ABaseZombie* BaseZombie = *ZombiePtr;
         FVector OldLocation = BaseZombie->GetActorLocation();
 
-        // ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+        // ±âÁ¸ Ä³¸¯ÅÍ À§Ä¡ ¾÷µ¥ÀÌÆ®
         BaseZombie->SetActorLocation(NewLocation);
         BaseZombie->SetActorRotation(NewRotation);
 
