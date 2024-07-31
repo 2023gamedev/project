@@ -91,7 +91,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	ABleedingHealingItemActor* CurrentBleedingHealingItem;
 
-	UPROPERTY(EditAnywhere);
+	UPROPERTY(EditAnywhere)
 	AKeyActor* CurrentKeyItem;
 	
 	//UPROPERTY(EditAnywhere)

@@ -796,6 +796,7 @@ void ABaseCharacter::Healing()
 	}
 
 	if (CurrentHealingItem != nullptr) {
+		m_bIsHealingTime = true;
 		CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
 		auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -843,7 +844,7 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 	//	Smoking();
 	//}
 
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	UpdateHealingSlot();
 }
 
@@ -959,6 +960,7 @@ void ABaseCharacter::UpdateHealingSlot()
 
 
 	if (QuickSlot[1].Count == 0) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UpdateHealing Count == 0!!!!!!");
 		DestroyHealingItemSlot();
 	}
 	else {
@@ -1493,6 +1495,7 @@ void ABaseCharacter::DestroyThrowWeapon()
 
 void ABaseCharacter::DestroyHealingItem()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "DestroyHealingItem!!!!!!");
 	if (CurrentHealingItem != nullptr) {
 		CurrentHealingItem->Destroy();
 	}
@@ -1567,6 +1570,7 @@ void ABaseCharacter::DestroyThrowWeaponItemSlot()
 
 void ABaseCharacter::DestroyHealingItemSlot()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "DestroyHealingItemSlot!!!!!!");
 	DestroyHealingItem();
 
 	QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
@@ -1669,10 +1673,10 @@ void ABaseCharacter::StartHealingTimer(float healingspeed, float healingduration
 {
 	//HealingFX->BeginPlay();
 
-	if (m_bIsHealingTime) {
-		return;
-	}
-	m_bIsHealingTime = true;
+	//if (m_bIsHealingTime) {
+	//	return;
+	//}
+	// m_bIsHealingTime = true;
 	m_fItemHealingSpeed = healingspeed;
 	m_fItemHealingDuration = healingduration;
 
