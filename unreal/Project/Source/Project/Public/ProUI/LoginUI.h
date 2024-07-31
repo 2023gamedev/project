@@ -28,11 +28,9 @@ public:
 	void Init();
 
 	void ShowAlert(const FString& Message);
-<<<<<<< HEAD
-=======
+
 
 	void OnCloseAlert();
->>>>>>> 524c51fb7f427e390d4f5a16137597dfd8bcf475
 
 	FMoveStartGameUI MoveStartGameUI;
 

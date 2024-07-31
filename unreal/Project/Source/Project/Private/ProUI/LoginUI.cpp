@@ -7,25 +7,23 @@
 
 void ULoginUI::ShowAlert(const FString& Message)
 {
-<<<<<<< HEAD
     if (AlertUI == nullptr)
     {
         static ConstructorHelpers::FClassFinder<UAlertUI> PLAYER_ALERTUI(TEXT("/Game/UI/WBP_Alert"));
         if (PLAYER_ALERTUI.Succeeded()) {
             AlertUI = PLAYER_ALERTUI.Class;
         }
-=======
+    }
+
     if (!AlertUI)
     {
         UE_LOG(LogTemp, Warning, TEXT("AlertUIClass is not set"));
         return;
->>>>>>> 524c51fb7f427e390d4f5a16137597dfd8bcf475
     }
 
     if (!AlertUIWidget)
     {
         AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
-<<<<<<< HEAD
         if (AlertUIWidget != nullptr)
         {
             AlertUIWidget->AddToViewport();
@@ -38,24 +36,22 @@ void ULoginUI::ShowAlert(const FString& Message)
             }
         }
     }
-}
-=======
-        if (AlertUIWidget)
-        {
-            AlertUIWidget->AddToViewport();
-            UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-            if (AlertText)
-            {
-                AlertText->SetText(FText::FromString(Message));
-            }
 
-            // Add Close button click event binding
-            if (AlertUIWidget->CloseButton)
-            {
-                AlertUIWidget->CloseButton->OnClicked.AddDynamic(this, &ULoginUI::OnCloseAlert);
-            }
-        }
-    }
+	if (AlertUIWidget)
+	{
+		AlertUIWidget->AddToViewport();
+		UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
+		if (AlertText)
+		{
+			AlertText->SetText(FText::FromString(Message));
+		}
+
+		// Add Close button click event binding
+		if (AlertUIWidget->CloseButton)
+		{
+			AlertUIWidget->CloseButton->OnClicked.AddDynamic(this, &ULoginUI::OnCloseAlert);
+		}
+	}
     else
     {
         UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
@@ -75,7 +71,6 @@ void ULoginUI::OnCloseAlert()
     }
 }
 
->>>>>>> 524c51fb7f427e390d4f5a16137597dfd8bcf475
 
 void ULoginUI::OnLoginButtonClicked()
 {
