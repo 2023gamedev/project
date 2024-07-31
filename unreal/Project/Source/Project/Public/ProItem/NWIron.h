@@ -10,7 +10,7 @@
 /**
  * 
  */
-// ´Ù¸®¹Ì
+// ë‹¤ë¦¬ë¯¸
 UCLASS()
 class PROJECT_API ANWIron : public ANormalWeaponActor
 {

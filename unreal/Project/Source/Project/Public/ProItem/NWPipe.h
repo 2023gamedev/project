@@ -9,7 +9,7 @@
 /**
  * 
  */
-// фдюлга
+// М▄▄Л²╢М■└
 UCLASS()
 class PROJECT_API ANWPipe : public ANormalWeaponActor
 {
