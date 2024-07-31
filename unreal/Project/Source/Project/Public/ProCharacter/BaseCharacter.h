@@ -94,6 +94,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	AKeyActor* CurrentKeyItem;
 
+	UPROPERTY(EditAnywhere)
+	AHealingNiagaEffect* HealingFX;
 
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* FlashLight;

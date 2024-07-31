@@ -63,7 +63,7 @@ void ABaseZombie::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	// º¯°æ ÇÊ¿ä °¢°¢ÀÇ animinstance°¡ ÇÊ¿äÇÒ °Í °°´Ù.
+	// ë³€ê²½ í•„ìš” ê°ê°ì˜ animinstanceê°€ í•„ìš”í•  ê²ƒ ê°™ë‹¤.
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
 	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseZombie::AttackMontageEnded);
@@ -136,7 +136,7 @@ void ABaseZombie::CutZombie(FName bonename)
 		FString BoneNameS = bonename.ToString();
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("CutBone: %s"), *BoneNameS));
 
-		// ProceduralMeshComponent »ı¼º ¹× ¼³Á¤
+		// ProceduralMeshComponent ìƒì„± ë° ì„¤ì •
 		CutProceduralMesh = NewObject<UProceduralMeshComponent>(this);
 		if (!CutProceduralMesh) return;
 
@@ -156,9 +156,9 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 	if (!Skeleton) return;
 
 	int32 BoneIndex = Skeleton->GetBoneIndex(bonename);
-	if (BoneIndex == INDEX_NONE) return; // ÁöÁ¤µÈ boneÀÌ ¾ø´Â °æ¿ì Áß´Ü
+	if (BoneIndex == INDEX_NONE) return; // ì§€ì •ëœ boneì´ ì—†ëŠ” ê²½ìš° ì¤‘ë‹¨
 
-	// ProceduralMeshComponent »ı¼º ¹× ¼³Á¤
+	// ProceduralMeshComponent ìƒì„± ë° ì„¤ì •
 	CutProceduralMesh = NewObject<UProceduralMeshComponent>(this);
 	if (!CutProceduralMesh) return;
 
@@ -170,7 +170,7 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 	CutProceduralMesh->SetCollisionProfileName("BlockAllDynamic");
 	CutProceduralMesh->RegisterComponent();
 
-	// StaticMesh µ¥ÀÌÅÍ ÃßÃâ
+	// StaticMesh ë°ì´í„° ì¶”ì¶œ
 	if (!CopyStaticMesh)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("CopyStaticMesh = nullptr"));
@@ -182,12 +182,12 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 
 	const FStaticMeshLODResources& LODResource = StaticMesh->GetRenderData()->LODResources[0];
 
-	// Àı´ÜµÈ ºÎºĞ È®ÀÎ
+	// ì ˆë‹¨ëœ ë¶€ë¶„ í™•ì¸
 	FVector CutLocation = Skeleton->GetBoneLocation(bonename);
-	FVector CutDirection = FVector(0.0f, 0.0f, 1.0f); // xÃà ±âÁØÀ¸·Î Àı´ÜµÈ ºÎºĞ¸¸ »ı¼º
+	FVector CutDirection = FVector(0.0f, 0.0f, 1.0f); // xì¶• ê¸°ì¤€ìœ¼ë¡œ ì ˆë‹¨ëœ ë¶€ë¶„ë§Œ ìƒì„±
 	FVector CutLocation2 = Skeleton->GetBoneLocation(bonename, EBoneSpaces::ComponentSpace);
 
-	// ¹öÅØ½º µ¥ÀÌÅÍ ÃßÃâ
+	// ë²„í…ìŠ¤ ë°ì´í„° ì¶”ì¶œ
 	TArray<FVector> Vertices;
 
 	uint32 LODResourcePosNumVetices = LODResource.VertexBuffers.PositionVertexBuffer.GetNumVertices();
@@ -198,7 +198,7 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 			FVector3f VP3f = LODResource.VertexBuffers.PositionVertexBuffer.VertexPosition(Index);
 			FVector VertexPosition = FVector(VP3f.X, VP3f.Y, VP3f.Z);
 
-			// Àı´ÜµÈ ºÎºĞ È®ÀÎ
+			// ì ˆë‹¨ëœ ë¶€ë¶„ í™•ì¸
 			if (FVector::DotProduct(VertexPosition - CutLocation2, CutDirection) > 0)
 			{
 				Vertices.Add(VertexPosition);
@@ -208,7 +208,7 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 
 
 
-	//// ¿ŞÂÊ°ú ¿À¸¥ÂÊ Àı´ÜµÈ ºÎºĞÀÇ ¹öÅØ½º ºĞ¸®
+	//// ì™¼ìª½ê³¼ ì˜¤ë¥¸ìª½ ì ˆë‹¨ëœ ë¶€ë¶„ì˜ ë²„í…ìŠ¤ ë¶„ë¦¬
 	//TArray<FVector> LeftVertices;
 	//TArray<FVector> RightVertices;
 	//for (const FVector& Vertex : Vertices)
@@ -223,37 +223,37 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 	//	}
 	//}
 
-	//// Àı´ÜµÈ ºÎºĞÀÇ ¿ŞÂÊ°ú ¿À¸¥ÂÊ ¹öÅØ½º¸¦ °¢°¢ ÀÌ¾î¼­ »ç¿ëÇÕ´Ï´Ù.
+	//// ì ˆë‹¨ëœ ë¶€ë¶„ì˜ ì™¼ìª½ê³¼ ì˜¤ë¥¸ìª½ ë²„í…ìŠ¤ë¥¼ ê°ê° ì´ì–´ì„œ ì‚¬ìš©í•©ë‹ˆë‹¤.
 	//Vertices = LeftVertices;
 	//Vertices.Append(RightVertices);
 
-	// ÀÎµ¦½º µ¥ÀÌÅÍ ÃßÃâ
+	// ì¸ë±ìŠ¤ ë°ì´í„° ì¶”ì¶œ
 	TArray<int32> Triangles;
 	const int32 NumIndices = LODResource.IndexBuffer.GetListIndex();
 	if (NumIndices > 0) {
 		for (int32 Index = 0; Index < NumIndices; ++Index)
 		{
-			// ¹öÅØ½ºÀÇ ÀÎµ¦½º¸¦ °¡Á®¿É´Ï´Ù.
+			// ë²„í…ìŠ¤ì˜ ì¸ë±ìŠ¤ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
 			int32 VertexIndex = LODResource.IndexBuffer.GetIndex(Index);
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Invalid VertexIndex: %d, Total Vertices: %d"), VertexIndex, LODResource.VertexBuffers.PositionVertexBuffer.GetListIndex()));
 
-			// ÀÎµ¦½º°¡ ¹üÀ§¸¦ ¹ş¾î³ªÁö ¾Ê´ÂÁö È®ÀÎ
+			// ì¸ë±ìŠ¤ê°€ ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ì§€ ì•ŠëŠ”ì§€ í™•ì¸
 			if (VertexIndex < 0 || VertexIndex >= static_cast<int32>(LODResource.VertexBuffers.PositionVertexBuffer.GetListIndex()))
 			{
-				// À¯È¿ÇÏÁö ¾ÊÀº ÀÎµ¦½º Á¢±Ù ½Ã ·Î±× Ãâ·Â
+				// ìœ íš¨í•˜ì§€ ì•Šì€ ì¸ë±ìŠ¤ ì ‘ê·¼ ì‹œ ë¡œê·¸ ì¶œë ¥
 				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Invalid VertexIndex: %d, Total Vertices: %d"), VertexIndex, LODResource.VertexBuffers.PositionVertexBuffer.GetListIndex()));
 				break;
 			}
 
-			// ÇØ´ç ¹öÅØ½ºÀÇ À§Ä¡¸¦ °¡Á®¿É´Ï´Ù.
+			// í•´ë‹¹ ë²„í…ìŠ¤ì˜ ìœ„ì¹˜ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
 			FVector3f VP3f = LODResource.VertexBuffers.PositionVertexBuffer.VertexPosition(VertexIndex);
 			FVector VertexPosition = FVector(VP3f.X, VP3f.Y, VP3f.Z);
 
-			// ¹öÅØ½º ¹è¿­¿¡¼­ ÇØ´ç ¹öÅØ½ºÀÇ ÀÎµ¦½º¸¦ Ã£½À´Ï´Ù.
+			// ë²„í…ìŠ¤ ë°°ì—´ì—ì„œ í•´ë‹¹ ë²„í…ìŠ¤ì˜ ì¸ë±ìŠ¤ë¥¼ ì°¾ìŠµë‹ˆë‹¤.
 			for (int32 VertIndex = 0; VertIndex < Vertices.Num(); ++VertIndex)
 			{
-				// ¹öÅØ½ºÀÇ À§Ä¡°¡ ÀÎµ¦½º ¹öÆÛ¿¡ ÀÖ´Â À§Ä¡¿Í °°´Ù¸é ÇØ´ç ÀÎµ¦½º¸¦ Ãß°¡ÇÕ´Ï´Ù.
+				// ë²„í…ìŠ¤ì˜ ìœ„ì¹˜ê°€ ì¸ë±ìŠ¤ ë²„í¼ì— ìˆëŠ” ìœ„ì¹˜ì™€ ê°™ë‹¤ë©´ í•´ë‹¹ ì¸ë±ìŠ¤ë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 				if (Vertices[VertIndex].Equals(VertexPosition, KINDA_SMALL_NUMBER))
 				{
 					Triangles.Add(VertIndex);
@@ -263,23 +263,23 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 	}
 
 
-	//// ÀÎµ¦½º µ¥ÀÌÅÍ ÃßÃâ
+	//// ì¸ë±ìŠ¤ ë°ì´í„° ì¶”ì¶œ
 	//TArray<int32> Triangles;
 
-	//// ¹öÅØ½º ¹è¿­À» »ç¿ëÇÏ¿© »ï°¢ÇüÀ» Çü¼ºÇÕ´Ï´Ù.
+	//// ë²„í…ìŠ¤ ë°°ì—´ì„ ì‚¬ìš©í•˜ì—¬ ì‚¼ê°í˜•ì„ í˜•ì„±í•©ë‹ˆë‹¤.
 	const int32 NumVertices = Vertices.Num();
 	//if (NumVertices >= 3) {
 	//	for (int32 Index = 0; Index < NumVertices - 2; ++Index)
 	//	{
-	//		// Ã¹ ¹øÂ° ¹öÅØ½ºÀÇ ÀÎµ¦½º
+	//		// ì²« ë²ˆì§¸ ë²„í…ìŠ¤ì˜ ì¸ë±ìŠ¤
 	//		Triangles.Add(Index);
-	//		// µÎ ¹øÂ° ¹öÅØ½ºÀÇ ÀÎµ¦½º
+	//		// ë‘ ë²ˆì§¸ ë²„í…ìŠ¤ì˜ ì¸ë±ìŠ¤
 	//		Triangles.Add(Index + 1);
-	//		// ¼¼ ¹øÂ° ¹öÅØ½ºÀÇ ÀÎµ¦½º
+	//		// ì„¸ ë²ˆì§¸ ë²„í…ìŠ¤ì˜ ì¸ë±ìŠ¤
 	//		Triangles.Add(Index + 2);
 	//	}
 
-	//	// ³²Àº µÎ °³ÀÇ ¹öÅØ½º·Î ¸¶Áö¸· »ï°¢ÇüÀ» Çü¼ºÇÕ´Ï´Ù.
+	//	// ë‚¨ì€ ë‘ ê°œì˜ ë²„í…ìŠ¤ë¡œ ë§ˆì§€ë§‰ ì‚¼ê°í˜•ì„ í˜•ì„±í•©ë‹ˆë‹¤.
 	//	if (NumVertices % 3 != 0) {
 	//		Triangles.Add(NumVertices - 3);
 	//		Triangles.Add(NumVertices - 2);
@@ -287,7 +287,7 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 	//	}
 	//}
 
-	// Normal ¹× UV µ¥ÀÌÅÍ ÃßÃâ
+	// Normal ë° UV ë°ì´í„° ì¶”ì¶œ
 	TArray<FVector> Normals;
 	TArray<FVector2D> UVs;
 	const FStaticMeshVertexBuffer& VertexBuffer = LODResource.VertexBuffers.StaticMeshVertexBuffer;
@@ -310,12 +310,12 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 	if (Vertices.Num() > 0 && Triangles.Num() > 0)
 	{
 
-		// Mesh »ı¼º
+		// Mesh ìƒì„±
 		CutProceduralMesh->CreateMeshSection(0, Vertices, Triangles, TArray<FVector>(), TArray<FVector2D>(), TArray<FColor>(), TArray<FProcMeshTangent>(), true);
 		//CutProceduralMesh->CreateMeshSection(1, Vertices, Triangles, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
 		//CutProceduralMesh->CreateMeshSection(2, Vertices, Triangles, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
 
-		// ¸ÓÅÍ¸®¾ó ÀÎ½ºÅÏ½º »ı¼º ¹× Àû¿ë
+		// ë¨¸í„°ë¦¬ì–¼ ì¸ìŠ¤í„´ìŠ¤ ìƒì„± ë° ì ìš©
 		if (Material)
 		{
 			UMaterialInstanceDynamic* MaterialInstance = UMaterialInstanceDynamic::Create(Material, this);
@@ -335,7 +335,7 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 		}
 
 	}
-	//float Mass = 1.0f; // ¿¹½Ã·Î 100.0f·Î ¼³Á¤
+	//float Mass = 1.0f; // ì˜ˆì‹œë¡œ 100.0fë¡œ ì„¤ì •
 	//CutProceduralMesh->GetMass();
 	//CutProceduralMesh->SetMassOverrideInKg(NAME_None, Mass, true);
 
@@ -480,7 +480,7 @@ void ABaseZombie::GetBoneInfluencedVertices(USkeletalMeshComponent* SkeletalMesh
 			FVector VertexLocation = FVector(VL3f.X, VL3f.Y, VL3f.Z);
 
 
-			// µğ¹ö±× ¸Ş½ÃÁö·Î X ÁÂÇ¥ Ãâ·Â
+			// ë””ë²„ê·¸ ë©”ì‹œì§€ë¡œ X ì¢Œí‘œ ì¶œë ¥
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Vertex X: %f"), VertexLocation.X));
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Bone X: %f"), BoneLocation2.X));
 
@@ -747,7 +747,7 @@ void ABaseZombie::AttackCheck()
 		);
 
 
-	// debug ¿ë(Ãæµ¹ ¹üÀ§ È®ÀÎ ¿ë)
+	// debug ìš©(ì¶©ëŒ ë²”ìœ„ í™•ì¸ ìš©)
 	//FVector TraceVec = GetActorForwardVector() * m_fAttackRange;
 	//FVector Center = GetActorLocation() + TraceVec * 0.5f;
 	//float HalfHeight = m_fAttackRange * 0.5f + 50.f;
@@ -804,7 +804,7 @@ void ABaseZombie::Shouting()
 
 		for (const FOverlapResult& OverlapResult : OverlapResults)
 		{
-			// ABaseZombieÀÎÁö È®ÀÎ
+			// ABaseZombieì¸ì§€ í™•ì¸
 			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
 			if (OverlappedZombie)
 			{
@@ -894,7 +894,7 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	TArray<FName> AllBoneNames;
 	Skeleton->GetBoneNames(AllBoneNames);
 
-	// º»ÀÇ °æ·Î¿¡¼­ ¼û±èÀ» ÇØÁ¦ÇÔ
+	// ë³¸ì˜ ê²½ë¡œì—ì„œ ìˆ¨ê¹€ì„ í•´ì œí•¨
 	for (const FName& PathBoneName : AllBoneNames)
 	{
 		Skeleton->UnHideBoneByName(PathBoneName);

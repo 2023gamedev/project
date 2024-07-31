@@ -9,7 +9,7 @@
 /**
  * 
  */
-// �ҹ浵��
+// 소방도끼
 UCLASS()
 class PROJECT_API ANWFireAxe : public ANormalWeaponActor
 {

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -10,7 +10,7 @@
  * 
  */
 
-// Å° ¾×ÅÍ
+// í‚¤ ì•¡í„°
 class ABaseCharacter;
 
 UCLASS()
