@@ -131,8 +131,10 @@ bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDr
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag End"));
 
 	if (oper != nullptr) {
-		Character->DraggingSwap(oper->SlotIndex, oper->Type, this->SlotIndex, this->Type);
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Success"));
+		// DragSwap을 사용하지 않기에 그냥 주석처리 --- 안하면 검은칸이 회색칸으로 바뀔수가 있음
+		//Character->DraggingSwap(oper->SlotIndex, oper->Type, this->SlotIndex, this->Type);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Success"));
+
 		return true;
 	}
 	else {
