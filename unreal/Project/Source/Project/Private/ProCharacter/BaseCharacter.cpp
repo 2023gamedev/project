@@ -949,6 +949,8 @@ void ABaseCharacter::Throw()
 
 }
 
+// 아이템을 먹고 아이템이 사라졌을때 다른 아이템을 주웠을때 인덱스 오류가 발생하는듯 수정 예정
+
 void ABaseCharacter::UpdateHealingSlot()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UpdateHealingSlot");
