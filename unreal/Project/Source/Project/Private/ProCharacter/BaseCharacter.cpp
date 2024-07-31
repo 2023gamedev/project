@@ -197,6 +197,8 @@ ABaseCharacter::ABaseCharacter()
 	CurrentHealingItem = nullptr;
 	CurrentKeyItem = nullptr;
 
+	HealingFX = nullptr;
+
 }
 
 // Called when the game starts or when spawned
@@ -837,6 +839,10 @@ void ABaseCharacter::Healing()
 void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
+	
+	HealingFX = GetWorld()->SpawnActor<AHealingNiagaEffect>(AHealingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
+
+	HealingFX->BeginPlay();
 
 	if (CurrentHealingItem != nullptr) {
 		StartHealingTimer(CurrentHealingItem->m_fHealingSpeed, CurrentHealingItem->m_fHealingDuration);
@@ -1698,6 +1704,8 @@ void ABaseCharacter::HealingTimerElapsed()
 		m_bIsHealingTime = false;
 
 		SetHealing(0.f);
+
+		HealingFX->EndPlay();
 
 		return;
 	}

@@ -28,6 +28,7 @@ class AKeyActor;
 class UGameTimerUI;
 class UPickUpUI;
 class UCircularPB_UI;
+class AHealingNiagaEffect;
 
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);

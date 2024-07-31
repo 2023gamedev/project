@@ -16,9 +16,11 @@ class PROJECT_API AHealingNiagaEffect : public AActor
 public:	
 	AHealingNiagaEffect();
 
-	void BeginPlay();
+	virtual void BeginPlay() override;
 
-	void Interaction();
+	virtual void Tick(float DeltaTime) override;
+
+	void EndPlay();
 
 	UPROPERTY()
 	UStaticMeshComponent* Mesh;

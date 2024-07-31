@@ -6,7 +6,7 @@
 #include "Components/SceneComponent.h"
 #include "PlayerSight.generated.h"
 
-// Player °¡ ¾ÆÀÌÅÛ ÁÖ¿ï ¶§ ½Ã¼± ¿ªÇÒÇÏ´Â SceneComponent Å¬·¡½º
+// Player ê°€ ì•„ì´í…œ ì£¼ìš¸ ë•Œ ì‹œì„  ì—­í• í•˜ëŠ” SceneComponent í´ë˜ìŠ¤
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECT_API UPlayerSight : public USceneComponent
 {
