@@ -1673,19 +1673,14 @@ void ABaseCharacter::FootSound()
 
 void ABaseCharacter::StartHealingTimer(float healingspeed, float healingduration)
 {
-<<<<<<< HEAD
-	if (m_bIsHealingTime) {
-		return;
-	}
-	m_bIsHealingTime = true;
-=======
+
 	//HealingFX->BeginPlay();
 
 	//if (m_bIsHealingTime) {
 	//	return;
 	//}
 	// m_bIsHealingTime = true;
->>>>>>> 322a6ae7c99cfea905b23751a7bd169be5e3474b
+
 	m_fItemHealingSpeed = healingspeed;
 	m_fItemHealingDuration = healingduration;
 
