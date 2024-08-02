@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HealingNiagaEffect.h"
+#include "ProNiagaFX/HealingNiagaEffect.h"
 #include "Components/WidgetComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "ProCharacter/BaseCharacter.h"
