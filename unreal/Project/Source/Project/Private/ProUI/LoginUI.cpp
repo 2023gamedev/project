@@ -7,37 +7,34 @@
 
 void ULoginUI::ShowAlert(const FString& Message)
 {
-    if (!AlertUI)
+    if (AlertUI == nullptr)
     {
-        UE_LOG(LogTemp, Warning, TEXT("AlertUIClass is not set"));
-        return;
+        AlertUI = LoadClass<UAlertUI>(nullptr, TEXT("/Game/UI/BP_Alert.BP_Alert_C"));
+        if (AlertUI == nullptr)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Could not load AlertUI class"));
+            return;
+        }
     }
 
-    if (!AlertUIWidget)
+    if (AlertUIWidget == nullptr)
     {
         AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
-        if (AlertUIWidget)
+        if (AlertUIWidget != nullptr)
         {
             AlertUIWidget->AddToViewport();
+
+            // AlertText ����
             UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-            if (AlertText)
+            if (AlertText != nullptr)
             {
                 AlertText->SetText(FText::FromString(Message));
             }
-
-            // Add Close button click event binding
-            if (AlertUIWidget->CloseButton)
-            {
-                AlertUIWidget->CloseButton->OnClicked.AddDynamic(this, &ULoginUI::OnCloseAlert);
-            }
         }
-    }
-    else
-    {
-        UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-        if (AlertText)
+
+        if (AlertUIWidget->CloseButton)
         {
-            AlertText->SetText(FText::FromString(Message));
+            AlertUIWidget->CloseButton->OnClicked.AddDynamic(this, &ULoginUI::OnCloseAlert);
         }
     }
 }
