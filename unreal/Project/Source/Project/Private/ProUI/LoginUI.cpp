@@ -6,48 +6,26 @@
 #include "LStruct.pb.h"
 
 void ULoginUI::ShowAlert(const FString& Message)
-{
+{   
+    AlertUI = LoadClass<UAlertUI>(nullptr, TEXT("/Game/UI/BP_Alert.BP_Alert_C"));
     if (AlertUI == nullptr)
     {
-        AlertUI = LoadClass<UAlertUI>(nullptr, TEXT("/Game/UI/BP_Alert.BP_Alert_C"));
-        if (AlertUI == nullptr)
-        {
-            UE_LOG(LogTemp, Warning, TEXT("Could not load AlertUI class"));
-            return;
-        }
+        UE_LOG(LogTemp, Warning, TEXT("Could not load AlertUI class"));
+        return;
     }
-
-    if (AlertUIWidget == nullptr)
+    
+    AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
+    if (AlertUIWidget != nullptr)
     {
-        AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
-        if (AlertUIWidget != nullptr)
-        {
-            AlertUIWidget->AddToViewport();
+        AlertUIWidget->AddToViewport();
 
-            // AlertText ����
-            UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-            if (AlertText != nullptr)
-            {
-                AlertText->SetText(FText::FromString(Message));
-            }
-        }
-
-        if (AlertUIWidget->CloseButton)
+        UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
+        if (AlertText != nullptr)
         {
-            AlertUIWidget->CloseButton->OnClicked.AddDynamic(this, &ULoginUI::OnCloseAlert);
+            AlertText->SetText(FText::FromString(Message));
         }
     }
 }
-
-void ULoginUI::OnCloseAlert()
-{
-    if (AlertUIWidget)
-    {
-        AlertUIWidget->RemoveFromParent();
-        AlertUIWidget = nullptr;
-    }
-}
-
 
 void ULoginUI::OnLoginButtonClicked()
 {
