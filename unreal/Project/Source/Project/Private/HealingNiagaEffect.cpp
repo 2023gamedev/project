@@ -4,6 +4,7 @@
 #include "HealingNiagaEffect.h"
 #include "Components/WidgetComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "ProCharacter/BaseCharacter.h"
 //#include "Engine.h"
 //#include "EngineUtils.h"
 
@@ -31,13 +32,14 @@ AHealingNiagaEffect::AHealingNiagaEffect()
 void AHealingNiagaEffect::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	HealingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HealingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
 	if (HealingFXComponent)
 	{
 		HealingFXComponent->Activate();
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX played");
 	}
+
 }
 
 // Called every frame
@@ -45,14 +47,12 @@ void AHealingNiagaEffect::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	HealingFXComponent->SetWorldLocation(this->GetActorLocation());
-	//FVector pos = this->GetActorLocation();
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("Actor's current location: (%d, %d, %d)"), pos.X, pos.Y, pos.Z));
+	HealingFXComponent->SetWorldLocation(OwnerChar->GetActorLocation());
+
 }
 
 void AHealingNiagaEffect::EndPlay()
 {
-
 	HealingFXComponent->Deactivate();
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX ended");

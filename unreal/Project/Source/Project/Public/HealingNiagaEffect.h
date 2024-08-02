@@ -8,6 +8,8 @@
 #include "NiagaraComponent.h"
 #include "HealingNiagaEffect.generated.h"
 
+class ABaseCharacter;
+
 UCLASS()
 class PROJECT_API AHealingNiagaEffect : public AActor
 {
@@ -28,7 +30,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
 	UNiagaraSystem* HealingFXSystem;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	UNiagaraComponent* HealingFXComponent;
 
+	ABaseCharacter* OwnerChar;
 };

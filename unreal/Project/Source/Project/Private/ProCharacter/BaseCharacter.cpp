@@ -100,6 +100,8 @@ ABaseCharacter::ABaseCharacter()
 	CurrentWeapon = CreateDefaultSubobject<ANormalWeaponActor>(TEXT("NORMALWEAPON"));
 	FlashLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("FLASHLIGHT"));
 
+	HealingFX = CreateDefaultSubobject<AHealingNiagaEffect>(TEXT("HealingFX"));
+
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 
 	Camera->SetupAttachment(SpringArm);
@@ -841,8 +843,7 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
 	
 	HealingFX = GetWorld()->SpawnActor<AHealingNiagaEffect>(AHealingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
-
-	HealingFX->BeginPlay();
+	HealingFX->OwnerChar = this;
 
 	if (CurrentHealingItem != nullptr) {
 		StartHealingTimer(CurrentHealingItem->m_fHealingSpeed, CurrentHealingItem->m_fHealingDuration);
