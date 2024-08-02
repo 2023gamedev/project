@@ -72,7 +72,7 @@
 #include "ProUI/PickUpUI.h"
 #include "ProUI/CircularPB_UI.h"
 #include "ProCharacter/PlayerCharacterController.h"
-#include "HealingNiagaEffect.h"
+#include "ProNiagaFX/HealingNiagaEffect.h"
 
 #define default_circularPB_widget_anim_playtime 5.f
 #define default_healing_anim_playtime 4.57f
