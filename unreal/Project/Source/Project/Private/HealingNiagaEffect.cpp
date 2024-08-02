@@ -18,10 +18,13 @@ AHealingNiagaEffect::AHealingNiagaEffect()
 
 	RootComponent = Mesh;
 
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX generated");
+
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NE(TEXT("/Script/Niagara.NiagaraSystem'/Game/HealingEffect.HealingEffect'"));
 	if (NE.Succeeded())
 	{
 		HealingFXSystem = NE.Object;
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX working fine");
 	}
 }
 
