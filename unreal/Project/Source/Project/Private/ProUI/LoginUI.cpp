@@ -7,14 +7,6 @@
 
 void ULoginUI::ShowAlert(const FString& Message)
 {
-    if (AlertUI == nullptr)
-    {
-        static ConstructorHelpers::FClassFinder<UAlertUI> PLAYER_ALERTUI(TEXT("/Game/UI/WBP_Alert"));
-        if (PLAYER_ALERTUI.Succeeded()) {
-            AlertUI = PLAYER_ALERTUI.Class;
-        }
-    }
-
     if (!AlertUI)
     {
         UE_LOG(LogTemp, Warning, TEXT("AlertUIClass is not set"));
@@ -24,34 +16,22 @@ void ULoginUI::ShowAlert(const FString& Message)
     if (!AlertUIWidget)
     {
         AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
-        if (AlertUIWidget != nullptr)
+        if (AlertUIWidget)
         {
             AlertUIWidget->AddToViewport();
-
-            // AlertText ¼³Á¤
-            UTextBlock* AlertText = Cast<UTextBlock>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-            if (AlertText != nullptr)
+            UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
+            if (AlertText)
             {
                 AlertText->SetText(FText::FromString(Message));
             }
+
+            // Add Close button click event binding
+            if (AlertUIWidget->CloseButton)
+            {
+                AlertUIWidget->CloseButton->OnClicked.AddDynamic(this, &ULoginUI::OnCloseAlert);
+            }
         }
     }
-
-	if (AlertUIWidget)
-	{
-		AlertUIWidget->AddToViewport();
-		UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
-		if (AlertText)
-		{
-			AlertText->SetText(FText::FromString(Message));
-		}
-
-		// Add Close button click event binding
-		if (AlertUIWidget->CloseButton)
-		{
-			AlertUIWidget->CloseButton->OnClicked.AddDynamic(this, &ULoginUI::OnCloseAlert);
-		}
-	}
     else
     {
         UEditableTextBox* AlertText = Cast<UEditableTextBox>(AlertUIWidget->GetWidgetFromName(TEXT("AlertText")));
@@ -90,7 +70,7 @@ void ULoginUI::OnLoginButtonClicked()
     std::string serializedData;
     packet.SerializeToString(&serializedData);
 
-    // Á÷·ÄÈ­µÈ µ¥ÀÌÅÍ¸¦ ¼­¹ö·Î Àü¼Û
+    // ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ ì„œë²„ë¡œ ì „ì†¡
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
     float timeout = 5.0f;
@@ -131,7 +111,7 @@ void ULoginUI::OnRegisterButtonClicked()
     std::string serializedData;
     packet.SerializeToString(&serializedData);
 
-    // Á÷·ÄÈ­µÈ µ¥ÀÌÅÍ¸¦ ¼­¹ö·Î Àü¼Û
+    // ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ ì„œë²„ë¡œ ì „ì†¡
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
     float timeout = 5.0f;
