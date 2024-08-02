@@ -4,7 +4,8 @@
 #include "HealingNiagaEffect.h"
 #include "Components/WidgetComponent.h"
 #include "NiagaraFunctionLibrary.h"
-
+//#include "Engine.h"
+//#include "EngineUtils.h"
 
 // Sets default values
 AHealingNiagaEffect::AHealingNiagaEffect()
@@ -16,13 +17,13 @@ AHealingNiagaEffect::AHealingNiagaEffect()
 
 	RootComponent = Mesh;
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX generated");
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX generated");
 
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NE(TEXT("/Script/Niagara.NiagaraSystem'/Game/HealingEffect.HealingEffect'"));
 	if (NE.Succeeded())
 	{
 		HealingFXSystem = NE.Object;
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX working fine");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX working fine");
 	}
 }
 
@@ -35,7 +36,7 @@ void AHealingNiagaEffect::BeginPlay()
 	if (HealingFXComponent)
 	{
 		HealingFXComponent->Activate();
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX played");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX played");
 	}
 }
 
@@ -54,7 +55,7 @@ void AHealingNiagaEffect::EndPlay()
 
 	HealingFXComponent->Deactivate();
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX ended");
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX ended");
 
 	Destroy();
 }
