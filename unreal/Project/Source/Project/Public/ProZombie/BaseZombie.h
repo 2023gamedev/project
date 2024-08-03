@@ -12,7 +12,9 @@
 DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
 
-// Zombie Å¬·¡½ºÀÇ ºÎ¸ğ Å¬·¡½º
+class ABloodNiagaEffect;
+
+// Zombie í´ë˜ìŠ¤ì˜ ë¶€ëª¨ í´ë˜ìŠ¤
 UCLASS()
 class PROJECT_API ABaseZombie : public ACharacter
 {
@@ -102,7 +104,7 @@ public:
 	bool m_bIsShouting = false;
 
 	UPROPERTY(EditAnywhere)
-	bool m_bIsShouted = false; // ¼Ò¸®ÃÆ´ÂÁö
+	bool m_bIsShouted = false; // ì†Œë¦¬ì³¤ëŠ”ì§€
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsNormalDead = false;
@@ -121,7 +123,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	FName m_sZombieName;
 
-	// TimerHandle 30ÃÊ µÚ¿¡ ºÎÈ°ÇÏ±â À§ÇØ
+	// TimerHandle 30ì´ˆ ë’¤ì— ë¶€í™œí•˜ê¸° ìœ„í•´
 	FTimerHandle ResurrectionHandle;
 
 	void StartResurrectionTimer();
@@ -183,6 +185,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Materials")
 	UMaterialInterface* Material3;
+
+	UPROPERTY(EditAnywhere)
+	ABloodNiagaEffect* BloodFX;
 
 private:
 

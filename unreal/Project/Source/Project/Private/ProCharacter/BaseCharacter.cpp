@@ -1681,9 +1681,6 @@ void ABaseCharacter::FootSound()
 
 void ABaseCharacter::StartHealingTimer(float healingspeed, float healingduration)
 {
-
-	//HealingFX->BeginPlay();
-
 	//if (m_bIsHealingTime) {
 	//	return;
 	//}
@@ -1706,7 +1703,7 @@ void ABaseCharacter::HealingTimerElapsed()
 
 		SetHealing(0.f);
 
-		HealingFX->EndPlay();
+		HealingFX->EndPlay(EEndPlayReason::Destroyed);
 
 		return;
 	}

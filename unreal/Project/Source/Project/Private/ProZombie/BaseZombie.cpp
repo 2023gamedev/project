@@ -10,6 +10,7 @@
 #include "ProZombie/RunningZombieAIController.h"
 #include "ProZombie/ShoutingZombieAIController.h"
 #include "Engine/SkeletalMesh.h"
+#include "ProNiagaFX/BloodNiagaEffect.h"
 
 #include "Rendering/SkeletalMeshRenderData.h"
 #include "Rendering/SkeletalMeshLODRenderData.h"
@@ -37,6 +38,12 @@ ABaseZombie::ABaseZombie()
 	
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 400.f;
+
+	BloodFX = CreateDefaultSubobject<ABloodNiagaEffect>(TEXT("BloodFX"));
+
+	BloodFX = nullptr;
+
+
 }
 
 // Called when the game starts or when spawned
@@ -83,6 +90,9 @@ void ABaseZombie::PossessedBy(AController* NewController)
 
 float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
+	BloodFX->OwnerZombie = this;
+
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	SetHP(GetHP() - Damage);
@@ -852,6 +862,8 @@ void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bBeAttacked = false;
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
+
+	//BloodFX->EndPlay(EEndPlayReason::Destroyed);
 }
 
 

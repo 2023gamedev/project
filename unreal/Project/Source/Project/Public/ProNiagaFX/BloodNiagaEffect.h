@@ -6,32 +6,34 @@
 #include "GameFramework/Actor.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
-#include "HealingNiagaEffect.generated.h"
+#include "BloodNiagaEffect.generated.h"
 
-class ABaseCharacter;
+class ABaseZombie;
 
 UCLASS()
-class PROJECT_API AHealingNiagaEffect : public AActor
+class PROJECT_API ABloodNiagaEffect : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	AHealingNiagaEffect();
+	// Sets default values for this actor's properties
+	ABloodNiagaEffect();
 
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void EndPlay(EEndPlayReason::Type type) override;
+	//virtual void EndPlay(EEndPlayReason::Type type) override;
 
 	UPROPERTY()
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
-	UNiagaraSystem* HealingFXSystem;
+	UNiagaraSystem* BloodFXSystem;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
-	UNiagaraComponent* HealingFXComponent;
+	UNiagaraComponent* BloodFXComponent;
 
-	ABaseCharacter* OwnerChar;
+	ABaseZombie* OwnerZombie;
+
 };

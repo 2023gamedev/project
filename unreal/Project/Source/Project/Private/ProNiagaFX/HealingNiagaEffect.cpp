@@ -51,7 +51,7 @@ void AHealingNiagaEffect::Tick(float DeltaTime)
 
 }
 
-void AHealingNiagaEffect::EndPlay()
+void AHealingNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
 	HealingFXComponent->Deactivate();
 
