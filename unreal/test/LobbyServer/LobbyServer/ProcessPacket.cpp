@@ -74,6 +74,25 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     } break;
 
+    case 6:
+    {
+        printf("[ No. %3u ] Select Packet Received !!\n", id);
+
+        Protocol::Select_Character Select_Packet;
+        Select_Packet.ParseFromArray(buffer, bufferSize);
+        string serializedData;
+        Select_Packet.SerializeToString(&serializedData);
+
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }
+        return true;
+
+    } break;
+
     default: {
         printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.type());
         // 클라이언트나 서버 종료, 로깅 등의 처리 가능

@@ -840,6 +840,13 @@ void ABaseCharacter::Healing()
 
 void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
+	
+	if (QuickSlot[1].Count <= 0) {
+		// 이상하게 힐링 아이템 다 먹고 나서 다른 아이템 먹으면 이 함수가 호출되는 문제가 있어서 예외처리
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->   QuickSlot[1].Count <= 0!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		return;
+	}
+
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
 	
 	HealingFX = GetWorld()->SpawnActor<AHealingNiagaEffect>(AHealingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
@@ -889,6 +896,11 @@ void ABaseCharacter::BleedHealing()
 void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
+
+
+	if (QuickSlot[0].Count <= 0) { // 이쪽도 예외처리
+		return;
+	}
 
 	m_DBleedingHealingEnd.AddLambda([this]() -> void {
 		m_bIsBleedHealing = false;

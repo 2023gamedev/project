@@ -33,3 +33,9 @@ message SC_Ready{
     uint32 type = 1;
     bool allready = 2;
 }
+
+message Select_Character {
+    uint32 type = 1;
+    uint32 playerid = 2;
+    uint32 character_type = 3;
+}
