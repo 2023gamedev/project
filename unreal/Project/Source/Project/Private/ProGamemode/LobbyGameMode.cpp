@@ -46,7 +46,7 @@ void ALobbyGameMode::BeginPlay()
     }
 }
 
-// ÀÌÁ¦ ¸ÞÀÎ ¸Ê°ú °ÔÀÓ¸ðµå·Î ÀÌµ¿
+// ì´ì œ ë©”ì¸ ë§µê³¼ ê²Œìž„ëª¨ë“œë¡œ ì´ë™
 void ALobbyGameMode::LobbyStageClear()
 {
     GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ALobbyGameMode::CheckServerType, 0.5f, true);
@@ -69,6 +69,7 @@ void ALobbyGameMode::ChoiceGirl()
 
     GameInstance->SetChoicedCharacterNumber(0);
     SendReady();
+    SendChoice(1);
     LobbyStageClear();
 }
 
@@ -79,6 +80,7 @@ void ALobbyGameMode::ChoiceEmployee()
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(1);
     SendReady();
+    SendChoice(2);
     LobbyStageClear();
 }
 
@@ -88,6 +90,7 @@ void ALobbyGameMode::ChoiceIdol()
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(2);
     SendReady();
+    SendChoice(3);
     LobbyStageClear();
 }
 
@@ -98,6 +101,7 @@ void ALobbyGameMode::ChoiceFireFighter()
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(3);
     SendReady();
+    SendChoice(4);
     LobbyStageClear();
 }
 
@@ -114,13 +118,31 @@ void ALobbyGameMode::SendReady()
     Protocol::CS_Ready Packet;
 
     Packet.set_playerid(MyPlayerId);
+    Packet.set_type(6);
     Packet.set_ready(true);
 
-    // Á÷·ÄÈ­
+    // ì§ë ¬í™”
     std::string serializedData;
     Packet.SerializeToString(&serializedData);
 
-    // Á÷·ÄÈ­µÈ µ¥ÀÌÅÍ¸¦ ¼­¹ö·Î Àü¼Û
+    // ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ ì„œë²„ë¡œ ì „ì†¡
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
+void ALobbyGameMode::SendChoice(uint32 character_type)
+{
+    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
+    uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+    Protocol::Select_Character Packet;
+
+    Packet.set_playerid(MyPlayerId);
+    Packet.set_type(7);
+    Packet.set_character_type(character_type);
+
+    // ì§ë ¬í™”
+    std::string serializedData;
+    Packet.SerializeToString(&serializedData);
+
+    // ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ ì„œë²„ë¡œ ì „ì†¡
+    bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+}
