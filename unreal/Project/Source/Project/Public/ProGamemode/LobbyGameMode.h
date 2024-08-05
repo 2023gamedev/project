@@ -12,7 +12,7 @@
 
 
 
-// LobbyMap¿¡¼­ÀÇ Gamemode Å¬·¡½º
+// LobbyMapì—ì„œì˜ Gamemode í´ë˜ìŠ¤
 UCLASS()
 class PROJECT_API ALobbyGameMode : public AGameModeBase
 {
@@ -24,6 +24,7 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
 	void SendReady();
+	void SendChoice(uint32 character_type);
 
 	virtual void BeginPlay() override;
 	void LobbyStageClear();

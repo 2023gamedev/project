@@ -34,10 +34,10 @@ struct PlayerData
 	uint32 charactertype;
 	float hp;
 
-	// ±âº» »ı¼ºÀÚ ¸í½ÃÀû Á¤ÀÇ
+	// ê¸°ë³¸ ìƒì„±ì ëª…ì‹œì  ì •ì˜
 	PlayerData() : PlayerId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), charactertype(0), hp(100) {}
 
-	// ¸Å°³º¯¼ö°¡ ÀÖ´Â »ı¼ºÀÚ
+	// ë§¤ê°œë³€ìˆ˜ê°€ ìˆëŠ” ìƒì„±ì
 	PlayerData(uint32 InPlayerId, FVector InLocation, FRotator InRotation, uint32 Incharactertype, float Inhp)
 		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation), charactertype(Incharactertype), hp(Inhp) {}
 };
@@ -49,10 +49,10 @@ struct ZombieData
 	FRotator Rotation;
 	uint32 zombietype;
 
-	// ±âº» »ı¼ºÀÚ ¸í½ÃÀû Á¤ÀÇ
+	// ê¸°ë³¸ ìƒì„±ì ëª…ì‹œì  ì •ì˜
 	ZombieData() : ZombieId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), zombietype(0) {}
 
-	// ¸Å°³º¯¼ö°¡ ÀÖ´Â »ı¼ºÀÚ
+	// ë§¤ê°œë³€ìˆ˜ê°€ ìˆëŠ” ìƒì„±ì
 	ZombieData(uint32 InZombieId, FVector InLocation, FRotator InRotation, uint32 Inzombietype)
 		: ZombieId(InZombieId), Location(InLocation), Rotation(InRotation), zombietype(Inzombietype) {}
 };
@@ -101,6 +101,17 @@ struct PlayerJump
 		: PlayerId(InPlayerId) {}
 };
 
+struct CharacterSelect
+{
+	uint32 PlayerId;
+	uint32 Character_type;
+
+	CharacterSelect() : PlayerId(0), Character_type(0) {}
+
+	CharacterSelect(uint32 InPlayerId, uint32 InCharacter_type)
+		: PlayerId(InPlayerId), Character_type(InCharacter_type) {}
+};
+
 
 class UProGameInstance;
 
@@ -121,6 +132,7 @@ public:
 	Concurrency::concurrent_queue<EquipItem> Q_eitem;
 	Concurrency::concurrent_queue<PlayerRun> Q_run;
 	Concurrency::concurrent_queue<PlayerJump> Q_jump;
+	Concurrency::concurrent_queue<CharacterSelect> Q_select;
 	
 
 	virtual bool Init() override;

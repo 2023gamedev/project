@@ -86,13 +86,13 @@ uint32 ClientSocket::Run()
 					case 6:
 					{
 						Protocol::SC_Ready Ready_Packet;
-						if (Packet.ParseFromArray(buffer.data(), buffer.size())) {
+						if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 							if (Ready_Packet.allready())
 							{
-								// ·Îºñ ¼­¹ö ¿¬°á Á¾·á
+								// ë¡œë¹„ ì„œë²„ ì—°ê²° ì¢…ë£Œ
 								Exit();
 
-								// °ÔÀÓ ¼­¹ö¿¡ ¿¬°á
+								// ê²Œì„ ì„œë²„ì— ì—°ê²°
 								if (ConnectServer(ServerType::GAME_SERVER))
 								{
 									CurrentServerType = ServerType::GAME_SERVER;
@@ -106,19 +106,31 @@ uint32 ClientSocket::Run()
 						}
 						break;
 					}
+
+					case 7:
+					{
+						Protocol::Select_Character Select_Packet;
+
+						if (Select_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+							Q_select.push(CharacterSelect(Select_Packet.playerid(), Select_Packet.character_type()));
+						}
+						UE_LOG(LogNet, Display, TEXT("Received Select Character: %d, %d"), Select_Packet.playerid(), Select_Packet.character_type());
+						break;
+					}
 					}
 					buffer.clear();
 				}
 			}
+		}
 
 			else if (CurrentServerType == ServerType::GAME_SERVER) {
 				Protocol::Character tempCharacterPacket;
 				if (tempCharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					// ¸Ş½ÃÁö Å¸ÀÔ È®ÀÎ
+					// ë©”ì‹œì§€ íƒ€ì… í™•ì¸
 					switch (tempCharacterPacket.packet_type())
 					{
-					case 1: // Character ¸Ş½ÃÁö Å¸ÀÔ °ª
+					case 1: // Character ë©”ì‹œì§€ íƒ€ì… ê°’
 					{
 						Protocol::Character CharacterPacket;
 						if (CharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
@@ -133,7 +145,7 @@ uint32 ClientSocket::Run()
 						}
 						break;
 					}
-					case 2: // Zombie ¸Ş½ÃÁö Å¸ÀÔ °ª
+					case 2: // Zombie ë©”ì‹œì§€ íƒ€ì… ê°’
 					{
 						Protocol::Zombie ZombiePacket;
 						if (ZombiePacket.ParseFromArray(buffer.data(), buffer.size()))
@@ -210,7 +222,6 @@ uint32 ClientSocket::Run()
 				UE_LOG(LogNet, Warning, TEXT("Recv Error"));
 				return 0;
 			}
-		}
 	}
 }
 

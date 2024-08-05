@@ -29,9 +29,6 @@ public:
 
 	void ShowAlert(const FString& Message);
 
-
-	void OnCloseAlert();
-
 	FMoveStartGameUI MoveStartGameUI;
 
 	UProGameInstance* GameInstance;
