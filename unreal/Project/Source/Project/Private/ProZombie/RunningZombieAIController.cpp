@@ -12,7 +12,7 @@
 #include "ProGamemode/OneGameModeBase.h"
 #include "ProGamemode/ProGameInstance.h"
 
-// AI Ãß°¡µÇ¸é ¼öÁ¤µÉ °Í °°Àº °Í!!
+// AI ì¶”ê°€ë˜ë©´ ìˆ˜ì •ë  ê²ƒ ê°™ì€ ê²ƒ!!
 
 const FName ARunningZombieAIController::TargetKey(TEXT("Target"));
 const FName ARunningZombieAIController::StartLocationKey(TEXT("StartLocation"));
@@ -57,18 +57,18 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 		return;
 	}
 
-	FVector ZombieForward = RunningZombie->GetActorForwardVector(); // Á»ºñÀÇ Àü¹æ º¤ÅÍ
-	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡
-	FVector ZombieLocation = RunningZombie->GetActorLocation(); // Á»ºñÀÇ À§Ä¡
+	FVector ZombieForward = RunningZombie->GetActorForwardVector(); // ì¢€ë¹„ì˜ ì „ë°© ë²¡í„°
+	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜
+	FVector ZombieLocation = RunningZombie->GetActorLocation(); // ì¢€ë¹„ì˜ ìœ„ì¹˜
 
-	FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // ÇÃ·¹ÀÌ¾î·Î ÇâÇÏ´Â ¹æÇâ º¤ÅÍ
+	FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // í”Œë ˆì´ì–´ë¡œ í–¥í•˜ëŠ” ë°©í–¥ ë²¡í„°
 
 	float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
-	float MaxSightRange = 1000.f; // ¿øÇÏ´Â ÃÖ´ë ½Ã¾ß ¹üÀ§¸¦ ¼³Á¤ÇÏ¼¼¿ä.
+	float MaxSightRange = 1000.f; // ì›í•˜ëŠ” ìµœëŒ€ ì‹œì•¼ ë²”ìœ„ë¥¼ ì„¤ì •í•˜ì„¸ìš”.
 	float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
-	// ½Ã¾ß°¢À» 90µµ·Î ¼³Á¤ (Àü¹æ 180µµ)
-	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // Àü¹æ 90µµ
+	// ì‹œì•¼ê°ì„ 90ë„ë¡œ ì„¤ì • (ì „ë°© 180ë„)
+	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // ì „ë°© 90ë„
 
 
 	FVector TargetLocation = PlayerLocation + (ZombieForward * 100.f);
@@ -98,13 +98,13 @@ void ARunningZombieAIController::CheckAndSendMovement()
 	FRotator CurrentRotation = ZombiePawn->GetActorRotation();
 	ZombieId = ZombiePawn->GetZombieId();
 
-	// ÀÌÀü À§Ä¡¿Í ÇöÀç À§Ä¡ ºñ±³ (¿òÁ÷ÀÓ °¨Áö)
+	// ì´ì „ ìœ„ì¹˜ì™€ í˜„ì¬ ìœ„ì¹˜ ë¹„êµ (ì›€ì§ì„ ê°ì§€)
 	//if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation){}
 
-	// Protobuf¸¦ »ç¿ëÇÏ¿© TestPacket »ı¼º
+	// Protobufë¥¼ ì‚¬ìš©í•˜ì—¬ TestPacket ìƒì„±
 	Protocol::Zombie packet;
 	packet.set_zombieid(ZombieId);
-	packet.set_packet_type(2); // ¿øÇÏ´Â À¯Çü ¼³Á¤
+	packet.set_packet_type(2); // ì›í•˜ëŠ” ìœ í˜• ì„¤ì •
 	packet.set_x(CurrentLocation.X);
 	packet.set_y(CurrentLocation.Y);
 	packet.set_z(CurrentLocation.Z);
@@ -112,14 +112,14 @@ void ARunningZombieAIController::CheckAndSendMovement()
 	packet.set_yaw(CurrentRotation.Yaw);
 	packet.set_roll(CurrentRotation.Roll);
 
-	// Á÷·ÄÈ­
+	// ì§ë ¬í™”
 	std::string serializedData;
 	packet.SerializeToString(&serializedData);
 
-	// Á÷·ÄÈ­µÈ µ¥ÀÌÅÍ¸¦ ¼­¹ö·Î Àü¼Û
+	// ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ ì„œë²„ë¡œ ì „ì†¡
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
-	// ÇöÀç À§Ä¡¸¦ ÀÌÀü À§Ä¡·Î ¾÷µ¥ÀÌÆ®
+	// í˜„ì¬ ìœ„ì¹˜ë¥¼ ì´ì „ ìœ„ì¹˜ë¡œ ì—…ë°ì´íŠ¸
 	PreviousLocation = CurrentLocation;
 	PreviousRotation = CurrentRotation;
 

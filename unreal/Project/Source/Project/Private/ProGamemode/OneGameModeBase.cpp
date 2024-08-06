@@ -40,14 +40,14 @@ AOneGameModeBase::AOneGameModeBase()
     //PlayerControllerClass = APlayerCharacterController::StaticClass();
 
 
-    // º¯¼öµé
+    // ë³€ìˆ˜ë“¤
     m_iItemBoxNumber = 0;
 
     m_iZombieNumber = 0;
     m_iShoutingZombieNumber = 0;
     m_iRunningZombieNumber = 0;
 
-    // ÇÃ·¹ÀÌ¾î¸¦ ¼±ÅÃÇÑ °ÍÀ» ¹Ş¾Æ¼­ ³Ñ°ÜÁÖ·Á°í ÇÒ ¿¹Á¤
+    // í”Œë ˆì´ì–´ë¥¼ ì„ íƒí•œ ê²ƒì„ ë°›ì•„ì„œ ë„˜ê²¨ì£¼ë ¤ê³  í•  ì˜ˆì •
     CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
 
 
@@ -83,7 +83,7 @@ void AOneGameModeBase::BeginPlay()
     SpawnItemBoxes(13, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
     SpawnItemBoxes(14, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
     SpawnItemBoxes(15, "Drink", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDrink.InvenDrink"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1); // ¼öÁ¤ ÇÊ¿ä
+    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1); // ìˆ˜ì • í•„ìš”
     SpawnItemBoxes(17, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
 
     SpawnItemBoxes(18, "CarKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
@@ -148,32 +148,32 @@ void AOneGameModeBase::BeginPlay()
 
 
 
-    // BeginPlay¿¡¼­ SpawnZombies È£Ãâ
+    // BeginPlayì—ì„œ SpawnZombies í˜¸ì¶œ
 
-    // ÁöÇÏ 1Ãş 
+    // ì§€í•˜ 1ì¸µ 
     SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
     SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
     SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
 
-    SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
-    SpawnZombies(4, EZombie::NORMAL, FVector(1200.f, 2710.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -700.f);
-    SpawnZombies(5, EZombie::NORMAL, FVector(400.f, 3800.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, 1200.f);
+    //SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
+    //SpawnZombies(4, EZombie::NORMAL, FVector(1200.f, 2710.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -700.f);
+    //SpawnZombies(5, EZombie::NORMAL, FVector(400.f, 3800.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, 1200.f);
 
 
-    SpawnZombies(6, EZombie::NORMAL, FVector(1320.f, 3100.f, 1040.275f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(7, EZombie::NORMAL, FVector(1400.f, 2800.f, 1040.275f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(8, EZombie::NORMAL, FVector(1000.f, 3320.f, 1040.275f), FRotator(0.f, 10.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1040.275f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(6, EZombie::NORMAL, FVector(1320.f, 3100.f, 1040.275f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(7, EZombie::NORMAL, FVector(1400.f, 2800.f, 1040.275f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(8, EZombie::NORMAL, FVector(1000.f, 3320.f, 1040.275f), FRotator(0.f, 10.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1040.275f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
-    //// Áö»ó 1Ãş
+    //// ì§€ìƒ 1ì¸µ
 
-    //SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
-    //SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(15, EZombie::NORMAL, FVector(2100.f, 3500.f, 1989.212f), FRotator(0.f, 120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(16, EZombie::NORMAL, FVector(200.f, 3200.f, 1989.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(17, EZombie::NORMAL, FVector(800.f, 3600.f, 1989.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -181,10 +181,10 @@ void AOneGameModeBase::BeginPlay()
     //SpawnZombies(19, EZombie::NORMAL, FVector(200.f, 2200.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
-    ////Áö»ó 2Ãş
-    //SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
-    //SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
-    //SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    ////ì§€ìƒ 2ì¸µ
+    SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
+    SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
+    SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
     //SpawnZombies(23, EZombie::NORMAL, FVector(580.f, 2170.f, 2947.212f), FRotator(0.f, -180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -195,13 +195,13 @@ void AOneGameModeBase::BeginPlay()
     //SpawnZombies(28, EZombie::NORMAL, FVector(2241.f, 3500.f, 2947.212f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(29, EZombie::NORMAL, FVector(190.f, 2600.f, 2947.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
-    //// ÁöÇÏ 2Ãş
-    //SpawnZombies(30, EZombie::RUNNING, FVector(600.f, 500.f, 90.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(31, EZombie::RUNNING, FVector(2000.f, 1340.f, 90.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -1200.f);
+    //// ì§€í•˜ 2ì¸µ
+    SpawnZombies(30, EZombie::RUNNING, FVector(600.f, 500.f, 90.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    SpawnZombies(31, EZombie::RUNNING, FVector(2000.f, 1340.f, 90.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -1200.f);
     //SpawnZombies(32, EZombie::RUNNING, FVector(2000.f, 3600.f, 90.212f), FRotator(0.f, -50.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(33, EZombie::RUNNING, FVector(180.f, 2400.f, 90.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 800.f);
     //SpawnZombies(34, EZombie::RUNNING, FVector(1000.f, 2800.f, 90.212f), FRotator(0.f, -60.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //             
+                
     //SpawnZombies(35, EZombie::NORMAL, FVector(600.f, 3600.f, 90.212f), FRotator(0.f, -130.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(36, EZombie::NORMAL, FVector(570.f, 2120.f, 90.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(37, EZombie::NORMAL, FVector(1600.f, 2000.f, 90.212f), FRotator(0.f, -120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -247,7 +247,7 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 void AOneGameModeBase::ChoiceCharacterBefore()
 {
-    // ÇöÀç ¿ùµåÀÇ °ÔÀÓ ÀÎ½ºÅÏ½º °¡Á®¿À±â
+    // í˜„ì¬ ì›”ë“œì˜ ê²Œì„ ì¸ìŠ¤í„´ìŠ¤ ê°€ì ¸ì˜¤ê¸°
     UGameInstance* CurrentGameInstance = GetGameInstance();
 
     if (CurrentGameInstance) {
@@ -268,11 +268,11 @@ void AOneGameModeBase::ChoiceCharacterBefore()
             }
         }
         else {
-            // °ÔÀÓ ÀÎ½ºÅÏ½º°¡ À¯È¿ÇÏÁö ¾ÊÀº °æ¿ì¿¡ ´ëÇÑ Ã³¸®
+            // ê²Œì„ ì¸ìŠ¤í„´ìŠ¤ê°€ ìœ íš¨í•˜ì§€ ì•Šì€ ê²½ìš°ì— ëŒ€í•œ ì²˜ë¦¬
         }
     }
     else {
-        // °ÔÀÓ ÀÎ½ºÅÏ½º°¡ ¾ÆÁ÷ »ı¼ºµÇÁö ¾ÊÀº °æ¿ì¿¡ ´ëÇÑ Ã³¸®
+        // ê²Œì„ ì¸ìŠ¤í„´ìŠ¤ê°€ ì•„ì§ ìƒì„±ë˜ì§€ ì•Šì€ ê²½ìš°ì— ëŒ€í•œ ì²˜ë¦¬
     }
 }
 
@@ -302,16 +302,16 @@ void AOneGameModeBase::ChoiceCharacter()
 
 void AOneGameModeBase::SpawnCharacter(int32 characterindex)
 {
-    // ±× ´ë½Å ÀÌ·¸°Ô ÇÏ¸é PlayerStart À§Ä¡µéÀ» µû·Î Àû¾î³ö¾ß ÇÒ°Í °°´Ù. ÄÚµå»ó¿¡¼­´Â ¾Ë ¼ö ¾øÀ¸´Ï±î
+    // ê·¸ ëŒ€ì‹  ì´ë ‡ê²Œ í•˜ë©´ PlayerStart ìœ„ì¹˜ë“¤ì„ ë”°ë¡œ ì ì–´ë†”ì•¼ í• ê²ƒ ê°™ë‹¤. ì½”ë“œìƒì—ì„œëŠ” ì•Œ ìˆ˜ ì—†ìœ¼ë‹ˆê¹Œ
     ABaseCharacter* DefaultPawn = nullptr;
     APlayerStart* PlayerStart = nullptr;
 
     DefaultPawn->SetPlayerId(99);
 
-    // ÀÌ¸§(Tag)À¸·Î ÇÒ ½Ã
+    // ì´ë¦„(Tag)ìœ¼ë¡œ í•  ì‹œ
     FName PlayerStartTagName = "Start3";
 
-    // ÀÎµ¦½º·Î ÇÒ ½Ã
+    // ì¸ë±ìŠ¤ë¡œ í•  ì‹œ
     // int index = 0;
 
     UWorld* World = GetWorld();
@@ -320,13 +320,13 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
         for (TActorIterator<APlayerStart> It(World); It; ++It) {
             APlayerStart* PS = *It;
 
-            // ÀÌ¸§(Tag)À¸·Î ÇÒ ½Ã
+            // ì´ë¦„(Tag)ìœ¼ë¡œ í•  ì‹œ
             if (PS && PS->PlayerStartTag == PlayerStartTagName) {
 
                 PlayerStart = PS;
                 break;
             }
-            // ÀÎµ¦½º·Î ÇÒ ½Ã
+            // ì¸ë±ìŠ¤ë¡œ í•  ì‹œ
             //if (index == 3) {
 
             //    PlayerStart = PS;
@@ -352,7 +352,7 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
 
 void AOneGameModeBase::ItemRandomLocationSetting()
 {
-    // 0~19Àº B1 20~39´Â F1 40~59´Â F2
+    // 0~19ì€ B1 20~39ëŠ” F1 40~59ëŠ” F2
 // B1
     ItemRandomLocationStruct[0].sLocation = FVector(2330.f, 3200.f, 975.0626f);
     ItemRandomLocationStruct[1].sLocation = FVector(1880.f, 3870.f, 975.0626f);
@@ -448,13 +448,13 @@ void AOneGameModeBase::ItemRandomLocationSetting()
 void AOneGameModeBase::SpawnZombiesStaticClasses()
 {
 
-    // ÁöÇÏ 1Ãş
+    // ì§€í•˜ 1ì¸µ
     for (int i = 0; i < 10; ++i) {
         ZombieClasses.Add(ANormalZombie::StaticClass());
         ZombieAIClasses.Add(AZombieAIController::StaticClass());
     }
 
-    // Áö»ó 1Ãş
+    // ì§€ìƒ 1ì¸µ
     for (int i = 10; i < 12; ++i) {
         ZombieClasses.Add(AShoutingZombie::StaticClass());
         ShoutingZombieAIClasses.Add(AShoutingZombieAIController::StaticClass());
@@ -464,7 +464,7 @@ void AOneGameModeBase::SpawnZombiesStaticClasses()
         ZombieAIClasses.Add(AZombieAIController::StaticClass());
     }
 
-    // Áö»ó 2Ãş
+    // ì§€ìƒ 2ì¸µ
     for (int i = 20; i < 23; ++i) {
         ZombieClasses.Add(ARunningZombie::StaticClass());
         RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
@@ -474,7 +474,7 @@ void AOneGameModeBase::SpawnZombiesStaticClasses()
         ZombieAIClasses.Add(AZombieAIController::StaticClass());
     }
 
-    // ÁöÇÏ 2Ãş
+    // ì§€í•˜ 2ì¸µ
     for (int i = 30; i < 35; ++i) {
         ZombieClasses.Add(ARunningZombie::StaticClass());
         RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
@@ -565,7 +565,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemC
     FVector itemboxpos = RandomItemBoxLocation(itemfloor);
 
 
-    // ¼±ÅÃµÈ ¾ÆÀÌÅÛ ¹Ú½º Å¬·¡½º·Î ¾ÆÀÌÅÛ ¹Ú½º »ı¼º
+    // ì„ íƒëœ ì•„ì´í…œ ë°•ìŠ¤ í´ë˜ìŠ¤ë¡œ ì•„ì´í…œ ë°•ìŠ¤ ìƒì„±
     AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
 
     UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
@@ -668,7 +668,7 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName)
 
         FName CarKey = CarKeyRandom[Randomkey].CarKeyName;
 
-        // ¼±ÅÃµÈ ¾ÆÀÌÅÛ ¹Ú½º Å¬·¡½º·Î ¾ÆÀÌÅÛ ¹Ú½º »ı¼º
+        // ì„ íƒëœ ì•„ì´í…œ ë°•ìŠ¤ í´ë˜ìŠ¤ë¡œ ì•„ì´í…œ ë°•ìŠ¤ ìƒì„±
         ACarActor* SpawnedCarActor = GetWorld()->SpawnActor<ACarActor>(SelectedInterActorClass, Location, Rotation);
         SpawnedCarActor->CarKeyName = CarKey;
     }
@@ -703,7 +703,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         return;
     }
 
-    // Ä³¸¯ÅÍ °Ë»ö
+    // ìºë¦­í„° ê²€ìƒ‰
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -711,7 +711,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         {
             FVector OldLocation = BasePlayer->GetActorLocation();
 
-            // ±âÁ¸ Ä³¸¯ÅÍ À§Ä¡ ¾÷µ¥ÀÌÆ®
+            // ê¸°ì¡´ ìºë¦­í„° ìœ„ì¹˜ ì—…ë°ì´íŠ¸
             BasePlayer->SetActorLocation(NewLocation);
             BasePlayer->SetActorRotation(NewRotation);
 
@@ -736,14 +736,14 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         OtherCharacterClasses.Add(AIdolCharacter::StaticClass());
     }
 
-    //±âÁ¸ Ä³¸¯ÅÍ¸¦ Ã£Áö ¸øÇÑ °æ¿ì¿¡¸¸ »õ Ä³¸¯ÅÍ ½ºÆù
+    //ê¸°ì¡´ ìºë¦­í„°ë¥¼ ì°¾ì§€ ëª»í•œ ê²½ìš°ì—ë§Œ ìƒˆ ìºë¦­í„° ìŠ¤í°
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
     ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(OtherCharacterClasses[0], NewLocation, NewRotation, SpawnParams);
 
     if (NewCharacter)
     {
-        // »õ Ä³¸¯ÅÍ¿¡ PlayerId ¼³Á¤
+        // ìƒˆ ìºë¦­í„°ì— PlayerId ì„¤ì •
         NewCharacter->SetPlayerId(PlayerID);
     }
 }
@@ -758,7 +758,7 @@ void AOneGameModeBase::UpdatePlayerAttack(uint32 PlayerID, bool battack)
         return;
     }
 
-    // Ä³¸¯ÅÍ °Ë»ö
+    // ìºë¦­í„° ê²€ìƒ‰
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -782,7 +782,7 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
         return;
     }
 
-    // Ä³¸¯ÅÍ °Ë»ö
+    // ìºë¦­í„° ê²€ìƒ‰
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -821,7 +821,7 @@ void AOneGameModeBase::UpdatePlayerRun(uint32 PlayerID, bool b_run)
         return;
     }
 
-    // Ä³¸¯ÅÍ °Ë»ö
+    // ìºë¦­í„° ê²€ìƒ‰
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -845,7 +845,7 @@ void AOneGameModeBase::UpdatePlayerJump(uint32 PlayerID)
         return;
     }
 
-    // Ä³¸¯ÅÍ °Ë»ö
+    // ìºë¦­í„° ê²€ìƒ‰
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
         ABaseCharacter* BasePlayer = *It;
@@ -868,7 +868,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
     TSubclassOf<ABaseZombie> SelectedZombieClass = ZombieClasses[zombieindex];
 
 
-    // ¼±ÅÃµÈ Á»ºñ Å¬·¡½º·Î Á»ºñ¸¦ »ı¼º
+    // ì„ íƒëœ ì¢€ë¹„ í´ë˜ìŠ¤ë¡œ ì¢€ë¹„ë¥¼ ìƒì„±
     ABaseZombie* SpawnedZombie = GetWorld()->SpawnActor<ABaseZombie>(SelectedZombieClass, zombiepos, zombieroatate);
 
 
@@ -974,7 +974,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotat
         ABaseZombie* BaseZombie = *ZombiePtr;
         FVector OldLocation = BaseZombie->GetActorLocation();
 
-        // ±âÁ¸ Ä³¸¯ÅÍ À§Ä¡ ¾÷µ¥ÀÌÆ®
+        // ê¸°ì¡´ ìºë¦­í„° ìœ„ì¹˜ ì—…ë°ì´íŠ¸
         BaseZombie->SetActorLocation(NewLocation);
         BaseZombie->SetActorRotation(NewRotation);
 

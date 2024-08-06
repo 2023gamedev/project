@@ -45,7 +45,7 @@ AShoutingZombie::AShoutingZombie()
 	SetStartHP(30);
 	SetSpeed(3);
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
-	SetSTR(FMath::RandRange(4, 8)); // ¼öÁ¤ ÇÊ¿ä 4 ~ 8
+	SetSTR(FMath::RandRange(4, 8)); // ìˆ˜ì • í•„ìš” 4 ~ 8
 	SetSpecialAbility(true);
 	SetZombieName("ShoutingZombie");
 }

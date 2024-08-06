@@ -13,7 +13,7 @@
 #include "ProZombie/NormalZombie.h"
 #include "ProGamemode/ProGameInstance.h"
 
-// AI Ãß°¡µÇ¸é ¼öÁ¤µÉ °Í °°Àº °Í!!
+// AI ì¶”ê°€ë˜ë©´ ìˆ˜ì •ë  ê²ƒ ê°™ì€ ê²ƒ!!
 
 const FName AZombieAIController::TargetKey(TEXT("Target"));
 const FName AZombieAIController::StartLocationKey(TEXT("StartLocation"));
@@ -56,13 +56,13 @@ void AZombieAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//static float SearchInterval = 0.5f; // 0.5ÃÊ¸¶´Ù ÇÃ·¹ÀÌ¾î °Ë»ö
+	//static float SearchInterval = 0.5f; // 0.5ì´ˆë§ˆë‹¤ í”Œë ˆì´ì–´ ê²€ìƒ‰
 	//static float TimeSinceLastSearch = 0.0f;
 	//TimeSinceLastSearch += DeltaTime;
 
 	//if (GameInstance->ClientSocketPtr->GetMyPlayerId() == 1)
 	//{
-		//TimeSinceLastSearch = 0.0f; // Å¸ÀÌ¸Ó ¸®¼Â
+		//TimeSinceLastSearch = 0.0f; // íƒ€ì´ë¨¸ ë¦¬ì…‹
 
 
 
@@ -74,20 +74,20 @@ void AZombieAIController::Tick(float DeltaTime)
 			return;
 		}
 
-		FVector ZombieForward = NormalZombie->GetActorForwardVector(); // Á»ºñÀÇ Àü¹æ º¤ÅÍ
-		FVector ZombieLocation = NormalZombie->GetActorLocation(); // Á»ºñÀÇ À§Ä¡
+		FVector ZombieForward = NormalZombie->GetActorForwardVector(); // ì¢€ë¹„ì˜ ì „ë°© ë²¡í„°
+		FVector ZombieLocation = NormalZombie->GetActorLocation(); // ì¢€ë¹„ì˜ ìœ„ì¹˜
 
-		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡
-		//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // ÇÃ·¹ÀÌ¾î·Î ÇâÇÏ´Â ¹æÇâ º¤ÅÍ
+		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜
+		//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // í”Œë ˆì´ì–´ë¡œ í–¥í•˜ëŠ” ë°©í–¥ ë²¡í„°
 		FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
 		//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
-		float MaxSightRange = 1000.f; // ¿øÇÏ´Â ÃÖ´ë ½Ã¾ß ¹üÀ§¸¦ ¼³Á¤ÇÏ¼¼¿ä.
+		float MaxSightRange = 1000.f; // ì›í•˜ëŠ” ìµœëŒ€ ì‹œì•¼ ë²”ìœ„ë¥¼ ì„¤ì •í•˜ì„¸ìš”.
 
 
-		// ½Ã¾ß°¢À» 90µµ·Î ¼³Á¤ (Àü¹æ 180µµ)
-		//float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // Àü¹æ 90µµ
+		// ì‹œì•¼ê°ì„ 90ë„ë¡œ ì„¤ì • (ì „ë°© 180ë„)
+		//float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // ì „ë°© 90ë„
 
 
 
@@ -102,8 +102,8 @@ void AZombieAIController::Tick(float DeltaTime)
 		{
 			APawn* TestPawn = Cast<APawn>(Player);
 
-			PlayerLocation = TestPawn->GetActorLocation(); // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡
-			// DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // ÇÃ·¹ÀÌ¾î·Î ÇâÇÏ´Â ¹æÇâ º¤ÅÍ
+			PlayerLocation = TestPawn->GetActorLocation(); // í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜
+			// DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // í”Œë ˆì´ì–´ë¡œ í–¥í•˜ëŠ” ë°©í–¥ ë²¡í„°
 			TargetLocation = PlayerLocation + (ZombieForward * 150.f);
 			// DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 			Distance = FVector::Dist(PlayerLocation, ZombieLocation);
@@ -129,7 +129,7 @@ void AZombieAIController::Tick(float DeltaTime)
 			//}
 		}
 
-		// ºí·¢º¸µå ¾÷µ¥ÀÌÆ®
+		// ë¸”ë™ë³´ë“œ ì—…ë°ì´íŠ¸
 		if (NearestPawn)
 		{
 			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
@@ -149,10 +149,10 @@ void AZombieAIController::Tick(float DeltaTime)
 	while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 	{
 		//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
-		// ÇöÀç GameMode ÀÎ½ºÅÏ½º¸¦ ¾ò±â
+		// í˜„ì¬ GameMode ì¸ìŠ¤í„´ìŠ¤ë¥¼ ì–»ê¸°
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
-			// GameMode ³»ÀÇ ÇÔ¼ö È£ÃâÇÏ¿© ´Ù¸¥ ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡ ¾÷µ¥ÀÌÆ®
+			// GameMode ë‚´ì˜ í•¨ìˆ˜ í˜¸ì¶œí•˜ì—¬ ë‹¤ë¥¸ í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜ ì—…ë°ì´íŠ¸
 			MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.Location, recvZombieData.Rotation);
 			//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
 		}
@@ -166,10 +166,10 @@ void AZombieAIController::CheckAndSendMovement()
 	FRotator CurrentRotation = ZombiePawn->GetActorRotation();
 	ZombieId = ZombiePawn->GetZombieId();
 
-	// ÀÌÀü À§Ä¡¿Í ÇöÀç À§Ä¡ ºñ±³ (¿òÁ÷ÀÓ °¨Áö)
+	// ì´ì „ ìœ„ì¹˜ì™€ í˜„ì¬ ìœ„ì¹˜ ë¹„êµ (ì›€ì§ì„ ê°ì§€)
 	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
 
-		// Protobuf¸¦ »ç¿ëÇÏ¿© TestPacket »ı¼º
+		// Protobufë¥¼ ì‚¬ìš©í•˜ì—¬ TestPacket ìƒì„±
 		Protocol::Zombie packet;
 		packet.set_zombieid(ZombieId);
 		packet.set_packet_type(2);
@@ -180,11 +180,11 @@ void AZombieAIController::CheckAndSendMovement()
 		packet.set_yaw(CurrentRotation.Yaw);
 		packet.set_roll(CurrentRotation.Roll);
 
-		// Á÷·ÄÈ­
+		// ì§ë ¬í™”
 		std::string serializedData;
 		packet.SerializeToString(&serializedData);
 
-		// Á÷·ÄÈ­µÈ µ¥ÀÌÅÍ¸¦ ¼­¹ö·Î Àü¼Û
+		// ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ ì„œë²„ë¡œ ì „ì†¡
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 		//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
 

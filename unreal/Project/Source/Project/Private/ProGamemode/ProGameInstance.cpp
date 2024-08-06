@@ -62,14 +62,14 @@ void UProGameInstance::ChangeOneGameMode()
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UProGameInstance::ChangeOneGameMode()");
     
     
-    // ÇöÀç ¿ùµå °¡Á®¿À±â
+    // í˜„ì¬ ì›”ë“œ ê°€ì ¸ì˜¤ê¸°
     UWorld* World = GetWorld();
     if (World)
     {
-        // »õ·Î¿î °ÔÀÓ ¸ğµå Å¬·¡½º¸¦ ·ÎµåÇÒ ·¹º§ ÀÌ¸§
+        // ìƒˆë¡œìš´ ê²Œì„ ëª¨ë“œ í´ë˜ìŠ¤ë¥¼ ë¡œë“œí•  ë ˆë²¨ ì´ë¦„
         FString LevelName = "/Game/ThirdPerson/Maps/ThirdPersonMap";
 
-        // »õ·Î¿î ·¹º§ ·Îµå
+        // ìƒˆë¡œìš´ ë ˆë²¨ ë¡œë“œ
         UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=ProGamemode/OneGameModeBase");
     }
 }
