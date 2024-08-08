@@ -8,6 +8,12 @@ void UChoiceCharacterUI::OnClickedGirlButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedGirlButton");
 
+    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
+    if (NewTexture)
+    {
+        First_Image->SetBrushFromTexture(NewTexture);
+    }
+
     ChoicedGirl.Execute();
 
     RemoveFromParent();
@@ -15,6 +21,12 @@ void UChoiceCharacterUI::OnClickedGirlButton()
 void UChoiceCharacterUI::OnClickedEmployeeButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedEmployeeButton");
+
+    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
+    if (NewTexture)
+    {
+        First_Image->SetBrushFromTexture(NewTexture);
+    }
 
     ChoicedEmployee.Execute();
 
@@ -25,6 +37,12 @@ void UChoiceCharacterUI::OnClickedIdolButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedIdolButton");
 
+    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
+    if (NewTexture)
+    {
+        First_Image->SetBrushFromTexture(NewTexture);
+    }
+
     ChoicedIdol.Execute();
 
     RemoveFromParent();
@@ -33,6 +51,12 @@ void UChoiceCharacterUI::OnClickedIdolButton()
 void UChoiceCharacterUI::OnClickedFireFighterButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedFireFighterButton");
+
+    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
+    if (NewTexture)
+    {
+        First_Image->SetBrushFromTexture(NewTexture);
+    }
 
     ChoicedFireFighter.Execute();
 

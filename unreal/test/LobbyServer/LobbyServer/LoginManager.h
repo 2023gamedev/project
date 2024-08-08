@@ -9,7 +9,6 @@ private:
     struct User {
         string username;
         string password;
-        int wincount;
     };
 
     vector<User> users; // 사용자 데이터 저장

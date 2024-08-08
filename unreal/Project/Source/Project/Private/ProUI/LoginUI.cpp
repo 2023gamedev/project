@@ -15,6 +15,9 @@ void ULoginUI::ShowAlert(const FString& Message)
     }
     
     AlertUIWidget = CreateWidget<UAlertUI>(GetWorld(), AlertUI);
+
+    AlertUIWidget->Init();
+
     if (AlertUIWidget != nullptr)
     {
         AlertUIWidget->AddToViewport();

@@ -43,7 +43,7 @@ void LoginManager::SaveToUser(const string& filename, const string& username, co
 {
     ofstream file(filename, ios::app);
     if (file.is_open()) {
-        file << username << " " << password << " " << endl;
+        file << username << " " << password << endl;
         file.close();
     }
 }

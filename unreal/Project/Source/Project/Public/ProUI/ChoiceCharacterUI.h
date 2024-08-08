@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Components/Image.h"
 #include "ChoiceCharacterUI.generated.h"
 
 /**
@@ -16,7 +17,7 @@ DECLARE_DELEGATE(FChoicedIdol);
 DECLARE_DELEGATE(FChoicedFireFighter);
 
 
-// Lobby¿¡¼­ Ä³¸¯ÅÍ¸¦ ¼±ÅÃÇÏ´Âµ¥¿¡ ¾²ÀÌ´À UI
+// Lobbyì—ì„œ ìºë¦­í„°ë¥¼ ì„ íƒí•˜ëŠ”ë°ì— ì“°ì´ëŠ UI
 UCLASS()
 class PROJECT_API UChoiceCharacterUI : public UUserWidget
 {
@@ -41,6 +42,18 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* FireFighterButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UImage* First_Image ;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UImage* Second_Image;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UImage* Third_Image;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UImage* Fourth_Image;
 
 
 private:
