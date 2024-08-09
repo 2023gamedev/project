@@ -65,7 +65,7 @@ public:
 	FThrowOnGround ThrowOnGround;
 	void SpawnOnGround(int slotindex);
 
-	void AttackCheck();
+	//void AttackCheck();
 
 	// 스프링 암
 	UPROPERTY(EditAnywhere)
@@ -289,7 +289,7 @@ public:
 	FVector GetStartLocation() { return m_VStartLocation; }
 
 	bool CanSetWeapon();
-	void SetWeapon(ANormalWeaponActor* NewWeapon);
+	// void SetWeapon(ANormalWeaponActor* NewWeapon); // 아마도 안쓸예정
 
 	void GameUIUpdate();
 

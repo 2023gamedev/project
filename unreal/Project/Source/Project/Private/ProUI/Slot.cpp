@@ -96,7 +96,7 @@ void USlot::Refresh()
 	}
 }
 
-// Shift + f1 ¸¶¿ì½º Ä¿¼­ ÀÌ·±½ÄÀ¸·Î µ¿ÀÛÇØ¼­ µå·¡±×µÇ´Â °úÁ¤ÀÌ ¾Èº¸ÀÌ´ÂÁö ¸ð¸£°Ú´Ù. ±×·±°Í °°±ä ÇÔ
+// Shift + f1 ë§ˆìš°ìŠ¤ ì»¤ì„œ ì´ëŸ°ì‹ìœ¼ë¡œ ë™ìž‘í•´ì„œ ë“œëž˜ê·¸ë˜ëŠ” ê³¼ì •ì´ ì•ˆë³´ì´ëŠ”ì§€ ëª¨ë¥´ê² ë‹¤. ê·¸ëŸ°ê²ƒ ê°™ê¸´ í•¨
 void USlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
@@ -131,14 +131,14 @@ bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDr
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag End"));
 
 	if (oper != nullptr) {
-		// DragSwapÀ» »ç¿ëÇÏÁö ¾Ê±â¿¡ ±×³É ÁÖ¼®Ã³¸® --- ¾ÈÇÏ¸é °ËÀºÄ­ÀÌ È¸»öÄ­À¸·Î ¹Ù²ð¼ö°¡ ÀÖÀ½
+		// DragSwapì„ ì‚¬ìš©í•˜ì§€ ì•Šê¸°ì— ê·¸ëƒ¥ ì£¼ì„ì²˜ë¦¬ --- ì•ˆí•˜ë©´ ê²€ì€ì¹¸ì´ íšŒìƒ‰ì¹¸ìœ¼ë¡œ ë°”ë€”ìˆ˜ê°€ ìžˆìŒ
 		//Character->DraggingSwap(oper->SlotIndex, oper->Type, this->SlotIndex, this->Type);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Success"));
 
 		return true;
 	}
 	else {
-		// fall µå¶øÇÏÀÚ
+		// fall ë“œëží•˜ìž
 		SpawnOnGround(SlotIndex);
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Fail"));
 		return false;
@@ -165,22 +165,22 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 	FEventReply eventreply;
 	eventreply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
-	// QuickSlotÀ» Å¬¸¯ÇÏ¸é ¾Æ¹« µ¿ÀÛµµ ÇÏÁö ¾Êµµ·Ï Ã³¸®
+	// QuickSlotì„ í´ë¦­í•˜ë©´ ì•„ë¬´ ë™ìž‘ë„ í•˜ì§€ ì•Šë„ë¡ ì²˜ë¦¬
 	if (Type == ESlotType::SLOT_QUICK) {
 		return FReply::Handled();
 	}
 
-	if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton) == true) { // Äü½½·Ô¿¡ ³Ö¾îÁÖ°Å³ª ÇØÁ¦ÇÏ´Â ¿ªÇÒ ÇÒ ¿¹Á¤
+	if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton) == true) { // í€µìŠ¬ë¡¯ì— ë„£ì–´ì£¼ê±°ë‚˜ í•´ì œí•˜ëŠ” ì—­í•  í•  ì˜ˆì •
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Right Button Down"));
 
-		// ºóÄ­¿¡ ¸¶¿ì½º ¿ìÅ¬¸¯ ½Ã ÆÃ±â´Â ºÎºÐ ¹æÁö
+		// ë¹ˆì¹¸ì— ë§ˆìš°ìŠ¤ ìš°í´ë¦­ ì‹œ íŒ…ê¸°ëŠ” ë¶€ë¶„ ë°©ì§€
 		if (Character->Inventory[SlotIndex].Type == EItemType::ITEM_NONE) {
 			return eventreply.NativeReply;
 		}
 
 		switch (Character->Inventory[SlotIndex].ItemClassType) {
 		
-			// 0¹ø: ÃâÇ÷È¸º¹, 1¹ø: »óÃ³È¸º¹ 2¹ø: ÅõÃ´¹«±â 3¹ø: Å° 4¹ø: ³ë¸»¹«±â
+			// 0ë²ˆ: ì¶œí˜ˆíšŒë³µ, 1ë²ˆ: ìƒì²˜íšŒë³µ 2ë²ˆ: íˆ¬ì²™ë¬´ê¸° 3ë²ˆ: í‚¤ 4ë²ˆ: ë…¸ë§ë¬´ê¸°
 		case EItemClass::BLEEDINGHEALINGITEM:
 			if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_NONE) {
 				Character->QuickSlot[0].Type = EItemType::ITEM_QUICK_EQUIPMENT;

@@ -12,6 +12,5 @@ AGameModeManager::AGameModeManager()
 
 void AGameModeManager::ChangeGameMode(TSubclassOf<AGameModeBase> NewGameMode)
 {
-    // Set the new game mode class
     NewGameModeClass = NewGameMode;
 }

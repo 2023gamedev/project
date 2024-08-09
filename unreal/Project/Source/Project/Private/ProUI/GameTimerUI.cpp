@@ -33,8 +33,9 @@ void UGameTimerUI::UpdateTimer()
 	m_iMinites = RemainingTimeSeconds / 60;
 	m_iSeconds = RemainingTimeSeconds % 60;
 
-	FText TimerText = FText::Format(NSLOCTEXT("TimerTxt", "Format", "{0}:{1:02}"), FText::AsNumber(m_iMinites), FText::AsNumber(m_iSeconds));
-	//FText TimerText = FText::AsNumber(Seconds);
+	FString TimerString = FString::Printf(TEXT("%d:%02d"), m_iMinites, m_iSeconds);
+	FText TimerText = FText::FromString(TimerString);
+
 	TimerTxt->SetText(TimerText);
 
 }
