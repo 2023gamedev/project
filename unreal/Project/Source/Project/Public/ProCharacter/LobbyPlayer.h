@@ -17,7 +17,7 @@ DECLARE_DELEGATE(FChoicedEmployeeCharcaterD);
 DECLARE_DELEGATE(FChoicedIdolCharcaterD);
 DECLARE_DELEGATE(FChoicedFireFighterCharcaterD);
 
-// Lobby¿¡¼­ UI¸¦ °í¸£´Â Player Å¬·¡½º
+// Lobbyì—ì„œ UIë¥¼ ê³ ë¥´ëŠ” Player í´ë˜ìŠ¤
 UCLASS()
 class PROJECT_API ALobbyPlayer : public APawn
 {
@@ -34,7 +34,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	//virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	FChoicedGirlCharcaterD ChoicedGirlCharcaterD;
 	FChoicedEmployeeCharcaterD ChoicedEmployeeCharcaterD;
@@ -52,7 +51,7 @@ public:
 
 	
 
-	// Ä«¸Ş¶ó
+	// ì¹´ë©”ë¼
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera;
 

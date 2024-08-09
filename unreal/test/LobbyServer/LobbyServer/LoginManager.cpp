@@ -19,6 +19,7 @@ bool LoginManager::RegisterName(const string& username, const string& password)
             return false;
         }
     }
+    cout << username << " " << password << endl;
     // 새 사용자 추가
     SaveToUser("users.txt", username, password);
     return true;
@@ -33,7 +34,7 @@ bool LoginManager::Login(const string& username, const string& password)
             return true;
         }
     }
-
+    cout << username << " " << password << endl;
     cout << "등록되지 않은 아이디거나 비밀번호가 틀렸습니다." << endl;
     return false;
 }

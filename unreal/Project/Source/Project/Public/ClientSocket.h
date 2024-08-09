@@ -22,6 +22,8 @@ constexpr int BUFSIZE = 1024;
 
 enum class ServerType { LOBBY_SERVER, GAME_SERVER };
 
+DECLARE_DELEGATE(FOnAllReadyReceived);
+
 /**
  *
  */
@@ -120,6 +122,8 @@ class PROJECT_API ClientSocket : public FRunnable
 public:
 	ClientSocket(UProGameInstance* Inst);
 	~ClientSocket() override;
+
+	FOnAllReadyReceived OnAllReadyReceived;
 
 	SOCKET Socket;
 	uint32 MyPlayerId = 0;
