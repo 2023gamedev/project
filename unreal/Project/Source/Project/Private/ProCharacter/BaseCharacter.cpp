@@ -754,28 +754,30 @@ void ABaseCharacter::InventoryOnOff()
 	}
 
 }
-
-void ABaseCharacter::AttackCheck()
-{
-	//FHitResult HitResult;
-	//FCollisionQueryParams Params(NAME_None, false, this);
-	//bool bResult = GetWorld()->SweepSingleByChannel(
-	//	HitResult,
-	//	GetActorLocation(),
-	//	GetActorLocation() + GetActorForwardVector() * 200.f,
-	//	FQuat::Identity,
-	//	ECollisionChannel::ECC_GameTraceChannel13,
-	//	FCollisionShape::MakeSphere(30.f),
-	//	Params
-	//);
-
-	//if (bResult) {
-
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
-	//	FDamageEvent DamageEvent;
-	//	HitResult.GetActor()->TakeDamage(GetSTR() * CurrentWeapon->m_fWeaponSTR, DamageEvent, GetController(), this);
-	//}
-}
+// 아마도 안쓸예정
+//void ABaseCharacter::AttackCheck()
+//{
+//	
+//
+//	//FHitResult HitResult;
+//	//FCollisionQueryParams Params(NAME_None, false, this);
+//	//bool bResult = GetWorld()->SweepSingleByChannel(
+//	//	HitResult,
+//	//	GetActorLocation(),
+//	//	GetActorLocation() + GetActorForwardVector() * 200.f,
+//	//	FQuat::Identity,
+//	//	ECollisionChannel::ECC_GameTraceChannel13,
+//	//	FCollisionShape::MakeSphere(30.f),
+//	//	Params
+//	//);
+//
+//	//if (bResult) {
+//
+//	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
+//	//	FDamageEvent DamageEvent;
+//	//	HitResult.GetActor()->TakeDamage(GetSTR() * CurrentWeapon->m_fWeaponSTR, DamageEvent, GetController(), this);
+//	//}
+//}
 
 void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
@@ -841,8 +843,7 @@ void ABaseCharacter::Healing()
 void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	
-	if (QuickSlot[1].Count <= 0) {
-		// 이상하게 힐링 아이템 다 먹고 나서 다른 아이템 먹으면 이 함수가 호출되는 문제가 있어서 예외처리
+	if (QuickSlot[1].Count <= 0) { // 이상하게 힐링 아이템 다 먹고 나서 다른 아이템 먹으면 이 함수가 호출되는 문제가 있어서 예외처리
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->   QuickSlot[1].Count <= 0!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		return;
 	}
@@ -855,9 +856,9 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 	if (CurrentHealingItem != nullptr) {
 		StartHealingTimer(CurrentHealingItem->m_fHealingSpeed, CurrentHealingItem->m_fHealingDuration);
 	}
-	//if (CurrentHealingItem->HName == "Smoke") {
-	//	Smoking();
-	//}
+	if (CurrentHealingItem->HName == "Smoke") {
+		Smoking();
+	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	UpdateHealingSlot();
@@ -964,7 +965,7 @@ void ABaseCharacter::PlayKey()
 
 }
 
-void ABaseCharacter::Throw()
+void ABaseCharacter::Throw() // throwweapon 생성 시 작성 필요
 {
 
 }
@@ -1016,7 +1017,7 @@ void ABaseCharacter::UpdateKeySlot()
 	}
 }
 
-void ABaseCharacter::UpdateThrowWSlot()
+void ABaseCharacter::UpdateThrowWSlot() // throwweapon 생성 시 작성 필요
 {
 }
 
@@ -1132,7 +1133,7 @@ void ABaseCharacter::QuickHItem()
 	}
 }
 
-void ABaseCharacter::QuickTWeapon()
+void ABaseCharacter::QuickTWeapon() // throwweapon 생성 시 작성 필요
 {
 	//if (IsNWHandIn()) {
 	//	CurrentWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -1201,19 +1202,19 @@ bool ABaseCharacter::CanSetWeapon()
 {
 	return (CurrentWeapon == nullptr);
 }
-
-void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
-{
-	//if (NewWeapon != nullptr) {
-	//	FName WeaponSocket = TEXT("middle_01_rSocket");
-	//	NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket); 
-	//	NewWeapon->SetOwner(this);
-	//	CurrentWeapon = NewWeapon;
-	//	CurrentWeapon->SetActorRelativeRotation(FRotator(0.f, 110.f, 0.f));
-	//	//SetHandIn(true);
-
-	//}
-}
+// 아마도 안쓸예정
+//void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
+//{
+//	//if (NewWeapon != nullptr) {
+//	//	FName WeaponSocket = TEXT("middle_01_rSocket");
+//	//	NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket); 
+//	//	NewWeapon->SetOwner(this);
+//	//	CurrentWeapon = NewWeapon;
+//	//	CurrentWeapon->SetActorRelativeRotation(FRotator(0.f, 110.f, 0.f));
+//	//	//SetHandIn(true);
+//
+//	//}
+//}
 
 void ABaseCharacter::GameUIUpdate()
 {

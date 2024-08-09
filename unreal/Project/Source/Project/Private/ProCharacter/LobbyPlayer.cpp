@@ -45,6 +45,7 @@ void ALobbyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// choicecharacterui를 먼저 생성할 때
 	//if (ChoiceCharacterUI != nullptr) {
 	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ChoiceCharacterUI != nullptr");
 	//	ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
@@ -68,7 +69,8 @@ void ALobbyPlayer::BeginPlay()
 	//	ChoiceCharacterUIWidget->ChoicedFireFighter.BindUObject(this, &ALobbyPlayer::ChoicedFireFighterCharacter);
 
 	//}
-	 
+	
+	// StartGameUI를 먼저 생성할 때
 	//if (StartGameUI != nullptr) {
 	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartGameUI != nullptr");
 	//	ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
@@ -91,7 +93,7 @@ void ALobbyPlayer::BeginPlay()
 	//}
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "LoginUI 123");
 
-
+	// LoginUI를 먼저 생성할 때
 	if (LoginUI != nullptr) {
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "LoginUI != nullptr");
 		ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
@@ -216,11 +218,5 @@ void ALobbyPlayer::OnMouseLeftClick()
 	}
 }
 
-
-//void ALobbyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-//{
-//	Super::SetupPlayerInputComponent(PlayerInputComponent);
-//
-//}
 
 
