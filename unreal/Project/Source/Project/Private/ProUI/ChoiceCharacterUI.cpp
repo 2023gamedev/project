@@ -15,8 +15,6 @@ void UChoiceCharacterUI::OnClickedGirlButton()
     }
 
     ChoicedGirl.Execute();
-
-    RemoveFromParent();
 }
 void UChoiceCharacterUI::OnClickedEmployeeButton()
 {
@@ -29,8 +27,6 @@ void UChoiceCharacterUI::OnClickedEmployeeButton()
     }
 
     ChoicedEmployee.Execute();
-
-    RemoveFromParent();
 }
 
 void UChoiceCharacterUI::OnClickedIdolButton()
@@ -44,8 +40,6 @@ void UChoiceCharacterUI::OnClickedIdolButton()
     }
 
     ChoicedIdol.Execute();
-
-    RemoveFromParent();
 }
 
 void UChoiceCharacterUI::OnClickedFireFighterButton()
@@ -59,8 +53,29 @@ void UChoiceCharacterUI::OnClickedFireFighterButton()
     }
 
     ChoicedFireFighter.Execute();
+}
 
-    RemoveFromParent();
+void UChoiceCharacterUI::OnClickedReadyButton()
+{
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedReadyButton");
+
+    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
+    uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+    Protocol::CS_Ready Packet;
+
+    Packet.set_playerid(MyPlayerId);
+    Packet.set_type(5);
+    Packet.set_ready(b_ready);
+
+    // 직렬화
+    std::string serializedData;
+    Packet.SerializeToString(&serializedData);
+
+    // 직렬화된 데이터를 서버로 전송
+    bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+    b_ready = !b_ready;
+
 }
 
 void UChoiceCharacterUI::Init()
@@ -109,6 +124,17 @@ void UChoiceCharacterUI::Init()
         FireFighterButton->SetIsEnabled(true);
 
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "FireFighterButton Init End");
+    }
+
+    if (ReadyButton)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ReadyButton Init");
+
+        ReadyButton->SetClickMethod(EButtonClickMethod::DownAndUp);
+        ReadyButton->OnClicked.AddUniqueDynamic(this, &UChoiceCharacterUI::OnClickedReadyButton);
+        ReadyButton->SetIsEnabled(true);
+
+        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ReadyButton Init End");
     }
 }
 

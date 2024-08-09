@@ -74,12 +74,14 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     } break;
 
-    case 6:
+    case 7:
     {
         printf("[ No. %3u ] Select Packet Received !!\n", id);
 
         Protocol::Select_Character Select_Packet;
         Select_Packet.ParseFromArray(buffer, bufferSize);
+        cout << Select_Packet.character_type() << endl;
+
         string serializedData;
         Select_Packet.SerializeToString(&serializedData);
 

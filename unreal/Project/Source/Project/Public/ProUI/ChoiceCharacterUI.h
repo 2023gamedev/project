@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "ProGamemode/ProGameInstance.h"
 #include "ChoiceCharacterUI.generated.h"
 
 /**
@@ -26,6 +27,8 @@ public:
 
 	void Init();
 
+	UProGameInstance* GameInstance;
+
 	FChoicedGirl ChoicedGirl;
 	FChoicedEmployee ChoicedEmployee;
 	FChoicedIdol ChoicedIdol;
@@ -44,6 +47,9 @@ public:
 	UButton* FireFighterButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* ReadyButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UImage* First_Image ;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -55,6 +61,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UImage* Fourth_Image;
 
+	bool b_ready = true;
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -68,4 +75,7 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	void OnClickedFireFighterButton();
+
+	UFUNCTION(BlueprintCallable)
+	void OnClickedReadyButton();
 };

@@ -68,9 +68,7 @@ void ALobbyGameMode::ChoiceGirl()
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
 
     GameInstance->SetChoicedCharacterNumber(0);
-    SendReady();
     SendChoice(1);
-    LobbyStageClear();
 }
 
 void ALobbyGameMode::ChoiceEmployee()
@@ -79,9 +77,7 @@ void ALobbyGameMode::ChoiceEmployee()
 
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(1);
-    SendReady();
     SendChoice(2);
-    LobbyStageClear();
 }
 
 void ALobbyGameMode::ChoiceIdol()
@@ -89,9 +85,7 @@ void ALobbyGameMode::ChoiceIdol()
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceIdol!");
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(2);
-    SendReady();
     SendChoice(3);
-    LobbyStageClear();
 }
 
 void ALobbyGameMode::ChoiceFireFighter()
@@ -100,9 +94,7 @@ void ALobbyGameMode::ChoiceFireFighter()
 
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(3);
-    SendReady();
     SendChoice(4);
-    LobbyStageClear();
 }
 
 
@@ -118,7 +110,7 @@ void ALobbyGameMode::SendReady()
     Protocol::CS_Ready Packet;
 
     Packet.set_playerid(MyPlayerId);
-    Packet.set_type(6);
+    Packet.set_type(5);
     Packet.set_ready(true);
 
     // 직렬화
