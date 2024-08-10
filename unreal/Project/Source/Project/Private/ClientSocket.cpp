@@ -114,7 +114,11 @@ uint32 ClientSocket::Run()
 						if (Select_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 							Q_select.push(CharacterSelect(Select_Packet.playerid(), Select_Packet.character_type()));
 						}
+						
 						UE_LOG(LogNet, Display, TEXT("Received Select Character: %d, %d"), Select_Packet.playerid(), Select_Packet.character_type());
+						
+						OnAllReadyReceived.Execute();
+						
 						break;
 					}
 					}

@@ -27,6 +27,8 @@ public:
 
 	void Init();
 
+	void HandleAllReady();
+
 	UProGameInstance* GameInstance;
 
 	FChoicedGirl ChoicedGirl;

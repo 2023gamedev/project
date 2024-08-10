@@ -2,6 +2,7 @@
 
 
 #include "ProUI/ChoiceCharacterUI.h"
+#include "Kismet/GameplayStatics.h"
 #include "Components/CanvasPanelSlot.h"
 
 void UChoiceCharacterUI::OnClickedGirlButton()
@@ -59,7 +60,6 @@ void UChoiceCharacterUI::OnClickedReadyButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedReadyButton");
 
-    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
     Protocol::CS_Ready Packet;
 
@@ -78,8 +78,22 @@ void UChoiceCharacterUI::OnClickedReadyButton()
 
 }
 
+void UChoiceCharacterUI::HandleAllReady()
+{
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All players are ready!");
+
+    RemoveFromParent();
+}
+
 void UChoiceCharacterUI::Init()
 {
+
+    GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+    GameInstance->ClientSocketPtr->OnAllReadyReceived.BindLambda([this]()
+    {
+            HandleAllReady();
+    });
 
 
     if (GirlButton)
