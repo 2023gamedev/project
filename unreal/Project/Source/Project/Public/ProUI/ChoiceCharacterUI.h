@@ -29,6 +29,8 @@ public:
 
 	void HandleAllReady();
 
+	void UpdateSelectImage();
+
 	UProGameInstance* GameInstance;
 
 	FChoicedGirl ChoicedGirl;
@@ -64,6 +66,8 @@ public:
 	UImage* Fourth_Image;
 
 	bool b_ready = true;
+
+	CharacterSelect recvSelect;
 
 private:
 	UFUNCTION(BlueprintCallable)
