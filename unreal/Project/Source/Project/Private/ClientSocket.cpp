@@ -89,6 +89,7 @@ uint32 ClientSocket::Run()
 						if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 							if (Ready_Packet.allready())
 							{
+								b_allready = true;
 								// 로비 서버 연결 종료
 								Exit();
 
@@ -116,8 +117,6 @@ uint32 ClientSocket::Run()
 						}
 						
 						UE_LOG(LogNet, Display, TEXT("Received Select Character: %d, %d"), Select_Packet.playerid(), Select_Packet.character_type());
-						
-						OnAllReadyReceived.Execute();
 						
 						break;
 					}

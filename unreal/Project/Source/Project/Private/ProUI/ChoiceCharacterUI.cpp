@@ -3,29 +3,39 @@
 
 #include "ProUI/ChoiceCharacterUI.h"
 #include "Kismet/GameplayStatics.h"
+#include "ProGamemode/LobbyGameMode.h"
 #include "Components/CanvasPanelSlot.h"
+
+//void UChoiceCharacterUI::NativeTick(FGeometry MyGeometry, float InDeltaTime)
+//{
+//    Super::NativeTick(MyGeometry, InDeltaTime);
+//
+//    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "uitick!");
+//
+//    UpdateSelectImage();
+//
+//    if (GameInstance->ClientSocketPtr->b_allready)
+//    {
+//        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All players are ready!");
+//
+//        RemoveFromParent();
+//
+//        if (ALobbyGameMode* MyGameMode = Cast<ALobbyGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+//        {
+//            MyGameMode->LobbyStageClear();
+//        }
+//    }
+//}
 
 void UChoiceCharacterUI::OnClickedGirlButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedGirlButton");
-
-    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
-    if (NewTexture)
-    {
-        First_Image->SetBrushFromTexture(NewTexture);
-    }
 
     ChoicedGirl.Execute();
 }
 void UChoiceCharacterUI::OnClickedEmployeeButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedEmployeeButton");
-
-    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
-    if (NewTexture)
-    {
-        First_Image->SetBrushFromTexture(NewTexture);
-    }
 
     ChoicedEmployee.Execute();
 }
@@ -34,24 +44,12 @@ void UChoiceCharacterUI::OnClickedIdolButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedIdolButton");
 
-    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
-    if (NewTexture)
-    {
-        First_Image->SetBrushFromTexture(NewTexture);
-    }
-
     ChoicedIdol.Execute();
 }
 
 void UChoiceCharacterUI::OnClickedFireFighterButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedFireFighterButton");
-
-    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
-    if (NewTexture)
-    {
-        First_Image->SetBrushFromTexture(NewTexture);
-    }
 
     ChoicedFireFighter.Execute();
 }
@@ -85,15 +83,45 @@ void UChoiceCharacterUI::HandleAllReady()
     RemoveFromParent();
 }
 
+void UChoiceCharacterUI::UpdateSelectImage()
+{
+    if (GameInstance->ClientSocketPtr->Q_select.try_pop(recvSelect))
+    {
+        UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
+        if (NewTexture)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "NewTexture!");
+            if (recvSelect.PlayerId == 1)
+            {
+                First_Image->SetBrushFromTexture(NewTexture);
+            }
+            else if (recvSelect.PlayerId == 2)
+            {
+                Second_Image->SetBrushFromTexture(NewTexture);
+            }
+            else if (recvSelect.PlayerId == 3)
+            {
+                Third_Image->SetBrushFromTexture(NewTexture);
+            }
+            else if (recvSelect.PlayerId == 4)
+            {
+                Fourth_Image->SetBrushFromTexture(NewTexture);
+            }
+        }
+    }
+
+    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
+    if (NewTexture)
+    {
+        First_Image->SetBrushFromTexture(NewTexture);
+    }
+}
+
+
 void UChoiceCharacterUI::Init()
 {
 
     GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-
-    GameInstance->ClientSocketPtr->OnAllReadyReceived.BindLambda([this]()
-    {
-            HandleAllReady();
-    });
 
 
     if (GirlButton)

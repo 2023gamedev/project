@@ -22,8 +22,6 @@ constexpr int BUFSIZE = 1024;
 
 enum class ServerType { LOBBY_SERVER, GAME_SERVER };
 
-DECLARE_DELEGATE(FOnAllReadyReceived);
-
 /**
  *
  */
@@ -123,8 +121,6 @@ public:
 	ClientSocket(UProGameInstance* Inst);
 	~ClientSocket() override;
 
-	FOnAllReadyReceived OnAllReadyReceived;
-
 	SOCKET Socket;
 	uint32 MyPlayerId = 0;
 	uint32 PlayerId = 0;
@@ -157,6 +153,8 @@ public:
 	bool recv_register = false;
 	bool b_login = false;
 	bool b_register = false;
+
+	bool b_allready = false;
 
 
 
