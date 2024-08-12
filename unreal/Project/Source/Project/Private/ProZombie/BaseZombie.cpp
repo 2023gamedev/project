@@ -11,6 +11,7 @@
 #include "ProZombie/ShoutingZombieAIController.h"
 #include "Engine/SkeletalMesh.h"
 #include "ProNiagaFX/BloodNiagaEffect.h"
+#include "ProNiagaFX/ShoutingNiagaEffect.h"
 
 #include "Rendering/SkeletalMeshRenderData.h"
 #include "Rendering/SkeletalMeshLODRenderData.h"
@@ -43,6 +44,9 @@ ABaseZombie::ABaseZombie()
 
 	BloodFX = nullptr;
 
+	ShoutingFX = CreateDefaultSubobject<AShoutingNiagaEffect>(TEXT("ShoutingFX"));
+
+	ShoutingFX = nullptr;
 
 }
 
@@ -788,8 +792,11 @@ void ABaseZombie::Shouting()
 	if (m_bIsShouting) {
 		return;
 	}
-	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
+	ShoutingFX = GetWorld()->SpawnActor<AShoutingNiagaEffect>(AShoutingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
+	ShoutingFX->OwnerZombie = this;
+
+	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
 	AnimInstance->PlayShoutingMontage();
 

@@ -13,6 +13,7 @@ DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
 
 class ABloodNiagaEffect;
+class AShoutingNiagaEffect;
 
 // Zombie 클래스의 부모 클래스
 UCLASS()
@@ -188,6 +189,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	ABloodNiagaEffect* BloodFX;
+
+	UPROPERTY(EditAnywhere)
+	AShoutingNiagaEffect* ShoutingFX;
 
 private:
 
