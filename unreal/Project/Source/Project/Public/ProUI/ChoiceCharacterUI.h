@@ -27,6 +27,10 @@ public:
 
 	void Init();
 
+	void HandleAllReady();
+
+	void UpdateSelectImage();
+
 	UProGameInstance* GameInstance;
 
 	FChoicedGirl ChoicedGirl;
@@ -63,7 +67,12 @@ public:
 
 	bool b_ready = true;
 
+	CharacterSelect recvSelect;
+
+	//virtual void NativeTick(FGeometry MyGeometry) override;
+
 private:
+
 	UFUNCTION(BlueprintCallable)
 	void OnClickedGirlButton();
 
