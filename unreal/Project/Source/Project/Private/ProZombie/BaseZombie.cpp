@@ -793,7 +793,9 @@ void ABaseZombie::Shouting()
 		return;
 	}
 
-	ShoutingFX = GetWorld()->SpawnActor<AShoutingNiagaEffect>(AShoutingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
+	FVector SpawnOffset = FVector (GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 5.0f);
+	
+	ShoutingFX = GetWorld()->SpawnActor<AShoutingNiagaEffect>(AShoutingNiagaEffect::StaticClass(), SpawnOffset, FRotator::ZeroRotator);
 	ShoutingFX->OwnerZombie = this;
 
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
