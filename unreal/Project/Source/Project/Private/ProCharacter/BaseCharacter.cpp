@@ -804,6 +804,7 @@ void ABaseCharacter::Healing()
 
 	if (CurrentHealingItem != nullptr) {
 		m_bIsHealingTime = true;
+
 		CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
 		auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -834,8 +835,8 @@ void ABaseCharacter::Healing()
 		}
 
 		if (m_iHealingMontageFlag == 0) {
-			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::HealingMontageEnded);
 			++m_iHealingMontageFlag;
+			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::HealingMontageEnded);
 		}
 	}
 }
@@ -1709,6 +1710,8 @@ void ABaseCharacter::StartHealingTimer(float healingspeed, float healingduration
 void ABaseCharacter::HealingTimerElapsed()
 {
 	m_fHealingCount++;
+
+	//종료조건
 	if (m_fHealingCount > m_fItemHealingDuration) {
 		GetWorld()->GetTimerManager().ClearTimer(HealingHandle);
 		m_fHealingCount = 0.f;
