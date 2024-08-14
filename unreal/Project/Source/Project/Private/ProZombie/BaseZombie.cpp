@@ -848,6 +848,10 @@ void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 	UE_LOG(LogTemp, Error, TEXT("bIsShouted true"));
 	m_DShoutingEnd.Broadcast();
 
+	if (ShoutingFX != NULL) {
+		ShoutingFX->EndPlay(EEndPlayReason::Destroyed);
+	}
+
 }
 
 void ABaseZombie::BeAttacked()
@@ -872,7 +876,9 @@ void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 	m_bBeAttacked = false;
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 
-	//BloodFX->EndPlay(EEndPlayReason::Destroyed);
+	if (BloodFX != NULL) {
+		BloodFX->EndPlay(EEndPlayReason::Destroyed);
+	}
 }
 
 

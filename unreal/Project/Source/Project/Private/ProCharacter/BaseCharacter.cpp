@@ -1716,7 +1716,9 @@ void ABaseCharacter::HealingTimerElapsed()
 
 		SetHealing(0.f);
 
-		HealingFX->EndPlay(EEndPlayReason::Destroyed);
+		if (HealingFX != NULL) {
+			HealingFX->EndPlay(EEndPlayReason::Destroyed);
+		}
 
 		return;
 	}

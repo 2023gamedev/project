@@ -23,7 +23,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	//virtual void EndPlay(EEndPlayReason::Type type) override;
+	virtual void EndPlay(EEndPlayReason::Type type) override;
 
 	UPROPERTY()
 	UStaticMeshComponent* Mesh;

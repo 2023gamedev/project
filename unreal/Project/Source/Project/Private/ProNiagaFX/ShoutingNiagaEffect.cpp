@@ -43,9 +43,9 @@ void AShoutingNiagaEffect::Tick(float DeltaTime)
 
 }
 
-//void AShoutingNiagaEffect::EndPlay(EEndPlayReason::Type type)
-//{
-//	ShoutingFXComponent->Deactivate();
-//
-//	Destroy();
-//}
+void AShoutingNiagaEffect::EndPlay(EEndPlayReason::Type type)
+{
+	ShoutingFXComponent->Deactivate();
+
+	Destroy();
+}
