@@ -30,6 +30,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "NavigationSystem.h"
 
+#include "NavMesh/RecastNavMesh.h"
 
 TMap<uint32, ABaseZombie*> ZombieMap;
 
@@ -227,7 +228,22 @@ void AOneGameModeBase::BeginPlay()
 
 
 
+    // commit debug용 
+    TArray<FVector> OutVertices;
+    ARecastNavMesh* NavMesh = Cast<ARecastNavMesh>(UNavigationSystemV1::GetCurrent(World)->MainNavData);
+    if (NavMesh)
+    {
+        FRecastDebugGeometry NavMeshGeometry;
+        NavMesh->GetDebugGeometry(NavMeshGeometry);
 
+        OutVertices.Append(NavMeshGeometry.MeshVerts);
+
+        for (const FVector& Vertex : NavMeshGeometry.MeshVerts)
+        {
+            DrawDebugPoint(GetWorld(), Vertex, 10.0f, FColor::Red, false, -1.0f, 0);
+        }
+
+    }
 
 }
 
