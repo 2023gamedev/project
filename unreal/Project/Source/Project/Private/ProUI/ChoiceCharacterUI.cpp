@@ -6,27 +6,6 @@
 #include "ProGamemode/LobbyGameMode.h"
 #include "Components/CanvasPanelSlot.h"
 
-//void UChoiceCharacterUI::NativeTick(FGeometry MyGeometry, float InDeltaTime)
-//{
-//    Super::NativeTick(MyGeometry, InDeltaTime);
-//
-//    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "uitick!");
-//
-//    UpdateSelectImage();
-//
-//    if (GameInstance->ClientSocketPtr->b_allready)
-//    {
-//        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All players are ready!");
-//
-//        RemoveFromParent();
-//
-//        if (ALobbyGameMode* MyGameMode = Cast<ALobbyGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-//        {
-//            MyGameMode->LobbyStageClear();
-//        }
-//    }
-//}
-
 void UChoiceCharacterUI::OnClickedGirlButton()
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedGirlButton");
@@ -83,37 +62,29 @@ void UChoiceCharacterUI::HandleAllReady()
     RemoveFromParent();
 }
 
-void UChoiceCharacterUI::UpdateSelectImage()
+void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
 {
-    if (GameInstance->ClientSocketPtr->Q_select.try_pop(recvSelect))
-    {
-        UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
-        if (NewTexture)
-        {
-            GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "NewTexture!");
-            if (recvSelect.PlayerId == 1)
-            {
-                First_Image->SetBrushFromTexture(NewTexture);
-            }
-            else if (recvSelect.PlayerId == 2)
-            {
-                Second_Image->SetBrushFromTexture(NewTexture);
-            }
-            else if (recvSelect.PlayerId == 3)
-            {
-                Third_Image->SetBrushFromTexture(NewTexture);
-            }
-            else if (recvSelect.PlayerId == 4)
-            {
-                Fourth_Image->SetBrushFromTexture(NewTexture);
-            }
-        }
-    }
-
-    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.png"));
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "NewTexture?");
+    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.testgirl"));
     if (NewTexture)
     {
-        First_Image->SetBrushFromTexture(NewTexture);
+        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "NewTexture!");
+        if (recvSelect.PlayerId == 1)
+        {
+            First_Image->SetBrushFromTexture(NewTexture);
+        }
+        else if (recvSelect.PlayerId == 2)
+        {
+            Second_Image->SetBrushFromTexture(NewTexture);
+        }
+        else if (recvSelect.PlayerId == 3)
+        {
+            Third_Image->SetBrushFromTexture(NewTexture);
+        }
+        else if (recvSelect.PlayerId == 4)
+        {
+            Fourth_Image->SetBrushFromTexture(NewTexture);
+        }
     }
 }
 

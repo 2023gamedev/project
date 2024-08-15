@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
+#include "ProUI/ChoiceCharacterUI.h"
+#include "ProGamemode/LobbyGameMode.h"
 #include "Components/CapsuleComponent.h"
 #include "LobbyPlayer.generated.h"
 
@@ -35,6 +37,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UChoiceCharacterUI* choicecharacterui;
+	UProGameInstance* GameInstance;
+
 	FChoicedGirlCharcaterD ChoicedGirlCharcaterD;
 	FChoicedEmployeeCharcaterD ChoicedEmployeeCharcaterD;
 	FChoicedIdolCharcaterD ChoicedIdolCharcaterD;
@@ -48,6 +53,8 @@ public:
 	void MoveChoiceCharacterUI();
 	void MoveStartGameUI();
 	void OnMouseLeftClick();
+
+	CharacterSelect recvSelect;
 
 	
 

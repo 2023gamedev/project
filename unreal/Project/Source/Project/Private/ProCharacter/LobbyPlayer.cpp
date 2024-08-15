@@ -5,6 +5,7 @@
 #include "ProUI/StartGameUI.h"
 #include "ProUI/ChoiceCharacterUI.h"
 #include "ProUI/LoginUI.h"
+#include "Kismet/GameplayStatics.h"
 #include "ProCharacter/LobbyPlayerController.h"
 
 // Sets default values
@@ -44,6 +45,8 @@ ALobbyPlayer::ALobbyPlayer()
 void ALobbyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 	// choicecharacterui를 먼저 생성할 때
 	//if (ChoiceCharacterUI != nullptr) {
@@ -123,6 +126,21 @@ void ALobbyPlayer::BeginPlay()
 void ALobbyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (GameInstance->ClientSocketPtr->Q_select.try_pop(recvSelect)){
+		choicecharacterui->UpdateSelectImage(recvSelect);
+	}
+
+    if (GameInstance->ClientSocketPtr->b_allready){
+        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All players are ready!");
+
+		choicecharacterui->RemoveFromParent();
+
+        if (ALobbyGameMode* MyGameMode = Cast<ALobbyGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+        {
+            MyGameMode->LobbyStageClear();
+        }
+    }
 
 }
 

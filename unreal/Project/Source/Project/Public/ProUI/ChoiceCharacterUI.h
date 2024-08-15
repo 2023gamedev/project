@@ -29,7 +29,7 @@ public:
 
 	void HandleAllReady();
 
-	void UpdateSelectImage();
+	void UpdateSelectImage(CharacterSelect recvSelect);
 
 	UProGameInstance* GameInstance;
 
@@ -66,8 +66,6 @@ public:
 	UImage* Fourth_Image;
 
 	bool b_ready = true;
-
-	CharacterSelect recvSelect;
 
 	//virtual void NativeTick(FGeometry MyGeometry) override;
 

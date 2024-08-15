@@ -34,6 +34,8 @@ void ALobbyPlayerController::BeginPlay()
 void ALobbyPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
 }
 
 void ALobbyPlayerController::SetupInputComponent()
