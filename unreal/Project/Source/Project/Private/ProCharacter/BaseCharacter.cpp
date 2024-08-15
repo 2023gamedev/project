@@ -1061,7 +1061,8 @@ void ABaseCharacter::QuickNWeapon()
 		SetThrowWHandIn(false);
 	}
 
-	if (IsBringCurrentWeapon()) {
+	if (IsBringCurrentWeapon() && CurrentWeapon) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
 		FName WeaponSocket = TEXT("RightHandSocket");
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
 		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
@@ -1093,7 +1094,8 @@ void ABaseCharacter::QuickBHItem()
 		SetThrowWHandIn(false);
 	}
 
-	if (IsBringCurrentBleedingHealingItem()) {
+	if (IsBringCurrentBleedingHealingItem() && CurrentBleedingHealingItem) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentBleedingHealingItem"));
 		FName Socket = TEXT("RightHandSocket");
 		CurrentBleedingHealingItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
 		CurrentBleedingHealingItem->SetActorRelativeRotation(CurrentBleedingHealingItem->ItemHandRot);
@@ -1125,7 +1127,8 @@ void ABaseCharacter::QuickHItem()
 		SetThrowWHandIn(false);
 	}
 
-	if (IsBringCurrentHealingItem()) {
+	if (IsBringCurrentHealingItem() && CurrentHealingItem) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentHealingItem"));
 		FName Socket = TEXT("RightHandSocket");
 		CurrentHealingItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
 		CurrentHealingItem->SetActorRelativeRotation(CurrentHealingItem->ItemHandRot);
@@ -1157,7 +1160,7 @@ void ABaseCharacter::QuickTWeapon() // throwweapon 생성 시 작성 필요
 	// 	SetHealHandIn(false);
 	//}
 
-	if (IsBringCurrentThrowWeapon()) {
+	if (IsBringCurrentThrowWeapon() && CurrentThrowWeapon) {
 		//FName Socket = TEXT("RightHandSocket");
 		//CurrentThrowWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
 		//CurrentThrowWeapon->SetActorRelativeRotation(CurrentThrowWeapon->ItemHandRot);
@@ -1189,7 +1192,7 @@ void ABaseCharacter::QuickKeyItem()
 		SetHealHandIn(false);
 	}
 
-	if (IsBringCurrentKeyItem()) {
+	if (IsBringCurrentKeyItem() && CurrentKeyItem) {
 		FName Socket = TEXT("RightHandSocket");
 		CurrentKeyItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
 		CurrentKeyItem->SetActorRelativeRotation(CurrentKeyItem->ItemHandRot);
