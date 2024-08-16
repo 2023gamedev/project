@@ -45,6 +45,17 @@ TArray<FVector> APathFinder::GenerateNodes(UWorld* World, float GridSize)
 
     NodeArr = Nodes;
 
+    // Nodes를 파일로 저장
+    FString FilePath = FPaths::ProjectDir() + TEXT("Nodes.txt");
+    FString NodeData;
+
+    for (const FVector& Node : Nodes)
+    {
+        NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+    }
+
+    FFileHelper::SaveStringToFile(NodeData, *FilePath);
+
     return Nodes;
 }
 
