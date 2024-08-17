@@ -36,6 +36,9 @@
     <ClCompile Include="ZombieController.cpp">
       <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="protocol.h">

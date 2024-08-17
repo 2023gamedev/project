@@ -166,6 +166,7 @@
     <ClCompile Include="iocpServerClass.cpp" />
     <ClCompile Include="ProcessPacket.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Tree.cpp" />
     <ClCompile Include="ZombieController.cpp" />
   </ItemGroup>
   <ItemGroup>
