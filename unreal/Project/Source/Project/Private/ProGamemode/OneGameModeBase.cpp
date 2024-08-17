@@ -243,6 +243,16 @@ void AOneGameModeBase::BeginPlay()
             DrawDebugPoint(GetWorld(), Vertex, 10.0f, FColor::Red, false, -1.0f, 0);
         }
 
+        FString FilePath = FPaths::ProjectDir() + TEXT("Nodes.txt");
+        FString NodeData;
+
+        for (const FVector& Node : OutVertices)
+        {
+            NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+        }
+
+        FFileHelper::SaveStringToFile(NodeData, *FilePath);
+
     }
 
 }
