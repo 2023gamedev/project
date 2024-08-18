@@ -80,10 +80,10 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 	{
 		//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
-		// «ˆ¿Á GameMode ¿ŒΩ∫≈œΩ∫∏¶ æÚ±‚
+		// ÌòÑÏû¨ GameMode Ïù∏Ïä§ÌÑ¥Ïä§Î•º ÏñªÍ∏∞
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
-			// GameMode ≥ª¿« «‘ºˆ »£√‚«œø© ¥Ÿ∏• «√∑π¿ÃæÓ¿« ¿ßƒ° æ˜µ•¿Ã∆Æ
+			// GameMode ÎÇ¥Ïùò Ìï®Ïàò Ìò∏Ï∂úÌïòÏó¨ Îã§Î•∏ ÌîåÎ†àÏù¥Ïñ¥Ïùò ÏúÑÏπò ÏóÖÎç∞Ïù¥Ìä∏
 			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
 				recvPlayerData.hp);
 		}
@@ -137,15 +137,15 @@ void APlayerCharacterController::CheckAndSendMovement()
 	uint32 ItemBoxId = MyBaseCharacter->ItemBoxId;
 	float hp = MyBaseCharacter->GetHP();
 	
-	// ¿Ã¿¸ ¿ßƒ°øÕ «ˆ¿Á ¿ßƒ° ∫Ò±≥ (øÚ¡˜¿” ∞®¡ˆ)
+	// Ïù¥Ï†Ñ ÏúÑÏπòÏôÄ ÌòÑÏû¨ ÏúÑÏπò ÎπÑÍµê (ÏõÄÏßÅÏûÑ Í∞êÏßÄ)
 	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp) {
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
 
-		// Protobuf∏¶ ªÁøÎ«œø© TestPacket ª˝º∫
+		// ProtobufÎ•º ÏÇ¨Ïö©ÌïòÏó¨ TestPacket ÏÉùÏÑ±
 		Protocol::Character packet;
 		packet.set_playerid(MyPlayerId);
-		packet.set_packet_type(1); // ø¯«œ¥¬ ¿Ø«¸ º≥¡§
+		packet.set_packet_type(1); // ÏõêÌïòÎäî Ïú†Ìòï ÏÑ§Ï†ï
 		packet.set_charactertype(MyCharacterNumber);
 		packet.set_x(CurrentLocation.X);
 		packet.set_y(CurrentLocation.Y);
@@ -156,14 +156,14 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_hp(hp);
 		packet.set_isingame(true);
 
-		// ¡˜∑ƒ»≠
+		// ÏßÅÎ†¨Ìôî
 		std::string serializedData;
 		packet.SerializeToString(&serializedData);
 
-		// ¡˜∑ƒ»≠µ» µ•¿Ã≈Õ∏¶ º≠πˆ∑Œ ¿¸º€
+		// ÏßÅÎ†¨ÌôîÎêú Îç∞Ïù¥ÌÑ∞Î•º ÏÑúÎ≤ÑÎ°ú Ï†ÑÏÜ°
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
-		// «ˆ¿Á ¿ßƒ°∏¶ ¿Ã¿¸ ¿ßƒ°∑Œ æ˜µ•¿Ã∆Æ
+		// ÌòÑÏû¨ ÏúÑÏπòÎ•º Ïù¥Ï†Ñ ÏúÑÏπòÎ°ú ÏóÖÎç∞Ïù¥Ìä∏
 		PreviousLocation = CurrentLocation;
 		PreviousRotation = CurrentRotation;
 		PreviouHP = hp;
@@ -181,7 +181,7 @@ void APlayerCharacterController::Send_Attack()
 		packet.set_packet_type(4);
 		packet.set_attack(b_attack);
 
-		// ¡˜∑ƒ»≠
+		// ÏßÅÎ†¨Ìôî
 		std::string serializedData;
 		packet.SerializeToString(&serializedData);
 
@@ -234,7 +234,7 @@ void APlayerCharacterController::Send_Equipment()
 		packet.set_itemtype(ItemType);
 		packet.set_itemname(ItemName);
 
-		// ¡˜∑ƒ»≠
+		// ÏßÅÎ†¨Ìôî
 		std::string serializedData;
 		packet.SerializeToString(&serializedData);
 
@@ -257,7 +257,7 @@ void APlayerCharacterController::Send_run() {
 		packet.set_b_run(b_run);
 		packet.set_packet_type(6);
 
-		// ¡˜∑ƒ»≠
+		// ÏßÅÎ†¨Ìôî
 		std::string serializedData;
 		packet.SerializeToString(&serializedData);
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
@@ -274,7 +274,7 @@ void APlayerCharacterController::Send_jump() {
 		packet.set_playerid(MyPlayerId);
 		packet.set_packet_type(7);
 
-		// ¡˜∑ƒ»≠
+		// ÏßÅÎ†¨Ìôî
 		std::string serializedData;
 		packet.SerializeToString(&serializedData);
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
@@ -418,7 +418,7 @@ void APlayerCharacterController::Jump(const FInputActionValue& Value)
 			basecharacter->SetStamina(basecharacter->GetStamina() - 20);
 			sendjump = true;
 
-			// «√∑π¿ÃæÓ∞° √≥¿Ωø° ∂Ÿ¥¬ ≈∞∫∏¥Ÿ jump≈∞∏¶ ∏’¿˙ ¥≠∑∂¿ª ∞ÊøÏ øπø‹ªÛ»≤ IFπÆ
+			// ÌîåÎ†àÏù¥Ïñ¥Í∞Ä Ï≤òÏùåÏóê Îõ∞Îäî ÌÇ§Î≥¥Îã§ jumpÌÇ§Î•º Î®ºÏ†Ä ÎàåÎ†ÄÏùÑ Í≤ΩÏö∞ ÏòàÏô∏ÏÉÅÌô© IFÎ¨∏
 			if (!basecharacter->IsRun()) {
 
 				basecharacter->HealingStamina();
@@ -451,22 +451,59 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
+
 	if (basecharacter->IsNWHandIn()) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
 		Attack();
 	}
 	else if (basecharacter->IsBHHandIn()) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
 		BleedHealing();
+
 	}
-	else if (basecharacter->IsHealHandIn()) {
+	else if (basecharacter->IsHealHandIn() ) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
 		Healing();
+
 	}
 	else if (basecharacter->IsKeyHandIn()) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
 		PlayKey();
+
 	}
 	else if (basecharacter->IsThrowWHandIn()) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
 		Throw();
 	}
-	
+
+	//if (basecharacter->IsNWHandIn() && !(basecharacter->IsAttack())) {
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
+	//	Attack();
+	//}
+	//else if (basecharacter->IsBHHandIn() && !(basecharacter->IsHealing())) {
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
+	//	BleedHealing();
+
+	//}
+	//else if (basecharacter->IsHealHandIn() && !(basecharacter->IsBHealing())) {
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
+
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
+	//	Healing();
+
+	//}
+	//else if (basecharacter->IsKeyHandIn()) {
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
+	//	PlayKey();
+
+	//}
+	//else if (basecharacter->IsThrowWHandIn()) {
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
+	//	Throw();
+
+	//}
 }
 
 void APlayerCharacterController::Attack()

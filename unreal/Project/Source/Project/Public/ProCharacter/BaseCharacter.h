@@ -198,6 +198,13 @@ public:
 	void QuickTWeapon();
 	void QuickKeyItem();
 
+	// 행동 확인 Get 함수 08/18
+	//bool IsAttack() { return m_bIsAttacking; }
+	//bool IsHealing() { return m_bIsHealingTime; }
+	//bool IsBHealing() { return m_bIsBleedHealing; }
+	// bool IsKey() { return m_bIsk; }
+	// bool IsTH() { return m_bIsk; }
+
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
 
