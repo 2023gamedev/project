@@ -1,13 +1,16 @@
 #pragma once
 #include "Common.h"
 
-struct Vector {
+struct Nvector {
     float x, y, z;
 };
 
-class node
+class Gnode
 {
+    Gnode();
+    ~Gnode();
+
 public:
-    vector<Vector> LoadNodesFromFile();
+    vector<Nvector> LoadNodesFromFile();
 
 };

@@ -1,4 +1,6 @@
 #pragma once
+#include "node.h"
+
 
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;
@@ -55,7 +57,9 @@ private:
 
 	unsigned int playerIndex{ UINT_MAX };
 
-	vector<int> m_zombie;
+	Gnode* nodeclass;
+
+	vector<Nvector> Nodes;
 
 	int GameTime = 0;
 

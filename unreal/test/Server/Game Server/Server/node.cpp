@@ -1,8 +1,16 @@
 #include "node.h"
 
-vector<Vector> node::LoadNodesFromFile()
+Gnode::Gnode()
 {
-    vector<Vector> Nodes;
+}
+
+Gnode::~Gnode()
+{
+}
+
+vector<Nvector> Gnode::LoadNodesFromFile()
+{
+    vector<Nvector> Nodes;
     ifstream File("Nodes.txt");
     string Line;
 
@@ -10,7 +18,7 @@ vector<Vector> node::LoadNodesFromFile()
     {
         while (getline(File, Line))
         {
-            Vector Vec;
+            Nvector Vec;
             sscanf_s(Line.c_str(), "%f,%f,%f", &Vec.x, &Vec.y, &Vec.z);
             Nodes.push_back(Vec);
         }
