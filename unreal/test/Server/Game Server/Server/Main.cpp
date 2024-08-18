@@ -5,6 +5,6 @@ using namespace std;
 int main() {
 	_wsetlocale(LC_ALL, L"korean");
 
-	// IOCP ¼­¹ö class
+	// IOCP ì„œë²„ class
 	IOCP_CORE iocpServer;
 }

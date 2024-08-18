@@ -1,7 +1,7 @@
 #pragma once
 
-#include "BT\Task.h"
-#include "C:\Users\seung\Desktop\2024_project\unreal\test\Server\Game Server\Server\Enemies.h"
+#include "Task.h"
+#include "Enemies.h"
 
 class EnemyNearCondition : public Task {
 public:
