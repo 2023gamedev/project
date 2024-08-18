@@ -19,7 +19,7 @@
 class UInputMappingContext;
 class UInputDataAsset;
 
-// Player Ä³¸¯ÅÍµéÀÇ ÄÁÆ®·Ñ·¯(LobbyPlayer Á¦¿Ü)
+// Player ìºë¦­í„°ë“¤ì˜ ì»¨íŠ¸ë¡¤ëŸ¬(LobbyPlayer ì œì™¸)
 UCLASS()
 class PROJECT_API APlayerCharacterController : public APlayerController
 {
@@ -87,11 +87,13 @@ protected:
 
 private:
 
-	//Ä³¸¯ÅÍÀÇ ÀÌÀü À§Ä¡ ÀúÀå º¯¼ö
+	//ìºë¦­í„°ì˜ ì´ì „ ìœ„ì¹˜ ì €ì¥ ë³€ìˆ˜
 	FVector PreviousLocation;
 	FRotator PreviousRotation;
 	float PreviouHP;
 
+	bool m_bisLeftClickAction = false;
+	 
 public:
 	UProGameInstance* GameInstance;
 	PlayerData recvPlayerData;
