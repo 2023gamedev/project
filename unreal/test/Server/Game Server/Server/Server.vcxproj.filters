@@ -19,6 +19,12 @@
     <Filter Include="소스 파일\ServerClass\Protocol">
       <UniqueIdentifier>{5200a910-95b5-40e1-8d03-44e107563632}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\BT">
+      <UniqueIdentifier>{919d3dc9-bb66-4a08-bb4a-5ab35d9101ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\BT">
+      <UniqueIdentifier>{24ff19e6-b163-41ab-bba0-8610208ef25e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="iocpServerClass.cpp">
@@ -36,8 +42,14 @@
     <ClCompile Include="ZombieController.cpp">
       <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
-    <ClCompile Include="Tree.cpp">
-      <Filter>소스 파일\ServerClass</Filter>
+    <ClCompile Include="EnemyNearCondition.h">
+      <Filter>헤더 파일\BT</Filter>
+    </ClCompile>
+    <ClCompile Include="BT\Task.h">
+      <Filter>헤더 파일\BT</Filter>
+    </ClCompile>
+    <ClCompile Include="BT\Tree.cpp">
+      <Filter>소스 파일\BT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,10 +71,27 @@
     <ClInclude Include="ZombieController.h">
       <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemies.h">
+      <Filter>헤더 파일\BT</Filter>
+    </ClInclude>
+    <ClInclude Include="Selector.h">
+      <Filter>헤더 파일\BT</Filter>
+    </ClInclude>
+    <ClInclude Include="Sequence.h">
+      <Filter>헤더 파일\BT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Gstruct.proto">
       <Filter>소스 파일\ServerClass\Protocol</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Server.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -162,23 +162,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BT\Task.h" />
+    <ClCompile Include="BT\Tree.cpp" />
     <ClCompile Include="GStruct.pb.cc" />
     <ClCompile Include="iocpServerClass.cpp" />
+    <ClCompile Include="EnemyNearCondition.h" />
     <ClCompile Include="ProcessPacket.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Tree.cpp" />
     <ClCompile Include="ZombieController.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemies.h" />
     <ClInclude Include="GStruct.pb.h" />
     <ClInclude Include="iocpServerClass.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="protocol.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Selector.h" />
+    <ClInclude Include="Sequence.h" />
     <ClInclude Include="ZombieController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Gstruct.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Server.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

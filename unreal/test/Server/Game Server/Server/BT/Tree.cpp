@@ -82,3 +82,19 @@ void postorder(struct Node* node) {
 	postorder(node->right);
 	cout << node->data << "->";
 }
+
+
+//int main()
+//{
+//	Node* root = CreateNode(1);
+//	root = InsertNode(root, 2);
+//	root = InsertNode(root, 3);
+//	root = InsertNode(root, 4);
+//	preorder(root);
+//	cout << endl;
+//	inorder(root);
+//	cout << endl;
+//	postorder(root);
+//	cout << endl;
+//	return 0;
+//}
