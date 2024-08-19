@@ -451,59 +451,42 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
+	if (m_bIsInputEnabled) {
+		m_bIsInputEnabled = false;
 
-	if (basecharacter->IsNWHandIn()) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
-		Attack();
+
+		// 타이머 설정 (따닥을 방지하기 위해 설정)
+		GetWorld()->GetTimerManager().SetTimer(InputCoolTimeHandle, this, &APlayerCharacterController::InputCoolTime, 0.2f, false);
+
+
+		if (basecharacter->IsNWHandIn() && !(basecharacter->IsAttack())) { // 아예 함수에 접근을 못하게 조건을 추가
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
+			Attack();
+		}
+		else if (basecharacter->IsBHHandIn() && !(basecharacter->IsBHealing())) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
+			BleedHealing();
+
+		}
+		else if (basecharacter->IsHealHandIn() && !(basecharacter->IsHealing())) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
+			Healing();
+
+		}
+		else if (basecharacter->IsKeyHandIn()) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
+			PlayKey();
+
+		}
+		else if (basecharacter->IsThrowWHandIn()) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
+			Throw();
+		}
+
 	}
-	else if (basecharacter->IsBHHandIn()) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
-		BleedHealing();
 
-	}
-	else if (basecharacter->IsHealHandIn() ) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
-
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
-		Healing();
-
-	}
-	else if (basecharacter->IsKeyHandIn()) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
-		PlayKey();
-
-	}
-	else if (basecharacter->IsThrowWHandIn()) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
-		Throw();
-	}
-
-	//if (basecharacter->IsNWHandIn() && !(basecharacter->IsAttack())) {
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
-	//	Attack();
-	//}
-	//else if (basecharacter->IsBHHandIn() && !(basecharacter->IsHealing())) {
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
-	//	BleedHealing();
-
-	//}
-	//else if (basecharacter->IsHealHandIn() && !(basecharacter->IsBHealing())) {
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
-
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
-	//	Healing();
-
-	//}
-	//else if (basecharacter->IsKeyHandIn()) {
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
-	//	PlayKey();
-
-	//}
-	//else if (basecharacter->IsThrowWHandIn()) {
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
-	//	Throw();
-
-	//}
 }
 
 void APlayerCharacterController::Attack()
@@ -598,6 +581,13 @@ void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
 	basecharacter->QuickKeyItem();
 
 	e_KeyItem = true;
+}
+
+
+
+void APlayerCharacterController::InputCoolTime()
+{
+	m_bIsInputEnabled = true;
 }
 
 void APlayerCharacterController::DisabledControllerInput()

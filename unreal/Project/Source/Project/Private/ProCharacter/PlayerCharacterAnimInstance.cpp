@@ -109,4 +109,36 @@ void UPlayerCharacterAnimInstance::AnimNotify_FootSound2()
 	OnFootSoundCheck.Broadcast();
 }
 
+UAnimMontage* UPlayerCharacterAnimInstance:: GetAttackMontage()
+{
+	if (AttackMontage) {
+		return AttackMontage;
+	}
+	return nullptr;
+}
+
+UAnimMontage* UPlayerCharacterAnimInstance::GetPickupMontage()
+{
+	if (PickUpMontage) {
+		return PickUpMontage;
+	}
+	return nullptr;
+}
+
+UAnimMontage* UPlayerCharacterAnimInstance::GetHealingMontage()
+{
+	if (HealingMontage) {
+		return HealingMontage;
+	}
+
+	return nullptr;
+}
+
+UAnimMontage* UPlayerCharacterAnimInstance::GetBleedingMontage()
+{
+	if (BleedHealingMontage) {
+		return BleedHealingMontage;
+	}
+	return nullptr;
+}
 

@@ -146,6 +146,7 @@ public:
 	FTimerHandle PickUpUIHandle;
 	void ProStartPickUpUI();
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UCircularPB_UI> CircularPB_Class;
 
@@ -199,9 +200,9 @@ public:
 	void QuickKeyItem();
 
 	// 행동 확인 Get 함수 08/18
-	//bool IsAttack() { return m_bIsAttacking; }
-	//bool IsHealing() { return m_bIsHealingTime; }
-	//bool IsBHealing() { return m_bIsBleedHealing; }
+	bool IsAttack() { return m_bIsAttacking; }
+	bool IsHealing() { return m_bIsHealingTime; }
+	bool IsBHealing() { return m_bIsBleedHealing; }
 	// bool IsKey() { return m_bIsk; }
 	// bool IsTH() { return m_bIsk; }
 
