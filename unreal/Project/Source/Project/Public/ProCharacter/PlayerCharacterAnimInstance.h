@@ -9,7 +9,7 @@
 /**
  * 
  */
-// Player Ä³¸¯ÅÍ¿¡ ¾Ö´ÔÀÎ½ºÅÏ½º
+// Player ìºë¦­í„°ì— ì• ë‹˜ì¸ìŠ¤í„´ìŠ¤
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackStartCheckDelegate)
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndCheckDelegate)
@@ -34,6 +34,12 @@ public:
 	FOnAttackStartCheckDelegate OnAttackStartCheck;
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
 	FOnFootSoundCheckDelegate OnFootSoundCheck;
+
+	UAnimMontage* GetAttackMontage();
+	UAnimMontage* GetPickupMontage();
+	UAnimMontage* GetHealingMontage();
+	UAnimMontage* GetBleedingMontage();
+
 private:
 	UFUNCTION()
 	void AnimNotify_AttackStart();
@@ -62,19 +68,19 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool m_bIsHandInWeapon;
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¸ùÅ¸ÁÖ
+	// ì• ë‹ˆë©”ì´ì…˜ ëª½íƒ€ì£¼
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¸ùÅ¸ÁÖ
+	// ì• ë‹ˆë©”ì´ì…˜ ëª½íƒ€ì£¼
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* PickUpMontage;
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¸ùÅ¸ÁÖ
+	// ì• ë‹ˆë©”ì´ì…˜ ëª½íƒ€ì£¼
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* HealingMontage;
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¸ùÅ¸ÁÖ
+	// ì• ë‹ˆë©”ì´ì…˜ ëª½íƒ€ì£¼
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* BleedHealingMontage;
 };

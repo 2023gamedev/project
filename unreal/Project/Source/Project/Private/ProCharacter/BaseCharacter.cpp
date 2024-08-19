@@ -843,6 +843,19 @@ void ABaseCharacter::Healing()
 
 void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	if (AnimInstance) {
+		if (Montage != AnimInstance->GetHealingMontage()) {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "NOT HealingMontage");
+			return;
+		}
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->AnimInstance NULL");
+		return;
+	}
+
 	
 	if (QuickSlot[1].Count <= 0) { // 이상하게 힐링 아이템 다 먹고 나서 다른 아이템 먹으면 이 함수가 호출되는 문제가 있어서 예외처리
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->   QuickSlot[1].Count <= 0!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -899,6 +912,18 @@ void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interr
 {
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
 
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	if (AnimInstance) {
+		if (Montage != AnimInstance->GetBleedingMontage()) {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "NOT BleedingMontage");
+			return;
+		}
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->AnimInstance NULL");
+		return;
+	}
 
 	if (QuickSlot[0].Count <= 0) { // 이쪽도 예외처리
 		return;
