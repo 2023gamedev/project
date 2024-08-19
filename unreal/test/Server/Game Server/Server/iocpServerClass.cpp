@@ -1,5 +1,6 @@
 #pragma once
 #include"Common.h"
+#include"iocpServerClass.h"
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 
@@ -7,6 +8,8 @@ IOCP_CORE::IOCP_CORE()
 {	
 	playerIndex = 0;
 	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
+
+	Nodes = nodeclass->LoadNodesFromFile();
 
 	IOCP_GetServerIpAddress();
 	CheckThisCPUcoreCount();
@@ -61,6 +64,11 @@ void IOCP_CORE::CheckThisCPUcoreCount()
 	GetSystemInfo(&si);
 	cpuCore = static_cast<int>(si.dwNumberOfProcessors);
 	printf("CPU Core Count = %d, threads = %d\n", cpuCore, cpuCore*2);
+
+	for (const Nvector& Node : Nodes)
+	{
+		cout << "Node: (" << Node.x << ", " << Node.y << ", " << Node.z << ")" << endl;
+	}
 }
 
 void IOCP_CORE::IOCP_MakeWorkerThreads()
