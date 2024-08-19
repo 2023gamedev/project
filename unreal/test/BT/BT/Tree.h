@@ -77,13 +77,54 @@ public:
 		DFS(node->right);
 	}
 
-	void BFS(Node* node, int level, queue<pair<int, int>>* bfs) {
-
+	void MakeBFSQue(Node* node, int level, queue<pair<int, int>>* bfs) {
 		if (node == NULL) return;
 
 		bfs->push(pair<int, int>(node->data, level));
 
-		BFS(node->left, level + 1, bfs);
-		BFS(node->right, level + 1, bfs);
+		MakeBFSQue(node->left, level + 1, bfs);
+		MakeBFSQue(node->right, level + 1, bfs);
+	}
+
+	void BFS(Node* node) {
+		if (node == NULL) return;
+
+		queue<pair<int, int>> bfs;
+
+		MakeBFSQue(node, 0, &bfs);
+		
+		queue<pair<int, int>> bypass;
+
+		int cnt = 0;
+		int currentLevel = 0;
+
+		while (bfs.size() != 0) {
+			if (currentLevel == bfs.front().second) {
+				cout << bfs.front().first << "->";
+				bfs.pop();
+				++cnt;
+
+				if (pow(2, currentLevel) <= cnt) {
+					++currentLevel;
+					cnt = 0;
+				}
+
+				queue<pair<int, int>> tmp;
+				while (bypass.size() != 0) {
+					tmp.push(bypass.front());
+					bypass.pop();
+				}
+				while (bfs.size() != 0) {
+					tmp.push(bfs.front());
+					bfs.pop();
+				}
+				bfs = tmp;
+			}
+			else {
+				bypass.push(bfs.front());
+				bfs.pop();
+			}
+		}
+
 	}
 };

@@ -33,41 +33,7 @@ int main()
 	root->DFS(root);
 	cout << endl;
 
-
-	queue<pair<int, int>> bfs;
-	queue<pair<int, int>> bypass;
-
-	root->BFS(root, 0, &bfs);
-
-	int cnt = 0;
-	int currentLevel = 0;
-	while (bfs.size() != 0) {
-		if (currentLevel == bfs.front().second) {
-			cout << bfs.front().first << "->";
-			bfs.pop();
-			++cnt;
-
-			if (pow(2, currentLevel) <= cnt) {
-				++currentLevel;
-				cnt = 0;
-			}
-
-			queue<pair<int, int>> tmp;
-			while (bypass.size() != 0) {
-				tmp.push(bypass.front());
-				bypass.pop();
-			}
-			while (bfs.size() != 0) {
-				tmp.push(bfs.front());
-				bfs.pop();
-			}
-			bfs = tmp;
-		}
-		else {
-			bypass.push(bfs.front());
-			bfs.pop();
-		}
-	}
+	root->BFS(root);
 	cout << endl;
 	
 	return 0;
