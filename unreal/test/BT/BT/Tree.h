@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <queue>
+#include <cmath>
 
 using namespace std;
 
@@ -69,20 +70,20 @@ public:
 
 	void DFS(Node* node) {
 		if (node == NULL) return;
+
 		cout << node->data << "->";
+
 		DFS(node->left);
 		DFS(node->right);
 	}
 
-	void BFS(Node* node) {
+	void BFS(Node* node, int level, queue<pair<int, int>>* bfs) {
+
 		if (node == NULL) return;
 
-		if (node->left != NULL) {
-			cout << node->data << "->";
-			cout << node->left->data << "->";
-			cout << node->right->data << "->";
-			BFS(node->left);
-			BFS(node->right);
-		}
+		bfs->push(pair<int, int>(node->data, level));
+
+		BFS(node->left, level + 1, bfs);
+		BFS(node->right, level + 1, bfs);
 	}
 };
