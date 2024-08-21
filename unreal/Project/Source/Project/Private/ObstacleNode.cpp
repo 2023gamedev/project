@@ -1,15 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PathFinder.h"
+#include "ObstacleNode.h"
 
-APathFinder::APathFinder()
+AObstacleNode::AObstacleNode()
 {
     PrimaryActorTick.bCanEverTick = true;
 
 }
 
-void APathFinder::BeginPlay()
+void AObstacleNode::BeginPlay()
 {
     Super::BeginPlay();
 
@@ -17,16 +17,16 @@ void APathFinder::BeginPlay()
     UE_LOG(LogTemp, Warning, TEXT("DebugTest"));
 }
 
-void APathFinder::Tick(float DeltaTime)
+void AObstacleNode::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 }
 
-TArray<FVector> APathFinder::GenerateNodes(UWorld* World, float GridSize)
+TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
 {
     TArray<FVector> Nodes;
 
-    // ∑π∫ß¿« ∞Ê∞Ë∏¶ ±‚¡ÿ¿∏∑Œ ≥ÎµÂ∏¶ ª˝º∫
+    // Î†àÎ≤®Ïùò Í≤ΩÍ≥ÑÎ•º Í∏∞Ï§ÄÏúºÎ°ú ÎÖ∏ÎìúÎ•º ÏÉùÏÑ±
     for (float x = -LevelBoundary; x <= LevelBoundary; x += GridSize)
     {
         for (float y = -LevelBoundary; y <= LevelBoundary; y += GridSize)
@@ -45,8 +45,8 @@ TArray<FVector> APathFinder::GenerateNodes(UWorld* World, float GridSize)
 
     NodeArr = Nodes;
 
-    // Nodes∏¶ ∆ƒ¿œ∑Œ ¿˙¿Â
-    FString FilePath = FPaths::ProjectDir() + TEXT("Nodes.txt");
+    // NodesÎ•º ÌååÏùºÎ°ú Ï†ÄÏû•
+    FString FilePath = FPaths::ProjectDir() + TEXT("ObstacleNodes.txt");
     FString NodeData;
 
     for (const FVector& Node : Nodes)
@@ -59,15 +59,15 @@ TArray<FVector> APathFinder::GenerateNodes(UWorld* World, float GridSize)
     return Nodes;
 }
 
-bool APathFinder::IsLocationNavigable(UWorld* World, FVector Location)
+bool AObstacleNode::IsLocationNavigable(UWorld* World, FVector Location)
 {
-    // ∑π¿Ãƒ≥Ω∫∆Æ µÓ¿ª ªÁøÎ«œø© Location¿Ã ¿Ãµø ∞°¥…«—¡ˆ »Æ¿Œ
+    // Î†àÏù¥Ï∫êÏä§Ìä∏ Îì±ÏùÑ ÏÇ¨Ïö©ÌïòÏó¨ LocationÏù¥ Ïù¥Îèô Í∞ÄÎä•ÌïúÏßÄ ÌôïÏù∏
     FHitResult Hit;
-    FVector Start = Location + FVector(0, 0, 10);
-    FVector End = Location - FVector(0, 0, 10);
+    FVector Start = Location + FVector(0, 0, 100);
+    FVector End = Location - FVector(0, 0, 100);
     FCollisionQueryParams Params;
 
-    bool Result = !World->LineTraceSingleByChannel(Hit, Start, End, ECC_GameTraceChannel5, Params);
+    bool Result = !World->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
     if (Result)
         DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 10.f);
@@ -77,7 +77,7 @@ bool APathFinder::IsLocationNavigable(UWorld* World, FVector Location)
     return Result;
 }
 
-TMap<FVector, TArray<FVector>> APathFinder::GenerateEdges(const TArray<FVector>& Nodes, float GridSize)
+TMap<FVector, TArray<FVector>> AObstacleNode::GenerateEdges(const TArray<FVector>& Nodes, float GridSize)
 {
     TMap<FVector, TArray<FVector>> Edges;
 
