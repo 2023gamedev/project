@@ -9,7 +9,7 @@ double heuristic(int x1, int y1, int x2, int y2) {
 }
 
 vector<pair<int, int>> findNeighbors(int x, int y) {
-    // 4¹æÇâ ÀÌµ¿ (»óÇÏÁÂ¿ì)
+    // 4ë°©í–¥ ì´ë™ (ìƒí•˜ì¢Œìš°)
     return { {x - 1, y}, {x + 1, y}, {x, y - 1}, {x, y + 1} };
 }
 
@@ -45,9 +45,9 @@ vector<Node> aStar(int startX, int startY, int startZ, int goalX, int goalY, int
             int neighborX = neighborPos.first;
             int neighborY = neighborPos.second;
 
-            // Àå¾Ö¹° Ã¼Å©
+            // ì¥ì• ë¬¼ ì²´í¬
             if (isObstacle(neighborX, neighborY, obstacles)) {
-                continue; // Àå¾Ö¹°ÀÌ ÀÖÀ¸¸é ÀÌ¿ô ³ëµå¸¦ ¹«½Ã
+                continue; // ì¥ì• ë¬¼ì´ ìˆìœ¼ë©´ ì´ì›ƒ ë…¸ë“œë¥¼ ë¬´ì‹œ
             }
 
             Node neighbor(neighborX, neighborY, current.z);
@@ -63,7 +63,7 @@ vector<Node> aStar(int startX, int startY, int startZ, int goalX, int goalY, int
         }
     }
 
-    return {}; // °æ·Î¸¦ Ã£Áö ¸øÇÔ
+    return {}; // ê²½ë¡œë¥¼ ì°¾ì§€ ëª»í•¨
 }
 
 int main() {

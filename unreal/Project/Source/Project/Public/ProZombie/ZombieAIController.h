@@ -12,8 +12,8 @@
 /**
  * 
  */
- // Zombie¸¦ ÄÁÆ®·ÑÇÏ´Â ÄÁÆ®·Ñ·¯ÀÇ ºÎ¸ð Å¬·¡½º
-// AI Ãß°¡µÇ¸é ¼öÁ¤µÉ °Í °°Àº °Í!!
+ // Zombieë¥¼ ì»¨íŠ¸ë¡¤í•˜ëŠ” ì»¨íŠ¸ë¡¤ëŸ¬ì˜ ë¶€ëª¨ í´ëž˜ìŠ¤
+// AI ì¶”ê°€ë˜ë©´ ìˆ˜ì •ë  ê²ƒ ê°™ì€ ê²ƒ!!
 UCLASS()
 class PROJECT_API AZombieAIController : public AAIController
 {

@@ -2,7 +2,7 @@
 
 int main()
 {
-	Node* root = NULL;
+	/*Node* root = NULL;
 
 	root = root->CreateNode(1);
 
@@ -18,7 +18,7 @@ int main()
 	root = root->InsertNode(11);
 	root = root->InsertNode(12);
 
-	/*
+	
 	------------------------------------------
 		     1			//Root Node 
 		  /    |
@@ -28,13 +28,15 @@ int main()
 	 / | / |  |
     8 9 10 11 12		//Leaf Nodes 
 	------------------------------------------
-	*/
 
 	root->DFS(root);
 	cout << endl;
 
 	root->BFS(root);
 	cout << endl;
-	
+	*/
+
+
+
 	return 0;
 }

@@ -11,8 +11,8 @@
 /**
  * 
  */
- // Blackboard¿¡¼­ º¯¼ö¸¦ ÃÊ±âÈ­ÇÏ´Â Å¬·¡½º
- // AI Ãß°¡µÇ¸é ¼öÁ¤µÉ °Í °°Àº °Í!!
+ // Blackboardì—ì„œ ë³€ìˆ˜ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í´ë˜ìŠ¤
+ // AI ì¶”ê°€ë˜ë©´ ìˆ˜ì •ë  ê²ƒ ê°™ì€ ê²ƒ!!
 UCLASS()
 class PROJECT_API UBTTask_ClearBlackboardBase : public UBTTask_BlackboardBase
 {
