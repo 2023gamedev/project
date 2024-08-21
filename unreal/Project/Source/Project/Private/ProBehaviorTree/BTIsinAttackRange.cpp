@@ -9,7 +9,7 @@
 #include "ProZombie//BaseZombie.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
-// AI Ãß°¡µÇ¸é ¼öÁ¤µÉ °Í °°Àº °Í!!
+// AI ì¶”ê°€ë˜ë©´ ìˆ˜ì •ë  ê²ƒ ê°™ì€ ê²ƒ!!
 
 UBTIsinAttackRange::UBTIsinAttackRange()
 {

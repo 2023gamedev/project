@@ -10,7 +10,7 @@
 #include "ProZombie//BaseZombie.h"
 #include "DrawDebugHelpers.h"
 
-// AI Ãß°¡µÇ¸é ¼öÁ¤µÉ °Í °°Àº °Í!!
+// AI ì¶”ê°€ë˜ë©´ ìˆ˜ì •ë  ê²ƒ ê°™ì€ ê²ƒ!!
 
 UBTService_CanAttack::UBTService_CanAttack()
 {
