@@ -18,12 +18,30 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CanAttack.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HasInvestigated.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HasFootSound.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HasShouting.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NotHasLastKnownPlayerLocation.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemies.h">
+    <ClInclude Include="Zombie.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyNearCondition.h">
+    <ClInclude Include="CanSeePlayer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Selector.h">
@@ -36,6 +54,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Tree.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CanNotAttack.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

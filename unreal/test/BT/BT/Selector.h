@@ -4,15 +4,20 @@
 #include <vector>
 #include <memory>
 
+using namespace std;
+
 class Selector : public Task {
+private:
+    vector<unique_ptr<Task>> sel_children;
+
 public:
     Selector() = default;
-    Selector(const std::vector<std::unique_ptr<Task>>& children) : children(children) {}
+    Selector(const vector<unique_ptr<Task>>& children) : sel_children(children) {}
 
 
-    bool Attack() const override {
-        for (const auto& child : children) {
-            if (child->Attack()) {
+    bool Detect() const override {
+        for (const auto& child : sel_children) {
+            if (true == child->Detect()) {
                 return true;
             }
         }
@@ -20,10 +25,8 @@ public:
     }
 
 
-    void AddChild(std::unique_ptr<Task> child) {
-        children.push_back(std::move(child));
+    void AddChild(unique_ptr<Task> child) {
+        sel_children.push_back(move(child));
     }
 
-private:
-    std::vector<std::unique_ptr<Task>> children;
 };

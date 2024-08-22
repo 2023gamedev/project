@@ -5,12 +5,9 @@
 
 class CanSeePlayer : public Task {
 public:
-    CanSeePlayer(float targetDistance = 10.0f) : TargetDistance(targetDistance) {}
 
-    bool MoveTo() const override {
-        return Zombie::DistanceToClosestPlayer <= TargetDistance;
+    bool Detect() const override {
+        return Zombie::DistanceToPlayer <= Zombie::CanSeeDistance;
     }
 
-private:
-    float TargetDistance;
 };

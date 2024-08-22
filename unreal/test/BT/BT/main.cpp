@@ -1,4 +1,43 @@
 #include "Tree.h"
+#include <iostream>
+
+using namespace std;
+
+class A {
+public:
+	static float a;
+	static const float c;
+	const float d = 5.f;
+	const static float f;
+
+	A() {
+		cout << a << "->";
+	}
+
+	A(int b) {
+		a = b;
+
+		cout << a << "->";
+	}
+
+	void p() {
+		a++;
+
+		cout << a << "->";
+	}
+
+	void set(int b) {
+		a = b;
+
+		cout << a << "->";
+	}
+
+	~A() {}
+};
+
+float A::a = 10.f;
+const float A::c = 5.f;
+const float A::f = 50.f;
 
 int main()
 {
@@ -36,7 +75,34 @@ int main()
 	cout << endl;
 	*/
 
+	A a;
 
+	a.p();
+	a.p();
+	a.p();
+	a.p();
+
+	cout << endl;
+
+	a.a = -5;
+
+	a.p();
+	a.p();
+	a.p();
+	a.p();
+
+	cout << endl;
+
+	A b(-5);
+
+	b.p();
+	b.p();
+	b.p();
+	b.p();
+
+	cout << endl;
+
+	b.set(6);
 
 	return 0;
 }

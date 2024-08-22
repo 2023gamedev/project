@@ -4,15 +4,20 @@
 #include <vector>
 #include <memory>
 
+using namespace std;
+
 class Sequence : public Task {
+private:
+    vector<unique_ptr<Task>> seq_children;
+
 public:
     Sequence() = default;
-    Sequence(const std::vector<std::unique_ptr<Task>>& children) : children(children) {}
+    Sequence(const vector<unique_ptr<Task>>& children) : seq_children(children) {}
 
 
-    bool Attack() const override {
-        for (const auto& child : children) {
-            if (!child->Attack()) {
+    bool HasInvestigated() const override {
+        for (const auto& child : seq_children) {
+            if (false == child->HasInvestigated()) {
                 return false;
             }
         }
@@ -20,10 +25,8 @@ public:
     }
 
 
-    void AddChild(std::unique_ptr<Task> child) {
-        children.push_back(std::move(child));
+    void AddChild(unique_ptr<Task> child) {
+        seq_children.push_back(move(child));
     }
 
-private:
-    std::vector<std::unique_ptr<Task>> children;
 };

@@ -3,11 +3,11 @@
 #include "Task.h"
 #include "Zombie.h"
 
-class CanAttack : public Task {
+class CanNotAttack : public Task {
 public:
 
     bool CanSeePlayer() const override {
-        return Zombie::DistanceToPlayer <= Zombie::CanAttackDistance;
+        return Zombie::DistanceToPlayer > Zombie::CanAttackDistance;
     }
 
 };

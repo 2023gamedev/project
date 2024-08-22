@@ -127,11 +127,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CanAttack.h" />
+    <ClCompile Include="HasFootSound.h" />
+    <ClCompile Include="HasInvestigated.h" />
+    <ClCompile Include="HasShouting.h" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NotHasLastKnownPlayerLocation.h" />
+    <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemies.h" />
-    <ClInclude Include="EnemyNearCondition.h" />
+    <ClInclude Include="CanNotAttack.h" />
+    <ClInclude Include="Zombie.h" />
+    <ClInclude Include="CanSeePlayer.h" />
     <ClInclude Include="Selector.h" />
     <ClInclude Include="Sequence.h" />
     <ClInclude Include="Task.h" />

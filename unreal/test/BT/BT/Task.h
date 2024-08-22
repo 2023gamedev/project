@@ -39,7 +39,7 @@ public:
     virtual bool HasFootSound() const = 0;      
 
     //샤우팅 반경 내 검사 [Sequence-Decorator]
-    virtual bool HasShoutingSound() const = 0;
+    virtual bool HasShouting() const = 0;
 
     //HasInvestigated()의 역조건 [Sequence-Decorator]
     virtual bool NotHasLastKnownPlayerLoaction() const = 0;
