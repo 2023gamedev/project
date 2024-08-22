@@ -27,10 +27,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         b_Timer = true;
     }
 
+    //test용
+    clientInfo->isInGame = true;
+
     // 패킷의 타입을 확인하여 처리
     switch (tempPacket.packet_type()) {
     case 1: {
-        printf("[ No. %3u ] character Packet Received !!\n", id);
+        //printf("[ No. %3u ] character Packet Received !!\n", id);
         //printf("Received packet type = %d\n", CharacterPacket.type());
         //printf("Received playerID = %d\n", CharacterPacket.playerid());
         //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
@@ -46,6 +49,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                printf("[ No. %3u ] character Packet Received !!\n", id);
             }
         }
         return true;
