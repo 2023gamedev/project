@@ -11,7 +11,7 @@
  */
 
 
- // NormalZombie(Æò¹üÇÑ Á»ºñ) Å¬·¡½º
+ // NormalZombie(í‰ë²”í•œ ì¢€ë¹„) í´ë˜ìŠ¤
 UCLASS()
 class PROJECT_API ANormalZombie : public ABaseZombie
 {

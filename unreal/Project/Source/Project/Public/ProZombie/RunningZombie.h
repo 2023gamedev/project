@@ -9,7 +9,7 @@
 /**
  * 
  */
- // RunningZombie(´Ş¸®´Â Á»ºñ) Å¬·¡½º
+ // RunningZombie(ë‹¬ë¦¬ëŠ” ì¢€ë¹„) í´ë˜ìŠ¤
 UCLASS()
 class PROJECT_API ARunningZombie : public ABaseZombie
 {

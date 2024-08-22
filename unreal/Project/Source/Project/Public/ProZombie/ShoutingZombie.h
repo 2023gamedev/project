@@ -11,7 +11,7 @@
  */
 
 
- // ShoutingZombie(¼Ò¸®Ä¡´Â Á»ºñ) Å¬·¡½º
+ // ShoutingZombie(ì†Œë¦¬ì¹˜ëŠ” ì¢€ë¹„) í´ë˜ìŠ¤
 UCLASS()
 class PROJECT_API AShoutingZombie : public ABaseZombie
 {

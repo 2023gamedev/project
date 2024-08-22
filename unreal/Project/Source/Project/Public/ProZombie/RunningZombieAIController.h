@@ -11,8 +11,8 @@
 /**
  * 
  */
- // RunningZombie(´Ş¸®´Â Á»ºñ)¸¦ ÄÁÆ®·ÑÇÏ´Â ÄÁÆ®·Ñ·¯
-// AI Ãß°¡µÇ¸é ¼öÁ¤µÉ °Í °°Àº °Í!!
+ // RunningZombie(ë‹¬ë¦¬ëŠ” ì¢€ë¹„)ë¥¼ ì»¨íŠ¸ë¡¤í•˜ëŠ” ì»¨íŠ¸ë¡¤ëŸ¬
+// AI ì¶”ê°€ë˜ë©´ ìˆ˜ì •ë  ê²ƒ ê°™ì€ ê²ƒ!!
 UCLASS()
 class PROJECT_API ARunningZombieAIController : public AAIController
 {
