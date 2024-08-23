@@ -9,7 +9,7 @@ IOCP_CORE::IOCP_CORE()
 	playerIndex = 0;
 	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 
-	//Nodes = nodeclass->LoadNodesFromFile();
+	Nodes = nodeclass->LoadNodesFromFile();
 
 	IOCP_GetServerIpAddress();
 	CheckThisCPUcoreCount();

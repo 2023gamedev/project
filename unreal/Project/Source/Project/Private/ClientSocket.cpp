@@ -7,14 +7,9 @@
 ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
-	//CurrentServerType = ServerType::LOBBY_SERVER;
-	CurrentServerType = ServerType::GAME_SERVER;
+	CurrentServerType = ServerType::LOBBY_SERVER;
 
-	//if (ConnectServer(ServerType::LOBBY_SERVER)) {
-	//	Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
-	//}
-	
-	if (ConnectServer(ServerType::GAME_SERVER)) {
+	if (ConnectServer(ServerType::LOBBY_SERVER)) {
 		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
 	}
 }
@@ -150,7 +145,6 @@ uint32 ClientSocket::Run()
 							if (PlayerId != MyPlayerId) {
 								Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.hp()));
 							}
-							UE_LOG(LogNet, Display, TEXT("recv character packet: PlayerId=%d"), CharacterPacket.playerid());
 						}
 						break;
 					}
