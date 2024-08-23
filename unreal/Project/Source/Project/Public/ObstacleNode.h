@@ -23,7 +23,7 @@ public:
 	float LevelBoundary = 0.f;
 
 	UPROPERTY(EditAnywhere)
-	float _GridSize = 0.f;
+	float _GridSize = 50.f;
 
 	UPROPERTY(EditAnywhere)
 	FVector StartLocation = FVector(1800.f, 2200.f, 0.f);

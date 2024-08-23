@@ -136,7 +136,10 @@
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Attack.h" />
     <ClInclude Include="CanNotAttack.h" />
+    <ClInclude Include="MoveTo.h" />
+    <ClInclude Include="Wait.h" />
     <ClInclude Include="Zombie.h" />
     <ClInclude Include="CanSeePlayer.h" />
     <ClInclude Include="Selector.h" />

@@ -1,28 +1,48 @@
 #pragma once
 
 #include <vector>
+#include <string>
+
+#include "Task.h"
 
 using namespace std;
 
+class Task;
+
 class Zombie {
 public:
-    static float DistanceToPlayer;
+    Task* Z_BT;
 
-    static const float CanSeeDistance;
 
-    static const float CanAttackDistance;
+    const float CanSeeDistance = 50.f;
 
-    static vector<vector<vector<int>>> PlayerLastLocation;
+    const float CanAttackDistance = 10.f;
 
-    static bool Investigated;
+    string name;
+
+    float DistanceToPlayer;
+
+    vector<vector<vector<int>>> TargetLocation;
+
+    bool KnewPlayerLocation;
     
-    static bool HeardFootSound;
+    bool HeardFootSound;
    
-    static bool HeardShouting;
+    bool HeardShouting;
+
+
+    Zombie();
+
+    Zombie(string n, float dtp, vector<vector<vector<int>>> tl, bool kpl, bool hfs, bool hs);
 
 
     void SetDistance(float dtp);
 
     void SetPlayerLocation(vector<vector<vector<int>>> pll);
 
+    void Attack() const;
+
+    void MoveTo() const;
+
+    void Wait() const;
 };

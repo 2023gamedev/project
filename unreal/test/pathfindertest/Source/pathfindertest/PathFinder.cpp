@@ -63,8 +63,8 @@ bool APathFinder::IsLocationNavigable(UWorld* World, FVector Location)
 {
     // 레이캐스트 등을 사용하여 Location이 이동 가능한지 확인
     FHitResult Hit;
-    FVector Start = Location + FVector(0, 0, 100);
-    FVector End = Location - FVector(0, 0, 100);
+    FVector Start = Location + FVector(0, 0, 10);
+    FVector End = Location - FVector(0, 0, 10);
     FCollisionQueryParams Params;
 
     bool Result = !World->LineTraceSingleByChannel(Hit, Start, End, ECC_GameTraceChannel5, Params);

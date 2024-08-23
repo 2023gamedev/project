@@ -34,10 +34,12 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
             FVector Location(x, y, StartLocation.Z);
             if (IsLocationNavigable(World, Location))
             {
-                Nodes.Add(Location);
+                //Nodes.Add(Location);
+                // 이 부분은 네비메쉬 부분을 사용할 예정
             }
             else
             {
+                Nodes.Add(Location);
                 UE_LOG(LogTemp, Warning, TEXT("Obstacle : %f,%f,%f"), Location.X, Location.Y, Location.Z);
             }
         }
@@ -51,7 +53,11 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
 
     for (const FVector& Node : Nodes)
     {
-        NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+        if (Node.X > 16.f && Node.X < 2366.f && Node.Y < 3960.f) {
+            NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+        }
+
+        //NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
     }
 
     FFileHelper::SaveStringToFile(NodeData, *FilePath);
@@ -70,9 +76,9 @@ bool AObstacleNode::IsLocationNavigable(UWorld* World, FVector Location)
     bool Result = !World->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
     if (Result)
-        DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 10.f);
+        DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 100.f);
     else
-        DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 10.f);
+        DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 100.f);
 
     return Result;
 }

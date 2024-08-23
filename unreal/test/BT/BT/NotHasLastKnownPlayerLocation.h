@@ -5,4 +5,5 @@
 class NotHasLastKnownPlayerLocation : public Task {
 public:
     NotHasLastKnownPlayerLocation() {}
+
 };

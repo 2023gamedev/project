@@ -5,8 +5,8 @@
 class CanSeePlayer : public Task {
 public:
 
-    bool Detect() const override {
-        return Zombie::DistanceToPlayer <= Zombie::CanSeeDistance;
+    bool Detect(Zombie zom) const override {
+        return zom.DistanceToPlayer <= zom.CanSeeDistance;
     }
 
 };

@@ -15,9 +15,9 @@ public:
     Sequence(const vector<unique_ptr<Task>>& children) : seq_children(children) {}
 
 
-    bool HasInvestigated() const override {
+    bool HasInvestigated(Zombie zom) const override {
         for (const auto& child : seq_children) {
-            if (false == child->HasInvestigated()) {
+            if (false == child->HasInvestigated(zom)) {
                 return false;
             }
         }

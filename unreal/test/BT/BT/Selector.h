@@ -15,9 +15,18 @@ public:
     Selector(const vector<unique_ptr<Task>>& children) : sel_children(children) {}
 
 
-    bool Detect() const override {
+    bool Detect(Zombie zom) const override {
         for (const auto& child : sel_children) {
-            if (true == child->Detect()) {
+            if (true == child->Detect(zom)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool CanSeePlayer(Zombie zom) const override {
+        for (const auto& child : sel_children) {
+            if (true == child->CanSeePlayer(zom)) {
                 return true;
             }
         }

@@ -5,8 +5,8 @@
 class HasShouting : public Task {
 public:
 
-    bool Detect() const override {
-        return Zombie::HeardShouting;
+    bool Detect(Zombie zom) const override {
+        return  zom.HeardShouting;
     }
 
 };
