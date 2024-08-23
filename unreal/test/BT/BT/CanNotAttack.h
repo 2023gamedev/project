@@ -6,7 +6,7 @@ class CanNotAttack : public Task {
 public:
 
     bool CanSeePlayer(Zombie zom) const override {
-        return  zom.DistanceToPlayer > zom.CanAttackDistance;
+        return zom.DistanceToPlayer > zom.CanAttackDistance;
     }
 
 };

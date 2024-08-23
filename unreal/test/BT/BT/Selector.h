@@ -21,7 +21,7 @@ public:
                 return true;
             }
         }
-        return false;
+        return false;   //사실상 실패할 일은 없긴하지만
     }
 
     bool CanSeePlayer(Zombie zom) const override {
@@ -30,7 +30,7 @@ public:
                 return true;
             }
         }
-        return false;
+        return false; //사실상 실패할 일은 없긴하지만
     }
 
 

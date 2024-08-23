@@ -6,7 +6,11 @@ class CanSeePlayer : public Task {
 public:
 
     bool Detect(Zombie zom) const override {
-        return zom.DistanceToPlayer <= zom.CanSeeDistance;
+        bool result = (zom.DistanceToPlayer <= zom.CanSeeDistance);
+
+        zom.KnewPlayerLocation = result;
+
+        return result;
     }
 
 };

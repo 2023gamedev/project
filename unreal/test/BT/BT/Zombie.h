@@ -4,21 +4,41 @@
 #include <string>
 
 #include "Task.h"
+#include "Player.h"
 
 using namespace std;
 
 class Task;
+class Player;
 
 class Zombie {
 public:
+    enum TARGET {
+        PLAYER,
+        SHOUTING,
+        FOOTSOUND,
+        INVESTIGATED,
+        ORIGIN
+    };
+
+
     Task* Z_BT;
+
+    Player* PL; //일단 싱글 플레이어으로 산정
 
 
     const float CanSeeDistance = 50.f;
 
     const float CanAttackDistance = 10.f;
 
+    const float CanHearDistance = 30.f;
+
+
     string name;
+
+    vector<vector<vector<int>>> ZombieLocation;
+
+    vector<vector<vector<int>>> ZombieOriginLocation;   //private 선언하는 것도 좋을 듯 (상수로 사용하니)
 
     float DistanceToPlayer;
 
@@ -33,12 +53,12 @@ public:
 
     Zombie();
 
-    Zombie(string n, float dtp, vector<vector<vector<int>>> tl, bool kpl, bool hfs, bool hs);
+    Zombie(Player* p, string n, vector<vector<vector<int>>> zl);
 
 
-    void SetDistance(float dtp);
+    void SetDistance();
 
-    void SetPlayerLocation(vector<vector<vector<int>>> pll);
+    void SetTargetLocation(TARGET t);
 
     void Attack() const;
 

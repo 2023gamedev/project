@@ -133,12 +133,15 @@
     <ClCompile Include="HasShouting.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NotHasLastKnownPlayerLocation.h" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attack.h" />
     <ClInclude Include="CanNotAttack.h" />
+    <ClInclude Include="ClearTargetLocation.h" />
     <ClInclude Include="MoveTo.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Wait.h" />
     <ClInclude Include="Zombie.h" />
     <ClInclude Include="CanSeePlayer.h" />

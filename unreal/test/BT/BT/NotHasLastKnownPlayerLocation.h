@@ -4,6 +4,10 @@
 
 class NotHasLastKnownPlayerLocation : public Task {
 public:
-    NotHasLastKnownPlayerLocation() {}
+
+    bool Detect(Zombie zom) const override {
+
+        return true;
+    }
 
 };
