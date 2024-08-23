@@ -1,6 +1,9 @@
 #pragma once
+#include "Common.h"
 #include "node.h"
+#include "ZombieController.h"
 
+class ZombieController;
 
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;
@@ -58,6 +61,7 @@ private:
 	unsigned int playerIndex{ UINT_MAX };
 
 	Gnode* nodeclass;
+	ZombieController* zombieclass;
 
 	vector<Nvector> Nodes;
 

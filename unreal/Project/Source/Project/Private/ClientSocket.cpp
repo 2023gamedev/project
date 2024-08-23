@@ -7,9 +7,14 @@
 ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
-	CurrentServerType = ServerType::LOBBY_SERVER;
+	//CurrentServerType = ServerType::LOBBY_SERVER;
+	CurrentServerType = ServerType::GAME_SERVER;
 
-	if (ConnectServer(ServerType::LOBBY_SERVER)) {
+	//if (ConnectServer(ServerType::LOBBY_SERVER)) {
+	//	Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
+	//}
+
+	if (ConnectServer(ServerType::GAME_SERVER)) {
 		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
 	}
 }
@@ -58,9 +63,9 @@ uint32 ClientSocket::Run()
 
 			buffer.insert(buffer.end(), tempBuff, tempBuff + recvLen);
 
-			if (CurrentServerType == ServerType::LOBBY_SERVER){
+			if (CurrentServerType == ServerType::LOBBY_SERVER) {
 				Protocol::SC_Ready Packet;
-				if (Packet.ParseFromArray(buffer.data(), buffer.size())) 
+				if (Packet.ParseFromArray(buffer.data(), buffer.size()))
 				{
 					switch (Packet.type())
 					{
@@ -115,16 +120,16 @@ uint32 ClientSocket::Run()
 						if (Select_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 							Q_select.push(CharacterSelect(Select_Packet.playerid(), Select_Packet.character_type()));
 						}
-						
+
 						UE_LOG(LogNet, Display, TEXT("Received Select Character: %d, %d"), Select_Packet.playerid(), Select_Packet.character_type());
-						
+
 						break;
 					}
 					}
 					buffer.clear();
 				}
 			}
-		}
+
 
 			else if (CurrentServerType == ServerType::GAME_SERVER) {
 				Protocol::Character tempCharacterPacket;
@@ -215,16 +220,17 @@ uint32 ClientSocket::Run()
 					}
 				}
 			}
-			else if (recvLen == 0)
-			{
-				UE_LOG(LogNet, Warning, TEXT("Connection closed"));
-				return 0;
-			}
-			else
-			{
-				UE_LOG(LogNet, Warning, TEXT("Recv Error"));
-				return 0;
-			}
+		}
+		else if (recvLen == 0)
+		{
+			UE_LOG(LogNet, Warning, TEXT("Connection closed"));
+			return 0;
+		}
+		else
+		{
+			UE_LOG(LogNet, Warning, TEXT("Recv Error"));
+			return 0;
+		}
 	}
 }
 

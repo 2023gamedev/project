@@ -152,9 +152,9 @@ void AOneGameModeBase::BeginPlay()
     // BeginPlay에서 SpawnZombies 호출
 
     // 지하 1층 
-    SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
-    SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
-    SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
+    //SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
+    //SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
+    //SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
 
     //SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
     //SpawnZombies(4, EZombie::NORMAL, FVector(1200.f, 2710.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -700.f);
@@ -169,12 +169,12 @@ void AOneGameModeBase::BeginPlay()
 
     //// 지상 1층
 
-    SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
-    SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(15, EZombie::NORMAL, FVector(2100.f, 3500.f, 1989.212f), FRotator(0.f, 120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(16, EZombie::NORMAL, FVector(200.f, 3200.f, 1989.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(17, EZombie::NORMAL, FVector(800.f, 3600.f, 1989.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -183,9 +183,9 @@ void AOneGameModeBase::BeginPlay()
 
 
     ////지상 2층
-    SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
-    SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
-    SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
+    //SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
+    //SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
 
     //SpawnZombies(23, EZombie::NORMAL, FVector(580.f, 2170.f, 2947.212f), FRotator(0.f, -180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -197,8 +197,8 @@ void AOneGameModeBase::BeginPlay()
     //SpawnZombies(29, EZombie::NORMAL, FVector(190.f, 2600.f, 2947.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
 
     //// 지하 2층
-    SpawnZombies(30, EZombie::RUNNING, FVector(600.f, 500.f, 90.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    SpawnZombies(31, EZombie::RUNNING, FVector(2000.f, 1340.f, 90.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -1200.f);
+    //SpawnZombies(30, EZombie::RUNNING, FVector(600.f, 500.f, 90.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
+    //SpawnZombies(31, EZombie::RUNNING, FVector(2000.f, 1340.f, 90.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -1200.f);
     //SpawnZombies(32, EZombie::RUNNING, FVector(2000.f, 3600.f, 90.212f), FRotator(0.f, -50.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
     //SpawnZombies(33, EZombie::RUNNING, FVector(180.f, 2400.f, 90.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 800.f);
     //SpawnZombies(34, EZombie::RUNNING, FVector(1000.f, 2800.f, 90.212f), FRotator(0.f, -60.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
@@ -777,28 +777,39 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         }
     }
 
+    // 캐릭터 타입에 따라 스폰할 클래스를 결정
+    TSubclassOf<ABaseCharacter> CharacterClass = nullptr;
+
     if (charactertype == 1) {
-        OtherCharacterClasses.Add(AEmployeeCharacter::StaticClass());
+        CharacterClass = AEmployeeCharacter::StaticClass();
+        //OtherCharacterClasses.Add(AEmployeeCharacter::StaticClass());
     }
     else if (charactertype == 3) {
-        OtherCharacterClasses.Add(AFireFighterCharacter::StaticClass());
+        CharacterClass = AFireFighterCharacter::StaticClass();
+        //OtherCharacterClasses.Add(AFireFighterCharacter::StaticClass());
     }
     else if (charactertype == 0) {
-        OtherCharacterClasses.Add(AGirlCharacter::StaticClass());
+        CharacterClass = AGirlCharacter::StaticClass();
+        //OtherCharacterClasses.Add(AGirlCharacter::StaticClass());
     }
     else if (charactertype == 2) {
-        OtherCharacterClasses.Add(AIdolCharacter::StaticClass());
+        CharacterClass = AIdolCharacter::StaticClass();
+        //OtherCharacterClasses.Add(AIdolCharacter::StaticClass());
     }
 
-    //기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
-    FActorSpawnParameters SpawnParams;
-    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-    ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(OtherCharacterClasses[0], NewLocation, NewRotation, SpawnParams);
-
-    if (NewCharacter)
+    if (CharacterClass)
     {
-        // 새 캐릭터에 PlayerId 설정
-        NewCharacter->SetPlayerId(PlayerID);
+        //기존 캐릭터를 찾지 못한 경우에만 새 캐릭터 스폰
+        FActorSpawnParameters SpawnParams;
+        SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+        ABaseCharacter* NewCharacter = World->SpawnActor<ABaseCharacter>(CharacterClass, NewLocation, NewRotation, SpawnParams);
+
+        if (NewCharacter)
+        {
+            // 새 캐릭터에 PlayerId 설정
+            NewCharacter->SetPlayerId(PlayerID);
+            NewCharacter->SetHP(hp);  // 초기 HP 설정
+        }
     }
 }
 
@@ -1010,7 +1021,7 @@ void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex,
     }
 }
 
-void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotator NewRotation)
+void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation)
 {
     UWorld* World = GetWorld();
 
@@ -1021,6 +1032,19 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotat
         UE_LOG(LogTemp, Warning, TEXT("UpdateZombie: GetWorld() returned nullptr"));
         return;
     }
+
+    TSubclassOf<ABaseZombie> ZombieClass = nullptr;
+
+    if (ZombieType == 0) {
+        ZombieClass = ANormalZombie::StaticClass();
+    }
+    else if (ZombieType == 1) {
+        ZombieClass = AShoutingZombie::StaticClass();
+    }
+    else if (ZombieType == 2) {
+        ZombieClass = ARunningZombie::StaticClass();
+    }
+
 
     ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieID);
     if (ZombiePtr && *ZombiePtr)
@@ -1038,6 +1062,22 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotat
     }
     else
     {
+        // 기존 좀비가 없으면 새로운 좀비 생성
+        FActorSpawnParameters SpawnParams;
+        SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+        ABaseZombie* NewZombie = World->SpawnActor<ABaseZombie>(ZombieClass, NewLocation, NewRotation, SpawnParams);
+
+        if (NewZombie)
+        {
+            // 새 좀비에 ZombieID 설정 및 ZombieMap에 추가
+            NewZombie->SetZombieId(ZombieID);
+            ZombieMap.Add(ZombieID, NewZombie);
+            UE_LOG(LogTemp, Warning, TEXT("Spawned new Zombie ID: %d"), ZombieID);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Error, TEXT("Failed to spawn new Zombie ID: %d"), ZombieID);
+        }
         //UE_LOG(LogTemp, Warning, TEXT("No zombie found with ID: %d"), ZombieID);
     }
 }

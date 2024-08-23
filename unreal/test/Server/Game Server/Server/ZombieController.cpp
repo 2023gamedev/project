@@ -85,26 +85,49 @@ void ZombieController::removeZombie(int zombieID) {
         zombiedata.end());
 }
 
-void ZombieController::setZombiePosition(ZombieData zombiedata)
+void ZombieController::SendZombieData(int id)
 {
-    for (auto& zombie : this->zombiedata) {
-        if (zombie.zombieID == zombiedata.zombieID) {
-            zombie.x = zombiedata.x;
-            zombie.y = zombiedata.y;
-            zombie.z = zombiedata.z;
-            zombie.pitch = zombiedata.pitch;
-            zombie.yaw = zombiedata.yaw;
-            zombie.roll = zombiedata.roll;
-            break;
-        }
+    Protocol::ZombieDataList zombieDataList;
+
+    for (const auto& z : zombiedata) {
+        Protocol::Zombie* zombie = zombieDataList.add_zombies();
+        zombie->set_zombieid(z.zombieID);
+        zombie->set_x(z.x);
+        zombie->set_y(z.y);
+        zombie->set_z(z.z);
+        zombie->set_pitch(z.pitch);
+        zombie->set_yaw(z.yaw);
+        zombie->set_roll(z.roll);
+        zombie->set_zombietype(z.zombietype);
     }
+
+    std::string serializedData;
+    zombieDataList.SerializeToString(&serializedData);
+
+    iocpServer->IOCP_SendPacket(id, serializedData.data(), serializedData.size());
 }
 
-ZombieData* ZombieController::getZombiePosition(int zombieID) {
-    for (auto& zombie : zombiedata) {
-        if (zombie.zombieID == zombieID) {
-            return &zombie;
+void ZombieController::SendZombieUpdate(const ZombieData& z)
+{
+    Protocol::Zombie zombie;
+
+    zombie.set_zombieid(z.zombieID);
+    zombie.set_x(z.x);
+    zombie.set_y(z.y);
+    zombie.set_z(z.z);
+    zombie.set_pitch(z.pitch);
+    zombie.set_yaw(z.yaw);
+    zombie.set_roll(z.roll);
+    zombie.set_zombietype(z.zombietype);
+
+    // 메시지를 직렬화하여 바이트 스트림으로 변환
+    std::string serializedData;
+    zombie.SerializeToString(&serializedData);
+
+    // 직렬화된 데이터를 클라이언트로 전송
+    for (const auto& player : g_players) {
+        if (player.second->isInGame) {
+            iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
         }
     }
-    return nullptr;
 }

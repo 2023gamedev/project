@@ -59,13 +59,11 @@
     <ClInclude Include="ZombieController.h">
       <Filter>소스 파일\ServerClass</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="resource.h">
       <Filter>헤더 파일</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="node.h">
       <Filter>소스 파일\ServerClass</Filter>
->>>>>>> 963f88e3ab0b326fa7f979042770e77046aeebb3
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
