@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Task.h"
-#include "Zombie.h"
 
 class CanSeePlayer : public Task {
 public:

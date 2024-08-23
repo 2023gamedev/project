@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Zombie.h"
+
 class Task {
 public:
     //다음으로 행동할 Task 감지 [Selector-Service]
