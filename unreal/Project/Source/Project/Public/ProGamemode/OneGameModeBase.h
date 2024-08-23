@@ -11,7 +11,7 @@
  *
  */
 
- // Main Gamemode Å¬·¡½º
+ // Main Gamemode í´ë˜ìŠ¤
 
 
 UENUM(BlueprintType)
@@ -22,7 +22,7 @@ enum class EZombie
     RUNNING,
 };
 
-// Zombie´Â ÆĞÆ®·ÑÀ» ¾î´ÀÂÊÀ¸·Î ÇÒ °ÍÀÎ°¡
+// ZombieëŠ” íŒ¨íŠ¸ë¡¤ì„ ì–´ëŠìª½ìœ¼ë¡œ í•  ê²ƒì¸ê°€
 UENUM(BlueprintType)
 enum class EZombiePatrol
 {
@@ -31,7 +31,7 @@ enum class EZombiePatrol
     PATROLY,
 };
 
-// Ä³¸¯ÅÍ ¼±ÅÃÀ» À§ÇÑ enum Å¬·¡½º
+// ìºë¦­í„° ì„ íƒì„ ìœ„í•œ enum í´ë˜ìŠ¤
 UENUM(BlueprintType)
 enum class EPlayerCharacter
 {
@@ -44,9 +44,9 @@ enum class EPlayerCharacter
 UENUM(BlueprintType)
 enum class EItemFloor
 {
-    FLOORB1, // ÁöÇÏ 1Ãş
-    FLOOR1,  // 1Ãş
-    FLOOR2,  // 2Ãş
+    FLOORB1, // ì§€í•˜ 1ì¸µ
+    FLOOR1,  // 1ì¸µ
+    FLOOR2,  // 2ì¸µ
 };
 
 
@@ -74,7 +74,7 @@ public:
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
 
-    // ¾ÆÀÌÅÛ ¹Ú½º
+    // ì•„ì´í…œ ë°•ìŠ¤
     UPROPERTY(EditDefaultsOnly, Category = "ItemBox")
     TArray<TSubclassOf<AItemBoxActor>> ItemBoxClasses;
 
@@ -82,7 +82,7 @@ public:
     int32 m_iItemBoxNumber;
 
 
-    // Ä³¸¯ÅÍ¸¦ ÀúÀåÇÒ ¹è¿­
+    // ìºë¦­í„°ë¥¼ ì €ì¥í•  ë°°ì—´
     UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter")
     TArray<TSubclassOf<ABaseCharacter>> PlayerCharacterClasses;
 
@@ -92,7 +92,7 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = "OtherCharacter")
     TArray<TSubclassOf<ABaseCharacter>> OtherCharacterClasses;
 
-    // ´Ù¾çÇÑ Á¾·ùÀÇ Á»ºñ Å¬·¡½º¸¦ ÀúÀåÇÒ ¹è¿­
+    // ë‹¤ì–‘í•œ ì¢…ë¥˜ì˜ ì¢€ë¹„ í´ë˜ìŠ¤ë¥¼ ì €ì¥í•  ë°°ì—´
     UPROPERTY(EditDefaultsOnly, Category = "Zombies")
     TArray<TSubclassOf<ABaseZombie>> ZombieClasses;
 
@@ -115,7 +115,7 @@ public:
     UPROPERTY(VisibleAnywhere, Category = "Zombies")
     int32 m_iRunningZombieNumber;
 
-    // InterActor ¹è¿­ 
+    // InterActor ë°°ì—´ 
     UPROPERTY(EditDefaultsOnly, Category = "Inter")
     TArray<TSubclassOf<AInterActor>> InterActorClasses;
 
@@ -127,8 +127,8 @@ public:
 
     struct SItemRandomLocation
     {
-        FVector sLocation;                  // À§Ä¡°¡ ¾îµò°¡
-        bool    bIsSeatLocation = false;    // À§Ä¡¿¡ ´©°¡ ÀÌ¹Ì Â÷ÁöÇÏ°í ÀÖ´Â°¡ true 
+        FVector sLocation;                  // ìœ„ì¹˜ê°€ ì–´ë”˜ê°€
+        bool    bIsSeatLocation = false;    // ìœ„ì¹˜ì— ëˆ„ê°€ ì´ë¯¸ ì°¨ì§€í•˜ê³  ìˆëŠ”ê°€ true 
     };
 
     struct SCarActorRandomLocation
@@ -146,36 +146,36 @@ public:
 
     void ChoiceCharacterBefore();
 
-    // Ä³¸¯ÅÍ ¼±ÅÃ ÇÔ¼ö
+    // ìºë¦­í„° ì„ íƒ í•¨ìˆ˜
     void ChoiceCharacter();
 
     void SpawnCharacter(int32 characterindex);
 
-    // ¾ÆÀÌÅÛ ¹Ú½º À§Ä¡ Á¤ÇØ³õ°í ·£´ıÀ¸·Î Á¤ÇØ¼­ »ı¼º
+    // ì•„ì´í…œ ë°•ìŠ¤ ìœ„ì¹˜ ì •í•´ë†“ê³  ëœë¤ìœ¼ë¡œ ì •í•´ì„œ ìƒì„±
     FVector RandomItemBoxLocation(EItemFloor itemfloor);
 
-    // Ä« ¾×ÅÍ À§Ä¡ Á¤ÇØ³õ°í ·£´ıÀ¸·Î Á¤ÇØ¼­ »ı¼º
+    // ì¹´ ì•¡í„° ìœ„ì¹˜ ì •í•´ë†“ê³  ëœë¤ìœ¼ë¡œ ì •í•´ì„œ ìƒì„±
     int32 RandomCarActorLocation();
 
     int32 RandomCarKey();
 
-    // ¾ÆÀÌÅÛ ·£´ı À§Ä¡ Á¤ÇØ³õ´Â ¹è¿­
+    // ì•„ì´í…œ ëœë¤ ìœ„ì¹˜ ì •í•´ë†“ëŠ” ë°°ì—´
     SItemRandomLocation ItemRandomLocationStruct[60];
 
-    // Car ·£´ı À§Ä¡ Á¤ÇØ³õ´Â ¹è¿­
+    // Car ëœë¤ ìœ„ì¹˜ ì •í•´ë†“ëŠ” ë°°ì—´
     SCarActorRandomLocation CarActorRandomLocationStruct[7];
 
     SCarKeyRandom CarKeyRandom[7];
 
-    // ¾ÆÀÌÅÛ »ı¼º ÇÔ¼ö
+    // ì•„ì´í…œ ìƒì„± í•¨ìˆ˜
     void ItemRandomLocationSetting();
     void SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, EItemFloor itemfloor);
 
-    // Á»ºñ »ı¼º ÇÔ¼ö
+    // ì¢€ë¹„ ìƒì„± í•¨ìˆ˜
     void SpawnZombiesStaticClasses();
     void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange);
 
-    void UpdateZombie(uint32 ZombieID, FVector NewLocation, FRotator NewRotation);
+    void UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation);
 
     void DestroyItem(uint32 ItemId);
 

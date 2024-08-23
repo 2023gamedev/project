@@ -47,14 +47,14 @@ struct ZombieData
 	uint32 ZombieId;
 	FVector Location;
 	FRotator Rotation;
-	uint32 zombietype;
+	uint32 ZombieType;
 
 	// 기본 생성자 명시적 정의
-	ZombieData() : ZombieId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), zombietype(0) {}
+	ZombieData() : ZombieId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), ZombieType(0) {}
 
 	// 매개변수가 있는 생성자
-	ZombieData(uint32 InZombieId, FVector InLocation, FRotator InRotation, uint32 Inzombietype)
-		: ZombieId(InZombieId), Location(InLocation), Rotation(InRotation), zombietype(Inzombietype) {}
+	ZombieData(uint32 InZombieId, FVector InLocation, FRotator InRotation, uint32 InZombieType)
+		: ZombieId(InZombieId), Location(InLocation), Rotation(InRotation), ZombieType(InZombieType) {}
 };
 
 struct PlayerAttack

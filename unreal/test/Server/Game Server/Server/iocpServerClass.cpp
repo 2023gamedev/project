@@ -1,5 +1,4 @@
 #pragma once
-#include"Common.h"
 #include"iocpServerClass.h"
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
@@ -9,7 +8,7 @@ IOCP_CORE::IOCP_CORE()
 	playerIndex = 0;
 	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 
-	Nodes = nodeclass->LoadNodesFromFile();
+	//Nodes = nodeclass->LoadNodesFromFile();
 
 	IOCP_GetServerIpAddress();
 	CheckThisCPUcoreCount();
@@ -224,6 +223,9 @@ void IOCP_CORE::IOCP_AcceptThread()
 			int err_no = WSAGetLastError();
 			IOCP_ErrorQuit(L"id send()", err_no);
 		}
+
+		//좀비 스폰 데이터 전송
+		zombieclass->SendZombieData(playerIndex);
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(client_sock), g_hIocp, playerIndex, 0);
 

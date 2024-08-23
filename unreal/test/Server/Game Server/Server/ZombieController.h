@@ -1,6 +1,8 @@
 #pragma once
 #include "Common.h"
-#include "iocpServerClass.h"
+#include"iocpServerClass.h"
+
+class IOCP_CORE;
 
 struct ZombieData {
 	int zombieID;
@@ -49,12 +51,15 @@ public:
 	ZombieController();
 	~ZombieController();
 
+	IOCP_CORE* iocpServer;
+
 	void SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
 
 	vector<ZombieData> zombiedata;
 
 	void removeZombie(int zombieID);
-	void setZombiePosition(ZombieData zombie);
-	ZombieData* getZombiePosition(int zombieid);
+
+	void SendZombieData(int id);
+	void SendZombieUpdate(const ZombieData& z);
 };
 
