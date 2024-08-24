@@ -52,7 +52,7 @@ AOneGameModeBase::AOneGameModeBase()
     CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
 
 
-    SpawnZombiesStaticClasses();
+    //SpawnZombiesStaticClasses();
 
     ItemRandomLocationSetting();
 

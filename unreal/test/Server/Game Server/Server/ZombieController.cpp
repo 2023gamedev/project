@@ -67,6 +67,7 @@ ZombieController::~ZombieController()
 void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange) {
  
     ZombieData zombie;
+
     zombie.zombieID = zombieID;
     zombie.x = position.X;
     zombie.y = position.Y;
@@ -77,12 +78,11 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     zombie.zombietype = zombieType;
     zombie.patroltype = patrolType;
     zombie.patrolrange = patrolRange;
-}
 
-void ZombieController::removeZombie(int zombieID) {
-    zombiedata.erase(std::remove_if(zombiedata.begin(), zombiedata.end(),
-        [zombieID](const ZombieData& z) { return z.zombieID == zombieID; }),
-        zombiedata.end());
+    // zombiedata º¤ÅÍ¿¡ Ãß°¡
+    zombiedata.push_back(zombie);
+
+    cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << zombiedata.size() << endl;
 }
 
 void ZombieController::SendZombieData(int id)
@@ -100,6 +100,8 @@ void ZombieController::SendZombieData(int id)
         zombie->set_roll(z.roll);
         zombie->set_zombietype(z.zombietype);
     }
+
+    zombieDataList.set_packet_type(8);
 
     std::string serializedData;
     zombieDataList.SerializeToString(&serializedData);
