@@ -20,17 +20,16 @@ struct TupleEqual {
     }
 };
 
+
 double heuristic(float x1, float y1, float x2, float y2) {
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
 }
 
-
-bool isObstacle(float x, float y, float z, const unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& obstacles) {
-    return obstacles.find({ x, y, z }) != obstacles.end();
-
+bool isObstacle(float x, float y, float z, const vector<tuple<float, float, float>>& obstacles) {
+    return find(obstacles.begin(), obstacles.end(), make_tuple(x, y, z)) != obstacles.end();
 }
 
-vector<Node> findNeighbors(const Node& current, const unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& validPositions, float goalX, float goalY) {
+vector<Node> findNeighbors(const Node& current, const vector<tuple<float, float, float>>& validPositions, float goalX, float goalY) {
     vector<Node> neighbors;
     Node closestNeighbor;
     double closestDist = numeric_limits<double>::infinity();
@@ -58,7 +57,7 @@ vector<Node> findNeighbors(const Node& current, const unordered_set<tuple<float,
 }
 
 vector<Node> aStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ,
-    const unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& validPositions, const unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& obstacles) {
+    const vector<tuple<float, float, float>>& validPositions, const vector<tuple<float, float, float>>& obstacles) {
 
     priority_queue<Node> openSet;
     unordered_map<Node, Node, Node::Hash> cameFrom;
@@ -83,7 +82,6 @@ vector<Node> aStar(float startX, float startY, float startZ, float goalX, float 
             return path;
         }
 
-
         for (Node neighbor : findNeighbors(current, validPositions, goalX, goalY)) {
             if (isObstacle(neighbor.x, neighbor.y, neighbor.z, obstacles)) {
                 continue;
@@ -102,21 +100,14 @@ vector<Node> aStar(float startX, float startY, float startZ, float goalX, float 
 
     return {};
 }
-// #include <direct.h> // _getcwd 함수 사용을 위해 필요 (Windows의 경우)
-int main() 
-{
-    //// 현재 작업 디렉터리 출력
-    //char buffer[256];
-    //if (_getcwd(buffer, 256)) {
-    //    std::cout << "현재 작업 디렉터리: " << buffer << std::endl;
-    //}
 
+int main()
+{
     float startX = 0.0f, startY = 0.0f, startZ = 0.0f;
     float goalX = 5.0f, goalY = 5.0f, goalZ = 0.0f;
 
     // 파일 경로 설정
     string filePath = "../../../Project/B1.txt";
-    //string filePath = "C:/LastProject/unreal/Project/B1.txt";
     ifstream file(filePath);
 
     if (!file.is_open()) {
@@ -124,8 +115,8 @@ int main()
         return 1;
     }
 
-
-    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> validPositions;
+    vector<tuple<float, float, float>> validPositions;
+    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
     string line;
 
     while (getline(file, line)) {
@@ -134,8 +125,15 @@ int main()
         char comma;
 
         if (ss >> x >> comma >> y >> comma >> z) {
-            validPositions.emplace(x, y, z);
-        } else {
+            tuple<float, float, float> position = make_tuple(x, y, z);
+
+            // 중복 확인 후 vector에 추가
+            if (positionSet.find(position) == positionSet.end()) {
+                positionSet.emplace(position);
+                validPositions.emplace_back(position);
+            }
+        }
+        else {
             cerr << "Not valid position: " << line << endl;
         }
     }
@@ -157,9 +155,9 @@ int main()
         return 1;
     }
 
-    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacles;
+    vector<tuple<float, float, float>> obstacles;
+    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
     string lineOb;
-
 
     while (getline(fileOb, lineOb)) {
         stringstream ss(lineOb);
@@ -167,21 +165,27 @@ int main()
         char comma;
 
         if (ss >> x >> comma >> y >> comma >> z) {
-            obstacles.emplace(x, y, z);
+            tuple<float, float, float> obstacle = make_tuple(x, y, z);
+
+            // 중복 확인 후 vector에 추가
+            if (obstacleSet.find(obstacle) == obstacleSet.end()) {
+                obstacleSet.emplace(obstacle);
+                obstacles.emplace_back(obstacle);
+            }
         }
         else {
-            cerr << "Not obstacles position: : " << lineOb << endl;
+            cerr << "Not valid obstacle position: " << lineOb << endl;
         }
     }
 
     fileOb.close();
 
-    cout << "obstacles Positions:" << endl;
+    cout << "Obstacles Positions:" << endl;
     for (const auto& pos : obstacles) {
         cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
     }
 
-    vector<Node> path = aStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);    
+    vector<Node> path = aStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
 
     if (!path.empty()) {
         cout << "Path found:\n";
