@@ -71,7 +71,7 @@ public:
 
 
     void AddChild(unique_ptr<Task> child) {
-        seq_children.push_back(move(child));
+        seq_children.emplace_back(move(child));
     }
 
 };

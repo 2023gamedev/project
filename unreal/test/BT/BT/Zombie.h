@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "Task.h"
 #include "Player.h"
@@ -22,7 +23,7 @@ public:
     };
 
 
-    Task* Z_BT;
+    vector<unique_ptr<Task>>* Z_BT;
 
     Player* PL; //일단 싱글 플레이어으로 산정
 

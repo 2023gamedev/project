@@ -35,7 +35,7 @@ public:
 
 
     void AddChild(unique_ptr<Task> child) {
-        sel_children.push_back(move(child));
+        sel_children.emplace_back(move(child));
     }
 
 };

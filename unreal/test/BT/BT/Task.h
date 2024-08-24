@@ -6,35 +6,26 @@ class Zombie;
 
 class Task {
 public:
+    //샤우팅 [Task]
+//virtual bool Shouting() const = 0;     
+// 
+// 
+// 
+// 
+// 
+// 
+// 
     //다음으로 행동할 Task 감지 [Selector-Service]
     virtual bool Detect(Zombie zom) const = 0;
 
     //플레이어를 보았는가 감지 [Selector-Decorator]
     virtual bool CanSeePlayer(Zombie zom) const = 0;
 
-    //공격 [Task]
-    //virtual bool Attack() const = 0;    
-    
-    //이동 [Task]
-    //virtual bool MoveTo() const = 0;    
-
-    //대기 [Task]
-    //virtual bool Wait() const = 0;      
-
-    //샤우팅 [Task]
-    virtual bool Shouting() const = 0;     
-
-    //블랙보드(발견 플레이어 위치) 초기화 [Task]
-    //virtual bool ClearBlackboardValue() const = 0;  
-
     //공격 범위 내 검사 [Sequence-Decorator]
     virtual bool CanAttack(Zombie zom) const = 0;
 
     //CanAttack()의 역조건 [Sequence-Decorator]
     virtual bool CanNotAttack(Zombie zom) const = 0;
-    
-    //이동할 타겟 위치 초기화 [Sequence-Service]
-    //virtual bool ClearTargetLoacation() const = 0;
 
     //샤우팅 반경 내 검사 [Sequence-Decorator]
     virtual bool HasShouting(Zombie zom) const = 0;

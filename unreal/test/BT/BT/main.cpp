@@ -4,21 +4,44 @@
 int main()
 {
 	vector<vector<vector<int>>> pl = vector<vector<vector<int>>>{ {{-8, 9, 12}} };
-
-	Player* p = new Player();
-	//Player* p = new Player(pl);
-
 	vector<vector<vector<int>>> zl = vector<vector<vector<int>>>{ {{2, 8, 7}} };
 
-	//cout << zl[0][0][0] << ", " << zl[0][0][1] << ", " << zl[0][0][2] << endl;
+	Player* p = new Player();
 
 	Zombie* z = new Zombie(p, "zombieee", zl);
 
-	cout << z->DistanceToPlayer << endl;
+	//z->Z_BT;
 
-	float a = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
+	
 
-	cout << a << endl;
+
+	class Test {
+	public:
+		int A, B;
+
+		Test(){}
+		Test(int a, int b) : A(a), B(b) {}
+	};
+
+	unique_ptr<Test> t(new Test(21, 9));
+	//cout << t.get()->A << endl;
+
+
+	vector<int> v;
+	v.emplace_back(6);
+	//cout << v.front() << endl;
+
+
+	vector<Test> t1;
+	t1.emplace_back(Test(8, 4));
+	//cout << t1.front().A << endl;
+
+	vector<unique_ptr<Test>> t2;
+	unique_ptr<Test> tt2(new Test(56, 48));
+	cout << tt2.get()->A << endl;
+	t2.emplace_back(move(tt2));
+	cout << t2.front().get()->A << endl;
+	//cout << tt2.get()->A << endl; //-> error: move함수로 소유권을 넘겨줬으므로 메모리가 해제됨
 
 	return 0;
 }

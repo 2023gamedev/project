@@ -68,12 +68,6 @@
     <ClInclude Include="MoveTo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Wait.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ClearTargetLocation.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
