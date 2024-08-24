@@ -216,6 +216,22 @@ uint32 ClientSocket::Run()
 						break;
 					}
 
+					case 8:
+					{
+						Protocol::ZombieDataList zombieDataList;
+						if (zombieDataList.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							for (const auto& zombie : zombieDataList.zombies())
+							{
+								FVector NewLocation(zombie.x(), zombie.y(), zombie.z());
+								FRotator NewRotation(zombie.pitch(), zombie.yaw(), zombie.roll());
+								Q_zombie.push(ZombieData(zombie.zombieid(), NewLocation, NewRotation, zombie.zombietype()));
+								UE_LOG(LogNet, Display, TEXT("ZombieData recv: %d"), zombie.zombieid());
+							}
+						}
+						break;
+					}
+
 					buffer.clear();
 					}
 				}

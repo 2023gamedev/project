@@ -10,6 +10,8 @@ IOCP_CORE::IOCP_CORE()
 
 	//Nodes = nodeclass->LoadNodesFromFile();
 
+	zombieclass = new ZombieController();
+
 	IOCP_GetServerIpAddress();
 	CheckThisCPUcoreCount();
 
@@ -224,9 +226,6 @@ void IOCP_CORE::IOCP_AcceptThread()
 			IOCP_ErrorQuit(L"id send()", err_no);
 		}
 
-		//좀비 스폰 데이터 전송
-		zombieclass->SendZombieData(playerIndex);
-
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(client_sock), g_hIocp, playerIndex, 0);
 
 		PLAYER_INFO *user = new PLAYER_INFO;
@@ -255,6 +254,9 @@ void IOCP_CORE::IOCP_AcceptThread()
 				IOCP_ErrorDisplay("Accept::WSARecv", err_no, __LINE__);
 			}
 		}
+
+		//좀비 스폰 데이터 전송
+		zombieclass->SendZombieData(playerIndex);
 	}
 }
 
