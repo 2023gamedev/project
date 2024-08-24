@@ -4,6 +4,7 @@
 #include <string>
 #include "Node.h"
 
+
 struct TupleHash {
     size_t operator()(const tuple<float, float, float>& t) const {
         size_t h1 = hash<float>{}(get<0>(t));
@@ -23,14 +24,10 @@ double heuristic(float x1, float y1, float x2, float y2) {
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
 }
 
-<<<<<<< HEAD
-vector<pair<int, int>> findNeighbors(int x, int y) {
-    // 4ë°©í–¥ ì´ë™ (ìƒí•˜ì¢Œìš°)
-    return { {x - 1, y}, {x + 1, y}, {x, y - 1}, {x, y + 1} };
-=======
+
 bool isObstacle(float x, float y, float z, const unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& obstacles) {
     return obstacles.find({ x, y, z }) != obstacles.end();
->>>>>>> edbd8adc077f8edbd2b3003bac783f59d681c24c
+
 }
 
 vector<Node> findNeighbors(const Node& current, const unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& validPositions, float goalX, float goalY) {
@@ -86,19 +83,10 @@ vector<Node> aStar(float startX, float startY, float startZ, float goalX, float 
             return path;
         }
 
-<<<<<<< HEAD
-        for (auto& neighborPos : findNeighbors(current.x, current.y)) {
-            int neighborX = neighborPos.first;
-            int neighborY = neighborPos.second;
 
-            // ì¥ì• ë¬¼ ì²´í¬
-            if (isObstacle(neighborX, neighborY, obstacles)) {
-                continue; // ì¥ì• ë¬¼ì´ ìˆìœ¼ë©´ ì´ì›ƒ ë…¸ë“œë¥¼ ë¬´ì‹œ
-=======
         for (Node neighbor : findNeighbors(current, validPositions, goalX, goalY)) {
             if (isObstacle(neighbor.x, neighbor.y, neighbor.z, obstacles)) {
                 continue;
->>>>>>> edbd8adc077f8edbd2b3003bac783f59d681c24c
             }
 
             double tentativeGScore = gScore[current] + heuristic(current.x, current.y, neighbor.x, neighbor.y);
@@ -112,19 +100,23 @@ vector<Node> aStar(float startX, float startY, float startZ, float goalX, float 
         }
     }
 
-<<<<<<< HEAD
-    return {}; // ê²½ë¡œë¥¼ ì°¾ì§€ ëª»í•¨
-=======
-    return {}; // No path found
->>>>>>> edbd8adc077f8edbd2b3003bac783f59d681c24c
+    return {};
 }
+// #include <direct.h> // _getcwd ÇÔ¼ö »ç¿ëÀ» À§ÇØ ÇÊ¿ä (WindowsÀÇ °æ¿ì)
+int main() 
+{
+    //// ÇöÀç ÀÛ¾÷ µğ·ºÅÍ¸® Ãâ·Â
+    //char buffer[256];
+    //if (_getcwd(buffer, 256)) {
+    //    std::cout << "ÇöÀç ÀÛ¾÷ µğ·ºÅÍ¸®: " << buffer << std::endl;
+    //}
 
-int main() {
     float startX = 0.0f, startY = 0.0f, startZ = 0.0f;
     float goalX = 5.0f, goalY = 5.0f, goalZ = 0.0f;
 
     // ÆÄÀÏ °æ·Î ¼³Á¤
-    string filePath = "D:\\FinalProject\\project\\unreal\\Project\\B1.txt";
+    string filePath = "../../../Project/B1.txt";
+    //string filePath = "C:/LastProject/unreal/Project/B1.txt";
     ifstream file(filePath);
 
     if (!file.is_open()) {
@@ -144,13 +136,12 @@ int main() {
         if (ss >> x >> comma >> y >> comma >> z) {
             validPositions.emplace(x, y, z);
         } else {
-            cerr << "ÆÄÀÏ¿¡¼­ Àß¸øµÈ Çü½Ä ¹ß°ß: " << line << endl;
+            cerr << "Not valid position: " << line << endl;
         }
     }
 
     file.close();
 
-    // °á°ú È®ÀÎÀ» À§ÇÑ Ãâ·Â
     cout << "Valid Positions:" << endl;
     for (const auto& pos : validPositions) {
         cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
@@ -158,11 +149,11 @@ int main() {
 
     cout << "==========================================================================================" << endl;
 
-    string filePathOb = "D:\\FinalProject\\project\\unreal\\Project\\ObstacleNodes.txt";
+    string filePathOb = "../../../Project/ObstacleNodes.txt";
     ifstream fileOb(filePathOb);
 
     if (!fileOb.is_open()) {
-        cerr << "ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù: " << filePathOb << endl;
+        cerr << "ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù.: " << filePathOb << endl;
         return 1;
     }
 
@@ -179,19 +170,18 @@ int main() {
             obstacles.emplace(x, y, z);
         }
         else {
-            cerr << "ÆÄÀÏ¿¡¼­ Àß¸øµÈ Çü½Ä ¹ß°ß: " << lineOb << endl;
+            cerr << "Not obstacles position: : " << lineOb << endl;
         }
     }
 
     fileOb.close();
 
-    // °á°ú È®ÀÎÀ» À§ÇÑ Ãâ·Â
     cout << "obstacles Positions:" << endl;
     for (const auto& pos : obstacles) {
         cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
     }
 
-    vector<Node> path = aStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
+    vector<Node> path = aStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);    
 
     if (!path.empty()) {
         cout << "Path found:\n";
