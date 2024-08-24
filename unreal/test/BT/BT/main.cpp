@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Task.h"
+#include "Selector.h"
 
 int main()
 {
@@ -9,10 +10,6 @@ int main()
 	Player* p = new Player();
 
 	Zombie* z = new Zombie(p, "zombieee", zl);
-
-	//z->Z_BT;
-
-	
 
 
 	class Test {
@@ -38,10 +35,27 @@ int main()
 
 	vector<unique_ptr<Test>> t2;
 	unique_ptr<Test> tt2(new Test(56, 48));
-	cout << tt2.get()->A << endl;
+	//cout << tt2.get()->A << endl;
 	t2.emplace_back(move(tt2));
-	cout << t2.front().get()->A << endl;
+	//cout << t2.front().get()->A << endl;
 	//cout << tt2.get()->A << endl; //-> error: move함수로 소유권을 넘겨줬으므로 메모리가 해제됨
+
+	vector<unique_ptr<Test>> t_2;
+	t_2.emplace_back(make_unique<Test>(45, 37));
+	//cout << t_2.front().get()->A << endl;
+	
+
+	//int* tmp = new int;
+	//*tmp = 6;
+	//cout << *tmp << endl;
+
+	vector<unique_ptr<Test>>* t3 = new vector<unique_ptr<Test>>;
+	t3->emplace_back(make_unique<Test>(454, 373));
+	//cout << t3->front().get()->A << endl;
+
+
+	z->Z_BT->emplace_back(make_unique<Selector>());
+	
 
 	return 0;
 }

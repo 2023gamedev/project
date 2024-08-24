@@ -6,13 +6,14 @@
 
 using namespace std;
 
+
 class Selector : public Task {
 private:
     vector<unique_ptr<Task>> sel_children;
 
 public:
     Selector() = default;
-    Selector(const vector<unique_ptr<Task>>& children) : sel_children(children) {}
+    //Selector(const vector<unique_ptr<Task>>& children) : sel_children(children) {}
 
 
     bool Detect(Zombie zom) const override {
@@ -37,5 +38,22 @@ public:
     void AddChild(unique_ptr<Task> child) {
         sel_children.emplace_back(move(child));
     }
+
+
+    //bool Detect(Zombie zom) const override {};
+
+    //bool CanSeePlayer(Zombie zom) const override {};
+
+    bool CanAttack(Zombie zom) const override { return false; };
+
+    bool CanNotAttack(Zombie zom) const override { return false; };
+
+    bool HasShouting(Zombie zom) const override { return false; };
+
+    bool HasFootSound(Zombie zom) const override { return false; };
+
+    bool HasInvestigated(Zombie zom) const override { return false; };
+
+    bool NotHasLastKnownPlayerLocation(Zombie zom) const override { return false; };
 
 };

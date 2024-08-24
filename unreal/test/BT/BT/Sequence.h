@@ -6,13 +6,14 @@
 
 using namespace std;
 
+
 class Sequence : public Task {
 private:
     vector<unique_ptr<Task>> seq_children;
 
 public:
     Sequence() = default;
-    Sequence(const vector<unique_ptr<Task>>& children) : seq_children(children) {}
+    //Sequence(const vector<unique_ptr<Task>>& children) : seq_children(children) {}
 
 
     bool CanNotAttack(Zombie zom) const override {
