@@ -47,7 +47,7 @@ public:
         }
         cout << "\"Sequence CanAttack [ERROR]!!!\"" << endl;
         cout << endl;
-        return "Fail";   //사실상 실패할 일은 없긴하지만
+        return "Fail";      //이건 실패 할 수 있음 (여기가 공격을 실행하는 Task인데 좀비의 공격이 벽에 막히는 경우를 생각해본다면)
     }
 
     bool Seq_HasShouting(Zombie zom) {

@@ -17,7 +17,7 @@ int main()
 	//플레이어 초기 위치
 	vector<vector<vector<int>>> pl = vector<vector<vector<int>>>{ {{-8, 9, 12}} };
 	//좀비 초기 위치
-	vector<vector<vector<int>>> zl = vector<vector<vector<int>>>{ {{2/*-8*/, 80, 7}} };
+	vector<vector<vector<int>>> zl = vector<vector<vector<int>>>{ {{2/*-8*//*80*/, 8, 7}}};
 
 	cout << "플레이어의 시작 위치: ( " << pl[0][0][0] << ", " << pl[0][0][1] << ", " << pl[0][0][2] << " )" << endl;
 	cout << "좀비의 시작 위치: ( " << zl[0][0][0] << ", " << zl[0][0][1] << ", " << zl[0][0][2] << " )" << endl;
