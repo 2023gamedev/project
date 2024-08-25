@@ -243,6 +243,8 @@ void IOCP_CORE::IOCP_AcceptThread()
 
 		g_players[user->id] = user;
 
+		zombieclass->SendZombieData(playerIndex);
+
 		/* 주변 클라이언트에 대해 뿌릴 정보 뿌리고, 시야 리스트나 처리해야 할 정보들도 함께 넣는다. */
 
 		// 클라이언트에서 응답오길 기다리기
@@ -254,9 +256,6 @@ void IOCP_CORE::IOCP_AcceptThread()
 				IOCP_ErrorDisplay("Accept::WSARecv", err_no, __LINE__);
 			}
 		}
-
-		//좀비 스폰 데이터 전송
-		zombieclass->SendZombieData(playerIndex);
 	}
 }
 
