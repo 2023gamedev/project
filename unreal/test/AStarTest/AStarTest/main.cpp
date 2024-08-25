@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 enum class FLOOR {
     FLOOR_B2,
     FLOOR_B1,
@@ -33,33 +34,54 @@ struct TupleEqual {
 double heuristic(float x1, float y1, float x2, float y2) {
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
 }
+//
+//bool isObstacle(float x, float y, float z, const vector<tuple<float, float, float>>& obstacles) {
+//    return find(obstacles.begin(), obstacles.end(), make_tuple(x, y, z)) != obstacles.end();
+//}
 
-bool isObstacle(float x, float y, float z, const vector<tuple<float, float, float>>& obstacles) {
-    return find(obstacles.begin(), obstacles.end(), make_tuple(x, y, z)) != obstacles.end();
+// 일정 거리 이내의 장애물로 간주하는 거리
+const float OBSTACLE_RADIUS = 200.0f;
+
+bool isInObstacleRange(float x, float y, float z, const vector<tuple<float, float, float>>& obstacles) {
+    for (const auto& obs : obstacles) {
+        float ox = get<0>(obs);
+        float oy = get<1>(obs);
+        float oz = get<2>(obs);
+
+        float dx = x - ox;
+        float dy = y - oy;
+        float dz = z - oz;
+        float distance = std::sqrt(dx * dx + dy * dy + dz * dz);
+
+        // 거리가 장애물 반경 이하이면 충돌
+        if (distance <= OBSTACLE_RADIUS) {
+            return true;
+        }
+    }
+    return false;
 }
 
-vector<Node> findNeighbors(const Node& current, const vector<tuple<float, float, float>>& validPositions, float goalX, float goalY) {
+
+vector<Node> findNeighbors(const Node& current, const vector<tuple<float, float, float>>& validPositions, float goalX, float goalY, const vector<tuple<float, float, float>>& obstacles) {
     vector<Node> neighbors;
-    Node closestNeighbor;
-    double closestDist = numeric_limits<double>::infinity();
 
     for (const auto& pos : validPositions) {
         float nx = get<0>(pos);
         float ny = get<1>(pos);
         float nz = get<2>(pos);
 
-        // z 값이 동일하고 현재 위치와 다를 경우만 고려
+        // z 값이 동일하고 현재 위치와 다른 노드만 고려
         if (nz == current.z && !(nx == current.x && ny == current.y)) {
-            double distance = heuristic(nx, ny, goalX, goalY);
-            if (distance < closestDist) {
-                closestDist = distance;
-                closestNeighbor = Node(nx, ny, nz, current.gCost + heuristic(current.x, current.y, nx, ny), distance);
+            // 현재 노드와의 거리 계산
+            double dist = heuristic(current.x, current.y, nx, ny);
+            if (dist <= 800.f) { // 일정 거리 이내에 있는 노드만 이웃으로 고려
+                if (isInObstacleRange(nx, ny, nz, obstacles)) {
+                    continue; 
+                }
+                double hCost = heuristic(nx, ny, goalX, goalY);
+                neighbors.push_back(Node(nx, ny, nz, current.gCost + dist, hCost));
             }
         }
-    }
-
-    if (closestDist < numeric_limits<double>::infinity()) {
-        neighbors.push_back(closestNeighbor);
     }
 
     return neighbors;
@@ -91,11 +113,7 @@ vector<Node> aStar(float startX, float startY, float startZ, float goalX, float 
             return path;
         }
 
-        for (Node neighbor : findNeighbors(current, validPositions, goalX, goalY)) {
-            if (isObstacle(neighbor.x, neighbor.y, neighbor.z, obstacles)) {
-                continue;
-            }
-
+        for (Node neighbor : findNeighbors(current, validPositions, goalX, goalY, obstacles)) {
             double tentativeGScore = gScore[current] + heuristic(current.x, current.y, neighbor.x, neighbor.y);
 
             if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
@@ -110,10 +128,119 @@ vector<Node> aStar(float startX, float startY, float startZ, float goalX, float 
     return {};
 }
 
+// load Position txt - b1,b2,f1,f2,f3 파일 읽는곳
+bool loadPositions(FLOOR floor, const string& filePath,
+    vector<tuple<float, float, float>>& validPositions,
+    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& positionSet) {
+    ifstream file(filePath);
+
+    if (!file.is_open()) {
+        cerr << "파일을 열 수 없습니다: " << filePath << endl;
+        return false;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        float x, y, z;
+        char comma;
+
+        if (ss >> x >> comma >> y >> comma >> z) {
+            tuple<float, float, float> position = make_tuple(x, y, z);
+
+            // 중복 확인 후 vector에 추가
+            if (positionSet.find(position) == positionSet.end()) {
+                positionSet.emplace(position);
+                validPositions.emplace_back(position);
+            }
+        }
+        else {
+            cerr << "Not valid position: " << line << endl;
+        }
+    }
+
+    file.close();
+    return true;
+}
+
+// load Obstacles txt - obstacles 파일 읽는곳 둘이 구조는 같지만 함수 분리
+bool loadObstacles(const string& filePath,
+    vector<tuple<float, float, float>>& obstacles,
+    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& obstacleSet) {
+    ifstream file(filePath);
+
+    if (!file.is_open()) {
+        cerr << "파일을 열 수 없습니다: " << filePath << endl;
+        return false;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        float x, y, z;
+        char comma;
+
+        if (ss >> x >> comma >> y >> comma >> z) {
+            tuple<float, float, float> obstacle = make_tuple(x, y, z);
+
+            // 중복 확인 후 vector에 추가
+            if (obstacleSet.find(obstacle) == obstacleSet.end()) {
+                obstacleSet.emplace(obstacle);
+                obstacles.emplace_back(obstacle);
+            }
+        }
+        else {
+            cerr << "Not valid obstacle position: " << line << endl;
+        }
+    }
+
+    file.close();
+    return true;
+}
+
 int main()
 {
     float startX = 988.0f, startY = 2964.0f, startZ = 952.0f;
-    float goalX = 304.0f, goalY = 3629.0f, goalZ = 952.0f;
+    
+    //Test1
+    //float goalX = 304.0f, goalY = 3629.0f, goalZ = 952.0f;
+    /*(988, 2964, 952)
+        (912, 2964, 952)
+        (494, 3629, 952)
+        (304, 3629, 952)*/
+
+    //Test2
+    //float goalX = 133.0f, goalY = 3952.0f, goalZ = 952.0f;
+
+    // 장애물 없을 시
+    /* 
+    (988, 2964, 952)
+        (912, 2964, 952)
+        (494, 3629, 952)
+        (133, 3952, 952)*/
+
+    // 장애물 있을 시 
+    //(988, 2964, 952)
+    //    (893, 3648, 952)
+    //    (456, 3952, 952)
+    //    (133, 3952, 952)
+
+
+    //Test3
+    float goalX = 2299.0f, goalY = 3857.0f, goalZ = 952.0f;
+    
+    // 장애물 없을 시
+    //(988, 2964, 952)
+    //    (1102, 2964, 952)
+    //    (1501, 3629, 952)
+    //    (1976, 3762, 952)
+    //    (2299, 3857, 952)
+
+    // 장애물 있을 시 
+    //    (988, 2964, 952)
+    //    (1292, 3648, 952)
+    //    (1976, 3762, 952)
+    //    (2299, 3857, 952)
 
     FLOOR floor;
 
@@ -144,235 +271,64 @@ int main()
         floor = FLOOR::FLOOR_F3;
 	}
 
-
     vector<tuple<float, float, float>> validPositions;
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
-    string line;
 
-    if (floor == FLOOR::FLOOR_B2) {
-        ifstream fileB2(filePathB2);
-
-        if (!fileB2.is_open()) {
-            cerr << "파일을 열 수 없습니다: " << filePathB2 << endl;
-            return 1;
-        }
-
-
-        while (getline(fileB2, line)) {
-            stringstream ss(line);
-            float x, y, z;
-            char comma;
-
-            if (ss >> x >> comma >> y >> comma >> z) {
-                tuple<float, float, float> position = make_tuple(x, y, z);
-
-                // 중복 확인 후 vector에 추가
-                if (positionSet.find(position) == positionSet.end()) {
-                    positionSet.emplace(position);
-                    validPositions.emplace_back(position);
-                }
-            }
-            else {
-                cerr << "Not valid position: " << line << endl;
-            }
-        }
-
-        fileB2.close();
-
-        cout << "Valid Positions:" << endl;
-        for (const auto& pos : validPositions) {
-            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
-        }
-
-    }
-    else if(floor == FLOOR::FLOOR_B1) {
-        ifstream fileB1(filePathB1);
-
-        if (!fileB1.is_open()) {
-            cerr << "파일을 열 수 없습니다: " << filePathB1 << endl;
-            return 1;
-        }
-
-
-        while (getline(fileB1, line)) {
-            stringstream ss(line);
-            float x, y, z;
-            char comma;
-
-            if (ss >> x >> comma >> y >> comma >> z) {
-                tuple<float, float, float> position = make_tuple(x, y, z);
-
-                // 중복 확인 후 vector에 추가
-                if (positionSet.find(position) == positionSet.end()) {
-                    positionSet.emplace(position);
-                    validPositions.emplace_back(position);
-                }
-            }
-            else {
-                cerr << "Not valid position: " << line << endl;
-            }
-        }
-
-        fileB1.close();
-
-        cout << "Valid Positions:" << endl;
-        for (const auto& pos : validPositions) {
-            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
-        }
-    }
-    else if (floor == FLOOR::FLOOR_F1) {
-        ifstream fileF1(filePathF1);
-
-        if (!fileF1.is_open()) {
-            cerr << "파일을 열 수 없습니다: " << filePathF1 << endl;
-            return 1;
-        }
-
-
-        while (getline(fileF1, line)) {
-            stringstream ss(line);
-            float x, y, z;
-            char comma;
-
-            if (ss >> x >> comma >> y >> comma >> z) {
-                tuple<float, float, float> position = make_tuple(x, y, z);
-
-                // 중복 확인 후 vector에 추가
-                if (positionSet.find(position) == positionSet.end()) {
-                    positionSet.emplace(position);
-                    validPositions.emplace_back(position);
-                }
-            }
-            else {
-                cerr << "Not valid position: " << line << endl;
-            }
-        }
-
-        fileF1.close();
-
-        cout << "Valid Positions:" << endl;
-        for (const auto& pos : validPositions) {
-            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
-        }
-    }
-    else if (floor == FLOOR::FLOOR_F2) {
-        ifstream fileF2(filePathF2);
-
-        if (!fileF2.is_open()) {
-            cerr << "파일을 열 수 없습니다: " << filePathF2 << endl;
-            return 1;
-        }
-
-
-        while (getline(fileF2, line)) {
-            stringstream ss(line);
-            float x, y, z;
-            char comma;
-
-            if (ss >> x >> comma >> y >> comma >> z) {
-                tuple<float, float, float> position = make_tuple(x, y, z);
-
-                // 중복 확인 후 vector에 추가
-                if (positionSet.find(position) == positionSet.end()) {
-                    positionSet.emplace(position);
-                    validPositions.emplace_back(position);
-                }
-            }
-            else {
-                cerr << "Not valid position: " << line << endl;
-            }
-        }
-
-        fileF2.close();
-
-        cout << "Valid Positions:" << endl;
-        for (const auto& pos : validPositions) {
-            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
-        }
-
-    }
-    else if (floor == FLOOR::FLOOR_F3) {
-        ifstream fileF3(filePathF3);
-
-        if (!fileF3.is_open()) {
-            cerr << "파일을 열 수 없습니다: " << filePathF3 << endl;
-            return 1;
-        }
-
-
-        while (getline(fileF3, line)) {
-            stringstream ss(line);
-            float x, y, z;
-            char comma;
-
-            if (ss >> x >> comma >> y >> comma >> z) {
-                tuple<float, float, float> position = make_tuple(x, y, z);
-
-                // 중복 확인 후 vector에 추가
-                if (positionSet.find(position) == positionSet.end()) {
-                    positionSet.emplace(position);
-                    validPositions.emplace_back(position);
-                }
-            }
-            else {
-                cerr << "Not valid position: " << line << endl;
-            }
-        }
-
-        fileF3.close();
-
-        cout << "Valid Positions:" << endl;
-        for (const auto& pos : validPositions) {
-            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
-        }
-
-    }
-    else {
+    bool success = false;
+    switch (floor) {
+    case FLOOR::FLOOR_B2:
+        success = loadPositions(floor, filePathB2, validPositions, positionSet);
+        break;
+    case FLOOR::FLOOR_B1:
+        success = loadPositions(floor, filePathB1, validPositions, positionSet);
+        break;
+    case FLOOR::FLOOR_F1:
+        success = loadPositions(floor, filePathF1, validPositions, positionSet);
+        break;
+    case FLOOR::FLOOR_F2:
+        success = loadPositions(floor, filePathF2, validPositions, positionSet);
+        break;
+    case FLOOR::FLOOR_F3:
+        success = loadPositions(floor, filePathF3, validPositions, positionSet);
+        break;
+    default:
         cout << "FILE ERROR!!!!" << endl;
-        return 0;
+        return 1;
     }
 
-
+    if (success) {
+        cout << "Valid Positions:" << endl;
+        for (const auto& pos : validPositions) {
+            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
+        }
+    }
 
     cout << "==========================================================================================" << endl;
 
     string filePathOb = "../../../Project/ObstacleNodes.txt";
-    ifstream fileOb(filePathOb);
-
-    if (!fileOb.is_open()) {
-        cerr << "파일을 열 수 없습니다.: " << filePathOb << endl;
-        return 1;
-    }
 
     vector<tuple<float, float, float>> obstacles;
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
-    string lineOb;
 
-    while (getline(fileOb, lineOb)) {
-        stringstream ss(lineOb);
-        float x, y, z;
-        char comma;
 
-        if (ss >> x >> comma >> y >> comma >> z) {
-            tuple<float, float, float> obstacle = make_tuple(x, y, z);
 
-            // 중복 확인 후 vector에 추가
-            if (obstacleSet.find(obstacle) == obstacleSet.end()) {
-                obstacleSet.emplace(obstacle);
-                obstacles.emplace_back(obstacle);
-            }
+    if (!loadObstacles(filePathOb, obstacles, obstacleSet)) {
+        cerr << "Failed to load obstacles." << endl;
+        return 1;
+    }
+
+    if (success) {
+        cout << "Valid Positions:" << endl;
+        for (const auto& pos : validPositions) {
+            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
         }
-        else {
-            cerr << "Not valid obstacle position: " << lineOb << endl;
+
+        cout << "Obstacles Positions:" << endl;
+        for (const auto& pos : obstacles) {
+            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
         }
     }
 
-    fileOb.close();
-
-    cout << "Obstacles Positions:" << endl;
-    for (const auto& pos : obstacles) {
-        cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
-    }
 
     vector<Node> path = aStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
 
