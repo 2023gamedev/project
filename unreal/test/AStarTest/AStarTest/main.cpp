@@ -4,6 +4,15 @@
 #include <string>
 #include "Node.h"
 
+using namespace std;
+
+enum class FLOOR {
+    FLOOR_B2,
+    FLOOR_B1,
+    FLOOR_F1,
+    FLOOR_F2,
+    FLOOR_F3
+};
 
 struct TupleHash {
     size_t operator()(const tuple<float, float, float>& t) const {
@@ -103,47 +112,227 @@ vector<Node> aStar(float startX, float startY, float startZ, float goalX, float 
 
 int main()
 {
-    float startX = 0.0f, startY = 0.0f, startZ = 0.0f;
-    float goalX = 5.0f, goalY = 5.0f, goalZ = 0.0f;
+    float startX = 988.0f, startY = 2964.0f, startZ = 952.0f;
+    float goalX = 304.0f, goalY = 3629.0f, goalZ = 952.0f;
+
+    FLOOR floor;
+
 
     // 파일 경로 설정
-    string filePath = "../../../Project/B1.txt";
-    ifstream file(filePath);
+    
+    string filePathB2 = "../../../Project/B2.txt";
+    string filePathB1 = "../../../Project/B1.txt";
+    string filePathF1 = "../../../Project/F1.txt";
+    string filePathF2 = "../../../Project/F2.txt";
+    string filePathF3 = "../../../Project/F3.txt";
 
-    if (!file.is_open()) {
-        cerr << "파일을 열 수 없습니다: " << filePath << endl;
-        return 1;
-    }
+
+
+	if (startZ < 800.f) {
+        floor = FLOOR::FLOOR_B2;
+	}
+	else if (startZ < 1800.f) {
+        floor = FLOOR::FLOOR_B1;
+	}
+	else if (startZ < 2500.f) {
+        floor = FLOOR::FLOOR_F1;
+	}
+	else if (startZ < 3600.f) {
+        floor = FLOOR::FLOOR_F2;
+	}
+	else {
+        floor = FLOOR::FLOOR_F3;
+	}
+
 
     vector<tuple<float, float, float>> validPositions;
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
     string line;
 
-    while (getline(file, line)) {
-        stringstream ss(line);
-        float x, y, z;
-        char comma;
+    if (floor == FLOOR::FLOOR_B2) {
+        ifstream fileB2(filePathB2);
 
-        if (ss >> x >> comma >> y >> comma >> z) {
-            tuple<float, float, float> position = make_tuple(x, y, z);
+        if (!fileB2.is_open()) {
+            cerr << "파일을 열 수 없습니다: " << filePathB2 << endl;
+            return 1;
+        }
 
-            // 중복 확인 후 vector에 추가
-            if (positionSet.find(position) == positionSet.end()) {
-                positionSet.emplace(position);
-                validPositions.emplace_back(position);
+
+        while (getline(fileB2, line)) {
+            stringstream ss(line);
+            float x, y, z;
+            char comma;
+
+            if (ss >> x >> comma >> y >> comma >> z) {
+                tuple<float, float, float> position = make_tuple(x, y, z);
+
+                // 중복 확인 후 vector에 추가
+                if (positionSet.find(position) == positionSet.end()) {
+                    positionSet.emplace(position);
+                    validPositions.emplace_back(position);
+                }
+            }
+            else {
+                cerr << "Not valid position: " << line << endl;
             }
         }
-        else {
-            cerr << "Not valid position: " << line << endl;
+
+        fileB2.close();
+
+        cout << "Valid Positions:" << endl;
+        for (const auto& pos : validPositions) {
+            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
+        }
+
+    }
+    else if(floor == FLOOR::FLOOR_B1) {
+        ifstream fileB1(filePathB1);
+
+        if (!fileB1.is_open()) {
+            cerr << "파일을 열 수 없습니다: " << filePathB1 << endl;
+            return 1;
+        }
+
+
+        while (getline(fileB1, line)) {
+            stringstream ss(line);
+            float x, y, z;
+            char comma;
+
+            if (ss >> x >> comma >> y >> comma >> z) {
+                tuple<float, float, float> position = make_tuple(x, y, z);
+
+                // 중복 확인 후 vector에 추가
+                if (positionSet.find(position) == positionSet.end()) {
+                    positionSet.emplace(position);
+                    validPositions.emplace_back(position);
+                }
+            }
+            else {
+                cerr << "Not valid position: " << line << endl;
+            }
+        }
+
+        fileB1.close();
+
+        cout << "Valid Positions:" << endl;
+        for (const auto& pos : validPositions) {
+            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
         }
     }
+    else if (floor == FLOOR::FLOOR_F1) {
+        ifstream fileF1(filePathF1);
 
-    file.close();
+        if (!fileF1.is_open()) {
+            cerr << "파일을 열 수 없습니다: " << filePathF1 << endl;
+            return 1;
+        }
 
-    cout << "Valid Positions:" << endl;
-    for (const auto& pos : validPositions) {
-        cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
+
+        while (getline(fileF1, line)) {
+            stringstream ss(line);
+            float x, y, z;
+            char comma;
+
+            if (ss >> x >> comma >> y >> comma >> z) {
+                tuple<float, float, float> position = make_tuple(x, y, z);
+
+                // 중복 확인 후 vector에 추가
+                if (positionSet.find(position) == positionSet.end()) {
+                    positionSet.emplace(position);
+                    validPositions.emplace_back(position);
+                }
+            }
+            else {
+                cerr << "Not valid position: " << line << endl;
+            }
+        }
+
+        fileF1.close();
+
+        cout << "Valid Positions:" << endl;
+        for (const auto& pos : validPositions) {
+            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
+        }
     }
+    else if (floor == FLOOR::FLOOR_F2) {
+        ifstream fileF2(filePathF2);
+
+        if (!fileF2.is_open()) {
+            cerr << "파일을 열 수 없습니다: " << filePathF2 << endl;
+            return 1;
+        }
+
+
+        while (getline(fileF2, line)) {
+            stringstream ss(line);
+            float x, y, z;
+            char comma;
+
+            if (ss >> x >> comma >> y >> comma >> z) {
+                tuple<float, float, float> position = make_tuple(x, y, z);
+
+                // 중복 확인 후 vector에 추가
+                if (positionSet.find(position) == positionSet.end()) {
+                    positionSet.emplace(position);
+                    validPositions.emplace_back(position);
+                }
+            }
+            else {
+                cerr << "Not valid position: " << line << endl;
+            }
+        }
+
+        fileF2.close();
+
+        cout << "Valid Positions:" << endl;
+        for (const auto& pos : validPositions) {
+            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
+        }
+
+    }
+    else if (floor == FLOOR::FLOOR_F3) {
+        ifstream fileF3(filePathF3);
+
+        if (!fileF3.is_open()) {
+            cerr << "파일을 열 수 없습니다: " << filePathF3 << endl;
+            return 1;
+        }
+
+
+        while (getline(fileF3, line)) {
+            stringstream ss(line);
+            float x, y, z;
+            char comma;
+
+            if (ss >> x >> comma >> y >> comma >> z) {
+                tuple<float, float, float> position = make_tuple(x, y, z);
+
+                // 중복 확인 후 vector에 추가
+                if (positionSet.find(position) == positionSet.end()) {
+                    positionSet.emplace(position);
+                    validPositions.emplace_back(position);
+                }
+            }
+            else {
+                cerr << "Not valid position: " << line << endl;
+            }
+        }
+
+        fileF3.close();
+
+        cout << "Valid Positions:" << endl;
+        for (const auto& pos : validPositions) {
+            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
+        }
+
+    }
+    else {
+        cout << "FILE ERROR!!!!" << endl;
+        return 0;
+    }
+
+
 
     cout << "==========================================================================================" << endl;
 
