@@ -8,7 +8,9 @@ using namespace std;
 
 Zombie::Zombie()
 {
-	PL = NULL;
+	Z_BT = new vector<unique_ptr<Task>>;
+
+	PL = new Player;
 
 	name = string{ "" };
 
@@ -29,6 +31,8 @@ Zombie::Zombie()
 
 Zombie::Zombie(Player* p, string n, vector<vector<vector<int>>> zl)
 {
+	Z_BT = new vector<unique_ptr<Task>>;
+
 	PL = p;
 
 	name = n;
@@ -41,7 +45,7 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<int>>> zl)
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 
-	TargetLocation = pl;
+	TargetLocation = vector<vector<vector<int>>>{ {{0, 0, 0}} };
 
 	KnewPlayerLocation = false;
 
@@ -81,15 +85,15 @@ void Zombie::SetTargetLocation(TARGET t)
 
 void Zombie::Attack() const
 {
-	cout << "Zombie " << name << " attacked Player!" << endl;
+	cout << "Zombie \'" << name << "\' attacked Player!" << endl;
 }
 
 void Zombie::MoveTo() const
 {
-	cout << "Zombie " << name << " moved to (" << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << ")." << endl;
+	cout << "Zombie \'" << name << "\' moved to (" << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << ")." << endl;
 }
 
 void Zombie::Wait() const
 {
-	cout << "Zombie " << name << " wait." << endl;
+	cout << "Zombie \'" << name << "\' wait." << endl;
 }

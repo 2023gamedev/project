@@ -1,41 +1,68 @@
 #pragma once
 
-#include "Task.h"
 #include <vector>
 #include <memory>
 
+#include "Task.h"
+#include "CanSeePlayer.h"
+
 using namespace std;
 
+
+//사실 Task의 자식 클래스로 생성 안해도 무관함. 이를 한번 나중에 다시 생각해보기.
 class Selector : public Task {
 private:
-    vector<unique_ptr<Task>> sel_children;
+    vector<unique_ptr<Task>>* sel_children = new vector<unique_ptr<Task>>;
 
 public:
     Selector() = default;
-    Selector(const vector<unique_ptr<Task>>& children) : sel_children(children) {}
 
 
-    bool Detect(Zombie zom) const override {
-        for (const auto& child : sel_children) {
-            if (true == child->Detect(zom)) {
-                return true;
+    string Sel_Detect(Zombie zom) {
+        cout << "Selector의 <Sel_Detect> 함수 호출" << endl;
+        cout << endl;
+        for (const auto& child : *sel_children) {
+            string result = child->Detect(zom);
+            if ("Fail" != result) {
+                cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
+                return result;
             }
         }
-        return false;   //사실상 실패할 일은 없긴하지만
+        cout << "\"Selector Detect [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
-    bool CanSeePlayer(Zombie zom) const override {
-        for (const auto& child : sel_children) {
-            if (true == child->CanSeePlayer(zom)) {
-                return true;
+    string Sel_CanSeePlayer(Zombie zom) {
+        cout << "Selector의 <Sel_CanSeePlayer> 함수 호출" << endl;
+        cout << endl;
+        for (const auto& child : *sel_children) {
+            string result = child->CanSeePlayer(zom);
+            if ("Fail" != result) {
+                cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
+                return result;
             }
         }
-        return false; //사실상 실패할 일은 없긴하지만
+        cout << "\"Selector CanSeePlayer [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
 
-    void AddChild(unique_ptr<Task> child) {
-        sel_children.push_back(move(child));
+    void AddChild(Task* child) {
+        sel_children->emplace_back(move(child));
     }
+
+
+    string Detect(Zombie zom) const override { return "Fail"; };
+    string CanSeePlayer(Zombie zom) const override { return "Fail"; };
+    string CanAttack(Zombie zom) const override { return "Fail"; };
+    string CanNotAttack(Zombie zom) const override { return "Fail"; };
+    string HasShouting(Zombie zom) const override { return "Fail"; };
+    string HasFootSound(Zombie zom) const override { return "Fail"; };
+    string HasInvestigated(Zombie zom) const override { return "Fail"; };
+    string NotHasLastKnownPlayerLocation(Zombie zom) const override { return "Fail"; };
 
 };

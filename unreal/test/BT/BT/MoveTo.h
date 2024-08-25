@@ -2,57 +2,72 @@
 
 #include "Task.h"
 
-class MoveTo : public Task {
+class TMoveTo : public Task {
 public:
 
-    bool CanNotAttack(Zombie zom) const override {
+    string CanNotAttack(Zombie zom) const override {
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);
 
         zom.MoveTo();
 
         zom.Wait();
+        
+        //bool result = zom.MoveTo(); 
+        //if (result)
+        //    return "MoveTo-Succeed";
+        //else
+        //    return "Fail";
 
-        return true;
+        return "MoveTo-Succeed";
     }
 
-    bool HasShouting(Zombie zom) const override {
+    string HasShouting(Zombie zom) const override {
         zom.SetTargetLocation(Zombie::TARGET::SHOUTING);
 
         zom.MoveTo();
 
         zom.Wait();
 
-        return true;
+        return "MoveTo-Succeed";
     }
 
-    bool HasFootSound(Zombie zom) const override {
+    string HasFootSound(Zombie zom) const override {
         zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);
 
         zom.MoveTo();
 
         zom.Wait();
 
-        return true;
+        return "MoveTo-Succeed";
     }
 
-    bool HasInvestigated(Zombie zom) const override {
+    string HasInvestigated(Zombie zom) const override {
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
 
         zom.MoveTo();
 
         zom.Wait();
 
-        return true;
+        return "MoveTo-Succeed";
     }
 
-    bool NotHasLastKnownPlayerLocation(Zombie zom) const override {
+    string NotHasLastKnownPlayerLocation(Zombie zom) const override {
         zom.SetTargetLocation(Zombie::TARGET::ORIGIN);
 
         zom.MoveTo();
 
         zom.Wait();
 
-        return true;
+        return "MoveTo-Succeed";
     }
+
+    string Detect(Zombie zom) const override { return "Fail"; };
+    string CanSeePlayer(Zombie zom) const override { return "Fail"; };
+    string CanAttack(Zombie zom) const override { return "Fail"; };
+    //string CanNotAttack(Zombie zom) const override { return "Fail"; };
+    //string HasShouting(Zombie zom) const override { return "Fail"; };
+    //string HasFootSound(Zombie zom) const override { return "Fail"; };
+    //string HasInvestigated(Zombie zom) const override { return "Fail"; };
+    //string NotHasLastKnownPlayerLocation(Zombie zom) const override { return "Fail"; };
 
 };

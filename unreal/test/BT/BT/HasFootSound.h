@@ -2,15 +2,18 @@
 
 #include "Task.h"
 
-class HasFootSound : public Task {
+class THasFootSound : public Task {
 public:
 
-    bool Detect(Zombie zom) const override {
+    string Detect(Zombie zom) const override {
         bool result = (zom.DistanceToPlayer <= zom.CanHearDistance); 
 
         zom.HeardFootSound = result;
 
-        return result;
+        if (result)
+            return "HasFootSound-Succeed";
+        else
+            return "Fail";
     }
 
 };
