@@ -17,7 +17,7 @@ int main()
 	//플레이어 초기 위치
 	vector<vector<vector<int>>> pl = vector<vector<vector<int>>>{ {{-8, 9, 12}} };
 	//좀비 초기 위치
-	vector<vector<vector<int>>> zl = vector<vector<vector<int>>>{ {{2/*-8*/, 8, 7}} };
+	vector<vector<vector<int>>> zl = vector<vector<vector<int>>>{ {{2/*-8*/, 80, 7}} };
 
 	cout << "플레이어의 시작 위치: ( " << pl[0][0][0] << ", " << pl[0][0][1] << ", " << pl[0][0][2] << " )" << endl;
 	cout << "좀비의 시작 위치: ( " << zl[0][0][0] << ", " << zl[0][0][1] << ", " << zl[0][0][2] << " )" << endl;
@@ -46,9 +46,14 @@ int main()
 	Sequence seq_cannotattack;
 	//{Sequence-CanAttack}
 	Sequence seq_canattack;
+	//
+	//{Sequence-HasInvestigated}
+	Sequence seq_hasinvestigated;
+	//{Sequence-NotHasLastKnownPlayerLocation}
+	Sequence seq_nothaslastknownplayerlocation;
 
 
-	//[Task]들 선언 & 메모리 할당
+	//[Task] 선언 & 메모리 할당
  
 	//<Selector Detact> 가 가지는 Task들
 
@@ -127,8 +132,24 @@ int main()
 	}
 	else if (result == "HasInvestigated-Succeed") {
 
+		//{Sequence-HasInvestigated} 할당
+		//{Sequence-HasInvestigated}에 해당 Task들 '순서대로' 삽입
+		seq_hasinvestigated.AddChild(t_moveto);
+
+		//{Sequence-HasInvestigated} 실행
+		string result = seq_hasinvestigated.Seq_HasInvestigated(*z);
+
+
 	}
 	else if (result == "NotHasLastKnownPlayerLocation-Succeed") {
+
+		//{Sequence-NotHasLastKnownPlayerLocation} 할당
+		//{Sequence-NotHasLastKnownPlayerLocation}에 해당 Task들 '순서대로' 삽입
+		seq_nothaslastknownplayerlocation.AddChild(t_moveto);
+
+		//{Sequence-NotHasLastKnownPlayerLocation} 실행
+		string result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*z);
+
 
 	}
 	else {	//result == "Fail"

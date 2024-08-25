@@ -1,11 +1,18 @@
 #pragma once
 
+#include <iostream>
+
 #include "Task.h"
+
+using namespace std;
+
 
 class TAttack : public Task {
 public:
 
     string CanAttack(Zombie zom) const override {
+        cout << "{CanAttack}의 [Attack Task] 호출" << endl;
+
         zom.Attack();
         
         //bool result = zom.Attack(); 

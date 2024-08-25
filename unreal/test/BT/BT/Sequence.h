@@ -68,22 +68,36 @@ public:
         return true;
     }
 
-    bool Seq_HasInvestigated(Zombie zom) {
+    string Seq_HasInvestigated(Zombie zom) {
+        cout << "Sequence의 {Seq_HasInvestigated} 함수 호출" << endl;
+        cout << endl;
         for (const auto& child : seq_children) {
-            if ("Fail" != child->HasInvestigated(zom)) {
-                return false;
+            string result = child->HasInvestigated(zom);
+            if ("Fail" != result) {
+                cout << "\"{Sequence HasInvestigated}의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
+                return result;
             }
         }
-        return true;
+        cout << "\"Sequence HasInvestigated [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
-    bool Seq_NotHasLastKnownPlayerLocation(Zombie zom) {
+    string Seq_NotHasLastKnownPlayerLocation(Zombie zom) {
+        cout << "Sequence의 {Seq_NotHasLastKnownPlayerLocation} 함수 호출" << endl;
+        cout << endl;
         for (const auto& child : seq_children) {
-            if ("Fail" != child->NotHasLastKnownPlayerLocation(zom)) {
-                return false;
+            string result = child->NotHasLastKnownPlayerLocation(zom);
+            if ("Fail" != result) {
+                cout << "\"{Sequence NotHasLastKnownPlayerLocation}의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
+                return result;
             }
         }
-        return true;
+        cout << "\"Sequence NotHasLastKnownPlayerLocation [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
 

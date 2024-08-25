@@ -1,6 +1,11 @@
 #pragma once
 
+#include <iostream>
+
 #include "Task.h"
+
+using namespace std;
+
 
 class TCanNotAttack : public Task {
 public:

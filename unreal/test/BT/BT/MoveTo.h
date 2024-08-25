@@ -1,11 +1,18 @@
 #pragma once
 
+#include <iostream>
+
 #include "Task.h"
+
+using namespace std;
+
 
 class TMoveTo : public Task {
 public:
 
     string CanNotAttack(Zombie zom) const override {
+        cout << "{CanNotAttack}의 [MoveTo Task] 호출" << endl;
+
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);
 
         zom.MoveTo();
@@ -22,6 +29,8 @@ public:
     }
 
     string HasShouting(Zombie zom) const override {
+        cout << "{HasShouting}의 [MoveTo Task] 호출" << endl;
+
         zom.SetTargetLocation(Zombie::TARGET::SHOUTING);
 
         zom.MoveTo();
@@ -32,6 +41,8 @@ public:
     }
 
     string HasFootSound(Zombie zom) const override {
+        cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
+
         zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);
 
         zom.MoveTo();
@@ -42,6 +53,8 @@ public:
     }
 
     string HasInvestigated(Zombie zom) const override {
+        cout << "{HasInvestigated}의 [MoveTo Task] 호출" << endl;
+
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
 
         zom.MoveTo();
@@ -52,6 +65,8 @@ public:
     }
 
     string NotHasLastKnownPlayerLocation(Zombie zom) const override {
+        cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
+
         zom.SetTargetLocation(Zombie::TARGET::ORIGIN);
 
         zom.MoveTo();
