@@ -11,7 +11,7 @@
  * 
  */
 
-// Instanceµé (Àü´ŞÇÏ°í ½ÍÀº(Global º¯¼öÃ³·³) ¸ğÀº Class
+// Instanceë“¤ (ì „ë‹¬í•˜ê³  ì‹¶ì€(Global ë³€ìˆ˜ì²˜ëŸ¼) ëª¨ì€ Class
 
 UCLASS()
 class PROJECT_API UProGameInstance : public UGameInstance

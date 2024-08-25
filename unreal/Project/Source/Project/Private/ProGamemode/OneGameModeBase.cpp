@@ -1050,15 +1050,18 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
     if (ZombiePtr && *ZombiePtr)
     {
         ABaseZombie* BaseZombie = *ZombiePtr;
-        FVector OldLocation = BaseZombie->GetActorLocation();
+        if (BaseZombie)
+        {
+            FVector OldLocation = BaseZombie->GetActorLocation();
 
-        // 기존 캐릭터 위치 업데이트
-        BaseZombie->SetActorLocation(NewLocation);
-        BaseZombie->SetActorRotation(NewRotation);
+            // 기존 캐릭터 위치 업데이트
+            BaseZombie->SetActorLocation(NewLocation);
+            BaseZombie->SetActorRotation(NewRotation);
 
-        BaseZombie->UpdateZombieData(NewLocation);
+            BaseZombie->UpdateZombieData(NewLocation);
 
-        //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
+            //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
+        }
     }
     else
     {

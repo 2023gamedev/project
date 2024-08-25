@@ -124,6 +124,18 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		}
 	}
 
+	while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
+	{
+		//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+		// 현재 GameMode 인스턴스를 얻기
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
+			MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.ZombieType, recvZombieData.Location, recvZombieData.Rotation);
+			//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+		}
+	}
+
 
 }
 

@@ -7,14 +7,16 @@
 #include "LStruct.pb.h"
 #include <concurrent_queue.h>
 #include <mutex>
-#include "HAL/Runnable.h"
-#include "Sockets.h"
-#include "Templates/SharedPointer.h"
-#include "Containers/Queue.h"
 
-class RecvWorker;
-class SendWorker;
-class PacketSession;
+#include "Windows/AllowWindowsPlatformTypes.h"
+#include "Windows/prewindowsapi.h"
+
+#pragma comment(lib, "ws2_32.lib")
+#include <WinSock2.h>
+
+#include "Windows/PostWindowsApi.h"
+#include "Windows/HideWindowsPlatformTypes.h"
+
 
 constexpr int BUFSIZE = 1024;
 
@@ -23,51 +25,6 @@ enum class ServerType { LOBBY_SERVER, GAME_SERVER };
 /**
  *
  */
-
-struct FPacketHeader
-{
-	uint32 PacketID;    // 패킷의 고유 ID
-	uint32 PacketSize;  // 패킷의 전체 크기 (헤더 포함)
-
-	// 기본 생성자
-	FPacketHeader()
-		: PacketID(0), PacketSize(0)
-	{
-	}
-
-	// 생성자
-	FPacketHeader(uint32 InPacketID, uint32 InPacketSize)
-		: PacketID(InPacketID), PacketSize(InPacketSize)
-	{
-	}
-
-	// 시리얼라이즈 함수 (Unreal에서 바이너리 스트림으로 읽고 쓰는 것을 지원)
-	friend FArchive& operator<<(FArchive& Ar, FPacketHeader& Header)
-	{
-		Ar << Header.PacketID;
-		Ar << Header.PacketSize;
-		return Ar;
-	}
-};
-
-struct SendBuffer
-{
-	SendBuffer(const void* Data, int32 InSize)
-		: BufferData(), DataSize(InSize)
-	{
-		BufferData.Append(static_cast<const uint8*>(Data), InSize);
-	}
-
-	const uint8* Buffer() const { return BufferData.GetData(); }
-	int32 GetSize() const { return DataSize; }
-
-public:
-	TArray<uint8> BufferData;
-	int32 DataSize;
-};
-
-typedef TSharedPtr<SendBuffer> SendBufferRef;
-
 
 struct PlayerData
 {
@@ -164,7 +121,7 @@ public:
 	ClientSocket(UProGameInstance* Inst);
 	~ClientSocket() override;
 
-	FSocket* Socket;
+	SOCKET Socket;
 	uint32 MyPlayerId = 0;
 	uint32 PlayerId = 0;
 	uint32 ZombieId = 0;
@@ -176,18 +133,13 @@ public:
 	Concurrency::concurrent_queue<PlayerRun> Q_run;
 	Concurrency::concurrent_queue<PlayerJump> Q_jump;
 	Concurrency::concurrent_queue<CharacterSelect> Q_select;
-	
+
 
 	virtual bool Init() override;
 	virtual uint32 Run() override;
 	virtual void Exit() override;
-
 	bool ConnectServer(ServerType serverType);
 	bool Send(const int SendSize, void* SendData);
-
-	void ProcessPackets();
-	void HandleLobbyServerPacket(const Protocol::SC_Ready& Packet);
-	void HandleGameServerPacket(const TArray<uint8>& Packet);
 
 	uint32 GetMyPlayerId() const;
 
@@ -215,62 +167,4 @@ private:
 
 	FRunnableThread* Thread;
 	bool ReceivedPlayerId = false;
-
-	TSharedPtr<RecvWorker> RecvThread;
-	TSharedPtr<SendWorker> SendThread;
-	TSharedPtr<PacketSession> Session;
-};
-
-
-class PROJECT_API RecvWorker : public FRunnable
-{
-public:
-	RecvWorker(FSocket* Socket, TSharedPtr<class PacketSession> Session);
-	virtual ~RecvWorker() override;
-
-
-	virtual bool Init() override;
-	virtual uint32 Run() override;
-	virtual void Exit() override;
-	void Destroy();
-
-private:
-
-	bool ReceivePacket(TArray<uint8>& OutPacket);
-	bool ReceiveDesiredBytes(uint8* Results, int32 Size);
-
-	FSocket* Socket;
-	TSharedPtr<class PacketSession> SessionRef;
-	FRunnableThread* Thread;
-	bool Running = true;
-};
-
-
-class SendWorker : public FRunnable
-{
-public:
-	SendWorker(FSocket* Socket, TSharedPtr<class PacketSession> Session);
-	virtual ~SendWorker();
-
-	virtual bool Init() override;
-	virtual uint32 Run() override;
-	virtual void Exit() override;
-	void Destroy();
-
-private:
-	bool SendPacket(SendBufferRef SendBuffer);
-	bool SendDesiredBytes(const uint8* Buffer, int32 Size);
-
-	FSocket* Socket;
-	TSharedPtr<class PacketSession> SessionRef;
-	FRunnableThread* Thread;
-	bool Running = true;
-};
-
-
-class PacketSession : public TSharedFromThis<PacketSession>
-{
-public:
-	TQueue<TArray<uint8>> RecvPacketQueue;
-	TQueue<SendBufferRef> SendPacketQueue;
 };

@@ -105,6 +105,7 @@ public:
 	EquipItem recvEquipItem;
 	PlayerRun recvRun;
 	PlayerJump recvJump;
+	ZombieData recvZombieData;
 
 	uint32 PlayerId;
 	uint32 MyCharacterNumber;

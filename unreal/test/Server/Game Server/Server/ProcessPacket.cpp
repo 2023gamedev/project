@@ -22,15 +22,17 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     Protocol::Character tempPacket;
     tempPacket.ParseFromArray(buffer, bufferSize);
 
-    if (tempPacket.playerid() == id || tempPacket.isingame()) {
+    if ((tempPacket.playerid() == id || tempPacket.isingame()) && !clientInfo->isInGame) {
         clientInfo->isInGame = true;
         b_Timer = true;
+        zombieclass->SendZombieData(id);
+        printf("SendZombieData!! %d\n", id);
     }
 
     // 패킷의 타입을 확인하여 처리
     switch (tempPacket.packet_type()) {
     case 1: {
-        printf("[ No. %3u ] character Packet Received !!\n", id);
+        //printf("[ No. %3u ] character Packet Received !!\n", id);
         //printf("Received packet type = %d\n", CharacterPacket.type());
         //printf("Received playerID = %d\n", CharacterPacket.playerid());
         //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
