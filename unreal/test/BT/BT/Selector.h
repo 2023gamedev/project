@@ -34,13 +34,20 @@ public:
         return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
-    bool Sel_CanSeePlayer(Zombie zom) {
+    string Sel_CanSeePlayer(Zombie zom) {
+        cout << "Selector의 <Sel_CanSeePlayer> 함수 호출" << endl;
+        cout << endl;
         for (const auto& child : *sel_children) {
-            if ("Fail" != child->CanSeePlayer(zom)) {
-                return true;
+            string result = child->CanSeePlayer(zom);
+            if ("Fail" != result) {
+                cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
+                return result;
             }
         }
-        return false; //사실상 실패할 일은 없긴하지만
+        cout << "\"Selector CanSeePlayer [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
 
