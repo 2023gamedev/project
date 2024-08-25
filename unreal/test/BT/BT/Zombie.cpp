@@ -45,7 +45,7 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<int>>> zl)
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 
-	TargetLocation = pl;
+	TargetLocation = vector<vector<vector<int>>>{ {{0, 0, 0}} };
 
 	KnewPlayerLocation = false;
 

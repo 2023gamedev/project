@@ -5,8 +5,13 @@
 class TCanNotAttack : public Task {
 public:
 
-    bool CanSeePlayer(Zombie zom) const override {
-        return zom.DistanceToPlayer > zom.CanAttackDistance;
+    string CanSeePlayer(Zombie zom) const override {
+        bool result = (zom.DistanceToPlayer > zom.CanAttackDistance);
+
+        if (result)
+            return "CanNotAttack-Succeed";
+        else
+            return "Fail";
     }
 
 };

@@ -5,10 +5,16 @@
 class TAttack : public Task {
 public:
 
-    bool CanAttack(Zombie zom) const override {
+    string CanAttack(Zombie zom) const override {
         zom.Attack();
         
-        return true;
+        //bool result = zom.Attack(); 
+        //if (result)
+        //    return "Attack-Succeed";
+        //else
+        //    return "Fail";
+
+        return "Attack-Succeed";
     }
 
 };

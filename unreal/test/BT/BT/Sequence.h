@@ -8,6 +8,7 @@
 using namespace std;
 
 
+//사실 Task의 자식 클래스로 생성 안해도 무관함. 이를 한번 나중에 다시 생각해보기.
 class Sequence : public Task {
 private:
     vector<unique_ptr<Task>> seq_children;
@@ -17,54 +18,54 @@ public:
     //Sequence(const vector<unique_ptr<Task>>& children) : seq_children(children) {}
 
 
-    bool CanNotAttack(Zombie zom) const override {
+    bool Seq_CanNotAttack(Zombie zom) {
         for (const auto& child : seq_children) {
-            if (false == child->CanNotAttack(zom)) {
+            if ("Fail" != child->CanNotAttack(zom)) {
                 return false;
             }
         }
         return true;
     }
 
-    bool CanAttack(Zombie zom) const override {
+    bool Seq_CanAttack(Zombie zom) {
         for (const auto& child : seq_children) {
-            if (false == child->CanAttack(zom)) {
+            if ("Fail" != child->CanAttack(zom)) {
                 return false;
             }
         }
         return true;
     }
 
-    bool HasShouting(Zombie zom) const override {
+    bool Seq_HasShouting(Zombie zom) {
         for (const auto& child : seq_children) {
-            if (false == child->HasShouting(zom)) {
+            if ("Fail" != child->HasShouting(zom)) {
                 return false;
             }
         }
         return true;
     }
 
-    bool HasFootSound(Zombie zom) const override {
+    bool Seq_HasFootSound(Zombie zom) {
         for (const auto& child : seq_children) {
-            if (false == child->HasFootSound(zom)) {
+            if ("Fail" != child->HasFootSound(zom)) {
                 return false;
             }
         }
         return true;
     }
 
-    bool HasInvestigated(Zombie zom) const override {
+    bool Seq_HasInvestigated(Zombie zom) {
         for (const auto& child : seq_children) {
-            if (false == child->HasInvestigated(zom)) {
+            if ("Fail" != child->HasInvestigated(zom)) {
                 return false;
             }
         }
         return true;
     }
 
-    bool NotHasLastKnownPlayerLocation(Zombie zom) const override {
+    bool Seq_NotHasLastKnownPlayerLocation(Zombie zom) {
         for (const auto& child : seq_children) {
-            if (false == child->NotHasLastKnownPlayerLocation(zom)) {
+            if ("Fail" != child->NotHasLastKnownPlayerLocation(zom)) {
                 return false;
             }
         }

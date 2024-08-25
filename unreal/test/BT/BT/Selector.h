@@ -9,30 +9,34 @@
 using namespace std;
 
 
+//사실 Task의 자식 클래스로 생성 안해도 무관함. 이를 한번 나중에 다시 생각해보기.
 class Selector : public Task {
-public:
+private:
     vector<unique_ptr<Task>>* sel_children = new vector<unique_ptr<Task>>;
 
 public:
     Selector() = default;
-    Selector(TCanSeePlayer task) { cout << "TCanSeePlayer task 형식을 받는 Selector 생성자" << endl; }
-    //Selector(vector<unique_ptr<Task>>* children) : sel_children(children) { cout << "vector<unique_ptr<Task>>* children 형식을 받는 Selector 생성자" << endl; }
 
 
-    bool Sel_Detect(Zombie zom) {
-        cout << "Selector의 Sel_Detect 함수 호출" << endl;
+    string Sel_Detect(Zombie zom) {
+        cout << "Selector의 <Sel_Detect> 함수 호출" << endl;
+        cout << endl;
         for (const auto& child : *sel_children) {
-            //cout << typeid(child).name() << endl;
-            if (true == child->Detect(zom)) {
-                return true;
+            string result = child->Detect(zom);
+            if ("Fail" != result) {
+                cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
+                return result;
             }
         }
-        return false;   //사실상 실패할 일은 없긴하지만
+        cout << "\"Selector Detect [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
     bool Sel_CanSeePlayer(Zombie zom) {
         for (const auto& child : *sel_children) {
-            if (true == child->CanSeePlayer(zom)) {
+            if ("Fail" != child->CanSeePlayer(zom)) {
                 return true;
             }
         }
@@ -45,20 +49,13 @@ public:
     }
 
 
-    bool Detect(Zombie zom) const override { return false; };
-
-    bool CanSeePlayer(Zombie zom) const override { return false; };
-
-    bool CanAttack(Zombie zom) const override { return false; };
-
-    bool CanNotAttack(Zombie zom) const override { return false; };
-
-    bool HasShouting(Zombie zom) const override { return false; };
-
-    bool HasFootSound(Zombie zom) const override { return false; };
-
-    bool HasInvestigated(Zombie zom) const override { return false; };
-
-    bool NotHasLastKnownPlayerLocation(Zombie zom) const override { return false; };
+    string Detect(Zombie zom) const override { return "Fail"; };
+    string CanSeePlayer(Zombie zom) const override { return "Fail"; };
+    string CanAttack(Zombie zom) const override { return "Fail"; };
+    string CanNotAttack(Zombie zom) const override { return "Fail"; };
+    string HasShouting(Zombie zom) const override { return "Fail"; };
+    string HasFootSound(Zombie zom) const override { return "Fail"; };
+    string HasInvestigated(Zombie zom) const override { return "Fail"; };
+    string NotHasLastKnownPlayerLocation(Zombie zom) const override { return "Fail"; };
 
 };
