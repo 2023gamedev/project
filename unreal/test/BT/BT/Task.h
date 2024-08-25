@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "Zombie.h"
 
 class Zombie;

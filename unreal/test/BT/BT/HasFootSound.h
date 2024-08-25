@@ -2,7 +2,7 @@
 
 #include "Task.h"
 
-class HasFootSound : public Task {
+class THasFootSound : public Task {
 public:
 
     bool Detect(Zombie zom) const override {

@@ -2,7 +2,7 @@
 
 #include "Task.h"
 
-class Attack : public Task {
+class TAttack : public Task {
 public:
 
     bool CanAttack(Zombie zom) const override {

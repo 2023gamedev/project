@@ -1,6 +1,9 @@
 #include <iostream>
+
 #include "Task.h"
 #include "Selector.h"
+#include "CanSeePlayer.h"
+
 
 int main()
 {
@@ -54,8 +57,25 @@ int main()
 	//cout << t3->front().get()->A << endl;
 
 
-	z->Z_BT->emplace_back(make_unique<Selector>());
+	//z->Z_BT->emplace_back(make_unique<Selector>(z->Z_BT));
 	
+	TCanSeePlayer t_canseeplayer;
+	Selector sel_detect;
+	//cout << sel_detect.sel_children->size() << endl;
+	//cout << typeid(sel_detect.sel_children->front()).name() << endl;
+	//sel_detect.AddChild(make_unique<Selector>(t_canseeplayer));
+	//cout << sel_detect.sel_children->size() << endl;
+	//cout << typeid(sel_detect.sel_children->front()).name() << endl;
+
+	//cout << typeid(t_canseeplayer).name() << endl;
+	//cout << typeid(make_unique<Selector>(t_canseeplayer)).name() << endl;
+	//sel_detect.Sel_Detect(*z);
+
+
+	TCanSeePlayer* pt_canseeplayer = new TCanSeePlayer;
+	Selector psel_detect;
+	psel_detect.AddChild(pt_canseeplayer);
+	psel_detect.Sel_Detect(*z);
 
 	return 0;
 }

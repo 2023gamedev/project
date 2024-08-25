@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Task.h"
 #include <vector>
 #include <memory>
+
+#include "Task.h"
 
 using namespace std;
 
