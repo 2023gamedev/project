@@ -12,6 +12,8 @@ public class Project : ModuleRules
 
         PrivateDependencyModuleNames.AddRange(new string[] { "ProtobufCore" });
 
+        PrivateDependencyModuleNames.AddRange(new string[] { "Sockets", "Networking" });
+
         PrivateIncludePaths.AddRange(new string[]
         {
             "Project/Protocol/"
