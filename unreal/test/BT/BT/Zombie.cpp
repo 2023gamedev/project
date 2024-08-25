@@ -85,15 +85,15 @@ void Zombie::SetTargetLocation(TARGET t)
 
 void Zombie::Attack() const
 {
-	cout << "Zombie " << name << " attacked Player!" << endl;
+	cout << "Zombie \'" << name << "\' attacked Player!" << endl;
 }
 
 void Zombie::MoveTo() const
 {
-	cout << "Zombie " << name << " moved to (" << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << ")." << endl;
+	cout << "Zombie \'" << name << "\' moved to (" << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << ")." << endl;
 }
 
 void Zombie::Wait() const
 {
-	cout << "Zombie " << name << " wait." << endl;
+	cout << "Zombie \'" << name << "\' wait." << endl;
 }

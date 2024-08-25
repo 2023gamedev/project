@@ -2,11 +2,14 @@
 
 #include "Task.h"
 #include "Selector.h"
+#include "Sequence.h"
 #include "CanSeePlayer.h"
 #include "HasInvestigated.h"
 #include "NotHasLastKnownPlayerLocation.h"
 #include "CanNotAttack.h"
 #include "CanAttack.h"
+#include "MoveTo.h"
+#include "Attack.h"
 
 
 int main()
@@ -14,7 +17,7 @@ int main()
 	//플레이어 초기 위치
 	vector<vector<vector<int>>> pl = vector<vector<vector<int>>>{ {{-8, 9, 12}} };
 	//좀비 초기 위치
-	vector<vector<vector<int>>> zl = vector<vector<vector<int>>>{ {{-8, 8, 7}} };
+	vector<vector<vector<int>>> zl = vector<vector<vector<int>>>{ {{2/*-8*/, 8, 7}} };
 
 	cout << "플레이어의 시작 위치: ( " << pl[0][0][0] << ", " << pl[0][0][1] << ", " << pl[0][0][2] << " )" << endl;
 	cout << "좀비의 시작 위치: ( " << zl[0][0][0] << ", " << zl[0][0][1] << ", " << zl[0][0][2] << " )" << endl;
@@ -26,7 +29,10 @@ int main()
 	Zombie* z = new Zombie(p, "zombieee", zl);
 
 
-	//=======좀비 BT 생성=======
+	//======[좀비 BT 생성]======
+	
+	//==========선언============
+	
 	//<Selector> 선언 
 	
 	//<Selector-Detect> (사실상 최상위 노드)
@@ -34,8 +40,15 @@ int main()
 	//<Selector-CanSeePlayer>  
 	Selector sel_canseeplayer;
 
+	//{Sequence} 선언
 
-	//Selector들 선언 & 메모리 할당
+	//{Sequence-CanNotAttack}
+	Sequence seq_cannotattack;
+	//{Sequence-CanAttack}
+	Sequence seq_canattack;
+
+
+	//[Task]들 선언 & 메모리 할당
  
 	//<Selector Detact> 가 가지는 Task들
 
@@ -53,6 +66,15 @@ int main()
 	//[CanAttack-Task]
 	TCanAttack* t_canattack = new TCanAttack;
 
+	//{Sequence} 가 가지는 Task들
+
+	//[MoveTo-Task]
+	TMoveTo* t_moveto = new TMoveTo;
+	//[Attack-Task]
+	TAttack* t_attack = new TAttack;
+
+
+	//========작업 할당==========
 
 	//<Selector-Detect> 할당
 	//<Selector-Detect>에 해당 Task들 '순서대로' 삽입
@@ -75,6 +97,33 @@ int main()
 		//<Selector-CanSeePlayer> 실행
 		string result = sel_canseeplayer.Sel_CanSeePlayer(*z);
 
+
+		//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 할당
+		if (result == "CanNotAttack-Succeed") {
+
+			//{Sequence-CanNotAttack} 할당
+			//{Sequence-CanNotAttack}에 해당 Task들 '순서대로' 삽입
+			seq_cannotattack.AddChild(t_moveto);
+
+			//{Sequence-CanNotAttack} 실행
+			string result = seq_cannotattack.Seq_CanNotAttack(*z);
+
+
+		}
+		else if (result == "CanAttack-Succeed") {
+
+			//{Sequence-CanAttack} 할당
+			//{Sequence-CanAttack}에 해당 Task들 '순서대로' 삽입
+			seq_canattack.AddChild(t_attack);
+
+			//{Sequence-CanAttack} 실행
+			string result = seq_canattack.Seq_CanAttack(*z);
+
+
+		}
+		else {	//result == "Fail"
+			cout << "EEEERRRROOOOOORRRR" << endl;
+		}
 	}
 	else if (result == "HasInvestigated-Succeed") {
 

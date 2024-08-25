@@ -18,22 +18,36 @@ public:
     //Sequence(const vector<unique_ptr<Task>>& children) : seq_children(children) {}
 
 
-    bool Seq_CanNotAttack(Zombie zom) {
+    string Seq_CanNotAttack(Zombie zom) {
+        cout << "Sequence의 {Seq_CanNotAttack} 함수 호출" << endl;
+        cout << endl;
         for (const auto& child : seq_children) {
-            if ("Fail" != child->CanNotAttack(zom)) {
-                return false;
+            string result = child->CanNotAttack(zom);
+            if ("Fail" != result) {
+                cout << "\"{Sequence CanNotAttack}의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
+                return result;
             }
         }
-        return true;
+        cout << "\"Sequence CanNotAttack [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
-    bool Seq_CanAttack(Zombie zom) {
+    string Seq_CanAttack(Zombie zom) {
+        cout << "Sequence의 {Seq_CanAttack} 함수 호출" << endl;
+        cout << endl;
         for (const auto& child : seq_children) {
-            if ("Fail" != child->CanAttack(zom)) {
-                return false;
+            string result = child->CanAttack(zom);
+            if ("Fail" != result) {
+                cout << "\"{Sequence CanAttack}의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
+                return result;
             }
         }
-        return true;
+        cout << "\"Sequence CanAttack [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
     bool Seq_HasShouting(Zombie zom) {
@@ -73,8 +87,18 @@ public:
     }
 
 
-    void AddChild(unique_ptr<Task> child) {
+    void AddChild(Task* child) {
         seq_children.emplace_back(move(child));
     }
+
+
+    string Detect(Zombie zom) const override { return "Fail"; };
+    string CanSeePlayer(Zombie zom) const override { return "Fail"; };
+    string CanAttack(Zombie zom) const override { return "Fail"; };
+    string CanNotAttack(Zombie zom) const override { return "Fail"; };
+    string HasShouting(Zombie zom) const override { return "Fail"; };
+    string HasFootSound(Zombie zom) const override { return "Fail"; };
+    string HasInvestigated(Zombie zom) const override { return "Fail"; };
+    string NotHasLastKnownPlayerLocation(Zombie zom) const override { return "Fail"; };
 
 };
