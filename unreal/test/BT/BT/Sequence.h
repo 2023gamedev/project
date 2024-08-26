@@ -11,11 +11,10 @@ using namespace std;
 //사실 Task의 자식 클래스로 생성 안해도 무관함. 이를 한번 나중에 다시 생각해보기.
 class Sequence : public Task {
 private:
-    vector<unique_ptr<Task>> seq_children;
+    vector<unique_ptr<Task>> seq_children;  //근데, 굳이 unique_ptr을 사용해야 할...까? 고민
 
 public:
     Sequence() = default;
-    //Sequence(const vector<unique_ptr<Task>>& children) : seq_children(children) {}
 
 
     string Seq_CanNotAttack(Zombie zom) {

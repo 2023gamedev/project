@@ -23,8 +23,9 @@ public:
         ORIGIN
     };
 
-
-    vector<unique_ptr<Task>>* Z_BT;         //포인터로 사용 안하면 (C2280: 삭제된 함수를 참조하려고 합니다.) 에러 발생
+ 
+    vector<unique_ptr<Task>>* Z_BT;         //포인터로 사용 안하면 (C2280: 삭제된 함수를 참조하려고 합니다.) 에러 발생 - [근데, 굳이 unique_ptr을 사용해야 할...까? 고민]
+                                            
 
     Player* PL; //일단 싱글 플레이어으로 산정
 

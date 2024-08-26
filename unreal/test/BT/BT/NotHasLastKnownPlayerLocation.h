@@ -19,7 +19,7 @@ public:
             cout << "좀비가 가진 플레이어 최신 위치: ( " << zom.TargetLocation[0][0][0] << ", " << zom.TargetLocation[0][0][1] << ", " << zom.TargetLocation[0][0][2] << " )" << endl;
             cout << "사실상 이 코드는 실행되면 안됨!!!!!!!!!" << endl;
         }
-        cout << "\'따라서\', [NotHasLastKnownPlayerLocation Task]의 <Detect> 함수 결과: " << boolalpha << result << endl;
+        cout << "\'따라서\', <Detect>의 [NotHasLastKnownPlayerLocation Task] 결과: " << boolalpha << result << endl;
         cout << endl;
 
         if (result)

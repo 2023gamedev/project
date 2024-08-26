@@ -16,7 +16,7 @@ public:
         cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
         cout << "플레이어와 좀비의 거리: " << zom.DistanceToPlayer << endl;
         cout << "좀비의 공격 사거리: " << zom.CanAttackDistance << endl;
-        cout << "\'따라서\', [CanNotAttack Task]의 <CanSeePlayer> 함수 결과: " << boolalpha << result << endl;
+        cout << "\'따라서\', <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
         cout << endl;
 
         if (result)

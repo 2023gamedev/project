@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "Task.h"
-#include "CanSeePlayer.h"
 
 using namespace std;
 
@@ -12,7 +11,7 @@ using namespace std;
 //사실 Task의 자식 클래스로 생성 안해도 무관함. 이를 한번 나중에 다시 생각해보기.
 class Selector : public Task {
 private:
-    vector<unique_ptr<Task>>* sel_children = new vector<unique_ptr<Task>>;
+    vector<unique_ptr<Task>> sel_children;  //근데, 굳이 unique_ptr을 사용해야 할...까? 고민
 
 public:
     Selector() = default;
@@ -21,7 +20,7 @@ public:
     string Sel_Detect(Zombie zom) {
         cout << "Selector의 <Sel_Detect> 함수 호출" << endl;
         cout << endl;
-        for (const auto& child : *sel_children) {
+        for (const auto& child : sel_children) {
             string result = child->Detect(zom);
             if ("Fail" != result) {
                 cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
@@ -37,7 +36,7 @@ public:
     string Sel_CanSeePlayer(Zombie zom) {
         cout << "Selector의 <Sel_CanSeePlayer> 함수 호출" << endl;
         cout << endl;
-        for (const auto& child : *sel_children) {
+        for (const auto& child : sel_children) {
             string result = child->CanSeePlayer(zom);
             if ("Fail" != result) {
                 cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
@@ -52,7 +51,7 @@ public:
 
 
     void AddChild(Task* child) {
-        sel_children->emplace_back(move(child));
+        sel_children.emplace_back(move(child));
     }
 
 
