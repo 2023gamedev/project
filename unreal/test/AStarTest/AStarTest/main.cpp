@@ -51,7 +51,9 @@ bool isInObstacleRange(float x, float y, float z, const vector<tuple<float, floa
         float dx = x - ox;
         float dy = y - oy;
         float dz = z - oz;
-        float distance = std::sqrt(dx * dx + dy * dy + dz * dz);
+        //float distance = std::sqrt(dx * dx + dy * dy + dz * dz);
+        // 생각해보니 장애물은 z좌표가 필요없을듯
+        float distance = std::sqrt(dx * dx + dy * dy);
 
         // 거리가 장애물 반경 이하이면 충돌
         if (distance <= OBSTACLE_RADIUS) {
