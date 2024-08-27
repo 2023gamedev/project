@@ -3,6 +3,7 @@
 #include "Task.h"
 #include "Selector.h"
 #include "Sequence.h"
+
 #include "CanSeePlayer.h"
 #include "HasInvestigated.h"
 #include "NotHasLastKnownPlayerLocation.h"
@@ -92,8 +93,8 @@ int main()
 
 	//<Selector-CanSeePlayer> 할당
 	//<Selector-CanSeePlayer>에 해당 Task들 '순서대로' 삽입
-	sel_canseeplayer.AddChild(t_cannotattack);
 	sel_canseeplayer.AddChild(t_canattack);
+	sel_canseeplayer.AddChild(t_cannotattack);
 
 	//{Sequence-CanNotAttack} 할당
 	//{Sequence-CanNotAttack}에 해당 Task들 '순서대로' 삽입
@@ -119,14 +120,7 @@ int main()
 	while (true) {
 
 		cout << "========BT 실행==========" << endl;
-		cout << endl;
-
-		vector<vector<vector<int>>> p_l = p->GetPlayerPos();
-		int p_x = p_l[0][0][0]; int p_y = p_l[0][0][1]; int p_z = p_l[0][0][2];
-		int z_x = z->ZombieLocation[0][0][0]; int z_y = z->ZombieLocation[0][0][1]; int z_z = z->ZombieLocation[0][0][2];
-		cout << "플레이어의 현제 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-		cout << "좀비의 현제 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
-		cout << endl;
+		cout << endl;;
 
 		//좀비와 플레이어의 거리 갱신
 		z->SetDistance();
@@ -139,23 +133,24 @@ int main()
 
 			//<Selector-CanSeePlayer> 실행
 			result = sel_canseeplayer.Sel_CanSeePlayer(*z);
-
+		
 			//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 실행
-			if (result == "CanNotAttack-Succeed") {
-
-				//{Sequence-CanNotAttack} 실행
-				result = seq_cannotattack.Seq_CanNotAttack(*z);
-
-			}
-			else if (result == "CanAttack-Succeed") {
+			if (result == "CanAttack-Succeed") {
 
 				//{Sequence-CanAttack} 실행
 				result = seq_canattack.Seq_CanAttack(*z);
 
 			}
+			else if (result == "CanNotAttack-Succeed") {
+
+				//{Sequence-CanNotAttack} 실행
+				result = seq_cannotattack.Seq_CanNotAttack(*z);
+
+			}
 			else {	//result == "Fail"
 				cout << "EEEERRRROOOOOORRRR" << endl;
 			}
+
 		}
 		else if (result == "HasInvestigated-Succeed") {
 
@@ -173,13 +168,20 @@ int main()
 			cout << "EEEERRRROOOOOORRRR" << endl;
 		}
 
+		vector<vector<vector<int>>> p_l = p->GetPlayerPos();
+		int p_x = p_l[0][0][0]; int p_y = p_l[0][0][1]; int p_z = p_l[0][0][2];
+		int z_x = z->ZombieLocation[0][0][0]; int z_y = z->ZombieLocation[0][0][1]; int z_z = z->ZombieLocation[0][0][2];
+		cout << "플레이어의 현제 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+		cout << "좀비의 현제 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+		cout << endl;
+
 		//플레이어 입력 받기
 		bool proper_input = false;
 		int input_x = 0;	// 6:x++, 4:x--
 		int input_y = 0;	// 8:y++, 2:y--
 		while (proper_input == false) {
-			//cout << "플레이어 이동=> 6: x++ , 4: x-- , 8: y++ , 2: y--" << endl;
-			cout << "플레이어 위치 설정" << endl;
+			//cout << "*** 플레이어 이동=> 5: 정지, 6: x++ , 4: x-- , 8: y++ , 2: y--" << endl;
+			cout << "*** 플레이어 위치 설정" << endl;
 			//cout << "x축 이동 입력: ";
 			cout << "x좌표 입력: ";
 			cin >> input_x;
@@ -205,34 +207,40 @@ int main()
 			cin.clear();
 			cin.ignore(1000, '\n');
 			cout << endl;
-			
 
-			/*if ((input_x == 6 || input_x == 4) && (input_y == 8 || input_y == 2)) {
+			/*cout << "플레이어 ";
+			if ((input_x == 5 || input_x == 6 || input_x == 4) && (input_y == 5 || input_y == 8 || input_y == 2)) {
 				proper_input = true;
 
-				if (input_x == 6) {
-					cout << "x축으로 ++ , ";
+				if (input_x == 5) {
+					cout << "x축으로 0 , ";
+				}
+				else if (input_x == 6) {
+					cout << "x축으로 +1 , ";
 					p->Move(1, 0, 0);
 				}
 				else if (input_x == 4) {
-					cout << "x축으로 -- , ";
+					cout << "x축으로 -1 , ";
 					p->Move(-1, 0, 0);
 				}
 				else
 					cout << "[Error]!!!";
 
-				if (input_y == 8) {
-					cout << "y축으로 ++ ";
+				if (input_y == 5) {
+					cout << "y축으로 0 ";
+				}
+				else if (input_y == 8) {
+					cout << "y축으로 +1 ";
 					p->Move(0, 1, 0);
 				}
 				else if (input_y == 2) {
-					cout << "y축으로 -- ";
+					cout << "y축으로 -1 ";
 					p->Move(0, -1, 0);
 				}
 				else
 					cout << "[Error]!!!";
 
-				cout << "이동!" << endl;
+				cout << "이동!!!" << endl;
 				cout << endl;
 			}
 			else {
@@ -246,6 +254,12 @@ int main()
 			break;
 
 		}
+
+		p_l = p->GetPlayerPos();
+		p_x = p_l[0][0][0]; p_y = p_l[0][0][1]; p_z = p_l[0][0][2];
+		cout << "플레이어의 이전 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+		cout << "좀비의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+		cout << endl;
 	}
 	
 	//==========================

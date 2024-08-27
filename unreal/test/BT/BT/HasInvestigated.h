@@ -10,7 +10,7 @@ using namespace std;
 class THasInvestigated : public Task {
 public:
 
-    string Detect(Zombie zom) const override {
+    string Detect(Zombie& zom) const override {
         bool result = zom.KnewPlayerLocation;
 
         cout << "<Detect>의 [HasInvestigated Task] 호출" << endl;
@@ -26,13 +26,14 @@ public:
             return "Fail";
     }
 
-    //string Detect(Zombie zom) const override { return "Fail"; };
-    string CanSeePlayer(Zombie zom) const override { return "Fail"; };
-    string CanAttack(Zombie zom) const override { return "Fail"; };
-    string CanNotAttack(Zombie zom) const override { return "Fail"; };
-    string HasShouting(Zombie zom) const override { return "Fail"; };
-    string HasFootSound(Zombie zom) const override { return "Fail"; };
-    string HasInvestigated(Zombie zom) const override { return "Fail"; };
-    string NotHasLastKnownPlayerLocation(Zombie zom) const override { return "Fail"; };
+    //사실상 더미 함수들
+    //string Detect(Zombie& zom) const override { return "Fail"; };
+    string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
+    string CanAttack(Zombie& zom) const override { return "Fail"; };
+    string CanNotAttack(Zombie& zom) const override { return "Fail"; };
+    string HasShouting(Zombie& zom) const override { return "Fail"; };
+    string HasFootSound(Zombie& zom) const override { return "Fail"; };
+    string HasInvestigated(Zombie& zom) const override { return "Fail"; };
+    string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
 
 };

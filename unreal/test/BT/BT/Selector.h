@@ -17,14 +17,14 @@ public:
     Selector() = default;
 
 
-    string Sel_Detect(Zombie zom) {
-        cout << "Selector의 <Sel_Detect> 함수 호출" << endl;
+    string Sel_Detect(Zombie& zom) {
+        cout << "Selector <Detect> 호출" << endl;
         cout << endl;
         for (const auto& child : sel_children) {
             string result = child->Detect(zom);
             if ("Fail" != result) {
-                cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
-                cout << endl;
+                //cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
+                //cout << endl;
                 return result;
             }
         }
@@ -33,14 +33,14 @@ public:
         return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
-    string Sel_CanSeePlayer(Zombie zom) {
-        cout << "Selector의 <Sel_CanSeePlayer> 함수 호출" << endl;
+    string Sel_CanSeePlayer(Zombie& zom) {
+        cout << "Selector <CanSeePlayer> 함수 호출" << endl;
         cout << endl;
         for (const auto& child : sel_children) {
             string result = child->CanSeePlayer(zom);
             if ("Fail" != result) {
-                cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
-                cout << endl;
+                //cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
+                //cout << endl;
                 return result;
             }
         }
@@ -55,13 +55,14 @@ public:
     }
 
 
-    string Detect(Zombie zom) const override { return "Fail"; };
-    string CanSeePlayer(Zombie zom) const override { return "Fail"; };
-    string CanAttack(Zombie zom) const override { return "Fail"; };
-    string CanNotAttack(Zombie zom) const override { return "Fail"; };
-    string HasShouting(Zombie zom) const override { return "Fail"; };
-    string HasFootSound(Zombie zom) const override { return "Fail"; };
-    string HasInvestigated(Zombie zom) const override { return "Fail"; };
-    string NotHasLastKnownPlayerLocation(Zombie zom) const override { return "Fail"; };
+    //사실상 더미 함수들
+    string Detect(Zombie& zom) const override { return "Fail"; };
+    string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
+    string CanAttack(Zombie& zom) const override { return "Fail"; };
+    string CanNotAttack(Zombie& zom) const override { return "Fail"; };
+    string HasShouting(Zombie& zom) const override { return "Fail"; };
+    string HasFootSound(Zombie& zom) const override { return "Fail"; };
+    string HasInvestigated(Zombie& zom) const override { return "Fail"; };
+    string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
 
 };

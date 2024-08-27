@@ -48,10 +48,14 @@ public:
     vector<vector<vector<int>>> TargetLocation;
 
     bool KnewPlayerLocation;
-    
-    bool HeardFootSound;
-   
+  
     bool HeardShouting;
+
+    bool HeardFootSound;
+
+    int speed;
+
+    TARGET targetType;
 
 
     Zombie();
@@ -63,9 +67,13 @@ public:
 
     void SetTargetLocation(TARGET t);
 
-    void Attack() const;
+    void Attack() ;
 
-    void MoveTo() const;
+    void MoveTo();
 
-    void Wait() const;
+    void Wait();
+
+    //void ShoutingHear();
+    
+    //void FootSoundHear();
 };
