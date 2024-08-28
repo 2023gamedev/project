@@ -320,11 +320,6 @@ int main()
     }
 
     if (success) {
-        cout << "Valid Positions:" << endl;
-        for (const auto& pos : validPositions) {
-            cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
-        }
-
         cout << "Obstacles Positions:" << endl;
         for (const auto& pos : obstacles) {
             cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
