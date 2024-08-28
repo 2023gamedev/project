@@ -1,6 +1,5 @@
 #pragma once
 #include "Common.h"
-#include "node.h"
 #include "ZombieController.h"
 
 class ZombieController;
@@ -23,7 +22,12 @@ using PLAYER_INFO = struct Client_INFO {
 	bool isInGame;
 };
 
+struct Player_Location {
+	float x, y, z;
+};
+
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
+extern std::unordered_map<int, Player_Location> playerLocations;
 
 class IOCP_CORE
 {
@@ -48,6 +52,10 @@ public:
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
 	void Timer_Thread();
+	void Zombie_BT_Thread();
+
+	Player_Location playerlocation;
+
 
 private:
 	HANDLE g_hIocp;	
@@ -56,14 +64,14 @@ private:
 	vector<thread*> worker_threads;
 	thread timer_thread;
 
+	thread zombie_thread;
+
 	bool ServerShutdown{ false };
 
 	unsigned int playerIndex{ UINT_MAX };
 
-	Gnode* nodeclass;
 	ZombieController* zombieclass;
 
-	vector<Nvector> Nodes;
 
 	int GameTime = 0;
 

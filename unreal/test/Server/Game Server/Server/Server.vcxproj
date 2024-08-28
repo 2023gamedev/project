@@ -169,20 +169,37 @@
   <ItemGroup>
     <ClCompile Include="GStruct.pb.cc" />
     <ClCompile Include="iocpServerClass.cpp" />
-    <ClCompile Include="node.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProcessPacket.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Zombie.cpp" />
     <ClCompile Include="ZombieController.cpp" />
+    <ClCompile Include="ZombiePathfinder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Attack.h" />
+    <ClInclude Include="CanAttack.h" />
+    <ClInclude Include="CanNotAttack.h" />
+    <ClInclude Include="CanSeePlayer.h" />
     <ClInclude Include="GStruct.pb.h" />
+    <ClInclude Include="HasFootSound.h" />
+    <ClInclude Include="HasInvestigated.h" />
+    <ClInclude Include="HasShouting.h" />
     <ClInclude Include="iocpServerClass.h" />
-    <ClInclude Include="node.h" />
+    <ClInclude Include="MoveTo.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="NotHasLastKnownPlayerLocation.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="protocol.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Selector.h" />
+    <ClInclude Include="Sequence.h" />
+    <ClInclude Include="Task.h" />
+    <ClInclude Include="Zombie.h" />
     <ClInclude Include="ZombieController.h" />
+    <ClInclude Include="ZombiePathfinder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Gstruct.proto" />

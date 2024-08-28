@@ -13,8 +13,9 @@ public:
     string Detect(Zombie& zom) const override {
         bool result = (zom.DistanceToPlayer <= zom.CanSeeDistance);
         
-        if (result)
+        if (result) {
             zom.KnewPlayerLocation = true;
+        }
 
         cout << "<Detect>의 [CanSeePlayer Task] 호출" << endl;
         cout << "플레이어와 좀비의 거리: " << zom.DistanceToPlayer << endl;

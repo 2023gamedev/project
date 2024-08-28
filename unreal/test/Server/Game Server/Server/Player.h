@@ -8,18 +8,18 @@ using namespace std;
 
 class Player {
 private:
-	vector<vector<vector<int>>> PlayerPos;
+	vector<vector<vector<float>>> PlayerPos;
 
 public:
 	Player();
 
-	Player(vector<vector<vector<int>>> pp);
+	Player(vector<vector<vector<float>>> pp);
 
-	vector<vector<vector<int>>> GetPlayerPos();
+	vector<vector<vector<float>>> GetPlayerPos();
 
-	void Move(int x, int y, int z);
+	void Move(float x, float y, float z);
 
-	void Teleport(int x, int y, int z); //디버깅용
+	void Teleport(float x, float y, float z); //디버깅용
 
 	~Player();
 };

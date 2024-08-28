@@ -82,7 +82,7 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     // zombiedata 벡터에 추가
     zombiedata.push_back(zombie);
 
-    cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << zombiedata.size() << endl;
+    //cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << zombiedata.size() << endl;
 }
 
 void ZombieController::SendZombieData(int id)
