@@ -1,6 +1,5 @@
 #pragma once
 #include "Common.h"
-#include "node.h"
 #include "ZombieController.h"
 
 class ZombieController;
@@ -48,6 +47,7 @@ public:
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
 	void Timer_Thread();
+	void Zombie_BT_Thread();
 
 private:
 	HANDLE g_hIocp;	
@@ -56,14 +56,14 @@ private:
 	vector<thread*> worker_threads;
 	thread timer_thread;
 
+	thread zombie_thread;
+
 	bool ServerShutdown{ false };
 
 	unsigned int playerIndex{ UINT_MAX };
 
-	Gnode* nodeclass;
 	ZombieController* zombieclass;
 
-	vector<Nvector> Nodes;
 
 	int GameTime = 0;
 

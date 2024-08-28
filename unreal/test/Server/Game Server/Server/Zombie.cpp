@@ -3,6 +3,9 @@
 
 #include "Zombie.h"
 
+// PathFinder
+#include "ZombiePathfinder.h"
+
 using namespace std;
 
 
@@ -14,7 +17,7 @@ Zombie::Zombie()
 
 	name = string{ "" };
 
-	ZombieLocation = vector<vector<vector<int>>>{ {{0, 0, 0}} };
+	ZombieLocation = vector<vector<vector<float>>>{ {{0, 0, 0}} };
 
 	ZombieOriginLocation = ZombieLocation;
 
@@ -33,7 +36,7 @@ Zombie::Zombie()
 	targetType = Zombie::TARGET::ORIGIN;
 }
 
-Zombie::Zombie(Player* p, string n, vector<vector<vector<int>>> zl)
+Zombie::Zombie(Player* p, string n, vector<vector<vector<float>>> zl)
 {
 	Z_BT = new vector<unique_ptr<Task>>;
 
@@ -45,7 +48,7 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<int>>> zl)
 
 	ZombieOriginLocation = ZombieLocation;
 
-	vector<vector<vector<int>>> pl = p->GetPlayerPos();
+	vector<vector<vector<float>>> pl = p->GetPlayerPos();
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 
@@ -65,8 +68,8 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<int>>> zl)
 
 void Zombie::SetDistance()
 { 
-	vector<vector<vector<int>>> zl = ZombieLocation;
-	vector<vector<vector<int>>> pl = PL->GetPlayerPos();
+	vector<vector<vector<float>>> zl = ZombieLocation;
+	vector<vector<vector<float>>> pl = PL->GetPlayerPos();
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 }
@@ -104,8 +107,24 @@ void Zombie::MoveTo()
 {
 	cout << "Zombie \'" << name << "\' moves to Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
 
-	vector<vector<vector<int>>> zl = ZombieLocation;
-	vector<vector<vector<int>>> tl = TargetLocation;
+	vector<vector<vector<float>>> zl = ZombieLocation;
+	vector<vector<vector<float>>> tl = TargetLocation;
+
+	//===================================
+	ZombiePathfinder pathfinder(zl[0][0][0], zl[0][0][1], zl[0][0][2], tl[0][0][0], tl[0][0][1], tl[0][0][2]);
+	pathfinder.Run();
+
+	// PathFinder에서 이동하는 처음 좌표 하나 보내주기(리턴값)
+	// 장애물에서 장애물 근처 초록색 좌표 추가해서 B1 이런데 추가하기
+
+	//===================================
+
+	// Move To 좌표 값들 float 값으로 바꿔주기
+	// Can See Player 조건값 지우고 클라이언트에서 검사한 값을 서버로 보내주게 조건식 짜기
+
+
+	// 공통
+	// 필요없는 Cout 지우기
 
 	cout << "좀비 " << name << " ";
 	if (zl[0][0][0] < tl[0][0][0]) {
