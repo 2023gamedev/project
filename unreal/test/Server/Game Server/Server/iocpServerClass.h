@@ -22,7 +22,12 @@ using PLAYER_INFO = struct Client_INFO {
 	bool isInGame;
 };
 
+struct Player_Location {
+	float x, y, z;
+};
+
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
+extern std::unordered_map<int, Player_Location> playerLocations;
 
 class IOCP_CORE
 {
@@ -48,6 +53,9 @@ public:
 
 	void Timer_Thread();
 	void Zombie_BT_Thread();
+
+	Player_Location playerlocation;
+
 
 private:
 	HANDLE g_hIocp;	

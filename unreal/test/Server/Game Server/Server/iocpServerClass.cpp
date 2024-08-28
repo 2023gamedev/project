@@ -19,6 +19,7 @@
 
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
+std::unordered_map<int, Player_Location> playerLocations;
 
 IOCP_CORE::IOCP_CORE()
 {	

@@ -77,62 +77,63 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	Send_run();
 	Send_jump();
 
-	if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
+	if (GameInstance && GameInstance->ClientSocketPtr)
 	{
-		//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
-		// 현재 GameMode 인스턴스를 얻기
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 		{
-			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
-				recvPlayerData.hp);
-		}
-	}
-
-	if (GameInstance->ClientSocketPtr->Q_pattack.try_pop(recvPlayerAttack))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		{
-			MyGameMode->UpdatePlayerAttack(recvPlayerAttack.PlayerId, recvPlayerAttack.b_attack);
 			//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+			// 현재 GameMode 인스턴스를 얻기
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
+				MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
+					recvPlayerData.hp);
+			}
 		}
-	}
 
-	if (GameInstance->ClientSocketPtr->Q_eitem.try_pop(recvEquipItem))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		if (GameInstance->ClientSocketPtr->Q_pattack.try_pop(recvPlayerAttack))
 		{
-			FString EquipItem = *FString(recvEquipItem.Itemname.c_str());
-			MyGameMode->UpdateEquipItem(recvEquipItem.PlayerId, EquipItem, recvEquipItem.Itemtype);
-			UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvEquipItem.PlayerId);
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdatePlayerAttack(recvPlayerAttack.PlayerId, recvPlayerAttack.b_attack);
+				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+			}
 		}
-	}
 
-	if (GameInstance->ClientSocketPtr->Q_run.try_pop(recvRun))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		if (GameInstance->ClientSocketPtr->Q_eitem.try_pop(recvEquipItem))
 		{
-			MyGameMode->UpdatePlayerRun(recvRun.PlayerId, recvRun.b_run);
-			//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				FString EquipItem = *FString(recvEquipItem.Itemname.c_str());
+				MyGameMode->UpdateEquipItem(recvEquipItem.PlayerId, EquipItem, recvEquipItem.Itemtype);
+				UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvEquipItem.PlayerId);
+			}
 		}
-	}
 
-	if (GameInstance->ClientSocketPtr->Q_jump.try_pop(recvJump)) {
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		if (GameInstance->ClientSocketPtr->Q_run.try_pop(recvRun))
 		{
-			MyGameMode->UpdatePlayerJump(recvJump.PlayerId);
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdatePlayerRun(recvRun.PlayerId, recvRun.b_run);
+				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+			}
 		}
-	}
 
-	while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
-	{
-		//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
-		// 현재 GameMode 인스턴스를 얻기
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		if (GameInstance->ClientSocketPtr->Q_jump.try_pop(recvJump)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdatePlayerJump(recvJump.PlayerId);
+			}
+		}
+
+		while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 		{
-			// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-			MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.ZombieType, recvZombieData.Location, recvZombieData.Rotation);
-			//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+			//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.ZombieType, recvZombieData.Location, recvZombieData.Rotation);
+				//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+			}
 		}
 	}
 
