@@ -18,8 +18,8 @@ public:
 
 
     string Seq_CanAttack(Zombie& zom) {
-        cout << "Sequence {CanAttack} 함수 호출" << endl;
-        cout << endl;
+        //cout << "Sequence {CanAttack} 함수 호출" << endl;
+        //cout << endl;
         for (const auto& child : seq_children) {
             string result = child->CanAttack(zom);
             if ("Fail" != result) {
@@ -34,8 +34,8 @@ public:
     }
 
     string Seq_CanNotAttack(Zombie& zom) {
-        cout << "Sequence {CanNotAttack} 함수 호출" << endl;
-        cout << endl;
+        //cout << "Sequence {CanNotAttack} 함수 호출" << endl;
+        //cout << endl;
         for (const auto& child : seq_children) {
             string result = child->CanNotAttack(zom);
             if ("Fail" != result) {
@@ -68,8 +68,8 @@ public:
     }
 
     string Seq_HasInvestigated(Zombie& zom) {
-        cout << "Sequence {HasInvestigated} 함수 호출" << endl;
-        cout << endl;
+        //cout << "Sequence {HasInvestigated} 함수 호출" << endl;
+        //cout << endl;
         for (const auto& child : seq_children) {
             string result = child->HasInvestigated(zom);
             if ("Fail" != result) {
@@ -84,8 +84,8 @@ public:
     }
 
     string Seq_NotHasLastKnownPlayerLocation(Zombie& zom) {
-        cout << "Sequence {NotHasLastKnownPlayerLocation} 함수 호출" << endl;
-        cout << endl;
+        //cout << "Sequence {NotHasLastKnownPlayerLocation} 함수 호출" << endl;
+        //cout << endl;
         for (const auto& child : seq_children) {
             string result = child->NotHasLastKnownPlayerLocation(zom);
             if ("Fail" != result) {

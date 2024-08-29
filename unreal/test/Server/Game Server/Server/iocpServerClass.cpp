@@ -376,7 +376,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 	//좀비 인스턴스
 	Zombie* z = new Zombie(p, "zombieee", zl);
 
-	vector<vector<vector<float>>> p_l = p->GetPlayerPos();
+	vector<vector<vector<float>>> p_l = p->PlayerLocation;
 	float p_x = p_l[0][0][0]; float p_y = p_l[0][0][1]; float p_z = p_l[0][0][2];
 	float z_x = z->ZombieLocation[0][0][0]; float z_y = z->ZombieLocation[0][0][1]; float z_z = z->ZombieLocation[0][0][2];
 	cout << "플레이어의 시작 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
@@ -519,95 +519,106 @@ void IOCP_CORE::Zombie_BT_Thread()
 			cout << "EEEERRRROOOOOORRRR" << endl;
 		}
 
-		vector<vector<vector<float>>> p_l = p->GetPlayerPos();
-		float p_x = p_l[0][0][0]; float p_y = p_l[0][0][1]; float p_z = p_l[0][0][2];
+		cout << endl;
+		float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
 		float z_x = z->ZombieLocation[0][0][0]; float z_y = z->ZombieLocation[0][0][1]; float z_z = z->ZombieLocation[0][0][2];
 		cout << "플레이어의 현제 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 		cout << "좀비의 현제 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 		cout << endl;
 
 		//플레이어 입력 받기
-		bool proper_input = false;
-		int input_x = 0;	// 6:x++, 4:x--
-		int input_y = 0;	// 8:y++, 2:y--
-		while (proper_input == false) {
-			//cout << "*** 플레이어 이동=> 5: 정지, 6: x++ , 4: x-- , 8: y++ , 2: y--" << endl;
-			cout << "*** 플레이어 위치 설정" << endl;
-			//cout << "x축 이동 입력: ";
-			cout << "x좌표 입력: ";
-			cin >> input_x;
-			if (cin.fail()) {
-				cout << "잘못된 입력입니다 다시 입력해 주세요." << endl;
-				cout << endl;
-				cin.clear();
-				cin.ignore(1000, '\n');
-				continue;
-			}
+		//bool proper_input = false;
+		//int input_x = 0;	// 6:x++, 4:x--
+		//int input_y = 0;	// 8:y++, 2:y--
+		//while (proper_input == false) {
+		//	//cout << "*** 플레이어 이동=> 5: 정지, 6: x++ , 4: x-- , 8: y++ , 2: y--" << endl;
+		//	cout << "*** 플레이어 위치 설정" << endl;
+		//	//cout << "x축 이동 입력: ";
+		//	cout << "x좌표 입력: ";
+		//	cin >> input_x;
+		//	if (cin.fail()) {
+		//		cout << "잘못된 입력입니다 다시 입력해 주세요." << endl;
+		//		cout << endl;
+		//		cin.clear();
+		//		cin.ignore(1000, '\n');
+		//		continue;
+		//	}
+		//	cin.clear();
+		//	cin.ignore(1000, '\n');
+		//	//cout << "y축 이동 입력: ";
+		//	cout << "y좌표 입력: ";
+		//	cin >> input_y;
+		//	if (cin.fail()) {
+		//		cout << "잘못된 입력입니다 다시 입력해 주세요." << endl;
+		//		cout << endl;
+		//		cin.clear();
+		//		cin.ignore(1000, '\n');
+		//		continue;
+		//	}
+		//	cin.clear();
+		//	cin.ignore(1000, '\n');
+		//	cout << endl;
+		//
+			//cout << "플레이어 ";
+			//if ((input_x == 5 || input_x == 6 || input_x == 4) && (input_y == 5 || input_y == 8 || input_y == 2)) {
+			//	proper_input = true;
+			//
+			//	if (input_x == 5) {
+			//		cout << "x축으로 0 , ";
+			//	}
+			//	else if (input_x == 6) {
+			//		cout << "x축으로 +1 , ";
+			//		p->Move(1, 0, 0);
+			//	}
+			//	else if (input_x == 4) {
+			//		cout << "x축으로 -1 , ";
+			//		p->Move(-1, 0, 0);
+			//	}
+			//	else
+			//		cout << "[Error]!!!";
+			//
+			//	if (input_y == 5) {
+			//		cout << "y축으로 0 ";
+			//	}
+			//	else if (input_y == 8) {
+			//		cout << "y축으로 +1 ";
+			//		p->Move(0, 1, 0);
+			//	}
+			//	else if (input_y == 2) {
+			//		cout << "y축으로 -1 ";
+			//		p->Move(0, -1, 0);
+			//	}
+			//	else
+			//		cout << "[Error]!!!";
+			//
+			//	cout << "이동!!!" << endl;
+			//	cout << endl;
+			//}
+			//else {
+			//	proper_input = false;
+			//
+			//	cout << "잘못된 입력입니다 다시 입력해 주세요." << endl;
+			//	cout << endl;
+			//}
+		//
+		//	p->Teleport(input_x, input_y, 00000);
+		//	break;
+		//
+		//}
+
+		//콘솔창에서 한 싸이클씩 돌아가게
+		cout << "(계속 진행)아무거나 입력 후 엔터: ";
+		int one_cycle;
+		cin >> one_cycle;
+		if (cin.fail()) {
 			cin.clear();
 			cin.ignore(1000, '\n');
-			//cout << "y축 이동 입력: ";
-			cout << "y좌표 입력: ";
-			cin >> input_y;
-			if (cin.fail()) {
-				cout << "잘못된 입력입니다 다시 입력해 주세요." << endl;
-				cout << endl;
-				cin.clear();
-				cin.ignore(1000, '\n');
-				continue;
-			}
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cout << endl;
-
-			/*cout << "플레이어 ";
-			if ((input_x == 5 || input_x == 6 || input_x == 4) && (input_y == 5 || input_y == 8 || input_y == 2)) {
-				proper_input = true;
-
-				if (input_x == 5) {
-					cout << "x축으로 0 , ";
-				}
-				else if (input_x == 6) {
-					cout << "x축으로 +1 , ";
-					p->Move(1, 0, 0);
-				}
-				else if (input_x == 4) {
-					cout << "x축으로 -1 , ";
-					p->Move(-1, 0, 0);
-				}
-				else
-					cout << "[Error]!!!";
-
-				if (input_y == 5) {
-					cout << "y축으로 0 ";
-				}
-				else if (input_y == 8) {
-					cout << "y축으로 +1 ";
-					p->Move(0, 1, 0);
-				}
-				else if (input_y == 2) {
-					cout << "y축으로 -1 ";
-					p->Move(0, -1, 0);
-				}
-				else
-					cout << "[Error]!!!";
-
-				cout << "이동!!!" << endl;
-				cout << endl;
-			}
-			else {
-				proper_input = false;
-
-				cout << "잘못된 입력입니다 다시 입력해 주세요." << endl;
-				cout << endl;
-			}*/
-
-			p->Teleport(input_x, input_y, 00000);
-			break;
-
 		}
+		cin.clear();			//한번더 써서 남은 개행 문자까지 싹 지워줌
+		cin.ignore(1000, '\n');
+		cout << endl;
 
-		p_l = p->GetPlayerPos();
-		p_x = p_l[0][0][0]; p_y = p_l[0][0][1]; p_z = p_l[0][0][2];
+		p_x = p->PlayerLocation[0][0][0]; p_y = p->PlayerLocation[0][0][1]; p_z = p->PlayerLocation[0][0][2];
 		cout << "플레이어의 이전 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 		cout << "좀비의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 		cout << endl;

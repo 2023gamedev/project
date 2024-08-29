@@ -30,7 +30,7 @@ public:
     Player* PL; //일단 싱글 플레이어으로 산정
 
 
-    const float CanSeeDistance = 500000.f;
+    const float CanSeeDistance = 500000.f;      //나중에 지우기
 
     const float CanAttackDistance = 10.f;
 
@@ -41,7 +41,7 @@ public:
 
     vector<vector<vector<float>>> ZombieLocation;
 
-    vector<vector<vector<float>>> ZombieOriginLocation;   //private 선언하는 것도 좋을 듯 (상수로 사용하니)
+    vector<vector<vector<float>>> ZombieOriginLocation;   //private 선언하는 것도 좋을 듯 (상수로 사용하니) - const는 생각해보면 불가능함
 
     float DistanceToPlayer;
 

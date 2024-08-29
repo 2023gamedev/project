@@ -18,8 +18,8 @@ public:
 
 
     string Sel_Detect(Zombie& zom) {
-        cout << "Selector <Detect> 호출" << endl;
-        cout << endl;
+        //cout << "Selector <Detect> 호출" << endl;
+        //cout << endl;
         for (const auto& child : sel_children) {
             string result = child->Detect(zom);
             if ("Fail" != result) {
@@ -34,8 +34,8 @@ public:
     }
 
     string Sel_CanSeePlayer(Zombie& zom) {
-        cout << "Selector <CanSeePlayer> 함수 호출" << endl;
-        cout << endl;
+        //cout << "Selector <CanSeePlayer> 함수 호출" << endl;
+        //cout << endl;
         for (const auto& child : sel_children) {
             string result = child->CanSeePlayer(zom);
             if ("Fail" != result) {

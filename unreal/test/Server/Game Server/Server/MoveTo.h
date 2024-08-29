@@ -11,7 +11,7 @@ class TMoveTo : public Task {
 public:
 
     string CanNotAttack(Zombie& zom) const override {
-        cout << "{CanNotAttack}의 [MoveTo Task] 호출" << endl;
+        //cout << "{CanNotAttack}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);
 
@@ -29,7 +29,7 @@ public:
     }
 
     string HasShouting(Zombie& zom) const override {
-        cout << "{HasShouting}의 [MoveTo Task] 호출" << endl;
+        //cout << "{HasShouting}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::SHOUTING);
 
@@ -41,7 +41,7 @@ public:
     }
 
     string HasFootSound(Zombie& zom) const override {
-        cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
+        //cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);
 
@@ -53,7 +53,7 @@ public:
     }
 
     string HasInvestigated(Zombie& zom) const override {
-        cout << "{HasInvestigated}의 [MoveTo Task] 호출" << endl;
+        //cout << "{HasInvestigated}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
 
@@ -65,7 +65,7 @@ public:
     }
 
     string NotHasLastKnownPlayerLocation(Zombie& zom) const override {
-        cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
+        //cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::ORIGIN);      //원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
 

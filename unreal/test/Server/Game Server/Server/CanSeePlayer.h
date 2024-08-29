@@ -17,11 +17,11 @@ public:
             zom.KnewPlayerLocation = true;
         }
 
-        cout << "<Detect>의 [CanSeePlayer Task] 호출" << endl;
-        cout << "플레이어와 좀비의 거리: " << zom.DistanceToPlayer << endl;
-        cout << "좀비의 시야 거리: " << zom.CanSeeDistance << endl;
-        cout << "\'따라서\', <Detect>의 [CanSeePlayer Task] 결과: " << boolalpha << result << endl;
-        cout << endl;
+        //cout << "<Detect>의 [CanSeePlayer Task] 호출" << endl;
+        //cout << "플레이어와 좀비의 거리: " << zom.DistanceToPlayer << endl;
+        //cout << "좀비의 시야 거리: " << zom.CanSeeDistance << endl;
+        //cout << "\'따라서\', <Detect>의 [CanSeePlayer Task] 결과: " << boolalpha << result << endl;
+        //cout << endl;
         
         if (result)
             return "CanSeePlayer-Succeed";

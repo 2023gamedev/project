@@ -2,9 +2,7 @@
 #include <cmath>
 
 #include "Zombie.h"
-
-// PathFinder
-#include "ZombiePathfinder.h"
+#include "ZombiePathfinder.h"   // PathFinder
 
 using namespace std;
 
@@ -48,7 +46,7 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<float>>> zl)
 
 	ZombieOriginLocation = ZombieLocation;
 
-	vector<vector<vector<float>>> pl = p->GetPlayerPos();
+	vector<vector<vector<float>>> pl = p->PlayerLocation;
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 
@@ -69,7 +67,7 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<float>>> zl)
 void Zombie::SetDistance()
 { 
 	vector<vector<vector<float>>> zl = ZombieLocation;
-	vector<vector<vector<float>>> pl = PL->GetPlayerPos();
+	vector<vector<vector<float>>> pl = PL->PlayerLocation;
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 }
@@ -80,13 +78,13 @@ void Zombie::SetTargetLocation(TARGET t)
 
 	switch (t) {
 	case TARGET::PLAYER:
-		TargetLocation = PL->GetPlayerPos();
+		TargetLocation = PL->PlayerLocation;
 		break;
 	case TARGET::SHOUTING:
 		//샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
 		break;
 	case TARGET::FOOTSOUND:
-		TargetLocation = PL->GetPlayerPos();
+		TargetLocation = PL->PlayerLocation;
 		break;
 	case TARGET::INVESTIGATED: 
 		TargetLocation = TargetLocation;		//걍 명시적 표기
@@ -106,6 +104,7 @@ void Zombie::Attack()
 void Zombie::MoveTo()
 {
 	cout << "Zombie \'" << name << "\' moves to Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+	cout << endl;
 
 	vector<vector<vector<float>>> zl = ZombieLocation;
 	vector<vector<vector<float>>> tl = TargetLocation;
@@ -123,10 +122,7 @@ void Zombie::MoveTo()
 	// Can See Player 조건값 지우고 클라이언트에서 검사한 값을 서버로 보내주게 조건식 짜기
 
 
-	// 공통
-	// 필요없는 Cout 지우기
-
-	cout << "좀비 " << name << " ";
+	/*cout << "좀비 " << name << " ";
 	if (zl[0][0][0] < tl[0][0][0]) {
 		ZombieLocation[0][0][0] += speed;
 		cout << "x축으로 " << speed << ", ";
@@ -150,13 +146,14 @@ void Zombie::MoveTo()
 	else {
 		cout << "y축으로 " << 0 << " ";
 	}
-	cout << "이동!!!" << endl;
+	cout << "이동!!!" << endl;*/
 
 
 	//좀비가 목적지에 도착하면
 	if (ZombieLocation == TargetLocation) {
 
-		cout << "Zombie \'" << name << "\' arrived Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+		cout << "Zombie \'" << name << "\' arrived to Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+		cout << endl;
 
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
 		switch (targetType) {
@@ -179,7 +176,7 @@ void Zombie::MoveTo()
 
 	}
 
-	cout << endl;
+	//cout << endl;
 }
 
 void Zombie::Wait()
