@@ -115,38 +115,14 @@ void Zombie::MoveTo()
 
 	//===================================
 
-	// Move To 좌표 값들 float 값으로 바꿔주기
-	// Can See Player 조건값 지우고 클라이언트에서 검사한 값을 서버로 보내주게 조건식 짜기
-	
+	// PathFinder로부터 경로 리스트 쭉 받고, 이를 가지고 언리얼에서 돌아가는 MoveTo와 유사하게 직접 여기서 움직임 계산하고 위치를 이동시켜서, 바뀐 좌표를 클라에게 쏘게 하는 방식 *(회의 필요) 
+	// Can See Player 조건식 지우고 클라이언트에서 검사한 값을 서버로 보내주고 이를 받아서(zom.KnewPlayerLocation) 조건 검사하는 조건식 짜기
+
+
 	cout << endl;
 	cout << "Zombie \'" << name << "\' moves to Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
 	cout << endl;
 
-	/*cout << "좀비 " << name << " ";
-	if (zl[0][0][0] < tl[0][0][0]) {
-		ZombieLocation[0][0][0] += speed;
-		cout << "x축으로 " << speed << ", ";
-	}
-	else if (zl[0][0][0] > tl[0][0][0]) {
-		ZombieLocation[0][0][0] -= speed;
-		cout << "x축으로 " << -speed << " , ";
-	}
-	else {
-		cout << "x축으로 " << 0 << " , ";
-	}
-
-	if (zl[0][0][1] < tl[0][0][1]) {
-		ZombieLocation[0][0][1] += speed;
-		cout << "y축으로 " << speed << " ";
-	}
-	else if (zl[0][0][1] > tl[0][0][1]) {
-		ZombieLocation[0][0][1] -= speed;
-		cout << "y축으로 " << -speed << " ";
-	}
-	else {
-		cout << "y축으로 " << 0 << " ";
-	}
-	cout << "이동!!!" << endl;*/
 
 
 	//좀비가 목적지에 도착하면
