@@ -29,6 +29,9 @@ public:
 
     Player* PL; //일단 싱글 플레이어으로 산정
 
+    
+    vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
+
 
     const float CanSeeDistance = 500000.f;      //나중에 지우기
 

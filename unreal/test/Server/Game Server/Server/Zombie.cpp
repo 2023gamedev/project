@@ -13,6 +13,8 @@ Zombie::Zombie()
 
 	PL = new Player;
 
+	path = vector<tuple<float, float, float>>{};
+
 	name = string{ "" };
 
 	ZombieLocation = vector<vector<vector<float>>>{ {{0, 0, 0}} };
@@ -39,6 +41,8 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<float>>> zl)
 	Z_BT = new vector<unique_ptr<Task>>;
 
 	PL = p;
+
+	path = vector<tuple<float, float, float>>{};
 
 	name = n;
 
@@ -109,6 +113,41 @@ void Zombie::MoveTo()
 	//===================================
 	ZombiePathfinder pathfinder(zl[0][0][0], zl[0][0][1], zl[0][0][2], tl[0][0][0], tl[0][0][1], tl[0][0][2]);
 	pathfinder.Run();
+
+	//==================작업 충돌을 피하기 위해 ZombiePathfinder.cpp 는 건들이지 않고, 다음과 같이 여기서 작업함 -> 나중에 옮기고 합치기
+
+	/*pathfinder.Run(path);
+
+	void ZombiePathfinder::Run(vector<tuple<float, float, float>> t)
+	{
+		DetermineFloor();
+		if (LoadPositions()) {
+			if (LoadObstacles()) {
+				FindPath(t);
+			}
+			else {
+				cerr << "Failed to load obstacles." << endl;
+			}
+		}
+	}
+
+	void ZombiePathfinder::FindPath(vector<tuple<float, float, float>> t)
+	{
+		vector<Node> path = AStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
+		if (!path.empty()) {
+			cout << "Path found:\n";
+			for (const auto& node : path) {
+				cout << "(" << node.x << ", " << node.y << ", " << node.z << ")\n";
+
+				t.emplace_back(make_tuple(node.x, node.y, node.z));
+			}
+		}
+		else {
+			cout << "No path found.\n";
+		}
+	}*/
+
+	//==================
 
 	// PathFinder에서 이동하는 처음 좌표 하나 보내주기(리턴값)
 	// 장애물에서 장애물 근처 초록색 좌표 추가해서 B1 이런데 추가하기
