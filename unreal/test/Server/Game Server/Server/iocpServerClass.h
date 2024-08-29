@@ -2,7 +2,27 @@
 #include "Common.h"
 #include "ZombieController.h"
 
+// BT
+//#include "Zombie.h"
+//#include "Player.h"
+
+#include "Task.h"
+#include "Selector.h"
+#include "Sequence.h"
+
+#include "CanSeePlayer.h"
+#include "HasInvestigated.h"
+#include "NotHasLastKnownPlayerLocation.h"
+#include "CanNotAttack.h"
+#include "CanAttack.h"
+#include "MoveTo.h"
+#include "Attack.h"
+
+
 class ZombieController;
+//class Zombie;
+//class Player;
+
 
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;
@@ -55,6 +75,63 @@ public:
 	void Zombie_BT_Thread();
 
 	Player_Location playerlocation;
+
+	void Zombie_BT_Initialize();
+	void ServerOn();
+
+	//======Zombie_BT 선언======
+
+	//서버가 먼저 켜지고 좀비 BT가 실행되도록 하기위해 사용 
+	bool bServerOn;
+
+	//플레이어 인스턴스
+	Player* p;
+	//좀비 인스턴스
+	Zombie* z;
+
+	//<Selector> 선언 
+
+	//<Selector-Detect> (사실상 최상위 노드)
+	Selector sel_detect;
+	//<Selector-CanSeePlayer>  
+	Selector sel_canseeplayer;
+
+	//{Sequence} 선언
+
+	//{Sequence-CanNotAttack}
+	Sequence seq_cannotattack;
+	//{Sequence-CanAttack}
+	Sequence seq_canattack;
+	//
+	//{Sequence-HasInvestigated}
+	Sequence seq_hasinvestigated;
+	//{Sequence-NotHasLastKnownPlayerLocation}
+	Sequence seq_nothaslastknownplayerlocation;
+
+	//[Task] 선언
+
+	//<Selector Detact> 가 가지는 Task들
+
+	//[CanSeePlayer-Task]
+	TCanSeePlayer* t_canseeplayer;
+	//[HasInvestigated-Task]
+	THasInvestigated* t_hasinvestigated;
+	//[NotHasLastKnownPlayerLocation-Task]
+	TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
+
+	//<Selector CanSeePlayer> 가 가지는 Task들
+
+	//[CanNotAttack-Task]
+	TCanNotAttack* t_cannotattack;
+	//[CanAttack-Task]
+	TCanAttack* t_canattack;
+
+	//{Sequence} 가 가지는 Task들
+
+	//[MoveTo-Task]
+	TMoveTo* t_moveto;
+	//[Attack-Task]
+	TAttack* t_attack;
 
 
 private:

@@ -1,31 +1,21 @@
 #pragma once
 
-
 #include"iocpServerClass.h"
-
-// BT
-#include "Task.h"
-#include "Selector.h"
-#include "Sequence.h"
-
-#include "CanSeePlayer.h"
-#include "HasInvestigated.h"
-#include "NotHasLastKnownPlayerLocation.h"
-#include "CanNotAttack.h"
-#include "CanAttack.h"
-#include "MoveTo.h"
-#include "Attack.h"
-
-
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player_Location> playerLocations;
 
+
 IOCP_CORE::IOCP_CORE()
 {	
 	playerIndex = 0;
+
 	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 
+	bServerOn = false;
+	//==========Zombie_BT 초기화
+	Zombie_BT_Initialize();
+	//==========Zombie_BT 쓰레드 시작 (Zombie BT 실행 시작)
 	zombie_thread = thread(&IOCP_CORE::Zombie_BT_Thread, this);
 
 	//Nodes = nodeclass->LoadNodesFromFile();
@@ -98,6 +88,8 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 	{
 		worker_threads.push_back(new thread{ &IOCP_CORE::IOCP_WorkerThread, this });
 	}
+
+	ServerOn();
 
 	thread acceptThread{ &IOCP_CORE::IOCP_AcceptThread, this };
 	while (ServerShutdown) { Sleep(1000); }
@@ -364,77 +356,49 @@ void IOCP_CORE::Timer_Thread()
 	}
 }
 
-void IOCP_CORE::Zombie_BT_Thread()
+void IOCP_CORE::Zombie_BT_Initialize()
 {
+	//======[좀비 BT 생성]======
+	//======Zombie_BT 초기화 -> 메모리 할당 -> 작업 할당======
+
+	//======좀비, 플레이어 초기화======
+
 	//플레이어 초기 위치
 	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{2299.f, 3857.f, 952.f}} };
 	//좀비 초기 위치
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{988.f, 2964.f, 952.f}} };
 
 	//플레이어 인스턴스
-	Player* p = new Player(pl);
+	p = new Player(pl);
 	//좀비 인스턴스
-	Zombie* z = new Zombie(p, "zombieee", zl);
+	z = new Zombie(p, "zombieee", zl);
 
-	vector<vector<vector<float>>> p_l = p->PlayerLocation;
-	float p_x = p_l[0][0][0]; float p_y = p_l[0][0][1]; float p_z = p_l[0][0][2];
-	float z_x = z->ZombieLocation[0][0][0]; float z_y = z->ZombieLocation[0][0][1]; float z_z = z->ZombieLocation[0][0][2];
-	cout << "플레이어의 시작 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-	cout << "좀비의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
-	cout << endl;
-
-
-	//======[좀비 BT 생성]======
-
-	//==========선언============
-
-	//<Selector> 선언 
-
-	//<Selector-Detect> (사실상 최상위 노드)
-	Selector sel_detect;
-	//<Selector-CanSeePlayer>  
-	Selector sel_canseeplayer;
-
-	//{Sequence} 선언
-
-	//{Sequence-CanNotAttack}
-	Sequence seq_cannotattack;
-	//{Sequence-CanAttack}
-	Sequence seq_canattack;
-	//
-	//{Sequence-HasInvestigated}
-	Sequence seq_hasinvestigated;
-	//{Sequence-NotHasLastKnownPlayerLocation}
-	Sequence seq_nothaslastknownplayerlocation;
-
-
-	//[Task] 선언 & 메모리 할당
+	//======[Task] 메모리 할당======
 
 	//<Selector Detact> 가 가지는 Task들
 
 	//[CanSeePlayer-Task]
-	TCanSeePlayer* t_canseeplayer = new TCanSeePlayer;
+	t_canseeplayer = new TCanSeePlayer;
 	//[HasInvestigated-Task]
-	THasInvestigated* t_hasinvestigated = new THasInvestigated;
+	t_hasinvestigated = new THasInvestigated;
 	//[NotHasLastKnownPlayerLocation-Task]
-	TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation = new TNotHasLastKnownPlayerLocation;
+	t_nothaslastknownplayerlocation = new TNotHasLastKnownPlayerLocation;
 
 	//<Selector CanSeePlayer> 가 가지는 Task들
 
 	//[CanNotAttack-Task]
-	TCanNotAttack* t_cannotattack = new TCanNotAttack;
+	t_cannotattack = new TCanNotAttack;
 	//[CanAttack-Task]
-	TCanAttack* t_canattack = new TCanAttack;
+	t_canattack = new TCanAttack;
 
 	//{Sequence} 가 가지는 Task들
 
 	//[MoveTo-Task]
-	TMoveTo* t_moveto = new TMoveTo;
+	t_moveto = new TMoveTo;
 	//[Attack-Task]
-	TAttack* t_attack = new TAttack;
+	t_attack = new TAttack;
 
-
-	//========작업 할당==========
+	//========작업 할당========
 
 	//<Selector-Detect> 할당
 	//<Selector-Detect>에 해당 Task들 '순서대로' 삽입
@@ -463,15 +427,36 @@ void IOCP_CORE::Zombie_BT_Thread()
 	//{Sequence-NotHasLastKnownPlayerLocation}에 해당 Task들 '순서대로' 삽입
 	seq_nothaslastknownplayerlocation.AddChild(t_moveto);
 
+	//==========================
+}
 
+void IOCP_CORE::ServerOn()
+{
+	bServerOn = true;
+
+	cout << endl;
+	float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
+	float z_x = z->ZombieLocation[0][0][0]; float z_y = z->ZombieLocation[0][0][1]; float z_z = z->ZombieLocation[0][0][2];
+	cout << "플레이어의 시작 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+	cout << "좀비의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+	//cout << endl;
+}
+
+void IOCP_CORE::Zombie_BT_Thread()
+{
 	//========작업 실행==========
 
 	string result = "Initial";
 
 	while (true) {
 
+		//서버가 먼저 켜지고 좀비 BT가 실행되도록
+		if (bServerOn == false)	
+			continue;
+
+		cout << endl;
 		cout << "========BT 실행==========" << endl;
-		cout << endl;;
+		cout << endl;
 
 		//좀비와 플레이어의 거리 갱신
 		z->SetDistance();
@@ -519,7 +504,6 @@ void IOCP_CORE::Zombie_BT_Thread()
 			cout << "EEEERRRROOOOOORRRR" << endl;
 		}
 
-		cout << endl;
 		float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
 		float z_x = z->ZombieLocation[0][0][0]; float z_y = z->ZombieLocation[0][0][1]; float z_z = z->ZombieLocation[0][0][2];
 		cout << "플레이어의 현제 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
@@ -608,7 +592,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 		//콘솔창에서 한 싸이클씩 돌아가게
 		cout << "(계속 진행)아무거나 입력 후 엔터: ";
-		int one_cycle;
+		char one_cycle;
 		cin >> one_cycle;
 		if (cin.fail()) {
 			cin.clear();
@@ -621,8 +605,21 @@ void IOCP_CORE::Zombie_BT_Thread()
 		p_x = p->PlayerLocation[0][0][0]; p_y = p->PlayerLocation[0][0][1]; p_z = p->PlayerLocation[0][0][2];
 		cout << "플레이어의 이전 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 		cout << "좀비의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
-		cout << endl;
+		//cout << endl;
 	}
 
 	//==========================
+
+
+	//========할당한 메모리 해제========
+	delete(p);
+	delete(z);
+
+	delete(t_canseeplayer);
+	delete(t_cannotattack);
+	delete(t_moveto);
+	delete(t_canattack);
+	delete(t_attack);
+	delete(t_hasinvestigated);
+	delete(t_nothaslastknownplayerlocation);
 }

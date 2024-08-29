@@ -103,9 +103,6 @@ void Zombie::Attack()
 
 void Zombie::MoveTo()
 {
-	cout << "Zombie \'" << name << "\' moves to Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
-	cout << endl;
-
 	vector<vector<vector<float>>> zl = ZombieLocation;
 	vector<vector<vector<float>>> tl = TargetLocation;
 
@@ -120,7 +117,10 @@ void Zombie::MoveTo()
 
 	// Move To 좌표 값들 float 값으로 바꿔주기
 	// Can See Player 조건값 지우고 클라이언트에서 검사한 값을 서버로 보내주게 조건식 짜기
-
+	
+	cout << endl;
+	cout << "Zombie \'" << name << "\' moves to Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+	cout << endl;
 
 	/*cout << "좀비 " << name << " ";
 	if (zl[0][0][0] < tl[0][0][0]) {
