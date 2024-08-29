@@ -432,14 +432,14 @@ void IOCP_CORE::Zombie_BT_Initialize()
 
 void IOCP_CORE::ServerOn()
 {
-	bServerOn = true;
-
 	cout << endl;
 	float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
 	float z_x = z->ZombieLocation[0][0][0]; float z_y = z->ZombieLocation[0][0][1]; float z_z = z->ZombieLocation[0][0][2];
 	cout << "플레이어의 시작 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 	cout << "좀비의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 	//cout << endl;
+
+	bServerOn = true;
 }
 
 void IOCP_CORE::Zombie_BT_Thread()

@@ -3,8 +3,6 @@
 #include "ZombieController.h"
 
 // BT
-//#include "Zombie.h"
-//#include "Player.h"
 
 #include "Task.h"
 #include "Selector.h"
@@ -20,8 +18,6 @@
 
 
 class ZombieController;
-//class Zombie;
-//class Player;
 
 
 using OVLP_EX = struct Overlap_ex {
