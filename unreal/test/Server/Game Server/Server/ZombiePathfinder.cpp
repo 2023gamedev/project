@@ -50,6 +50,8 @@ bool ZombiePathfinder::LoadPositions()
 
 bool ZombiePathfinder::LoadObstacles()
 {
+    // 장애물 좌표 층별로 추가 필요
+
     string filePathOb = "../../../../Project/ObstacleNodes.txt";
     return LoadFile(filePathOb, obstacles, obstacleSet);
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Common.h"
 #include "ZombieController.h"
+#include "Zombie.h"
+
 
 // BT
 
@@ -144,6 +146,8 @@ private:
 	unsigned int playerIndex{ UINT_MAX };
 
 	ZombieController* zombieclass;
+
+	Zombie* zombie;
 
 
 	int GameTime = 0;

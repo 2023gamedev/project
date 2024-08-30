@@ -51,6 +51,9 @@ extern CharacterDefaultTypeInternal _Character_default_instance_;
 class Character_Attack;
 struct Character_AttackDefaultTypeInternal;
 extern Character_AttackDefaultTypeInternal _Character_Attack_default_instance_;
+class Detected;
+struct DetectedDefaultTypeInternal;
+extern DetectedDefaultTypeInternal _Detected_default_instance_;
 class Equip_Item;
 struct Equip_ItemDefaultTypeInternal;
 extern Equip_ItemDefaultTypeInternal _Equip_Item_default_instance_;
@@ -73,6 +76,7 @@ extern runDefaultTypeInternal _run_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::Character* Arena::CreateMaybeMessage<::Protocol::Character>(Arena*);
 template<> ::Protocol::Character_Attack* Arena::CreateMaybeMessage<::Protocol::Character_Attack>(Arena*);
+template<> ::Protocol::Detected* Arena::CreateMaybeMessage<::Protocol::Detected>(Arena*);
 template<> ::Protocol::Equip_Item* Arena::CreateMaybeMessage<::Protocol::Equip_Item>(Arena*);
 template<> ::Protocol::Time* Arena::CreateMaybeMessage<::Protocol::Time>(Arena*);
 template<> ::Protocol::Zombie* Arena::CreateMaybeMessage<::Protocol::Zombie>(Arena*);
@@ -746,6 +750,176 @@ class ZombieDataList final :
 };
 // -------------------------------------------------------------------
 
+class Detected final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Detected) */ {
+ public:
+  inline Detected() : Detected(nullptr) {}
+  ~Detected() override;
+  explicit PROTOBUF_CONSTEXPR Detected(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Detected(const Detected& from);
+  Detected(Detected&& from) noexcept
+    : Detected() {
+    *this = ::std::move(from);
+  }
+
+  inline Detected& operator=(const Detected& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Detected& operator=(Detected&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Detected& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Detected* internal_default_instance() {
+    return reinterpret_cast<const Detected*>(
+               &_Detected_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(Detected& a, Detected& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Detected* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Detected* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Detected* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Detected>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Detected& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Detected& from) {
+    Detected::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Detected* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.Detected";
+  }
+  protected:
+  explicit Detected(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kZombieidFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
+    kPacketTypeFieldNumber = 3,
+  };
+  // uint32 zombieid = 1;
+  void clear_zombieid();
+  uint32_t zombieid() const;
+  void set_zombieid(uint32_t value);
+  private:
+  uint32_t _internal_zombieid() const;
+  void _internal_set_zombieid(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.Detected)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t zombieid_;
+    uint32_t playerid_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GStruct_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Time final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Time) */ {
  public:
@@ -794,7 +968,7 @@ class Time final :
                &_Time_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(Time& a, Time& b) {
     a.Swap(&b);
@@ -953,7 +1127,7 @@ class Character_Attack final :
                &_Character_Attack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(Character_Attack& a, Character_Attack& b) {
     a.Swap(&b);
@@ -1123,7 +1297,7 @@ class Equip_Item final :
                &_Equip_Item_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(Equip_Item& a, Equip_Item& b) {
     a.Swap(&b);
@@ -1309,7 +1483,7 @@ class run final :
                &_run_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(run& a, run& b) {
     a.Swap(&b);
@@ -1479,7 +1653,7 @@ class jump final :
                &_jump_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(jump& a, jump& b) {
     a.Swap(&b);
@@ -2069,6 +2243,70 @@ inline void ZombieDataList::set_packet_type(uint32_t value) {
 
 // -------------------------------------------------------------------
 
+// Detected
+
+// uint32 zombieid = 1;
+inline void Detected::clear_zombieid() {
+  _impl_.zombieid_ = 0u;
+}
+inline uint32_t Detected::_internal_zombieid() const {
+  return _impl_.zombieid_;
+}
+inline uint32_t Detected::zombieid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Detected.zombieid)
+  return _internal_zombieid();
+}
+inline void Detected::_internal_set_zombieid(uint32_t value) {
+  
+  _impl_.zombieid_ = value;
+}
+inline void Detected::set_zombieid(uint32_t value) {
+  _internal_set_zombieid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Detected.zombieid)
+}
+
+// uint32 playerid = 2;
+inline void Detected::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t Detected::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t Detected::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Detected.playerid)
+  return _internal_playerid();
+}
+inline void Detected::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void Detected::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Detected.playerid)
+}
+
+// uint32 packet_type = 3;
+inline void Detected::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t Detected::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t Detected::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Detected.packet_type)
+  return _internal_packet_type();
+}
+inline void Detected::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void Detected::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Detected.packet_type)
+}
+
+// -------------------------------------------------------------------
+
 // Time
 
 // uint32 timer = 1;
@@ -2400,6 +2638,8 @@ inline void jump::set_packet_type(uint32_t value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
