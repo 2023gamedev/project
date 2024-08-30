@@ -2,14 +2,12 @@
 
 
 
-void ZombiePathfinder::Run()
+void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t)
 {
     DetermineFloor();
     if (LoadPositions()) {
-        //PrintPositions();
         if (LoadObstacles()) {
-            //PrintObstacles();
-            FindPath();
+            FindPath(t);
         }
         else {
             cerr << "Failed to load obstacles." << endl;
@@ -100,13 +98,15 @@ void ZombiePathfinder::PrintObstacles()
     }
 }
 
-void ZombiePathfinder::FindPath()
+void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
 {
     vector<Node> path = AStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
     if (!path.empty()) {
         cout << "Path found:\n";
         for (const auto& node : path) {
             cout << "(" << node.x << ", " << node.y << ", " << node.z << ")\n";
+
+            t.emplace_back(make_tuple(node.x, node.y, node.z));
         }
     }
     else {
