@@ -15,15 +15,17 @@ Zombie::Zombie()
 
 	path = vector<tuple<float, float, float>>{};
 
-	name = string{ "" };
+	//name = string{ "" };
+	ZombieData.zombieID = 0;
 
-	ZombieLocation = vector<vector<vector<float>>>{ {{0, 0, 0}} };
+	//ZombieLocation = vector<vector<vector<float>>>{ {{0, 0, 0}} };
+	ZombieData.x = 0;	ZombieData.y = 0;	ZombieData.z = 0; 
 
-	ZombieOriginLocation = ZombieLocation;
+	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	DistanceToPlayer = 1000.f;
 
-	TargetLocation = ZombieLocation;
+	TargetLocation = ZombieOriginLocation;
 
 	KnewPlayerLocation = false;
 
@@ -36,7 +38,7 @@ Zombie::Zombie()
 	targetType = Zombie::TARGET::ORIGIN;
 }
 
-Zombie::Zombie(Player* p, string n, vector<vector<vector<float>>> zl)
+Zombie::Zombie(int z_ID, Player* p, string n, vector<vector<vector<float>>> zl)
 {
 	Z_BT = new vector<unique_ptr<Task>>;
 
@@ -44,17 +46,19 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<float>>> zl)
 
 	path = vector<tuple<float, float, float>>{};
 
-	name = n;
+	//name = n;
+	ZombieData.zombieID = z_ID;
 
-	ZombieLocation = zl;
+	//ZombieLocation = zl;
+	ZombieData.x = zl[0][0][0];	ZombieData.y = zl[0][0][1];	ZombieData.z = zl[0][0][2];
 
-	ZombieOriginLocation = ZombieLocation;
+	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	vector<vector<vector<float>>> pl = p->PlayerLocation;
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 
-	TargetLocation = ZombieLocation;
+	TargetLocation = ZombieOriginLocation;
 
 	KnewPlayerLocation = false;
 
@@ -70,7 +74,7 @@ Zombie::Zombie(Player* p, string n, vector<vector<vector<float>>> zl)
 
 void Zombie::SetDistance()
 { 
-	vector<vector<vector<float>>> zl = ZombieLocation;
+	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 	vector<vector<vector<float>>> pl = PL->PlayerLocation;
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
@@ -101,13 +105,13 @@ void Zombie::SetTargetLocation(TARGET t)
 
 void Zombie::Attack()
 {
-	cout << "Zombie \'" << name << "\' attacks Player!" << endl;
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어를 공격하였습니다!" << endl;
 	cout << endl;
 }
 
 void Zombie::MoveTo()
 {
-	vector<vector<vector<float>>> zl = ZombieLocation;
+	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 	vector<vector<vector<float>>> tl = TargetLocation;
 
 	//===================================
@@ -115,7 +119,7 @@ void Zombie::MoveTo()
 	pathfinder.Run(path);
 
 	cout << endl;
-	cout << "좀비가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
 
 	//===================================
 
@@ -127,14 +131,15 @@ void Zombie::MoveTo()
 	// Can See Player 조건식 지우고 클라이언트에서 검사한 값을 서버로 보내주고 이를 받아서(zom.KnewPlayerLocation) 조건 검사하는 조건식 짜기
 
 	cout << endl;
-	cout << "좀비 \'" << name << "\' 의 타겟 좌표[최종 목표 지점] ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
 	cout << endl;
 
 
 	//좀비가 목적지에 도착하면
-	if (ZombieLocation == TargetLocation) {
+	zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+	if (zl == TargetLocation) {
 
-		cout << "좀비 \'" << name << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
+		cout << "좀비 \#'" << ZombieData.zombieID << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
 		cout << endl;
 
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
@@ -163,6 +168,6 @@ void Zombie::MoveTo()
 
 void Zombie::Wait()
 {
-	//cout << "Zombie \'" << name << "\' wait for delay." << endl;
+	//cout << "Zombie \'#" << ZombieData.zombieID << "\' wait for delay." << endl;
 	//cout << endl;
 }

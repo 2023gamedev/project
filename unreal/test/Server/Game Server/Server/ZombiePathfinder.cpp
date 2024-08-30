@@ -6,7 +6,9 @@ void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t)
 {
     DetermineFloor();
     if (LoadPositions()) {
+        //PrintPositions();
         if (LoadObstacles()) {
+            //PrintObstacles();
             FindPath(t);
         }
         else {

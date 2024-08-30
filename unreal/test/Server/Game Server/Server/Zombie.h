@@ -47,9 +47,9 @@ public:
     const float CanHearDistance = 30.f;
 
 
-    string name;    // 지우기
+    //string name;    // 지우기
 
-    vector<vector<vector<float>>> ZombieLocation;   // 지우기
+    //vector<vector<vector<float>>> ZombieLocation;   // 지우기
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이타들 구조체
 
@@ -72,7 +72,7 @@ public:
 
     Zombie();
 
-    Zombie(Player* p, string n, vector<vector<vector<float>>> zl);
+    Zombie(int z_ID, Player* p, string n, vector<vector<vector<float>>> zl);
 
 
     void SetDistance();

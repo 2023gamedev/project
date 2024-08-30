@@ -371,7 +371,7 @@ void IOCP_CORE::Zombie_BT_Initialize()
 	//플레이어 인스턴스
 	p = new Player(pl);
 	//좀비 인스턴스
-	z.emplace_back(Zombie(p, "zombieee", zl));
+	z.emplace_back(Zombie(0, p, "zombieee", zl));
 
 	//======[Task] 메모리 할당======
 
@@ -434,9 +434,9 @@ void IOCP_CORE::ServerOn()
 {
 	cout << endl;
 	float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
-	float z_x = z[0].ZombieLocation[0][0][0]; float z_y = z[0].ZombieLocation[0][0][1]; float z_z = z[0].ZombieLocation[0][0][2];
+	float z_x = z[0].ZombieData.x;			float z_y = z[0].ZombieData.y;			float z_z = z[0].ZombieData.z;
 	cout << "플레이어의 시작 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-	cout << "좀비의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+	cout << "좀비 \'#" << z[0].ZombieData.zombieID << "\' 의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 	//cout << endl;
 
 	bServerOn = true;
@@ -505,9 +505,9 @@ void IOCP_CORE::Zombie_BT_Thread()
 		}
 
 		float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
-		float z_x = z[0].ZombieLocation[0][0][0]; float z_y = z[0].ZombieLocation[0][0][1]; float z_z = z[0].ZombieLocation[0][0][2];
-		cout << "플레이어의 현제 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-		cout << "좀비의 현제 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+		float z_x = z[0].ZombieData.x;			float z_y = z[0].ZombieData.y;			float z_z = z[0].ZombieData.z;
+		cout << "플레이어의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+		cout << "좀비 \'#" << z[0].ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 		cout << endl;
 
 		//콘솔창에서 한 싸이클씩 돌아가게
@@ -524,7 +524,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 		p_x = p->PlayerLocation[0][0][0]; p_y = p->PlayerLocation[0][0][1]; p_z = p->PlayerLocation[0][0][2];
 		cout << "플레이어의 이전 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-		cout << "좀비의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+		cout << "좀비 \'#" << z[0].ZombieData.zombieID << "\' 의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 		//cout << endl;
 	}
 
