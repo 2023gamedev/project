@@ -32,6 +32,12 @@ message ZombieDataList {
     uint32 packet_type = 3;
 }
 
+message Detected {
+    uint32 zombieid = 1;
+    uint32 playerid = 2;
+    uint32 packet_type = 3;
+}
+
 message Time {
     uint32 timer = 1;
     uint32 packet_type = 3;

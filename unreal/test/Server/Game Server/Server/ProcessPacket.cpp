@@ -3,6 +3,7 @@
 #include"iocpServerClass.h"
 #include "algorithm"
 #include "ZombieController.h"
+#include "Zombie.h"
 
 bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     // g_players에서 클라이언트 정보 검색
@@ -163,6 +164,16 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             }
         }
         return true;
+    }
+
+    case 9:
+    {
+        printf("[ No. %3u ] Detected Packet Received !!\n", id);
+        Protocol::Detected Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+        
+        //여기서 패킷 처리 추가
+
     }
 
     default: {

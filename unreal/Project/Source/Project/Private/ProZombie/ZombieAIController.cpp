@@ -31,6 +31,8 @@ AZombieAIController::AZombieAIController()
 		AIBehavior = BTObject.Object;
 	}
 
+	UE_LOG(LogNet, Display, TEXT("ZombieAIController On"));
+
 }
 
 void AZombieAIController::BeginPlay()
@@ -136,6 +138,9 @@ void AZombieAIController::Tick(float DeltaTime)
 			//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
 			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
 			GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
+
+			ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
+			Send_Detected(BaseCharacter);
 		}
 		else
 		{
@@ -145,6 +150,23 @@ void AZombieAIController::Tick(float DeltaTime)
 	//}
 
 	//CheckAndSendMovement();
+}
+
+void AZombieAIController::Send_Detected(ABaseCharacter* BaseCharacter)
+{
+	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
+	ZombieId = ZombiePawn->GetZombieId();
+	uint32 PlayerId = BaseCharacter->GetPlayerId();
+
+	Protocol::Detected packet;
+	packet.set_zombieid(ZombieId);
+	packet.set_playerid(PlayerId);
+	packet.set_packet_type(9);
+
+	std::string serializedData;
+	packet.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
 void AZombieAIController::CheckAndSendMovement()

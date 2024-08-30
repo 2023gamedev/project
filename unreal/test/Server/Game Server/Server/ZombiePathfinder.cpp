@@ -52,7 +52,15 @@ bool ZombiePathfinder::LoadPositions()
 
 bool ZombiePathfinder::LoadObstacles()
 {
-    string filePathOb = "../../../../Project/ObstacleNodes.txt";
+    string filePathOb;
+    switch (floor) {
+    case FLOOR::FLOOR_B2: filePathOb = "../../../../Project/OB2.txt"; break;
+    case FLOOR::FLOOR_B1: filePathOb = "../../../../Project/OB1.txt"; break;
+    case FLOOR::FLOOR_F1: filePathOb = "../../../../Project/OF1.txt"; break;
+    case FLOOR::FLOOR_F2: filePathOb = "../../../../Project/OF2.txt"; break;
+    case FLOOR::FLOOR_F3: filePathOb = "../../../../Project/OF3.txt"; break;
+    default: cout << "FILE ERROR!!!!" << endl; return false;
+    }
     return LoadFile(filePathOb, obstacles, obstacleSet);
 }
 

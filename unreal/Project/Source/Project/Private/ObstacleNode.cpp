@@ -13,6 +13,12 @@ void AObstacleNode::BeginPlay()
 {
     Super::BeginPlay();
 
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AObstacleNode::GenerateNodesAndEdges, 1.0f, false);
+}
+
+void AObstacleNode::GenerateNodesAndEdges()
+{
     GenerateEdges(GenerateNodes(GetWorld(), _GridSize), _GridSize);
     UE_LOG(LogTemp, Warning, TEXT("DebugTest"));
 }

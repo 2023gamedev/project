@@ -31,6 +31,8 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	void Send_Detected(ABaseCharacter* BaseCharacter);
+
 	void CheckAndSendMovement();
 
 	void SetStartLocationValue(FVector startlocation);
