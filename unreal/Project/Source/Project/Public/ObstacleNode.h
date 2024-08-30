@@ -16,6 +16,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	void GenerateNodesAndEdges();
 	virtual void Tick(float DeltaTime) override;
 
 public:
