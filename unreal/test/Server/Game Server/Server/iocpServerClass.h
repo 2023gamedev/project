@@ -69,8 +69,8 @@ public:
 
 	void Timer_Thread();
 	void Zombie_BT_Thread();
-
-	Player_Location playerlocation;
+	
+	//Player_Location playerlocation;
 
 	void Zombie_BT_Initialize();
 	void ServerOn();
@@ -81,9 +81,9 @@ public:
 	bool bServerOn;
 
 	//플레이어 인스턴스
-	Player* p;
-	//좀비 인스턴스
-	Zombie* z;
+	Player* p;				// 지우기
+	//좀비 벡터
+	vector<Zombie> z;
 
 	//<Selector> 선언 
 

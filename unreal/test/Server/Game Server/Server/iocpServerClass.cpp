@@ -371,7 +371,7 @@ void IOCP_CORE::Zombie_BT_Initialize()
 	//플레이어 인스턴스
 	p = new Player(pl);
 	//좀비 인스턴스
-	z = new Zombie(p, "zombieee", zl);
+	z.emplace_back(Zombie(p, "zombieee", zl));
 
 	//======[Task] 메모리 할당======
 
@@ -434,7 +434,7 @@ void IOCP_CORE::ServerOn()
 {
 	cout << endl;
 	float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
-	float z_x = z->ZombieLocation[0][0][0]; float z_y = z->ZombieLocation[0][0][1]; float z_z = z->ZombieLocation[0][0][2];
+	float z_x = z[0].ZombieLocation[0][0][0]; float z_y = z[0].ZombieLocation[0][0][1]; float z_z = z[0].ZombieLocation[0][0][2];
 	cout << "플레이어의 시작 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 	cout << "좀비의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 	//cout << endl;
@@ -459,28 +459,28 @@ void IOCP_CORE::Zombie_BT_Thread()
 		cout << endl;
 
 		//좀비와 플레이어의 거리 갱신
-		z->SetDistance();
+		z[0].SetDistance();
 
 		//<Selector-Detect> 실행
-		result = sel_detect.Sel_Detect(*z);
+		result = sel_detect.Sel_Detect(z[0]);
 
 		//<Selector-Detect> 결과 값에 따라 다음 Task들 실행
 		if (result == "CanSeePlayer-Succeed") {
 
 			//<Selector-CanSeePlayer> 실행
-			result = sel_canseeplayer.Sel_CanSeePlayer(*z);
+			result = sel_canseeplayer.Sel_CanSeePlayer(z[0]);
 
 			//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 실행
 			if (result == "CanAttack-Succeed") {
 
 				//{Sequence-CanAttack} 실행
-				result = seq_canattack.Seq_CanAttack(*z);
+				result = seq_canattack.Seq_CanAttack(z[0]);
 
 			}
 			else if (result == "CanNotAttack-Succeed") {
 
 				//{Sequence-CanNotAttack} 실행
-				result = seq_cannotattack.Seq_CanNotAttack(*z);
+				result = seq_cannotattack.Seq_CanNotAttack(z[0]);
 
 			}
 			else {	//result == "Fail"
@@ -491,13 +491,13 @@ void IOCP_CORE::Zombie_BT_Thread()
 		else if (result == "HasInvestigated-Succeed") {
 
 			//{Sequence-HasInvestigated} 실행
-			result = seq_hasinvestigated.Seq_HasInvestigated(*z);
+			result = seq_hasinvestigated.Seq_HasInvestigated(z[0]);
 
 		}
 		else if (result == "NotHasLastKnownPlayerLocation-Succeed") {
 
 			//{Sequence-NotHasLastKnownPlayerLocation} 실행
-			result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*z);
+			result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(z[0]);
 
 		}
 		else {	//result == "Fail"
@@ -505,7 +505,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 		}
 
 		float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
-		float z_x = z->ZombieLocation[0][0][0]; float z_y = z->ZombieLocation[0][0][1]; float z_z = z->ZombieLocation[0][0][2];
+		float z_x = z[0].ZombieLocation[0][0][0]; float z_y = z[0].ZombieLocation[0][0][1]; float z_z = z[0].ZombieLocation[0][0][2];
 		cout << "플레이어의 현제 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 		cout << "좀비의 현제 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 		cout << endl;
@@ -533,7 +533,6 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 	//========할당한 메모리 해제========
 	delete(p);
-	delete(z);
 
 	delete(t_canseeplayer);
 	delete(t_cannotattack);

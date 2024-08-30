@@ -134,7 +134,7 @@ void Zombie::MoveTo()
 	//좀비가 목적지에 도착하면
 	if (ZombieLocation == TargetLocation) {
 
-		cout << "Zombie \'" << name << "\' arrived at Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+		cout << "좀비 \'" << name << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
 		cout << endl;
 
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
