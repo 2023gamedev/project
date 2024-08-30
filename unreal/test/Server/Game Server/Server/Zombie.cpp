@@ -38,7 +38,7 @@ Zombie::Zombie()
 	targetType = Zombie::TARGET::ORIGIN;
 }
 
-Zombie::Zombie(int z_ID, Player* p, string n, vector<vector<vector<float>>> zl)
+Zombie::Zombie(int z_ID, Player* p, vector<vector<vector<float>>> zl)
 {
 	Z_BT = new vector<unique_ptr<Task>>;
 
@@ -69,6 +69,15 @@ Zombie::Zombie(int z_ID, Player* p, string n, vector<vector<vector<float>>> zl)
 	speed = 1;
 
 	targetType = Zombie::TARGET::ORIGIN;
+}
+
+Zombie::~Zombie()
+{
+	//delete(Z_BT);
+	
+	//delete(PL);
+
+	//여기 cout 해서 출력보면 왜 zombie 클래스가 생성도 되기 전인데 여러번 미리 불림?! -> 그래서 할당된 메모리도 없는데 지울려 해서 에러 -> 이유 모르겠음 그냥
 }
 
 
@@ -119,8 +128,9 @@ void Zombie::MoveTo()
 	pathfinder.Run(path);
 
 	cout << endl;
-	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
-
+	if(path.size() != 0)
+		cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
+	
 	//===================================
 
 	// 장애물에서 장애물 근처 초록색 좌표 추가해서 B1 이런데 추가하기

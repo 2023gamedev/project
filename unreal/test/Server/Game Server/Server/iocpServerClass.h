@@ -81,9 +81,9 @@ public:
 	bool bServerOn;
 
 	//플레이어 인스턴스
-	Player* p;				// 지우기
+	Player* player;				// 지우기
 	//좀비 벡터
-	vector<Zombie> z;
+	vector<Zombie> zombie;
 
 	//<Selector> 선언 
 

@@ -72,7 +72,9 @@ public:
 
     Zombie();
 
-    Zombie(int z_ID, Player* p, string n, vector<vector<vector<float>>> zl);
+    Zombie(int z_ID, Player* p, vector<vector<vector<float>>> zl);
+
+    ~Zombie();
 
 
     void SetDistance();

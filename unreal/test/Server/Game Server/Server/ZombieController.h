@@ -1,18 +1,18 @@
 #pragma once
 #include "Common.h"
 #include "iocpServerClass.h"
-//#include "Zombie.h"
+#include "Zombie.h"
 
 class IOCP_CORE;
 
-struct ZombieData {
-	int zombieID;
-	float x, y, z;
-	float pitch, yaw, roll;
-	int zombietype;
-	int patroltype;
-	float patrolrange;
-};
+//struct ZombieData {
+//	int zombieID;
+//	float x, y, z;
+//	float pitch, yaw, roll;
+//	int zombietype;
+//	int patroltype;
+//	float patrolrange;
+//};
 
 struct Vector3 {
 	float X;
@@ -49,18 +49,19 @@ enum class EZombiePatrol
 class ZombieController
 {
 public:
-	ZombieController();
+	ZombieController(IOCP_CORE& mainServer);
 	~ZombieController();
 
-	IOCP_CORE* iocpServer;
+	IOCP_CORE* iocpServer;		// 이거 Main.cpp에서 선언한 IOCP_CORE 변수랑 같은 건지 물어보기!!! => 만약 맞다면 'IOCP_CORE& mainServer' 로 인자 선언한 함수들 모두 고치기!
 
-	void SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
+	void SpawnZombies(IOCP_CORE& mainServer, int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
 
-	vector<ZombieData> zombiedata;
+	//vector<ZombieData> zombiedata;
 
 	void removeZombie(int zombieID);
 
-	void SendZombieData(int id);
-	void SendZombieUpdate(const ZombieData& z);
+	void SendZombieData(IOCP_CORE& mainServer, int id);
+	//void SendZombieUpdate(const ZombieData& z);
+	void SendZombieUpdate(const Zombie_Data& z);
 };
 

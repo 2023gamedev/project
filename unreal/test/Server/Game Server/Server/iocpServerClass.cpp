@@ -20,7 +20,7 @@ IOCP_CORE::IOCP_CORE()
 
 	//Nodes = nodeclass->LoadNodesFromFile();
 
-	zombieclass = new ZombieController();
+	zombieclass = new ZombieController(*this);
 
 	IOCP_GetServerIpAddress();
 	CheckThisCPUcoreCount();
@@ -364,14 +364,15 @@ void IOCP_CORE::Zombie_BT_Initialize()
 	//======좀비, 플레이어 초기화======
 
 	//플레이어 초기 위치
-	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{2299.f, 3857.f, 952.f}} };
+	//vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{2299.f, 3857.f, 952.f}} };
 	//좀비 초기 위치
-	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{988.f, 2964.f, 952.f}} };
+	//vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{988.f, 2964.f, 952.f}} };
 
 	//플레이어 인스턴스
-	p = new Player(pl);
+	//player = new Player(pl);
+	player = new Player;
 	//좀비 인스턴스
-	z.emplace_back(Zombie(0, p, "zombieee", zl));
+	//zombie.emplace_back(Zombie(0, player, zl));
 
 	//======[Task] 메모리 할당======
 
@@ -433,10 +434,10 @@ void IOCP_CORE::Zombie_BT_Initialize()
 void IOCP_CORE::ServerOn()
 {
 	cout << endl;
-	float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
-	float z_x = z[0].ZombieData.x;			float z_y = z[0].ZombieData.y;			float z_z = z[0].ZombieData.z;
+	float p_x = player->PlayerLocation[0][0][0];	float p_y = player->PlayerLocation[0][0][1];	float p_z = player->PlayerLocation[0][0][2];
+	//float z_x = z[0].ZombieData.x;				float z_y = z[0].ZombieData.y;					float z_z = z[0].ZombieData.z;
 	cout << "플레이어의 시작 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-	cout << "좀비 \'#" << z[0].ZombieData.zombieID << "\' 의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+	//cout << "좀비 \'#" << z[0].ZombieData.zombieID << "\' 의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 	//cout << endl;
 
 	bServerOn = true;
@@ -454,62 +455,77 @@ void IOCP_CORE::Zombie_BT_Thread()
 		if (bServerOn == false)	
 			continue;
 
-		cout << endl;
-		cout << "========BT 실행==========" << endl;
-		cout << endl;
+		//좀비가 있을때 BT 실행
+		for (auto& zom : zombie) {
 
-		//좀비와 플레이어의 거리 갱신
-		z[0].SetDistance();
+			cout << endl;
+			cout << "========BT 실행==========" << endl;
+			cout << endl;
 
-		//<Selector-Detect> 실행
-		result = sel_detect.Sel_Detect(z[0]);
+			//좀비와 플레이어의 거리 갱신
+			zom.SetDistance();
 
-		//<Selector-Detect> 결과 값에 따라 다음 Task들 실행
-		if (result == "CanSeePlayer-Succeed") {
+			//<Selector-Detect> 실행
+			result = sel_detect.Sel_Detect(zom);
 
-			//<Selector-CanSeePlayer> 실행
-			result = sel_canseeplayer.Sel_CanSeePlayer(z[0]);
+			//<Selector-Detect> 결과 값에 따라 다음 Task들 실행
+			if (result == "CanSeePlayer-Succeed") {
 
-			//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 실행
-			if (result == "CanAttack-Succeed") {
+				//<Selector-CanSeePlayer> 실행
+				result = sel_canseeplayer.Sel_CanSeePlayer(zom);
 
-				//{Sequence-CanAttack} 실행
-				result = seq_canattack.Seq_CanAttack(z[0]);
+				//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 실행
+				if (result == "CanAttack-Succeed") {
+
+					//{Sequence-CanAttack} 실행
+					result = seq_canattack.Seq_CanAttack(zom);
+
+				}
+				else if (result == "CanNotAttack-Succeed") {
+
+					//{Sequence-CanNotAttack} 실행
+					result = seq_cannotattack.Seq_CanNotAttack(zom);
+
+				}
+				else {	//result == "Fail"
+					cout << "EEEERRRROOOOOORRRR" << endl;
+				}
 
 			}
-			else if (result == "CanNotAttack-Succeed") {
+			else if (result == "HasInvestigated-Succeed") {
 
-				//{Sequence-CanNotAttack} 실행
-				result = seq_cannotattack.Seq_CanNotAttack(z[0]);
+				//{Sequence-HasInvestigated} 실행
+				result = seq_hasinvestigated.Seq_HasInvestigated(zom);
+
+			}
+			else if (result == "NotHasLastKnownPlayerLocation-Succeed") {
+
+				//{Sequence-NotHasLastKnownPlayerLocation} 실행
+				result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(zom);
 
 			}
 			else {	//result == "Fail"
 				cout << "EEEERRRROOOOOORRRR" << endl;
 			}
 
+			//float p_x = player->PlayerLocation[0][0][0];	float p_y = player->PlayerLocation[0][0][1];	float p_z = player->PlayerLocation[0][0][2];
+			float z_x = zom.ZombieData.x;					float z_y = zom.ZombieData.y;					float z_z = zom.ZombieData.z;
+			//cout << "플레이어의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+			cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+			cout << endl;
+
+
+			//===============좀비 이동 코드===============
+
+			//============================================
+			
+			//p_x = player->PlayerLocation[0][0][0]; p_y = player->PlayerLocation[0][0][1]; p_z = player->PlayerLocation[0][0][2];
+			//cout << "플레이어의 이전 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+			//cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+			//cout << endl;
 		}
-		else if (result == "HasInvestigated-Succeed") {
 
-			//{Sequence-HasInvestigated} 실행
-			result = seq_hasinvestigated.Seq_HasInvestigated(z[0]);
-
-		}
-		else if (result == "NotHasLastKnownPlayerLocation-Succeed") {
-
-			//{Sequence-NotHasLastKnownPlayerLocation} 실행
-			result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(z[0]);
-
-		}
-		else {	//result == "Fail"
-			cout << "EEEERRRROOOOOORRRR" << endl;
-		}
-
-		float p_x = p->PlayerLocation[0][0][0]; float p_y = p->PlayerLocation[0][0][1]; float p_z = p->PlayerLocation[0][0][2];
-		float z_x = z[0].ZombieData.x;			float z_y = z[0].ZombieData.y;			float z_z = z[0].ZombieData.z;
-		cout << "플레이어의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-		cout << "좀비 \'#" << z[0].ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
-		cout << endl;
-
+		
 		//콘솔창에서 한 싸이클씩 돌아가게
 		cout << "(계속 진행)아무거나 입력 후 엔터: ";
 		char one_cycle;
@@ -522,17 +538,13 @@ void IOCP_CORE::Zombie_BT_Thread()
 		cin.ignore(1000, '\n');
 		cout << endl;
 
-		p_x = p->PlayerLocation[0][0][0]; p_y = p->PlayerLocation[0][0][1]; p_z = p->PlayerLocation[0][0][2];
-		cout << "플레이어의 이전 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-		cout << "좀비 \'#" << z[0].ZombieData.zombieID << "\' 의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
-		//cout << endl;
 	}
 
 	//==========================
 
 
 	//========할당한 메모리 해제========
-	delete(p);
+	delete(player);
 
 	delete(t_canseeplayer);
 	delete(t_cannotattack);
