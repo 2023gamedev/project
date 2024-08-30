@@ -37,7 +37,7 @@ public:
     ZombiePathfinder(float startX, float startY, float startZ, float goalX, float goalY, float goalZ)
         : startX(startX), startY(startY), startZ(startZ), goalX(goalX), goalY(goalY), goalZ(goalZ) {}
 
-    void Run();
+    void Run(vector<tuple<float, float, float>>& t);
 
 private:
     float startX, startY, startZ;
@@ -62,7 +62,7 @@ private:
 
     void PrintObstacles();
 
-    void FindPath();
+    void FindPath(vector<tuple<float, float, float>>& t);
 
     vector<Node> FindNeighbors(const Node& current);
 

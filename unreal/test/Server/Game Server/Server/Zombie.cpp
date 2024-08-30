@@ -112,44 +112,13 @@ void Zombie::MoveTo()
 
 	//===================================
 	ZombiePathfinder pathfinder(zl[0][0][0], zl[0][0][1], zl[0][0][2], tl[0][0][0], tl[0][0][1], tl[0][0][2]);
-	pathfinder.Run();
+	pathfinder.Run(path);
 
-	//==================작업 충돌을 피하기 위해 ZombiePathfinder.cpp 는 건들이지 않고, 다음과 같이 여기서 작업함 -> 나중에 옮기고 합치기
+	cout << endl;
+	cout << "좀비가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
 
-	/*pathfinder.Run(path);
+	//===================================
 
-	void ZombiePathfinder::Run(vector<tuple<float, float, float>> t)
-	{
-		DetermineFloor();
-		if (LoadPositions()) {
-			if (LoadObstacles()) {
-				FindPath(t);
-			}
-			else {
-				cerr << "Failed to load obstacles." << endl;
-			}
-		}
-	}
-
-	void ZombiePathfinder::FindPath(vector<tuple<float, float, float>> t)
-	{
-		vector<Node> path = AStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
-		if (!path.empty()) {
-			cout << "Path found:\n";
-			for (const auto& node : path) {
-				cout << "(" << node.x << ", " << node.y << ", " << node.z << ")\n";
-
-				t.emplace_back(make_tuple(node.x, node.y, node.z));
-			}
-		}
-		else {
-			cout << "No path found.\n";
-		}
-	}*/
-
-	//==================
-
-	// PathFinder에서 이동하는 처음 좌표 하나 보내주기(리턴값)
 	// 장애물에서 장애물 근처 초록색 좌표 추가해서 B1 이런데 추가하기
 
 	//===================================
@@ -157,17 +126,15 @@ void Zombie::MoveTo()
 	// PathFinder로부터 경로 리스트 쭉 받고, 이를 가지고 언리얼에서 돌아가는 MoveTo와 유사하게 직접 여기서 움직임 계산하고 위치를 이동시켜서, 바뀐 좌표를 클라에게 쏘게 하는 방식 *(회의 필요) 
 	// Can See Player 조건식 지우고 클라이언트에서 검사한 값을 서버로 보내주고 이를 받아서(zom.KnewPlayerLocation) 조건 검사하는 조건식 짜기
 
-
 	cout << endl;
-	cout << "Zombie \'" << name << "\' moves to Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+	cout << "좀비 \'" << name << "\' 의 타겟 좌표[최종 목표 지점] ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
 	cout << endl;
-
 
 
 	//좀비가 목적지에 도착하면
 	if (ZombieLocation == TargetLocation) {
 
-		cout << "Zombie \'" << name << "\' arrived to Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+		cout << "Zombie \'" << name << "\' arrived at Target ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
 		cout << endl;
 
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
