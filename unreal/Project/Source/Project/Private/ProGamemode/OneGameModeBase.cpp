@@ -1075,6 +1075,8 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             // 새 좀비에 ZombieID 설정 및 ZombieMap에 추가
             NewZombie->SetZombieId(ZombieID);
             ZombieMap.Add(ZombieID, NewZombie);
+
+            NewZombie->SpawnDefaultController();
             UE_LOG(LogTemp, Warning, TEXT("Spawned new Zombie ID: %d"), ZombieID);
         }
         else
