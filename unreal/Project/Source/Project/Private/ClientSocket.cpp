@@ -231,6 +231,30 @@ uint32 ClientSocket::Run()
 						}
 						break;
 					}
+					case 10:
+					{
+						Protocol::ZombiePath zombiepath;
+						if (zombiepath.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							ZombiePath localZombiePath;
+
+							localZombiePath.ZombieId = zombiepath.zombieid();
+							// 프로토콜 버퍼의 path 값을 localZombiePath의 Path 벡터에 추가
+							for (const auto& path : zombiepath.path())
+							{
+								// Vector3를 std::tuple<float, float, float>로 변환하여 추가
+								localZombiePath.Path.emplace_back(path.x(), path.y(), path.z());
+							}
+
+							// 위치 값도 추가
+							localZombiePath.Location = FVector(zombiepath.location().x(), zombiepath.location().y(), zombiepath.location().z());
+
+							// 큐에 ZombiePath 객체를 추가
+							Q_path.push(localZombiePath);
+							UE_LOG(LogNet, Display, TEXT("ZombiePath recv: %d"), localZombiePath.ZombieId);
+						}
+						break;
+					}
 
 					buffer.clear();
 					}

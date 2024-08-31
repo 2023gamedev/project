@@ -6,12 +6,14 @@
 
 #include "Task.h"
 #include "Player.h"
+#include "iocpServerClass.h"
 
 using namespace std;
 
 
 class Task;
 class Player;
+class IOCP_CORE;
 
 struct Zombie_Data {
     int zombieID;
@@ -35,6 +37,8 @@ public:
         INVESTIGATED,
         ORIGIN
     };
+
+    IOCP_CORE* iocpServer;
                                             
 
     Player* PL; //일단 싱글 플레이어 게임으로 산정 => 플레이어들 정보 변수 iocpServerClass.h 에 전역으로 선언 되있음 => 나중에 삭제하고 코드들 수정 몇개 해야함

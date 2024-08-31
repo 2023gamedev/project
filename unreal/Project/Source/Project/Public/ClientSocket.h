@@ -112,6 +112,18 @@ struct CharacterSelect
 		: PlayerId(InPlayerId), Character_type(InCharacter_type) {}
 };
 
+struct ZombiePath
+{
+	uint32 ZombieId;
+	std::vector<std::tuple<float, float, float>> Path;
+	FVector Location;
+
+	ZombiePath() : ZombieId(0), Path(), Location(FVector::ZeroVector) {}
+
+	ZombiePath(uint32 InZombieId, const std::vector<std::tuple<float, float, float>>& InPath, const FVector& InLocation)
+		: ZombieId(InZombieId), Path(InPath), Location(InLocation) {}
+};
+
 
 class UProGameInstance;
 
@@ -133,6 +145,7 @@ public:
 	Concurrency::concurrent_queue<PlayerRun> Q_run;
 	Concurrency::concurrent_queue<PlayerJump> Q_jump;
 	Concurrency::concurrent_queue<CharacterSelect> Q_select;
+	Concurrency::concurrent_queue<ZombiePath> Q_path;
 
 
 	virtual bool Init() override;

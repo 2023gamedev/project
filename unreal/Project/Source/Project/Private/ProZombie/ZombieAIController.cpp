@@ -139,6 +139,7 @@ void AZombieAIController::Tick(float DeltaTime)
 			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
 			GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
 
+			// 감지한 좀비와 플레이어 아이디 전송
 			ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
 			Send_Detected(BaseCharacter);
 		}

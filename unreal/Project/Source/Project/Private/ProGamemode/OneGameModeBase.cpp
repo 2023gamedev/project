@@ -148,6 +148,7 @@ void AOneGameModeBase::BeginPlay()
     SpawnInterItem(7, "RoofTopDoorActor");
 
 
+    ZombieMap.Empty(); // ZombieMap 초기화
 
     // BeginPlay에서 SpawnZombies 호출
 
@@ -1034,15 +1035,19 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
     }
 
     TSubclassOf<ABaseZombie> ZombieClass = nullptr;
+    TSubclassOf<AZombieAIController> ZombieAIClass = nullptr;
 
     if (ZombieType == 0) {
         ZombieClass = ANormalZombie::StaticClass();
+        ZombieAIClass = AZombieAIController::StaticClass();
     }
     else if (ZombieType == 1) {
         ZombieClass = AShoutingZombie::StaticClass();
+        ZombieAIClass = AShoutingZombieAIController::StaticClass();
     }
     else if (ZombieType == 2) {
         ZombieClass = ARunningZombie::StaticClass();
+        ZombieAIClass = ARunningZombieAIController::StaticClass();
     }
 
 
@@ -1076,8 +1081,18 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             NewZombie->SetZombieId(ZombieID);
             ZombieMap.Add(ZombieID, NewZombie);
 
-            NewZombie->SpawnDefaultController();
             UE_LOG(LogTemp, Warning, TEXT("Spawned new Zombie ID: %d"), ZombieID);
+
+            AZombieAIController* AIZombieController = World->SpawnActor<AZombieAIController>(ZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+            if (AIZombieController)
+            {
+                AIZombieController->Possess(NewZombie);
+                UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
+            }
+            else
+            {
+                UE_LOG(LogTemp, Error, TEXT("Failed to spawn AI Controller for Zombie ID: %d"), ZombieID);
+            }
         }
         else
         {

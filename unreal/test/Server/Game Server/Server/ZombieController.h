@@ -47,8 +47,6 @@ public:
 	IOCP_CORE* iocpServer;
 	void SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
 
-	void removeZombie(int zombieID);
-
 	void SendZombieData(int id);
 	void SendZombieUpdate(const Zombie_Data& z);
 };

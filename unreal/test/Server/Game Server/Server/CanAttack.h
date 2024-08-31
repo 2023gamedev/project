@@ -3,8 +3,11 @@
 #include <iostream>
 
 #include "Task.h"
+#include "Zombie.h"
 
 using namespace std;
+
+class Zombie;
 
 
 class TCanAttack : public Task {
