@@ -172,7 +172,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Protocol::Detected Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         
-        //여기서 패킷 처리 추가
+        zombie[Packet.zombieid()].KnewPlayerLocation = true;
+        //Packet.playerid()
 
     }
 

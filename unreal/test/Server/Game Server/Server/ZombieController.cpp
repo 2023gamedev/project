@@ -103,7 +103,7 @@ void ZombieController::SendZombieData(IOCP_CORE& mainServer, int id)
 {
     Protocol::ZombieDataList zombieDataList;
 
-    for (const auto& z : mainServer.zombie) {
+    for (const auto& z : iocpServer->zombie) {
         Protocol::Zombie* zombie = zombieDataList.add_zombies();
         zombie->set_zombieid(z.ZombieData.zombieID);
         zombie->set_x(z.ZombieData.x);
