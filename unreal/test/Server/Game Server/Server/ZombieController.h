@@ -46,11 +46,11 @@ public:
 
 	IOCP_CORE* iocpServer;		// 이거 Main.cpp에서 선언한 IOCP_CORE 변수랑 같은 건지 물어보기!!! => 만약 맞다면 'IOCP_CORE& mainServer' 로 인자 선언한 함수들 모두 고치기!
 
-	void SpawnZombies(IOCP_CORE& mainServer, int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
+	void SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
 
 	void removeZombie(int zombieID);
 
-	void SendZombieData(IOCP_CORE& mainServer, int id);
+	void SendZombieData(int id);
 	void SendZombieUpdate(const Zombie_Data& z);
 };
 
