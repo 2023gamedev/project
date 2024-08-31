@@ -106,6 +106,21 @@ void Zombie::Attack()
 	cout << endl;
 }
 
+void Zombie::Walk()
+{
+
+	float PathX = get<0>(path.front());
+	float PathY = get<1>(path.front());
+	if (ZombieData.x == PathX && ZombieData.y == PathY) {
+		PathX = get<0>(path[1]);
+		PathY = get<1>(path[1]);
+	}
+
+
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' WALK ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
+}
+
+
 void Zombie::MoveTo()
 {
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
@@ -121,6 +136,7 @@ void Zombie::MoveTo()
 	
 	//===================================
 
+	Walk();
 	// 장애물에서 장애물 근처 초록색 좌표 추가해서 B1 이런데 추가하기
 
 	//===================================
