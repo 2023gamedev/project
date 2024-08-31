@@ -147,8 +147,11 @@ private:
 
 	ZombieController* zombieclass;
 
+<<<<<<< HEAD
 	Zombie* zombie_h;
 
+=======
+>>>>>>> 79c66d796f7e724723f931abd70e53710bd95352
 
 	int GameTime = 0;
 
