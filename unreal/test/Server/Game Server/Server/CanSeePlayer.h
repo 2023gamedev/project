@@ -4,7 +4,8 @@
 
 #include "Task.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 
 class TCanSeePlayer : public Task {

@@ -5,7 +5,9 @@
 
 #include "Zombie.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
 
 
 class Zombie;

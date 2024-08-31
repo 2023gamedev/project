@@ -2,18 +2,21 @@
 
 #include <vector>
 #include <string>
-#include <memory>
 
 #include "Task.h"
 #include "Player.h"
 
-using namespace std;
+using std::vector;
+using std::string;
+using std::tuple;
 
 
 class Task;
 class Player;
 
-struct Zombie_Data {
+// 통신에서 주로 사용할 데이터 클래스
+class Zombie_Data {
+public:
     int zombieID;
     float x, y, z;
     float pitch, yaw, roll;
@@ -23,7 +26,7 @@ struct Zombie_Data {
 
     Zombie_Data() = default;
     Zombie_Data(int zid, float x, float y, float z, float pitch, float yaw, float roll, int ztype, int pattype, float patrange) 
-        : zombieID(zid), x(x), y(y), z(z), pitch(pitch), yaw(yaw), roll(roll), zombietype(ztype), patroltype(pattype), patrolrange(patrange) {}
+        : zombieID(zid), x(x), y(y), z(z), pitch(pitch), yaw(yaw), roll(roll), zombietype(ztype), patroltype(pattype), patrolrange(patrange) {} //초기화 리스트
 };
 
 class Zombie {
@@ -34,10 +37,7 @@ public:
         FOOTSOUND,
         INVESTIGATED,
         ORIGIN
-    };
-                                            
-
-    Player* PL; //일단 싱글 플레이어 게임으로 산정 => 플레이어들 정보 변수 iocpServerClass.h 에 전역으로 선언 되있음 => 나중에 삭제하고 코드들 수정 몇개 해야함
+    };                      
 
     
     vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
@@ -47,7 +47,7 @@ public:
 
     const float CanHearDistance = 30.f;
 
-    Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이타들 구조체
+    Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
     vector<vector<vector<float>>> ZombieOriginLocation;   //private 선언하는 것도 좋을 듯 (상수로 사용하니) - const는 생각해보면 불가능함
 
@@ -61,14 +61,16 @@ public:
 
     bool HeardFootSound;
 
-    int speed;
+    float speed;
 
     TARGET targetType;
+
+    int bt_playerID;        //BT 돌릴때, 어떤 플레이어와 검사 할지를 설정하기 위해 사용 -> SetTargetLocation 등에서 필요
 
 
     Zombie();
 
-    Zombie(Zombie_Data zd, Player* p, vector<vector<vector<float>>> zl);
+    Zombie(Zombie_Data zd, vector<vector<vector<float>>> zl);
 
     ~Zombie();
 

@@ -5,7 +5,8 @@
 
 #include "Task.h"
 
-using namespace std;
+using std::vector;
+using std::unique_ptr;
 
 
 //사실 Task의 자식 클래스로 생성 안해도 무관함. 이를 한번 나중에 다시 생각해보기.

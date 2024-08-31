@@ -2,31 +2,34 @@
 
 Player::Player() 
 {
-	PlayerLocation = vector<vector<vector<float>>>{ {{0, 0, 0}} };
+	this->x = 0;
+	this->y = 0;
+	this->z = 0;
 }
 
-Player::Player(vector<vector<vector<float>>> pp)
+Player::Player(float x, float y, float z)
 {
-	PlayerLocation = pp;
+	this->x = x;
+	this->y = y;
+	this->z = z;
 }
 
 
-void Player::Move(float x, float y, float z)
+void Player::Move(float dx, float dy, float dz)
 {
-	PlayerLocation[0][0][0] = PlayerLocation[0][0][0] + x;
-	PlayerLocation[0][0][1] = PlayerLocation[0][0][1] + y;
-	PlayerLocation[0][0][2] = PlayerLocation[0][0][2] + z;
+	this->x = this->x + dx;
+	this->y = this->y + dy;
+	this->z = this->z + dz;
 }
 
 //디버깅용
-void Player::Teleport(float x, float y, float z)
+void Player::Teleport(float tx, float ty, float tz)
 {
-	PlayerLocation[0][0][0] = x;
-	PlayerLocation[0][0][1] = y;
-	//PlayerPos[0][0][2] = z;
+	this->x = tx;
+	this->y = ty;
+	this->z = tz;
 }
 
 Player::~Player() 
 {
-
 }

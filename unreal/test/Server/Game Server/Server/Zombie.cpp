@@ -3,21 +3,21 @@
 
 #include "Zombie.h"
 #include "ZombiePathfinder.h"   // PathFinder
+#include"iocpServerClass.h"		// 전역변수 playerDB 사용하려구
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 
 Zombie::Zombie()
 {
-	PL = new Player;
-
 	path = vector<tuple<float, float, float>>{};
 
 	ZombieData = Zombie_Data();
 
 	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
-	DistanceToPlayer = 1000.f;
+	DistanceToPlayer = 100000.f;		//그냥 초기화값
 
 	TargetLocation = ZombieOriginLocation;
 
@@ -27,24 +27,22 @@ Zombie::Zombie()
 
 	HeardFootSound = false;
 
-	speed = 0;
+	speed = 0.f;
 
 	targetType = Zombie::TARGET::ORIGIN;
+
+	bt_playerID = 0;
 }
 
-Zombie::Zombie(Zombie_Data z_d, Player* p, vector<vector<vector<float>>> zl)
+Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 {
-	PL = p;
-
 	path = vector<tuple<float, float, float>>{};
 
 	ZombieData = z_d;
 
 	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
-	vector<vector<vector<float>>> pl = p->PlayerLocation;
-
-	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
+	DistanceToPlayer = 100000.f;		//그냥 초기화값
 
 	TargetLocation = ZombieOriginLocation;
 
@@ -54,25 +52,25 @@ Zombie::Zombie(Zombie_Data z_d, Player* p, vector<vector<vector<float>>> zl)
 
 	HeardFootSound = false;
 
-	speed = 1;
+	speed = 1.f;
 
 	targetType = Zombie::TARGET::ORIGIN;
+
+	bt_playerID = 0;
 }
 
 Zombie::~Zombie()
 {
-	//delete(Z_BT);
-	
-	//delete(PL);
-
-	//여기 cout 해서 출력보면 왜 zombie 클래스가 생성도 되기 전인데 여러번 미리 불림?! -> 그래서 할당된 메모리도 없는데 지울려 해서 에러 -> 이유 모르겠음 그냥
+	//여기 cout 해서 출력보면 왜 zombie 클래스가 생성도 되기 전인데 여러번 미리 불림?! 
+	// -> 그래서 여기서 만약 new 할당된 메모리 delete 하려하면 할당된 메모리도 없는데 지울려 해서 에러 (지금은 다 없애어 없긴하지만... 미리 소멸자가 여러번 불리는 건 마찬가지)
+	// -> 이유는 모르겠음 그냥
 }
 
 
 void Zombie::SetDistance()
 { 
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-	vector<vector<vector<float>>> pl = PL->PlayerLocation;
+	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[bt_playerID].x, playerDB[bt_playerID].y, playerDB[bt_playerID].z}}};
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 }
@@ -81,28 +79,30 @@ void Zombie::SetTargetLocation(TARGET t)
 {
 	targetType = t;
 
-	switch (t) {
+	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[bt_playerID].x, playerDB[bt_playerID].y, playerDB[bt_playerID].z}} };
+
+	switch (targetType) {
 	case TARGET::PLAYER:
-		TargetLocation = PL->PlayerLocation;
+		TargetLocation = pl;
 		break;
 	case TARGET::SHOUTING:
-		//샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
+		//==================================샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
 		break;
 	case TARGET::FOOTSOUND:
-		TargetLocation = PL->PlayerLocation;
+		TargetLocation = pl;
 		break;
 	case TARGET::INVESTIGATED: 
 		TargetLocation = TargetLocation;		//걍 명시적 표기
 		break;
 	case TARGET::ORIGIN:
-		TargetLocation = ZombieOriginLocation;	//원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
+		TargetLocation = ZombieOriginLocation;	//============================원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
 		break;
 	}
 }
 
 void Zombie::Attack()
 {
-	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어를 공격하였습니다!" << endl;
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << bt_playerID << "\' 을 공격하였습니다!" << endl;
 	cout << endl;
 }
 

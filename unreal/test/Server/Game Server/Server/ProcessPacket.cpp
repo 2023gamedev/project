@@ -45,12 +45,12 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        Player_Location pl;
+        Player pl;
         pl.x = Packet.x();
         pl.y = Packet.y();
         pl.z = Packet.z();
 
-        playerLocations[Packet.playerid()] = pl;
+        playerDB[Packet.playerid()] = pl;
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {

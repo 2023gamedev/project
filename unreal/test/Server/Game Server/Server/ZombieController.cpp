@@ -87,10 +87,8 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     //좀비 초기 위치
     vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
 
-    //플레이어 인스턴스
-    iocpServer->player = new Player(pl);        //지우기
     //좀비 인스턴스
-    Zombie new_zombie = Zombie(new_zombie_data, iocpServer->player, zl);
+    Zombie new_zombie = Zombie(new_zombie_data, zl);
 
     // zombiedata 벡터에 추가
     iocpServer->zombie.emplace_back(new_zombie);

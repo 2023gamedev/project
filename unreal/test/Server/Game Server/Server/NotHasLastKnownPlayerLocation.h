@@ -1,10 +1,6 @@
 ﻿#pragma once
 
-#include <iostream>
-
 #include "Task.h"
-
-using namespace std;
 
 
 class TNotHasLastKnownPlayerLocation : public Task {

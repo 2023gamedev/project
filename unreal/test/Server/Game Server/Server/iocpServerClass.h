@@ -21,7 +21,6 @@
 
 class ZombieController;
 
-
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;
 	int operation;
@@ -40,12 +39,8 @@ using PLAYER_INFO = struct Client_INFO {
 	bool isInGame;
 };
 
-struct Player_Location {
-	float x, y, z;
-};
-
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
-extern std::unordered_map<int, Player_Location> playerLocations;
+extern std::unordered_map<int, Player> playerDB;
 
 class IOCP_CORE
 {
@@ -71,8 +66,6 @@ public:
 
 	void Timer_Thread();
 	void Zombie_BT_Thread();
-	
-	//Player_Location playerlocation;	//지우기
 
 	void Zombie_BT_Initialize();
 	void ServerOn();
@@ -80,8 +73,6 @@ public:
 	//서버가 먼저 켜지고 좀비 BT가 실행되도록 하기위해 사용 
 	bool bServerOn;
 
-	//플레이어 인스턴스
-	Player* player;				// 지우기
 	//좀비 벡터
 	vector<Zombie> zombie;
 
