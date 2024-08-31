@@ -45,7 +45,7 @@ public:
 	~ZombieController();
 
 	IOCP_CORE* iocpServer;
-	void SpawnZombies(IOCP_CORE& mainServer, int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
+	void SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
 
 	//vector<ZombieData> zombiedata;
 
