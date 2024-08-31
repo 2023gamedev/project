@@ -131,7 +131,7 @@ vector<Node> ZombiePathfinder::FindNeighbors(const Node& current)
         float nx = get<0>(pos);
         float ny = get<1>(pos);
         float nz = get<2>(pos);
-        if (nz == current.z && !(nx == current.x && ny == current.y)) {
+        if (nz >= current.z - 400.f && nz <= current.z + 400.f && !(nx == current.x && ny == current.y)) {
             double dist = Heuristic(current.x, current.y, nx, ny);
             if (dist <= 800.f && !IsInObstacleRange(nx, ny, nz)) {
                 double hCost = Heuristic(nx, ny, goalX, goalY);
@@ -142,11 +142,37 @@ vector<Node> ZombiePathfinder::FindNeighbors(const Node& current)
     return neighbors;
 }
 
+double ZombiePathfinder::EuclideanDistance(float x1, float y1,float x2, float y2) {
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+
+// 함수: 주어진 좌표들 내에서 목표 좌표와 가장 가까운 좌표 찾기
+tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions) {
+    tuple<float, float, float> closestPosition = validPositions[0];
+    double minDistance = EuclideanDistance(goalX, goalY, get<0>(closestPosition), get<1>(closestPosition));
+
+    for (const auto& position : validPositions) {
+        double distance = EuclideanDistance(goalX, goalY, get<0>(position), get<1>(position));
+        if (distance < minDistance) {
+            closestPosition = position;
+            minDistance = distance;
+        }
+    }
+    return closestPosition;
+}
+
 vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions, const vector<tuple<float, float, float>>& obstacles)
 {
+    float SimilargoalX;
+    float SimilargoalY;
+    float SimilargoalZ;
+    tie(SimilargoalX, SimilargoalY, SimilargoalZ) = FindClosestValidPosition(goalX, goalY, goalZ, validPositions);
+    SimilargoalZ = goalZ;
+
     priority_queue<Node> openSet;
     unordered_map<Node, Node, Node::Hash> cameFrom;
     unordered_map<Node, double, Node::Hash> gScore;
+
 
     Node start(startX, startY, startZ, 0, Heuristic(startX, startY, goalX, goalY));
     openSet.push(start);
@@ -156,7 +182,7 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
         Node current = openSet.top();
         openSet.pop();
 
-        if (current.x == goalX && current.y == goalY && current.z == goalZ) {
+        if (current.x == SimilargoalX && current.y == SimilargoalY) {
             vector<Node> path;
             while (cameFrom.find(current) != cameFrom.end()) {
                 path.push_back(current);
@@ -164,6 +190,11 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
             }
             path.push_back(start);
             reverse(path.begin(), path.end());
+
+            if (SimilargoalX != goalX || SimilargoalY != goalY) {
+                path.push_back(Node(goalX, goalY, goalZ, 0, 0));
+            }
+
             return path;
         }
 
@@ -191,7 +222,7 @@ bool ZombiePathfinder::IsInObstacleRange(float x, float y, float z)
         float dy = y - oy;
         float distance = sqrt(dx * dx + dy * dy);
 
-        if (distance <= OBSTACLE_RADIUS) {
+        if (distance <= OBSTACLE_RADIUS) { // 장애물 부분 수정 필요
             return true;
         }
     }
