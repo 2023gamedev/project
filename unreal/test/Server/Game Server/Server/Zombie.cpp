@@ -9,15 +9,11 @@ using namespace std;
 
 Zombie::Zombie()
 {
-	//Z_BT = new vector<unique_ptr<Task>>;
-
 	PL = new Player;
 
 	path = vector<tuple<float, float, float>>{};
 
-	ZombieData.zombieID = 0;
-
-	ZombieData.x = 0;	ZombieData.y = 0;	ZombieData.z = 0; 
+	ZombieData = Zombie_Data();
 
 	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
@@ -36,17 +32,13 @@ Zombie::Zombie()
 	targetType = Zombie::TARGET::ORIGIN;
 }
 
-Zombie::Zombie(int z_ID, Player* p, vector<vector<vector<float>>> zl)
+Zombie::Zombie(Zombie_Data z_d, Player* p, vector<vector<vector<float>>> zl)
 {
-	//Z_BT = new vector<unique_ptr<Task>>;
-
 	PL = p;
 
 	path = vector<tuple<float, float, float>>{};
 
-	ZombieData.zombieID = z_ID;
-
-	ZombieData.x = zl[0][0][0];	ZombieData.y = zl[0][0][1];	ZombieData.z = zl[0][0][2];
+	ZombieData = z_d;
 
 	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 

@@ -20,6 +20,10 @@ struct Zombie_Data {
     int zombietype;
     int patroltype;
     float patrolrange;
+
+    Zombie_Data() = default;
+    Zombie_Data(int zid, float x, float y, float z, float pitch, float yaw, float roll, int ztype, int pattype, float patrange) 
+        : zombieID(zid), x(x), y(y), z(z), pitch(pitch), yaw(yaw), roll(roll), zombietype(ztype), patroltype(pattype), patrolrange(patrange) {}
 };
 
 class Zombie {
@@ -31,9 +35,6 @@ public:
         INVESTIGATED,
         ORIGIN
     };
-
- 
-    //vector<unique_ptr<Task>>* Z_BT;         //포인터로 사용 안하면 (C2280: 삭제된 함수를 참조하려고 합니다.) 에러 발생 - [근데, 굳이 unique_ptr을 사용해야 할...까? 고민]
                                             
 
     Player* PL; //일단 싱글 플레이어 게임으로 산정 => 플레이어들 정보 변수 iocpServerClass.h 에 전역으로 선언 되있음 => 나중에 삭제하고 코드들 수정 몇개 해야함
@@ -67,7 +68,7 @@ public:
 
     Zombie();
 
-    Zombie(int z_ID, Player* p, vector<vector<vector<float>>> zl);
+    Zombie(Zombie_Data zd, Player* p, vector<vector<vector<float>>> zl);
 
     ~Zombie();
 
