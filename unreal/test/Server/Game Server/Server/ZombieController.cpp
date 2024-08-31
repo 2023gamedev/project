@@ -68,28 +68,28 @@ ZombieController::~ZombieController()
 
 void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange) 
 {
-     Zombie_Data zombie_data;
+    Zombie_Data new_zombie_data;
 
-    zombie_data.zombieID = zombieID;
-    zombie_data.x = position.X;
-    zombie_data.y = position.Y;
-    zombie_data.z = position.Z;
-    zombie_data.pitch = rotation.Pitch;
-    zombie_data.yaw = rotation.Yaw;
-    zombie_data.roll = rotation.Roll;
-    zombie_data.zombietype = zombieType;
-    zombie_data.patroltype = patrolType;
-    zombie_data.patrolrange = patrolRange;
+    new_zombie_data.zombieID = zombieID;
+    new_zombie_data.x = position.X;
+    new_zombie_data.y = position.Y;
+    new_zombie_data.z = position.Z;
+    new_zombie_data.pitch = rotation.Pitch;
+    new_zombie_data.yaw = rotation.Yaw;
+    new_zombie_data.roll = rotation.Roll;
+    new_zombie_data.zombietype = zombieType;
+    new_zombie_data.patroltype = patrolType;
+    new_zombie_data.patrolrange = patrolRange;
 
     //플레이어 초기 위치
-    vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{2299.f, 3857.f, 1040.28f/*952.f*/}} };
+    vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{2299.f, 3857.f, 952.f}} };  //지우기
     //좀비 초기 위치
     vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
 
     //플레이어 인스턴스
-    iocpServer->player = new Player(pl);
+    iocpServer->player = new Player(pl);        //지우기
     //좀비 인스턴스
-    Zombie new_zombie = Zombie(zombieID, iocpServer->player, zl);
+    Zombie new_zombie = Zombie(new_zombie_data, iocpServer->player, zl);
 
     // zombiedata 벡터에 추가
     iocpServer->zombie.emplace_back(new_zombie);

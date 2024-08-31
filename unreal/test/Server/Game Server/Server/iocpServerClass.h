@@ -72,12 +72,10 @@ public:
 	void Timer_Thread();
 	void Zombie_BT_Thread();
 	
-	//Player_Location playerlocation;
+	//Player_Location playerlocation;	//지우기
 
 	void Zombie_BT_Initialize();
 	void ServerOn();
-
-	//======Zombie_BT 선언======
 
 	//서버가 먼저 켜지고 좀비 BT가 실행되도록 하기위해 사용 
 	bool bServerOn;
@@ -86,6 +84,8 @@ public:
 	Player* player;				// 지우기
 	//좀비 벡터
 	vector<Zombie> zombie;
+
+	//======Zombie_BT 선언======
 
 	//<Selector> 선언 
 
@@ -130,6 +130,9 @@ public:
 	TMoveTo* t_moveto;
 	//[Attack-Task]
 	TAttack* t_attack;
+	
+	//==========================
+
 
 
 private:
