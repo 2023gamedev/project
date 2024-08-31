@@ -87,6 +87,8 @@ public:
 
     void Wait();
 
+    void Walk();
+
     //void ShoutingHear();
     
     //void FootSoundHear();

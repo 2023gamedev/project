@@ -3,7 +3,7 @@
 ZombieController::ZombieController(IOCP_CORE& mainServer)
 {
     // 지하 1층 
-    SpawnZombies(mainServer, 0, 0, Vector3(1800.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
+    SpawnZombies(mainServer, 0, 0, Vector3(1976.f, 1976.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     SpawnZombies(mainServer, 1, 0, Vector3(1000.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     SpawnZombies(mainServer, 2, 0, Vector3(600.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     
@@ -81,7 +81,7 @@ void ZombieController::SpawnZombies(IOCP_CORE& mainServer, int zombieID, int zom
     zombie_data.patrolrange = patrolRange;
 
     //플레이어 초기 위치
-    vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{2299.f, 3857.f, 1040.28f/*952.f*/}} };
+    vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{1850.f, 2500.f,952.f}} };
     //좀비 초기 위치
     vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
 

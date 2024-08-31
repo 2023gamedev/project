@@ -47,7 +47,7 @@ private:
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
     vector<tuple<float, float, float>> obstacles;
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
-    const float OBSTACLE_RADIUS = 200.0f;
+    const float OBSTACLE_RADIUS = 0.0f;
 
     void DetermineFloor();
 
@@ -75,6 +75,9 @@ private:
     }
 
     bool IsInObstacleRange(float x, float y, float z);
+
+    double EuclideanDistance(float x1, float y1, float x2, float y2);
+    tuple<float, float, float> FindClosestValidPosition(float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions);
 };
 
 
