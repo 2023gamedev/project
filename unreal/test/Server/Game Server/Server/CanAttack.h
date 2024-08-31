@@ -1,7 +1,10 @@
 ﻿#pragma once
 
 #include "Task.h"
+#include "Zombie.h"
 
+
+class Zombie;
 
 class TCanAttack : public Task {
 public:

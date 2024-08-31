@@ -5,6 +5,7 @@
 
 #include "Task.h"
 #include "Player.h"
+#include "iocpServerClass.h"
 
 using std::vector;
 using std::string;
@@ -13,6 +14,7 @@ using std::tuple;
 
 class Task;
 class Player;
+class IOCP_CORE;
 
 // 통신에서 주로 사용할 데이터 클래스
 class Zombie_Data {
@@ -36,10 +38,13 @@ public:
         SHOUTING,
         FOOTSOUND,
         INVESTIGATED,
-        ORIGIN
-    };                      
+        ORIGIN             
+    };
 
-    
+
+    IOCP_CORE* iocpServer;
+
+
     vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
 
 

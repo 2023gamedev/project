@@ -1,7 +1,6 @@
 #pragma once
 #include "Common.h"
 #include "ZombieController.h"
-#include "Zombie.h"
 
 
 // BT
@@ -20,6 +19,7 @@
 
 
 class ZombieController;
+class Zombie;
 
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;

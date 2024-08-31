@@ -1,5 +1,7 @@
 ﻿#include <iostream>
 #include <cmath>
+#include "GStruct.pb.h"
+#include "iocpServerClass.h"
 
 #include "Zombie.h"
 #include "ZombiePathfinder.h"   // PathFinder
@@ -129,6 +131,32 @@ void Zombie::MoveTo()
 	//===================================
 	ZombiePathfinder pathfinder(zl[0][0][0], zl[0][0][1], zl[0][0][2], tl[0][0][0], tl[0][0][1], tl[0][0][2]);
 	pathfinder.Run(path);
+
+	// path값 전송
+	Protocol::ZombiePath zPath;
+	zPath.set_zombieid(ZombieData.zombieID);
+	zPath.set_packet_type(10);
+
+	for (const auto& p : path)
+	{
+		Protocol::Vector3* path = zPath.add_path();
+		path->set_x(get<0>(p));
+		path->set_y(get<1>(p));
+		path->set_z(get<2>(p));
+	}
+
+	Protocol::Vector3* currentLocation = zPath.mutable_location();
+	currentLocation->set_x(ZombieData.x);
+	currentLocation->set_y(ZombieData.y);
+	currentLocation->set_z(ZombieData.z);
+
+	string serializedData;
+	zPath.SerializeToString(&serializedData);
+
+	for (const auto& player : g_players) {
+		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+	}
+	//
 
 	cout << endl;
 	if(path.size() != 0)
