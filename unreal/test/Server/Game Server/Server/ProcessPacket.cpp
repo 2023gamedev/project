@@ -27,7 +27,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         clientInfo->isInGame = true;
         b_Timer = true;
         zombieclass->SendZombieData(id);
-        printf("SendZombieData!! %d\n", id);
+        printf("SendZombieData!! #%d\n", id);
     }
 
     // 패킷의 타입을 확인하여 처리
@@ -172,6 +172,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Protocol::Detected Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         
+        zombie[Packet.zombieid()].PlayerInSight = true;
         zombie[Packet.zombieid()].KnewPlayerLocation = true;
         //Packet.playerid()
 

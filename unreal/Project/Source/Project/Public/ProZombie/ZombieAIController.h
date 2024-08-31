@@ -68,6 +68,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bShoutingSound;
 
+	UPROPERTY(EditAnywhere)
+	bool m_bPlayerInSight;
+
 
 
 	ZombieData recvZombieData;

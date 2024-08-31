@@ -60,6 +60,8 @@ public:
 
     vector<vector<vector<float>>> TargetLocation;
 
+    bool PlayerInSight;
+
     bool KnewPlayerLocation;
   
     bool HeardShouting;

@@ -117,6 +117,20 @@ void AZombieAIController::Tick(float DeltaTime)
 				{
 					NearestDist = Dist;
 					NearestPawn = TestPawn;
+
+			
+					// 바로 아래에 '블랙보드 업데이트' 안에 잘못 불리고 있었던거 옮김
+					// 생각해보니 보고있는(시야에 들어오는) 상황을 실시간으로 체크해야 했음
+					//=>	보고 있는지 아닌지를 틱마다 보내는 건 아닌 것 같고, 변수를 하나 여기(언리얼)이랑 서버에 만들어서
+					//		일단 여기서 시야각에 들어오면 해당 변수를 true로 만들고 시야각 들어옴을 서버에 알리고 (현재 만들어 놓은 상태 -> 하지만 한번만 보내자[수정함])
+					//		시야를 벗어나 true인 상태를 벗어나면, 그때 벗어났다고 서버에 다시 알려줘야 할 것 같음 (만들어야 함)
+
+					// 감지한 좀비와 플레이어 아이디 전송
+					if (m_bPlayerInSight == false) {
+						m_bPlayerInSight = true;
+						ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
+						Send_Detected(BaseCharacter);
+					}
 				}
 			}
 
@@ -138,10 +152,6 @@ void AZombieAIController::Tick(float DeltaTime)
 			//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
 			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
 			GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
-
-			// 감지한 좀비와 플레이어 아이디 전송
-			ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
-			Send_Detected(BaseCharacter);
 		}
 		else
 		{

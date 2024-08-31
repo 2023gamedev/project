@@ -23,6 +23,8 @@ Zombie::Zombie()
 
 	TargetLocation = ZombieOriginLocation;
 
+	PlayerInSight = false;
+
 	KnewPlayerLocation = false;
 
 	HeardShouting = false;
@@ -47,6 +49,8 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 	DistanceToPlayer = 100000.f;		//그냥 초기화값
 
 	TargetLocation = ZombieOriginLocation;
+
+	PlayerInSight = false;
 
 	KnewPlayerLocation = false;
 
@@ -164,8 +168,9 @@ void Zombie::MoveTo()
 	
 	//===================================
 
+	cout << endl;
 	Walk();
-	// 장애물에서 장애물 근처 초록색 좌표 추가해서 B1 이런데 추가하기
+	// A* 장애물을 제대로 피하도록 수정 필요
 
 	//===================================
 

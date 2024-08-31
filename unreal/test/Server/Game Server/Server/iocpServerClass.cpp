@@ -472,10 +472,13 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 		if (playerDB.size() == 0) {
 			cout << "연결된 플레이어가 없습니다..." << endl;
+			cout << endl;
 			result = "NO PLAYER";
 		}
-		cout << endl;
-
+		else {
+			result = "HAS PLAYER";
+		}
+		
 
 		//좀비가 있을때 BT 실행
 		for (auto& zom : zombie) {
@@ -496,7 +499,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 			for (auto& player : playerDB) {
 
 				float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
-				cout << "========플레이어 \'#" << player.first << "\' 과(와) 검사==========" << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+				cout << "========플레이어 \'#" << player.first << "\' 과(와) 검사==========" << endl;
 				cout << endl;
 
 				//BT 검사할 플레이어 인덱스 설정
@@ -548,16 +551,14 @@ void IOCP_CORE::Zombie_BT_Thread()
 					cout << "EEEERRRROOOOOORRRR" << endl;
 				}
 
-
-				//===============좀비 이동 코드===============
-
-				//============================================
-
 				//p_x = player->PlayerLocation[0][0][0]; p_y = player->PlayerLocation[0][0][1]; p_z = player->PlayerLocation[0][0][2];
 				//cout << "플레이어의 이전 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 				//cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 				//cout << endl;
 			}
+
+			cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 종료==========" << endl;
+			cout << endl;
 		}
 
 

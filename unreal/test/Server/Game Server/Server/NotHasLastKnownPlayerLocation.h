@@ -15,8 +15,8 @@ public:
             cout << "좀비가 가진 플레이어 최신 위치: ( " << zom.TargetLocation[0][0][0] << ", " << zom.TargetLocation[0][0][1] << ", " << zom.TargetLocation[0][0][2] << " )" << endl;
             cout << "근데, 사실상 이 코드는 실행되면 안됨!!!!!!!!! [ERROR]" << endl;
         }
-        //cout << "\'따라서\', <Detect>의 [NotHasLastKnownPlayerLocation Task] 결과: " << boolalpha << result << endl;
-        //cout << endl;
+        cout << "\'따라서\', 좀비 \"#" << zom.ZombieData.zombieID << "\"에 <Detect>의 [NotHasLastKnownPlayerLocation Task] 결과: " << boolalpha << result << endl;
+        cout << endl;
 
         if (result)
             return "NotHasLastKnownPlayerLocation-Succeed";

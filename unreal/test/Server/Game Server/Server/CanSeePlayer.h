@@ -12,17 +12,11 @@ class TCanSeePlayer : public Task {
 public:
 
     string Detect(Zombie& zom) const override {
-        bool result = true;
-        
-        if (result) {
-            zom.KnewPlayerLocation = true;
-        }
+        bool result = zom.PlayerInSight;
 
         //cout << "<Detect>의 [CanSeePlayer Task] 호출" << endl;
-        //cout << "플레이어와 좀비의 거리: " << zom.DistanceToPlayer << endl;
-        //cout << "좀비의 시야 거리: " << zom.CanSeeDistance << endl;
-        //cout << "\'따라서\', <Detect>의 [CanSeePlayer Task] 결과: " << boolalpha << result << endl;
-        //cout << endl;
+        cout << "\'따라서\', 좀비 \"#" << zom.ZombieData.zombieID << "\"에 <Detect>의 [CanSeePlayer Task] 결과: " << boolalpha << result << endl;
+        cout << endl;
         
         if (result)
             return "CanSeePlayer-Succeed";
