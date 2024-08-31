@@ -8,7 +8,7 @@ using namespace std;
 
 Zombie::Zombie()
 {
-	Z_BT = new vector<unique_ptr<Task>>;
+	//Z_BT = new vector<unique_ptr<Task>>;
 
 	PL = new Player;
 
@@ -35,7 +35,7 @@ Zombie::Zombie()
 
 Zombie::Zombie(Player* p, string n, vector<vector<vector<int>>> zl)
 {
-	Z_BT = new vector<unique_ptr<Task>>;
+	//Z_BT = new vector<unique_ptr<Task>>;
 
 	PL = p;
 

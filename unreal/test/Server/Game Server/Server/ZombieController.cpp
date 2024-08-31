@@ -91,11 +91,9 @@ void ZombieController::SpawnZombies(IOCP_CORE& mainServer, int zombieID, int zom
     Zombie new_zombie = Zombie(zombieID, mainServer.player, zl);
 
     // zombiedata º¤ÅÍ¿¡ Ãß°¡
-    //zombiedata.push_back(zombie_data);
     mainServer.zombie.emplace_back(new_zombie);
   
 
-    //cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << zombiedata.size() << endl;
     //cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << mainServer.zombie.size() << endl;
 }
 

@@ -33,7 +33,7 @@ public:
     };
 
  
-    vector<unique_ptr<Task>>* Z_BT;         //포인터로 사용 안하면 (C2280: 삭제된 함수를 참조하려고 합니다.) 에러 발생 - [근데, 굳이 unique_ptr을 사용해야 할...까? 고민]
+    //vector<unique_ptr<Task>>* Z_BT;         //포인터로 사용 안하면 (C2280: 삭제된 함수를 참조하려고 합니다.) 에러 발생 - [근데, 굳이 unique_ptr을 사용해야 할...까? 고민]
                                             
 
     Player* PL; //일단 싱글 플레이어 게임으로 산정 => 플레이어들 정보 변수 iocpServerClass.h 에 전역으로 선언 되있음 => 나중에 삭제하고 코드들 수정 몇개 해야함
@@ -45,11 +45,6 @@ public:
     const float CanAttackDistance = 10.f;
 
     const float CanHearDistance = 30.f;
-
-
-    //string name;    // 지우기
-
-    //vector<vector<vector<float>>> ZombieLocation;   // 지우기
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이타들 구조체
 

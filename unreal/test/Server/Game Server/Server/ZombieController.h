@@ -5,14 +5,6 @@
 
 class IOCP_CORE;
 
-//struct ZombieData {
-//	int zombieID;
-//	float x, y, z;
-//	float pitch, yaw, roll;
-//	int zombietype;
-//	int patroltype;
-//	float patrolrange;
-//};
 
 struct Vector3 {
 	float X;
@@ -56,12 +48,9 @@ public:
 
 	void SpawnZombies(IOCP_CORE& mainServer, int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
 
-	//vector<ZombieData> zombiedata;
-
 	void removeZombie(int zombieID);
 
 	void SendZombieData(IOCP_CORE& mainServer, int id);
-	//void SendZombieUpdate(const ZombieData& z);
 	void SendZombieUpdate(const Zombie_Data& z);
 };
 
