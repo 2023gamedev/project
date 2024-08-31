@@ -11,7 +11,7 @@ class TCanSeePlayer : public Task {
 public:
 
     string Detect(Zombie& zom) const override {
-        bool result = true; //(zom.DistanceToPlayer <= zom.CanSeeDistance);
+        bool result = true;
         
         if (result) {
             zom.KnewPlayerLocation = true;

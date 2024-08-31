@@ -26,7 +26,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     if ((tempPacket.playerid() == id || tempPacket.isingame()) && !clientInfo->isInGame) {
         clientInfo->isInGame = true;
         b_Timer = true;
-        zombieclass->SendZombieData(*this, id);
+        zombieclass->SendZombieData(id);
         printf("SendZombieData!! %d\n", id);
     }
 

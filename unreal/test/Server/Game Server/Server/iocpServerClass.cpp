@@ -20,6 +20,7 @@ IOCP_CORE::IOCP_CORE()
 
 	//Nodes = nodeclass->LoadNodesFromFile();
 
+	//좀비 스폰 & 초기화
 	zombieclass = new ZombieController(*this);
 
 	IOCP_GetServerIpAddress();
@@ -363,16 +364,9 @@ void IOCP_CORE::Zombie_BT_Initialize()
 
 	//======좀비, 플레이어 초기화======
 
-	//플레이어 초기 위치
-	//vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{2299.f, 3857.f, 952.f}} };
-	//좀비 초기 위치
-	//vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{988.f, 2964.f, 952.f}} };
-
 	//플레이어 인스턴스
 	//player = new Player(pl);
 	player = new Player;
-	//좀비 인스턴스
-	//zombie.emplace_back(Zombie(0, player, zl));
 
 	//======[Task] 메모리 할당======
 
