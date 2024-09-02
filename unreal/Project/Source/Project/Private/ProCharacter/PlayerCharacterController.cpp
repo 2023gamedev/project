@@ -126,14 +126,20 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
-		while (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
+		//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);
+		if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 		{
 			//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.ZombieType, recvZombieData.Location, recvZombieData.Rotation);
-				//UE_LOG(LogNet, Display, TEXT("Update call Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+				UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->PlayerId);
 			}
+		}
+
+		if (GameInstance->ClientSocketPtr->Q_path.try_pop(recvZombiePath))
+		{
+			UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
 		}
 	}
 

@@ -150,67 +150,6 @@ void AOneGameModeBase::BeginPlay()
 
     ZombieMap.Empty(); // ZombieMap 초기화
 
-    // BeginPlay에서 SpawnZombies 호출
-
-    // 지하 1층 
-    //SpawnZombies(0, EZombie::NORMAL, FVector(1800.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
-    //SpawnZombies(1, EZombie::NORMAL, FVector(1000.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
-    //SpawnZombies(2, EZombie::NORMAL, FVector(600.f, 600.f, 1040.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLY, 1200.f);
-
-    //SpawnZombies(3, EZombie::NORMAL, FVector(2100.f, 2400.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -800.f);
-    //SpawnZombies(4, EZombie::NORMAL, FVector(1200.f, 2710.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, -700.f);
-    //SpawnZombies(5, EZombie::NORMAL, FVector(400.f, 3800.f, 1050.275f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::PATROLX, 1200.f);
-
-
-    //SpawnZombies(6, EZombie::NORMAL, FVector(1320.f, 3100.f, 1040.275f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(7, EZombie::NORMAL, FVector(1400.f, 2800.f, 1040.275f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(8, EZombie::NORMAL, FVector(1000.f, 3320.f, 1040.275f), FRotator(0.f, 10.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(9, EZombie::NORMAL, FVector(2200.f, 3100.f, 1040.275f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-
-
-    //// 지상 1층
-
-    //SpawnZombies(10, EZombie::SHOUTING, FVector(600.f, 600.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(11, EZombie::SHOUTING, FVector(1000.f, 2600.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-
-    //SpawnZombies(12, EZombie::NORMAL, FVector(220.f, 1200.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(13, EZombie::NORMAL, FVector(250.f, 1700.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(14, EZombie::NORMAL, FVector(200.f, 1780.f, 1989.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(15, EZombie::NORMAL, FVector(2100.f, 3500.f, 1989.212f), FRotator(0.f, 120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(16, EZombie::NORMAL, FVector(200.f, 3200.f, 1989.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(17, EZombie::NORMAL, FVector(800.f, 3600.f, 1989.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(18, EZombie::NORMAL, FVector(800.f, 1600.f, 1989.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(19, EZombie::NORMAL, FVector(200.f, 2200.f, 1989.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-
-
-    ////지상 2층
-    //SpawnZombies(20, EZombie::RUNNING, FVector(2200.f, 600.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
-    //SpawnZombies(21, EZombie::RUNNING, FVector(670.f, 400.f, 2947.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 1000.f);
-    //SpawnZombies(22, EZombie::RUNNING, FVector(1200.f, 1820.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-
-
-    //SpawnZombies(23, EZombie::NORMAL, FVector(580.f, 2170.f, 2947.212f), FRotator(0.f, -180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(24, EZombie::NORMAL, FVector(1850.f, 2300.f, 2947.212f), FRotator(0.f, 20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(25, EZombie::NORMAL, FVector(2000.f, 2800.f, 2947.212f), FRotator(0.f, -130.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(26, EZombie::NORMAL, FVector(1400.f, 3000.f, 2947.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -800.f);
-    //SpawnZombies(27, EZombie::NORMAL, FVector(870.f, 3660.f, 2947.212f), FRotator(0.f, -90.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(28, EZombie::NORMAL, FVector(2241.f, 3500.f, 2947.212f), FRotator(0.f, 30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(29, EZombie::NORMAL, FVector(190.f, 2600.f, 2947.212f), FRotator(0.f, -30.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-
-    //// 지하 2층
-    //SpawnZombies(30, EZombie::RUNNING, FVector(600.f, 500.f, 90.212f), FRotator(0.f, 0.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(31, EZombie::RUNNING, FVector(2000.f, 1340.f, 90.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::PATROLX, -1200.f);
-    //SpawnZombies(32, EZombie::RUNNING, FVector(2000.f, 3600.f, 90.212f), FRotator(0.f, -50.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(33, EZombie::RUNNING, FVector(180.f, 2400.f, 90.212f), FRotator(0.f, 90.f, 0.f), EZombiePatrol::PATROLY, 800.f);
-    //SpawnZombies(34, EZombie::RUNNING, FVector(1000.f, 2800.f, 90.212f), FRotator(0.f, -60.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-                
-    //SpawnZombies(35, EZombie::NORMAL, FVector(600.f, 3600.f, 90.212f), FRotator(0.f, -130.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(36, EZombie::NORMAL, FVector(570.f, 2120.f, 90.212f), FRotator(0.f, 180.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(37, EZombie::NORMAL, FVector(1600.f, 2000.f, 90.212f), FRotator(0.f, -120.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(38, EZombie::NORMAL, FVector(200.f, 200.f, 90.212f), FRotator(0.f, -20.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-    //SpawnZombies(39, EZombie::NORMAL, FVector(800.f, 2800.f, 90.212f), FRotator(0.f, 60.f, 0.f), EZombiePatrol::NOTPATROL, 0.f);
-
-
     ABaseCharacter* DefaultPawn = nullptr;
 
     UWorld* World = GetWorld();
@@ -929,98 +868,98 @@ void AOneGameModeBase::UpdatePlayerJump(uint32 PlayerID)
 
 
 
-void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange)
-{
-    TSubclassOf<ABaseZombie> SelectedZombieClass = ZombieClasses[zombieindex];
-
-
-    // 선택된 좀비 클래스로 좀비를 생성
-    ABaseZombie* SpawnedZombie = GetWorld()->SpawnActor<ABaseZombie>(SelectedZombieClass, zombiepos, zombieroatate);
-
-
-    UE_LOG(LogTemp, Error, TEXT("111111111111111111111"));
-    if (SpawnedZombie)
-    {
-        UE_LOG(LogTemp, Error, TEXT("2222222222222222222222222222222222222222"));
-        if (zombieaiconindex == EZombie::NORMAL) {
-
-            TSubclassOf<AZombieAIController> SelectedZombieAIClass = ZombieAIClasses[m_iZombieNumber];
-            AZombieAIController* AIZombieController = GetWorld()->SpawnActor<AZombieAIController>(SelectedZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
-
-            if (AIZombieController) {
-                SpawnedZombie->SpawnDefaultController();
-                AIZombieController->Possess(SpawnedZombie);
-                AIZombieController->SetStartLocationValue(zombiepos);
-
-                if (zombiepatrol == EZombiePatrol::PATROLX) {
-                    AIZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
-                }
-                else if (zombiepatrol == EZombiePatrol::PATROLY) {
-                    AIZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
-                }
-            }
-            else {
-                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
-            }
-
-            SpawnedZombie->SetZombieId(zombieindex);
-            m_iZombieNumber++;
-        }
-        else if (zombieaiconindex == EZombie::SHOUTING) {
-            UE_LOG(LogTemp, Error, TEXT("333333333333333333333333333333333333333333"));
-
-            TSubclassOf<AShoutingZombieAIController> SelectedShoutingZombieAIClass = ShoutingZombieAIClasses[m_iShoutingZombieNumber];
-            AShoutingZombieAIController* AIShoutingZombieController = GetWorld()->SpawnActor<AShoutingZombieAIController>(SelectedShoutingZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
-
-            if (AIShoutingZombieController) {
-                SpawnedZombie->SpawnDefaultController();
-                AIShoutingZombieController->Possess(SpawnedZombie);
-                AIShoutingZombieController->SetStartLocationValue(zombiepos);
-
-                if (zombiepatrol == EZombiePatrol::PATROLX) {
-                    AIShoutingZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
-                }
-                else if (zombiepatrol == EZombiePatrol::PATROLY) {
-                    AIShoutingZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
-                }
-            }
-            else {
-                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
-            }
-
-            SpawnedZombie->SetZombieId(zombieindex);
-            m_iShoutingZombieNumber++;
-        }
-        else if (zombieaiconindex == EZombie::RUNNING) {
-            UE_LOG(LogTemp, Error, TEXT("4444444444444444444444444444444444444444444"));
-
-            TSubclassOf<ARunningZombieAIController> SelectedRunningZombieAIClass = RunningZombieAIClasses[m_iRunningZombieNumber];
-            ARunningZombieAIController* AIRunningZombieController = GetWorld()->SpawnActor<ARunningZombieAIController>(SelectedRunningZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
-
-            if (AIRunningZombieController) {
-                SpawnedZombie->SpawnDefaultController();
-                AIRunningZombieController->Possess(SpawnedZombie);
-                AIRunningZombieController->SetStartLocationValue(zombiepos);
-
-
-                if (zombiepatrol == EZombiePatrol::PATROLX) {
-                    AIRunningZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
-                }
-                else if (zombiepatrol == EZombiePatrol::PATROLY) {
-                    AIRunningZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
-                }
-            }
-            else {
-                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));
-            }
-
-            SpawnedZombie->SetZombieId(zombieindex);
-            m_iRunningZombieNumber++;
-        }
-
-        ZombieMap.Add(zombieindex, SpawnedZombie);
-    }
-}
+//void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange)
+//{
+//    TSubclassOf<ABaseZombie> SelectedZombieClass = ZombieClasses[zombieindex];
+//
+//
+//    // 선택된 좀비 클래스로 좀비를 생성
+//    ABaseZombie* SpawnedZombie = GetWorld()->SpawnActor<ABaseZombie>(SelectedZombieClass, zombiepos, zombieroatate);
+//
+//
+//    UE_LOG(LogTemp, Error, TEXT("111111111111111111111"));
+//    if (SpawnedZombie)
+//    {
+//        UE_LOG(LogTemp, Error, TEXT("2222222222222222222222222222222222222222"));
+//        if (zombieaiconindex == EZombie::NORMAL) {
+//
+//            TSubclassOf<AZombieAIController> SelectedZombieAIClass = ZombieAIClasses[m_iZombieNumber];
+//            AZombieAIController* AIZombieController = GetWorld()->SpawnActor<AZombieAIController>(SelectedZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
+//
+//            if (AIZombieController) {
+//                SpawnedZombie->SpawnDefaultController();
+//                AIZombieController->Possess(SpawnedZombie);
+//                AIZombieController->SetStartLocationValue(zombiepos);
+//
+//                if (zombiepatrol == EZombiePatrol::PATROLX) {
+//                    AIZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
+//                }
+//                else if (zombiepatrol == EZombiePatrol::PATROLY) {
+//                    AIZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
+//                }
+//            }
+//            else {
+//                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
+//            }
+//
+//            SpawnedZombie->SetZombieId(zombieindex);
+//            m_iZombieNumber++;
+//        }
+//        else if (zombieaiconindex == EZombie::SHOUTING) {
+//            UE_LOG(LogTemp, Error, TEXT("333333333333333333333333333333333333333333"));
+//
+//            TSubclassOf<AShoutingZombieAIController> SelectedShoutingZombieAIClass = ShoutingZombieAIClasses[m_iShoutingZombieNumber];
+//            AShoutingZombieAIController* AIShoutingZombieController = GetWorld()->SpawnActor<AShoutingZombieAIController>(SelectedShoutingZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
+//
+//            if (AIShoutingZombieController) {
+//                SpawnedZombie->SpawnDefaultController();
+//                AIShoutingZombieController->Possess(SpawnedZombie);
+//                AIShoutingZombieController->SetStartLocationValue(zombiepos);
+//
+//                if (zombiepatrol == EZombiePatrol::PATROLX) {
+//                    AIShoutingZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
+//                }
+//                else if (zombiepatrol == EZombiePatrol::PATROLY) {
+//                    AIShoutingZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
+//                }
+//            }
+//            else {
+//                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
+//            }
+//
+//            SpawnedZombie->SetZombieId(zombieindex);
+//            m_iShoutingZombieNumber++;
+//        }
+//        else if (zombieaiconindex == EZombie::RUNNING) {
+//            UE_LOG(LogTemp, Error, TEXT("4444444444444444444444444444444444444444444"));
+//
+//            TSubclassOf<ARunningZombieAIController> SelectedRunningZombieAIClass = RunningZombieAIClasses[m_iRunningZombieNumber];
+//            ARunningZombieAIController* AIRunningZombieController = GetWorld()->SpawnActor<ARunningZombieAIController>(SelectedRunningZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
+//
+//            if (AIRunningZombieController) {
+//                SpawnedZombie->SpawnDefaultController();
+//                AIRunningZombieController->Possess(SpawnedZombie);
+//                AIRunningZombieController->SetStartLocationValue(zombiepos);
+//
+//
+//                if (zombiepatrol == EZombiePatrol::PATROLX) {
+//                    AIRunningZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
+//                }
+//                else if (zombiepatrol == EZombiePatrol::PATROLY) {
+//                    AIRunningZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
+//                }
+//            }
+//            else {
+//                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));
+//            }
+//
+//            SpawnedZombie->SetZombieId(zombieindex);
+//            m_iRunningZombieNumber++;
+//        }
+//
+//        ZombieMap.Add(zombieindex, SpawnedZombie);
+//    }
+//}
 
 void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation)
 {
@@ -1065,7 +1004,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
 
             BaseZombie->UpdateZombieData(NewLocation);
 
-            //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
+            //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location, player: %d"), ZombieID, PlayerID);
         }
     }
     else
@@ -1113,4 +1052,19 @@ void AOneGameModeBase::DestroyItem(uint32 ItemId)
             break;
         }
     }
+}
+
+void AOneGameModeBase::BeginDestroy()
+{
+    Super::BeginDestroy();
+
+    // 게임 종료 시 모든 좀비 객체와 맵 초기화
+    for (auto& Elem : ZombieMap)
+    {
+        if (Elem.Value)
+        {
+            Elem.Value->Destroy();
+        }
+    }
+    ZombieMap.Empty();
 }
