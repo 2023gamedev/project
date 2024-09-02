@@ -160,7 +160,6 @@ tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goal
     }
     return closestPosition;
 }
-
 vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions, const vector<tuple<float, float, float>>& obstacles)
 {
     float SimilargoalX;
@@ -172,7 +171,6 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
     priority_queue<Node> openSet;
     unordered_map<Node, Node, Node::Hash> cameFrom;
     unordered_map<Node, double, Node::Hash> gScore;
-
 
     Node start(startX, startY, startZ, 0, Heuristic(startX, startY, goalX, goalY));
     openSet.push(start);
@@ -195,10 +193,14 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
                 path.push_back(Node(goalX, goalY, goalZ, 0, 0));
             }
 
-            return path;
+            return path; // 경로를 성공적으로 찾음
         }
 
         for (Node neighbor : FindNeighbors(current)) {
+            if (IsPathBlockedByObstacle(current, neighbor)) {
+                continue; // 장애물이 있는 경로는 무시하고 다른 경로를 탐색
+            }
+
             double tentativeGScore = gScore[current] + Heuristic(current.x, current.y, neighbor.x, neighbor.y);
 
             if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
@@ -209,9 +211,30 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
             }
         }
     }
-    return {};
+    return {}; // 가능한 경로를 찾지 못함
 }
 
+bool ZombiePathfinder::IsPathBlockedByObstacle(const Node& startNode, const Node& endNode) {
+    float dx = endNode.x - startNode.x;
+    float dy = endNode.y - startNode.y;
+    float dz = endNode.z - startNode.z;
+
+    float length = sqrt(dx * dx + dy * dy + dz * dz);
+    int numSteps = static_cast<int>(length / OBSTACLE_CHECK_INTERVAL); // 장애물 체크 간격에 따라 조정
+
+    for (int i = 0; i <= numSteps; ++i) {
+        float t = static_cast<float>(i) / numSteps;
+        float x = startNode.x + t * dx;
+        float y = startNode.y + t * dy;
+        float z = startNode.z + t * dz;
+
+        if (IsInObstacleRange(x, y, z)) {
+            return true; // 경로 상에 장애물이 있음
+        }
+    }
+
+    return false; // 경로 상에 장애물이 없음
+}
 bool ZombiePathfinder::IsInObstacleRange(float x, float y, float z)
 {
     for (const auto& obs : obstacles) {

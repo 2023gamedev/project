@@ -47,7 +47,8 @@ private:
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
     vector<tuple<float, float, float>> obstacles;
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
-    const float OBSTACLE_RADIUS = 0.0f;
+    const float OBSTACLE_RADIUS = 10.0f;
+    const float OBSTACLE_CHECK_INTERVAL = 10.0f;
 
     void DetermineFloor();
 
@@ -69,6 +70,8 @@ private:
     vector<Node> AStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ,
         const vector<tuple<float, float, float>>& validPositions,
         const vector<tuple<float, float, float>>& obstacles);
+
+    bool IsPathBlockedByObstacle(const Node& startNode, const Node& endNode);
 
     double Heuristic(float x1, float y1, float x2, float y2) {
         return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
