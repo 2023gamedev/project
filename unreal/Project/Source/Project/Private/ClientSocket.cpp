@@ -226,7 +226,7 @@ uint32 ClientSocket::Run()
 								FVector NewLocation(zombie.x(), zombie.y(), zombie.z());
 								FRotator NewRotation(zombie.pitch(), zombie.yaw(), zombie.roll());
 								Q_zombie.push(ZombieData(zombie.zombieid(), NewLocation, NewRotation, zombie.zombietype()));
-								UE_LOG(LogNet, Display, TEXT("ZombieData recv: %d"), zombie.zombieid());
+								UE_LOG(LogNet, Display, TEXT("ZombieData recv: %d, playerid = %d"), zombie.zombieid(), MyPlayerId);
 							}
 						}
 						break;

@@ -70,6 +70,7 @@ public:
     virtual void PostLogin(APlayerController* NewPlayer) override;
 
     virtual void BeginPlay() override;
+    virtual void BeginDestroy() override;
 
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
