@@ -22,7 +22,7 @@ public:
     int zombieID;
     float x, y, z;
     float pitch, yaw, roll;
-    int zombietype;
+    int zombietype;             // 0 - 일반 좀비, 1 - 샤우팅 좀비, 2 - 뛰는 좀비
     int patroltype;
     float patrolrange;
 
@@ -48,9 +48,11 @@ public:
     vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
 
 
-    const float CanAttackDistance = 150.f;          //========================언리얼 BTIsinAttackRange.cpp에서 if (DistanceToTarget > 150.f)에서 참조 (맞는지 확인 필요)
+    const float CanAttackDistance = 150.f;          //========================언리얼 BTIsinAttackRange.cpp에서 CalculateRawConditionValue(...) - if (DistanceToTarget > 150.f)에서 참조 (맞는지 확인 필요)
 
-    const float CanHearDistance = 30.f;             //========================해당 값이 존재하는지 못 찾음 (확인 필요)
+    const float CanHearDistance = 500.f;            //========================언리얼 BaseCharacter.cpp에서 FootSound() - float DetectRadius = 500.f;에서 참조 (맞는지 확인 필요)
+
+    const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 

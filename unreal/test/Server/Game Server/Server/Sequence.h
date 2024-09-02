@@ -50,22 +50,28 @@ public:
         return "Fail";   //사실상 실패할 일은 없긴하지만
     }
 
-    bool Seq_HasShouting(Zombie& zom) {
+    string Seq_HasShouting(Zombie& zom) {
         for (const auto& child : seq_children) {
-            if ("Fail" != child->HasShouting(zom)) {
-                return false;
+            string result = child->HasShouting(zom);
+            if ("Fail" != result) {
+                return result;
             }
         }
-        return true;
+        cout << "\"Sequence HasShouting [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";
     }
 
-    bool Seq_HasFootSound(Zombie& zom) {
+    string Seq_HasFootSound(Zombie& zom) {
         for (const auto& child : seq_children) {
-            if ("Fail" != child->HasFootSound(zom)) {
-                return false;
+            string result = child->HasFootSound(zom);
+            if ("Fail" != result) {
+                return result;
             }
         }
-        return true;
+        cout << "\"Sequence HasFootSound [ERROR]!!!\"" << endl;
+        cout << endl;
+        return "Fail";
     }
 
     string Seq_HasInvestigated(Zombie& zom) {

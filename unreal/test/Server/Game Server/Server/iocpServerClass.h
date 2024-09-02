@@ -10,6 +10,8 @@
 #include "Sequence.h"
 
 #include "CanSeePlayer.h"
+#include "HasShouting.h"
+#include "HasFootSound.h"
 #include "HasInvestigated.h"
 #include "NotHasLastKnownPlayerLocation.h"
 #include "CanNotAttack.h"
@@ -91,7 +93,10 @@ public:
 	Sequence seq_cannotattack;
 	//{Sequence-CanAttack}
 	Sequence seq_canattack;
-	//
+	//{Sequence-HasShouting}
+	Sequence seq_hasshouting;
+	//{Sequence-HasFootSound}
+	Sequence seq_hasfootsound;
 	//{Sequence-HasInvestigated}
 	Sequence seq_hasinvestigated;
 	//{Sequence-NotHasLastKnownPlayerLocation}
@@ -103,6 +108,10 @@ public:
 
 	//[CanSeePlayer-Task]
 	TCanSeePlayer* t_canseeplayer;
+	//[HasShouting-Task]
+	THasShouting* t_hasshouting;
+	//[HasFootSound-Task]
+	THasFootSound* t_hasfootsound;
 	//[HasInvestigated-Task]
 	THasInvestigated* t_hasinvestigated;
 	//[NotHasLastKnownPlayerLocation-Task]

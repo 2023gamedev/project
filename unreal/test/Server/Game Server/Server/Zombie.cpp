@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <cmath>
+
 #include "GStruct.pb.h"
 #include "iocpServerClass.h"
 

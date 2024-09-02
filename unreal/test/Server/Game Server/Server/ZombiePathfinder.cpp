@@ -1,5 +1,6 @@
-#include "ZombiePathfinder.h"
+#include <iomanip>
 
+#include "ZombiePathfinder.h"
 
 
 void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t)
@@ -114,7 +115,7 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
     if (!path.empty()) {
         cout << "Path found:\n";
         for (const auto& node : path) {
-            cout << "(" << node.x << ", " << node.y << ", " << node.z << ")\n";
+            cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )\n";
 
             t.emplace_back(make_tuple(node.x, node.y, node.z));
         }

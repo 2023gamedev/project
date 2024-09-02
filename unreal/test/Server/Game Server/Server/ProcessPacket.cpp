@@ -33,7 +33,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     // 패킷의 타입을 확인하여 처리
     switch (tempPacket.packet_type()) {
     case 1: {
-        //printf("[ No. %3u ] character Packet Received !!\n", id);
+        //printf("\n[ No. %3u ] character Packet Received !!\n", id);
         //printf("Received packet type = %d\n", CharacterPacket.type());
         //printf("Received playerID = %d\n", CharacterPacket.playerid());
         //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
@@ -62,7 +62,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     } break;
 
     case 2: {
-        //printf("[ No. %3u ] zombie Packet Received !!\n", id);
+        //printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
         Protocol::Zombie Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -101,7 +101,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     case 4:
     {
-        printf("[ No. %3u ] character Packet Received !!\n", id);
+        printf("\n[ No. %3u ] character Packet Received !!\n", id);
         Protocol::Character_Attack Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -118,7 +118,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     case 5:
     {
-        printf("[ No. %3u ] Equip Packet Received !!\n", id);
+        printf("\n[ No. %3u ] Equip Packet Received !!\n", id);
         Protocol::Equip_Item Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -134,7 +134,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     }
     case 6:
     {
-        printf("[ No. %3u ] Run Packet Received !!\n", id);
+        printf("\n[ No. %3u ] Run Packet Received !!\n", id);
         Protocol::run Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -151,7 +151,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     case 7:
     {
-        printf("[ No. %3u ] Jump Packet Received !!\n", id);
+        printf("\n[ No. %3u ] Jump Packet Received !!\n", id);
         Protocol::jump Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -168,18 +168,20 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     case 9:
     {
-        printf("[ No. %3u ] Detected Packet Received !!\n", id);
+        printf("\n[ No. %3u ] Detected Packet Received !!\n", id);
         Protocol::Detected Packet;
         Packet.ParseFromArray(buffer, bufferSize);
-        
+
         zombie[Packet.zombieid()].PlayerInSight = true;
         zombie[Packet.zombieid()].KnewPlayerLocation = true;
         //Packet.playerid()
 
+        //============================ return true; 가 빠져서 아래 에러 메세지가 계속 같이 뜸
+        return true;
     }
 
     default: {
-        printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
+        printf("\nERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
         // 클라이언트나 서버 종료, 로깅 등의 처리 가능
         return true;
     } break;

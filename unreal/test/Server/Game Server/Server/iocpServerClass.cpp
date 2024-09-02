@@ -1,6 +1,8 @@
 #pragma once
 
-#include"iocpServerClass.h"
+#include <iomanip>
+
+#include "iocpServerClass.h"
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
@@ -221,7 +223,7 @@ void IOCP_CORE::IOCP_AcceptThread()
 		/* DB 관련 login 기능이 여기에 추가되어야 한다. 로그인이 번호가 제대로 맞으면 통과, 아니면 클라이언트 연결을 끊는다. 로그인을 하면 DB에서 정보를 가져온다 */
 
 		playerIndex += 1;
-		printf("[ No. %3u ] Client IP = %s, Port = %d is Connected\n", playerIndex, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+		printf("\n[ No. %3u ] Client IP = %s, Port = %d is Connected\n", playerIndex, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
 		WSABUF wsabuf;
 		wsabuf.buf = reinterpret_cast<char*>(&playerIndex);
@@ -333,6 +335,7 @@ void IOCP_CORE::Timer_Thread()
 		{
 			Protocol::Time packet;
 
+			//============================================================ sleep_for 정확도 떨어지니 deltaTime 변수 따로 만들어서 지나간 시간을 계산해서 시간 초 세기로 수정하기
 			std::this_thread::sleep_for(std::chrono::seconds(1)); // 1초마다 타이머
 			GameTime++;
 
@@ -368,6 +371,10 @@ void IOCP_CORE::Zombie_BT_Initialize()
 
 	//[CanSeePlayer-Task]
 	t_canseeplayer = new TCanSeePlayer;
+	//[HasShouting-Task]
+	t_hasshouting = new THasShouting;
+	//[HasFootSound-Task]
+	t_hasfootsound = new THasFootSound;
 	//[HasInvestigated-Task]
 	t_hasinvestigated = new THasInvestigated;
 	//[NotHasLastKnownPlayerLocation-Task]
@@ -392,6 +399,8 @@ void IOCP_CORE::Zombie_BT_Initialize()
 	//<Selector-Detect> 할당
 	//<Selector-Detect>에 해당 Task들 '순서대로' 삽입
 	sel_detect.AddChild(t_canseeplayer);
+	sel_detect.AddChild(t_hasshouting);
+	sel_detect.AddChild(t_hasfootsound);
 	sel_detect.AddChild(t_hasinvestigated);
 	sel_detect.AddChild(t_nothaslastknownplayerlocation);
 
@@ -400,13 +409,21 @@ void IOCP_CORE::Zombie_BT_Initialize()
 	sel_canseeplayer.AddChild(t_canattack);
 	sel_canseeplayer.AddChild(t_cannotattack);
 
+	//{Sequence-CanAttack} 할당
+	//{Sequence-CanAttack}에 해당 Task들 '순서대로' 삽입
+	seq_canattack.AddChild(t_attack);
+
 	//{Sequence-CanNotAttack} 할당
 	//{Sequence-CanNotAttack}에 해당 Task들 '순서대로' 삽입
 	seq_cannotattack.AddChild(t_moveto);
 
-	//{Sequence-CanAttack} 할당
-	//{Sequence-CanAttack}에 해당 Task들 '순서대로' 삽입
-	seq_canattack.AddChild(t_attack);
+	//{Sequence-HasShouting} 할당
+	//{Sequence-HasShouting}에 해당 Task들 '순서대로' 삽입
+	seq_hasshouting.AddChild(t_moveto);
+
+	//{Sequence-HasFootSound} 할당
+	//{Sequence-HasFootSound}에 해당 Task들 '순서대로' 삽입
+	seq_hasfootsound.AddChild(t_moveto);
 
 	//{Sequence-HasInvestigated} 할당
 	//{Sequence-HasInvestigated}에 해당 Task들 '순서대로' 삽입
@@ -423,12 +440,15 @@ void IOCP_CORE::ServerOn()
 {
 	cout << endl;
 
+	cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// 출력 칸 맞추기
+
 	for (const auto& player : playerDB) {
 		float p_x = player.second.x;
 		float p_y = player.second.y;
 		float p_z = player.second.z;
 
-		cout << "플레이어 \'#" << player.first << "\' 의 시작 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+		cout << "플레이어 \'#" << player.first << "\' 의 시작 위치: ( "
+			<< std::setw(8) << p_x << ", " << std::setw(8) << p_y << ", " << std::setw(8) << p_z << " )" << endl;
 	}
 
 	cout << endl;
@@ -438,7 +458,8 @@ void IOCP_CORE::ServerOn()
 		float z_y = zom.ZombieData.y;
 		float z_z = zom.ZombieData.z;
 
-		cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시작 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+		cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시작 위치: ( "
+			<< std::setw(8) << z_x << ", " << std::setw(8) << z_y << ", " << std::setw(8) << z_z << " )" << endl;
 	}
 
 	cout << endl;
@@ -533,6 +554,18 @@ void IOCP_CORE::Zombie_BT_Thread()
 					else {	//result == "Fail"
 						cout << "EEEERRRROOOOOORRRR" << endl;
 					}
+
+				}
+				else if (result == "HasShouting-Succeed") {
+
+					//{Sequence-HasShouting} 실행
+					result = seq_hasshouting.Seq_HasShouting(zom);
+
+				}
+				else if (result == "HasFootSound-Succeed") {
+
+					//{Sequence-HasFootSound} 실행
+					result = seq_hasfootsound.Seq_HasFootSound(zom);
 
 				}
 				else if (result == "HasInvestigated-Succeed") {
