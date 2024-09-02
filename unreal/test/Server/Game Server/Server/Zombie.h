@@ -48,9 +48,9 @@ public:
     vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
 
 
-    const float CanAttackDistance = 10.f;
+    const float CanAttackDistance = 150.f;          //========================언리얼 BTIsinAttackRange.cpp에서 if (DistanceToTarget > 150.f)에서 참조 (맞는지 확인 필요)
 
-    const float CanHearDistance = 30.f;
+    const float CanHearDistance = 30.f;             //========================해당 값이 존재하는지 못 찾음 (확인 필요)
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 

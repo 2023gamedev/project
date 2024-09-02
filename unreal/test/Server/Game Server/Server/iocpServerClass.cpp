@@ -470,22 +470,22 @@ void IOCP_CORE::Zombie_BT_Thread()
 		}
 		cout << endl;
 
-		//if (playerDB.size() == 0) {
-		//	cout << "연결된 플레이어가 없습니다..." << endl;
-		//	cout << endl;
-		//	result = "NO PLAYER";
-		//}
-		//else {
-		//	result = "HAS PLAYER";
-		//}
+		if (playerDB.size() == 0) {
+			cout << "연결된 플레이어가 없습니다..." << endl;
+			cout << endl;
+			result = "NO PLAYER";
+		}
+		else {
+			result = "HAS PLAYER";
+		}
 		
 
 		//좀비가 있을때 BT 실행
 		for (auto& zom : zombie) {
 
-			////플레이어가 있을때 BT 실행
-			//if (result == "NO PLAYER")
-			//	break;
+			//플레이어가 있을때 BT 실행
+			if (result == "NO PLAYER")
+				break;
 
 			cout << endl;
 			cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 실행==========" << endl;

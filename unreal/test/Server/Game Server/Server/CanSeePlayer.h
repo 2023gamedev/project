@@ -15,7 +15,8 @@ public:
         bool result = zom.PlayerInSight;
 
         //cout << "<Detect>의 [CanSeePlayer Task] 호출" << endl;
-        cout << "\'따라서\', 좀비 \"#" << zom.ZombieData.zombieID << "\"에 <Detect>의 [CanSeePlayer Task] 결과: " << boolalpha << result << endl;
+        //cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시야에 플레이어 \'#" << zom.bt_playerID << "\' 가 있는가?: " << boolalpha << result << endl;
+        cout << "따라서, 플레이어 \'#" << zom.bt_playerID << "\' 에 대한 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [CanSeePlayer Task] 결과: \"" << boolalpha << result << "\"" << endl;
         cout << endl;
         
         if (result)
