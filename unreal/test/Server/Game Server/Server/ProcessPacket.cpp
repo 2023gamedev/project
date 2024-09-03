@@ -179,7 +179,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         else {
             zombie[Packet.zombieid()].PlayerInSight = false;
-            zombie[Packet.zombieid()].KnewPlayerLocation = false;
         }
         //Packet.playerid()
 
