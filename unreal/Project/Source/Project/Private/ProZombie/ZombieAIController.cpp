@@ -104,12 +104,12 @@ void AZombieAIController::Tick(float DeltaTime)
 	for (AActor* Player : Players)
 	{
 		//좀비들의 시야 검사 나 자신에 대해서만 실시==========================
-		ABaseCharacter* Char = Cast<ABaseCharacter>(Player);
-
-		uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-
-		if (Char->GetPlayerId() == myPlayerId)
-			continue;
+		//ABaseCharacter* Char = Cast<ABaseCharacter>(Player);
+		//
+		//uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+		//
+		//if (Char->GetPlayerId() == myPlayerId)
+		//	continue;
 		//====================================================================
 
 		APawn* TestPawn = Cast<APawn>(Player);
@@ -128,12 +128,6 @@ void AZombieAIController::Tick(float DeltaTime)
 				NearestDist = Dist;
 				NearestPawn = TestPawn;
 
-
-				//===================================== 생각해보니 보고있는(시야에 들어오는) 상황을 실시간으로 체크해야 했음
-				//=>	보고 있는지 아닌지를 틱마다 보내는 건 아닌 것 같고, 변수를 하나 여기(언리얼)이랑 서버에 만들어서
-				//		일단 여기서 시야각에 들어오면 해당 변수를 true로 만들고 시야각 들어옴을 서버에 알리고 (현재 만들어 놓은 상태 -> 하지만 한번만 보내자[수정함])
-				//		시야를 벗어나 true인 상태를 벗어나면, 그때 벗어났다고 서버에 다시 알려줘야 할 것 같음 (만들어야 함)
-
 				// 감지한 좀비와 플레이어 아이디 전송
 				if (m_bPlayerInSight == false) {
 					m_bPlayerInSight = true;
@@ -142,12 +136,12 @@ void AZombieAIController::Tick(float DeltaTime)
 					LastSeenPlayer = BaseCharacter;
 				}
 			}
+		}
 
-			if (m_bPlayerInSight == true && NearestPawn == nullptr)
-			{
-				m_bPlayerInSight = false;
-				Send_PlayerLost(LastSeenPlayer); // 서버에 플레이어가 인식 범위를 벗어났음을 알림
-			}
+		if (m_bPlayerInSight == true && NearestPawn != TestPawn)
+		{
+			m_bPlayerInSight = false;
+			Send_PlayerLost(LastSeenPlayer); // 서버에 플레이어가 인식 범위를 벗어났음을 알림
 		}
 
 		//if (TestPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(TestPawn))
