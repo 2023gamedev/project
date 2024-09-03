@@ -190,11 +190,11 @@ void AZombieAIController::Send_Detected(ABaseCharacter* BaseCharacter)
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
-void AZombieAIController::Send_PlayerLost(ABaseCharacter* LastSeenPlayer)
+void AZombieAIController::Send_PlayerLost(ABaseCharacter* BaseCharacter)
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
 	ZombieId = ZombiePawn->GetZombieId();
-	uint32 PlayerId = LastSeenPlayer->GetPlayerId();
+	uint32 PlayerId = BaseCharacter->GetPlayerId();
 
 	Protocol::Detected packet;
 	packet.set_zombieid(ZombieId);
