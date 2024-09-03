@@ -68,104 +68,112 @@ void AZombieAIController::Tick(float DeltaTime)
 
 
 
-		APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
-		ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
+	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
 
-		if (PlayerPawn == nullptr || NormalZombie == nullptr) {
-			return;
-		}
+	if (PlayerPawn == nullptr || NormalZombie == nullptr) {
+		return;
+	}
 
-		FVector ZombieForward = NormalZombie->GetActorForwardVector(); // 좀비의 전방 벡터
-		FVector ZombieLocation = NormalZombie->GetActorLocation(); // 좀비의 위치
+	FVector ZombieForward = NormalZombie->GetActorForwardVector(); // 좀비의 전방 벡터
+	FVector ZombieLocation = NormalZombie->GetActorLocation(); // 좀비의 위치
 
-		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
-		//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-		FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
-		//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
-		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
+	//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+	FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
+	//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
+	float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
-		float MaxSightRange = 1000.f; // 원하는 최대 시야 범위를 설정하세요.
-
-
-		//========================================================================== 시야각 설정 설정 필요!
-		// 시야각을 90도로 설정 (전방 180도)
-		//float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // 전방 90도
+	float MaxSightRange = 1000.f; // 원하는 최대 시야 범위를 설정하세요.
 
 
+	//========================================================================== 시야각 설정 설정 필요!
+	// 시야각을 90도로 설정 (전방 180도)
+	//float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // 전방 90도
 
 
-		TArray<AActor*> Players;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
 
-		APawn* NearestPawn = nullptr;
-		float NearestDist = FLT_MAX;
 
-		for (AActor* Player : Players)
+	TArray<AActor*> Players;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
+
+	APawn* NearestPawn = nullptr;
+	float NearestDist = FLT_MAX;
+
+	for (AActor* Player : Players)
+	{
+		//좀비들의 시야 검사 나 자신에 대해서만 실시==========================
+		ABaseCharacter* Char = Cast<ABaseCharacter>(Player);
+
+		uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+
+		if (Char->GetPlayerId() == myPlayerId)
+			continue;
+		//====================================================================
+
+		APawn* TestPawn = Cast<APawn>(Player);
+
+		PlayerLocation = TestPawn->GetActorLocation(); // 플레이어의 위치
+		// DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+		TargetLocation = PlayerLocation + (ZombieForward * 150.f);
+		// DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
+		Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+
+		if (TestPawn && Distance <= MaxSightRange && LineOfSightTo(TestPawn))
 		{
-			APawn* TestPawn = Cast<APawn>(Player);
-
-			PlayerLocation = TestPawn->GetActorLocation(); // 플레이어의 위치
-			// DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-			TargetLocation = PlayerLocation + (ZombieForward * 150.f);
-			// DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
-			Distance = FVector::Dist(PlayerLocation, ZombieLocation);
-
-			if (TestPawn && Distance <= MaxSightRange && LineOfSightTo(TestPawn))
+			float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
+			if (Dist < NearestDist)
 			{
-				float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
-				if (Dist < NearestDist)
-				{
-					NearestDist = Dist;
-					NearestPawn = TestPawn;
+				NearestDist = Dist;
+				NearestPawn = TestPawn;
 
-			
-					//===================================== 생각해보니 보고있는(시야에 들어오는) 상황을 실시간으로 체크해야 했음
-					//=>	보고 있는지 아닌지를 틱마다 보내는 건 아닌 것 같고, 변수를 하나 여기(언리얼)이랑 서버에 만들어서
-					//		일단 여기서 시야각에 들어오면 해당 변수를 true로 만들고 시야각 들어옴을 서버에 알리고 (현재 만들어 놓은 상태 -> 하지만 한번만 보내자[수정함])
-					//		시야를 벗어나 true인 상태를 벗어나면, 그때 벗어났다고 서버에 다시 알려줘야 할 것 같음 (만들어야 함)
 
-					// 감지한 좀비와 플레이어 아이디 전송
-					if (m_bPlayerInSight == false) {
-						m_bPlayerInSight = true;
-						ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
-						Send_Detected(BaseCharacter);
-						LastSeenPlayer = BaseCharacter;
-					}
-				}
+				//===================================== 생각해보니 보고있는(시야에 들어오는) 상황을 실시간으로 체크해야 했음
+				//=>	보고 있는지 아닌지를 틱마다 보내는 건 아닌 것 같고, 변수를 하나 여기(언리얼)이랑 서버에 만들어서
+				//		일단 여기서 시야각에 들어오면 해당 변수를 true로 만들고 시야각 들어옴을 서버에 알리고 (현재 만들어 놓은 상태 -> 하지만 한번만 보내자[수정함])
+				//		시야를 벗어나 true인 상태를 벗어나면, 그때 벗어났다고 서버에 다시 알려줘야 할 것 같음 (만들어야 함)
 
-				if (m_bPlayerInSight == true && NearestPawn == nullptr)
-				{
-					m_bPlayerInSight = false;
-					Send_PlayerLost(LastSeenPlayer); // 서버에 플레이어가 인식 범위를 벗어났음을 알림
-					LastSeenPlayer = nullptr;
+				// 감지한 좀비와 플레이어 아이디 전송
+				if (m_bPlayerInSight == false) {
+					m_bPlayerInSight = true;
+					ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
+					Send_Detected(BaseCharacter);
+					LastSeenPlayer = BaseCharacter;
 				}
 			}
 
-			//if (TestPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(TestPawn))
-			//{
-			//	float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
-			//	if (Dist < NearestDist)
-			//	{
-			//		NearestDist = Dist;
-			//		NearestPawn = TestPawn;
-			//	}
-			//}
+			if (m_bPlayerInSight == true && NearestPawn == nullptr)
+			{
+				m_bPlayerInSight = false;
+				Send_PlayerLost(LastSeenPlayer); // 서버에 플레이어가 인식 범위를 벗어났음을 알림
+			}
 		}
 
-		// 블랙보드 업데이트
-		if (NearestPawn)
-		{
-			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
-			//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
-			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
-			GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
-		}
-		else
-		{
-			GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-			GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
-		}
+		//if (TestPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(TestPawn))
+		//{
+		//	float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
+		//	if (Dist < NearestDist)
+		//	{
+		//		NearestDist = Dist;
+		//		NearestPawn = TestPawn;
+		//	}
+		//}
+	}
+
+	// 블랙보드 업데이트
+	if (NearestPawn)
+	{
+		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
+		//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
+	}
+	else
+	{
+		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
+	}
 	//}
 
 	//CheckAndSendMovement();
