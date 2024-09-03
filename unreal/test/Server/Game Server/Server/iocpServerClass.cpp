@@ -329,17 +329,29 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 void IOCP_CORE::Timer_Thread()
 {
 	printf("Timer Thread Started\n");
+	auto lastTime = std::chrono::high_resolution_clock::now();
+
 	while (!ServerShutdown)
 	{
 		if (b_Timer) 
 		{
 			Protocol::Time packet;
 
-			//============================================================ sleep_for 정확도 떨어지니 deltaTime 변수 따로 만들어서 지나간 시간을 계산해서 시간 초 세기로 수정하기
-			std::this_thread::sleep_for(std::chrono::seconds(1)); // 1초마다 타이머
-			GameTime++;
+			// 현재 시간 측정
+			auto currentTime = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<float> deltaTime = currentTime - lastTime;
+			lastTime = currentTime;
 
-			std::string gameTimeStr = std::to_string(GameTime);
+			// deltaTime을 누적하여 GameTime에 더함
+			GameTime += deltaTime.count();  // 초 단위
+			for (auto& zom : zombie) {
+				if (!(zom.path.empty())) {
+					zom.Walk(deltaTime.count());
+				}
+			}
+
+			// GameTime을 문자열로 변환
+			//std::string gameTimeStr = std::to_string(GameTime);
 
 			packet.set_timer(GameTime);
 			packet.set_packet_type(3);

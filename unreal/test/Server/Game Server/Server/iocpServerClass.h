@@ -150,7 +150,7 @@ private:
 
 	ZombieController* zombieclass;
 
-	int GameTime = 0;
+	float GameTime = 0.f;
 
 	bool b_Timer = false;
 };
