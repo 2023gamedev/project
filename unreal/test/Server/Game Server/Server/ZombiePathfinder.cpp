@@ -227,7 +227,7 @@ bool ZombiePathfinder::IsPathBlockedByObstacle(const Node& startNode, const Node
         float t = static_cast<float>(i) / numSteps;
         float x = startNode.x + t * dx;
         float y = startNode.y + t * dy;
-        float z = startNode.z + t * dz;
+        float z = startNode.z + t * dz; // 사실 z값이 필요하지는 않음
 
         if (IsInObstacleRange(x, y, z)) {
             return true; // 경로 상에 장애물이 있음
@@ -246,7 +246,7 @@ bool ZombiePathfinder::IsInObstacleRange(float x, float y, float z)
         float dy = y - oy;
         float distance = sqrt(dx * dx + dy * dy);
 
-        if (distance <= OBSTACLE_RADIUS) { // 장애물 부분 수정 필요
+        if (distance <= OBSTACLE_RADIUS) { 
             return true;
         }
     }

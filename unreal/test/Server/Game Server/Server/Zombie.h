@@ -76,6 +76,7 @@ public:
 
     int bt_playerID;        //BT 돌릴때, 어떤 플레이어와 검사 할지를 설정하기 위해 사용 -> SetTargetLocation 등에서 필요
 
+    int ZombiePathIndex = 0;
 
     Zombie();
 
