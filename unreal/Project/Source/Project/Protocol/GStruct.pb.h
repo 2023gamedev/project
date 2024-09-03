@@ -1421,13 +1421,13 @@ class Time final :
     kTimerFieldNumber = 1,
     kPacketTypeFieldNumber = 3,
   };
-  // uint32 timer = 1;
+  // float timer = 1;
   void clear_timer();
-  uint32_t timer() const;
-  void set_timer(uint32_t value);
+  float timer() const;
+  void set_timer(float value);
   private:
-  uint32_t _internal_timer() const;
-  void _internal_set_timer(uint32_t value);
+  float _internal_timer() const;
+  void _internal_set_timer(float value);
   public:
 
   // uint32 packet_type = 3;
@@ -1447,7 +1447,7 @@ class Time final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    uint32_t timer_;
+    float timer_;
     uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -2924,22 +2924,22 @@ inline void Detected::set_packet_type(uint32_t value) {
 
 // Time
 
-// uint32 timer = 1;
+// float timer = 1;
 inline void Time::clear_timer() {
-  _impl_.timer_ = 0u;
+  _impl_.timer_ = 0;
 }
-inline uint32_t Time::_internal_timer() const {
+inline float Time::_internal_timer() const {
   return _impl_.timer_;
 }
-inline uint32_t Time::timer() const {
+inline float Time::timer() const {
   // @@protoc_insertion_point(field_get:Protocol.Time.timer)
   return _internal_timer();
 }
-inline void Time::_internal_set_timer(uint32_t value) {
+inline void Time::_internal_set_timer(float value) {
   
   _impl_.timer_ = value;
 }
-inline void Time::set_timer(uint32_t value) {
+inline void Time::set_timer(float value) {
   _internal_set_timer(value);
   // @@protoc_insertion_point(field_set:Protocol.Time.timer)
 }

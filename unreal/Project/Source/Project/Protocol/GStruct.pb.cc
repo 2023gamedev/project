@@ -127,7 +127,7 @@ struct DetectedDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DetectedDefaultTypeInternal _Detected_default_instance_;
 PROTOBUF_CONSTEXPR Time::Time(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.timer_)*/0u
+    /*decltype(_impl_.timer_)*/0
   , /*decltype(_impl_.packet_type_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct TimeDefaultTypeInternal {
@@ -364,7 +364,7 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "ocation\030\004 \001(\0132\021.Protocol.Vector3\"C\n\010Dete"
   "cted\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r"
   "\022\023\n\013packet_type\030\003 \001(\r\"*\n\004Time\022\r\n\005timer\030\001"
-  " \001(\r\022\023\n\013packet_type\030\003 \001(\r\"I\n\020Character_A"
+  " \001(\002\022\023\n\013packet_type\030\003 \001(\r\"I\n\020Character_A"
   "ttack\022\020\n\010playerid\030\001 \001(\r\022\016\n\006attack\030\002 \001(\010\022"
   "\023\n\013packet_type\030\003 \001(\r\"W\n\nEquip_Item\022\020\n\010pl"
   "ayerid\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013packet"
@@ -2388,7 +2388,7 @@ inline void Time::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.timer_){0u}
+      decltype(_impl_.timer_){0}
     , decltype(_impl_.packet_type_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -2429,11 +2429,11 @@ const char* Time::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint32 timer = 1;
+      // float timer = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _impl_.timer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 13)) {
+          _impl_.timer_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
@@ -2474,10 +2474,14 @@ uint8_t* Time::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 timer = 1;
-  if (this->_internal_timer() != 0) {
+  // float timer = 1;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_timer = this->_internal_timer();
+  uint32_t raw_timer;
+  memcpy(&raw_timer, &tmp_timer, sizeof(tmp_timer));
+  if (raw_timer != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_timer(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(1, this->_internal_timer(), target);
   }
 
   // uint32 packet_type = 3;
@@ -2502,9 +2506,13 @@ size_t Time::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // uint32 timer = 1;
-  if (this->_internal_timer() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_timer());
+  // float timer = 1;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_timer = this->_internal_timer();
+  uint32_t raw_timer;
+  memcpy(&raw_timer, &tmp_timer, sizeof(tmp_timer));
+  if (raw_timer != 0) {
+    total_size += 1 + 4;
   }
 
   // uint32 packet_type = 3;
@@ -2530,7 +2538,11 @@ void Time::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_timer() != 0) {
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_timer = from._internal_timer();
+  uint32_t raw_timer;
+  memcpy(&raw_timer, &tmp_timer, sizeof(tmp_timer));
+  if (raw_timer != 0) {
     _this->_internal_set_timer(from._internal_timer());
   }
   if (from._internal_packet_type() != 0) {
