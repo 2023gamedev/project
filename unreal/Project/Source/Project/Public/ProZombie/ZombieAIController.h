@@ -33,6 +33,8 @@ public:
 
 	void Send_Detected(ABaseCharacter* BaseCharacter);
 
+	void Send_PlayerLost(ABaseCharacter* LastSeenPlayer);
+
 	void CheckAndSendMovement();
 
 	void SetStartLocationValue(FVector startlocation);
@@ -78,6 +80,8 @@ public:
 	FVector NewLocation;
 	FVector PreviousLocation;
 	FRotator PreviousRotation;
+
+	ABaseCharacter* LastSeenPlayer;
 
 
 };

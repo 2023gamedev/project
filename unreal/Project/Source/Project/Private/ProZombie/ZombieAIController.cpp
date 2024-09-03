@@ -131,7 +131,15 @@ void AZombieAIController::Tick(float DeltaTime)
 						m_bPlayerInSight = true;
 						ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
 						Send_Detected(BaseCharacter);
+						LastSeenPlayer = BaseCharacter;
 					}
+				}
+
+				if (m_bPlayerInSight == true && NearestPawn == nullptr)
+				{
+					m_bPlayerInSight = false;
+					Send_PlayerLost(LastSeenPlayer); // 서버에 플레이어가 인식 범위를 벗어났음을 알림
+					LastSeenPlayer = nullptr;
 				}
 			}
 
@@ -173,6 +181,25 @@ void AZombieAIController::Send_Detected(ABaseCharacter* BaseCharacter)
 	Protocol::Detected packet;
 	packet.set_zombieid(ZombieId);
 	packet.set_playerid(PlayerId);
+	packet.set_player_insight(true);
+	packet.set_packet_type(9);
+
+	std::string serializedData;
+	packet.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+}
+
+void AZombieAIController::Send_PlayerLost(ABaseCharacter* LastSeenPlayer)
+{
+	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
+	ZombieId = ZombiePawn->GetZombieId();
+	uint32 PlayerId = LastSeenPlayer->GetPlayerId();
+
+	Protocol::Detected packet;
+	packet.set_zombieid(ZombieId);
+	packet.set_playerid(PlayerId);
+	packet.set_player_insight(false);
 	packet.set_packet_type(9);
 
 	std::string serializedData;

@@ -172,8 +172,15 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Protocol::Detected Packet;
         Packet.ParseFromArray(buffer, bufferSize);
 
-        zombie[Packet.zombieid()].PlayerInSight = true;
-        zombie[Packet.zombieid()].KnewPlayerLocation = true;
+        if (Packet.player_insight()) {
+            zombie[Packet.zombieid()].PlayerInSight = true;
+            zombie[Packet.zombieid()].KnewPlayerLocation = true;
+        }
+
+        else {
+            zombie[Packet.zombieid()].PlayerInSight = false;
+            zombie[Packet.zombieid()].KnewPlayerLocation = false;
+        }
         //Packet.playerid()
 
         //============================ return true; 가 빠져서 아래 에러 메세지가 계속 같이 뜸
