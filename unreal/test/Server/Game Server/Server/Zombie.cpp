@@ -113,18 +113,70 @@ void Zombie::Attack()
 	cout << endl;
 }
 
+#define DELTA_TIME 0.2f
+
 void Zombie::Walk()
 {
+	if (ZombiePathIndex >= path.size()) {
+		cout << "Zombie has reached the final destination." << endl;
+		ZombiePathIndex = 0;
+		return; // 경로 끝에 도달
+	}
 
 	float PathX = get<0>(path.front());
 	float PathY = get<1>(path.front());
-	if (ZombieData.x == PathX && ZombieData.y == PathY) {
-		PathX = get<0>(path[1]);
-		PathY = get<1>(path[1]);
+	if (ZombieData.x == PathX && ZombieData.y == PathY) { // 혹시 초기 위치가 같으면 다음 path값을 받아오게 변경
+		ZombiePathIndex++;
+	}
+	float ZombieSpeed = 0.f;
+	if (ZombieData.zombietype == 0) {
+		ZombieSpeed = 200.f;
+	}
+	else if (ZombieData.zombietype == 1) {
+		ZombieSpeed = 300.f;
+	}
+	else if (ZombieData.zombietype == 2) {
+		ZombieSpeed = 400.f;
+	}
+	else {
+		cout << "WALK ERROR" << endl;
+		return;
+	}
+	
+
+	// 현재 목표 노드
+	tuple<float, float, float> TargetNode = path[ZombiePathIndex];
+
+
+
+	// 타겟 방향 계산
+	float dx = get<0>(TargetNode) - ZombieData.x;
+	float dy = get<1>(TargetNode) - ZombieData.y;
+
+	// 거리를 계산
+	float distance = sqrt(dx * dx + dy * dy);
+
+
+	// 타겟 위치에 도달했는지 확인
+	if (distance <= ZombieSpeed * DELTA_TIME) {
+		ZombieData.x = get<0>(TargetNode);
+		ZombieData.y = get<1>(TargetNode);
+
+		// 다음 목표 노드로 이동
+		ZombiePathIndex++;
+
+		if (ZombiePathIndex >= path.size()) {
+			cout << "Zombie 경로 끝." << endl;
+			ZombiePathIndex = 0;
+		}
+	}
+	else {
+		// 타겟 방향으로 이동
+		float MoveFactor = (ZombieSpeed * DELTA_TIME) / distance;
+		ZombieData.x += dx * MoveFactor;
+		ZombieData.y += dy * MoveFactor;
 	}
 
-
-	cout << "좀비 \'#" << ZombieData.zombieID << "\' WALK ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
 }
 
 
