@@ -113,9 +113,8 @@ void Zombie::Attack()
 	cout << endl;
 }
 
-#define DELTA_TIME 0.2f
 
-void Zombie::Walk()
+void Zombie::Walk(float deltasecond)
 {
 	if (ZombiePathIndex >= path.size()) {
 		cout << "Zombie has reached the final destination." << endl;
@@ -143,7 +142,6 @@ void Zombie::Walk()
 		return;
 	}
 	
-
 	// 현재 목표 노드
 	tuple<float, float, float> TargetNode = path[ZombiePathIndex];
 
@@ -158,7 +156,7 @@ void Zombie::Walk()
 
 
 	// 타겟 위치에 도달했는지 확인
-	if (distance <= ZombieSpeed * DELTA_TIME) {
+	if (distance <= ZombieSpeed * deltasecond) {
 		ZombieData.x = get<0>(TargetNode);
 		ZombieData.y = get<1>(TargetNode);
 
@@ -172,7 +170,7 @@ void Zombie::Walk()
 	}
 	else {
 		// 타겟 방향으로 이동
-		float MoveFactor = (ZombieSpeed * DELTA_TIME) / distance;
+		float MoveFactor = (ZombieSpeed * deltasecond) / distance;
 		ZombieData.x += dx * MoveFactor;
 		ZombieData.y += dy * MoveFactor;
 	}
@@ -222,8 +220,7 @@ void Zombie::MoveTo()
 	//===================================
 
 	cout << endl;
-	Walk();
-	// A* 장애물을 제대로 피하도록 수정 필요
+	// Walk();
 
 	//===================================
 

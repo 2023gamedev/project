@@ -95,7 +95,7 @@ public:
 
     void Wait();
 
-    void Walk();
+    void Walk(float deltasecond);
 
     //void ShoutingHear();
     

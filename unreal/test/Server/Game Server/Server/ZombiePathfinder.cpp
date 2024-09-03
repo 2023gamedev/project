@@ -220,14 +220,14 @@ bool ZombiePathfinder::IsPathBlockedByObstacle(const Node& startNode, const Node
     float dy = endNode.y - startNode.y;
     float dz = endNode.z - startNode.z;
 
-    float length = sqrt(dx * dx + dy * dy + dz * dz);
+    float length = sqrt(dx * dx + dy * dy);
     int numSteps = static_cast<int>(length / OBSTACLE_CHECK_INTERVAL); // 장애물 체크 간격에 따라 조정
 
     for (int i = 0; i <= numSteps; ++i) {
         float t = static_cast<float>(i) / numSteps;
         float x = startNode.x + t * dx;
         float y = startNode.y + t * dy;
-        float z = startNode.z + t * dz; // 사실 z값이 필요하지는 않음
+        float z = startNode.z + t * dz; // 사실 z값은 필요하지는 않음
 
         if (IsInObstacleRange(x, y, z)) {
             return true; // 경로 상에 장애물이 있음
