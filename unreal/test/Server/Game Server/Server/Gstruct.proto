@@ -52,7 +52,7 @@ message Detected {
 }
 
 message Time {
-    uint32 timer = 1;
+    float timer = 1;
     uint32 packet_type = 3;
 }
 

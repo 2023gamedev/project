@@ -156,7 +156,7 @@ public:
 
 	uint32 GetMyPlayerId() const;
 
-	uint32 Timer = 0;
+	float Timer = 0.f;
 
 	bool b_run = false;
 
