@@ -115,6 +115,7 @@ PROTOBUF_CONSTEXPR Detected::Detected(
     /*decltype(_impl_.zombieid_)*/0u
   , /*decltype(_impl_.playerid_)*/0u
   , /*decltype(_impl_.packet_type_)*/0u
+  , /*decltype(_impl_.player_insight_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct DetectedDefaultTypeInternal {
   PROTOBUF_CONSTEXPR DetectedDefaultTypeInternal()
@@ -273,6 +274,7 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::Detected, _impl_.zombieid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Detected, _impl_.playerid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Detected, _impl_.packet_type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Detected, _impl_.player_insight_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::Time, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -325,11 +327,11 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 40, -1, -1, sizeof(::Protocol::Vector3)},
   { 49, -1, -1, sizeof(::Protocol::ZombiePath)},
   { 59, -1, -1, sizeof(::Protocol::Detected)},
-  { 68, -1, -1, sizeof(::Protocol::Time)},
-  { 76, -1, -1, sizeof(::Protocol::Character_Attack)},
-  { 85, -1, -1, sizeof(::Protocol::Equip_Item)},
-  { 95, -1, -1, sizeof(::Protocol::run)},
-  { 104, -1, -1, sizeof(::Protocol::jump)},
+  { 69, -1, -1, sizeof(::Protocol::Time)},
+  { 77, -1, -1, sizeof(::Protocol::Character_Attack)},
+  { 86, -1, -1, sizeof(::Protocol::Equip_Item)},
+  { 96, -1, -1, sizeof(::Protocol::run)},
+  { 105, -1, -1, sizeof(::Protocol::jump)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -361,21 +363,22 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\"y\n\nZombieP"
   "ath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004path\030\002 \003(\0132\021.Pr"
   "otocol.Vector3\022\023\n\013packet_type\030\003 \001(\r\022#\n\010l"
-  "ocation\030\004 \001(\0132\021.Protocol.Vector3\"C\n\010Dete"
+  "ocation\030\004 \001(\0132\021.Protocol.Vector3\"[\n\010Dete"
   "cted\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r"
-  "\022\023\n\013packet_type\030\003 \001(\r\"*\n\004Time\022\r\n\005timer\030\001"
-  " \001(\002\022\023\n\013packet_type\030\003 \001(\r\"I\n\020Character_A"
-  "ttack\022\020\n\010playerid\030\001 \001(\r\022\016\n\006attack\030\002 \001(\010\022"
-  "\023\n\013packet_type\030\003 \001(\r\"W\n\nEquip_Item\022\020\n\010pl"
-  "ayerid\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013packet"
-  "_type\030\003 \001(\r\022\020\n\010itemtype\030\004 \001(\r\";\n\003run\022\020\n\010"
-  "playerid\030\001 \001(\r\022\r\n\005b_run\030\002 \001(\010\022\023\n\013packet_"
-  "type\030\003 \001(\r\"-\n\004jump\022\020\n\010playerid\030\001 \001(\r\022\023\n\013"
-  "packet_type\030\003 \001(\rb\006proto3"
+  "\022\023\n\013packet_type\030\003 \001(\r\022\026\n\016player_insight\030"
+  "\004 \001(\010\"*\n\004Time\022\r\n\005timer\030\001 \001(\002\022\023\n\013packet_t"
+  "ype\030\003 \001(\r\"I\n\020Character_Attack\022\020\n\010playeri"
+  "d\030\001 \001(\r\022\016\n\006attack\030\002 \001(\010\022\023\n\013packet_type\030\003"
+  " \001(\r\"W\n\nEquip_Item\022\020\n\010playerid\030\001 \001(\r\022\020\n\010"
+  "itemname\030\002 \001(\t\022\023\n\013packet_type\030\003 \001(\r\022\020\n\010i"
+  "temtype\030\004 \001(\r\";\n\003run\022\020\n\010playerid\030\001 \001(\r\022\r"
+  "\n\005b_run\030\002 \001(\010\022\023\n\013packet_type\030\003 \001(\r\"-\n\004ju"
+  "mp\022\020\n\010playerid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001("
+  "\rb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 985, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 1009, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 11,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -2140,12 +2143,13 @@ Detected::Detected(const Detected& from)
       decltype(_impl_.zombieid_){}
     , decltype(_impl_.playerid_){}
     , decltype(_impl_.packet_type_){}
+    , decltype(_impl_.player_insight_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.zombieid_, &from._impl_.zombieid_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.packet_type_) -
-    reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.packet_type_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.player_insight_) -
+    reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.player_insight_));
   // @@protoc_insertion_point(copy_constructor:Protocol.Detected)
 }
 
@@ -2157,6 +2161,7 @@ inline void Detected::SharedCtor(
       decltype(_impl_.zombieid_){0u}
     , decltype(_impl_.playerid_){0u}
     , decltype(_impl_.packet_type_){0u}
+    , decltype(_impl_.player_insight_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -2185,8 +2190,8 @@ void Detected::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.zombieid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.packet_type_) -
-      reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.packet_type_));
+      reinterpret_cast<char*>(&_impl_.player_insight_) -
+      reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.player_insight_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2216,6 +2221,14 @@ const char* Detected::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.packet_type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool player_insight = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.player_insight_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -2267,6 +2280,12 @@ uint8_t* Detected::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
   }
 
+  // bool player_insight = 4;
+  if (this->_internal_player_insight() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_player_insight(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2298,6 +2317,11 @@ size_t Detected::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
   }
 
+  // bool player_insight = 4;
+  if (this->_internal_player_insight() != 0) {
+    total_size += 1 + 1;
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2325,6 +2349,9 @@ void Detected::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTO
   if (from._internal_packet_type() != 0) {
     _this->_internal_set_packet_type(from._internal_packet_type());
   }
+  if (from._internal_player_insight() != 0) {
+    _this->_internal_set_player_insight(from._internal_player_insight());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2343,8 +2370,8 @@ void Detected::InternalSwap(Detected* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Detected, _impl_.packet_type_)
-      + sizeof(Detected::_impl_.packet_type_)
+      PROTOBUF_FIELD_OFFSET(Detected, _impl_.player_insight_)
+      + sizeof(Detected::_impl_.player_insight_)
       - PROTOBUF_FIELD_OFFSET(Detected, _impl_.zombieid_)>(
           reinterpret_cast<char*>(&_impl_.zombieid_),
           reinterpret_cast<char*>(&other->_impl_.zombieid_));

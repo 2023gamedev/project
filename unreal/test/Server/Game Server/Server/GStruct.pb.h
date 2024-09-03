@@ -1252,6 +1252,7 @@ class Detected final :
     kZombieidFieldNumber = 1,
     kPlayeridFieldNumber = 2,
     kPacketTypeFieldNumber = 3,
+    kPlayerInsightFieldNumber = 4,
   };
   // uint32 zombieid = 1;
   void clear_zombieid();
@@ -1280,6 +1281,15 @@ class Detected final :
   void _internal_set_packet_type(uint32_t value);
   public:
 
+  // bool player_insight = 4;
+  void clear_player_insight();
+  bool player_insight() const;
+  void set_player_insight(bool value);
+  private:
+  bool _internal_player_insight() const;
+  void _internal_set_player_insight(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.Detected)
  private:
   class _Internal;
@@ -1291,6 +1301,7 @@ class Detected final :
     uint32_t zombieid_;
     uint32_t playerid_;
     uint32_t packet_type_;
+    bool player_insight_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2919,6 +2930,26 @@ inline void Detected::_internal_set_packet_type(uint32_t value) {
 inline void Detected::set_packet_type(uint32_t value) {
   _internal_set_packet_type(value);
   // @@protoc_insertion_point(field_set:Protocol.Detected.packet_type)
+}
+
+// bool player_insight = 4;
+inline void Detected::clear_player_insight() {
+  _impl_.player_insight_ = false;
+}
+inline bool Detected::_internal_player_insight() const {
+  return _impl_.player_insight_;
+}
+inline bool Detected::player_insight() const {
+  // @@protoc_insertion_point(field_get:Protocol.Detected.player_insight)
+  return _internal_player_insight();
+}
+inline void Detected::_internal_set_player_insight(bool value) {
+  
+  _impl_.player_insight_ = value;
+}
+inline void Detected::set_player_insight(bool value) {
+  _internal_set_player_insight(value);
+  // @@protoc_insertion_point(field_set:Protocol.Detected.player_insight)
 }
 
 // -------------------------------------------------------------------
