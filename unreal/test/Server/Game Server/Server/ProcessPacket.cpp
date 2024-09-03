@@ -176,7 +176,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         zombie[Packet.zombieid()].KnewPlayerLocation = true;
         //Packet.playerid()
 
-        //============================ return true; 가 빠져서 아래 에러 메세지가 계속 같이 뜸
         return true;
     }
 
