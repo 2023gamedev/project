@@ -336,7 +336,6 @@ void IOCP_CORE::Timer_Thread()
 	{
 		if (b_Timer) 
 		{
-			Protocol::Time packet;
 
 			// 현재 시간 측정
 			auto currentTime = std::chrono::high_resolution_clock::now();
@@ -376,7 +375,7 @@ void IOCP_CORE::Timer_Thread()
 						IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
 					}
 					cout << "send" << '\n';
-					printf("Send Timer");
+					//printf("Send Timer");
 				}
 
 				lastSendTime = currentTime;
