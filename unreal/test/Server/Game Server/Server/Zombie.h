@@ -46,6 +46,7 @@ public:
 
 
     vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
+    vector<tuple<float, float, float>> beforepath;  //PathFinder로부터 받은 이전 경로 저장
 
 
     const float CanAttackDistance = 150.f;          //========================언리얼 BTIsinAttackRange.cpp에서 CalculateRawConditionValue(...) - if (DistanceToTarget > 150.f)에서 참조 (맞는지 확인 필요)
@@ -96,6 +97,8 @@ public:
     void Wait();
 
     void Walk(float deltasecond);
+
+    bool IsPathUpdated();
 
     //void ShoutingHear();
     

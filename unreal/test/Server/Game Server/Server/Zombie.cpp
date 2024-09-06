@@ -16,6 +16,8 @@ Zombie::Zombie()
 {
 	path = vector<tuple<float, float, float>>{};
 
+	beforepath = vector<tuple<float, float, float>>{};
+
 	ZombieData = Zombie_Data();
 
 	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
@@ -116,17 +118,20 @@ void Zombie::Attack()
 
 void Zombie::Walk(float deltasecond)
 {
-	if (ZombiePathIndex >= path.size()) {
-		cout << "Zombie has reached the final destination." << endl;
+	if (IsPathUpdated()) {
 		ZombiePathIndex = 0;
+	}
+
+	if (ZombiePathIndex >= path.size()) {
+		// cout << "Zombie has reached the final destination." << endl;
 		return; // 경로 끝에 도달
 	}
 
-	float PathX = get<0>(path.front());
-	float PathY = get<1>(path.front());
-	if (ZombieData.x == PathX && ZombieData.y == PathY) { // 혹시 초기 위치가 같으면 다음 path값을 받아오게 변경
-		ZombiePathIndex++;
-	}
+	// 현재 목표 노드
+	tuple<float, float, float> TargetNode = path[ZombiePathIndex];
+	float PathX = get<0>(TargetNode);
+	float PathY = get<1>(TargetNode);
+
 	float ZombieSpeed = 0.f;
 	if (ZombieData.zombietype == 0) {
 		ZombieSpeed = 200.f;
@@ -141,31 +146,24 @@ void Zombie::Walk(float deltasecond)
 		cout << "WALK ERROR" << endl;
 		return;
 	}
-	
-	// 현재 목표 노드
-	tuple<float, float, float> TargetNode = path[ZombiePathIndex];
-
-
 
 	// 타겟 방향 계산
-	float dx = get<0>(TargetNode) - ZombieData.x;
-	float dy = get<1>(TargetNode) - ZombieData.y;
+	float dx = PathX - ZombieData.x;
+	float dy = PathY - ZombieData.y;
 
 	// 거리를 계산
 	float distance = sqrt(dx * dx + dy * dy);
 
-
 	// 타겟 위치에 도달했는지 확인
 	if (distance <= ZombieSpeed * deltasecond) {
-		ZombieData.x = get<0>(TargetNode);
-		ZombieData.y = get<1>(TargetNode);
+		ZombieData.x = PathX;
+		ZombieData.y = PathY;
 
 		// 다음 목표 노드로 이동
 		ZombiePathIndex++;
 
 		if (ZombiePathIndex >= path.size()) {
 			cout << "Zombie 경로 끝." << endl;
-			ZombiePathIndex = 0;
 		}
 	}
 	else {
@@ -174,7 +172,17 @@ void Zombie::Walk(float deltasecond)
 		ZombieData.x += dx * MoveFactor;
 		ZombieData.y += dy * MoveFactor;
 	}
+}
 
+bool Zombie::IsPathUpdated()
+{
+	if (beforepath == path) {
+		return false;
+	}
+	else {
+		beforepath = path;
+		return true;
+	}
 }
 
 
@@ -185,6 +193,7 @@ void Zombie::MoveTo()
 
 	//===================================
 	ZombiePathfinder pathfinder(zl[0][0][0], zl[0][0][1], zl[0][0][2], tl[0][0][0], tl[0][0][1], tl[0][0][2]);
+	beforepath = path;
 	pathfinder.Run(path);
 
 	// path값 전송
@@ -220,7 +229,6 @@ void Zombie::MoveTo()
 	//===================================
 
 	cout << endl;
-	// Walk();
 
 	//===================================
 

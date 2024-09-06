@@ -346,6 +346,10 @@ void IOCP_CORE::Timer_Thread()
 			GameTime += deltaTime.count();  // 초 단위
 			for (auto& zom : zombie) {
 				if (!(zom.path.empty())) {
+					//if (zom.ZombiePathIndex >= zom.path.size()) {
+					//	 // cout << "Zombie has reached the final destination." << endl;
+					//	continue; // 경로 끝에 도달
+					//}
 					zom.Walk(deltaTime.count());
 				}
 			}
