@@ -497,12 +497,25 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 	string result = "Initial";
 
+	auto lastTime = std::chrono::high_resolution_clock::now();
+	auto lastBTTime = std::chrono::high_resolution_clock::now();
+
 	while (true) {
 
 		//서버가 먼저 켜지고 좀비 BT가 실행되도록
 		if (bServerOn == false)
 			continue;
 
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<float> deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+
+		std::chrono::duration<float> BTInterval = currentTime - lastBTTime;
+		if (BTInterval.count() < 5.0f) {
+			continue;							// BT 작동 인터벌 설정 - 5초
+		}
+
+		lastBTTime = currentTime;
 
 		//=============================================== 좀비가 만약 한 번에 여러명의 플레이어를 포착하면 어떤 플레이어를 우선적으로 따라가게 만들지? => 의논 필요!!!
 		//												======> 거리가 가장 가까운 플레이어를 따라가도록 (+만약 최단 거리가 두명 이상이면 랜덤하게 따라가게) 
@@ -620,16 +633,16 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 
 		//콘솔창에서 한 싸이클씩 돌아가게
-		cout << "(계속 진행)아무거나 입력 후 엔터: ";
-		char one_cycle;
-		cin >> one_cycle;
-		if (cin.fail()) {
-			cin.clear();
-			cin.ignore(1000, '\n');
-		}
-		cin.clear();			//한번더 써서 남은 개행 문자까지 싹 지워줌
-		cin.ignore(1000, '\n');
-		cout << endl;
+		//cout << "(계속 진행)아무거나 입력 후 엔터: ";
+		//char one_cycle;
+		//cin >> one_cycle;
+		//if (cin.fail()) {
+		//	cin.clear();
+		//	cin.ignore(1000, '\n');
+		//}
+		//cin.clear();			//한번더 써서 남은 개행 문자까지 싹 지워줌
+		//cin.ignore(1000, '\n');
+		//cout << endl;
 
 	}
 

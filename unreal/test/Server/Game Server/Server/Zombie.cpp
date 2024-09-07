@@ -220,23 +220,19 @@ void Zombie::MoveTo()
 	for (const auto& player : g_players) {
 		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 	}
-	//
+
 
 	cout << endl;
-	if(path.size() != 0)
-		cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
-	
-	//===================================
-
-	cout << endl;
+	//if(path.size() != 0)
+	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
 
 	//===================================
 
 	// PathFinder로부터 경로 리스트 쭉 받고, 이를 가지고 언리얼에서 돌아가는 MoveTo와 유사하게 직접 여기서 움직임 계산하고 위치를 이동시켜서, 바뀐 좌표를 클라에게 쏘게 하는 방식 *(회의 필요) 
 
-	cout << endl;
-	cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
-	cout << endl;
+	//cout << endl;
+	//cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+	//cout << endl;
 
 
 	//좀비가 목적지에 도착하면

@@ -15,8 +15,8 @@ public:
         //cout << "<CanSeePlayer>의 [CanAttack Task] 호출" << endl;
         cout << "플레이어\'#" << zom.bt_playerID << "\' 와 좀비 \'#" << zom.ZombieData.zombieID << "\' 의 거리: " << zom.DistanceToPlayer << endl;
         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 공격 사거리: " << zom.CanAttackDistance << endl;
-        cout << "따라서, 플레이어 \'#" << zom.bt_playerID << "\' 에 대한 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanAttack Task] 결과: \"" << boolalpha << result << "\"" << endl;
-        cout << endl;
+       // cout << "따라서, 플레이어 \'#" << zom.bt_playerID << "\' 에 대한 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanAttack Task] 결과: \"" << boolalpha << result << "\"" << endl;
+        //cout << endl;
 
         if (result)
             return "CanAttack-Succeed";
