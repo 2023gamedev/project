@@ -104,12 +104,12 @@ void AZombieAIController::Tick(float DeltaTime)
 	for (AActor* Player : Players)
 	{
 		//좀비들의 시야 검사 나 자신에 대해서만 실시==========================
-		//ABaseCharacter* Char = Cast<ABaseCharacter>(Player);
+		ABaseCharacter* Char = Cast<ABaseCharacter>(Player);
 		//
-		//uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+		uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		//
-		//if (Char->GetPlayerId() == myPlayerId)
-		//	continue;
+		if (Char->GetPlayerId() != 99/*myPlayerId*/)
+			continue;
 		//====================================================================
 
 		APawn* TestPawn = Cast<APawn>(Player);
@@ -127,6 +127,9 @@ void AZombieAIController::Tick(float DeltaTime)
 			{
 				NearestDist = Dist;
 				NearestPawn = TestPawn;
+
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
 
 				// 감지한 좀비와 플레이어 아이디 전송
 				if (m_bPlayerInSight == false) {

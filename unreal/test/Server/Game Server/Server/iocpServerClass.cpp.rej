@@ -1,0 +1,18 @@
+diff a/unreal/test/Server/Game Server/Server/iocpServerClass.cpp b/unreal/test/Server/Game Server/Server/iocpServerClass.cpp	(rejected hunks)
+@@ -344,11 +344,11 @@
+ 
+ 			// deltaTime�� �����Ͽ� GameTime�� ����
+ 			GameTime += deltaTime.count();  // �� ����
+-			for (auto& zom : zombie) {
+-				if (!(zom.path.empty())) {
+-					zom.Walk(deltaTime.count());
+-				}
+-			}
++			//for (auto& zom : zombie) {
++			//	if (!(zom.path.empty())) {
++			//		zom.Walk(deltaTime.count());
++			//	}
++			//}
+ 
+ 			// GameTime�� ���ڿ��� ��ȯ
+ 			//std::string gameTimeStr = std::to_string(GameTime);

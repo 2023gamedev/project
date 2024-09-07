@@ -300,7 +300,7 @@ void AOneGameModeBase::SpawnCharacter(int32 characterindex)
     ABaseCharacter* DefaultPawn = nullptr;
     APlayerStart* PlayerStart = nullptr;
 
-    DefaultPawn->SetPlayerId(99);
+    DefaultPawn->SetPlayerId(characterindex);
 
     // 이름(Tag)으로 할 시
     FName PlayerStartTagName = "Start3";

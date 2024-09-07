@@ -374,7 +374,7 @@ void IOCP_CORE::Timer_Thread()
 					if (player->connected) {
 						IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
 					}
-					cout << "send" << '\n';
+					//cout << "send" << '\n';
 					//printf("Send Timer");
 				}
 
