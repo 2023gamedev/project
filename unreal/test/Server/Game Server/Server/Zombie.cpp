@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <cmath>
+#include <random>
 
 #include "GStruct.pb.h"
 #include "iocpServerClass.h"
@@ -84,6 +85,35 @@ void Zombie::SetDistance()
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 }
 
+bool Zombie::RandomPatrol()
+{
+	float x, y, z;
+	bool result;
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	
+	std::uniform_int_distribution<int> dist(-500, 500);
+
+	x = dist(mt);
+	y = dist(mt);
+	z = dist(mt);
+
+	ZombiePathfinder pathfinder(ZombieData.x, ZombieData.y, ZombieData.z, ZombieData.x + x, ZombieData.y + y, ZombieData.z + z);
+	pathfinder.Run(path);
+
+	if (path.size() > 0) {
+		TargetLocation[0][0][0] = x;
+		TargetLocation[0][0][1] = y;
+		TargetLocation[0][0][2] = z;
+
+		return true;
+	}
+	else
+		return false;
+
+}
+
 void Zombie::SetTargetLocation(TARGET t)
 {
 	targetType = t;
@@ -104,7 +134,8 @@ void Zombie::SetTargetLocation(TARGET t)
 		TargetLocation = TargetLocation;		//걍 명시적 표기
 		break;
 	case TARGET::ORIGIN:
-		TargetLocation = ZombieOriginLocation;	//============================원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
+		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
+		while(RandomPatrol() == false) {}
 		break;
 	}
 }

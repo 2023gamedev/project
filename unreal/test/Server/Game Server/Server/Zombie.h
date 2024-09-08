@@ -100,6 +100,8 @@ public:
 
     bool IsPathUpdated();
 
+    bool RandomPatrol();
+
     //void ShoutingHear();
     
     //void FootSoundHear();
