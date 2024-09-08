@@ -351,7 +351,7 @@ void IOCP_CORE::Timer_Thread()
 					//	 // cout << "Zombie has reached the final destination." << endl;
 					//	continue; // 경로 끝에 도달
 					//}
-					zom.Walk(deltaTime.count());
+					//zom.Walk(deltaTime.count());
 				}
 			}
 
@@ -375,7 +375,8 @@ void IOCP_CORE::Timer_Thread()
 					if (player->connected) {
 						IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
 					}
-					cout << "send" << '\n';
+					//cout << "send" << '\n';
+					//printf("Send Timer");
 				}
 
 				lastSendTime = currentTime;
@@ -504,21 +505,34 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 	string result = "Initial";
 
+	auto lastTime = std::chrono::high_resolution_clock::now();
+	auto lastBTTime = std::chrono::high_resolution_clock::now();
+
 	while (true) {
 
 		//서버가 먼저 켜지고 좀비 BT가 실행되도록
 		if (bServerOn == false)
 			continue;
 
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<float> deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+
+		std::chrono::duration<float> BTInterval = currentTime - lastBTTime;
+		if (BTInterval.count() < 5.0f) {
+			continue;							// BT 작동 인터벌 설정 - 5초
+		}
+
+		lastBTTime = currentTime;
 
 		//=============================================== 좀비가 만약 한 번에 여러명의 플레이어를 포착하면 어떤 플레이어를 우선적으로 따라가게 만들지? => 의논 필요!!!
 		//												======> 거리가 가장 가까운 플레이어를 따라가도록 (+만약 최단 거리가 두명 이상이면 랜덤하게 따라가게) 
 		//												==========> 이걸 하려면 좀비 클래스내 DistanceToPlayer 변수를 단일 변수가 아니라 리스트 형태로 가져야 각 플레이어들과 거리들 저장 가능
 
 		for (auto& player : playerDB) {
-			float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
-			cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-			cout << endl;
+			//float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
+			//cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+			//cout << endl;
 		}
 		cout << endl;
 
@@ -550,9 +564,9 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 			for (auto& player : playerDB) {
 
-				float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
-				cout << "========플레이어 \'#" << player.first << "\' 과(와) 검사==========" << endl;
-				cout << endl;
+				//float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
+				//cout << "========플레이어 \'#" << player.first << "\' 과(와) 검사==========" << endl;
+				//cout << endl;
 
 				//BT 검사할 플레이어 인덱스 설정
 				zom.bt_playerID = player.first;
@@ -627,16 +641,16 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 
 		//콘솔창에서 한 싸이클씩 돌아가게
-		cout << "(계속 진행)아무거나 입력 후 엔터: ";
-		char one_cycle;
-		cin >> one_cycle;
-		if (cin.fail()) {
-			cin.clear();
-			cin.ignore(1000, '\n');
-		}
-		cin.clear();			//한번더 써서 남은 개행 문자까지 싹 지워줌
-		cin.ignore(1000, '\n');
-		cout << endl;
+		//cout << "(계속 진행)아무거나 입력 후 엔터: ";
+		//char one_cycle;
+		//cin >> one_cycle;
+		//if (cin.fail()) {
+		//	cin.clear();
+		//	cin.ignore(1000, '\n');
+		//}
+		//cin.clear();			//한번더 써서 남은 개행 문자까지 싹 지워줌
+		//cin.ignore(1000, '\n');
+		//cout << endl;
 
 	}
 

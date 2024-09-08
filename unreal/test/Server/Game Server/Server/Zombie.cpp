@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <cmath>
+#include <random>
 
 #include "GStruct.pb.h"
 #include "iocpServerClass.h"
@@ -20,11 +21,9 @@ Zombie::Zombie()
 
 	ZombieData = Zombie_Data();
 
-	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-
 	DistanceToPlayer = 100000.f;		//그냥 초기화값
 
-	TargetLocation = ZombieOriginLocation;
+	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	PlayerInSight = false;
 
@@ -34,9 +33,11 @@ Zombie::Zombie()
 
 	HeardFootSound = false;
 
+	RandPatrol = false;
+
 	speed = 0.f;
 
-	targetType = Zombie::TARGET::ORIGIN;
+	targetType = Zombie::TARGET::PATROL;
 
 	bt_playerID = 0;
 }
@@ -47,11 +48,9 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 
 	ZombieData = z_d;
 
-	ZombieOriginLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-
 	DistanceToPlayer = 100000.f;		//그냥 초기화값
 
-	TargetLocation = ZombieOriginLocation;
+	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	PlayerInSight = false;
 
@@ -61,9 +60,11 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 
 	HeardFootSound = false;
 
+	RandPatrol = false;
+
 	speed = 1.f;
 
-	targetType = Zombie::TARGET::ORIGIN;
+	targetType = Zombie::TARGET::PATROL;
 
 	bt_playerID = 0;
 }
@@ -82,6 +83,37 @@ void Zombie::SetDistance()
 	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[bt_playerID].x, playerDB[bt_playerID].y, playerDB[bt_playerID].z}}};
 
 	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
+}
+
+bool Zombie::RandomPatrol()
+{
+	float px, py, pz;
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	
+	std::uniform_int_distribution<int> dist(-500, 500);		//현 위치에서 반경 500 +-
+
+	px = ZombieData.x + dist(mt);
+	py = ZombieData.y + dist(mt);
+	pz = ZombieData.z;
+
+	vector<tuple<float, float, float>> tmp;
+	ZombiePathfinder pathfinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
+	pathfinder.Run(tmp);
+
+	if (!tmp.empty()) {
+		TargetLocation[0][0][0] = px;
+		TargetLocation[0][0][1] = py;
+		TargetLocation[0][0][2] = pz;
+
+		RandPatrol = true;
+
+		return true;
+	}
+	else
+		return false;
+
 }
 
 void Zombie::SetTargetLocation(TARGET t)
@@ -103,8 +135,10 @@ void Zombie::SetTargetLocation(TARGET t)
 	case TARGET::INVESTIGATED: 
 		TargetLocation = TargetLocation;		//걍 명시적 표기
 		break;
-	case TARGET::ORIGIN:
-		TargetLocation = ZombieOriginLocation;	//============================원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
+	case TARGET::PATROL:
+		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
+		if (RandPatrol == false)
+			while (RandomPatrol() == false) {}
 		break;
 	}
 }
@@ -163,7 +197,7 @@ void Zombie::Walk(float deltasecond)
 		ZombiePathIndex++;
 
 		if (ZombiePathIndex >= path.size()) {
-			cout << "Zombie 경로 끝." << endl;
+		//	cout << "Zombie 경로 끝." << endl;
 		}
 	}
 	else {
@@ -188,13 +222,11 @@ bool Zombie::IsPathUpdated()
 
 void Zombie::MoveTo()
 {
-	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-	vector<vector<vector<float>>> tl = TargetLocation;
-
 	//===================================
-	ZombiePathfinder pathfinder(zl[0][0][0], zl[0][0][1], zl[0][0][2], tl[0][0][0], tl[0][0][1], tl[0][0][2]);
+	ZombiePathfinder pathfinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 	beforepath = path;
 	pathfinder.Run(path);
+	cout << endl;
 
 	// path값 전송
 	Protocol::ZombiePath zPath;
@@ -220,28 +252,21 @@ void Zombie::MoveTo()
 	for (const auto& player : g_players) {
 		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 	}
-	//
 
-	cout << endl;
-	if(path.size() != 0)
-		cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
-	
-	//===================================
 
-	cout << endl;
+	//cout << endl;
+	//if(path.size() != 0)
+	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
 
 	//===================================
 
-	// PathFinder로부터 경로 리스트 쭉 받고, 이를 가지고 언리얼에서 돌아가는 MoveTo와 유사하게 직접 여기서 움직임 계산하고 위치를 이동시켜서, 바뀐 좌표를 클라에게 쏘게 하는 방식 *(회의 필요) 
-
 	cout << endl;
-	cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )." << endl;
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
 	cout << endl;
 
 
 	//좀비가 목적지에 도착하면
-	zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-	if (zl == TargetLocation) {
+	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] && ZombieData.z == TargetLocation[0][0][2]) {
 
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
 		cout << endl;
@@ -260,8 +285,9 @@ void Zombie::MoveTo()
 		case TARGET::INVESTIGATED:
 			KnewPlayerLocation = false;
 			break;
-		case TARGET::ORIGIN:
-			//원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
+		case TARGET::PATROL:
+			//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
+			RandPatrol = false;
 			break;
 		}
 
