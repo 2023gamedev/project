@@ -185,6 +185,22 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         return true;
     }
 
+    case 11:
+    {
+        Protocol::ping pingpacket;
+        pingpacket.ParseFromArray(buffer, bufferSize);
+
+        auto it = g_players.find(pingpacket.playerid());
+     
+        if (it != g_players.end())
+        {
+            PLAYER_INFO* player = it->second;
+            player->pingcnt = 0; // 클라이언트가 응답했으므로 pingcnt 초기화
+        }
+
+        return true;
+    }
+
     default: {
         printf("\nERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
         // 클라이언트나 서버 종료, 로깅 등의 처리 가능

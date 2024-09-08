@@ -146,6 +146,7 @@ public:
 	Concurrency::concurrent_queue<PlayerJump> Q_jump;
 	Concurrency::concurrent_queue<CharacterSelect> Q_select;
 	Concurrency::concurrent_queue<ZombiePath> Q_path;
+	Concurrency::concurrent_queue<bool> Q_ping;
 
 
 	virtual bool Init() override;

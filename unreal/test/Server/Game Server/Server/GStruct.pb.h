@@ -76,6 +76,9 @@ extern ZombiePathDefaultTypeInternal _ZombiePath_default_instance_;
 class jump;
 struct jumpDefaultTypeInternal;
 extern jumpDefaultTypeInternal _jump_default_instance_;
+class ping;
+struct pingDefaultTypeInternal;
+extern pingDefaultTypeInternal _ping_default_instance_;
 class run;
 struct runDefaultTypeInternal;
 extern runDefaultTypeInternal _run_default_instance_;
@@ -91,6 +94,7 @@ template<> ::Protocol::Zombie* Arena::CreateMaybeMessage<::Protocol::Zombie>(Are
 template<> ::Protocol::ZombieDataList* Arena::CreateMaybeMessage<::Protocol::ZombieDataList>(Arena*);
 template<> ::Protocol::ZombiePath* Arena::CreateMaybeMessage<::Protocol::ZombiePath>(Arena*);
 template<> ::Protocol::jump* Arena::CreateMaybeMessage<::Protocol::jump>(Arena*);
+template<> ::Protocol::ping* Arena::CreateMaybeMessage<::Protocol::ping>(Arena*);
 template<> ::Protocol::run* Arena::CreateMaybeMessage<::Protocol::run>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
@@ -2151,6 +2155,165 @@ class jump final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Gstruct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class ping final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.ping) */ {
+ public:
+  inline ping() : ping(nullptr) {}
+  ~ping() override;
+  explicit PROTOBUF_CONSTEXPR ping(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ping(const ping& from);
+  ping(ping&& from) noexcept
+    : ping() {
+    *this = ::std::move(from);
+  }
+
+  inline ping& operator=(const ping& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ping& operator=(ping&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ping& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ping* internal_default_instance() {
+    return reinterpret_cast<const ping*>(
+               &_ping_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(ping& a, ping& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ping* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ping* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ping* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ping>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ping& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ping& from) {
+    ping::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ping* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.ping";
+  }
+  protected:
+  explicit ping(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayeridFieldNumber = 1,
+    kPacketTypeFieldNumber = 3,
+  };
+  // uint32 playerid = 1;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.ping)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t playerid_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
 // ===================================================================
 
 
@@ -3282,9 +3445,55 @@ inline void jump::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.jump.packet_type)
 }
 
+// -------------------------------------------------------------------
+
+// ping
+
+// uint32 playerid = 1;
+inline void ping::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t ping::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t ping::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.ping.playerid)
+  return _internal_playerid();
+}
+inline void ping::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void ping::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.ping.playerid)
+}
+
+// uint32 packet_type = 3;
+inline void ping::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t ping::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t ping::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.ping.packet_type)
+  return _internal_packet_type();
+}
+inline void ping::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void ping::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.ping.packet_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
