@@ -129,10 +129,12 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				IOCP_ErrorDisplay("WorkerThreadStart::GetQueuedCompletionStatus", err_no, __LINE__);
 			}
 
-			closesocket(user->s);
-			user->connected = false;
-			DisconnectClient(user->id);
-			printf("[ No. %3u ] Disconnected\n", key);
+			if (user->connected) {
+				closesocket(user->s);
+				user->connected = false;
+				DisconnectClient(user->id);
+				printf("[ No. %3u ] Disconnected\n", key);
+			}
 
 			continue;
 		}
@@ -661,22 +663,28 @@ void IOCP_CORE::SendPingToClients()
 	std::string serializedData;
 	pingpacket.SerializeToString(&serializedData);
 
-	for (auto& playerPair : g_players)
+	for (auto it = g_players.begin(); it != g_players.end(); )
 	{
-		PLAYER_INFO* player = playerPair.second;
+		PLAYER_INFO* player = it->second;
+
 		if (player->connected)
 		{
 			IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
-			
 			player->pingcnt++;
 
 			if (player->pingcnt >= 10)
 			{
 				printf("Client #%u did not respond\n", player->id);
-				closesocket(player->s);
+
+				// 클라이언트 연결 해제
 				player->connected = false;
+
+				// 클라이언트 삭제 후, 다음 반복자를 얻음
+				it = g_players.erase(it);  // erase()는 삭제된 요소의 다음 반복자를 반환
 				DisconnectClient(player->id);
+				continue;  // 삭제한 후, 다음 클라이언트로 이동
 			}
 		}
+		++it;  // 삭제되지 않은 경우에만 반복자를 증가시킴
 	}
 }
