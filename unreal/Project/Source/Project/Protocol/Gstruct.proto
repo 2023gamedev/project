@@ -80,3 +80,8 @@ message jump{
     uint32 playerid = 1;
     uint32 packet_type = 3;
 }
+
+message ping{
+    uint32 playerid = 1;
+    uint32 packet_type=3;
+}

@@ -256,6 +256,16 @@ uint32 ClientSocket::Run()
 						break;
 					}
 
+					case 11:
+					{
+						Protocol::ping pingpacket;
+						if (pingpacket.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							Q_ping.push(true);
+							UE_LOG(LogNet, Display, TEXT("ping"));
+						}
+					}
+
 					buffer.clear();
 					}
 				}

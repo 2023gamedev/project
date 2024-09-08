@@ -39,6 +39,7 @@ using PLAYER_INFO = struct Client_INFO {
 	int previous_size;
 	Packet packet_buff[MAX_BUF_SIZE];
 	bool isInGame;
+	int pingcnt;
 };
 
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
@@ -68,6 +69,8 @@ public:
 
 	void Timer_Thread();
 	void Zombie_BT_Thread();
+
+	void SendPingToClients();
 
 	void Zombie_BT_Initialize();
 	void ServerOn();

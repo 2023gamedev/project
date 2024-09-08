@@ -141,6 +141,26 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		{
 			UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
 		}
+
+		bool recvping = false;
+		if (GameInstance->ClientSocketPtr->Q_ping.try_pop(recvping))
+		{
+			if (recvping)
+			{
+				Protocol::ping packet;
+
+				uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+
+				packet.set_packet_type(11);
+				packet.set_playerid(MyPlayerId);
+
+				std::string serializedData;
+				packet.SerializeToString(&serializedData);
+
+				bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+			}
+			UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
+		}
 	}
 
 

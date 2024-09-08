@@ -106,9 +106,6 @@ bool Zombie::RandomPatrol()
 		TargetLocation[0][0][0] = px;
 		TargetLocation[0][0][1] = py;
 		TargetLocation[0][0][2] = pz;
-		//TargetLocation[0][0][0] = ZombieData.x;
-		//TargetLocation[0][0][1] = ZombieData.y;
-		//TargetLocation[0][0][2] = ZombieData.z;
 
 		RandPatrol = true;
 

@@ -220,8 +220,6 @@ void IOCP_CORE::IOCP_AcceptThread()
 			while (true);
 		}
 
-		/* DB 관련 login 기능이 여기에 추가되어야 한다. 로그인이 번호가 제대로 맞으면 통과, 아니면 클라이언트 연결을 끊는다. 로그인을 하면 DB에서 정보를 가져온다 */
-
 		playerIndex += 1;
 		printf("\n[ No. %3u ] Client IP = %s, Port = %d is Connected\n", playerIndex, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
@@ -331,6 +329,7 @@ void IOCP_CORE::Timer_Thread()
 	printf("Timer Thread Started\n");
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	auto lastSendTime = std::chrono::high_resolution_clock::now();
+	auto lastPingTime = std::chrono::high_resolution_clock::now();
 
 	while (!ServerShutdown)
 	{
@@ -379,6 +378,13 @@ void IOCP_CORE::Timer_Thread()
 				}
 
 				lastSendTime = currentTime;
+			}
+
+			// 5초마다 Ping 메시지 전송
+			std::chrono::duration<float> pingInterval = currentTime - lastPingTime;
+			if (pingInterval.count() >= 5.0f) {
+				SendPingToClients();
+				lastPingTime = currentTime;
 			}
 		}
 	}
@@ -658,4 +664,33 @@ void IOCP_CORE::Zombie_BT_Thread()
 	delete(t_attack);
 	delete(t_hasinvestigated);
 	delete(t_nothaslastknownplayerlocation);
+}
+
+void IOCP_CORE::SendPingToClients()
+{
+	Protocol::ping pingpacket;
+
+	pingpacket.set_packet_type(11);
+
+	std::string serializedData;
+	pingpacket.SerializeToString(&serializedData);
+
+	for (auto& playerPair : g_players)
+	{
+		PLAYER_INFO* player = playerPair.second;
+		if (player->connected)
+		{
+			IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
+			
+			player->pingcnt++;
+
+			if (player->pingcnt >= 10)
+			{
+				printf("Client #%u did not respond\n", player->id);
+				closesocket(player->s);
+				player->connected = false;
+				DisconnectClient(player->id);
+			}
+		}
+	}
 }
