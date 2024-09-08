@@ -350,7 +350,7 @@ void IOCP_CORE::Timer_Thread()
 					//	 // cout << "Zombie has reached the final destination." << endl;
 					//	continue; // 경로 끝에 도달
 					//}
-					zom.Walk(deltaTime.count());
+					//zom.Walk(deltaTime.count());
 				}
 			}
 
@@ -464,7 +464,7 @@ void IOCP_CORE::ServerOn()
 {
 	cout << endl;
 
-	//cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// 출력 칸 맞추기
+	cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// 출력 칸 맞추기
 
 	for (const auto& player : playerDB) {
 		float p_x = player.second.x;
