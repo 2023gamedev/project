@@ -464,7 +464,7 @@ void IOCP_CORE::ServerOn()
 {
 	cout << endl;
 
-	cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// 출력 칸 맞추기
+	//cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// 출력 칸 맞추기
 
 	for (const auto& player : playerDB) {
 		float p_x = player.second.x;
@@ -522,9 +522,9 @@ void IOCP_CORE::Zombie_BT_Thread()
 		//												==========> 이걸 하려면 좀비 클래스내 DistanceToPlayer 변수를 단일 변수가 아니라 리스트 형태로 가져야 각 플레이어들과 거리들 저장 가능
 
 		for (auto& player : playerDB) {
-			float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
-			cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-			cout << endl;
+			//float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
+			//cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+			//cout << endl;
 		}
 		cout << endl;
 
@@ -556,9 +556,9 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 			for (auto& player : playerDB) {
 
-				float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
-				cout << "========플레이어 \'#" << player.first << "\' 과(와) 검사==========" << endl;
-				cout << endl;
+				//float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
+				//cout << "========플레이어 \'#" << player.first << "\' 과(와) 검사==========" << endl;
+				//cout << endl;
 
 				//BT 검사할 플레이어 인덱스 설정
 				zom.bt_playerID = player.first;

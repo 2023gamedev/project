@@ -68,7 +68,7 @@ public:
     string NotHasLastKnownPlayerLocation(Zombie& zom) const override {
         //cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
 
-        zom.SetTargetLocation(Zombie::TARGET::ORIGIN);      //원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
+        zom.SetTargetLocation(Zombie::TARGET::PATROL);      //원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
 
         zom.MoveTo();
 

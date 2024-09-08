@@ -38,7 +38,7 @@ public:
         SHOUTING,
         FOOTSOUND,
         INVESTIGATED,
-        ORIGIN             
+        PATROL             
     };
 
 
@@ -57,8 +57,6 @@ public:
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
-    vector<vector<vector<float>>> ZombieOriginLocation;   //private 선언하는 것도 좋을 듯 (상수로 사용하니) - const는 생각해보면 불가능함
-
     float DistanceToPlayer;
 
     vector<vector<vector<float>>> TargetLocation;
@@ -70,6 +68,8 @@ public:
     bool HeardShouting;
 
     bool HeardFootSound;
+
+    bool RandPatrol;
 
     float speed;
 
