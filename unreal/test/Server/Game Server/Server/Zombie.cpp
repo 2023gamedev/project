@@ -137,8 +137,9 @@ void Zombie::SetTargetLocation(TARGET t)
 		break;
 	case TARGET::PATROL:
 		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
-		if (RandPatrol == false)
-			while (RandomPatrol() == false) {}
+		// 일단 주석처리해서 목표지점은 처음 초기화 값인 자기 스폰 위치 그대로임
+		//if (RandPatrol == false)
+		//	while (RandomPatrol() == false) {}
 		break;
 	}
 }
@@ -156,10 +157,18 @@ void Zombie::Walk(float deltasecond)
 		ZombiePathIndex = 0;
 	}
 
+	//Walk가 동작하기 전에 이미 도착위치에 위치해 있다면, 해당 종료조건 발동 X
 	if (ZombiePathIndex >= path.size()) {
-		// cout << "Zombie has reached the final destination." << endl;
+		cout << "Zombie has reached the final destination." << endl;
+
 		return; // 경로 끝에 도달
 	}
+
+	// 하지만 다음 조건식 넣으면 정상종료됨 (해당 조건식, 아래 BT의 MoveTo에서 도착지점 검사 조건식이랑 동일함)
+	// 그래서 다음 조건식을 주석 풀면 도착지점에 잘 도착함
+	//if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
+	//	return;
+	//}
 
 	// 현재 목표 노드
 	tuple<float, float, float> TargetNode = path[ZombiePathIndex];
@@ -189,6 +198,7 @@ void Zombie::Walk(float deltasecond)
 	float distance = sqrt(dx * dx + dy * dy);
 
 	// 타겟 위치에 도달했는지 확인
+	// 위에 종료 조건인 if (ZombiePathIndex >= path.size()) 이 종료시점을 놓쳐도 해당 조건식이 발동되어서 도착지점에서 멈춰야 하는데 그렇지 않은 것 같음
 	if (distance <= ZombieSpeed * deltasecond) {
 		ZombieData.x = PathX;
 		ZombieData.y = PathY;
@@ -197,11 +207,12 @@ void Zombie::Walk(float deltasecond)
 		ZombiePathIndex++;
 
 		if (ZombiePathIndex >= path.size()) {
-		//	cout << "Zombie 경로 끝." << endl;
+			cout << "Zombie 경로 끝." << endl;
 		}
 	}
 	else {
 		// 타겟 방향으로 이동
+		// 해당 이동 코드도 문제가 있어보임
 		float MoveFactor = (ZombieSpeed * deltasecond) / distance;
 		ZombieData.x += dx * MoveFactor;
 		ZombieData.y += dy * MoveFactor;
@@ -260,13 +271,12 @@ void Zombie::MoveTo()
 
 	//===================================
 
-	cout << endl;
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
 	cout << endl;
 
 
 	//좀비가 목적지에 도착하면
-	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] && ZombieData.z == TargetLocation[0][0][2]) {
+	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
 
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
 		cout << endl;
