@@ -137,11 +137,6 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
-		if (GameInstance->ClientSocketPtr->Q_path.try_pop(recvZombiePath))
-		{
-			UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
-		}
-
 		bool recvping = false;
 		if (GameInstance->ClientSocketPtr->Q_ping.try_pop(recvping))
 		{
@@ -162,8 +157,6 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
 		}
 	}
-
-
 }
 
 void APlayerCharacterController::CheckAndSendMovement()

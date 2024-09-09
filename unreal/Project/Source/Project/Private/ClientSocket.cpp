@@ -266,6 +266,26 @@ uint32 ClientSocket::Run()
 						}
 					}
 
+					case 12:
+					{
+						Protocol::Zombie_hp zombiehp;
+						if (zombiehp.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							Q_zhp.push(ZombieHP(zombiehp.zombieid(), zombiehp.hp()));
+							UE_LOG(LogNet, Display, TEXT("Zombie HP"));
+						}
+					}
+
+					case 13:
+					{
+						Protocol::Zombie_attack zombieattack;
+						if (zombieattack.ParseFromArray(buffer.data(), buffer.size()))
+						{
+							Q_zattack.push(zombieattack.zombieid());
+							UE_LOG(LogNet, Display, TEXT("Zombie Attack"));
+						}
+					}
+
 					buffer.clear();
 					}
 				}
