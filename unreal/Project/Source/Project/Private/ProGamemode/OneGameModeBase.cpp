@@ -1041,6 +1041,62 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
     }
 }
 
+void AOneGameModeBase::UpdateZombieAttack(uint32 ZombieId)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateZombieAttack: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // ZombieMap에서 ZombieID로 좀비를 찾음
+    ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieId);
+    if (ZombiePtr && *ZombiePtr)
+    {
+        ABaseZombie* BaseZombie = *ZombiePtr;
+        if (BaseZombie)
+        {
+            // 좀비의 공격 상태 업데이트
+            BaseZombie->Attack();
+            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d attack"), ZombieId);
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No zombie found with ID: %d"), ZombieId);
+    }
+}
+
+void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, uint32 HP)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateZombieHP: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // ZombieMap에서 ZombieID로 좀비를 찾음
+    ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieId);
+    if (ZombiePtr && *ZombiePtr)
+    {
+        ABaseZombie* BaseZombie = *ZombiePtr;
+        if (BaseZombie)
+        {
+            //좀비의 체력상태 업데이트
+            BaseZombie->SetHP(HP);
+            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %d"), ZombieId, HP);
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No zombie found with ID: %d"), ZombieId);
+    }
+}
+
 void AOneGameModeBase::DestroyItem(uint32 ItemId)
 {
     for (TActorIterator<AItemBoxActor> It(GetWorld()); It; ++It)

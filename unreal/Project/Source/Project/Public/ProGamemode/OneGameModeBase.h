@@ -174,9 +174,13 @@ public:
 
     // 좀비 생성 함수
     void SpawnZombiesStaticClasses();
-    void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange);
+    //void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange);
 
     void UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation);
+
+    void UpdateZombieAttack(uint32 ZombieId);
+
+    void UpdateZombieHP(uint32 ZombieId, uint32 HP);
 
     void DestroyItem(uint32 ItemId);
 
