@@ -50,7 +50,7 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 
 	DistanceToPlayer = 100000.f;		//그냥 초기화값
 
-	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+	TargetLocation = vector<vector<vector<float>>>{ {{1700.f,800.f, ZombieData.z}} };
 
 	PlayerInSight = false;
 
@@ -153,22 +153,23 @@ void Zombie::Attack()
 
 void Zombie::Walk(float deltasecond)
 {
+	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
+		return;
+	}
+
 	if (IsPathUpdated()) {
+		cout << "PathUpdate" << endl;
 		ZombiePathIndex = 0;
 	}
 
 	//Walk가 동작하기 전에 이미 도착위치에 위치해 있다면, 해당 종료조건 발동 X
 	if (ZombiePathIndex >= path.size()) {
-		cout << "Zombie has reached the final destination." << endl;
+		//cout << "Zombie has reached the final destination." << endl;
 
 		return; // 경로 끝에 도달
 	}
 
-	// 하지만 다음 조건식 넣으면 정상종료됨 (해당 조건식, 아래 BT의 MoveTo에서 도착지점 검사 조건식이랑 동일함)
-	// 그래서 다음 조건식을 주석 풀면 도착지점에 잘 도착함
-	//if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
-	//	return;
-	//}
+
 
 	// 현재 목표 노드
 	tuple<float, float, float> TargetNode = path[ZombiePathIndex];
@@ -190,6 +191,8 @@ void Zombie::Walk(float deltasecond)
 		return;
 	}
 
+
+
 	// 타겟 방향 계산
 	float dx = PathX - ZombieData.x;
 	float dy = PathY - ZombieData.y;
@@ -197,11 +200,32 @@ void Zombie::Walk(float deltasecond)
 	// 거리를 계산
 	float distance = sqrt(dx * dx + dy * dy);
 
+	// 이동 방향 벡터를 정규화
+	float directionX = dx / distance;
+	float directionY = dy / distance;
+
+	// 이동 거리 계산
+	float moveDistance = ZombieSpeed * deltasecond;
+
+	// 이동 벡터 계산
+	float moveX = directionX * moveDistance;
+	float moveY = directionY * moveDistance;
+
+
 	// 타겟 위치에 도달했는지 확인
 	// 위에 종료 조건인 if (ZombiePathIndex >= path.size()) 이 종료시점을 놓쳐도 해당 조건식이 발동되어서 도착지점에서 멈춰야 하는데 그렇지 않은 것 같음
-	if (distance <= ZombieSpeed * deltasecond) {
+
+	// 목표에 도착했는지 확인 (옵션)
+	float newDistance = sqrt((PathX - ZombieData.x) * (PathX - ZombieData.x) + (PathY - ZombieData.y) * (PathY - ZombieData.y));
+
+	if (newDistance < moveDistance) {
 		ZombieData.x = PathX;
 		ZombieData.y = PathY;
+
+		//cout << "speed * deltasecond " << max(ZombieSpeed * deltasecond, 1e-5f) << endl;
+		//cout << "distance : " << distance << endl;
+		//cout << "X: " << ZombieData.x << endl;
+		//cout << "Y: " << ZombieData.y << endl;
 
 		// 다음 목표 노드로 이동
 		ZombiePathIndex++;
@@ -212,22 +236,28 @@ void Zombie::Walk(float deltasecond)
 	}
 	else {
 		// 타겟 방향으로 이동
-		// 해당 이동 코드도 문제가 있어보임
-		float MoveFactor = (ZombieSpeed * deltasecond) / distance;
-		ZombieData.x += dx * MoveFactor;
-		ZombieData.y += dy * MoveFactor;
+		ZombieData.x += moveX;
+		ZombieData.y += moveY;
+		//cout << "X: " << ZombieData.x << endl;
+		//cout << "Y: " << ZombieData.y << endl;
 	}
 }
 
 bool Zombie::IsPathUpdated()
 {
-	if (beforepath == path) {
-		return false;
+	if (!path.empty() && !beforepath.empty()) {
+
+		if (beforepath.back() == path.back()) {
+			return false;
+		}
+		else {
+
+			beforepath = path;
+			return true;
+		}
+		
 	}
-	else {
-		beforepath = path;
-		return true;
-	}
+	return false;
 }
 
 
@@ -235,7 +265,6 @@ void Zombie::MoveTo()
 {
 	//===================================
 	ZombiePathfinder pathfinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-	beforepath = path;
 	pathfinder.Run(path);
 	cout << endl;
 

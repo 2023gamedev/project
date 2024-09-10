@@ -111,6 +111,11 @@ void ZombiePathfinder::PrintObstacles()
 
 void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
 {
+    if (beforegoalX == goalX && beforegoalY == goalY && beforegoalZ == goalZ) {
+        return;
+    }
+
+    t.clear();
     vector<Node> path = AStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
     if (!path.empty()) {
         cout << "Path found:\n";
@@ -154,6 +159,11 @@ tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goal
 
     for (const auto& position : validPositions) {
         double distance = EuclideanDistance(goalX, goalY, get<0>(position), get<1>(position));
+
+        if (distance == 0) {
+            return position;
+        }
+
         if (distance < minDistance) {
             closestPosition = position;
             minDistance = distance;
@@ -163,6 +173,11 @@ tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goal
 }
 vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions, const vector<tuple<float, float, float>>& obstacles)
 {
+    // 시작 지점과 목표 지점이 같다면
+    if (startX == goalX && startY == goalY && startZ == goalZ) {
+        return { Node(startX, startY, startZ, 0, 0) }; // 시작 지점만 포함된 경로 반환
+    }
+
     float SimilargoalX;
     float SimilargoalY;
     float SimilargoalZ;
@@ -190,9 +205,13 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
             path.push_back(start);
             reverse(path.begin(), path.end());
 
-            if (SimilargoalX != goalX || SimilargoalY != goalY) {
+            // 마지막 경로와 목표 지점이 같은지 확인
+            if (path.back().x != goalX || path.back().y != goalY || path.back().z != goalZ) {
                 path.push_back(Node(goalX, goalY, goalZ, 0, 0));
             }
+            beforegoalX = goalX;
+            beforegoalY = goalY;
+            beforegoalZ = goalZ;
 
             return path; // 경로를 성공적으로 찾음
         }
