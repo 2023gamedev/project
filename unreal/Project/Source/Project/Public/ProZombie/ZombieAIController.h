@@ -83,5 +83,5 @@ public:
 
 	ABaseCharacter* LastSeenPlayer;
 
-
+	ZombiePath recvZombiePath;
 };
