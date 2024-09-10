@@ -208,6 +208,15 @@ void AZombieAIController::Tick(float DeltaTime)
 		if (tmp_path.ZombieId == ZombieId) {
 			recvZombiePath = tmp_path;
 			//UE_LOG(LogNet, Display, TEXT("Path found: ZombieId=%d"), recvZombiePath.ZombieId);
+
+			UE_LOG(LogNet, Display, TEXT("=================PathStart==================="));
+			int cnt = 1;
+			for (auto path : recvZombiePath.Path) {
+				UE_LOG(LogNet, Display, TEXT("Path #%d: ( %f, %f, %f )"), cnt, get<0>(path), get<1>(path), get<2>(path));
+				cnt++;
+			}
+			UE_LOG(LogNet, Display, TEXT("=================PathEnd==================="));
+
 			break;
 		}
 	}
