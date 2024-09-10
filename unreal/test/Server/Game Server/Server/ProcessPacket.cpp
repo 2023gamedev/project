@@ -187,16 +187,32 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     case 11:
     {
-        Protocol::ping pingpacket;
-        pingpacket.ParseFromArray(buffer, bufferSize);
+        Protocol::ping Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
 
-        auto it = g_players.find(pingpacket.playerid());
+        auto it = g_players.find(Packet.playerid());
      
         if (it != g_players.end())
         {
             PLAYER_INFO* player = it->second;
             player->pingcnt = 0; // 클라이언트가 응답했으므로 pingcnt 초기화
         }
+
+        return true;
+    }
+
+    case 12:
+    {
+        Protocol::Zombie_hp Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+
+        return true;
+    }
+
+    case 13:
+    {
+        Protocol::Zombie_attack Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
 
         return true;
     }

@@ -27,6 +27,17 @@ message Zombie {
     float roll = 9;
 };
 
+message Zombie_attack{
+    uint32 zombieid = 1;
+    uint32 packet_type = 3;
+}
+
+message Zombie_hp{
+    uint32 zombieid = 1;
+    uint32 hp = 2;
+    uint32 packet_type = 3;
+}
+
 message ZombieDataList {
     repeated Zombie zombies = 1;
     uint32 packet_type = 3;

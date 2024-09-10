@@ -175,7 +175,6 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	//CheckAndSendMovement();
 
-
 	if (GameInstance->ClientSocketPtr->Q_path.try_pop(recvZombiePath))
 	{
 		UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);

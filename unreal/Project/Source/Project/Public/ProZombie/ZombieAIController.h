@@ -76,6 +76,8 @@ public:
 
 
 	ZombieData recvZombieData;
+	ZombiePath recvZombiePath;
+
 	uint32 ZombieId;
 	FVector NewLocation;
 	FVector PreviousLocation;

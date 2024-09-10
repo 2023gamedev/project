@@ -156,8 +156,6 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 	}
-
-
 }
 
 void APlayerCharacterController::CheckAndSendMovement()

@@ -42,9 +42,15 @@ public:
 
     void Run(vector<tuple<float, float, float>>& t);
 
+
 private:
     float startX, startY, startZ;
     float goalX, goalY, goalZ;
+    float beforegoalX = 0.f;
+    float beforegoalY = 0.f;
+    float beforegoalZ = 0.f;
+
+
     FLOOR floor;
     vector<tuple<float, float, float>> validPositions;
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
@@ -52,6 +58,8 @@ private:
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
     const float OBSTACLE_RADIUS = 10.0f;
     const float OBSTACLE_CHECK_INTERVAL = 10.0f;
+
+
 
     void DetermineFloor();
 
