@@ -49,11 +49,11 @@ public:
     vector<tuple<float, float, float>> beforepath;  //PathFinder로부터 받은 이전 경로 저장
 
 
-    const float CanAttackDistance = 150.f;          //========================언리얼 BTIsinAttackRange.cpp에서 CalculateRawConditionValue(...) - if (DistanceToTarget > 150.f)에서 참조 (맞는지 확인 필요)
+    const float CanAttackDistance = 150.f;          
 
-    const float CanHearDistance = 500.f;            //========================언리얼 BaseCharacter.cpp에서 FootSound() - float DetectRadius = 500.f;에서 참조 (맞는지 확인 필요)
-
-    const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
+    // 사용 안 할 듯 함
+    //const float CanHearDistance = 500.f;            //========================언리얼 BaseCharacter.cpp에서 FootSound() - float DetectRadius = 500.f;에서 참조 (맞는지 확인 필요)
+    //const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
