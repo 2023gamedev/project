@@ -179,13 +179,15 @@ void AZombieAIController::Tick(float DeltaTime)
 	//=========================================================================================================
 
 	auto paths = GameInstance->ClientSocketPtr->Q_path;
-	while (paths.empty()) {
+	if (paths.empty()) {
+		return;
+	}
+	while (paths.empty() != true) {
 		ZombiePath tmp_path;
 		paths.try_pop(tmp_path);
-		if (tmp_path.ZombieId == GameInstance->ClientSocketPtr->GetMyPlayerId()) {
+		if (tmp_path.ZombieId == ZombieId) {
 			recvZombiePath = tmp_path;
-			UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId));
+			//UE_LOG(LogNet, Display, TEXT("Path found: ZombieId=%d"), recvZombiePath.ZombieId);
 			break;
 		}
 	}
