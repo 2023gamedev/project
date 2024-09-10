@@ -151,6 +151,8 @@ public:
 
 	void UpdateLastKnownPositionByShoutingSound(FVector playerlocation);
 
+	void SetAttack(bool battack);
+
 	void StopAITree();
 	void StartAITree();
 

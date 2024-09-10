@@ -179,6 +179,24 @@ void AZombieAIController::Tick(float DeltaTime)
 	{
 		UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
 	}
+
+	if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdateZombieAttack(AttackZombieId);
+			UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
+			UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
+		}
+	}
 }
 
 void AZombieAIController::Send_Detected(ABaseCharacter* BaseCharacter)
