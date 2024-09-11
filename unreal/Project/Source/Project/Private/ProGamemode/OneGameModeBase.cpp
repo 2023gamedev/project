@@ -1002,9 +1002,8 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             BaseZombie->SetActorLocation(NewLocation);
             BaseZombie->SetActorRotation(NewRotation);
 
-            BaseZombie->UpdateZombieData(NewLocation);
-
-            //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location, player: %d"), ZombieID, PlayerID);
+            
+            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
         }
     }
     else
