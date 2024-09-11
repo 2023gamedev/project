@@ -5,6 +5,7 @@
 
 #include "Task.h"
 #include "Player.h"
+#include "ZombiePathfinder.h"
 #include "iocpServerClass.h"
 
 using std::vector;
@@ -57,6 +58,8 @@ public:
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
+    ZombiePathfinder pathfinder;
+    
     float DistanceToPlayer;
 
     vector<vector<vector<float>>> TargetLocation;

@@ -111,13 +111,14 @@ void ZombiePathfinder::PrintObstacles()
 
 void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
 {
+    // cout << beforegoalX << " , " << beforegoalY << " , " << beforegoalZ << " , " << endl;
     if (beforegoalX == goalX && beforegoalY == goalY && beforegoalZ == goalZ) {
         return;
     }
 
-    t.clear();
     vector<Node> path = AStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
     if (!path.empty()) {
+        t.clear();
         cout << "Path found:\n";
         for (const auto& node : path) {
             cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )\n";
@@ -150,6 +151,16 @@ vector<Node> ZombiePathfinder::FindNeighbors(const Node& current)
 
 double ZombiePathfinder::EuclideanDistance(float x1, float y1,float x2, float y2) {
     return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+
+void ZombiePathfinder::UpdatePathFinder(float startx, float starty, float startz, float goalx, float goaly, float goalz)
+{
+    startX = startx;
+    startY = starty;
+    startZ = startz;
+    goalX = goalx;
+    goalY = goaly;
+    goalZ= goalz;
 }
 
 // 함수: 주어진 좌표들 내에서 목표 좌표와 가장 가까운 좌표 찾기
@@ -206,7 +217,7 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
             reverse(path.begin(), path.end());
 
             // 마지막 경로와 목표 지점이 같은지 확인
-            if (path.back().x != goalX || path.back().y != goalY || path.back().z != goalZ) {
+            if (path.back().x != goalX || path.back().y != goalY) {
                 path.push_back(Node(goalX, goalY, goalZ, 0, 0));
             }
             beforegoalX = goalX;

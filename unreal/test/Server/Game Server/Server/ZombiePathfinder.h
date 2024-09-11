@@ -42,6 +42,7 @@ public:
 
     void Run(vector<tuple<float, float, float>>& t);
 
+    void UpdatePathFinder(float startX, float startY, float startZ, float goalX, float goalY, float goalZ);
 
 private:
     float startX, startY, startZ;
@@ -75,6 +76,7 @@ private:
     void PrintObstacles();
 
     void FindPath(vector<tuple<float, float, float>>& t);
+
 
     vector<Node> FindNeighbors(const Node& current);
 
