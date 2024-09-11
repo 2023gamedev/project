@@ -178,6 +178,8 @@ void AZombieAIController::Tick(float DeltaTime)
 	if (GameInstance->ClientSocketPtr->Q_path.try_pop(recvZombiePath))
 	{
 		UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
+		UE_LOG(LogNet, Display, TEXT("try_pop Path: %lf, %lf, %lf"), recvZombiePath.Location.X, recvZombiePath.Location.Y, recvZombiePath.Location.Z);
+		
 	}
 
 	if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))

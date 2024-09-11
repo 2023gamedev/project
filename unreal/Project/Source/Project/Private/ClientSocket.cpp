@@ -264,6 +264,7 @@ uint32 ClientSocket::Run()
 							Q_ping.push(true);
 							UE_LOG(LogNet, Display, TEXT("ping"));
 						}
+						break;
 					}
 
 					case 12:
@@ -274,6 +275,7 @@ uint32 ClientSocket::Run()
 							Q_zhp.push(ZombieHP(zombiehp.zombieid(), zombiehp.hp()));
 							UE_LOG(LogNet, Display, TEXT("Zombie HP"));
 						}
+						break;
 					}
 
 					case 13:
@@ -284,6 +286,7 @@ uint32 ClientSocket::Run()
 							Q_zattack.push(zombieattack.zombieid());
 							UE_LOG(LogNet, Display, TEXT("Zombie Attack"));
 						}
+						break;
 					}
 
 					buffer.clear();
