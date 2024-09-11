@@ -137,9 +137,8 @@ void Zombie::SetTargetLocation(TARGET t)
 		break;
 	case TARGET::PATROL:
 		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
-		// 일단 주석처리해서 목표지점은 처음 초기화 값인 자기 스폰 위치 그대로임
-		//if (RandPatrol == false)
-		//	while (RandomPatrol() == false) {}
+		if (RandPatrol == false)
+			while (RandomPatrol() == false) {}
 		break;
 	}
 }

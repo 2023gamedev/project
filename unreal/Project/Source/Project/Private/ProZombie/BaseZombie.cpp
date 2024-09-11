@@ -683,7 +683,6 @@ void ABaseZombie::StartAITree()
 		AZombieAIController* NormalZombieAIController = Cast<AZombieAIController>(GetController());
 
 		NormalZombieAIController->StartAI();
-
 	}
 	else if (GetZombieName() == "RunningZombie") {
 		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
