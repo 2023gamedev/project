@@ -231,8 +231,8 @@ void Zombie::Walk(float deltasecond)
 
 		//cout << "speed * deltasecond " << max(ZombieSpeed * deltasecond, 1e-5f) << endl;
 		//cout << "distance : " << distance << endl;
-		cout << "X: " << ZombieData.x << endl;
-		cout << "Y: " << ZombieData.y << endl;
+		//cout << "X: " << ZombieData.x << endl;
+		//cout << "Y: " << ZombieData.y << endl;
 
 		// 다음 목표 노드로 이동
 		ZombiePathIndex++;
