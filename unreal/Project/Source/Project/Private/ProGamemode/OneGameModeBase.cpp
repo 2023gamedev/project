@@ -439,45 +439,45 @@ void AOneGameModeBase::ItemRandomLocationSetting()
 
 }
 
-void AOneGameModeBase::SpawnZombiesStaticClasses()
-{
-
-    // 지하 1층
-    for (int i = 0; i < 10; ++i) {
-        ZombieClasses.Add(ANormalZombie::StaticClass());
-        ZombieAIClasses.Add(AZombieAIController::StaticClass());
-    }
-
-    // 지상 1층
-    for (int i = 10; i < 12; ++i) {
-        ZombieClasses.Add(AShoutingZombie::StaticClass());
-        ShoutingZombieAIClasses.Add(AShoutingZombieAIController::StaticClass());
-    }
-    for (int i = 12; i < 20; ++i) {
-        ZombieClasses.Add(ANormalZombie::StaticClass());
-        ZombieAIClasses.Add(AZombieAIController::StaticClass());
-    }
-
-    // 지상 2층
-    for (int i = 20; i < 23; ++i) {
-        ZombieClasses.Add(ARunningZombie::StaticClass());
-        RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
-    }
-    for (int i = 23; i < 30; ++i) {
-        ZombieClasses.Add(ANormalZombie::StaticClass());
-        ZombieAIClasses.Add(AZombieAIController::StaticClass());
-    }
-
-    // 지하 2층
-    for (int i = 30; i < 35; ++i) {
-        ZombieClasses.Add(ARunningZombie::StaticClass());
-        RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
-    }
-    for (int i = 35; i < 40; ++i) {
-        ZombieClasses.Add(ANormalZombie::StaticClass());
-        ZombieAIClasses.Add(AZombieAIController::StaticClass());
-    }
-}
+//void AOneGameModeBase::SpawnZombiesStaticClasses()
+//{
+//
+//    // 지하 1층
+//    for (int i = 0; i < 10; ++i) {
+//        ZombieClasses.Add(ANormalZombie::StaticClass());
+//        ZombieAIClasses.Add(AZombieAIController::StaticClass());
+//    }
+//
+//    // 지상 1층
+//    for (int i = 10; i < 12; ++i) {
+//        ZombieClasses.Add(AShoutingZombie::StaticClass());
+//        ShoutingZombieAIClasses.Add(AShoutingZombieAIController::StaticClass());
+//    }
+//    for (int i = 12; i < 20; ++i) {
+//        ZombieClasses.Add(ANormalZombie::StaticClass());
+//        ZombieAIClasses.Add(AZombieAIController::StaticClass());
+//    }
+//
+//    // 지상 2층
+//    for (int i = 20; i < 23; ++i) {
+//        ZombieClasses.Add(ARunningZombie::StaticClass());
+//        RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
+//    }
+//    for (int i = 23; i < 30; ++i) {
+//        ZombieClasses.Add(ANormalZombie::StaticClass());
+//        ZombieAIClasses.Add(AZombieAIController::StaticClass());
+//    }
+//
+//    // 지하 2층
+//    for (int i = 30; i < 35; ++i) {
+//        ZombieClasses.Add(ARunningZombie::StaticClass());
+//        RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
+//    }
+//    for (int i = 35; i < 40; ++i) {
+//        ZombieClasses.Add(ANormalZombie::StaticClass());
+//        ZombieAIClasses.Add(AZombieAIController::StaticClass());
+//    }
+//}
 
 FVector AOneGameModeBase::RandomItemBoxLocation(EItemFloor itemfloor)
 {
