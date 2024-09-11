@@ -175,6 +175,23 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	//CheckAndSendMovement();
 
+	if (GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdateZombieAttack(AttackZombieId);
+			UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
+			UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
+		}
+	}
 
 	//==================================== 여기 좀비 아이디 확인하고 그 해당 좀비만 작동하는 거 맞는지 확인
 	//if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
@@ -197,50 +214,33 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	//=========================================================================================================
 
-	//Concurrency::concurrent_queue<ZombiePath> front_que;
-
+	
 	//if (GameInstance->ClientSocketPtr->Q_path.empty()) {
 	//	return;
 	//}
 	//while (GameInstance->ClientSocketPtr->Q_path.empty() != true) {
 	//	ZombiePath tmp_path;
 	//	GameInstance->ClientSocketPtr->Q_path.try_pop(tmp_path);
-	//	if (tmp_path.ZombieId == ZombieId) {
-	//		recvZombiePath = tmp_path;
-	//		//UE_LOG(LogNet, Display, TEXT("Path found: ZombieId=%d"), recvZombiePath.ZombieId);
+	//	//UE_LOG(LogNet, Display, TEXT("Path found: ZombieId=%d"), recvZombiePath.ZombieId);
 
-	//		//UE_LOG(LogNet, Display, TEXT("=================PathStart==================="));
-	//		//int cnt = 1;
-	//		//for (auto path : recvZombiePath.Path) {
-	//		//	UE_LOG(LogNet, Display, TEXT("Zombie #%d's Path - num%d: ( %f, %f, %f )"), tmp_path.ZombieId,cnt, get<0>(path), get<1>(path), get<2>(path));
-	//		//	cnt++;
-	//		//}
-	//		//UE_LOG(LogNet, Display, TEXT("=================PathEnd==================="));
+	//	//UE_LOG(LogNet, Display, TEXT("=================PathStart==================="));
+	//	//int cnt = 1;
+	//	//for (auto path : recvZombiePath.Path) {
+	//	//	UE_LOG(LogNet, Display, TEXT("Zombie #%d's Path - num%d: ( %f, %f, %f )"), tmp_path.ZombieId,cnt, get<0>(path), get<1>(path), get<2>(path));
+	//	//	cnt++;
+	//	//}
+	//	//UE_LOG(LogNet, Display, TEXT("=================PathEnd==================="));
 
-	//		//일단 좀비가 장애물을 피해 경로를 잘 따라 움직이는지 확인 (애니메이션 X)
-	//		NormalZombie->SetActorLocation(tmp_path.Location);
-	//		UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, tmp_path.Location.X, tmp_path.Location.Y, tmp_path.Location.Z);
+	//	//일단 좀비가 장애물을 피해 경로를 잘 따라 움직이는지 확인 (애니메이션 X)
+	//	UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, tmp_path.Location.X, tmp_path.Location.Y, tmp_path.Location.Z);
 
 
-	//		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-	//		{
-	//			MyGameMode->UpdateZombie(tmp_path.ZombieId, 0, tmp_path.Location, NormalZombie->GetActorRotation());
-	//		}
-
-	//		//break;
+	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+	//	{
+	//		MyGameMode->UpdateZombie(tmp_path.ZombieId, 0, tmp_path.Location, NormalZombie->GetActorRotation());
 	//	}
-	//	else {
-	//		front_que.push(tmp_path);
-	//	}
-	//}
 
-	//if (front_que.empty()) {
-	//	return;
-	//}
-	//while (front_que.empty() != true) {
-	//	ZombiePath tmp_path;
-	//	front_que.try_pop(tmp_path);
-	//	GameInstance->ClientSocketPtr->Q_path.push(tmp_path);
+	//	break;
 	//}
 
 	//=========================================================================================================

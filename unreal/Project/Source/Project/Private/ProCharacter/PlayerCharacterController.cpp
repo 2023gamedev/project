@@ -137,6 +137,16 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_path.try_pop(recvZombiePath))
+		{
+			UE_LOG(LogNet, Display, TEXT("try_pop Path: ZombieId=%d"), recvZombiePath.ZombieId);
+			UE_LOG(LogNet, Display, TEXT("try_pop Path: %lf, %lf, %lf"), recvZombiePath.Location.X, recvZombiePath.Location.Y, recvZombiePath.Location.Z);
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdateZombie(recvZombiePath.ZombieId, 0, recvZombiePath.Location, {0, 0, 0});
+			}
+		}
+
 		bool recvping = false;
 		if (GameInstance->ClientSocketPtr->Q_ping.try_pop(recvping))
 		{
