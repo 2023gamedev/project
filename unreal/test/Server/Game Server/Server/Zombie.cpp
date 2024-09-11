@@ -138,8 +138,14 @@ void Zombie::SetTargetLocation(TARGET t)
 		break;
 	case TARGET::PATROL:
 		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
+		int cnt = 0;
 		if (RandPatrol == false)
-			while (RandomPatrol() == false) {}
+			while (RandomPatrol() == false) {
+				cnt++;
+
+				if (cnt >= 5)
+					break;
+			}
 		break;
 	}
 }
@@ -250,7 +256,7 @@ bool Zombie::IsPathUpdated()
 
 	if (!path.empty() && !beforepath.empty()) {
 
-		if (beforepath.back() == path.back()) {
+		if (beforepath == path) {
 			return false;
 		}
 		else {
