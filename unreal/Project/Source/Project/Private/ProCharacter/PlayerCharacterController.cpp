@@ -156,6 +156,56 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 	}
+
+
+	// 좀비 관련 이지만 일단 좀비 관련 싱글턴 객체가 딱히 없어 - 여기에서 작업
+	//Concurrency::concurrent_queue<ZombiePath> front_que;
+
+	if (GameInstance->ClientSocketPtr->Q_path.empty()) {
+		return;
+	}
+	while (GameInstance->ClientSocketPtr->Q_path.empty() != true) {
+		ZombiePath tmp_path;
+		GameInstance->ClientSocketPtr->Q_path.try_pop(tmp_path);
+		//if (tmp_path.ZombieId == ZombieId) {
+		//	recvZombiePath = tmp_path;
+			//UE_LOG(LogNet, Display, TEXT("Path found: ZombieId=%d"), recvZombiePath.ZombieId);
+
+			//UE_LOG(LogNet, Display, TEXT("=================PathStart==================="));
+			//int cnt = 1;
+			//for (auto path : recvZombiePath.Path) {
+			//	UE_LOG(LogNet, Display, TEXT("Zombie #%d's Path - num%d: ( %f, %f, %f )"), tmp_path.ZombieId,cnt, get<0>(path), get<1>(path), get<2>(path));
+			//	cnt++;
+			//}
+			//UE_LOG(LogNet, Display, TEXT("=================PathEnd==================="));
+
+			//일단 좀비가 장애물을 피해 경로를 잘 따라 움직이는지 확인 (애니메이션 X)
+			//NormalZombie->SetActorLocation(tmp_path.Location);
+			UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, tmp_path.Location.X, tmp_path.Location.Y, tmp_path.Location.Z);
+
+			FRotator tmp_ro = FRotator{0.f, 0.f, 0.f};
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdateZombie(tmp_path.ZombieId, 0, tmp_path.Location, tmp_ro);
+			}
+
+			//break;
+		//}
+		//else {
+		//	front_que.push(tmp_path);
+		//}
+	}
+
+	//if (front_que.empty()) {
+	//	return;
+	//}
+	//while (front_que.empty() != true) {
+	//	ZombiePath tmp_path;
+	//	front_que.try_pop(tmp_path);
+	//	GameInstance->ClientSocketPtr->Q_path.push(tmp_path);
+	//}
+
+
 }
 
 void APlayerCharacterController::CheckAndSendMovement()

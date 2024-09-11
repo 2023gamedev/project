@@ -227,6 +227,6 @@ private:
 
 public:
 	uint32 ZombieId;
-	FVector NewLocation;
+	//FVector NewLocation;
 
 };
