@@ -892,10 +892,10 @@ uint32 ABaseZombie::GetZombieId() const
 	return ZombieId;
 }
 
-void ABaseZombie::UpdateZombieData(FVector Location)
-{
-	NewLocation = Location;
-}
+//void ABaseZombie::UpdateZombieData(FVector Location)
+//{
+//	NewLocation = Location;
+//}
 
 void ABaseZombie::StartResurrectionTimer()
 {

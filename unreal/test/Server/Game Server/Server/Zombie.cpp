@@ -6,7 +6,6 @@
 #include "iocpServerClass.h"
 
 #include "Zombie.h"
-#include "ZombiePathfinder.h"   // PathFinder
 #include"iocpServerClass.h"		// 전역변수 playerDB 사용하려구
 
 using std::cout;
@@ -14,6 +13,7 @@ using std::endl;
 
 
 Zombie::Zombie()
+	: pathfinder(0.f, 0.f, 0.f, 1.f, 1.f, 1.f)
 {
 	path = vector<tuple<float, float, float>>{};
 
@@ -38,6 +38,7 @@ Zombie::Zombie()
 	speed = 0.f;
 
 	targetType = Zombie::TARGET::PATROL;
+
 
 	bt_playerID = 0;
 }
@@ -152,6 +153,7 @@ void Zombie::Attack()
 
 void Zombie::Walk(float deltasecond)
 {
+
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
 		return;
 	}
@@ -223,8 +225,8 @@ void Zombie::Walk(float deltasecond)
 
 		//cout << "speed * deltasecond " << max(ZombieSpeed * deltasecond, 1e-5f) << endl;
 		//cout << "distance : " << distance << endl;
-		//cout << "X: " << ZombieData.x << endl;
-		//cout << "Y: " << ZombieData.y << endl;
+		cout << "X: " << ZombieData.x << endl;
+		cout << "Y: " << ZombieData.y << endl;
 
 		// 다음 목표 노드로 이동
 		ZombiePathIndex++;
@@ -244,6 +246,8 @@ void Zombie::Walk(float deltasecond)
 
 bool Zombie::IsPathUpdated()
 {
+
+
 	if (!path.empty() && !beforepath.empty()) {
 
 		if (beforepath.back() == path.back()) {
@@ -256,6 +260,14 @@ bool Zombie::IsPathUpdated()
 		}
 		
 	}
+
+	if (!path.empty() && beforepath.empty()) {
+
+		beforepath = path;
+
+		return true;
+	}
+
 	return false;
 }
 
@@ -263,7 +275,7 @@ bool Zombie::IsPathUpdated()
 void Zombie::MoveTo()
 {
 	//===================================
-	ZombiePathfinder pathfinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+	pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 	pathfinder.Run(path);
 	cout << endl;
 
