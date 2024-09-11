@@ -78,7 +78,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	FVector ZombieForward = NormalZombie->GetActorForwardVector(); // 좀비의 전방 벡터
 	FVector ZombieLocation = NormalZombie->GetActorLocation(); // 좀비의 위치
-
+	
 	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
 	//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
 	FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
@@ -178,23 +178,23 @@ void AZombieAIController::Tick(float DeltaTime)
 
 
 	//==================================== 여기 좀비 아이디 확인하고 그 해당 좀비만 작동하는 거 맞는지 확인
-	if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		{
-			MyGameMode->UpdateZombieAttack(AttackZombieId);
-			UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
-		}
-	}
-
-	if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		{
-			MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
-			UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
-		}
-	}
+	//if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
+	//{
+	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+	//	{
+	//		MyGameMode->UpdateZombieAttack(AttackZombieId);
+	//		UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
+	//	}
+	//}
+	//
+	//if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
+	//{
+	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+	//	{
+	//		MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
+	//		UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
+	//	}
+	//}
 
 	//=========================================================================================================
 
@@ -212,11 +212,15 @@ void AZombieAIController::Tick(float DeltaTime)
 			UE_LOG(LogNet, Display, TEXT("=================PathStart==================="));
 			int cnt = 1;
 			for (auto path : recvZombiePath.Path) {
-				UE_LOG(LogNet, Display, TEXT("Path #%d: ( %f, %f, %f )"), cnt, get<0>(path), get<1>(path), get<2>(path));
+				UE_LOG(LogNet, Display, TEXT("Zombie #%d's Path - num%d: ( %f, %f, %f )"), tmp_path.ZombieId,cnt, get<0>(path), get<1>(path), get<2>(path));
 				cnt++;
 			}
 			UE_LOG(LogNet, Display, TEXT("=================PathEnd==================="));
 
+			//일단 좀비가 장애물을 피해 경로를 잘 따라 움직이는지 확인 (애니메이션 X)
+			NormalZombie->SetActorLocation(tmp_path.Location);
+			UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %f, %f, %f )"), tmp_path.ZombieId, tmp_path.Location.X, tmp_path.Location.Y, tmp_path.Location.Z);
+			
 			break;
 		}
 	}
