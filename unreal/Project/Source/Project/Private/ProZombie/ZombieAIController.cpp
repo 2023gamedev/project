@@ -182,6 +182,23 @@ void AZombieAIController::Tick(float DeltaTime)
 		
 	}
 
+	if (GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdateZombieAttack(AttackZombieId);
+			UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
+			UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
+		}
+	}
 
 	//==================================== 여기 좀비 아이디 확인하고 그 해당 좀비만 작동하는 거 맞는지 확인
 	//if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
