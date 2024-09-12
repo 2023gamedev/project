@@ -62,6 +62,7 @@ private:
     const float OBSTACLE_CHECK_INTERVAL = 10.0f;
 
     void SetObstacleRadius(float radious) { OBSTACLE_RADIUS = radious; }
+    void SetPatrolType(int patroltype) { PatrolType = patroltype; }
 
     void DetermineFloor();
 

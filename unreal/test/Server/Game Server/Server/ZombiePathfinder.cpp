@@ -5,13 +5,7 @@
 
 void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t, int patroltype)
 {
-    if (patroltype == 0) {
-        SetObstacleRadius(25.f);
-    }
-    else if(patroltype == 1) {
-        SetObstacleRadius(0.f);
-    }
-
+    SetPatrolType(patroltype);
     DetermineFloor();
     if (LoadPositions()) {
         //PrintPositions();
@@ -224,13 +218,22 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
             path.push_back(start);
             reverse(path.begin(), path.end());
 
+            //if (PatrolType == 0) { // 이렇게 할 시 아예 움직이지를 않음
+            //    // 마지막 경로와 목표 지점이 같은지 확인
+            //    if (path.back().x != goalX || path.back().y != goalY) {
+            //        path.push_back(Node(goalX, goalY, goalZ, 0, 0));
+            //    }
+            //}
+
             // 마지막 경로와 목표 지점이 같은지 확인
-            if (path.back().x != goalX || path.back().y != goalY) {
+            if (path.back().x != goalX || path.back().y != goalY) { 
                 path.push_back(Node(goalX, goalY, goalZ, 0, 0));
             }
+
             beforegoalX = goalX;
             beforegoalY = goalY;
             beforegoalZ = goalZ;
+
 
             return path; // 경로를 성공적으로 찾음
         }
