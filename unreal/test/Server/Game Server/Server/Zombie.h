@@ -72,7 +72,7 @@ public:
 
     bool HeardFootSound;
 
-    bool RandPatrol;
+    bool SetRandPatrol;
 
     float speed;
 
