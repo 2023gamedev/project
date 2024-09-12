@@ -3,8 +3,15 @@
 #include "ZombiePathfinder.h"
 
 
-void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t)
+void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t, int patroltype)
 {
+    if (patroltype == 0) {
+        SetObstacleRadius(25.f);
+    }
+    else if(patroltype == 1) {
+        SetObstacleRadius(0.f);
+    }
+
     DetermineFloor();
     if (LoadPositions()) {
         //PrintPositions();
@@ -127,6 +134,7 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
         }
     }
     else {
+        cout << OBSTACLE_RADIUS << endl;;
         cout << "No path found.\n";
     }
 }

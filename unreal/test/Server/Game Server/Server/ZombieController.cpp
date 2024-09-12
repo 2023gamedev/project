@@ -22,18 +22,18 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     SpawnZombies(10, 0, Vector3(2200.f, 3100.f, 1040.275f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
   
 
-    // Áö»ó 1Ãþ
-    SpawnZombies(11, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
-    SpawnZombies(12, 1, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    
-    SpawnZombies(13, 0, Vector3(220.f, 1200.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    SpawnZombies(14, 0, Vector3(250.f, 1700.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    SpawnZombies(15, 0, Vector3(200.f, 1780.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    SpawnZombies(16, 0, Vector3(2100.f, 3500.f, 1989.212f), Rotator(0.f, 120.f, 0.f), 0, 0.f);
-    SpawnZombies(17, 0, Vector3(200.f, 3200.f, 1989.212f), Rotator(0.f, 20.f, 0.f), 0, 0.f);
-    SpawnZombies(18, 0, Vector3(800.f, 3600.f, 1989.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
-    SpawnZombies(19, 0, Vector3(800.f, 1600.f, 1989.212f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
-    SpawnZombies(20, 0, Vector3(200.f, 2200.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
+    //// Áö»ó 1Ãþ
+    //SpawnZombies(11, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
+    //SpawnZombies(12, 1, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    //
+    //SpawnZombies(13, 0, Vector3(220.f, 1200.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    //SpawnZombies(14, 0, Vector3(250.f, 1700.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    //SpawnZombies(15, 0, Vector3(200.f, 1780.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    //SpawnZombies(16, 0, Vector3(2100.f, 3500.f, 1989.212f), Rotator(0.f, 120.f, 0.f), 0, 0.f);
+    //SpawnZombies(17, 0, Vector3(200.f, 3200.f, 1989.212f), Rotator(0.f, 20.f, 0.f), 0, 0.f);
+    //SpawnZombies(18, 0, Vector3(800.f, 3600.f, 1989.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
+    //SpawnZombies(19, 0, Vector3(800.f, 1600.f, 1989.212f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
+    //SpawnZombies(20, 0, Vector3(200.f, 2200.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
     
     
     ////Áö»ó 2Ãþ
