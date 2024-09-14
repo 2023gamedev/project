@@ -172,13 +172,25 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Protocol::Detected Packet;
         Packet.ParseFromArray(buffer, bufferSize);
 
+        int recvzombieid = Packet.zombieid();
+
         if (Packet.player_insight()) {
-            zombie[Packet.zombieid()].PlayerInSight = true;
-            zombie[Packet.zombieid()].KnewPlayerLocation = true;
+            for (auto& z : zombie) {
+                if (z.ZombieData.zombieID == recvzombieid) {
+                    z.PlayerInSight = true;
+                    z.KnewPlayerLocation = true;
+                    break;
+                }
+            }
         }
 
         else {
-            zombie[Packet.zombieid()].PlayerInSight = false;
+            for (auto& z : zombie) {
+                if (z.ZombieData.zombieID == recvzombieid) {
+                    z.PlayerInSight = false;
+                    break;
+                }
+            }
         }
         //Packet.playerid()
 
