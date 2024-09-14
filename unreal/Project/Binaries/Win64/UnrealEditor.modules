@@ -2,6 +2,10 @@
 	"BuildId": "27405482",
 	"Modules": 
 	{
+<<<<<<< HEAD
 		"Project": "UnrealEditor-Project-5974.dll"
+=======
+		"Project": "UnrealEditor-Project-1160.dll"
+>>>>>>> 95d459bba7c6968c4510cf823cfb6f8fcba61b56
 	}
 }

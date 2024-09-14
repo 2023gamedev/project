@@ -40,9 +40,10 @@ public:
     ZombiePathfinder(float startX, float startY, float startZ, float goalX, float goalY, float goalZ)
         : startX(startX), startY(startY), startZ(startZ), goalX(goalX), goalY(goalY), goalZ(goalZ) {}
 
-    void Run(vector<tuple<float, float, float>>& t);
+    void Run(vector<tuple<float, float, float>>& t, int patroltype);
 
     void UpdatePathFinder(float startX, float startY, float startZ, float goalX, float goalY, float goalZ);
+    float OBSTACLE_RADIUS = 0.f;
 
 private:
     float startX, startY, startZ;
@@ -50,6 +51,7 @@ private:
     float beforegoalX = 0.f;
     float beforegoalY = 0.f;
     float beforegoalZ = 0.f;
+    int  PatrolType = 0; // 0일때는 일반 동작 , 1일때는 patrol
 
 
     FLOOR floor;
@@ -57,10 +59,10 @@ private:
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
     vector<tuple<float, float, float>> obstacles;
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
-    const float OBSTACLE_RADIUS = 10.0f;
     const float OBSTACLE_CHECK_INTERVAL = 10.0f;
 
-
+    void SetObstacleRadius(float radious) { OBSTACLE_RADIUS = radious; }
+    void SetPatrolType(int patroltype) { PatrolType = patroltype; }
 
     void DetermineFloor();
 

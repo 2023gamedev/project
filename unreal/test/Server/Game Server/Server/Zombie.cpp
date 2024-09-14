@@ -33,7 +33,7 @@ Zombie::Zombie()
 
 	HeardFootSound = false;
 
-	RandPatrol = false;
+	SetRandPatrol = false;
 
 	speed = 0.f;
 
@@ -51,7 +51,7 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 
 	DistanceToPlayer = 100000.f;		//그냥 초기화값
 
-	TargetLocation = vector<vector<vector<float>>>{ {{1700.f,800.f, ZombieData.z}} };
+	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	PlayerInSight = false;
 
@@ -61,7 +61,7 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 
 	HeardFootSound = false;
 
-	RandPatrol = false;
+	SetRandPatrol = false;
 
 	speed = 1.f;
 
@@ -100,8 +100,8 @@ bool Zombie::RandomPatrol()
 	pz = ZombieData.z;
 
 	vector<tuple<float, float, float>> tmp;
-	ZombiePathfinder pathfinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
-	pathfinder.Run(tmp);
+	ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
+	pathfinderpatrol.Run(tmp, 1);
 
 	if (!tmp.empty()) {
 		TargetLocation[0][0][0] = px;
@@ -111,7 +111,7 @@ bool Zombie::RandomPatrol()
 		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
 		path = tmp;
 
-		RandPatrol = true;
+		SetRandPatrol = true;
 
 		return true;
 	}
@@ -142,7 +142,7 @@ void Zombie::SetTargetLocation(TARGET t)
 	case TARGET::PATROL:
 		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
 		int cnt = 0;
-		if (RandPatrol == false)
+		if (SetRandPatrol == false)
 			while (RandomPatrol() == false) {
 				cnt++;
 
@@ -164,6 +164,7 @@ void Zombie::Walk(float deltasecond)
 {
 
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
+		cout << "return" << endl;
 		return;
 	}
 
@@ -284,8 +285,10 @@ bool Zombie::IsPathUpdated()
 void Zombie::MoveTo()
 {
 	//===================================
-	pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-	pathfinder.Run(path);
+	if (!SetRandPatrol) {
+		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+		pathfinder.Run(path, 0);
+	}
 	cout << endl;
 
 	// path값 전송
@@ -346,7 +349,7 @@ void Zombie::MoveTo()
 			break;
 		case TARGET::PATROL:
 			//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
-			RandPatrol = false;
+			SetRandPatrol = false;
 			break;
 		}
 
