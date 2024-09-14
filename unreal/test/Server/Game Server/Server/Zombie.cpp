@@ -108,6 +108,9 @@ bool Zombie::RandomPatrol()
 		TargetLocation[0][0][1] = py;
 		TargetLocation[0][0][2] = pz;
 
+		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
+		path = tmp;
+
 		RandPatrol = true;
 
 		return true;

@@ -50,7 +50,7 @@ public:
     vector<tuple<float, float, float>> beforepath;  //PathFinder로부터 받은 이전 경로 저장
 
 
-    const float CanAttackDistance = 150.f;          
+    const float CanAttackDistance = 150.f;          // 공격 사정거리 150.f
 
     // 사용 안 할 듯 함
     //const float CanHearDistance = 500.f;            //========================언리얼 BaseCharacter.cpp에서 FootSound() - float DetectRadius = 500.f;에서 참조 (맞는지 확인 필요)
