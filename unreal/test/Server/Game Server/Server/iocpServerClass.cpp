@@ -529,12 +529,12 @@ void IOCP_CORE::Zombie_BT_Thread()
 		//												======> 거리가 가장 가까운 플레이어를 따라가도록 (+만약 최단 거리가 두명 이상이면 랜덤하게 따라가게) 
 		//												==========> 이걸 하려면 좀비 클래스내 DistanceToPlayer 변수를 단일 변수가 아니라 리스트 형태로 가져야 각 플레이어들과 거리들 저장 가능
 
-		for (auto& player : playerDB) {
+		/*for (auto& player : playerDB) {
 			float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
 			cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 			cout << endl;
 		}
-		cout << endl;
+		cout << endl;*/
 
 		if (playerDB.size() == 0) {
 			cout << "연결된 플레이어가 없습니다..." << endl;

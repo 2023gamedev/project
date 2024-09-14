@@ -166,15 +166,51 @@ void AOneGameModeBase::BeginPlay()
         DefaultPawn->ThrowOnGround.BindUObject(this, &AOneGameModeBase::SpawnOnGroundItem);
     }
 
-
-
+ 
     // commit debug용 
     TArray<FVector> OutVertices;
+    TArray<FVector> Outlines;
+    TArray<FVector> OutPoly;
     ARecastNavMesh* NavMesh = Cast<ARecastNavMesh>(UNavigationSystemV1::GetCurrent(World)->MainNavData);
+
+
     if (NavMesh)
     {
         FRecastDebugGeometry NavMeshGeometry;
         NavMesh->GetDebugGeometry(NavMeshGeometry);
+        
+        Outlines.Append(NavMeshGeometry.NavMeshEdges);
+        OutPoly.Append(NavMeshGeometry.PolyEdges);
+
+
+
+        int i = 0;
+        // 데이터를 텍스트 파일로 저장하기 위한 문자열로 변환
+        FString OutlineData;
+        for (const FVector& Edge : Outlines)
+        {
+            i++;
+            OutlineData += FString::Printf(TEXT("%f,%f,%f\n"), Edge.X, Edge.Y, Edge.Z);
+        }
+
+        UE_LOG(LogTemp, Log, TEXT("Outlines :: %d!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), i);
+
+        // 데이터를 텍스트 파일로 저장하기 위한 문자열로 변환
+        FString OutPolyData;
+        for (const FVector& Poly : OutPoly)
+        {
+            OutPolyData += FString::Printf(TEXT("%f,%f,%f\n"), Poly.X, Poly.Y, Poly.Z);
+        }
+
+        // 저장할 파일 경로 설정 (프로젝트 디렉토리)
+        FString FilePath = FPaths::ProjectDir() + TEXT("NavMeshEdges.txt");
+        FString FilePathPol = FPaths::ProjectDir() + TEXT("NavMeshPolyes.txt");
+
+        // 파일에 데이터 저장
+        FFileHelper::SaveStringToFile(OutlineData, *FilePath);
+        FFileHelper::SaveStringToFile(OutPolyData, *FilePathPol);
+
+
 
         OutVertices.Append(NavMeshGeometry.MeshVerts);
 

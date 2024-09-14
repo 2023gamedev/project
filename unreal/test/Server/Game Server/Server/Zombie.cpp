@@ -88,12 +88,17 @@ void Zombie::SetDistance()
 
 bool Zombie::RandomPatrol()
 {
+
+	cout << "RandomPatrol!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+
 	float px, py, pz;
 
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	
 	std::uniform_int_distribution<int> dist(-500, 500);		//현 위치에서 반경 500 +-
+
+	cout << "RandomPatrol2222!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 
 	px = ZombieData.x + dist(mt);
 	py = ZombieData.y + dist(mt);

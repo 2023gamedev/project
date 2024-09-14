@@ -81,8 +81,10 @@ bool AObstacleNode::IsLocationNavigable(UWorld* World, FVector Location)
 
     bool Result = !World->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
-    if (Result)
-        DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 100.f);
+    if (Result) {
+        //DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 100.f);
+
+    }
     else
         DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 100.f);
 
