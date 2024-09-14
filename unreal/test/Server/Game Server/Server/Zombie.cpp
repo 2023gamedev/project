@@ -163,7 +163,6 @@ void Zombie::Walk(float deltasecond)
 {
 
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
-		cout << "return" << endl;
 		return;
 	}
 

@@ -34,8 +34,6 @@ ABaseZombie::ABaseZombie()
 	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
 	GetMesh()->SetCollisionProfileName("Zombie");
 	GetMesh()->SetGenerateOverlapEvents(true);
-
-	ZombieId = 0;
 	
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 400.f;

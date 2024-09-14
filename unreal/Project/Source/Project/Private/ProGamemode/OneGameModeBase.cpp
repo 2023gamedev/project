@@ -991,12 +991,11 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
 
 
     ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieID);
-    if (ZombiePtr && *ZombiePtr)
+    if (ZombiePtr && *ZombiePtr && IsValid(*ZombiePtr))
     {
         ABaseZombie* BaseZombie = *ZombiePtr;
         if (BaseZombie)
         {
-            FVector OldLocation = BaseZombie->GetActorLocation();
 
             // 기존 캐릭터 위치 업데이트
             BaseZombie->SetActorLocation(NewLocation);
