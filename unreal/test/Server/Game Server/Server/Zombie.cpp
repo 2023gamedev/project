@@ -104,12 +104,20 @@ bool Zombie::RandomPatrol()
 	pathfinderpatrol.Run(tmp, 1);
 
 	if (!tmp.empty()) {
-		TargetLocation[0][0][0] = px;
-		TargetLocation[0][0][1] = py;
+		tmp.pop_back();
+		
+		tuple<float, float, float> t_tmp;
+		t_tmp = tmp.back();
+
+		TargetLocation[0][0][0] = get<0>(t_tmp);
+		TargetLocation[0][0][1] = get<1>(t_tmp);
 		TargetLocation[0][0][2] = pz;
 
-		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
+		//tmp.push_back(t_tmp);
+
+		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 		path = tmp;
+
 		SetRandPatrol = true;
 
 		return true;
@@ -163,6 +171,7 @@ void Zombie::Walk(float deltasecond)
 {
 
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
+		//cout << "return" << endl;
 		return;
 	}
 
