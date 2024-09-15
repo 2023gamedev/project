@@ -330,54 +330,54 @@ void AOneGameModeBase::ChoiceCharacter()
 
 }
 
-void AOneGameModeBase::SpawnCharacter(int32 characterindex)
-{
-    // 그 대신 이렇게 하면 PlayerStart 위치들을 따로 적어놔야 할것 같다. 코드상에서는 알 수 없으니까
-    ABaseCharacter* DefaultPawn = nullptr;
-    APlayerStart* PlayerStart = nullptr;
-
-    DefaultPawn->SetPlayerId(characterindex);
-
-    // 이름(Tag)으로 할 시
-    FName PlayerStartTagName = "Start3";
-
-    // 인덱스로 할 시
-    // int index = 0;
-
-    UWorld* World = GetWorld();
-    if (World) {
-
-        for (TActorIterator<APlayerStart> It(World); It; ++It) {
-            APlayerStart* PS = *It;
-
-            // 이름(Tag)으로 할 시
-            if (PS && PS->PlayerStartTag == PlayerStartTagName) {
-
-                PlayerStart = PS;
-                break;
-            }
-            // 인덱스로 할 시
-            //if (index == 3) {
-
-            //    PlayerStart = PS;
-            //    break;
-            //}
-            //index++;
-        }
-        for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
-            UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
-            DefaultPawn = *ActorItr;
-            if (DefaultPawn) {
-                break;
-            }
-        }
-
-        if (DefaultPawn && PlayerStart) {
-            UE_LOG(LogTemp, Error, TEXT("DefaultPawn && PlayerStart Complete"));
-            DefaultPawn->SetActorLocation(PlayerStart->GetActorLocation());
-        }
-    }
-}
+//void AOneGameModeBase::SpawnCharacter(int32 characterindex)
+//{
+//    // 그 대신 이렇게 하면 PlayerStart 위치들을 따로 적어놔야 할것 같다. 코드상에서는 알 수 없으니까
+//    ABaseCharacter* DefaultPawn = nullptr;
+//    APlayerStart* PlayerStart = nullptr;
+//
+//    DefaultPawn->SetPlayerId(characterindex);
+//
+//    // 이름(Tag)으로 할 시
+//    FName PlayerStartTagName = "Start3";
+//
+//    // 인덱스로 할 시
+//    // int index = 0;
+//
+//    UWorld* World = GetWorld();
+//    if (World) {
+//
+//        for (TActorIterator<APlayerStart> It(World); It; ++It) {
+//            APlayerStart* PS = *It;
+//
+//            // 이름(Tag)으로 할 시
+//            if (PS && PS->PlayerStartTag == PlayerStartTagName) {
+//
+//                PlayerStart = PS;
+//                break;
+//            }
+//            // 인덱스로 할 시
+//            //if (index == 3) {
+//
+//            //    PlayerStart = PS;
+//            //    break;
+//            //}
+//            //index++;
+//        }
+//        for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
+//            UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
+//            DefaultPawn = *ActorItr;
+//            if (DefaultPawn) {
+//                break;
+//            }
+//        }
+//
+//        if (DefaultPawn && PlayerStart) {
+//            UE_LOG(LogTemp, Error, TEXT("DefaultPawn && PlayerStart Complete"));
+//            DefaultPawn->SetActorLocation(PlayerStart->GetActorLocation());
+//        }
+//    }
+//}
 
 
 void AOneGameModeBase::ItemRandomLocationSetting()
@@ -474,46 +474,6 @@ void AOneGameModeBase::ItemRandomLocationSetting()
     }
 
 }
-
-//void AOneGameModeBase::SpawnZombiesStaticClasses()
-//{
-//
-//    // 지하 1층
-//    for (int i = 0; i < 10; ++i) {
-//        ZombieClasses.Add(ANormalZombie::StaticClass());
-//        ZombieAIClasses.Add(AZombieAIController::StaticClass());
-//    }
-//
-//    // 지상 1층
-//    for (int i = 10; i < 12; ++i) {
-//        ZombieClasses.Add(AShoutingZombie::StaticClass());
-//        ShoutingZombieAIClasses.Add(AShoutingZombieAIController::StaticClass());
-//    }
-//    for (int i = 12; i < 20; ++i) {
-//        ZombieClasses.Add(ANormalZombie::StaticClass());
-//        ZombieAIClasses.Add(AZombieAIController::StaticClass());
-//    }
-//
-//    // 지상 2층
-//    for (int i = 20; i < 23; ++i) {
-//        ZombieClasses.Add(ARunningZombie::StaticClass());
-//        RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
-//    }
-//    for (int i = 23; i < 30; ++i) {
-//        ZombieClasses.Add(ANormalZombie::StaticClass());
-//        ZombieAIClasses.Add(AZombieAIController::StaticClass());
-//    }
-//
-//    // 지하 2층
-//    for (int i = 30; i < 35; ++i) {
-//        ZombieClasses.Add(ARunningZombie::StaticClass());
-//        RunningZombieAIClasses.Add(ARunningZombieAIController::StaticClass());
-//    }
-//    for (int i = 35; i < 40; ++i) {
-//        ZombieClasses.Add(ANormalZombie::StaticClass());
-//        ZombieAIClasses.Add(AZombieAIController::StaticClass());
-//    }
-//}
 
 FVector AOneGameModeBase::RandomItemBoxLocation(EItemFloor itemfloor)
 {
@@ -901,102 +861,6 @@ void AOneGameModeBase::UpdatePlayerJump(uint32 PlayerID)
 }
 
 
-
-
-
-//void AOneGameModeBase::SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange)
-//{
-//    TSubclassOf<ABaseZombie> SelectedZombieClass = ZombieClasses[zombieindex];
-//
-//
-//    // 선택된 좀비 클래스로 좀비를 생성
-//    ABaseZombie* SpawnedZombie = GetWorld()->SpawnActor<ABaseZombie>(SelectedZombieClass, zombiepos, zombieroatate);
-//
-//
-//    UE_LOG(LogTemp, Error, TEXT("111111111111111111111"));
-//    if (SpawnedZombie)
-//    {
-//        UE_LOG(LogTemp, Error, TEXT("2222222222222222222222222222222222222222"));
-//        if (zombieaiconindex == EZombie::NORMAL) {
-//
-//            TSubclassOf<AZombieAIController> SelectedZombieAIClass = ZombieAIClasses[m_iZombieNumber];
-//            AZombieAIController* AIZombieController = GetWorld()->SpawnActor<AZombieAIController>(SelectedZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
-//
-//            if (AIZombieController) {
-//                SpawnedZombie->SpawnDefaultController();
-//                AIZombieController->Possess(SpawnedZombie);
-//                AIZombieController->SetStartLocationValue(zombiepos);
-//
-//                if (zombiepatrol == EZombiePatrol::PATROLX) {
-//                    AIZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
-//                }
-//                else if (zombiepatrol == EZombiePatrol::PATROLY) {
-//                    AIZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
-//                }
-//            }
-//            else {
-//                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL"));
-//            }
-//
-//            SpawnedZombie->SetZombieId(zombieindex);
-//            m_iZombieNumber++;
-//        }
-//        else if (zombieaiconindex == EZombie::SHOUTING) {
-//            UE_LOG(LogTemp, Error, TEXT("333333333333333333333333333333333333333333"));
-//
-//            TSubclassOf<AShoutingZombieAIController> SelectedShoutingZombieAIClass = ShoutingZombieAIClasses[m_iShoutingZombieNumber];
-//            AShoutingZombieAIController* AIShoutingZombieController = GetWorld()->SpawnActor<AShoutingZombieAIController>(SelectedShoutingZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
-//
-//            if (AIShoutingZombieController) {
-//                SpawnedZombie->SpawnDefaultController();
-//                AIShoutingZombieController->Possess(SpawnedZombie);
-//                AIShoutingZombieController->SetStartLocationValue(zombiepos);
-//
-//                if (zombiepatrol == EZombiePatrol::PATROLX) {
-//                    AIShoutingZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
-//                }
-//                else if (zombiepatrol == EZombiePatrol::PATROLY) {
-//                    AIShoutingZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
-//                }
-//            }
-//            else {
-//                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL2"));
-//            }
-//
-//            SpawnedZombie->SetZombieId(zombieindex);
-//            m_iShoutingZombieNumber++;
-//        }
-//        else if (zombieaiconindex == EZombie::RUNNING) {
-//            UE_LOG(LogTemp, Error, TEXT("4444444444444444444444444444444444444444444"));
-//
-//            TSubclassOf<ARunningZombieAIController> SelectedRunningZombieAIClass = RunningZombieAIClasses[m_iRunningZombieNumber];
-//            ARunningZombieAIController* AIRunningZombieController = GetWorld()->SpawnActor<ARunningZombieAIController>(SelectedRunningZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator);
-//
-//            if (AIRunningZombieController) {
-//                SpawnedZombie->SpawnDefaultController();
-//                AIRunningZombieController->Possess(SpawnedZombie);
-//                AIRunningZombieController->SetStartLocationValue(zombiepos);
-//
-//
-//                if (zombiepatrol == EZombiePatrol::PATROLX) {
-//                    AIRunningZombieController->SetPatrolLocationValue(FVector(zombiepos.X + patrolrange, zombiepos.Y, zombiepos.Z));
-//                }
-//                else if (zombiepatrol == EZombiePatrol::PATROLY) {
-//                    AIRunningZombieController->SetPatrolLocationValue(FVector(zombiepos.X, zombiepos.Y + patrolrange, zombiepos.Z));
-//                }
-//            }
-//            else {
-//                UE_LOG(LogTemp, Error, TEXT("SpawnedZombie is NULL3"));
-//            }
-//
-//            SpawnedZombie->SetZombieId(zombieindex);
-//            m_iRunningZombieNumber++;
-//        }
-//
-//        ZombieMap.Add(zombieindex, SpawnedZombie);
-//    }
-//}
-
 void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation)
 {
     UWorld* World = GetWorld();
@@ -1025,8 +889,14 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
         ZombieAIClass = ARunningZombieAIController::StaticClass();
     }
 
+    // 0번 좀비가 제대로 함수 호출을 하긴 하는지 확인
+    UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
 
     ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieID);
+    if (!ZombiePtr)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Could not find Zombie ID: %d"), ZombieID);
+    }
     if (ZombiePtr && *ZombiePtr && IsValid(*ZombiePtr))
     {
         ABaseZombie* BaseZombie = *ZombiePtr;
@@ -1038,7 +908,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             BaseZombie->SetActorRotation(NewRotation);
 
             
-            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
+            //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
         }
     }
     else
