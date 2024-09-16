@@ -54,11 +54,11 @@
     <ClCompile Include="Player.cpp">
       <Filter>소스 파일\Zombie_BT</Filter>
     </ClCompile>
-    <ClCompile Include="Zombie.cpp">
-      <Filter>소스 파일\Zombie_BT</Filter>
-    </ClCompile>
     <ClCompile Include="ZombiePathfinder.cpp">
       <Filter>소스 파일\PathFinder</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>소스 파일\Zombie_BT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

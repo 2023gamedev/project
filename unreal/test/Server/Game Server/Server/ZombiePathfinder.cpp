@@ -121,14 +121,24 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
     if (!path.empty()) {
         t.clear();
         cout << "Path found:\n";
-        for (const auto& node : path) {
-            cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )\n";
+        for (auto it = path.begin(); it != path.end(); ++it) {
+            const auto& node = *it;
 
+
+            if (it != path.end() - 1) {
+                cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )";
+            }
+            else {
+                if (PatrolType == 0) {
+                    cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )";
+                }
+            }
+
+            cout << "\n";
             t.emplace_back(make_tuple(node.x, node.y, node.z));
         }
     }
     else {
-        cout << OBSTACLE_RADIUS << endl;;
         cout << "No path found.\n";
     }
 }

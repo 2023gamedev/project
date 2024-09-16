@@ -130,21 +130,23 @@ void AZombieAIController::Tick(float DeltaTime)
 
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
-
-				// 감지한 좀비와 플레이어 아이디 전송
-				if (m_bPlayerInSight == false) {
-					m_bPlayerInSight = true;
-					ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
-					Send_Detected(BaseCharacter);
-					LastSeenPlayer = BaseCharacter;
-				}
 			}
 		}
 
-		if (m_bPlayerInSight == true && NearestPawn != TestPawn)
-		{
-			m_bPlayerInSight = false;
-			Send_PlayerLost(LastSeenPlayer); // 서버에 플레이어가 인식 범위를 벗어났음을 알림
+		// NearestPawn에 따라 상태 변경
+		if (NearestPawn) {
+			if (!m_bPlayerInSight) {
+				m_bPlayerInSight = true;
+				ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
+				Send_Detected(BaseCharacter); // 플레이어 감지 메시지 전송
+				LastSeenPlayer = BaseCharacter;
+			}
+		}
+		else {
+			if (m_bPlayerInSight) {
+				m_bPlayerInSight = false;
+				Send_PlayerLost(LastSeenPlayer); // 플레이어를 놓쳤을 때 메시지 전송
+			}
 		}
 
 		//if (TestPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(TestPawn))
@@ -193,57 +195,23 @@ void AZombieAIController::Tick(float DeltaTime)
 		}
 	}
 
-	//==================================== 여기 좀비 아이디 확인하고 그 해당 좀비만 작동하는 거 맞는지 확인
-	//if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
-	//{
-	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-	//	{
-	//		MyGameMode->UpdateZombieAttack(AttackZombieId);
-	//		UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
-	//	}
-	//}
-	//
-	//if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
-	//{
-	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-	//	{
-	//		MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
-	//		UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
-	//	}
-	//}
-
-	//=========================================================================================================
-
+	if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdateZombieAttack(AttackZombieId);
+			UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
+		}
+	}
 	
-	//if (GameInstance->ClientSocketPtr->Q_path.empty()) {
-	//	return;
-	//}
-	//while (GameInstance->ClientSocketPtr->Q_path.empty() != true) {
-	//	ZombiePath tmp_path;
-	//	GameInstance->ClientSocketPtr->Q_path.try_pop(tmp_path);
-	//	//UE_LOG(LogNet, Display, TEXT("Path found: ZombieId=%d"), recvZombiePath.ZombieId);
-
-	//	//UE_LOG(LogNet, Display, TEXT("=================PathStart==================="));
-	//	//int cnt = 1;
-	//	//for (auto path : recvZombiePath.Path) {
-	//	//	UE_LOG(LogNet, Display, TEXT("Zombie #%d's Path - num%d: ( %f, %f, %f )"), tmp_path.ZombieId,cnt, get<0>(path), get<1>(path), get<2>(path));
-	//	//	cnt++;
-	//	//}
-	//	//UE_LOG(LogNet, Display, TEXT("=================PathEnd==================="));
-
-	//	//일단 좀비가 장애물을 피해 경로를 잘 따라 움직이는지 확인 (애니메이션 X)
-	//	UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, tmp_path.Location.X, tmp_path.Location.Y, tmp_path.Location.Z);
-
-
-	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-	//	{
-	//		MyGameMode->UpdateZombie(tmp_path.ZombieId, 0, tmp_path.Location, NormalZombie->GetActorRotation());
-	//	}
-
-	//	break;
-	//}
-
-	//=========================================================================================================
+	if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
+	{
+		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
+			UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
+		}
+	}
 }
 
 void AZombieAIController::Send_Detected(ABaseCharacter* BaseCharacter)
