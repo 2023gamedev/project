@@ -21,17 +21,17 @@ const FName AZombieAIController::PatrolLocationKey(TEXT("PatrolLocation"));
 
 AZombieAIController::AZombieAIController()
 {
-	//static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT("/Game/BB_ZombieV.BB_ZombieV"));
-	//if (BBObject.Succeeded()) {
-	//	BlackBoardAsset = BBObject.Object;
-	//}
-	//
-	//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/BT_ZombieTree.BT_ZombieTree"));
-	//if (BTObject.Succeeded()) {
-	//	AIBehavior = BTObject.Object;
-	//}
-	//
-	//UE_LOG(LogNet, Display, TEXT("ZombieAIController On"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT("/Game/BB_ZombieV.BB_ZombieV"));
+	if (BBObject.Succeeded()) {
+		BlackBoardAsset = BBObject.Object;
+	}
+	
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/BT_ZombieTree.BT_ZombieTree"));
+	if (BTObject.Succeeded()) {
+		AIBehavior = BTObject.Object;
+	}
+	
+	UE_LOG(LogNet, Display, TEXT("ZombieAIController On"));
 
 }
 
@@ -39,12 +39,12 @@ void AZombieAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//if (AIBehavior != nullptr) {
-	//	RunBehaviorTree(AIBehavior);
-	//
-	//	AActor* OwningPawn = GetPawn();
-	//
-	//}
+	if (AIBehavior != nullptr) {
+		RunBehaviorTree(AIBehavior);
+	
+		AActor* OwningPawn = GetPawn();
+	
+	}
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
@@ -161,18 +161,18 @@ void AZombieAIController::Tick(float DeltaTime)
 	}
 
 	// 블랙보드 업데이트
-	//if (NearestPawn)
-	//{
-	//	GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
-	//	//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
-	//	GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
-	//	GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
-	//}
-	//else
-	//{
-	//	GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-	//	GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
-	//}
+	if (NearestPawn)
+	{
+		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
+		//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
+	}
+	else
+	{
+		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
+	}
 	//}
 
 	//CheckAndSendMovement();

@@ -260,23 +260,23 @@ void AOneGameModeBase::BeginPlay()
 
     //==========================================
     {
-        // 현재 월드에서 네비게이션 시스템을 가져옵니다.
-        UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
-        if (NavSystem)
-        {
-            // 네비게이션 데이터 인스턴스를 가져옵니다.
-            ARecastNavMesh* NavData = Cast<ARecastNavMesh>(NavSystem->GetDefaultNavDataInstance());
-            if (NavData)
-            {
-                // NavData를 통해 NavMesh 세부 정보에 접근할 수 있습니다.
-                //const TArray<FNavMeshTile>& Tiles = NavData->GetNavMeshTiles();
-                // Tiles를 통해 폴리곤 및 정점 정보를 가져옵니다.
-                
-                
-                
-                FBox Tiles = NavData->GetNavMeshTileBounds(0);
-            }
-        }
+        //// 현재 월드에서 네비게이션 시스템을 가져옵니다.
+        //UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
+        //if (NavSystem)
+        //{
+        //    // 네비게이션 데이터 인스턴스를 가져옵니다.
+        //    ARecastNavMesh* NavData = Cast<ARecastNavMesh>(NavSystem->GetDefaultNavDataInstance());
+        //    if (NavData)
+        //    {
+        //        // NavData를 통해 NavMesh 세부 정보에 접근할 수 있습니다.
+        //        //const TArray<FNavMeshTile>& Tiles = NavData->GetNavMeshTiles();
+        //        // Tiles를 통해 폴리곤 및 정점 정보를 가져옵니다.
+        //        
+        //        
+        //        
+        //        FBox Tiles = NavData->GetNavMeshTileBounds(0);
+        //    }
+        //}
 
 
 

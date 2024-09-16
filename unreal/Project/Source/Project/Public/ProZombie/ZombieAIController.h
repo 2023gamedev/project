@@ -51,11 +51,11 @@ public:
 	UProGameInstance* GameInstance;
 
 private:
-	//UPROPERTY(EditAnywhere)
-	//class UBehaviorTree* AIBehavior;
+	UPROPERTY(EditAnywhere)
+	class UBehaviorTree* AIBehavior;
 
-	//UPROPERTY(EditAnywhere)
-	//class UBlackboardData* BlackBoardAsset;
+	UPROPERTY(EditAnywhere)
+	class UBlackboardData* BlackBoardAsset;
 
 public:
 	UPROPERTY(EditAnywhere)
