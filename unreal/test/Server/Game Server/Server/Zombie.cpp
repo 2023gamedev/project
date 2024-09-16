@@ -93,7 +93,7 @@ bool Zombie::RandomPatrol()
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	
-	std::uniform_int_distribution<int> dist(-500, 500);		//현 위치에서 반경 500 +-
+	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 500 +-
 
 	px = ZombieData.x + dist(mt);
 	py = ZombieData.y + dist(mt);
@@ -112,8 +112,6 @@ bool Zombie::RandomPatrol()
 		TargetLocation[0][0][0] = get<0>(t_tmp);
 		TargetLocation[0][0][1] = get<1>(t_tmp);
 		TargetLocation[0][0][2] = pz;
-
-		//tmp.push_back(t_tmp);
 
 		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 		path = tmp;
@@ -152,7 +150,7 @@ void Zombie::SetTargetLocation(TARGET t)
 		if (SetRandPatrol == false)
 			while (RandomPatrol() == false) {
 				cnt++;
-
+		
 				if (cnt >= 5)
 					break;
 			}

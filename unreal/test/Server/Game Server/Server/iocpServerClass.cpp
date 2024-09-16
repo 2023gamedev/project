@@ -519,8 +519,8 @@ void IOCP_CORE::Zombie_BT_Thread()
 		lastTime = currentTime;
 
 		std::chrono::duration<float> BTInterval = currentTime - lastBTTime;
-		if (BTInterval.count() < 1.0f) {
-			continue;							// BT 작동 인터벌 설정
+		if (BTInterval.count() < 0.1f) {		// BT 작동 인터벌 설정
+			continue;							
 		}
 
 		lastBTTime = currentTime;
