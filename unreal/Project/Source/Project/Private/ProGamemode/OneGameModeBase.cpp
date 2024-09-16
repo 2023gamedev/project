@@ -259,6 +259,7 @@ void AOneGameModeBase::BeginPlay()
 
     }
 
+
 }
 
 void AOneGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
