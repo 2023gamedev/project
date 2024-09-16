@@ -59,7 +59,7 @@ private:
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
     vector<tuple<float, float, float>> obstacles;
     unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
-    const float OBSTACLE_CHECK_INTERVAL = 10.0f;
+    const float OBSTACLE_CHECK_INTERVAL = 25.0f;
 
     void SetObstacleRadius(float radious) { OBSTACLE_RADIUS = radious; }
     void SetPatrolType(int patroltype) { PatrolType = patroltype; }

@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "ProceduralMeshComponent.h"
+#include "ProZombie/ZombieAnimInstance.h"
 #include "BaseZombie.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
@@ -226,7 +227,17 @@ private:
 
 
 public:
+	UZombieAnimInstance* CachedAnimInstance;
+
 	uint32 ZombieId = 99;
 	//FVector NewLocation;
+
+	FVector NewLocation;
+
+	FVector OldLocation = FVector(0.0f, 0.0f, 0.0f);
+
+	float Speed;
+	float PreviousSpeed;
+
 
 };

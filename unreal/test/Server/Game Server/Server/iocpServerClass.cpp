@@ -519,7 +519,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 		lastTime = currentTime;
 
 		std::chrono::duration<float> BTInterval = currentTime - lastBTTime;
-		if (BTInterval.count() < 0.1f) {		// BT 작동 인터벌 설정
+		if (BTInterval.count() < 0.1f) {	// BT 작동 인터벌 설정
 			continue;							
 		}
 
@@ -686,7 +686,7 @@ void IOCP_CORE::SendPingToClients()
 			IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
 			player->pingcnt++;
 
-			if (player->pingcnt >= 10)
+			if (player->pingcnt >= 3)
 			{
 				printf("Client #%u did not respond\n", player->id);
 

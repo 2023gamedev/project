@@ -930,6 +930,9 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             BaseZombie->SetActorLocation(NewLocation);
             BaseZombie->SetActorRotation(NewRotation);
 
+            //좀비 애니메이션 업데이트용
+            BaseZombie->UpdateZombieData(NewLocation);
+
             
             //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
         }

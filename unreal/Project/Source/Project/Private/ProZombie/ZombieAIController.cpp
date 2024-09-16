@@ -52,7 +52,111 @@ void AZombieAIController::BeginPlay()
 
 }
 
+//void AZombieAIController::IsZombiePathUpdate()
+//{
+//	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
+//
+//	auto paths = GameInstance->ClientSocketPtr->Q_path;
+//
+//	ZombiePath zompath;
+//
+//	while (paths.unsafe_size() != 0) {
+//
+//		paths.try_pop(zompath);
+//
+//		if (zompath.ZombieId == NormalZombie->GetZombieId()) {
+//
+//			if (zompath.IsZombiePathUpdate == true) {
+//
+//				if (m_bIsPathUpdate == false) {
+//					ZPath = zompath.Path;
+//					ZombiePathIndex = 0;
+//					m_bIsPathUpdate = true;
+//				}
+//			}
+//			else {
+//				m_bIsPathUpdate = false;
+//			}
+//
+//			break;
+//		}
+//	}
+//
+//}
 
+
+//void AZombieAIController::Walk(float deltasecond)
+//{
+//	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
+//	FVector zomlocation;
+//
+//	if (NormalZombie) {
+//
+//		zomlocation = NormalZombie->GetActorLocation();
+//	}
+//
+//	std::tuple<float,float,float> target = ZPath.back();
+//
+//
+//	if (zomlocation.X == get<0>(target) && zomlocation.Y == get<1>(target)) {
+//		ZombiePathIndex = 0;
+//		return;
+//	}
+//
+//
+//	////Walk가 동작하기 전에 이미 도착위치에 위치해 있다면, 해당 종료조건 발동 X
+//	//if (ZombiePathIndex >= path.size()) {
+//	//	//cout << "Zombie has reached the final destination." << endl;
+//
+//	//	return; // 경로 끝에 도달
+//	//}
+//
+//
+//
+//	// 현재 목표 노드
+//	std::tuple<float, float, float> TargetNode = ZPath[ZombiePathIndex];
+//	float PathX = get<0>(TargetNode);
+//	float PathY = get<1>(TargetNode);
+//
+//
+//	// 타겟 방향 계산
+//	float dx = PathX - zomlocation.X;
+//	float dy = PathY - zomlocation.Y;
+//
+//	// 거리를 계산
+//	float distance = sqrt(dx * dx + dy * dy);
+//
+//	// 이동 방향 벡터를 정규화
+//	float directionX = dx / distance;
+//	float directionY = dy / distance;
+//
+//	// 이동 거리 계산
+//	float moveDistance = NormalZombie->GetSpeed() * 100.f * deltasecond;
+//
+//	// 이동 벡터 계산
+//	float moveX = directionX * moveDistance;
+//	float moveY = directionY * moveDistance;
+//
+//
+//
+//	// 목표에 도착했는지 확인 (옵션)
+//	float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
+//
+//	if (newDistance < moveDistance) {
+//		zomlocation.X = PathX;
+//		zomlocation.Y = PathY;
+//
+//		// 다음 목표 노드로 이동
+//		ZombiePathIndex++;
+//		m_bIsTurn = true;
+//	}
+//	else {
+//		// 타겟 방향으로 이동
+//		zomlocation.X  += moveX;
+//		zomlocation.Y  += moveY;
+//
+//	}
+//}
 
 void AZombieAIController::Tick(float DeltaTime)
 {
@@ -127,7 +231,7 @@ void AZombieAIController::Tick(float DeltaTime)
 			{
 				NearestDist = Dist;
 				NearestPawn = TestPawn;
-
+				//IsZombiePathUpdate();
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
 			}
@@ -176,6 +280,8 @@ void AZombieAIController::Tick(float DeltaTime)
 	//}
 
 	//CheckAndSendMovement();
+
+	//Walk(DeltaTime);
 
 	if (GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
 	{
@@ -324,4 +430,9 @@ void AZombieAIController::StartAI()
 	//	BehaviorTreeComponent->StartTree(*this->AIBehavior, EBTExecutionMode::Looped);
 	//}
 }
+
+//void AZombieAIController::ZombieTurn(float delasecond)
+//{
+//
+//}
 

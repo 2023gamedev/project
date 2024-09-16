@@ -192,7 +192,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                 }
             }
         }
-        //Packet.playerid()
 
         return true;
     }

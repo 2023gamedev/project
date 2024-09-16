@@ -270,12 +270,10 @@ bool Zombie::IsPathUpdated()
 
 	if (!path.empty() && !beforepath.empty()) {
 
-		if (beforepath == path) {
-			return false;
-		}
-		else {
+		if (beforepath != path) {
 
 			beforepath = path;
+
 			return true;
 		}
 		
@@ -302,10 +300,12 @@ void Zombie::MoveTo()
 	cout << endl;
 
 	// path값 전송
+	
 	Protocol::ZombiePath zPath;
 	zPath.set_zombieid(ZombieData.zombieID);
 	zPath.set_packet_type(10);
 
+	// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
 	for (const auto& p : path)
 	{
 		Protocol::Vector3* path = zPath.add_path();
