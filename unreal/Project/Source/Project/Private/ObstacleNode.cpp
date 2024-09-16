@@ -40,12 +40,12 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
             FVector Location(x, y, StartLocation.Z);
             if (IsLocationNavigable(World, Location))
             {
-                //Nodes.Add(Location);
+                Nodes.Add(Location);
                 // 이 부분은 네비메쉬 부분을 사용할 예정
             }
             else
             {
-                Nodes.Add(Location);
+                //Nodes.Add(Location);
                 UE_LOG(LogTemp, Warning, TEXT("Obstacle : %f,%f,%f"), Location.X, Location.Y, Location.Z);
             }
         }
@@ -82,11 +82,13 @@ bool AObstacleNode::IsLocationNavigable(UWorld* World, FVector Location)
     bool Result = !World->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
     if (Result) {
-        //DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 100.f);
+        DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 100.f);
 
     }
-    else
-        DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 100.f);
+    else {
+       // DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 100.f);
+
+    }
 
     return Result;
 }
@@ -110,6 +112,26 @@ TMap<FVector, TArray<FVector>> AObstacleNode::GenerateEdges(const TArray<FVector
     }
 
     EdgesMap = Edges;
+
+    FString EdgeData;
+
+    // 엣지 데이터를 문자열로 변환
+    for (const auto& Edge : Edges)
+    {
+        const FVector& Node = Edge.Key;
+        const TArray<FVector>& Neighbors = Edge.Value;
+
+        EdgeData += FString::Printf(TEXT("Node: %f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+
+        for (const FVector& Neighbor : Neighbors)
+        {
+            EdgeData += FString::Printf(TEXT("    Neighbor: %f,%f,%f\n"), Neighbor.X, Neighbor.Y, Neighbor.Z);
+        }
+    }
+
+    // 엣지 데이터를 파일로 저장
+    FString FilePath = FPaths::ProjectDir() + TEXT("Edges.txt");
+    FFileHelper::SaveStringToFile(EdgeData, *FilePath);
 
     return Edges;
 }

@@ -48,6 +48,12 @@ public:
 	void StopAI();
 	void StartAI();
 
+	//bool IsZombiePathUpdate();
+
+	//void ZombieTurn(float delasecond);
+	
+	//void Walk(float deltasecond);
+
 	UProGameInstance* GameInstance;
 
 private:
@@ -74,6 +80,17 @@ public:
 	bool m_bPlayerInSight;
 
 
+	int ZombiePathIndex;
+
+	// path가 업데이트 되면 이것을 true로 바꿔주기
+	//bool m_bIsPathUpdate;
+
+	// path 도착하고 turn 할지 말지 bool 값
+	//bool m_bIsTurn;
+
+	//std::vector<std::tuple<float, float, float>> before_ZPath = {};
+
+	//std::vector<std::tuple<float, float, float>> ZPath = {};
 
 	ZombieData recvZombieData;
 	ZombiePath recvZombiePath;
