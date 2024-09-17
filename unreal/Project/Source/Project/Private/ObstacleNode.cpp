@@ -99,16 +99,24 @@ TMap<FVector, TArray<FVector>> AObstacleNode::GenerateEdges(const TArray<FVector
 
     for (const FVector& Node : Nodes)
     {
-        TArray<FVector> Neighbors;
-        for (const FVector& Offset : NeighborOffsets)
-        {
-            FVector Neighbor = Node + Offset * GridSize;
-            if (Nodes.Contains(Neighbor))
+
+        if (Node.X > 16.f && Node.X < 2366.f && Node.Y < 3960.f) {
+            TArray<FVector> Neighbors;
+            for (const FVector& Offset : NeighborOffsets)
             {
-                Neighbors.Add(Neighbor);
+                FVector Neighbor = Node + Offset * GridSize;
+
+                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
+
+                    if (Nodes.Contains(Neighbor))
+                    {
+                        Neighbors.Add(Neighbor);
+                    }
+                }
             }
+            Edges.Add(Node, Neighbors);
         }
-        Edges.Add(Node, Neighbors);
+
     }
 
     EdgesMap = Edges;
@@ -130,7 +138,7 @@ TMap<FVector, TArray<FVector>> AObstacleNode::GenerateEdges(const TArray<FVector
     }
 
     // 엣지 데이터를 파일로 저장
-    FString FilePath = FPaths::ProjectDir() + TEXT("Edges.txt");
+    FString FilePath = FPaths::ProjectDir() + TEXT("EdgesF2.txt");
     FFileHelper::SaveStringToFile(EdgeData, *FilePath);
 
     return Edges;
