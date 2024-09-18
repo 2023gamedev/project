@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #include "Task.h"
 #include "Player.h"
@@ -11,6 +12,7 @@
 using std::vector;
 using std::string;
 using std::tuple;
+using std::map;
 
 
 class Task;
@@ -60,7 +62,7 @@ public:
 
     ZombiePathfinder pathfinder;
     
-    float DistanceToPlayer;
+    map<int, float> DistanceToPlayers;
 
     vector<vector<vector<float>>> TargetLocation;
 

@@ -21,32 +21,32 @@ const FName AZombieAIController::PatrolLocationKey(TEXT("PatrolLocation"));
 
 AZombieAIController::AZombieAIController()
 {
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT("/Game/BB_ZombieV.BB_ZombieV"));
-	if (BBObject.Succeeded()) {
-		BlackBoardAsset = BBObject.Object;
-	}
-	
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/BT_ZombieTree.BT_ZombieTree"));
-	if (BTObject.Succeeded()) {
-		AIBehavior = BTObject.Object;
-	}
-	
-	UE_LOG(LogNet, Display, TEXT("ZombieAIController On"));
+	//static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT("/Game/BB_ZombieV.BB_ZombieV"));
+	//if (BBObject.Succeeded()) {
+	//	BlackBoardAsset = BBObject.Object;
+	//}
+	//
+	//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/BT_ZombieTree.BT_ZombieTree"));
+	//if (BTObject.Succeeded()) {
+	//	AIBehavior = BTObject.Object;
+	//}
+	//
+	//UE_LOG(LogNet, Display, TEXT("ZombieAIController On"));
 
 }
 
 void AZombieAIController::BeginPlay()
 {
-	Super::BeginPlay();
-
-	if (AIBehavior != nullptr) {
-		RunBehaviorTree(AIBehavior);
-	
-		AActor* OwningPawn = GetPawn();
-	
-	}
-
-	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	//Super::BeginPlay();
+	//
+	//if (AIBehavior != nullptr) {
+	//	RunBehaviorTree(AIBehavior);
+	//
+	//	AActor* OwningPawn = GetPawn();
+	//
+	//}
+	//
+	//GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 
 
@@ -197,8 +197,6 @@ void AZombieAIController::Tick(float DeltaTime)
 	//float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // 전방 90도
 
 
-
-
 	TArray<AActor*> Players;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
 
@@ -265,59 +263,43 @@ void AZombieAIController::Tick(float DeltaTime)
 	}
 
 	// 블랙보드 업데이트
-	if (NearestPawn)
-	{
-		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
-		//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
-		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
-		GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
-	}
-	else
-	{
-		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-		GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
-	}
+	//if (NearestPawn)
+	//{
+	//	GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
+	//	//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
+	//	GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
+	//	GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
+	//}
+	//else
+	//{
+	//	GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+	//	GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
+	//}
 	//}
 
 	//CheckAndSendMovement();
 
 	//Walk(DeltaTime);
 
-	if (GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		{
-			MyGameMode->UpdateZombieAttack(AttackZombieId);
-			UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
-		}
-	}
 
-	if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		{
-			MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
-			UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
-		}
-	}
-
-	if(GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		{
-			MyGameMode->UpdateZombieAttack(AttackZombieId);
-			UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
-		}
-	}
-	
-	if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
-	{
-		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		{
-			MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
-			UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
-		}
-	}
+	// 계속 공격 애니메이션 재생되니 일단 주석처리
+	//if (GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
+	//{
+	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+	//	{
+	//		MyGameMode->UpdateZombieAttack(AttackZombieId);
+	//		UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
+	//	}
+	//}
+	//
+	//if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
+	//{
+	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+	//	{
+	//		MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
+	//		UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
+	//	}
+	//}
 }
 
 void AZombieAIController::Send_Detected(ABaseCharacter* BaseCharacter)

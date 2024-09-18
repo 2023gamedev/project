@@ -38,6 +38,10 @@ public:
         //cout << "Selector <CanSeePlayer> 함수 호출" << endl;
         //cout << endl;
         for (const auto& child : sel_children) {
+            //좀비와 플레이어들의 거리 갱신
+            //==============================================거리로만 공격을 판단하지 말고 방향 벡터까지 계산해서 공격 명령시키도록 하자
+            zom.SetDistance();
+
             string result = child->CanSeePlayer(zom);
             if ("Fail" != result) {
                 //cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;

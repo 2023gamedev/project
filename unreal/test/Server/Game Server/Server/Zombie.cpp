@@ -21,7 +21,7 @@ Zombie::Zombie()
 
 	ZombieData = Zombie_Data();
 
-	DistanceToPlayer = 100000.f;		//그냥 초기화값
+	DistanceToPlayers = {};
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
@@ -49,7 +49,7 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 
 	ZombieData = z_d;
 
-	DistanceToPlayer = 100000.f;		//그냥 초기화값
+	DistanceToPlayers = {};
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
@@ -77,28 +77,26 @@ Zombie::~Zombie()
 	// -> 이유는 모르겠음 그냥
 }
 
-
+// 플레이어를 단 한명이라도 포착해야 돌아감
 void Zombie::SetDistance()
 { 
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[bt_playerID].x, playerDB[bt_playerID].y, playerDB[bt_playerID].z}}};
 
-	DistanceToPlayer = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
+	DistanceToPlayers.emplace(bt_playerID, sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2)));
 }
 
 bool Zombie::RandomPatrol()
 {
 
-	cout << "RandomPatrol!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+	cout << "RandomPatrol!!!" << endl;
 
 	float px, py, pz;
 
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	
-	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 500 +-
-
-	cout << "RandomPatrol2222!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 1500 +-
 
 	px = ZombieData.x + dist(mt);
 	py = ZombieData.y + dist(mt);
@@ -134,7 +132,34 @@ void Zombie::SetTargetLocation(TARGET t)
 {
 	targetType = t;
 
-	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[bt_playerID].x, playerDB[bt_playerID].y, playerDB[bt_playerID].z}} };
+	float max = 0.f;
+	vector<vector<vector<float>>> pl = {};
+	vector<int> keys = {};
+
+	// 단 한명의 플레이어라도 마주쳤다면
+	if (DistanceToPlayers.size() != 0) {
+
+		for (auto player : playerDB) {
+			if (max < DistanceToPlayers.at(player.first)) {
+				max = DistanceToPlayers.at(player.first);
+				//pl = vector<vector<vector<float>>>{ {{player.second.x,player.second.y, player.second.z}} };
+			}
+		}
+
+		// 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
+		for (auto player : playerDB) {
+			if (max == DistanceToPlayers.at(player.first)) {
+				keys.emplace_back(player.first);
+			}
+		}
+
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		
+		std::uniform_int_distribution<int> dist(0, keys.size() - 1);
+
+		pl = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x,playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}}};
+	}
 
 	switch (targetType) {
 	case TARGET::PLAYER:
@@ -303,6 +328,7 @@ void Zombie::MoveTo()
 	
 	Protocol::ZombiePath zPath;
 	zPath.set_zombieid(ZombieData.zombieID);
+	cout << "Path 보내는 좀비 ID: " << ZombieData.zombieID << endl;
 	zPath.set_packet_type(10);
 
 	// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기

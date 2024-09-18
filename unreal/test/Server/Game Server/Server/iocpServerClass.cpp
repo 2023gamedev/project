@@ -519,15 +519,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 		lastTime = currentTime;
 
 		std::chrono::duration<float> BTInterval = currentTime - lastBTTime;
-		if (BTInterval.count() < 0.1f) {	// BT 작동 인터벌 설정
+		if (BTInterval.count() < 1.0f) {	// BT 작동 인터벌 설정
 			continue;							
 		}
 
 		lastBTTime = currentTime;
-
-		//=============================================== 좀비가 만약 한 번에 여러명의 플레이어를 포착하면 어떤 플레이어를 우선적으로 따라가게 만들지? => 의논 필요!!!
-		//												======> 거리가 가장 가까운 플레이어를 따라가도록 (+만약 최단 거리가 두명 이상이면 랜덤하게 따라가게) 
-		//												==========> 이걸 하려면 좀비 클래스내 DistanceToPlayer 변수를 단일 변수가 아니라 리스트 형태로 가져야 각 플레이어들과 거리들 저장 가능
 
 		/*for (auto& player : playerDB) {
 			float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
@@ -561,6 +557,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 			cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 			cout << endl;
 
+			//=============================================== 좀비가 만약 한 번에 여러명의 플레이어를 포착하면 어떤 플레이어를 우선적으로 따라가게 만들지?
+			//												======> 거리가 가장 가까운 플레이어를 따라가도록 (+만약 최단 거리가 두명 이상이면 랜덤하게 따라가게) 
+			//좀비와 플레이어들의 거리 초기화
+			zom.DistanceToPlayers.clear();
+
 
 			for (auto& player : playerDB) {
 
@@ -570,9 +571,6 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 				//BT 검사할 플레이어 인덱스 설정
 				zom.bt_playerID = player.first;
-
-				//좀비와 플레이어의 거리 갱신
-				zom.SetDistance();
 
 				//<Selector-Detect> 실행
 				result = sel_detect.Sel_Detect(zom);

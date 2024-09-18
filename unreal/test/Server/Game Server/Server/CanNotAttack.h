@@ -7,7 +7,7 @@ class TCanNotAttack : public Task {
 public:
 
     string CanSeePlayer(Zombie& zom) const override {
-        bool result = (zom.DistanceToPlayer > zom.CanAttackDistance);
+        bool result = (zom.DistanceToPlayers.at(zom.bt_playerID) > zom.CanAttackDistance);
 
         //cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
         //cout << "플레이어와 좀비의 거리: " << zom.DistanceToPlayer << endl;
