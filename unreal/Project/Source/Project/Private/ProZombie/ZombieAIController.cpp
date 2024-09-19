@@ -415,6 +415,22 @@ void AZombieAIController::StartAI()
 
 //void AZombieAIController::ZombieTurn(float delasecond)
 //{
+//	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
+//
+//	FRotator zomCurRot = NormalZombie->GetActorRotation();
+//
+//	FVector zomDir = NormalZombie->GetActorLocation() - zDestination;
+//
+//	FVector zomNDir = zomDir.GetSafeNormal();
+//	FRotator zomTarRot = zomNDir.Rotation();
+//
+//	// 회전 계산
+//	float RotationSpeed = NormalZombie->GetTurningSpeed() * deltasecond;
+//
+//	FRotator NewRotation = FMath::RInterpTo(zomCurRot, zomTarRot, deltasecond, RotationSpeed);
+//
+//
+//	NormalZombie->SetActorRotation(NewRotation);
 //
 //}
 

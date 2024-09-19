@@ -51,8 +51,11 @@ public:
 	void SetSTR(float str) { m_fSTR = str; }
 
 	float GetSpeed() { return m_fSpeed; }
-	void SetSpeed(float speed) { m_fSpeed = speed; }
-
+	void SetSpeed(float speed) { m_fSpeed = speed; }	
+	
+	//float GetTurningSpeed() { return m_fTurningSpeedDegree; }
+	//void SetTurningSpeed(float degree) { m_fTurningSpeedDegree = degree; }
+		
 	bool IsDie() { return m_bDie; }
 	void SetDie(bool die) { m_bDie = die; }
 
@@ -225,6 +228,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float m_fAttackRange = 100.f;
 
+	// 1초당 고개 돌리는 각도
+	//UPROPERTY(EditAnywhere)
+	//float m_fTurningSpeedDegree = 90.f;
 
 public:
 	UZombieAnimInstance* CachedAnimInstance;
