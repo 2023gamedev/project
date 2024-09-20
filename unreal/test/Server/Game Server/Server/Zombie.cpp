@@ -246,8 +246,6 @@ void Zombie::MoveTo(float deltasecond)
 
 
 	// 타겟 위치에 도달했는지 확인
-
-	// 목표에 도착했는지 확인
 	float newDistance = sqrt((PathX - ZombieData.x) * (PathX - ZombieData.x) + (PathY - ZombieData.y) * (PathY - ZombieData.y));
 
 	if (newDistance < moveDistance) {

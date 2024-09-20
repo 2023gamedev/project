@@ -2,13 +2,20 @@
 
 ZombieController::ZombieController(IOCP_CORE& mainServer)
 {
-    // ���� ����
+    // 서버 설정
     iocpServer = &mainServer;
 
-    // ���� 1�� 
+<<<<<<< HEAD
+    // 지하 1층 
+    SpawnZombies(0, 0, Vector3(1800.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
+    SpawnZombies(1, 0, Vector3(1000.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
+    SpawnZombies(2, 0, Vector3(600.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
+=======
+    // ���� 1�� 
     SpawnZombies(1, 0, Vector3(1800.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     SpawnZombies(2, 0, Vector3(1000.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
-    SpawnZombies(3, 0, Vector3(600.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
+    SpawnZombies(0, 0, Vector3(600.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
+>>>>>>> C0920
 
 
     //SpawnZombies(3, 0, Vector3(2100.f, 2400.f, 1050.275f), Rotator(0.f, 0.f, 0.f), 1, -800.f);
@@ -20,9 +27,9 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     //SpawnZombies(7, 0, Vector3(1400.f, 2800.f, 1040.275f), Rotator(0.f, 30.f, 0.f), 0, 0.f);
     //SpawnZombies(8, 0, Vector3(1000.f, 3320.f, 1040.275f), Rotator(0.f, 10.f, 0.f), 0, 0.f);
     //SpawnZombies(9, 0, Vector3(2200.f, 3100.f, 1040.275f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
-  
 
-    //// ���� 1��
+
+    //// 지상 1층
     //SpawnZombies(10, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
     //SpawnZombies(11, 1, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
     //
@@ -34,14 +41,14 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     //SpawnZombies(17, 0, Vector3(800.f, 3600.f, 1989.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
     //SpawnZombies(18, 0, Vector3(800.f, 1600.f, 1989.212f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
     //SpawnZombies(19, 0, Vector3(200.f, 2200.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
-    
-    
-    ////���� 2��
+
+
+    ////지상 2층
     /*SpawnZombies(20, 2, Vector3(2200.f, 600.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
     SpawnZombies(21, 2, Vector3(670.f, 400.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
     SpawnZombies(22, 2, Vector3(1200.f, 1820.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);*/
-    
-    
+
+
     //SpawnZombies(23, 0, Vector3(580.f, 2170.f, 2947.212f), Rotator(0.f, -180.f, 0.f), 0, 0.f);
     //SpawnZombies(24, 0, Vector3(1850.f, 2300.f, 2947.212f), Rotator(0.f, 20.f, 0.f), 0, 0.f);
     //SpawnZombies(25, 0, Vector3(2000.f, 2800.f, 2947.212f), Rotator(0.f, -130.f, 0.f), 0, 0.f);
@@ -50,7 +57,7 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     //SpawnZombies(28, 0, Vector3(2241.f, 3500.f, 2947.212f), Rotator(0.f, 30.f, 0.f), 0, 0.f);
     //SpawnZombies(29, 0, Vector3(190.f, 2600.f, 2947.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
     //
-    //// ���� 2��
+    //// 지하 2층
     //SpawnZombies(30, 2, Vector3(600.f, 500.f, 90.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
     //SpawnZombies(31, 2, Vector3(2000.f, 1340.f, 90.212f), Rotator(0.f, 180.f, 0.f), 1, -1200.f);
     //SpawnZombies(32, 2, Vector3(2000.f, 3600.f, 90.212f), Rotator(0.f, -50.f, 0.f), 0, 0.f);
@@ -68,11 +75,11 @@ ZombieController::~ZombieController()
 {
 }
 
-void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange) 
+void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange)
 {
     Zombie_Data new_zombie_data;
 
-    new_zombie_data.zombieID = zombieID;        
+    new_zombie_data.zombieID = zombieID;
     new_zombie_data.x = position.X;
     new_zombie_data.y = position.Y;
     new_zombie_data.z = position.Z;
@@ -83,15 +90,15 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     new_zombie_data.patroltype = patrolType;
     new_zombie_data.patrolrange = patrolRange;
 
-    //���� �ʱ� ��ġ
+    //좀비 초기 위치
     vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
 
-    //���� �ν��Ͻ�
+    //좀비 인스턴스
     Zombie new_zombie = Zombie(new_zombie_data, zl);
 
-    // zombiedata ���Ϳ� �߰�
+    // zombiedata 벡터에 추가
     iocpServer->zombie.emplace_back(new_zombie);
-  
+
 
     //cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << iocpServer->zombie.size() << endl;
 }
@@ -102,7 +109,7 @@ void ZombieController::SendZombieData(int id)
 
     for (const auto& z : iocpServer->zombie) {
         Protocol::Zombie* zombie = zombieDataList.add_zombies();
-        zombie->set_zombieid(z.ZombieData.zombieID);  
+        zombie->set_zombieid(z.ZombieData.zombieID);
         zombie->set_x(z.ZombieData.x);
         zombie->set_y(z.ZombieData.y);
         zombie->set_z(z.ZombieData.z);
@@ -134,11 +141,11 @@ void ZombieController::SendZombieUpdate(const Zombie_Data& z)
     zombie.set_roll(z.roll);
     zombie.set_zombietype(z.zombietype);
 
-    // �޽����� ����ȭ�Ͽ� ����Ʈ ��Ʈ������ ��ȯ
+    // 메시지를 직렬화하여 바이트 스트림으로 변환
     std::string serializedData;
     zombie.SerializeToString(&serializedData);
 
-    // ����ȭ�� �����͸� Ŭ���̾�Ʈ�� ����
+    // 직렬화된 데이터를 클라이언트로 전송
     for (const auto& player : g_players) {
         if (player.second->isInGame) {
             iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());

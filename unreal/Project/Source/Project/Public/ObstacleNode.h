@@ -34,8 +34,12 @@ public:
 	TMap<FVector, TArray<FVector>> GenerateEdges(const TArray<FVector>& Nodes, float GridSize);
 
 	const TArray<FVector> NeighborOffsets = {
+	// 상하좌우 방향
 	FVector(1, 0, 0), FVector(-1, 0, 0),
-	FVector(0, 1, 0), FVector(0, -1, 0)
+	FVector(0, 1, 0), FVector(0, -1, 0),
+	// 대각선 방향
+	FVector(1, 1, 0), FVector(-1, -1, 0),
+	FVector(-1, 1, 0), FVector(1, -1, 0)
 	};
 
 	TArray<FVector> NodeArr;
