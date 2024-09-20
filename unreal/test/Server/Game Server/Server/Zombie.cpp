@@ -88,8 +88,7 @@ void Zombie::SetDistance()
 
 bool Zombie::RandomPatrol()
 {
-
-	cout << "RandomPatrol!!!" << endl;
+	//cout << "RandomPatrol!!!" << endl;
 
 	float px, py, pz;
 
@@ -195,26 +194,15 @@ void Zombie::Attack()
 }
 
 
-void Zombie::Walk(float deltasecond)
+void Zombie::MoveTo(float deltasecond)
 {
-
-	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
-		//cout << "return" << endl;
-		return;
-	}
+	// 최종 목표지점에 도착
+	CheckFinalDestination();
 
 	if (IsPathUpdated()) {
-		cout << "PathUpdate" << endl;
+		cout << "PathUpdated!" << endl;
 		ZombiePathIndex = 0;
 	}
-
-	//Walk가 동작하기 전에 이미 도착위치에 위치해 있다면, 해당 종료조건 발동 X
-	if (ZombiePathIndex >= path.size()) {
-		//cout << "Zombie has reached the final destination." << endl;
-
-		return; // 경로 끝에 도달
-	}
-
 
 
 	// 현재 목표 노드
@@ -233,10 +221,9 @@ void Zombie::Walk(float deltasecond)
 		ZombieSpeed = 400.f;
 	}
 	else {
-		cout << "WALK ERROR" << endl;
+		cout << "MOVETO ZOMBIE TYPE ERROR" << endl;
 		return;
 	}
-
 
 
 	// 타겟 방향 계산
@@ -259,9 +246,8 @@ void Zombie::Walk(float deltasecond)
 
 
 	// 타겟 위치에 도달했는지 확인
-	// 위에 종료 조건인 if (ZombiePathIndex >= path.size()) 이 종료시점을 놓쳐도 해당 조건식이 발동되어서 도착지점에서 멈춰야 하는데 그렇지 않은 것 같음
 
-	// 목표에 도착했는지 확인 (옵션)
+	// 목표에 도착했는지 확인
 	float newDistance = sqrt((PathX - ZombieData.x) * (PathX - ZombieData.x) + (PathY - ZombieData.y) * (PathY - ZombieData.y));
 
 	if (newDistance < moveDistance) {
@@ -276,6 +262,7 @@ void Zombie::Walk(float deltasecond)
 		// 다음 목표 노드로 이동
 		ZombiePathIndex++;
 
+		// 경로의 끝에 도착
 		if (ZombiePathIndex >= path.size()) {
 			cout << "Zombie 경로 끝." << endl;
 			ZombiePathIndex = 0;
@@ -292,8 +279,6 @@ void Zombie::Walk(float deltasecond)
 
 bool Zombie::IsPathUpdated()
 {
-
-
 	if (!path.empty() && !beforepath.empty()) {
 
 		if (beforepath != path) {
@@ -315,8 +300,7 @@ bool Zombie::IsPathUpdated()
 	return false;
 }
 
-
-void Zombie::MoveTo()
+void Zombie::CheckFinalDestination()
 {
 	//===================================
 	if (!SetRandPatrol) {
@@ -365,6 +349,8 @@ void Zombie::MoveTo()
 
 	//좀비가 목적지에 도착하면
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
+		cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
+		cout << endl;
 
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
 		cout << endl;
@@ -392,6 +378,50 @@ void Zombie::MoveTo()
 	}
 
 	//cout << endl;
+}
+
+
+void Zombie::SendPath()
+{
+	// 패트롤인 경우 RandPatrol에서 해당 작업을 이미 진행해주기 때문에 A* 중복 실행방지 
+	if (!SetRandPatrol) {
+		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+		pathfinder.Run(path, 0);
+	}
+	cout << endl;
+
+	// path값 전송
+	Protocol::ZombiePath zPath;
+	zPath.set_zombieid(ZombieData.zombieID + 1);		// 0번 인덱스 사용을 위해 (protobuf는 0번 인덱스를 기본값으로 인식해 직렬화를 하지 X)
+	zPath.set_packet_type(10);
+
+	// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
+	for (const auto& p : path)
+	{
+		Protocol::Vector3* path = zPath.add_path();
+		path->set_x(get<0>(p));
+		path->set_y(get<1>(p));
+		path->set_z(get<2>(p));
+	}
+
+	Protocol::Vector3* currentLocation = zPath.mutable_location();
+	currentLocation->set_x(ZombieData.x);
+	currentLocation->set_y(ZombieData.y);
+	currentLocation->set_z(ZombieData.z);
+
+	string serializedData;
+	zPath.SerializeToString(&serializedData);
+
+	for (const auto& player : g_players) {
+		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+	}
+
+
+	//cout << endl;
+	//if(path.size() != 0)
+	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
+
+	//===================================
 }
 
 void Zombie::Wait()

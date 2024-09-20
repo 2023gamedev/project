@@ -97,15 +97,17 @@ public:
 
     void Attack() ;
 
-    void MoveTo();
+    void SendPath();
 
     void Wait();
 
-    void Walk(float deltasecond);
+    void MoveTo(float deltasecond);
 
     bool IsPathUpdated();
 
     bool RandomPatrol();
+
+    void CheckFinalDestination();
 
     //void ShoutingHear();
     

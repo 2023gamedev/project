@@ -16,7 +16,7 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);
 
-        zom.MoveTo();
+        zom.SendPath();
 
         zom.Wait();
         
@@ -34,7 +34,7 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::SHOUTING);
 
-        zom.MoveTo();
+        zom.SendPath();
 
         zom.Wait();
 
@@ -46,7 +46,7 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);
 
-        zom.MoveTo();
+        zom.SendPath();
 
         zom.Wait();
 
@@ -58,7 +58,7 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
 
-        zom.MoveTo();
+        zom.SendPath();
 
         zom.Wait();
 
@@ -70,7 +70,7 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::PATROL);      //원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
 
-        zom.MoveTo();
+        zom.SendPath();
 
         zom.Wait();
 
