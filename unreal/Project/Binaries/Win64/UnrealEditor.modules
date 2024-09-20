@@ -3,9 +3,13 @@
 	"Modules": 
 	{
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"Project": "UnrealEditor-Project-8881.dll"
 =======
 		"Project": "UnrealEditor-Project.dll"
 >>>>>>> 5088896dbe421374603d37c874183c5b1d610be1
+=======
+		"Project": "UnrealEditor-Project.dll"
+>>>>>>> C0920
 	}
 }

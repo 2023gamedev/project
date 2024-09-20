@@ -97,23 +97,61 @@ TMap<FVector, TArray<FVector>> AObstacleNode::GenerateEdges(const TArray<FVector
 {
     TMap<FVector, TArray<FVector>> Edges;
 
+    // 해야할 일
+    // TMap에 두번째 인자인 TArray<FVector>부분 FVector 아닌 cost값(거리)인 float 값 추가하기
+    // 그것을 txt로 뽑고 그것을 이용해서 서버에서 받아서 AStar 이것들을 이용하도록 수정하기
+
     for (const FVector& Node : Nodes)
     {
 
         if (Node.X > 16.f && Node.X < 2366.f && Node.Y < 3960.f) {
             TArray<FVector> Neighbors;
+            //for (const FVector& Offset : NeighborOffsets)
+            //{
+            //    FVector Neighbor = Node + Offset * GridSize;
+
+            //    if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
+
+            //        if (Nodes.Contains(Neighbor))
+            //        {
+            //            Neighbors.Add(Neighbor);
+            //        }
+            //    }
+            //}
             for (const FVector& Offset : NeighborOffsets)
             {
+               
+               // 생각해보니 대각선도 그냥 GridSize만 구해주면 된다.
+               // bool bDiagonal = (FMath::Abs(Offset.X) == 1 && FMath::Abs(Offset.Y) == 1) ? true : false;
                 FVector Neighbor = Node + Offset * GridSize;
 
-                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
+                //if (bDiagonal) {
 
+                //    if (Offset == FVector(1, 1, 0)) {
+                //        Neighbor += FVector(0.f, 100.f, 0.f);
+                //    }
+                //    else if (Offset == FVector(1, -1, 0)) {
+                //        Neighbor += FVector(0.f, -100.f, 0.f);
+                //    }
+                //    else if (Offset == FVector(-1, 1, 0)) {
+                //        Neighbor += FVector(0.f, 100.f, 0.f);
+                //    }
+                //    else if (Offset == FVector(1, -1, 0)) {
+                //        Neighbor += FVector(0.f, -100.f, 0.f);
+                //    }
+                //}
+
+               
+
+                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
                     if (Nodes.Contains(Neighbor))
                     {
                         Neighbors.Add(Neighbor);
                     }
                 }
             }
+ 
+
             Edges.Add(Node, Neighbors);
         }
 
