@@ -300,7 +300,52 @@ bool Zombie::IsPathUpdated()
 
 void Zombie::CheckFinalDestination()
 {
-	//좀비가 최종 목적지에 도착하면
+	//===================================
+	if (!SetRandPatrol) {
+		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+		pathfinder.Run(path, 0);
+	}
+	cout << endl;
+
+	if (path.empty() || ZombiePathIndex >= path.size()) {
+		return;
+	}
+	
+	else {
+		// path값 전송
+		Protocol::ZombiePath zPath;
+		zPath.set_zombieid(ZombieData.zombieID);
+		cout << "Path 보내는 좀비 ID: " << ZombieData.zombieID << endl;
+		zPath.set_packet_type(10);
+
+		// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
+
+		Protocol::Vector3* Destination = zPath.mutable_location();
+		Destination->set_x(get<0>(path[ZombiePathIndex]));
+		Destination->set_y(get<1>(path[ZombiePathIndex]));
+		Destination->set_z(get<2>(path[ZombiePathIndex]));
+
+		cout << "z좌표 = " << get<2>(path[ZombiePathIndex]) << endl;
+
+		string serializedData;
+		zPath.SerializeToString(&serializedData);
+
+		for (const auto& player : g_players) {
+			iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+		}
+	}
+
+	//cout << endl;
+	//if(path.size() != 0)
+	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
+
+	//===================================
+
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
+	cout << endl;
+
+
+	//좀비가 목적지에 도착하면
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
 		cout << endl;
