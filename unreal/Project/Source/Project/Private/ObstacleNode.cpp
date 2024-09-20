@@ -97,6 +97,10 @@ TMap<FVector, TArray<FVector>> AObstacleNode::GenerateEdges(const TArray<FVector
 {
     TMap<FVector, TArray<FVector>> Edges;
 
+    // 해야할 일
+    // TMap에 두번째 인자인 TArray<FVector>부분 FVector 아닌 cost값(거리)인 float 값 추가하기
+    // 그것을 txt로 뽑고 그것을 이용해서 서버에서 받아서 AStar 이것들을 이용하도록 수정하기
+
     for (const FVector& Node : Nodes)
     {
 
