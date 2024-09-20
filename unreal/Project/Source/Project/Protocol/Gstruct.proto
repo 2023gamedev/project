@@ -51,7 +51,7 @@ message Vector3 {
 
 message ZombiePath {
     uint32 zombieid = 1;
-    repeated Vector3 path = 2;
+    Vector3 path = 2;
     uint32 packet_type = 3;
     Vector3 location = 4;
 }

@@ -125,7 +125,7 @@ struct Vector3DefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 Vector3DefaultTypeInternal _Vector3_default_instance_;
 PROTOBUF_CONSTEXPR ZombiePath::ZombiePath(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.path_)*/{}
+    /*decltype(_impl_.path_)*/nullptr
   , /*decltype(_impl_.location_)*/nullptr
   , /*decltype(_impl_.zombieid_)*/0u
   , /*decltype(_impl_.packet_type_)*/0u
@@ -438,7 +438,7 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "eDataList\022!\n\007zombies\030\001 \003(\0132\020.Protocol.Zo"
   "mbie\022\023\n\013packet_type\030\003 \001(\r\"*\n\007Vector3\022\t\n\001"
   "x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\"y\n\nZombieP"
-  "ath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004path\030\002 \003(\0132\021.Pr"
+  "ath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004path\030\002 \001(\0132\021.Pr"
   "otocol.Vector3\022\023\n\013packet_type\030\003 \001(\r\022#\n\010l"
   "ocation\030\004 \001(\0132\021.Protocol.Vector3\"[\n\010Dete"
   "cted\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r"
@@ -2366,9 +2366,14 @@ void Vector3::InternalSwap(Vector3* other) {
 
 class ZombiePath::_Internal {
  public:
+  static const ::Protocol::Vector3& path(const ZombiePath* msg);
   static const ::Protocol::Vector3& location(const ZombiePath* msg);
 };
 
+const ::Protocol::Vector3&
+ZombiePath::_Internal::path(const ZombiePath* msg) {
+  return *msg->_impl_.path_;
+}
 const ::Protocol::Vector3&
 ZombiePath::_Internal::location(const ZombiePath* msg) {
   return *msg->_impl_.location_;
@@ -2383,13 +2388,16 @@ ZombiePath::ZombiePath(const ZombiePath& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   ZombiePath* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.path_){from._impl_.path_}
+      decltype(_impl_.path_){nullptr}
     , decltype(_impl_.location_){nullptr}
     , decltype(_impl_.zombieid_){}
     , decltype(_impl_.packet_type_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_path()) {
+    _this->_impl_.path_ = new ::Protocol::Vector3(*from._impl_.path_);
+  }
   if (from._internal_has_location()) {
     _this->_impl_.location_ = new ::Protocol::Vector3(*from._impl_.location_);
   }
@@ -2404,7 +2412,7 @@ inline void ZombiePath::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.path_){arena}
+      decltype(_impl_.path_){nullptr}
     , decltype(_impl_.location_){nullptr}
     , decltype(_impl_.zombieid_){0u}
     , decltype(_impl_.packet_type_){0u}
@@ -2423,7 +2431,7 @@ ZombiePath::~ZombiePath() {
 
 inline void ZombiePath::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.path_.~RepeatedPtrField();
+  if (this != internal_default_instance()) delete _impl_.path_;
   if (this != internal_default_instance()) delete _impl_.location_;
 }
 
@@ -2437,7 +2445,10 @@ void ZombiePath::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.path_.Clear();
+  if (GetArenaForAllocation() == nullptr && _impl_.path_ != nullptr) {
+    delete _impl_.path_;
+  }
+  _impl_.path_ = nullptr;
   if (GetArenaForAllocation() == nullptr && _impl_.location_ != nullptr) {
     delete _impl_.location_;
   }
@@ -2462,16 +2473,11 @@ const char* ZombiePath::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
         } else
           goto handle_unusual;
         continue;
-      // repeated .Protocol.Vector3 path = 2;
+      // .Protocol.Vector3 path = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_path(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+          ptr = ctx->ParseMessage(_internal_mutable_path(), ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2526,12 +2532,11 @@ uint8_t* ZombiePath::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_zombieid(), target);
   }
 
-  // repeated .Protocol.Vector3 path = 2;
-  for (unsigned i = 0,
-      n = static_cast<unsigned>(this->_internal_path_size()); i < n; i++) {
-    const auto& repfield = this->_internal_path(i);
+  // .Protocol.Vector3 path = 2;
+  if (this->_internal_has_path()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
+      InternalWriteMessage(2, _Internal::path(this),
+        _Internal::path(this).GetCachedSize(), target, stream);
   }
 
   // uint32 packet_type = 3;
@@ -2563,11 +2568,11 @@ size_t ZombiePath::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .Protocol.Vector3 path = 2;
-  total_size += 1UL * this->_internal_path_size();
-  for (const auto& msg : this->_impl_.path_) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  // .Protocol.Vector3 path = 2;
+  if (this->_internal_has_path()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.path_);
   }
 
   // .Protocol.Vector3 location = 4;
@@ -2605,7 +2610,10 @@ void ZombiePath::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_impl_.path_.MergeFrom(from._impl_.path_);
+  if (from._internal_has_path()) {
+    _this->_internal_mutable_path()->::Protocol::Vector3::MergeFrom(
+        from._internal_path());
+  }
   if (from._internal_has_location()) {
     _this->_internal_mutable_location()->::Protocol::Vector3::MergeFrom(
         from._internal_location());
@@ -2633,13 +2641,12 @@ bool ZombiePath::IsInitialized() const {
 void ZombiePath::InternalSwap(ZombiePath* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _impl_.path_.InternalSwap(&other->_impl_.path_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ZombiePath, _impl_.packet_type_)
       + sizeof(ZombiePath::_impl_.packet_type_)
-      - PROTOBUF_FIELD_OFFSET(ZombiePath, _impl_.location_)>(
-          reinterpret_cast<char*>(&_impl_.location_),
-          reinterpret_cast<char*>(&other->_impl_.location_));
+      - PROTOBUF_FIELD_OFFSET(ZombiePath, _impl_.path_)>(
+          reinterpret_cast<char*>(&_impl_.path_),
+          reinterpret_cast<char*>(&other->_impl_.path_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ZombiePath::GetMetadata() const {
