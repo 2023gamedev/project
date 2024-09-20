@@ -238,10 +238,7 @@ uint32 ClientSocket::Run()
 						{
 							ZombiePath localZombiePath;
 							
-							// =============================================================================== 이렇게 받으면 zombieid 제대로 뽑는게 맞는지 확인 => case 8번에서는 id도 for문을 돌려서 뽑음
-							localZombiePath.ZombieId = zombiepath.zombieid();
-							UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), zombiepath.zombieid());
-							// ===============================================================================
+							localZombiePath.ZombieId = zombiepath.zombieid() - 1;
 
 							// 프로토콜 버퍼의 path 값을 localZombiePath의 Path 벡터에 추가
 							for (const auto& path : zombiepath.path())
