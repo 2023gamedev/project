@@ -102,18 +102,52 @@ TMap<FVector, TArray<FVector>> AObstacleNode::GenerateEdges(const TArray<FVector
 
         if (Node.X > 16.f && Node.X < 2366.f && Node.Y < 3960.f) {
             TArray<FVector> Neighbors;
+            //for (const FVector& Offset : NeighborOffsets)
+            //{
+            //    FVector Neighbor = Node + Offset * GridSize;
+
+            //    if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
+
+            //        if (Nodes.Contains(Neighbor))
+            //        {
+            //            Neighbors.Add(Neighbor);
+            //        }
+            //    }
+            //}
             for (const FVector& Offset : NeighborOffsets)
             {
+               
+               // 생각해보니 대각선도 그냥 GridSize만 구해주면 된다.
+               // bool bDiagonal = (FMath::Abs(Offset.X) == 1 && FMath::Abs(Offset.Y) == 1) ? true : false;
                 FVector Neighbor = Node + Offset * GridSize;
 
-                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
+                //if (bDiagonal) {
 
+                //    if (Offset == FVector(1, 1, 0)) {
+                //        Neighbor += FVector(0.f, 100.f, 0.f);
+                //    }
+                //    else if (Offset == FVector(1, -1, 0)) {
+                //        Neighbor += FVector(0.f, -100.f, 0.f);
+                //    }
+                //    else if (Offset == FVector(-1, 1, 0)) {
+                //        Neighbor += FVector(0.f, 100.f, 0.f);
+                //    }
+                //    else if (Offset == FVector(1, -1, 0)) {
+                //        Neighbor += FVector(0.f, -100.f, 0.f);
+                //    }
+                //}
+
+               
+
+                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
                     if (Nodes.Contains(Neighbor))
                     {
                         Neighbors.Add(Neighbor);
                     }
                 }
             }
+ 
+
             Edges.Add(Node, Neighbors);
         }
 
