@@ -238,14 +238,12 @@ uint32 ClientSocket::Run()
 						{
 							ZombiePath localZombiePath;
 							
-							localZombiePath.ZombieId = zombiepath.zombieid() - 1;
+							localZombiePath.ZombieId = zombiepath.zombieid();
+							UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), zombiepath.zombieid());
 
-							// 프로토콜 버퍼의 path 값을 localZombiePath의 Path 벡터에 추가
-							for (const auto& path : zombiepath.path())
-							{
-								// Vector3를 std::tuple<float, float, float>로 변환하여 추가
-								localZombiePath.Path.emplace_back(path.x(), path.y(), path.z());
-							}
+							
+							localZombiePath.Path.emplace_back(zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());
+							
 
 							// 위치 값도 추가
 							localZombiePath.Location = FVector(zombiepath.location().x(), zombiepath.location().y(), zombiepath.location().z());
