@@ -216,6 +216,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         Protocol::Zombie_hp Packet;
         Packet.ParseFromArray(buffer, bufferSize);
+        cout << "recv zombie" << Packet.zombieid() << "HP Packet" << endl;
 
         return true;
     }
