@@ -221,14 +221,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         return true;
     }
 
-    case 13:
-    {
-        Protocol::Zombie_attack Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
-
-        return true;
-    }
-
     default: {
         printf("\nERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
         // 클라이언트나 서버 종료, 로깅 등의 처리 가능

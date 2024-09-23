@@ -137,6 +137,16 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_zattack.try_pop(ZombieId))
+		{
+			//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdateZombieAttack(ZombieId);
+				UE_LOG(LogNet, Display, TEXT("Update Zombie Attack: Zombieid=%d"), ZombieId);
+			}
+		}
+
 		bool recvping = false;
 		if (GameInstance->ClientSocketPtr->Q_ping.try_pop(recvping))
 		{
