@@ -44,6 +44,7 @@ public:
 
     void UpdatePathFinder(float startX, float startY, float startZ, float goalX, float goalY, float goalZ);
     float OBSTACLE_RADIUS = 25.f;
+    unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> EdgesMap;
 
 private:
     float startX, startY, startZ;
@@ -72,6 +73,10 @@ private:
 
     bool LoadFile(const string& filePath, vector<tuple<float, float, float>>& positions,
         unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& positionSet);
+
+    //NewAstar
+    bool LoadEdgesMap(const string& filePath, unordered_map<tuple<float, float, float>,
+        vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
 
     void PrintPositions();
 
