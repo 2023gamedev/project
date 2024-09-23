@@ -2,10 +2,10 @@
 
 ZombieController::ZombieController(IOCP_CORE& mainServer)
 {
-    // ì„œë²„ ì„¤ì •
+    // ¼­¹ö ¼³Á¤
     iocpServer = &mainServer;
 
-    // ì§€í•˜ 1ì¸µ 
+    // ÁöÇÏ 1Ãş 
     SpawnZombies(0, 0, Vector3(1800.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     SpawnZombies(1, 0, Vector3(1000.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     SpawnZombies(2, 0, Vector3(600.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
@@ -22,7 +22,7 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     //SpawnZombies(9, 0, Vector3(2200.f, 3100.f, 1040.275f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
 
 
-    //// ì§€ìƒ 1ì¸µ
+    //// Áö»ó 1Ãş
     //SpawnZombies(10, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
     //SpawnZombies(11, 1, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
     //
@@ -36,7 +36,7 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     //SpawnZombies(19, 0, Vector3(200.f, 2200.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
 
 
-    ////ì§€ìƒ 2ì¸µ
+    ////Áö»ó 2Ãş
     /*SpawnZombies(20, 2, Vector3(2200.f, 600.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
     SpawnZombies(21, 2, Vector3(670.f, 400.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
     SpawnZombies(22, 2, Vector3(1200.f, 1820.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);*/
@@ -50,7 +50,7 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     //SpawnZombies(28, 0, Vector3(2241.f, 3500.f, 2947.212f), Rotator(0.f, 30.f, 0.f), 0, 0.f);
     //SpawnZombies(29, 0, Vector3(190.f, 2600.f, 2947.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
     //
-    //// ì§€í•˜ 2ì¸µ
+    //// ÁöÇÏ 2Ãş
     //SpawnZombies(30, 2, Vector3(600.f, 500.f, 90.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
     //SpawnZombies(31, 2, Vector3(2000.f, 1340.f, 90.212f), Rotator(0.f, 180.f, 0.f), 1, -1200.f);
     //SpawnZombies(32, 2, Vector3(2000.f, 3600.f, 90.212f), Rotator(0.f, -50.f, 0.f), 0, 0.f);
@@ -83,13 +83,13 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     new_zombie_data.patroltype = patrolType;
     new_zombie_data.patrolrange = patrolRange;
 
-    //ì¢€ë¹„ ì´ˆê¸° ìœ„ì¹˜
+    //Á»ºñ ÃÊ±â À§Ä¡
     vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
 
-    //ì¢€ë¹„ ì¸ìŠ¤í„´ìŠ¤
+    //Á»ºñ ÀÎ½ºÅÏ½º
     Zombie new_zombie = Zombie(new_zombie_data, zl);
 
-    // zombiedata ë²¡í„°ì— ì¶”ê°€
+    // zombiedata º¤ÅÍ¿¡ Ãß°¡
     iocpServer->zombie.emplace_back(new_zombie);
 
 
@@ -134,11 +134,11 @@ void ZombieController::SendZombieUpdate(const Zombie_Data& z)
     zombie.set_roll(z.roll);
     zombie.set_zombietype(z.zombietype);
 
-    // ë©”ì‹œì§€ë¥¼ ì§ë ¬í™”í•˜ì—¬ ë°”ì´íŠ¸ ìŠ¤íŠ¸ë¦¼ìœ¼ë¡œ ë³€í™˜
+    // ¸Ş½ÃÁö¸¦ Á÷·ÄÈ­ÇÏ¿© ¹ÙÀÌÆ® ½ºÆ®¸²À¸·Î º¯È¯
     std::string serializedData;
     zombie.SerializeToString(&serializedData);
 
-    // ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ í´ë¼ì´ì–¸íŠ¸ë¡œ ì „ì†¡
+    // Á÷·ÄÈ­µÈ µ¥ÀÌÅÍ¸¦ Å¬¶óÀÌ¾ğÆ®·Î Àü¼Û
     for (const auto& player : g_players) {
         if (player.second->isInGame) {
             iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());

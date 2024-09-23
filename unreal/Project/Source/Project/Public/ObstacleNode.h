@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "ObstacleNode.generated.h"
 
+
 UCLASS()
 class AObstacleNode : public AActor
 {
@@ -31,13 +32,38 @@ public:
 
 	TArray<FVector> GenerateNodes(UWorld* World, float GridSize);
 	bool IsLocationNavigable(UWorld* World, FVector Location);
-	TMap<FVector, TArray<FVector>> GenerateEdges(const TArray<FVector>& Nodes, float GridSize);
+	TMap<FVector, TArray<FEdgeData>> GenerateEdges(const TArray<FVector>& Nodes, float GridSize);
 
 	const TArray<FVector> NeighborOffsets = {
+	// 상하좌우 방향
 	FVector(1, 0, 0), FVector(-1, 0, 0),
-	FVector(0, 1, 0), FVector(0, -1, 0)
+	FVector(0, 1, 0), FVector(0, -1, 0),
+	// 대각선 방향
+	FVector(1, 1, 0), FVector(-1, -1, 0),
+	FVector(-1, 1, 0), FVector(1, -1, 0)
 	};
 
 	TArray<FVector> NodeArr;
-	TMap<FVector, TArray<FVector>> EdgesMap;
+	TMap<FVector, TArray<FEdgeData>> EdgesMap;
+};
+
+// FVector와 float 값을 포함하는 구조체 정의
+USTRUCT(Atomic, BlueprintType)
+struct FEdgeData
+{
+	GENERATED_USTRUCT_BODY()
+
+	// FVector와 float 변수
+	UPROPERTY()
+	FVector Location;
+
+	UPROPERTY()
+	float Weight;
+
+	// 생성자
+	FEdgeData()
+		: Location(FVector::ZeroVector), Weight(0.f) {}
+
+	FEdgeData(FVector InLocation, float InWeight)
+		: Location(InLocation), Weight(InWeight) {}
 };

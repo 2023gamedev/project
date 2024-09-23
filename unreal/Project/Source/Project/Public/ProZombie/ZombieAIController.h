@@ -35,6 +35,8 @@ public:
 
 	void Send_PlayerLost(ABaseCharacter* LastSeenPlayer);
 
+	void Send_ZombieHP();
+
 	void CheckAndSendMovement();
 
 	void SetStartLocationValue(FVector startlocation);
@@ -105,4 +107,6 @@ public:
 	ABaseCharacter* LastSeenPlayer;
 
 	ANormalZombie* OwnerZombie;
+
+	float PreviousHp;
 };

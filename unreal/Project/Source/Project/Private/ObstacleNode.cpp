@@ -93,54 +93,60 @@ bool AObstacleNode::IsLocationNavigable(UWorld* World, FVector Location)
     return Result;
 }
 
-TMap<FVector, TArray<FVector>> AObstacleNode::GenerateEdges(const TArray<FVector>& Nodes, float GridSize)
+TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVector>& Nodes, float GridSize)
 {
-    TMap<FVector, TArray<FVector>> Edges;
+    TMap<FVector, TArray<FEdgeData>> Edges;
 
     for (const FVector& Node : Nodes)
     {
-
         if (Node.X > 16.f && Node.X < 2366.f && Node.Y < 3960.f) {
-            TArray<FVector> Neighbors;
+            TArray<FEdgeData> EdgeDatas;
             for (const FVector& Offset : NeighborOffsets)
             {
+                bool bDiagonal = (FMath::Abs(Offset.X) == 1 && FMath::Abs(Offset.Y) == 1);
                 FVector Neighbor = Node + Offset * GridSize;
 
-                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
+                FEdgeData EdgeData;
+                EdgeData.Location = Neighbor;
+                EdgeData.Weight = bDiagonal ? sqrt(2.f) : 1.f;
 
-                    if (Nodes.Contains(Neighbor))
-                    {
-                        Neighbors.Add(Neighbor);
+                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
+                    if (Nodes.Contains(Neighbor)) {
+                        EdgeDatas.Add(EdgeData);
                     }
                 }
             }
-            Edges.Add(Node, Neighbors);
+            Edges.Add(Node, EdgeDatas);
         }
-
     }
 
     EdgesMap = Edges;
 
-    FString EdgeData;
-
     // 엣지 데이터를 문자열로 변환
+    FString EdgeData;
     for (const auto& Edge : Edges)
     {
         const FVector& Node = Edge.Key;
-        const TArray<FVector>& Neighbors = Edge.Value;
+        const TArray<FEdgeData>& EdgeDatas = Edge.Value;
 
-        EdgeData += FString::Printf(TEXT("Node: %f,%f,%f\n"), Node.X, Node.Y, Node.Z);
-
-        for (const FVector& Neighbor : Neighbors)
+        EdgeData += FString::Printf(TEXT("Node: %f, %f, %f\n"), Node.X, Node.Y, Node.Z);
+        for (const FEdgeData& EdgeDataEntry : EdgeDatas)
         {
-            EdgeData += FString::Printf(TEXT("    Neighbor: %f,%f,%f\n"), Neighbor.X, Neighbor.Y, Neighbor.Z);
+            EdgeData += FString::Printf(TEXT("    Neighbor: %f, %f, %f, Weight: %f\n"),
+                EdgeDataEntry.Location.X,
+                EdgeDataEntry.Location.Y,
+                EdgeDataEntry.Location.Z,
+                EdgeDataEntry.Weight);
         }
     }
 
-    // 엣지 데이터를 파일로 저장
-    FString FilePath = FPaths::ProjectDir() + TEXT("EdgesF2.txt");
+    // 파일로 저장
+    FString FilePath = FPaths::ProjectDir() + TEXT("EdgesB2.txt");
     FFileHelper::SaveStringToFile(EdgeData, *FilePath);
 
     return Edges;
 }
 
+// 해야할 일
+// TMap에 두번째 인자인 TArray<FVector>부분 FVector 아닌 cost값(거리)인 float 값 추가하기
+// 그것을 txt로 뽑고 그것을 이용해서 서버에서 받아서 AStar 이것들을 이용하도록 수정하기

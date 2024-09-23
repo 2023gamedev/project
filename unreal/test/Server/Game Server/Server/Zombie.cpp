@@ -307,34 +307,6 @@ void Zombie::CheckFinalDestination()
 	}
 	cout << endl;
 
-	if (path.empty() || ZombiePathIndex >= path.size()) {
-		return;
-	}
-	
-	else {
-		// path값 전송
-		Protocol::ZombiePath zPath;
-		zPath.set_zombieid(ZombieData.zombieID);
-		cout << "Path 보내는 좀비 ID: " << ZombieData.zombieID << endl;
-		zPath.set_packet_type(10);
-
-		// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
-
-		Protocol::Vector3* Destination = zPath.mutable_location();
-		Destination->set_x(get<0>(path[ZombiePathIndex]));
-		Destination->set_y(get<1>(path[ZombiePathIndex]));
-		Destination->set_z(get<2>(path[ZombiePathIndex]));
-
-		cout << "z좌표 = " << get<2>(path[ZombiePathIndex]) << endl;
-
-		string serializedData;
-		zPath.SerializeToString(&serializedData);
-
-		for (const auto& player : g_players) {
-			iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-		}
-	}
-
 	//cout << endl;
 	//if(path.size() != 0)
 	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
@@ -388,30 +360,32 @@ void Zombie::SendPath()
 	}
 	cout << endl;
 
-	// path값 전송
-	Protocol::ZombiePath zPath;
-	zPath.set_zombieid(ZombieData.zombieID + 1);		// 0번 인덱스 사용을 위해 (protobuf는 0번 인덱스를 기본값으로 인식해 직렬화를 하지 X)
-	zPath.set_packet_type(10);
-
-	// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
-	for (const auto& p : path)
-	{
-		Protocol::Vector3* path = zPath.add_path();
-		path->set_x(get<0>(p));
-		path->set_y(get<1>(p));
-		path->set_z(get<2>(p));
+	if (path.empty() || ZombiePathIndex >= path.size()) {
+		return;
 	}
 
-	Protocol::Vector3* currentLocation = zPath.mutable_location();
-	currentLocation->set_x(ZombieData.x);
-	currentLocation->set_y(ZombieData.y);
-	currentLocation->set_z(ZombieData.z);
+	else {
+		// path값 전송
+		Protocol::ZombiePath zPath;
+		zPath.set_zombieid(ZombieData.zombieID);
+		cout << "Path 보내는 좀비 ID: " << ZombieData.zombieID << endl;
+		zPath.set_packet_type(10);
 
-	string serializedData;
-	zPath.SerializeToString(&serializedData);
+		// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
 
-	for (const auto& player : g_players) {
-		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+		Protocol::Vector3* Destination = zPath.mutable_location();
+		Destination->set_x(get<0>(path[ZombiePathIndex]));
+		Destination->set_y(get<1>(path[ZombiePathIndex]));
+		Destination->set_z(get<2>(path[ZombiePathIndex]));
+
+		cout << "z좌표 = " << get<2>(path[ZombiePathIndex]) << endl;
+
+		string serializedData;
+		zPath.SerializeToString(&serializedData);
+
+		for (const auto& player : g_players) {
+			iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+		}
 	}
 
 
