@@ -245,5 +245,5 @@ public:
 	float Speed;
 	float PreviousSpeed;
 
-
+	FVector TargetLocation;
 };

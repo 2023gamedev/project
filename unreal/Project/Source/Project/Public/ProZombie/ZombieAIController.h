@@ -52,7 +52,7 @@ public:
 
 	//void ZombieTurn(float delasecond);
 	
-	//void Walk(float deltasecond);
+	void MoveTo(float deltasecond);
 
 	UProGameInstance* GameInstance;
 
@@ -103,4 +103,6 @@ public:
 	FRotator PreviousRotation;
 
 	ABaseCharacter* LastSeenPlayer;
+
+	ANormalZombie* OwnerZombie;
 };

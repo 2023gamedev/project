@@ -159,7 +159,6 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 
 	// 좀비 관련 이지만 일단 좀비 관련 싱글턴 객체가 딱히 없어 - 여기에서 작업
-	//Concurrency::concurrent_queue<ZombiePath> front_que;
 
 	if (GameInstance->ClientSocketPtr->Q_path.empty()) {
 		return;
@@ -167,9 +166,12 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	while (GameInstance->ClientSocketPtr->Q_path.empty() != true) {
 		ZombiePath tmp_path;
 		GameInstance->ClientSocketPtr->Q_path.try_pop(tmp_path);
+	
+		auto target = tmp_path.Path.begin();
 
 		UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, tmp_path.Location.X, tmp_path.Location.Y, tmp_path.Location.Z);
-
+		UE_LOG(LogNet, Display, TEXT("Zombie #%d's Target Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, get<0>(target[0]), get<1>(target[0]), get<2>(target[0]));
+	
 		FRotator tmp_ro = FRotator{ 0.f, 0.f, 0.f };
 		if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 		{
