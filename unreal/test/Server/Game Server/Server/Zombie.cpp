@@ -33,7 +33,7 @@ Zombie::Zombie()
 
 	HeardFootSound = false;
 
-	SetRandPatrol = false;
+	RandPatrolSet = false;
 
 	speed = 0.f;
 
@@ -61,7 +61,7 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 
 	HeardFootSound = false;
 
-	SetRandPatrol = false;
+	RandPatrolSet = false;
 
 	speed = 1.f;
 
@@ -79,9 +79,9 @@ Zombie::~Zombie()
 
 // 플레이어를 단 한명이라도 포착해야 돌아감
 void Zombie::SetDistance()
-{ 
+{
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[bt_playerID].x, playerDB[bt_playerID].y, playerDB[bt_playerID].z}}};
+	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[bt_playerID].x, playerDB[bt_playerID].y, playerDB[bt_playerID].z}} };
 
 	DistanceToPlayers.emplace(bt_playerID, sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2)));
 }
@@ -94,7 +94,7 @@ bool Zombie::RandomPatrol()
 
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	
+
 	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 1500 +-
 
 	px = ZombieData.x + dist(mt);
@@ -107,7 +107,7 @@ bool Zombie::RandomPatrol()
 
 	if (!tmp.empty()) {
 		tmp.pop_back();
-		
+
 		tuple<float, float, float> t_tmp;
 		t_tmp = tmp.back();
 
@@ -118,7 +118,7 @@ bool Zombie::RandomPatrol()
 		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 		path = tmp;
 
-		SetRandPatrol = true;
+		RandPatrolSet = true;
 
 		return true;
 	}
@@ -154,10 +154,10 @@ void Zombie::SetTargetLocation(TARGET t)
 
 		std::random_device rd;
 		std::mt19937 mt(rd());
-		
+
 		std::uniform_int_distribution<int> dist(0, keys.size() - 1);
 
-		pl = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x,playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}}};
+		pl = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x,playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
 	}
 
 	switch (targetType) {
@@ -170,16 +170,16 @@ void Zombie::SetTargetLocation(TARGET t)
 	case TARGET::FOOTSOUND:
 		TargetLocation = pl;
 		break;
-	case TARGET::INVESTIGATED: 
+	case TARGET::INVESTIGATED:
 		TargetLocation = TargetLocation;		//걍 명시적 표기
 		break;
 	case TARGET::PATROL:
 		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
 		int cnt = 0;
-		if (SetRandPatrol == false)
+		if (RandPatrolSet == false)
 			while (RandomPatrol() == false) {
 				cnt++;
-		
+
 				if (cnt >= 5)
 					break;
 			}
@@ -210,8 +210,10 @@ void Zombie::Attack()
 
 void Zombie::MoveTo(float deltasecond)
 {
-	// 최종 목표지점에 도착
-	CheckFinalDestination();
+	// 이미 최종 목표지점에 도착
+	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
+		return;
+	}
 
 	if (IsPathUpdated()) {
 		//cout << "PathUpdated!" << endl;
@@ -269,9 +271,10 @@ void Zombie::MoveTo(float deltasecond)
 		// 다음 목표 노드로 이동
 		ZombiePathIndex++;
 
-		// 경로의 끝에 도착
+		// 경로의 끝에 도착 = 최종 목표지점에 도착
 		if (ZombiePathIndex >= path.size()) {
 			//cout << "Zombie 경로 끝." << endl;
+			ReachFinalDestination();
 			ZombiePathIndex = 0;
 		}
 	}
@@ -292,7 +295,7 @@ bool Zombie::IsPathUpdated()
 
 			return true;
 		}
-		
+
 	}
 
 	if (!path.empty() && beforepath.empty()) {
@@ -305,31 +308,19 @@ bool Zombie::IsPathUpdated()
 	return false;
 }
 
-void Zombie::CheckFinalDestination()
+void Zombie::ReachFinalDestination()
 {
-	//===================================
-	if (!SetRandPatrol) {
+	// 패트롤인 경우 RandPatrol에서 해당 작업을 이미 진행해주기 때문에 A* 중복 실행방지 
+	if (RandPatrolSet == false) {
 		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-		pathfinder.Run(path, 0);
+		pathfinder.Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
 	}
 	//cout << endl;
 
-	//cout << endl;
-	//if(path.size() != 0)
-	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
 
-	//===================================
-
-	/*cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
-	cout << endl;*/
-
-
-	//좀비가 목적지에 도착하면
+	// 혹시 몰라서 한번 더 체크
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
-		//cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
-		//cout << endl;
-
-		//cout << "좀비 \'#" << ZombieData.zombieID << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
+		//cout << "좀비 \'#" << ZombieData.zombieID << "\' 타겟 좌표[최종 목표 지점] ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
 		//cout << endl;
 
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
@@ -348,7 +339,7 @@ void Zombie::CheckFinalDestination()
 			break;
 		case TARGET::PATROL:
 			//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
-			SetRandPatrol = false;
+			RandPatrolSet = false;
 			break;
 		}
 
@@ -359,16 +350,15 @@ void Zombie::CheckFinalDestination()
 void Zombie::SendPath()
 {
 	// 패트롤인 경우 RandPatrol에서 해당 작업을 이미 진행해주기 때문에 A* 중복 실행방지 
-	if (!SetRandPatrol) {
+	if (RandPatrolSet == false) {
 		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-		pathfinder.Run(path, 0);
+		pathfinder.Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
 	}
 	//cout << endl;
 
 	if (path.empty() || ZombiePathIndex >= path.size()) {
 		return;
 	}
-
 	else {
 		// path값 전송
 		Protocol::ZombiePath zPath;
@@ -394,8 +384,13 @@ void Zombie::SendPath()
 			iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 		}
 	}
+	
 
-	//===================================
+	//cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
+
+	/*cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
+	cout << endl;*/
+
 }
 
 void Zombie::Wait()

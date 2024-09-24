@@ -74,7 +74,7 @@ public:
 
     bool HeardFootSound;
 
-    bool SetRandPatrol;
+    bool RandPatrolSet;
 
     float speed;
 
@@ -107,7 +107,7 @@ public:
 
     bool RandomPatrol();
 
-    void CheckFinalDestination();
+    void ReachFinalDestination();
 
     //void ShoutingHear();
     
