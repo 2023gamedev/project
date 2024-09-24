@@ -331,21 +331,21 @@ void AZombieAIController::Send_PlayerLost(ABaseCharacter* BaseCharacter)
 
 void AZombieAIController::Send_ZombieHP()
 {
-	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-	if (PreviousHp != ZombiePawn->GetHP()) {
-		ZombieId = ZombiePawn->GetZombieId();
-
-		Protocol::Zombie_hp packet;
-		packet.set_zombieid(ZombieId);
-		packet.set_hp(ZombiePawn->GetHP());
-		packet.set_packet_type(12);
-
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
-		PreviousHp = ZombiePawn->GetHP();
-
-		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-	}
+	//auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
+	//if (PreviousHp != ZombiePawn->GetHP()) {
+	//	ZombieId = ZombiePawn->GetZombieId();
+	//
+	//	Protocol::Zombie_hp packet;
+	//	packet.set_zombieid(ZombieId);
+	//	packet.set_hp(ZombiePawn->GetHP());
+	//	packet.set_packet_type(12);
+	//
+	//	std::string serializedData;
+	//	packet.SerializeToString(&serializedData);
+	//	PreviousHp = ZombiePawn->GetHP();
+	//
+	//	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+	//}
 }
 
 void AZombieAIController::CheckAndSendMovement()

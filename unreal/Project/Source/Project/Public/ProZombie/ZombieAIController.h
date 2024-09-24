@@ -107,5 +107,7 @@ public:
 
 	ABaseCharacter* LastSeenPlayer;
 
+	ANormalZombie* OwnerZombie;
+
 	float PreviousHp = 0.f;
 };

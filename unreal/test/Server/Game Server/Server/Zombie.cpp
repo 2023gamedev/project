@@ -381,7 +381,7 @@ void Zombie::SendPath()
 	else {
 		// path값 전송
 		Protocol::ZombiePath zPath;
-		zPath.set_zombieid(ZombieData.zombieID);						// probuf 0번 인덱스 직렬화 불가를 보완하기위해서
+		zPath.set_zombieid(ZombieData.zombieID + 1);						// probuf 0번 인덱스 직렬화 불가를 보완하기위해서
 		cout << "Path 보내는 좀비 ID: " << ZombieData.zombieID << endl;
 		zPath.set_packet_type(10);
 
