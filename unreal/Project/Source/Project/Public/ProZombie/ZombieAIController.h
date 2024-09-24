@@ -78,9 +78,9 @@ public:
 
 	uint32 ZombieId;
 	uint32 AttackZombieId;
-	FVector NewLocation;
-	FVector PreviousLocation;
-	FRotator PreviousRotation;
+	//FVector NewLocation;
+	//FVector PreviousLocation;
+	//FRotator PreviousRotation;
 
 	ABaseCharacter* LastSeenPlayer;
 

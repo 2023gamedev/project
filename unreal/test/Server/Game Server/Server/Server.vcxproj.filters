@@ -13,26 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Zombie_BT">
-      <UniqueIdentifier>{45734811-527c-4e1b-a42f-9494a7ea72fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\Zombie_BT">
-      <UniqueIdentifier>{680b390f-81cb-47da-8eeb-e49d8313884b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\PathFinder">
-      <UniqueIdentifier>{7e9d949b-36de-44cf-9880-cf2da10b3344}</UniqueIdentifier>
-    </Filter>
     <Filter Include="헤더 파일\ServerHeader">
       <UniqueIdentifier>{c61da119-4d1f-445d-8378-ae6e1a1902c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\PathFinder">
-      <UniqueIdentifier>{2487f0f0-c410-4e69-98ff-81dcd684223d}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\ServerClass">
       <UniqueIdentifier>{87a8b892-3a8d-43f1-924f-96746f3a5b3e}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\ServerClass\Protocol">
       <UniqueIdentifier>{5200a910-95b5-40e1-8d03-44e107563632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\PathFinderClass">
+      <UniqueIdentifier>{7e9d949b-36de-44cf-9880-cf2da10b3344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Zombie_BTClass">
+      <UniqueIdentifier>{45734811-527c-4e1b-a42f-9494a7ea72fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\PathFinderHeader">
+      <UniqueIdentifier>{2487f0f0-c410-4e69-98ff-81dcd684223d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Zombie_BTHeader">
+      <UniqueIdentifier>{680b390f-81cb-47da-8eeb-e49d8313884b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,13 +52,13 @@
       <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>소스 파일\Zombie_BT</Filter>
+      <Filter>소스 파일\Zombie_BTClass</Filter>
     </ClCompile>
     <ClCompile Include="Zombie.cpp">
-      <Filter>소스 파일\Zombie_BT</Filter>
+      <Filter>소스 파일\Zombie_BTClass</Filter>
     </ClCompile>
     <ClCompile Include="ZombiePathfinder.cpp">
-      <Filter>소스 파일\PathFinder</Filter>
+      <Filter>소스 파일\PathFinderClass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,52 +75,52 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Attack.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="CanAttack.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="CanNotAttack.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="CanSeePlayer.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="HasFootSound.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="HasInvestigated.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="HasShouting.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="MoveTo.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="NotHasLastKnownPlayerLocation.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="Selector.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="Sequence.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="Task.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.h">
-      <Filter>헤더 파일\Zombie_BT</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="ZombiePathfinder.h">
-      <Filter>헤더 파일\PathFinder</Filter>
+      <Filter>헤더 파일\PathFinderHeader</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
-      <Filter>헤더 파일\PathFinder</Filter>
+      <Filter>헤더 파일\PathFinderHeader</Filter>
     </ClInclude>
     <ClInclude Include="GStruct.pb.h">
       <Filter>소스 파일\ServerClass\Protocol</Filter>

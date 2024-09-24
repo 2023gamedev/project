@@ -139,12 +139,6 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
 	FVector ZombieLocation = OwnerZombie->GetActorLocation(); // 좀비의 위치
-	
-	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
-	//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-	FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
-	//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
-	float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
 	float MaxSightRange = 1000.f; // 원하는 최대 시야 범위를 설정하세요.
 
@@ -167,28 +161,30 @@ void AZombieAIController::Tick(float DeltaTime)
 		//
 		uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		//
-		if (Char->GetPlayerId() != 99/*myPlayerId*/)
+		if (Char->GetPlayerId() != 99)
 			continue;
 		//====================================================================
 
-		APawn* TestPawn = Cast<APawn>(Player);
+		PlayerPawn = Cast<APawn>(Player);
 
-		PlayerLocation = TestPawn->GetActorLocation(); // 플레이어의 위치
-		// DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-		TargetLocation = PlayerLocation + (ZombieForward * 150.f);
-		// DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
-		Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
+		//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+		//FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
+		//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
+		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 
-		if (TestPawn && Distance <= MaxSightRange && LineOfSightTo(TestPawn))
+		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn))
 		{
-			float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
+			float Dist = FVector::Dist(GetPawn()->GetActorLocation(), PlayerPawn->GetActorLocation());
 			if (Dist < NearestDist)
 			{
 				NearestDist = Dist;
-				NearestPawn = TestPawn;
-				//IsZombiePathUpdate();
-				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
-				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
+				NearestPawn = PlayerPawn;
+				
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
+				UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
 			}
 		}
 
@@ -208,21 +204,18 @@ void AZombieAIController::Tick(float DeltaTime)
 			}
 		}
 
-		//if (TestPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(TestPawn))
+		//if (PlayerPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(PlayerPawn))
 		//{
-		//	float Dist = FVector::Dist(GetPawn()->GetActorLocation(), TestPawn->GetActorLocation());
+		//	float Dist = FVector::Dist(GetPawn()->GetActorLocation(), PlayerPawn->GetActorLocation());
 		//	if (Dist < NearestDist)
 		//	{
 		//		NearestDist = Dist;
-		//		NearestPawn = TestPawn;
+		//		NearestPawn = PlayerPawn;
 		//	}
 		//}
 	}
 
 	//CheckAndSendMovement();
-
-	//Walk(DeltaTime);
-
 
 	// 계속 공격 애니메이션 재생되니 일단 주석처리
 	//if (GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
@@ -303,39 +296,40 @@ void AZombieAIController::Send_ZombieHP()
 	}
 }
 
-void AZombieAIController::CheckAndSendMovement()
-{
-	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-	FVector CurrentLocation = ZombiePawn->GetActorLocation();
-	FRotator CurrentRotation = ZombiePawn->GetActorRotation();
-	ZombieId = ZombiePawn->GetZombieId();
-
-	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
-
-		// Protobuf를 사용하여 TestPacket 생성
-		Protocol::Zombie packet;
-		packet.set_zombieid(ZombieId);
-		packet.set_packet_type(2);
-		packet.set_x(CurrentLocation.X);
-		packet.set_y(CurrentLocation.Y);
-		packet.set_z(CurrentLocation.Z);
-		packet.set_pitch(CurrentRotation.Pitch);
-		packet.set_yaw(CurrentRotation.Yaw);
-		packet.set_roll(CurrentRotation.Roll);
-
-		// 직렬화
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
-
-		// 직렬화된 데이터를 서버로 전송
-		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-		//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
-
-		PreviousLocation = CurrentLocation;
-		PreviousRotation = CurrentRotation;
-	}
-}
+// 이전 클라에서 BT 돌릴때 쓰던 통신용 함수 같음 - 혹시 맞으면 더이상 안쓰니까 지우기
+//void AZombieAIController::CheckAndSendMovement()
+//{
+//	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
+//	FVector CurrentLocation = ZombiePawn->GetActorLocation();
+//	FRotator CurrentRotation = ZombiePawn->GetActorRotation();
+//	ZombieId = ZombiePawn->GetZombieId();
+//
+//	// 이전 위치와 현재 위치 비교 (움직임 감지)
+//	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
+//
+//		// Protobuf를 사용하여 TestPacket 생성
+//		Protocol::Zombie packet;
+//		packet.set_zombieid(ZombieId);
+//		packet.set_packet_type(2);
+//		packet.set_x(CurrentLocation.X);
+//		packet.set_y(CurrentLocation.Y);
+//		packet.set_z(CurrentLocation.Z);
+//		packet.set_pitch(CurrentRotation.Pitch);
+//		packet.set_yaw(CurrentRotation.Yaw);
+//		packet.set_roll(CurrentRotation.Roll);
+//
+//		// 직렬화
+//		std::string serializedData;
+//		packet.SerializeToString(&serializedData);
+//
+//		// 직렬화된 데이터를 서버로 전송
+//		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+//		//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
+//
+//		PreviousLocation = CurrentLocation;
+//		PreviousRotation = CurrentRotation;
+//	}
+//}
 
 
 void AZombieAIController::SetStartLocationValue(FVector startlocation)
