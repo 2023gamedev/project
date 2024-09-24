@@ -88,36 +88,41 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 		zomlocation.Y  += moveY;
 	}
 
+
 	OwnerZombie->SetActorLocation(zomlocation);
 	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->GetSpeed());
 }
 
-//void AZombieAIController::ZombieTurn(float delasecond)
-//{
-//	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
-//
-//	FRotator zomCurRot = NormalZombie->GetActorRotation();
-//
-//	FVector zomDir = NormalZombie->GetActorLocation() - zDestination;
-//
-//	FVector zomNDir = zomDir.GetSafeNormal();
-//	FRotator zomTarRot = zomNDir.Rotation();
-//
-//	// 회전 계산
-//	float RotationSpeed = NormalZombie->GetTurningSpeed() * deltasecond;
-//
-//	FRotator NewRotation = FMath::RInterpTo(zomCurRot, zomTarRot, deltasecond, RotationSpeed);
-//
-//
-//	NormalZombie->SetActorRotation(NewRotation);
-//
-//}
+void AZombieAIController::ZombieTurn(float deltasecond)
+{
+	OwnerZombie->GetActorRotation();
+
+	FVector zombieDest;
+	zombieDest.X = get<0>(OwnerZombie->NextPath);
+	zombieDest.Y = get<1>(OwnerZombie->NextPath);
+	zombieDest.Z = get<2>(OwnerZombie->NextPath);
+
+	FVector zomDir = OwnerZombie->GetActorLocation() - zombieDest;
+
+	FVector zomNDir = zomDir.GetSafeNormal();
+	FRotator zomTarRot = zomNDir.Rotation();
+	FRotator zomCurRot = OwnerZombie->K2_GetActorRotation();
+
+	// 회전 계산
+	float RotationSpeed = OwnerZombie->GetTurningSpeed() * deltasecond;
+
+	FRotator NewRotation = FMath::RInterpTo(zomCurRot, zomTarRot, deltasecond, RotationSpeed);
+
+
+	OwnerZombie->SetActorRotation(NewRotation);
+}
 
 void AZombieAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	ZombieMoveTo(DeltaTime);
+	ZombieTurn(DeltaTime);
 
 	//static float SearchInterval = 0.5f; // 0.5초마다 플레이어 검색
 	//static float TimeSinceLastSearch = 0.0f;

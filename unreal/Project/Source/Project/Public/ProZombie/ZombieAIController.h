@@ -48,10 +48,10 @@ public:
 
 	void UpdateLastKnownPositionByShoutingSound(FVector playerlocation);
 
-
-	//void ZombieTurn(float delasecond);
 	
 	void ZombieMoveTo(float deltasecond);
+
+	void ZombieTurn(float deltasecond);
 
 	UProGameInstance* GameInstance;
 
