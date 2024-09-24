@@ -50,8 +50,6 @@ void AZombieAIController::BeginPlay()
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
-
-
 }
 
 void AZombieAIController::ZombieMoveTo(float deltasecond)
@@ -135,6 +133,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	Send_ZombieHP();
 
+	OwnerZombie = Cast<ANormalZombie>(GetPawn());
 
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
@@ -264,11 +263,11 @@ void AZombieAIController::Tick(float DeltaTime)
 	//}
 }
 
-void AZombieAIController::Send_Detected(ABaseCharacter* BaseCharacter)
+void AZombieAIController::Send_Detected(ABaseCharacter* Player)
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
 	ZombieId = ZombiePawn->GetZombieId();
-	uint32 PlayerId = BaseCharacter->GetPlayerId();
+	uint32 PlayerId = Player->GetPlayerId();
 
 	Protocol::Detected packet;
 	packet.set_zombieid(ZombieId);
@@ -282,11 +281,11 @@ void AZombieAIController::Send_Detected(ABaseCharacter* BaseCharacter)
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
-void AZombieAIController::Send_PlayerLost(ABaseCharacter* BaseCharacter)
+void AZombieAIController::Send_PlayerLost(ABaseCharacter* Player)
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
 	ZombieId = ZombiePawn->GetZombieId();
-	uint32 PlayerId = BaseCharacter->GetPlayerId();
+	uint32 PlayerId = Player->GetPlayerId();
 
 	Protocol::Detected packet;
 	packet.set_zombieid(ZombieId);
@@ -302,19 +301,23 @@ void AZombieAIController::Send_PlayerLost(ABaseCharacter* BaseCharacter)
 
 void AZombieAIController::Send_ZombieHP()
 {
-	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-	if (PreviousHp != ZombiePawn->GetHP()) {
-		ZombieId = ZombiePawn->GetZombieId();
-	
+	if (!OwnerZombie) {
+		UE_LOG(LogTemp, Warning, TEXT("ZombiePawn is null."));
+		return;
+	}
+
+	if (PreviousHp != OwnerZombie->GetHP()) {
+		ZombieId = OwnerZombie->GetZombieId();
+
 		Protocol::Zombie_hp packet;
 		packet.set_zombieid(ZombieId);
-		packet.set_hp(ZombiePawn->GetHP());
+		packet.set_hp(OwnerZombie->GetHP());
 		packet.set_packet_type(12);
-	
+
 		std::string serializedData;
 		packet.SerializeToString(&serializedData);
-		PreviousHp = ZombiePawn->GetHP();
-	
+		PreviousHp = OwnerZombie->GetHP();
+
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 	}
 }
