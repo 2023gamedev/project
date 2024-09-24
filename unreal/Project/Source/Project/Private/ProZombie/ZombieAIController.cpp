@@ -37,7 +37,10 @@ AZombieAIController::AZombieAIController()
 
 void AZombieAIController::BeginPlay()
 {
-	//Super::BeginPlay();
+	Super::BeginPlay();
+
+	OwnerZombie = Cast<ANormalZombie>(GetPawn());
+
 	//
 	//if (AIBehavior != nullptr) {
 	//	RunBehaviorTree(AIBehavior);
@@ -85,78 +88,67 @@ void AZombieAIController::BeginPlay()
 //}
 
 
-//void AZombieAIController::Walk(float deltasecond)
-//{
-//	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
-//	FVector zomlocation;
-//
-//	if (NormalZombie) {
-//
-//		zomlocation = NormalZombie->GetActorLocation();
-//	}
-//
-//	std::tuple<float,float,float> target = ZPath.back();
-//
-//
-//	if (zomlocation.X == get<0>(target) && zomlocation.Y == get<1>(target)) {
-//		ZombiePathIndex = 0;
-//		return;
-//	}
-//
-//
-//	////Walk가 동작하기 전에 이미 도착위치에 위치해 있다면, 해당 종료조건 발동 X
-//	//if (ZombiePathIndex >= path.size()) {
-//	//	//cout << "Zombie has reached the final destination." << endl;
-//
-//	//	return; // 경로 끝에 도달
-//	//}
-//
-//
-//
-//	// 현재 목표 노드
-//	std::tuple<float, float, float> TargetNode = ZPath[ZombiePathIndex];
-//	float PathX = get<0>(TargetNode);
-//	float PathY = get<1>(TargetNode);
-//
-//
-//	// 타겟 방향 계산
-//	float dx = PathX - zomlocation.X;
-//	float dy = PathY - zomlocation.Y;
-//
-//	// 거리를 계산
-//	float distance = sqrt(dx * dx + dy * dy);
-//
-//	// 이동 방향 벡터를 정규화
-//	float directionX = dx / distance;
-//	float directionY = dy / distance;
-//
-//	// 이동 거리 계산
-//	float moveDistance = NormalZombie->GetSpeed() * 100.f * deltasecond;
-//
-//	// 이동 벡터 계산
-//	float moveX = directionX * moveDistance;
-//	float moveY = directionY * moveDistance;
-//
-//
-//
-//	// 목표에 도착했는지 확인 (옵션)
-//	float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
-//
-//	if (newDistance < moveDistance) {
-//		zomlocation.X = PathX;
-//		zomlocation.Y = PathY;
-//
-//		// 다음 목표 노드로 이동
-//		ZombiePathIndex++;
-//		m_bIsTurn = true;
-//	}
-//	else {
-//		// 타겟 방향으로 이동
-//		zomlocation.X  += moveX;
-//		zomlocation.Y  += moveY;
-//
-//	}
-//}
+void AZombieAIController::MoveTo(float deltasecond)
+{
+	FVector zomlocation;
+
+	if (OwnerZombie) {
+		zomlocation = OwnerZombie->GetActorLocation();
+	}
+
+	std::tuple<float,float,float> target = ZPath.back();
+
+
+	if (zomlocation.X == get<0>(target) && zomlocation.Y == get<1>(target)) {
+		ZombiePathIndex = 0;
+		return;
+	}
+
+
+	// 현재 목표 노드
+	std::tuple<float, float, float> TargetNode = ZPath[ZombiePathIndex];
+	float PathX = get<0>(TargetNode);
+	float PathY = get<1>(TargetNode);
+
+
+	// 타겟 방향 계산
+	float dx = PathX - zomlocation.X;
+	float dy = PathY - zomlocation.Y;
+
+	// 거리를 계산
+	float distance = sqrt(dx * dx + dy * dy);
+
+	// 이동 방향 벡터를 정규화
+	float directionX = dx / distance;
+	float directionY = dy / distance;
+
+	// 이동 거리 계산
+	float moveDistance = OwnerZombie->GetSpeed() * 100.f * deltasecond;
+
+	// 이동 벡터 계산
+	float moveX = directionX * moveDistance;
+	float moveY = directionY * moveDistance;
+
+
+
+	// 목표에 도착했는지 확인 (옵션)
+	float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
+
+	if (newDistance < moveDistance) {
+		zomlocation.X = PathX;
+		zomlocation.Y = PathY;
+
+		// 다음 목표 노드로 이동
+		ZombiePathIndex++;
+		m_bIsTurn = true;
+	}
+	else {
+		// 타겟 방향으로 이동
+		zomlocation.X  += moveX;
+		zomlocation.Y  += moveY;
+
+	}
+}
 
 void AZombieAIController::Tick(float DeltaTime)
 {
@@ -175,14 +167,12 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
-	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
-
-	if (PlayerPawn == nullptr || NormalZombie == nullptr) {
+	if (PlayerPawn == nullptr || OwnerZombie == nullptr) {
 		return;
 	}
 
-	FVector ZombieForward = NormalZombie->GetActorForwardVector(); // 좀비의 전방 벡터
-	FVector ZombieLocation = NormalZombie->GetActorLocation(); // 좀비의 위치
+	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
+	FVector ZombieLocation = OwnerZombie->GetActorLocation(); // 좀비의 위치
 	
 	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
 	//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
