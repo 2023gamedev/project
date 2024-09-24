@@ -179,6 +179,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                 if (z.ZombieData.zombieID == recvzombieid) {
                     z.PlayerInSight = true;
                     z.KnewPlayerLocation = true;
+
+                    cout << "좀비 \'#" << z.ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
+
                     break;
                 }
             }
@@ -188,6 +191,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             for (auto& z : zombie) {
                 if (z.ZombieData.zombieID == recvzombieid) {
                     z.PlayerInSight = false;
+
+                    cout << "좀비 \'#" << z.ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!: " << endl;
+
                     break;
                 }
             }

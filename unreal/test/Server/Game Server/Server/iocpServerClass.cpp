@@ -551,13 +551,13 @@ void IOCP_CORE::Zombie_BT_Thread()
 			if (result == "NO PLAYER")
 				break;
 
-			cout << endl;
-			cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 실행==========" << endl;
-			cout << endl;
-
-			float z_x = zom.ZombieData.x;					float z_y = zom.ZombieData.y;					float z_z = zom.ZombieData.z;
-			cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
-			cout << endl;
+			//cout << endl;
+			//cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 실행==========" << endl;
+			//cout << endl;
+			//
+			//float z_x = zom.ZombieData.x;					float z_y = zom.ZombieData.y;					float z_z = zom.ZombieData.z;
+			//cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+			//cout << endl;
 
 			//=============================================== 좀비가 만약 한 번에 여러명의 플레이어를 포착하면 어떤 플레이어를 우선적으로 따라가게 만들지?
 			//												======> 거리가 가장 가까운 플레이어를 따라가도록 (+만약 최단 거리가 두명 이상이면 랜덤하게 따라가게) 
@@ -635,8 +635,8 @@ void IOCP_CORE::Zombie_BT_Thread()
 				//cout << endl;
 			}
 
-			cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 종료==========" << endl;
-			cout << endl;
+			//cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 종료==========" << endl;
+			//cout << endl;
 		}
 
 

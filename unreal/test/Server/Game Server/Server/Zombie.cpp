@@ -214,7 +214,7 @@ void Zombie::MoveTo(float deltasecond)
 	CheckFinalDestination();
 
 	if (IsPathUpdated()) {
-		cout << "PathUpdated!" << endl;
+		//cout << "PathUpdated!" << endl;
 		ZombiePathIndex = 0;
 	}
 
@@ -271,7 +271,7 @@ void Zombie::MoveTo(float deltasecond)
 
 		// 경로의 끝에 도착
 		if (ZombiePathIndex >= path.size()) {
-			cout << "Zombie 경로 끝." << endl;
+			//cout << "Zombie 경로 끝." << endl;
 			ZombiePathIndex = 0;
 		}
 	}
@@ -326,11 +326,11 @@ void Zombie::CheckFinalDestination()
 
 	//좀비가 목적지에 도착하면
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
-		cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
-		cout << endl;
+		//cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
+		//cout << endl;
 
-		cout << "좀비 \'#" << ZombieData.zombieID << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
-		cout << endl;
+		//cout << "좀비 \'#" << ZombieData.zombieID << "\' 타겟 좌표 ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
+		//cout << endl;
 
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
 		switch (targetType) {
@@ -363,7 +363,7 @@ void Zombie::SendPath()
 		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 		pathfinder.Run(path, 0);
 	}
-	cout << endl;
+	//cout << endl;
 
 	if (path.empty() || ZombiePathIndex >= path.size()) {
 		return;
