@@ -238,8 +238,8 @@ uint32 ClientSocket::Run()
 						{
 							ZombiePath localZombiePath;
 							
-							localZombiePath.ZombieId = zombiepath.zombieid();
-							UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), zombiepath.zombieid());
+							localZombiePath.ZombieId = zombiepath.zombieid() - 1;		// probuf 0번 인덱스 직렬화 불가를 보완하기위해서
+							UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), localZombiePath.ZombieId);
 
 							
 							localZombiePath.Path.emplace_back(zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());

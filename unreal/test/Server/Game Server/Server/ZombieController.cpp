@@ -6,6 +6,7 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     iocpServer = &mainServer;
 
     // ÁöÇÏ 1Ãþ 
+
     SpawnZombies(0, 0, Vector3(1800.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     SpawnZombies(1, 0, Vector3(1000.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     SpawnZombies(2, 0, Vector3(600.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
