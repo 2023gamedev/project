@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "tuple"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -241,6 +243,8 @@ public:
 	FVector NewLocation;
 
 	FVector OldLocation = FVector(0.0f, 0.0f, 0.0f);
+
+	std::tuple<float, float, float> NextPath;
 
 	float Speed;
 	float PreviousSpeed;

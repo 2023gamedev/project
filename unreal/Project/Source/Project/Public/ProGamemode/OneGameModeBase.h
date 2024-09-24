@@ -60,6 +60,8 @@ class ARunningZombieAIController;
 class AItemBoxActor;
 class AInterActor;
 
+extern TMap<uint32, ABaseZombie*> ZombieMap;
+
 UCLASS()
 class PROJECT_API AOneGameModeBase : public AGameModeBase
 {

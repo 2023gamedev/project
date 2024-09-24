@@ -34,7 +34,6 @@
 
 TMap<uint32, ABaseZombie*> ZombieMap;
 
-
 AOneGameModeBase::AOneGameModeBase()
 {
     //DefaultPawnClass = ABaseCharacter::StaticClass();
@@ -956,6 +955,8 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             if (AIZombieController)
             {
                 AIZombieController->Possess(NewZombie);
+                AIZombieController->OwnerZombie = Cast<ANormalZombie>(NewZombie);
+              
                 UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
             }
             else

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "ClientSocket.h"
-#include "NormalZombie.h"
+#include "BaseZombie.h"
 #include "ZombieAIController.generated.h"
 
 
@@ -55,7 +55,7 @@ public:
 
 	//void ZombieTurn(float delasecond);
 	
-	void MoveTo(float deltasecond);
+	void ZombieMoveTo(float deltasecond);
 
 	UProGameInstance* GameInstance;
 
@@ -83,20 +83,15 @@ public:
 	bool m_bPlayerInSight;
 
 
-	int ZombiePathIndex;
-
 	// path가 업데이트 되면 이것을 true로 바꿔주기
 	//bool m_bIsPathUpdate;
-
-	// path 도착하고 turn 할지 말지 bool 값
-	//bool m_bIsTurn;
 
 	//std::vector<std::tuple<float, float, float>> before_ZPath = {};
 
 	//std::vector<std::tuple<float, float, float>> ZPath = {};
 
-	ZombieData recvZombieData;
-	ZombiePath recvZombiePath;
+	//ZombieData recvZombieData;
+	//ZombiePath recvZombiePath;
 	ZombieHP recvZombieHP;
 
 	uint32 ZombieId;
@@ -107,7 +102,7 @@ public:
 
 	ABaseCharacter* LastSeenPlayer;
 
-	ANormalZombie* OwnerZombie;
+	ABaseZombie* OwnerZombie;
 
 	float PreviousHp = 0.f;
 };

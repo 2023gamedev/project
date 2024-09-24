@@ -39,8 +39,6 @@ void AZombieAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OwnerZombie = Cast<ANormalZombie>(GetPawn());
-
 	//
 	//if (AIBehavior != nullptr) {
 	//	RunBehaviorTree(AIBehavior);
@@ -49,110 +47,83 @@ void AZombieAIController::BeginPlay()
 	//
 	//}
 	//
-	//GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 
 
 }
 
-//void AZombieAIController::IsZombiePathUpdate()
-//{
-//	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
-//
-//	auto paths = GameInstance->ClientSocketPtr->Q_path;
-//
-//	ZombiePath zompath;
-//
-//	while (paths.unsafe_size() != 0) {
-//
-//		paths.try_pop(zompath);
-//
-//		if (zompath.ZombieId == NormalZombie->GetZombieId()) {
-//
-//			if (zompath.IsZombiePathUpdate == true) {
-//
-//				if (m_bIsPathUpdate == false) {
-//					ZPath = zompath.Path;
-//					ZombiePathIndex = 0;
-//					m_bIsPathUpdate = true;
-//				}
-//			}
-//			else {
-//				m_bIsPathUpdate = false;
-//			}
-//
-//			break;
-//		}
-//	}
-//
-//}
-
-
-void AZombieAIController::MoveTo(float deltasecond)
+void AZombieAIController::ZombieMoveTo(float deltasecond)
 {
-	//FVector zomlocation;
-	//
-	//if (OwnerZombie) {
-	//	zomlocation = OwnerZombie->GetActorLocation();
-	//}
-	//
-	//std::tuple<float,float,float> target = ZPath.back();
-	//
-	//
-	//if (zomlocation.X == get<0>(target) && zomlocation.Y == get<1>(target)) {
-	//	ZombiePathIndex = 0;
-	//	return;
-	//}
-	//
-	//
-	//// 현재 목표 노드
-	//std::tuple<float, float, float> TargetNode = ZPath[ZombiePathIndex];
-	//float PathX = get<0>(TargetNode);
-	//float PathY = get<1>(TargetNode);
-	//
-	//
-	//// 타겟 방향 계산
-	//float dx = PathX - zomlocation.X;
-	//float dy = PathY - zomlocation.Y;
-	//
-	//// 거리를 계산
-	//float distance = sqrt(dx * dx + dy * dy);
-	//
-	//// 이동 방향 벡터를 정규화
-	//float directionX = dx / distance;
-	//float directionY = dy / distance;
-	//
-	//// 이동 거리 계산
-	//float moveDistance = OwnerZombie->GetSpeed() * 100.f * deltasecond;
-	//
-	//// 이동 벡터 계산
-	//float moveX = directionX * moveDistance;
-	//float moveY = directionY * moveDistance;
-	//
-	//
-	//
-	//// 목표에 도착했는지 확인 (옵션)
-	//float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
-	//
-	//if (newDistance < moveDistance) {
-	//	zomlocation.X = PathX;
-	//	zomlocation.Y = PathY;
-	//
-	//	// 다음 목표 노드로 이동
-	//	ZombiePathIndex++;
-	//	m_bIsTurn = true;
-	//}
-	//else {
-	//	// 타겟 방향으로 이동
-	//	zomlocation.X  += moveX;
-	//	zomlocation.Y  += moveY;
-	//
-	//}
+	FVector zomlocation;
+	
+	if (OwnerZombie) {
+		zomlocation = OwnerZombie->GetActorLocation();
+	}
+	
+	std::tuple<float,float,float> target = OwnerZombie->NextPath;
+	
+	
+	// 현재 목표 노드
+	float PathX = get<0>(target);
+	float PathY = get<1>(target);
+
+
+	//이미 도착지점에 도착했을때
+	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
+		OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	//애니메이션 정지
+		
+		return;
+	}
+	
+	
+	// 타겟 방향 계산
+	float dx = PathX - zomlocation.X;
+	float dy = PathY - zomlocation.Y;
+	
+	// 거리를 계산
+	float distance = sqrt(dx * dx + dy * dy);
+	
+	// 이동 방향 벡터를 정규화
+	float directionX = dx / distance;
+	float directionY = dy / distance;
+	
+	// 이동 거리 계산
+	float moveDistance = OwnerZombie->GetSpeed() * 100.f * deltasecond;
+	
+	// 이동 벡터 계산
+	float moveX = directionX * moveDistance;
+	float moveY = directionY * moveDistance;
+	
+	
+	
+	// 목표에 도착했는지 확인 (옵션)
+	float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
+	
+	if (newDistance < moveDistance) {
+		zomlocation.X = PathX;
+		zomlocation.Y = PathY;
+	}
+	else {
+		// 타겟 방향으로 이동
+		zomlocation.X  += moveX;
+		zomlocation.Y  += moveY;
+	}
+
+	OwnerZombie->SetActorLocation(zomlocation);
+	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->Speed);
 }
 
 void AZombieAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	//if (OwnerZombie != NULL) {
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("OwnerZombie ID #%d"), OwnerZombie->GetZombieId()));
+	//}
+
+	ZombieMoveTo(DeltaTime);
 
 	//static float SearchInterval = 0.5f; // 0.5초마다 플레이어 검색
 	//static float TimeSinceLastSearch = 0.0f;
@@ -331,21 +302,21 @@ void AZombieAIController::Send_PlayerLost(ABaseCharacter* BaseCharacter)
 
 void AZombieAIController::Send_ZombieHP()
 {
-	//auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-	//if (PreviousHp != ZombiePawn->GetHP()) {
-	//	ZombieId = ZombiePawn->GetZombieId();
-	//
-	//	Protocol::Zombie_hp packet;
-	//	packet.set_zombieid(ZombieId);
-	//	packet.set_hp(ZombiePawn->GetHP());
-	//	packet.set_packet_type(12);
-	//
-	//	std::string serializedData;
-	//	packet.SerializeToString(&serializedData);
-	//	PreviousHp = ZombiePawn->GetHP();
-	//
-	//	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-	//}
+	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
+	if (PreviousHp != ZombiePawn->GetHP()) {
+		ZombieId = ZombiePawn->GetZombieId();
+	
+		Protocol::Zombie_hp packet;
+		packet.set_zombieid(ZombieId);
+		packet.set_hp(ZombiePawn->GetHP());
+		packet.set_packet_type(12);
+	
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+		PreviousHp = ZombiePawn->GetHP();
+	
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+	}
 }
 
 void AZombieAIController::CheckAndSendMovement()
