@@ -109,6 +109,7 @@ public:
 	ZombiePath recvZombiePath;
 
 	uint32 PlayerId;
+	uint32 ZombieId;
 	uint32 MyCharacterNumber;
 	uint32 OtherCharacterNumber;
 	FVector NewLocation;
@@ -124,6 +125,6 @@ public:
 	bool b_run = false;
 	bool sendRun = false;
 	bool sendjump = false;
-
+	
 
 };

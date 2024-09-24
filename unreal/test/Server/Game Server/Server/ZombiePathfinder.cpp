@@ -56,7 +56,7 @@ void ZombiePathfinder::DetermineFloor()
 //    }
 //
 //    // EdgesMap을 불러오는 로직으로 수정
-//    return LoadEdgesMap(filePath, EdgesMap);
+//    return LoadEdgesMap(filePath, validPositions,EdgesMap);
 //}
 
 bool ZombiePathfinder::LoadPositions()
@@ -123,7 +123,7 @@ void ZombiePathfinder::PrintPositions()
     }
 }
 
-bool ZombiePathfinder::LoadEdgesMap(const string& filePath, unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap)
+bool ZombiePathfinder::LoadEdgesMap(const string& filePath, vector<tuple<float, float, float>>& positions, unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap)
 {
     ifstream file(filePath);
     if (!file.is_open()) {
@@ -144,6 +144,9 @@ bool ZombiePathfinder::LoadEdgesMap(const string& filePath, unordered_map<tuple<
             if (ss >> x >> comma >> y >> comma >> z) {
                 currentNode = make_tuple(x, y, z);
                 EdgesMap[currentNode] = {};  // 새로운 노드 추가
+
+                // validPositions에 currentNode 추가
+                positions.push_back(currentNode);
             }
         }
         else if (line.find("Neighbor:") != string::npos) {
@@ -266,6 +269,11 @@ tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goal
 //    }
 //
 //    // 목표 지점과 가장 가까운 유효한 지점 찾기
+//
+//    float SimilarStartX, SimilarStartY, SimilarStartZ;
+//    tie(SimilarStartX, SimilarStartY, SimilarStartZ) = FindClosestValidPosition(startX, startY, startZ, validPositions);
+//    SimilarStartZ = startZ;
+//
 //    float SimilargoalX, SimilargoalY, SimilargoalZ;
 //    tie(SimilargoalX, SimilargoalY, SimilargoalZ) = FindClosestValidPosition(goalX, goalY, goalZ, validPositions);
 //    SimilargoalZ = goalZ;
@@ -278,6 +286,12 @@ tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goal
 //    // 시작 노드 초기화
 //    Node start(startX, startY, startZ, 0, Heuristic(startX, startY, goalX, goalY));
 //    openSet.push(start);
+//
+//    if (startX != SimilarStartX || startY != SimilarStartY) {
+//        Node start2(SimilarStartX, SimilarStartY, SimilarStartZ, 0, Heuristic(SimilarStartX, SimilarStartY, goalX, goalY));
+//        openSet.push(start2);
+//    }
+//
 //    gScore[start] = 0;
 //
 //    // A* 탐색 시작

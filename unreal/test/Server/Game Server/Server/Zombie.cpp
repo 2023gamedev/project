@@ -191,6 +191,20 @@ void Zombie::Attack()
 {
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << bt_playerID << "\' 을 공격하였습니다!" << endl;
 	cout << endl;
+
+	Protocol::Zombie_attack attackpacket;
+
+	attackpacket.set_zombieid(ZombieData.zombieID);
+	attackpacket.set_packet_type(13);
+
+	string serializedData;
+	attackpacket.SerializeToString(&serializedData);
+
+	for (const auto& player : g_players) {
+		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+	}
+
+
 }
 
 

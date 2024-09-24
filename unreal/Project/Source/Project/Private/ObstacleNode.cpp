@@ -141,7 +141,7 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
     }
 
     // 파일로 저장
-    FString FilePath = FPaths::ProjectDir() + TEXT("EdgesB2.txt");
+    FString FilePath = FPaths::ProjectDir() + TEXT("EdgesF2.txt");
     FFileHelper::SaveStringToFile(EdgeData, *FilePath);
 
     return Edges;
