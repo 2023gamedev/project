@@ -182,7 +182,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 		ABaseZombie** zombie = ZombieMap.Find(tmp_path.ZombieId);
 
-		(*zombie)->NextPath = *tmp_path.Path.begin();
+		if(tmp_path.Path.empty() == false)
+			(*zombie)->NextPath = *(tmp_path.Path.begin());
 	}
 
 }

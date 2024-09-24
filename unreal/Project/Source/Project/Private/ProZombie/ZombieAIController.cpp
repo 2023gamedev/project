@@ -41,11 +41,9 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 	
 	std::tuple<float,float,float> target = OwnerZombie->NextPath;
 	
-	
 	// 현재 목표 노드
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
-
 
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
@@ -73,9 +71,8 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 	float moveX = directionX * moveDistance;
 	float moveY = directionY * moveDistance;
 	
-	
-	
-	// 목표에 도착했는지 확인 (옵션)
+
+	// 목표에 도착했는지 확인
 	float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
 	
 	if (newDistance < moveDistance) {
@@ -95,19 +92,20 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 
 void AZombieAIController::ZombieTurn(float deltasecond)
 {
-	OwnerZombie->GetActorRotation();
-
 	FVector zombieDest;
 	zombieDest.X = get<0>(OwnerZombie->NextPath);
 	zombieDest.Y = get<1>(OwnerZombie->NextPath);
 	zombieDest.Z = get<2>(OwnerZombie->NextPath);
 
-	FVector zomDir = OwnerZombie->GetActorLocation() - zombieDest;
+	FVector zomTarDir = zombieDest - OwnerZombie->GetActorLocation();
 
-	FVector zomNDir = zomDir.GetSafeNormal();
-	FRotator zomTarRot = zomNDir.Rotation();
-	FRotator zomCurRot = OwnerZombie->K2_GetActorRotation();
-
+	FVector zomTarNDir = zomTarDir.GetSafeNormal();
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("zomTarNDir: (%f, %f, %f)"), zomTarNDir.X, zomTarNDir.Y, zomTarNDir.Z));
+	FRotator zomTarRot = zomTarNDir.Rotation();
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("zomTarRot: (%f, %f, %f)"), zomTarRot.Roll, zomTarRot.Pitch, zomTarRot.Yaw));
+	FRotator zomCurRot = OwnerZombie->GetActorRotation();
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("zomCurRot: (%f, %f, %f)"), zomCurRot.Roll, zomCurRot.Pitch, zomCurRot.Yaw));
+	
 	// 회전 계산
 	float RotationSpeed = OwnerZombie->GetTurningSpeed() * deltasecond;
 
