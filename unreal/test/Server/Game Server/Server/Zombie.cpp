@@ -319,7 +319,7 @@ void Zombie::CheckFinalDestination()
 		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 		pathfinder.Run(path, 0);
 	}
-	cout << endl;
+	//cout << endl;
 
 	//cout << endl;
 	//if(path.size() != 0)
@@ -327,8 +327,8 @@ void Zombie::CheckFinalDestination()
 
 	//===================================
 
-	cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
-	cout << endl;
+	/*cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
+	cout << endl;*/
 
 
 	//좀비가 목적지에 도착하면

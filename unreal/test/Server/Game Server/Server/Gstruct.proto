@@ -34,7 +34,7 @@ message Zombie_attack{
 
 message Zombie_hp{
     uint32 zombieid = 1;
-    uint32 hp = 2;
+    float hp = 2;
     uint32 packet_type = 3;
 }
 

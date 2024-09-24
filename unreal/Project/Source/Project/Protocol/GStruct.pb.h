@@ -895,13 +895,13 @@ class Zombie_hp final :
   void _internal_set_zombieid(uint32_t value);
   public:
 
-  // uint32 hp = 2;
+  // float hp = 2;
   void clear_hp();
-  uint32_t hp() const;
-  void set_hp(uint32_t value);
+  float hp() const;
+  void set_hp(float value);
   private:
-  uint32_t _internal_hp() const;
-  void _internal_set_hp(uint32_t value);
+  float _internal_hp() const;
+  void _internal_set_hp(float value);
   public:
 
   // uint32 packet_type = 3;
@@ -922,7 +922,7 @@ class Zombie_hp final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     uint32_t zombieid_;
-    uint32_t hp_;
+    float hp_;
     uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -3133,22 +3133,22 @@ inline void Zombie_hp::set_zombieid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie_hp.zombieid)
 }
 
-// uint32 hp = 2;
+// float hp = 2;
 inline void Zombie_hp::clear_hp() {
-  _impl_.hp_ = 0u;
+  _impl_.hp_ = 0;
 }
-inline uint32_t Zombie_hp::_internal_hp() const {
+inline float Zombie_hp::_internal_hp() const {
   return _impl_.hp_;
 }
-inline uint32_t Zombie_hp::hp() const {
+inline float Zombie_hp::hp() const {
   // @@protoc_insertion_point(field_get:Protocol.Zombie_hp.hp)
   return _internal_hp();
 }
-inline void Zombie_hp::_internal_set_hp(uint32_t value) {
+inline void Zombie_hp::_internal_set_hp(float value) {
   
   _impl_.hp_ = value;
 }
-inline void Zombie_hp::set_hp(uint32_t value) {
+inline void Zombie_hp::set_hp(float value) {
   _internal_set_hp(value);
   // @@protoc_insertion_point(field_set:Protocol.Zombie_hp.hp)
 }
