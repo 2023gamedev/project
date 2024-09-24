@@ -106,5 +106,5 @@ public:
 
 	ABaseCharacter* LastSeenPlayer;
 
-	float PreviousHp;
+	float PreviousHp = 0.f;
 };

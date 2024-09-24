@@ -82,7 +82,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR Zombie_hp::Zombie_hp(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.zombieid_)*/0u
-  , /*decltype(_impl_.hp_)*/0u
+  , /*decltype(_impl_.hp_)*/0
   , /*decltype(_impl_.packet_type_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct Zombie_hpDefaultTypeInternal {
@@ -434,7 +434,7 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   " \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004roll\030\t \001(\002\"6\n\rZombi"
   "e_attack\022\020\n\010zombieid\030\001 \001(\r\022\023\n\013packet_typ"
   "e\030\003 \001(\r\">\n\tZombie_hp\022\020\n\010zombieid\030\001 \001(\r\022\n"
-  "\n\002hp\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\"H\n\016Zombi"
+  "\n\002hp\030\002 \001(\002\022\023\n\013packet_type\030\003 \001(\r\"H\n\016Zombi"
   "eDataList\022!\n\007zombies\030\001 \003(\0132\020.Protocol.Zo"
   "mbie\022\023\n\013packet_type\030\003 \001(\r\"*\n\007Vector3\022\t\n\001"
   "x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\"y\n\nZombieP"
@@ -1678,7 +1678,7 @@ inline void Zombie_hp::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.zombieid_){0u}
-    , decltype(_impl_.hp_){0u}
+    , decltype(_impl_.hp_){0}
     , decltype(_impl_.packet_type_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -1727,11 +1727,11 @@ const char* Zombie_hp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         } else
           goto handle_unusual;
         continue;
-      // uint32 hp = 2;
+      // float hp = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 21)) {
+          _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
@@ -1778,10 +1778,14 @@ uint8_t* Zombie_hp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_zombieid(), target);
   }
 
-  // uint32 hp = 2;
-  if (this->_internal_hp() != 0) {
+  // float hp = 2;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = this->_internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_hp(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(2, this->_internal_hp(), target);
   }
 
   // uint32 packet_type = 3;
@@ -1811,9 +1815,13 @@ size_t Zombie_hp::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_zombieid());
   }
 
-  // uint32 hp = 2;
-  if (this->_internal_hp() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_hp());
+  // float hp = 2;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = this->_internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
+    total_size += 1 + 4;
   }
 
   // uint32 packet_type = 3;
@@ -1842,7 +1850,11 @@ void Zombie_hp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   if (from._internal_zombieid() != 0) {
     _this->_internal_set_zombieid(from._internal_zombieid());
   }
-  if (from._internal_hp() != 0) {
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_hp = from._internal_hp();
+  uint32_t raw_hp;
+  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
+  if (raw_hp != 0) {
     _this->_internal_set_hp(from._internal_hp());
   }
   if (from._internal_packet_type() != 0) {
