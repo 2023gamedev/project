@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "ClientSocket.h"
+#include "NormalZombie.h"
 #include "ZombieAIController.generated.h"
 
 
