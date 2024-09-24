@@ -75,8 +75,9 @@ private:
         unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& positionSet);
 
     //NewAstar
-    bool LoadEdgesMap(const string& filePath, unordered_map<tuple<float, float, float>,
-        vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
+    bool LoadEdgesMap(const string& filePath, 
+        vector<tuple<float, float, float>>& positions,
+        unordered_map<tuple<float, float, float>,vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
 
     void PrintPositions();
 
