@@ -387,12 +387,15 @@ void Zombie::SendPath()
 
 		// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
 
-		Protocol::Vector3* Destination = zPath.mutable_location();
+		Protocol::Vector3* Destination = zPath.mutable_path();
 		Destination->set_x(get<0>(path[ZombiePathIndex]));
 		Destination->set_y(get<1>(path[ZombiePathIndex]));
 		Destination->set_z(get<2>(path[ZombiePathIndex]));
 
-		cout << "z좌표 = " << get<2>(path[ZombiePathIndex]) << endl;
+		Protocol::Vector3* currentLocation = zPath.mutable_location();
+		currentLocation->set_x(ZombieData.x);
+		currentLocation->set_y(ZombieData.y);
+		currentLocation->set_z(ZombieData.z);
 
 		string serializedData;
 		zPath.SerializeToString(&serializedData);
