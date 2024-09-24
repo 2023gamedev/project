@@ -39,8 +39,6 @@ void AZombieAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OwnerZombie = Cast<ANormalZombie>(GetPawn());
-
 	//
 	//if (AIBehavior != nullptr) {
 	//	RunBehaviorTree(AIBehavior);
@@ -50,9 +48,6 @@ void AZombieAIController::BeginPlay()
 	//}
 	//
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-
-
-
 }
 
 //void AZombieAIController::IsZombiePathUpdate()
@@ -164,6 +159,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	Send_ZombieHP();
 
+	OwnerZombie = Cast<ANormalZombie>(GetPawn());
 
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 

@@ -971,6 +971,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
     }
 }
 
+
 void AOneGameModeBase::UpdateZombieAttack(uint32 ZombieId)
 {
     UWorld* World = GetWorld();
