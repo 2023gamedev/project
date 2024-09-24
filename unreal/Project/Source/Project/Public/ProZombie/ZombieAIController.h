@@ -48,23 +48,12 @@ public:
 
 	void UpdateLastKnownPositionByShoutingSound(FVector playerlocation);
 
-	void StopAI();
-	void StartAI();
-
-	//bool IsZombiePathUpdate();
 
 	//void ZombieTurn(float delasecond);
 	
 	void ZombieMoveTo(float deltasecond);
 
 	UProGameInstance* GameInstance;
-
-private:
-	//UPROPERTY(EditAnywhere)
-	//class UBehaviorTree* AIBehavior;
-	//
-	//UPROPERTY(EditAnywhere)
-	//class UBlackboardData* BlackBoardAsset;
 
 public:
 	UPROPERTY(EditAnywhere)
@@ -82,13 +71,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bPlayerInSight;
 
-
-	// path가 업데이트 되면 이것을 true로 바꿔주기
-	//bool m_bIsPathUpdate;
-
-	//std::vector<std::tuple<float, float, float>> before_ZPath = {};
-
-	//std::vector<std::tuple<float, float, float>> ZPath = {};
 
 	//ZombieData recvZombieData;
 	//ZombiePath recvZombiePath;

@@ -239,18 +239,18 @@ uint32 ClientSocket::Run()
 							ZombiePath localZombiePath;
 							
 							localZombiePath.ZombieId = zombiepath.zombieid() - 1;		// probuf 0번 인덱스 직렬화 불가를 보완하기위해서
-							UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), localZombiePath.ZombieId);
+							//UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), localZombiePath.ZombieId);
 
 							
 							localZombiePath.Path.emplace_back(zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());
-							UE_LOG(LogNet, Display, TEXT("Zombie #%d's Target Location: ( %.2f, %.2f, %.2f )"), localZombiePath.ZombieId, zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());
+							//UE_LOG(LogNet, Display, TEXT("Zombie #%d's Target Location: ( %.2f, %.2f, %.2f )"), localZombiePath.ZombieId, zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());
 
 							// 위치 값도 추가
 							localZombiePath.Location = FVector(zombiepath.location().x(), zombiepath.location().y(), zombiepath.location().z());
 
 							// 큐에 ZombiePath 객체를 추가
 							Q_path.push(localZombiePath);
-							UE_LOG(LogNet, Display, TEXT("ZombiePath recv: %d"), localZombiePath.ZombieId);
+							//UE_LOG(LogNet, Display, TEXT("ZombiePath recv: %d"), localZombiePath.ZombieId);
 						}
 						break;
 					}
@@ -261,7 +261,7 @@ uint32 ClientSocket::Run()
 						if (pingpacket.ParseFromArray(buffer.data(), buffer.size()))
 						{
 							Q_ping.push(true);
-							UE_LOG(LogNet, Display, TEXT("ping"));
+							//UE_LOG(LogNet, Display, TEXT("ping"));
 						}
 						break;
 					}

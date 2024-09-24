@@ -266,11 +266,6 @@ void Zombie::MoveTo(float deltasecond)
 		ZombieData.x = PathX;
 		ZombieData.y = PathY;
 
-		//cout << "speed * deltasecond " << max(ZombieSpeed * deltasecond, 1e-5f) << endl;
-		//cout << "distance : " << distance << endl;
-		//cout << "X: " << ZombieData.x << endl;
-		//cout << "Y: " << ZombieData.y << endl;
-
 		// 다음 목표 노드로 이동
 		ZombiePathIndex++;
 
@@ -284,8 +279,6 @@ void Zombie::MoveTo(float deltasecond)
 		// 타겟 방향으로 이동
 		ZombieData.x += moveX;
 		ZombieData.y += moveY;
-		//cout << "X: " << ZombieData.x << endl;
-		//cout << "Y: " << ZombieData.y << endl;
 	}
 }
 
@@ -360,8 +353,6 @@ void Zombie::CheckFinalDestination()
 		}
 
 	}
-
-	//cout << endl;
 }
 
 
@@ -382,7 +373,6 @@ void Zombie::SendPath()
 		// path값 전송
 		Protocol::ZombiePath zPath;
 		zPath.set_zombieid(ZombieData.zombieID + 1);						// probuf 0번 인덱스 직렬화 불가를 보완하기위해서
-		cout << "Path 보내는 좀비 ID: " << ZombieData.zombieID << endl;
 		zPath.set_packet_type(10);
 
 		// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
@@ -404,11 +394,6 @@ void Zombie::SendPath()
 			iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 		}
 	}
-
-
-	//cout << endl;
-	//if(path.size() != 0)
-	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 경로의 첫 좌표: ( " << get<0>(path.front()) << ", " << get<1>(path.front()) << ", " << get<2>(path.front()) << " )" << endl;
 
 	//===================================
 }

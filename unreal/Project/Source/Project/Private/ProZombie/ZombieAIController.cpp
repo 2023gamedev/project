@@ -21,32 +21,11 @@ const FName AZombieAIController::PatrolLocationKey(TEXT("PatrolLocation"));
 
 AZombieAIController::AZombieAIController()
 {
-	//static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT("/Game/BB_ZombieV.BB_ZombieV"));
-	//if (BBObject.Succeeded()) {
-	//	BlackBoardAsset = BBObject.Object;
-	//}
-	//
-	//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/BT_ZombieTree.BT_ZombieTree"));
-	//if (BTObject.Succeeded()) {
-	//	AIBehavior = BTObject.Object;
-	//}
-	//
-	//UE_LOG(LogNet, Display, TEXT("ZombieAIController On"));
-
 }
 
 void AZombieAIController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//
-	//if (AIBehavior != nullptr) {
-	//	RunBehaviorTree(AIBehavior);
-	//
-	//	AActor* OwningPawn = GetPawn();
-	//
-	//}
-	//
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
@@ -113,13 +92,30 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->GetSpeed());
 }
 
+//void AZombieAIController::ZombieTurn(float delasecond)
+//{
+//	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
+//
+//	FRotator zomCurRot = NormalZombie->GetActorRotation();
+//
+//	FVector zomDir = NormalZombie->GetActorLocation() - zDestination;
+//
+//	FVector zomNDir = zomDir.GetSafeNormal();
+//	FRotator zomTarRot = zomNDir.Rotation();
+//
+//	// 회전 계산
+//	float RotationSpeed = NormalZombie->GetTurningSpeed() * deltasecond;
+//
+//	FRotator NewRotation = FMath::RInterpTo(zomCurRot, zomTarRot, deltasecond, RotationSpeed);
+//
+//
+//	NormalZombie->SetActorRotation(NewRotation);
+//
+//}
+
 void AZombieAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//if (OwnerZombie != NULL) {
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("OwnerZombie ID #%d"), OwnerZombie->GetZombieId()));
-	//}
 
 	ZombieMoveTo(DeltaTime);
 
@@ -222,21 +218,6 @@ void AZombieAIController::Tick(float DeltaTime)
 		//	}
 		//}
 	}
-
-	// 블랙보드 업데이트
-	//if (NearestPawn)
-	//{
-	//	GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), TargetLocation);
-	//	//GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), NearestPawn->GetActorLocation());
-	//	GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), NearestPawn->GetActorLocation());
-	//	GetBlackboardComponent()->SetValueAsObject(TargetKey, NearestPawn);
-	//}
-	//else
-	//{
-	//	GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-	//	GetBlackboardComponent()->SetValueAsObject(TargetKey, nullptr);
-	//}
-	//}
 
 	//CheckAndSendMovement();
 
@@ -378,43 +359,3 @@ void AZombieAIController::UpdateLastKnownPositionByShoutingSound(FVector playerl
 	m_bShoutingSound = true;
 	m_vShoutingPos = playerlocation;
 }
-
-void AZombieAIController::StopAI()
-{
-	auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
-	if (nullptr != BehaviorTreeComponent)
-	{
-		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
-	}
-}
-
-void AZombieAIController::StartAI()
-{
-	//auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
-	//if (nullptr != BehaviorTreeComponent)
-	//{
-	//	BehaviorTreeComponent->StartTree(*this->AIBehavior, EBTExecutionMode::Looped);
-	//}
-}
-
-//void AZombieAIController::ZombieTurn(float delasecond)
-//{
-//	ANormalZombie* NormalZombie = Cast<ANormalZombie>(GetPawn());
-//
-//	FRotator zomCurRot = NormalZombie->GetActorRotation();
-//
-//	FVector zomDir = NormalZombie->GetActorLocation() - zDestination;
-//
-//	FVector zomNDir = zomDir.GetSafeNormal();
-//	FRotator zomTarRot = zomNDir.Rotation();
-//
-//	// 회전 계산
-//	float RotationSpeed = NormalZombie->GetTurningSpeed() * deltasecond;
-//
-//	FRotator NewRotation = FMath::RInterpTo(zomCurRot, zomTarRot, deltasecond, RotationSpeed);
-//
-//
-//	NormalZombie->SetActorRotation(NewRotation);
-//
-//}
-

@@ -171,6 +171,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 
 	// 좀비 관련 이지만 일단 좀비 관련 싱글턴 객체가 딱히 없어 - 여기에서 작업
+	// 좀비 관련 네트워크 데이터 각 좀비 객체에 할당
 
 	if (GameInstance->ClientSocketPtr->Q_path.empty()) {
 		return;
@@ -182,24 +183,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		ABaseZombie** zombie = ZombieMap.Find(tmp_path.ZombieId);
 
 		(*zombie)->NextPath = *tmp_path.Path.begin();
-
-		//UE_LOG(LogNet, Display, TEXT("Zombie #%d's NextPath: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, get<0>((*zombie)->NextPath), get<1>((*zombie)->NextPath), get<2>((*zombie)->NextPath));
-
-		auto target = tmp_path.Path.begin();
-
-		//UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, tmp_path.Location.X, tmp_path.Location.Y, tmp_path.Location.Z);
-
-		for (auto p : tmp_path.Path) {
-			//UE_LOG(LogNet, Display, TEXT("Zombie #%d's Target Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, get<0>(p), get<1>(p), get<2>(p));
-		}
-	
-		//FRotator tmp_ro = FRotator{ 0.f, 0.f, 0.f };
-		//if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-		//{
-		//	MyGameMode->UpdateZombie(tmp_path.ZombieId, 0, tmp_path.Location, tmp_ro);
-		//}
 	}
-
 
 }
 
