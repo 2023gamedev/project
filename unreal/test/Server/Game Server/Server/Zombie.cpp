@@ -392,7 +392,9 @@ void Zombie::SendPath()
 		Destination->set_y(get<1>(path[ZombiePathIndex]));
 		Destination->set_z(get<2>(path[ZombiePathIndex]));
 
-		cout << "z좌표 = " << get<2>(path[ZombiePathIndex]) << endl;
+		//cout << "x좌표 = " << get<0>(path[ZombiePathIndex]) << endl;
+		//cout << "y좌표 = " << get<1>(path[ZombiePathIndex]) << endl;
+		//cout << "z좌표 = " << get<2>(path[ZombiePathIndex]) << endl;
 
 		string serializedData;
 		zPath.SerializeToString(&serializedData);

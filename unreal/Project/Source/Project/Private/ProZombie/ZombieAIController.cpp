@@ -110,7 +110,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 	}
 
 	OwnerZombie->SetActorLocation(zomlocation);
-	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->Speed);
+	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->GetSpeed());
 }
 
 void AZombieAIController::Tick(float DeltaTime)

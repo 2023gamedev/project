@@ -65,22 +65,22 @@ void ABaseZombie::Tick(float DeltaTime)
 	//	CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
 	//}
 
-	if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
-		float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
-		Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("zombie speed: %f"), Speed));
-	}
-
-	// 애니메이션 인스턴스에 속도 파라미터 설정
-	if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
-	{
-		if (CachedAnimInstance) {
-			CachedAnimInstance->SetCurrentPawnSpeed(Speed);
-		}
-	}
-
-	PreviousSpeed = Speed;
-	OldLocation = NewLocation;
+	//if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
+	//	float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
+	//	Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
+	//	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("zombie speed: %f"), Speed));
+	//}
+	//
+	//// 애니메이션 인스턴스에 속도 파라미터 설정
+	//if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
+	//{
+	//	if (CachedAnimInstance) {
+	//		CachedAnimInstance->SetCurrentPawnSpeed(Speed);
+	//	}
+	//}
+	//
+	//PreviousSpeed = Speed;
+	//OldLocation = NewLocation;
 }
 
 void ABaseZombie::PostInitializeComponents()

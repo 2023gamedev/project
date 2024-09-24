@@ -246,8 +246,8 @@ public:
 
 	std::tuple<float, float, float> NextPath;
 
-	float Speed;
-	float PreviousSpeed;
+	//float Speed;
+	//float PreviousSpeed;
 
 	FVector TargetLocation;
 };

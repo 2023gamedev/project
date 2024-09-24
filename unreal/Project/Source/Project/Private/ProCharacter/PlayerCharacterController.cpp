@@ -183,12 +183,15 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 		(*zombie)->NextPath = *tmp_path.Path.begin();
 
-		UE_LOG(LogNet, Display, TEXT("Zombie #%d's NextPath: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, get<0>((*zombie)->NextPath), get<1>((*zombie)->NextPath), get<2>((*zombie)->NextPath));
+		//UE_LOG(LogNet, Display, TEXT("Zombie #%d's NextPath: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, get<0>((*zombie)->NextPath), get<1>((*zombie)->NextPath), get<2>((*zombie)->NextPath));
 
-		//auto target = tmp_path.Path.begin();
+		auto target = tmp_path.Path.begin();
 
 		//UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, tmp_path.Location.X, tmp_path.Location.Y, tmp_path.Location.Z);
-		//UE_LOG(LogNet, Display, TEXT("Zombie #%d's Target Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, get<0>(target[0]), get<1>(target[0]), get<2>(target[0]));
+
+		for (auto p : tmp_path.Path) {
+			//UE_LOG(LogNet, Display, TEXT("Zombie #%d's Target Location: ( %.2f, %.2f, %.2f )"), tmp_path.ZombieId, get<0>(p), get<1>(p), get<2>(p));
+		}
 	
 		//FRotator tmp_ro = FRotator{ 0.f, 0.f, 0.f };
 		//if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
