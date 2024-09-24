@@ -226,7 +226,7 @@ uint32 ClientSocket::Run()
 								FVector NewLocation(zombie.x(), zombie.y(), zombie.z());
 								FRotator NewRotation(zombie.pitch(), zombie.yaw(), zombie.roll());
 								Q_zombie.push(ZombieData(zombie.zombieid(), NewLocation, NewRotation, zombie.zombietype()));
-								UE_LOG(LogNet, Display, TEXT("ZombieData recv: %d, playerid = %d"), zombie.zombieid(), MyPlayerId);
+								UE_LOG(LogNet, Display, TEXT("ZombieSpawnData recv: %d, playerid = %d"), zombie.zombieid(), MyPlayerId);
 							}
 						}
 						break;
@@ -238,7 +238,7 @@ uint32 ClientSocket::Run()
 						{
 							ZombiePath localZombiePath;
 							
-							localZombiePath.ZombieId = zombiepath.zombieid() - 1;		// probuf 0번 인덱스 직렬화 불가를 보완하기위해서
+							localZombiePath.ZombieId = zombiepath.zombieid();
 							//UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), localZombiePath.ZombieId);
 
 							

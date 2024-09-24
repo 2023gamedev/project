@@ -372,7 +372,7 @@ void Zombie::SendPath()
 	else {
 		// path값 전송
 		Protocol::ZombiePath zPath;
-		zPath.set_zombieid(ZombieData.zombieID + 1);						// probuf 0번 인덱스 직렬화 불가를 보완하기위해서
+		zPath.set_zombieid(ZombieData.zombieID);
 		zPath.set_packet_type(10);
 
 		// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기

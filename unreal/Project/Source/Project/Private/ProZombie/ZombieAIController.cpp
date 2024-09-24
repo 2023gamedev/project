@@ -100,11 +100,8 @@ void AZombieAIController::ZombieTurn(float deltasecond)
 	FVector zomTarDir = zombieDest - OwnerZombie->GetActorLocation();
 
 	FVector zomTarNDir = zomTarDir.GetSafeNormal();
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("zomTarNDir: (%f, %f, %f)"), zomTarNDir.X, zomTarNDir.Y, zomTarNDir.Z));
 	FRotator zomTarRot = zomTarNDir.Rotation();
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("zomTarRot: (%f, %f, %f)"), zomTarRot.Roll, zomTarRot.Pitch, zomTarRot.Yaw));
 	FRotator zomCurRot = OwnerZombie->GetActorRotation();
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("zomCurRot: (%f, %f, %f)"), zomCurRot.Roll, zomCurRot.Pitch, zomCurRot.Yaw));
 	
 	// 회전 계산
 	float RotationSpeed = OwnerZombie->GetTurningSpeed() * deltasecond;
