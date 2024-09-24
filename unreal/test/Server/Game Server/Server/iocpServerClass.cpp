@@ -7,6 +7,8 @@
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
 
+#define BT_INTERVAL 0.1		// BT 작동 인터벌 설정
+
 
 IOCP_CORE::IOCP_CORE()
 {	
@@ -519,7 +521,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 		lastTime = currentTime;
 
 		std::chrono::duration<float> BTInterval = currentTime - lastBTTime;
-		if (BTInterval.count() < 1.0f) {	// BT 작동 인터벌 설정
+		if (BTInterval.count() < BT_INTERVAL) {	
 			continue;							
 		}
 

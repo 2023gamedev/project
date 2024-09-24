@@ -182,6 +182,10 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 		ABaseZombie** zombie = ZombieMap.Find(tmp_path.ZombieId);
 
+		// 좀비 위치 서버에서 받은 위치로 갱신
+		(*zombie)->SetActorLocation(tmp_path.Location);
+
+		// 좀비 목적지 설정
 		if(tmp_path.Path.empty() == false)
 			(*zombie)->NextPath = *(tmp_path.Path.begin());
 	}
