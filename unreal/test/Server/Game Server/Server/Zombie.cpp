@@ -101,22 +101,29 @@ bool Zombie::RandomPatrol()
 	py = ZombieData.y + dist(mt);
 	pz = ZombieData.z;
 
-	vector<tuple<float, float, float>> tmp;
+	while (px >= 2366.f) {		// 좀비가 계단 쪽, 그리고 그쪽 벽 넘어로 자주 넘어가는 오류가 있어 이를 일단 방지하기 위해 (맵 수정 전까지는)
+		px = ZombieData.x + dist(mt);
+
+		if (ZombieData.x >= 2366.f)
+			return false;
+	}
+
+	vector<tuple<float, float, float>> dest_test;
 	ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
-	pathfinderpatrol.Run(tmp, 1);
+	pathfinderpatrol.Run(dest_test, 1);
 
-	if (!tmp.empty()) {
-		tmp.pop_back();
+	if (!dest_test.empty()) {
+		dest_test.pop_back();
 
-		tuple<float, float, float> t_tmp;
-		t_tmp = tmp.back();
+		tuple<float, float, float> dest;
+		dest = dest_test.back();
 
-		TargetLocation[0][0][0] = get<0>(t_tmp);
-		TargetLocation[0][0][1] = get<1>(t_tmp);
+		TargetLocation[0][0][0] = get<0>(dest);
+		TargetLocation[0][0][1] = get<1>(dest);
 		TargetLocation[0][0][2] = pz;
 
 		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-		path = tmp;
+		path = dest_test;
 
 		RandPatrolSet = true;
 
