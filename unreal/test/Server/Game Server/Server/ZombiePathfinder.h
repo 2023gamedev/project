@@ -96,8 +96,7 @@ private:
     
     
     vector<Node> NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ,
-        const vector<tuple<float, float, float>>& validPositions,
-        const vector<tuple<float, float, float>>& obstacles);
+        const vector<tuple<float, float, float>>& validPositions);
 
     bool IsPathBlockedByObstacle(const Node& startNode, const Node& endNode);
 

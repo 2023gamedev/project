@@ -7,7 +7,7 @@ void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t, int patroltype
 {
     SetPatrolType(patroltype);
     DetermineFloor();
-    if (LoadPositions() /*LoadNewAStarPositions()*/) {
+    if (LoadPositions()/* LoadNewAStarPositions()*/) {
         //PrintPositions();
         if (LoadObstacles()) {
             //PrintObstacles();
@@ -181,7 +181,7 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
     }
 
     vector<Node> path = AStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
-    // vector<Node> path = NewAStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
+    //vector<Node> path = NewAStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions);
     if (!path.empty()) {
         t.clear();
         //cout << "Path found:\n";
@@ -262,7 +262,7 @@ tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goal
 
 //New AStar
 
-vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions, const vector<tuple<float, float, float>>& obstacles)
+vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions)
 {
     // 시작 지점과 목표 지점이 같으면 바로 반환
     if (startX == goalX && startY == goalY && startZ == goalZ) {
@@ -271,9 +271,9 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
 
     // 목표 지점과 가장 가까운 유효한 지점 찾기
 
-    //float SimilarStartX, SimilarStartY, SimilarStartZ;
-    //tie(SimilarStartX, SimilarStartY, SimilarStartZ) = FindClosestValidPosition(startX, startY, startZ, validPositions);
-    //SimilarStartZ = startZ;
+    float SimilarStartX, SimilarStartY, SimilarStartZ;
+    tie(SimilarStartX, SimilarStartY, SimilarStartZ) = FindClosestValidPosition(startX, startY, startZ, validPositions);
+    SimilarStartZ = startZ;
 
     float SimilargoalX, SimilargoalY, SimilargoalZ;
     tie(SimilargoalX, SimilargoalY, SimilargoalZ) = FindClosestValidPosition(goalX, goalY, goalZ, validPositions);
@@ -285,15 +285,24 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
     unordered_map<Node, double, Node::Hash> gScore;
 
     // 시작 노드 초기화
-    Node start(startX, startY, startZ, 0, Heuristic(startX, startY, goalX, goalY));
-    openSet.push(start);
+    Node Realstart(startX, startY, startZ, 0, Heuristic(startX, startY, SimilargoalX, SimilargoalY));
+    //openSet.push(Realstart);
 
-    //if (startX != SimilarStartX || startY != SimilarStartY) {
-    //    Node start2(SimilarStartX, SimilarStartY, SimilarStartZ, 0, Heuristic(SimilarStartX, SimilarStartY, goalX, goalY));
-    //    openSet.push(start2);
-    //}
 
-    gScore[start] = 0;
+    Node start(SimilarStartX, SimilarStartY, SimilarStartZ, 0, Heuristic(SimilarStartX, SimilarStartY, SimilargoalX, SimilargoalY));
+    if (startX != SimilarStartX || startY != SimilarStartY) {
+        
+        openSet.push(start);
+        gScore[start] = 0;
+
+    }
+    else
+    {
+        openSet.push(Realstart);
+        gScore[Realstart] = 0;
+    }
+
+    
 
     // A* 탐색 시작
     while (!openSet.empty()) {
@@ -307,7 +316,14 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
                 path.push_back(current);
                 current = cameFrom[current];
             }
-            path.push_back(start);
+            if (startX != SimilarStartX || startY != SimilarStartY) {
+                path.push_back(start);
+            }
+            else
+            {
+                path.push_back(Realstart);
+            }
+
             reverse(path.begin(), path.end());
 
             // 최종 목표 지점 확인 및 추가
