@@ -67,6 +67,8 @@ private:
 
     void DetermineFloor();
 
+    bool LoadNewAStarPositions();
+
     bool LoadPositions();
 
     bool LoadObstacles();
@@ -89,6 +91,11 @@ private:
     vector<Node> FindNeighbors(const Node& current);
 
     vector<Node> AStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ,
+        const vector<tuple<float, float, float>>& validPositions,
+        const vector<tuple<float, float, float>>& obstacles); 
+    
+    
+    vector<Node> NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ,
         const vector<tuple<float, float, float>>& validPositions,
         const vector<tuple<float, float, float>>& obstacles);
 
