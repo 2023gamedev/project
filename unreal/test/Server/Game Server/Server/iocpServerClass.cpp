@@ -355,7 +355,7 @@ void IOCP_CORE::Timer_Thread()
 					//	 // cout << "Zombie has reached the final destination." << endl;
 					//	continue; // 경로 끝에 도달
 					//}
-					zom.MoveTo(deltaTime.count());
+					//zom.MoveTo(deltaTime.count());
 				}
 			}
 
