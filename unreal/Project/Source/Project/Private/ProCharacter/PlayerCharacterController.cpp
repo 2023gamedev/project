@@ -185,9 +185,9 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		}
 
 		ABaseZombie** zombie = ZombieMap.Find(tmp_path.ZombieId);
-		
+
 		if (zombie == nullptr || *zombie == nullptr) {
-			break;
+			continue;  // 좀비를 찾을 수 없으면 다음으로 넘어감
 		}
 
 		// 좀비 위치 서버에서 받은 위치로 갱신
