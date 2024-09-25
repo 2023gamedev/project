@@ -180,7 +180,15 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		ZombiePath tmp_path;
 		GameInstance->ClientSocketPtr->Q_path.try_pop(tmp_path);
 
+		if (ZombieMap.IsEmpty() == true) {
+			break;
+		}
+
 		ABaseZombie** zombie = ZombieMap.Find(tmp_path.ZombieId);
+		
+		if (zombie == nullptr || *zombie == nullptr) {
+			break;
+		}
 
 		// 좀비 위치 서버에서 받은 위치로 갱신
 		if(tmp_path.Location.IsZero() == false)
