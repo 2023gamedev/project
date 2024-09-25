@@ -107,6 +107,8 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 	acceptThread.join();
 
 	timer_thread.join();
+
+	zombie_thread.join();
 }
 
 void IOCP_CORE::IOCP_WorkerThread() {
