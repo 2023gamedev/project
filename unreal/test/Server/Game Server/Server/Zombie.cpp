@@ -139,24 +139,28 @@ void Zombie::SetTargetLocation(TARGET t)
 	if (DistanceToPlayers.size() != 0) {
 
 		for (auto player : playerDB) {
-			if (max < DistanceToPlayers.at(player.first)) {
-				max = DistanceToPlayers.at(player.first);
-				//pl = vector<vector<vector<float>>>{ {{player.second.x,player.second.y, player.second.z}} };
+			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
+				if (max < DistanceToPlayers.at(player.first)) {
+					max = DistanceToPlayers.at(player.first);
+					//pl = vector<vector<vector<float>>>{ {{player.second.x,player.second.y, player.second.z}} };
+				}
 			}
 		}
-
+		
 		// 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
 		for (auto player : playerDB) {
-			if (max == DistanceToPlayers.at(player.first)) {
-				keys.emplace_back(player.first);
+			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
+				if (max == DistanceToPlayers.at(player.first)) {
+					keys.emplace_back(player.first);
+				}
 			}
 		}
-
+		
 		std::random_device rd;
 		std::mt19937 mt(rd());
-
+		
 		std::uniform_int_distribution<int> dist(0, keys.size() - 1);
-
+		
 		pl = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x,playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
 	}
 
@@ -220,6 +224,9 @@ void Zombie::MoveTo(float deltasecond)
 		ZombiePathIndex = 0;
 	}
 
+	if (ZombiePathIndex >= path.size()) {
+		return;
+	}
 
 	// 현재 목표 노드
 	tuple<float, float, float> TargetNode = path[ZombiePathIndex];

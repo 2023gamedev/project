@@ -45,6 +45,7 @@ using PLAYER_INFO = struct Client_INFO {
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 extern std::unordered_map<int, Player> playerDB;
 
+
 class IOCP_CORE
 {
 public:
@@ -134,6 +135,8 @@ public:
 	//[Attack-Task]
 	TAttack* t_attack;
 	
+	static float BT_INTERVAL;		// BT 작동 인터벌 설정
+
 	//==========================
 
 

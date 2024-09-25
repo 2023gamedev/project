@@ -3,9 +3,12 @@
 #include <iostream>
 
 #include "Task.h"
+#include "iocpServerClass.h"
 
 using std::cout;
 using std::endl;
+
+class IOCP_CORE;
 
 
 class TMoveTo : public Task {
@@ -15,6 +18,8 @@ public:
         //cout << "{CanNotAttack}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);
+
+        //zom.MoveTo(IOCP_CORE::BT_INTERVAL);
 
         zom.SendPath();
 
@@ -34,6 +39,8 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::SHOUTING);
 
+        //zom.MoveTo(IOCP_CORE::BT_INTERVAL);
+
         zom.SendPath();
 
         zom.Wait();
@@ -45,6 +52,8 @@ public:
         //cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);
+
+        //zom.MoveTo(IOCP_CORE::BT_INTERVAL);
 
         zom.SendPath();
 
@@ -58,6 +67,8 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
 
+        //zom.MoveTo(IOCP_CORE::BT_INTERVAL);
+
         zom.SendPath();
 
         zom.Wait();
@@ -69,6 +80,8 @@ public:
         //cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::PATROL);      //원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
+
+        //zom.MoveTo(IOCP_CORE::BT_INTERVAL);
 
         zom.SendPath();
 

@@ -7,7 +7,7 @@
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
 
-#define BT_INTERVAL 0.1		// BT 작동 인터벌 설정
+float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정
 
 
 IOCP_CORE::IOCP_CORE()
@@ -103,6 +103,8 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 		thread->join();
 		delete thread;
 	}
+
+	zombie_thread.join();
 
 	acceptThread.join();
 
