@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Common.h"
 #include "ZombieController.h"
 
@@ -16,12 +17,15 @@
 #include "NotHasLastKnownPlayerLocation.h"
 #include "CanNotAttack.h"
 #include "CanAttack.h"
-#include "MoveTo.h"
+//#include "MoveTo.h"
 #include "Attack.h"
 
 
 class ZombieController;
 class Zombie;
+
+class TMoveTo;	// 전방 선언 -> static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해 (순환 포함 문제를 피하기 위해)
+
 
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;

@@ -1,8 +1,8 @@
-#pragma once
-
 #include <iomanip>
 
 #include "iocpServerClass.h"
+
+#include "MoveTo.h"
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
@@ -109,8 +109,6 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 	acceptThread.join();
 
 	timer_thread.join();
-
-	zombie_thread.join();
 }
 
 void IOCP_CORE::IOCP_WorkerThread() {
