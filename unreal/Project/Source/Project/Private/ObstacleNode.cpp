@@ -99,7 +99,7 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
 
     for (const FVector& Node : Nodes)
     {
-        if (Node.X > 16.f && Node.X < 2366.f && Node.Y < 3960.f) {
+        if (Node.X > 16.f && Node.X < 2366.f && Node.Y > -1220.f && Node.Y < 3960.f) {
             TArray<FEdgeData> EdgeDatas;
             for (const FVector& Offset : NeighborOffsets)
             {
@@ -132,11 +132,11 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
         EdgeData += FString::Printf(TEXT("Node: %f, %f, %f\n"), Node.X, Node.Y, Node.Z);
         for (const FEdgeData& EdgeDataEntry : EdgeDatas)
         {
-            EdgeData += FString::Printf(TEXT("    Neighbor: %f, %f, %f, Weight: %f\n"),
+            EdgeData += FString::Printf(TEXT("Neighbor: %f, %f, %f\n"),
                 EdgeDataEntry.Location.X,
                 EdgeDataEntry.Location.Y,
-                EdgeDataEntry.Location.Z,
-                EdgeDataEntry.Weight);
+                EdgeDataEntry.Location.Z);
+            EdgeData += FString::Printf(TEXT("Weight: %f\n"), EdgeDataEntry.Weight);
         }
     }
 
