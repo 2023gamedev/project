@@ -81,6 +81,8 @@ private:
         vector<tuple<float, float, float>>& positions,
         unordered_map<tuple<float, float, float>,vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
 
+
+
     void PrintPositions();
 
     void PrintObstacles();
@@ -100,8 +102,14 @@ private:
 
     bool IsPathBlockedByObstacle(const Node& startNode, const Node& endNode);
 
+    float FloorZPos();
+
     double Heuristic(float x1, float y1, float x2, float y2) {
         return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+    }
+
+    double NewMaxeuristic(float x1, float y1, float x2, float y2, float maxWeight) {
+        return maxWeight * sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
     }
 
     bool IsInObstacleRange(float x, float y, float z);
