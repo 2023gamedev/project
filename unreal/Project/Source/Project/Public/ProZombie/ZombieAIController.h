@@ -38,7 +38,7 @@ public:
 
 	void Send_ZombieHP();
 
-	void CheckAndSendMovement();
+	void Send_PatrolHit();
 
 	void SetStartLocationValue(FVector startlocation);
 	void SetPatrolLocationValue(FVector patrollocation);

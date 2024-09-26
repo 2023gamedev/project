@@ -12,8 +12,8 @@
 	{
 		"MajorVersion": 5,
 		"MinorVersion": 3,
-		"PatchVersion": 2,
-		"Changelist": 29314046,
+		"PatchVersion": 1,
+		"Changelist": 28051148,
 		"CompatibleChangelist": 27405482,
 		"IsLicenseeVersion": 0,
 		"IsPromotedBuild": 0,
@@ -30,6 +30,29 @@
 			"Type": "SymbolFile"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidDeviceDetection.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidPlatformEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidRuntimeSettings.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidTargetPlatform.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+>>>>>>> a9d536c03f495692bef0934b4294a75ec4b62dc2
 			"Path": "$(EngineDir)/Binaries/Win64/OpenColorIO_2_2.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -286,6 +309,13 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CEF3Utils.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> a9d536c03f495692bef0934b4294a75ec4b62dc2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CSVtoSVG.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -659,6 +689,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HeadMountedDisplay.dll",
+<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -666,6 +697,15 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+=======
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HierarchicalLODOutliner.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> a9d536c03f495692bef0934b4294a75ec4b62dc2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HierarchicalLODUtilities.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -683,6 +723,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-IESFile.dll",
+<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -690,6 +731,15 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+=======
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-Icmp.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> a9d536c03f495692bef0934b4294a75ec4b62dc2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-ImageCore.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1419,6 +1469,12 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-SubobjectEditor.dll",
+<<<<<<< HEAD
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-SwarmInterface.dll",
+=======
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -1430,6 +1486,36 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TargetDeviceServices.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TargetPlatform.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TelemetryUtils.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureBuild.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureBuildUtilities.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureCompressor.dll",
+>>>>>>> a9d536c03f495692bef0934b4294a75ec4b62dc2
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-SynthBenchmark.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+<<<<<<< HEAD
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TargetDeviceServices.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1466,6 +1552,24 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormat.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatASTC.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatETC2.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> a9d536c03f495692bef0934b4294a75ec4b62dc2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatIntelISPCTexComp.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1622,6 +1726,13 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WebBrowser.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> a9d536c03f495692bef0934b4294a75ec4b62dc2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WidgetCarousel.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1807,6 +1918,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Animation/IKRig/Binaries/Win64/UnrealEditor-IKRigDeveloper.dll",
+<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -1815,6 +1927,36 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Animation/IKRig/Binaries/Win64/UnrealEditor.modules",
+=======
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Animation/IKRig/Binaries/Win64/UnrealEditor-IKRigEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Animation/IKRig/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-Bridge.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-Bridge.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-MegascansPlugin.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-MegascansPlugin.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor.modules",
+>>>>>>> a9d536c03f495692bef0934b4294a75ec4b62dc2
 			"Type": "RequiredResource"
 		},
 		{
@@ -21300,6 +21442,10 @@
 			"Type": "DebugNonUFS"
 		},
 		{
+			"Path": "$(EngineDir)/Binaries/Win64/EpicWebHelper.exe",
+			"Type": "NonUFS"
+		},
+		{
 			"Path": "$(EngineDir)/Binaries/Win64/OpenColorIO_2_2.dll",
 			"Type": "NonUFS"
 		},
@@ -24117,6 +24263,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Animation/IKRig/IKRig.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Bridge.uplugin",
 			"Type": "UFS"
 		},
 		{

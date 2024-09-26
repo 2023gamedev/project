@@ -224,7 +224,23 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Packet.ParseFromArray(buffer, bufferSize);
         cout << "recv zombie" << Packet.zombieid() << "HP Packet" << endl;
 
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }
+
         return true;
+    }
+
+    case 14:
+    {
+        Protocol::PatrolPath Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+        cout << "recv patrol zombie hit" << Packet.zombieid() << endl;
     }
 
     default: {
