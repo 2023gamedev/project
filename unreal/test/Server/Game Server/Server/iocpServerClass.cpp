@@ -2,10 +2,24 @@
 
 #include "iocpServerClass.h"
 
+#include "ZombiePathfinder.h"
+
 #include "MoveTo.h"
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
+
+
+std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB2;
+std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB1;
+std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapF1;
+std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapF2;
+
+std::vector<tuple<float, float, float>> g_valispositionsB2;
+std::vector<tuple<float, float, float>> g_valispositionsB1;
+std::vector<tuple<float, float, float>> g_valispositionsF1;
+std::vector<tuple<float, float, float>> g_valispositionsF2;
+
 
 float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정
 
@@ -17,6 +31,24 @@ IOCP_CORE::IOCP_CORE()
 	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 
 	bServerOn = false;
+
+	string filePath;
+
+	filePath = "../../../../Project/EdgesB2.txt";
+	LoadEdgesMap(filePath, g_valispositionsB2, g_EdgesMapB2);
+
+	filePath = "../../../../Project/EdgesB1.txt";
+	LoadEdgesMap(filePath, g_valispositionsB1, g_EdgesMapB1);
+
+	filePath = "../../../../Project/EdgesF1.txt";
+	LoadEdgesMap(filePath, g_valispositionsF1, g_EdgesMapF1);
+
+	filePath = "../../../../Project/EdgesF2.txt";
+	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
+	
+	
+
+
 	//==========Zombie_BT 초기화
 	Zombie_BT_Initialize();
 	//==========Zombie_BT 쓰레드 시작 (Zombie BT 실행 시작)
@@ -668,6 +700,67 @@ void IOCP_CORE::Zombie_BT_Thread()
 	delete(t_attack);
 	delete(t_hasinvestigated);
 	delete(t_nothaslastknownplayerlocation);
+}
+#include <fstream>
+#include <sstream>
+#include <string>
+bool IOCP_CORE::LoadEdgesMap(const string& filePath, vector<tuple<float, float, float>>& positions, unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap)
+{
+	 ifstream file(filePath);
+    if (!file.is_open()) {
+        cerr << "Cannot open file: " << filePath << endl;
+        return false;
+    }
+
+    string line;
+    tuple<float, float, float> currentNode;
+    tuple<float, float, float> neighborNode;
+    while (getline(file, line)) {
+        stringstream ss(line);
+
+        // "Node:" 줄 처리
+        if (line.find("Node:") != string::npos) {
+            // Node 정보 파싱
+            float x, y, z;
+            char comma;
+            ss.ignore(5); // "Node: " 무시
+            if (ss >> x >> comma >> y >> comma >> z) {
+                currentNode = make_tuple(x, y, z);
+                EdgesMap[currentNode] = {};  // 새로운 노드 추가
+
+                // validPositions에 currentNode 추가
+                positions.push_back(currentNode);
+            }
+        }
+        // "Neighbor:" 줄 처리
+        else if (line.find("Neighbor:") != string::npos) {
+            // Neighbor 정보 파싱
+            float nx, ny, nz;
+            char comma;
+            ss.ignore(9); // "Neighbor: " 무시
+
+            // x, y, z 좌표 파싱
+            if (ss >> nx >> comma >> ny >> comma >> nz) {
+                neighborNode = make_tuple(nx, ny, nz);
+            }
+
+            // 다음 줄에서 "Weight:" 정보를 가져오기
+            if (getline(file, line)) {
+                stringstream weightStream(line);
+                string temp;
+                float weight;
+
+                // "Weight: " 무시하고 가중치 값 추출
+                if (weightStream >> temp >> weight && temp == "Weight:") {
+                    // 이웃 노드와 가중치 추가
+                    EdgesMap[currentNode].emplace_back(neighborNode, weight);
+                }
+            }
+        }
+    }
+
+    file.close();
+    return true;
 }
 
 void IOCP_CORE::SendPingToClients()

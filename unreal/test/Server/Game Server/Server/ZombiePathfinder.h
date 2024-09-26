@@ -5,7 +5,11 @@
 #include <sstream>
 #include <string>
 
+//#include "iocpServerClass.h"
 #include "Node.h"
+
+
+
 
 using namespace std;
 
@@ -18,20 +22,6 @@ enum class FLOOR {
     FLOOR_F3
 };
 
-struct TupleHash {
-    size_t operator()(const tuple<float, float, float>& t) const {
-        size_t h1 = hash<float>{}(get<0>(t));
-        size_t h2 = hash<float>{}(get<1>(t));
-        size_t h3 = hash<float>{}(get<2>(t));
-        return h1 ^ (h2 << 1) ^ (h3 << 2);
-    }
-};
-
-struct TupleEqual {
-    bool operator()(const tuple<float, float, float>& t1, const tuple<float, float, float>& t2) const {
-        return t1 == t2;
-    }
-};
 
 class ZombiePathfinder {
 public:
@@ -44,7 +34,7 @@ public:
 
     void UpdatePathFinder(float startX, float startY, float startZ, float goalX, float goalY, float goalZ);
     float OBSTACLE_RADIUS = 25.f;
-    unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> EdgesMap;
+    //unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> EdgesMap;
 
 private:
     float startX, startY, startZ;
@@ -57,9 +47,9 @@ private:
 
     FLOOR floor;
     vector<tuple<float, float, float>> validPositions;
-    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
+    //unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> positionSet;
     vector<tuple<float, float, float>> obstacles;
-    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
+    //unordered_set<tuple<float, float, float>, TupleHash, TupleEqual> obstacleSet;
     const float OBSTACLE_CHECK_INTERVAL = 25.0f;
 
     void SetObstacleRadius(float radious) { OBSTACLE_RADIUS = radious; }
@@ -67,23 +57,23 @@ private:
 
     void DetermineFloor();
 
-    bool LoadNewAStarPositions();
+    //bool LoadNewAStarPositions();
 
-    bool LoadPositions();
+    //bool LoadPositions();
 
-    bool LoadObstacles();
+    //bool LoadObstacles();
 
-    bool LoadFile(const string& filePath, vector<tuple<float, float, float>>& positions,
-        unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& positionSet);
+    //bool LoadFile(const string& filePath, vector<tuple<float, float, float>>& positions,
+    //    unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& positionSet);
 
-    //NewAstar
-    bool LoadEdgesMap(const string& filePath, 
-        vector<tuple<float, float, float>>& positions,
-        unordered_map<tuple<float, float, float>,vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
+    ////NewAstar
+    //bool LoadEdgesMap(const string& filePath, 
+    //    vector<tuple<float, float, float>>& positions,
+    //    unordered_map<tuple<float, float, float>,vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
 
 
 
-    void PrintPositions();
+    //void PrintPositions();
 
     void PrintObstacles();
 
@@ -97,8 +87,7 @@ private:
         const vector<tuple<float, float, float>>& obstacles); 
     
     
-    vector<Node> NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ,
-        const vector<tuple<float, float, float>>& validPositions);
+    vector<Node> NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ);
 
     bool IsPathBlockedByObstacle(const Node& startNode, const Node& endNode);
 
@@ -115,7 +104,7 @@ private:
     bool IsInObstacleRange(float x, float y, float z);
 
     double EuclideanDistance(float x1, float y1, float x2, float y2);
-    tuple<float, float, float> FindClosestValidPosition(float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions);
+    tuple<float, float, float> FindClosestValidPosition(float goalX, float goalY, float goalZ);
 };
 
 
