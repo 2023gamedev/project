@@ -4,7 +4,6 @@
 
 #include "ZombieController.h"
 
-
 // BT
 
 #include "Task.h"
@@ -24,6 +23,7 @@
 
 class ZombieController;
 class Zombie;
+class ZombiePathFinder;
 
 class TMoveTo;	// 전방 선언 -> static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해 (순환 포함 문제를 피하기 위해)
 
@@ -50,6 +50,33 @@ using PLAYER_INFO = struct Client_INFO {
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 extern std::unordered_map<int, Player> playerDB;
 
+struct TupleHash {
+	size_t operator()(const tuple<float, float, float>& t) const {
+		size_t h1 = hash<float>{}(get<0>(t));
+		size_t h2 = hash<float>{}(get<1>(t));
+		size_t h3 = hash<float>{}(get<2>(t));
+		return h1 ^ (h2 << 1) ^ (h3 << 2);
+	}
+};
+
+struct TupleEqual {
+	bool operator()(const tuple<float, float, float>& t1, const tuple<float, float, float>& t2) const {
+		return t1 == t2;
+	}
+};
+
+
+extern std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB2;
+extern std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB1;
+extern std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapF1;
+extern std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapF2;
+
+extern std::vector<tuple<float, float, float>> g_valispositionsB2;
+extern std::vector<tuple<float, float, float>> g_valispositionsB1;
+extern std::vector<tuple<float, float, float>> g_valispositionsF1;
+extern std::vector<tuple<float, float, float>> g_valispositionsF2;
+
+
 
 class IOCP_CORE
 {
@@ -75,6 +102,10 @@ public:
 
 	void Timer_Thread();
 	void Zombie_BT_Thread();
+
+	bool LoadEdgesMap(const string& filePath,
+		vector<tuple<float, float, float>>& positions,
+		unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
 
 	void SendPingToClients();
 

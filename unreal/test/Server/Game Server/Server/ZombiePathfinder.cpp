@@ -2,21 +2,26 @@
 
 #include "ZombiePathfinder.h"
 
+#include "iocpServerClass.h"
 
 void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t, int patroltype)
 {
     SetPatrolType(patroltype);
     DetermineFloor();
-    if (/*LoadPositions()*/ LoadNewAStarPositions()) {
-        //PrintPositions();
-        if (LoadObstacles()) {
-            //PrintObstacles();
-            FindPath(t);
-        }
-        else {
-            cerr << "Failed to load obstacles." << endl;
-        }
-    }
+
+    //if (/*LoadPositions()*/ LoadNewAStarPositions()) {
+    //    //PrintPositions();
+    //    if (LoadObstacles()) {
+    //        //PrintObstacles();
+    //        FindPath(t);
+    //    }
+    //    else {
+    //        cerr << "Failed to load obstacles." << endl;
+    //    }
+    //}
+
+    FindPath(t);
+
 }
 
 void ZombiePathfinder::DetermineFloor()
@@ -37,151 +42,151 @@ void ZombiePathfinder::DetermineFloor()
         floor = FLOOR::FLOOR_F3;
     }
 }
-
-//NewAstar
-bool ZombiePathfinder::LoadNewAStarPositions()
-{
-    string filePath;
-
-    // 층별로 파일 경로 설정
-    switch (floor) {
-    case FLOOR::FLOOR_B2: filePath = "../../../../Project/EdgesB2.txt"; break;
-    case FLOOR::FLOOR_B1: filePath = "../../../../Project/EdgesB1.txt"; break;
-    case FLOOR::FLOOR_F1: filePath = "../../../../Project/EdgesF1.txt"; break;
-    case FLOOR::FLOOR_F2: filePath = "../../../../Project/EdgesF2.txt"; break;
-    case FLOOR::FLOOR_F3: filePath = "../../../../Project/EdgesF3.txt"; break;
-    default:
-        cout << "FILE ERROR!!!!" << endl;
-        return false;
-    }
-
-    // EdgesMap을 불러오는 로직으로 수정
-    return LoadEdgesMap(filePath, validPositions,EdgesMap);
-}
-
-bool ZombiePathfinder::LoadPositions()
-{
-    string filePath;
-    switch (floor) {
-    case FLOOR::FLOOR_B2: filePath = "../../../../Project/B2.txt"; break;
-    case FLOOR::FLOOR_B1: filePath = "../../../../Project/B1.txt"; break;
-    case FLOOR::FLOOR_F1: filePath = "../../../../Project/F1.txt"; break;
-    case FLOOR::FLOOR_F2: filePath = "../../../../Project/F2.txt"; break;
-    case FLOOR::FLOOR_F3: filePath = "../../../../Project/F3.txt"; break;
-    default: cout << "FILE ERROR!!!!" << endl; return false;
-    }
-    return LoadFile(filePath, validPositions, positionSet);
-}
-
-bool ZombiePathfinder::LoadObstacles()
-{
-    string filePathOb;
-    switch (floor) {
-    case FLOOR::FLOOR_B2: filePathOb = "../../../../Project/OB2.txt"; break;
-    case FLOOR::FLOOR_B1: filePathOb = "../../../../Project/OB1.txt"; break;
-    case FLOOR::FLOOR_F1: filePathOb = "../../../../Project/OF1.txt"; break;
-    case FLOOR::FLOOR_F2: filePathOb = "../../../../Project/OF2.txt"; break;
-    case FLOOR::FLOOR_F3: filePathOb = "../../../../Project/OF3.txt"; break;
-    default: cout << "FILE ERROR!!!!" << endl; return false;
-    }
-    return LoadFile(filePathOb, obstacles, obstacleSet);
-}
-
-bool ZombiePathfinder::LoadFile(const string& filePath, vector<tuple<float, float, float>>& positions, unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& positionSet)
-{
-    ifstream file(filePath);
-    if (!file.is_open()) {
-        cerr << "Cannot open file: " << filePath << endl;
-        return false;
-    }
-
-    string line;
-    while (getline(file, line)) {
-        stringstream ss(line);
-        float x, y, z;
-        char comma;
-        if (ss >> x >> comma >> y >> comma >> z) {
-            tuple<float, float, float> position = make_tuple(x, y, z);
-            if (positionSet.find(position) == positionSet.end()) {
-                positionSet.emplace(position);
-                positions.emplace_back(position);
-            }
-        }
-        else {
-            cerr << "Invalid position: " << line << endl;
-        }
-    }
-    file.close();
-    return true;
-}
-
-void ZombiePathfinder::PrintPositions()
-{
-    cout << "Valid Positions:" << endl;
-    for (const auto& pos : validPositions) {
-        cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
-    }
-}
-
-bool ZombiePathfinder::LoadEdgesMap(const string& filePath, vector<tuple<float, float, float>>& positions, unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap)
-{
-    ifstream file(filePath);
-    if (!file.is_open()) {
-        cerr << "Cannot open file: " << filePath << endl;
-        return false;
-    }
-
-    string line;
-    tuple<float, float, float> currentNode;
-    tuple<float, float, float> neighborNode;
-    while (getline(file, line)) {
-        stringstream ss(line);
-
-        // "Node:" 줄 처리
-        if (line.find("Node:") != string::npos) {
-            // Node 정보 파싱
-            float x, y, z;
-            char comma;
-            ss.ignore(5); // "Node: " 무시
-            if (ss >> x >> comma >> y >> comma >> z) {
-                currentNode = make_tuple(x, y, z);
-                EdgesMap[currentNode] = {};  // 새로운 노드 추가
-
-                // validPositions에 currentNode 추가
-                positions.push_back(currentNode);
-            }
-        }
-        // "Neighbor:" 줄 처리
-        else if (line.find("Neighbor:") != string::npos) {
-            // Neighbor 정보 파싱
-            float nx, ny, nz;
-            char comma;
-            ss.ignore(9); // "Neighbor: " 무시
-
-            // x, y, z 좌표 파싱
-            if (ss >> nx >> comma >> ny >> comma >> nz) {
-                neighborNode = make_tuple(nx, ny, nz);
-            }
-
-            // 다음 줄에서 "Weight:" 정보를 가져오기
-            if (getline(file, line)) {
-                stringstream weightStream(line);
-                string temp;
-                float weight;
-
-                // "Weight: " 무시하고 가중치 값 추출
-                if (weightStream >> temp >> weight && temp == "Weight:") {
-                    // 이웃 노드와 가중치 추가
-                    EdgesMap[currentNode].emplace_back(neighborNode, weight);
-                }
-            }
-        }
-    }
-
-    file.close();
-    return true;
-}
-
+//
+////NewAstar
+//bool ZombiePathfinder::LoadNewAStarPositions()
+//{
+//    string filePath;
+//
+//    // 층별로 파일 경로 설정
+//    switch (floor) {
+//    case FLOOR::FLOOR_B2: filePath = "../../../../Project/EdgesB2.txt"; break;
+//    case FLOOR::FLOOR_B1: filePath = "../../../../Project/EdgesB1.txt"; break;
+//    case FLOOR::FLOOR_F1: filePath = "../../../../Project/EdgesF1.txt"; break;
+//    case FLOOR::FLOOR_F2: filePath = "../../../../Project/EdgesF2.txt"; break;
+//    case FLOOR::FLOOR_F3: filePath = "../../../../Project/EdgesF3.txt"; break;
+//    default:
+//        cout << "FILE ERROR!!!!" << endl;
+//        return false;
+//    }
+//
+//    // EdgesMap을 불러오는 로직으로 수정
+//    return LoadEdgesMap(filePath, validPositions,EdgesMap);
+//}
+//
+//bool ZombiePathfinder::LoadPositions()
+//{
+//    string filePath;
+//    switch (floor) {
+//    case FLOOR::FLOOR_B2: filePath = "../../../../Project/B2.txt"; break;
+//    case FLOOR::FLOOR_B1: filePath = "../../../../Project/B1.txt"; break;
+//    case FLOOR::FLOOR_F1: filePath = "../../../../Project/F1.txt"; break;
+//    case FLOOR::FLOOR_F2: filePath = "../../../../Project/F2.txt"; break;
+//    case FLOOR::FLOOR_F3: filePath = "../../../../Project/F3.txt"; break;
+//    default: cout << "FILE ERROR!!!!" << endl; return false;
+//    }
+//    return LoadFile(filePath, validPositions, positionSet);
+//}
+//
+//bool ZombiePathfinder::LoadObstacles()
+//{
+//    string filePathOb;
+//    switch (floor) {
+//    case FLOOR::FLOOR_B2: filePathOb = "../../../../Project/OB2.txt"; break;
+//    case FLOOR::FLOOR_B1: filePathOb = "../../../../Project/OB1.txt"; break;
+//    case FLOOR::FLOOR_F1: filePathOb = "../../../../Project/OF1.txt"; break;
+//    case FLOOR::FLOOR_F2: filePathOb = "../../../../Project/OF2.txt"; break;
+//    case FLOOR::FLOOR_F3: filePathOb = "../../../../Project/OF3.txt"; break;
+//    default: cout << "FILE ERROR!!!!" << endl; return false;
+//    }
+//    return LoadFile(filePathOb, obstacles, obstacleSet);
+//}
+//
+//bool ZombiePathfinder::LoadFile(const string& filePath, vector<tuple<float, float, float>>& positions, unordered_set<tuple<float, float, float>, TupleHash, TupleEqual>& positionSet)
+//{
+//    ifstream file(filePath);
+//    if (!file.is_open()) {
+//        cerr << "Cannot open file: " << filePath << endl;
+//        return false;
+//    }
+//
+//    string line;
+//    while (getline(file, line)) {
+//        stringstream ss(line);
+//        float x, y, z;
+//        char comma;
+//        if (ss >> x >> comma >> y >> comma >> z) {
+//            tuple<float, float, float> position = make_tuple(x, y, z);
+//            if (positionSet.find(position) == positionSet.end()) {
+//                positionSet.emplace(position);
+//                positions.emplace_back(position);
+//            }
+//        }
+//        else {
+//            cerr << "Invalid position: " << line << endl;
+//        }
+//    }
+//    file.close();
+//    return true;
+//}
+//
+//void ZombiePathfinder::PrintPositions()
+//{
+//    cout << "Valid Positions:" << endl;
+//    for (const auto& pos : validPositions) {
+//        cout << get<0>(pos) << ", " << get<1>(pos) << ", " << get<2>(pos) << endl;
+//    }
+//}
+//
+//bool ZombiePathfinder::LoadEdgesMap(const string& filePath, vector<tuple<float, float, float>>& positions, unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap)
+//{
+//    ifstream file(filePath);
+//    if (!file.is_open()) {
+//        cerr << "Cannot open file: " << filePath << endl;
+//        return false;
+//    }
+//
+//    string line;
+//    tuple<float, float, float> currentNode;
+//    tuple<float, float, float> neighborNode;
+//    while (getline(file, line)) {
+//        stringstream ss(line);
+//
+//        // "Node:" 줄 처리
+//        if (line.find("Node:") != string::npos) {
+//            // Node 정보 파싱
+//            float x, y, z;
+//            char comma;
+//            ss.ignore(5); // "Node: " 무시
+//            if (ss >> x >> comma >> y >> comma >> z) {
+//                currentNode = make_tuple(x, y, z);
+//                EdgesMap[currentNode] = {};  // 새로운 노드 추가
+//
+//                // validPositions에 currentNode 추가
+//                positions.push_back(currentNode);
+//            }
+//        }
+//        // "Neighbor:" 줄 처리
+//        else if (line.find("Neighbor:") != string::npos) {
+//            // Neighbor 정보 파싱
+//            float nx, ny, nz;
+//            char comma;
+//            ss.ignore(9); // "Neighbor: " 무시
+//
+//            // x, y, z 좌표 파싱
+//            if (ss >> nx >> comma >> ny >> comma >> nz) {
+//                neighborNode = make_tuple(nx, ny, nz);
+//            }
+//
+//            // 다음 줄에서 "Weight:" 정보를 가져오기
+//            if (getline(file, line)) {
+//                stringstream weightStream(line);
+//                string temp;
+//                float weight;
+//
+//                // "Weight: " 무시하고 가중치 값 추출
+//                if (weightStream >> temp >> weight && temp == "Weight:") {
+//                    // 이웃 노드와 가중치 추가
+//                    EdgesMap[currentNode].emplace_back(neighborNode, weight);
+//                }
+//            }
+//        }
+//    }
+//
+//    file.close();
+//    return true;
+//}
+//
 
 void ZombiePathfinder::PrintObstacles()
 {
@@ -199,7 +204,7 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
     }
 
     //vector<Node> path = AStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions, obstacles);
-    vector<Node> path = NewAStar(startX, startY, startZ, goalX, goalY, goalZ, validPositions);
+    vector<Node> path = NewAStar(startX, startY, startZ, goalX, goalY, goalZ);
     if (!path.empty()) {
         t.clear();
         //cout << "Path found:\n";
@@ -258,22 +263,76 @@ void ZombiePathfinder::UpdatePathFinder(float startx, float starty, float startz
 }
 
 // 함수: 주어진 좌표들 내에서 목표 좌표와 가장 가까운 좌표 찾기
-tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions) {
-    tuple<float, float, float> closestPosition = validPositions[0];
-    double minDistance = EuclideanDistance(goalX, goalY, get<0>(closestPosition), get<1>(closestPosition));
+tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goalX, float goalY, float goalZ) {
 
-    for (const auto& position : validPositions) {
-        double distance = EuclideanDistance(goalX, goalY, get<0>(position), get<1>(position));
+    tuple<float, float, float> closestPosition;
+    int ifloor = 0;
+    double minDistance;
+    if (floor == FLOOR::FLOOR_B2) {
+        closestPosition = g_valispositionsB2[0];
+        minDistance = EuclideanDistance(goalX, goalY, get<0>(closestPosition), get<1>(closestPosition));
+        for (const auto& position : g_valispositionsB2) {
+            double distance = EuclideanDistance(goalX, goalY, get<0>(position), get<1>(position));
 
-        if (distance == 0) {
-            return position;
-        }
+            if (distance == 0) {
+                return position;
+            }
 
-        if (distance < minDistance) {
-            closestPosition = position;
-            minDistance = distance;
+            if (distance < minDistance) {
+                closestPosition = position;
+                minDistance = distance;
+            }
         }
     }
+    else if (floor == FLOOR::FLOOR_B1) {
+        closestPosition = g_valispositionsB1[0];
+        minDistance = EuclideanDistance(goalX, goalY, get<0>(closestPosition), get<1>(closestPosition));
+        for (const auto& position : g_valispositionsB1) {
+            double distance = EuclideanDistance(goalX, goalY, get<0>(position), get<1>(position));
+
+            if (distance == 0) {
+                return position;
+            }
+
+            if (distance < minDistance) {
+                closestPosition = position;
+                minDistance = distance;
+            }
+        }
+    }
+    else if (floor == FLOOR::FLOOR_F1) {
+        closestPosition = g_valispositionsF1[0];
+        minDistance = EuclideanDistance(goalX, goalY, get<0>(closestPosition), get<1>(closestPosition));
+        for (const auto& position : g_valispositionsF1) {
+            double distance = EuclideanDistance(goalX, goalY, get<0>(position), get<1>(position));
+
+            if (distance == 0) {
+                return position;
+            }
+
+            if (distance < minDistance) {
+                closestPosition = position;
+                minDistance = distance;
+            }
+        }
+    }
+    else if (floor == FLOOR::FLOOR_F2) {
+        closestPosition = g_valispositionsF2[0];
+        minDistance = EuclideanDistance(goalX, goalY, get<0>(closestPosition), get<1>(closestPosition));
+        for (const auto& position : g_valispositionsF2) {
+            double distance = EuclideanDistance(goalX, goalY, get<0>(position), get<1>(position));
+
+            if (distance == 0) {
+                return position;
+            }
+
+            if (distance < minDistance) {
+                closestPosition = position;
+                minDistance = distance;
+            }
+        }
+    }
+
     return closestPosition;
 }
 
@@ -295,7 +354,7 @@ float ZombiePathfinder::FloorZPos()
 
 //New AStar
 
-vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ, const vector<tuple<float, float, float>>& validPositions)
+vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ)
 {
     // 시작 지점과 목표 지점이 같으면 바로 반환
     if (startX == goalX && startY == goalY && startZ == goalZ) {
@@ -305,11 +364,11 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
     // 목표 지점과 가장 가까운 유효한 지점 찾기
 
     float SimilarStartX, SimilarStartY, SimilarStartZ;
-    tie(SimilarStartX, SimilarStartY, SimilarStartZ) = FindClosestValidPosition(startX, startY, startZ, validPositions);
+    tie(SimilarStartX, SimilarStartY, SimilarStartZ) = FindClosestValidPosition(startX, startY, startZ);
     SimilarStartZ = startZ;
 
     float SimilargoalX, SimilargoalY, SimilargoalZ;
-    tie(SimilargoalX, SimilargoalY, SimilargoalZ) = FindClosestValidPosition(goalX, goalY, goalZ, validPositions);
+    tie(SimilargoalX, SimilargoalY, SimilargoalZ) = FindClosestValidPosition(goalX, goalY, goalZ);
     SimilargoalZ = goalZ;
 
     // A* 알고리즘을 위한 데이터 구조
@@ -318,13 +377,8 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
     unordered_map<Node, double, Node::Hash> gScore;
 
     // 시작 노드 초기화
-    //Node Realstart(startX, startY, startZ, 0, Heuristic(startX, startY, SimilargoalX, SimilargoalY));
     Node Realstart(startX, startY, startZ, 0, NewMaxeuristic(startX, startY, SimilargoalX, SimilargoalY, sqrt(2)));
-    //openSet.push(Realstart);
 
-
-
-    //Node start(SimilarStartX, SimilarStartY, SimilarStartZ, 0, Heuristic(SimilarStartX, SimilarStartY, SimilargoalX, SimilargoalY));
     Node start(SimilarStartX, SimilarStartY, SimilarStartZ, 0, NewMaxeuristic(SimilarStartX, SimilarStartY, SimilargoalX, SimilargoalY, sqrt(2)));
     if (startX != SimilarStartX || startY != SimilarStartY) {
         
@@ -381,54 +435,116 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
 
         tuple<float, float, float> currentPos = make_tuple(current.x, current.y, FloorZPos());
 
-        // EdgesMap이 현재 노드의 이웃을 가지고 있는지 확인
-        if (EdgesMap.find(currentPos) != EdgesMap.end()) {
-            const vector<pair<tuple<float, float, float>, float>>& neighbors = EdgesMap[currentPos];
+        if (floor == FLOOR::FLOOR_B2) {
+            // EdgesMap이 현재 노드의 이웃을 가지고 있는지 확인
+            if (g_EdgesMapB2.find(currentPos) != g_EdgesMapB2.end()) {
+                const vector<pair<tuple<float, float, float>, float>>& neighbors = g_EdgesMapB2[currentPos];
 
-            // 이웃 노드들에 대해 반복
-            for (const auto& neighborData : neighbors) {
-                tuple<float, float, float> neighborPos = neighborData.first;
-                float edgeWeight = neighborData.second;  // Edge 가중치
+                // 이웃 노드들에 대해 반복
+                for (const auto& neighborData : neighbors) {
+                    tuple<float, float, float> neighborPos = neighborData.first;
+                    float edgeWeight = neighborData.second;  // Edge 가중치
 
-                Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
+                    Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
 
 
-                // gScore 계산 (엣지의 가중치를 사용)
-                double tentativeGScore = gScore[current] + edgeWeight;
+                    // gScore 계산 (엣지의 가중치를 사용)
+                    double tentativeGScore = gScore[current] + edgeWeight;
 
-                // 더 나은 경로를 발견하면 업데이트
-                if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
-                    cameFrom[neighbor] = current;
-                    gScore[neighbor] = tentativeGScore;
-                    //double hCost = Heuristic(neighbor.x, neighbor.y, goalX, goalY);
-                    double hCost = NewMaxeuristic(neighbor.x, neighbor.y, goalX, goalY, sqrt(2));
-                    openSet.push(Node(neighbor.x, neighbor.y, neighbor.z, tentativeGScore, hCost));
+                    // 더 나은 경로를 발견하면 업데이트
+                    if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeGScore;
+                        //double hCost = Heuristic(neighbor.x, neighbor.y, goalX, goalY);
+                        double hCost = NewMaxeuristic(neighbor.x, neighbor.y, goalX, goalY, sqrt(2));
+                        openSet.push(Node(neighbor.x, neighbor.y, neighbor.z, tentativeGScore, hCost));
+                    }
+                }
+            }
+        }
+        else if (floor == FLOOR::FLOOR_B1) {
+            // EdgesMap이 현재 노드의 이웃을 가지고 있는지 확인
+            if (g_EdgesMapB1.find(currentPos) != g_EdgesMapB1.end()) {
+                const vector<pair<tuple<float, float, float>, float>>& neighbors = g_EdgesMapB1[currentPos];
+
+                // 이웃 노드들에 대해 반복
+                for (const auto& neighborData : neighbors) {
+                    tuple<float, float, float> neighborPos = neighborData.first;
+                    float edgeWeight = neighborData.second;  // Edge 가중치
+
+                    Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
+
+
+                    // gScore 계산 (엣지의 가중치를 사용)
+                    double tentativeGScore = gScore[current] + edgeWeight;
+
+                    // 더 나은 경로를 발견하면 업데이트
+                    if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeGScore;
+                        //double hCost = Heuristic(neighbor.x, neighbor.y, goalX, goalY);
+                        double hCost = NewMaxeuristic(neighbor.x, neighbor.y, goalX, goalY, sqrt(2));
+                        openSet.push(Node(neighbor.x, neighbor.y, neighbor.z, tentativeGScore, hCost));
+                    }
+                }
+            }
+        }
+        else if (floor == FLOOR::FLOOR_F1) {
+            // EdgesMap이 현재 노드의 이웃을 가지고 있는지 확인
+            if (g_EdgesMapF1.find(currentPos) != g_EdgesMapF1.end()) {
+                const vector<pair<tuple<float, float, float>, float>>& neighbors = g_EdgesMapF1[currentPos];
+
+                // 이웃 노드들에 대해 반복
+                for (const auto& neighborData : neighbors) {
+                    tuple<float, float, float> neighborPos = neighborData.first;
+                    float edgeWeight = neighborData.second;  // Edge 가중치
+
+                    Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
+
+
+                    // gScore 계산 (엣지의 가중치를 사용)
+                    double tentativeGScore = gScore[current] + edgeWeight;
+
+                    // 더 나은 경로를 발견하면 업데이트
+                    if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeGScore;
+                        //double hCost = Heuristic(neighbor.x, neighbor.y, goalX, goalY);
+                        double hCost = NewMaxeuristic(neighbor.x, neighbor.y, goalX, goalY, sqrt(2));
+                        openSet.push(Node(neighbor.x, neighbor.y, neighbor.z, tentativeGScore, hCost));
+                    }
+                }
+            }
+        }
+        else if (floor == FLOOR::FLOOR_F2) {
+            // EdgesMap이 현재 노드의 이웃을 가지고 있는지 확인
+            if (g_EdgesMapF2.find(currentPos) != g_EdgesMapF2.end()) {
+                const vector<pair<tuple<float, float, float>, float>>& neighbors = g_EdgesMapF2[currentPos];
+
+                // 이웃 노드들에 대해 반복
+                for (const auto& neighborData : neighbors) {
+                    tuple<float, float, float> neighborPos = neighborData.first;
+                    float edgeWeight = neighborData.second;  // Edge 가중치
+
+                    Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
+
+
+                    // gScore 계산 (엣지의 가중치를 사용)
+                    double tentativeGScore = gScore[current] + edgeWeight;
+
+                    // 더 나은 경로를 발견하면 업데이트
+                    if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeGScore;
+                        //double hCost = Heuristic(neighbor.x, neighbor.y, goalX, goalY);
+                        double hCost = NewMaxeuristic(neighbor.x, neighbor.y, goalX, goalY, sqrt(2));
+                        openSet.push(Node(neighbor.x, neighbor.y, neighbor.z, tentativeGScore, hCost));
+                    }
                 }
             }
         }
 
-
-        //for (const auto& [keyPos, neighbors] : EdgesMap) {
-        //    // x, y 좌표가 같을 경우에만 처리
-        //    if (get<0>(keyPos) == current.x && get<1>(keyPos) == current.y) {
-        //        // 이웃 노드 처리
-        //        for (const auto& neighborData : neighbors) {
-        //            tuple<float, float, float> neighborPos = neighborData.first;
-        //            float edgeWeight = neighborData.second;  // Edge 가중치
-
-        //            Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
-
-        //            // gScore 계산 및 업데이트 로직
-        //            double tentativeGScore = gScore[current] + edgeWeight;
-        //            if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
-        //                cameFrom[neighbor] = current;
-        //                gScore[neighbor] = tentativeGScore;
-        //                double hCost = NewMaxeuristic(neighbor.x, neighbor.y, goalX, goalY, sqrt(2));
-        //                openSet.push(Node(neighbor.x, neighbor.y, neighbor.z, tentativeGScore, hCost));
-        //            }
-        //        }
-        //    }
-        //}
+        
 
     }
 
@@ -447,7 +563,7 @@ vector<Node> ZombiePathfinder::AStar(float startX, float startY, float startZ, f
     float SimilargoalX;
     float SimilargoalY;
     float SimilargoalZ;
-    tie(SimilargoalX, SimilargoalY, SimilargoalZ) = FindClosestValidPosition(goalX, goalY, goalZ, validPositions);
+    tie(SimilargoalX, SimilargoalY, SimilargoalZ) = FindClosestValidPosition(goalX, goalY, goalZ);
     SimilargoalZ = goalZ;
 
     priority_queue<Node> openSet;

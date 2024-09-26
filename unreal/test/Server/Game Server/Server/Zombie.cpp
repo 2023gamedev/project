@@ -5,6 +5,7 @@
 #include "GStruct.pb.h"
 
 #include "Zombie.h"
+//#include "ZombiePathfinder.h"
 #include "iocpServerClass.h"		// 전역변수 playerDB 사용하려구
 
 using std::cout;
@@ -12,7 +13,6 @@ using std::endl;
 
 
 Zombie::Zombie()
-	: pathfinder(0.f, 0.f, 0.f, 1.f, 1.f, 1.f)
 {
 	path = vector<tuple<float, float, float>>{};
 
@@ -114,7 +114,7 @@ bool Zombie::RandomPatrol()
 	vector<tuple<float, float, float>> dest_test;
 	//ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
 	//pathfinderpatrol.Run(dest_test, 1);
-	pathfinder.Run(dest_test, 1);
+	pathfinder->Run(dest_test, 1);
 
 	if (!dest_test.empty()) {
 		dest_test.pop_back();
@@ -128,7 +128,7 @@ bool Zombie::RandomPatrol()
 		TargetLocation[0][0][1] = get<1>(dest);
 		TargetLocation[0][0][2] = pz;
 
-		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+		pathfinder->UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 		path = dest_test;
 
 		RandPatrolSet = true;
@@ -336,8 +336,8 @@ void Zombie::ReachFinalDestination()
 {
 	// 패트롤인 경우 RandPatrol에서 해당 작업을 이미 진행해주기 때문에 A* 중복 실행방지 
 	if (RandPatrolSet == false) {
-		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-		pathfinder.Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
+		pathfinder->UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+		pathfinder->Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
 	}
 	//cout << endl;
 
@@ -375,8 +375,8 @@ void Zombie::SendPath()
 {
 	// 패트롤인 경우 RandPatrol에서 해당 작업을 이미 진행해주기 때문에 A* 중복 실행방지 
 	if (RandPatrolSet == false) {
-		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-		pathfinder.Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
+		pathfinder->UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+		pathfinder->Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
 	}
 	//cout << endl;
 

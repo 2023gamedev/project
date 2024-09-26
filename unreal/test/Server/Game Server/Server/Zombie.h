@@ -13,10 +13,10 @@ using std::string;
 using std::tuple;
 using std::map;
 
-
 class Task;
 class Player;
 class IOCP_CORE;
+class ZombiePathfinder;
 
 // 통신에서 주로 사용할 데이터 클래스
 class Zombie_Data {
@@ -61,7 +61,7 @@ public:
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
-    ZombiePathfinder pathfinder;
+    ZombiePathfinder* pathfinder;
     
     map<int, float> DistanceToPlayers;
 
