@@ -3,10 +3,9 @@
 #include <random>
 
 #include "GStruct.pb.h"
-#include "iocpServerClass.h"
 
 #include "Zombie.h"
-#include"iocpServerClass.h"		// 전역변수 playerDB 사용하려구
+#include "iocpServerClass.h"		// 전역변수 playerDB 사용하려구
 
 using std::cout;
 using std::endl;
@@ -35,6 +34,8 @@ Zombie::Zombie()
 
 	RandPatrolSet = false;
 
+	IsAttacking = false;
+
 	speed = 0.f;
 
 	targetType = Zombie::TARGET::PATROL;
@@ -62,6 +63,8 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 	HeardFootSound = false;
 
 	RandPatrolSet = false;
+
+	IsAttacking = false;
 
 	speed = 1.f;
 
@@ -109,14 +112,17 @@ bool Zombie::RandomPatrol()
 	}
 
 	vector<tuple<float, float, float>> dest_test;
-	ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
-	pathfinderpatrol.Run(dest_test, 1);
+	//ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
+	//pathfinderpatrol.Run(dest_test, 1);
+	pathfinder.Run(dest_test, 1);
 
 	if (!dest_test.empty()) {
 		dest_test.pop_back();
 
 		tuple<float, float, float> dest;
-		dest = dest_test.back();
+		if (!dest_test.empty()) {
+			dest = dest_test.back();
+		}
 
 		TargetLocation[0][0][0] = get<0>(dest);
 		TargetLocation[0][0][1] = get<1>(dest);
@@ -203,6 +209,8 @@ void Zombie::Attack()
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << bt_playerID << "\' 을 공격하였습니다!" << endl;
 	cout << endl;
 
+	// 어택 통신 패킷 보내기
+
 	Protocol::Zombie_attack attackpacket;
 
 	attackpacket.set_zombieid(ZombieData.zombieID);
@@ -215,7 +223,9 @@ void Zombie::Attack()
 		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 	}
 
+	IsAttacking = true;	// 좀비 공격중으로 변경
 
+	attackAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 공격 시작 시간
 }
 
 
@@ -411,4 +421,14 @@ void Zombie::Wait()
 {
 	//cout << "Zombie \'#" << ZombieData.zombieID << "\' wait for delay." << endl;
 	//cout << endl;
+
+
+	if (IsAttacking) {
+
+		auto waitAfterTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<float> deltaTime = attackAnimStartTime - waitAfterTime;
+
+		if (deltaTime.count() >= ZombieAttackAnimDuration)
+			IsAttacking = false;
+	}
 }

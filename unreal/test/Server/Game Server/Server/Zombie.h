@@ -7,7 +7,6 @@
 #include "Task.h"
 #include "Player.h"
 #include "ZombiePathfinder.h"
-#include "iocpServerClass.h"
 
 using std::vector;
 using std::string;
@@ -58,6 +57,8 @@ public:
     //const float CanHearDistance = 500.f;            //========================언리얼 BaseCharacter.cpp에서 FootSound() - float DetectRadius = 500.f;에서 참조 (맞는지 확인 필요)
     //const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
 
+    const float ZombieAttackAnimDuration = 2.7f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
+
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
     ZombiePathfinder pathfinder;
@@ -75,6 +76,10 @@ public:
     bool HeardFootSound;
 
     bool RandPatrolSet;
+
+    bool IsAttacking;       // 해당 좀비 지금 공격 중인가? (애니메이션 재생 중인 가?)
+
+    std::chrono::steady_clock::time_point attackAnimStartTime;      // 좀비 공격 시작 시간
 
     float speed;
 

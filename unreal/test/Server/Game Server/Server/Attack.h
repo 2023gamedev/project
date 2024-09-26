@@ -16,7 +16,10 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);      //좀비 공격 범위에 플레이어 있을 때도 플레이어의 최신 위치를 갱신해주는게 맞는거 같아서
 
-        zom.Attack();
+        if (zom.IsAttacking == false)
+            zom.Attack();
+        else
+            zom.Wait();
         
         //bool result = zom.Attack(); 
         //if (result)

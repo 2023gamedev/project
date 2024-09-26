@@ -511,7 +511,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	auto lastBTTime = std::chrono::high_resolution_clock::now();
-
+	
 	while (true) {
 
 		//서버가 먼저 켜지고 좀비 BT가 실행되도록

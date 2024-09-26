@@ -18,6 +18,9 @@ public:
         //cout << "따라서, 플레이어 \'#" << zom.bt_playerID << "\' 에 대한 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanAttack Task] 결과: \"" << boolalpha << result << "\"" << endl;
         //cout << endl;
 
+        if(zom.IsAttacking == true)         // 일단, 좀비 공격 애니메이션이 아직 재생 중이라면 -> 좀비 정지 시켜 놓기
+            return "CanAttack-Succeed";
+
         if (result)
             return "CanAttack-Succeed";
         else
