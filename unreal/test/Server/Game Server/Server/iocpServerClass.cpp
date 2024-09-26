@@ -578,12 +578,18 @@ void IOCP_CORE::Zombie_BT_Thread()
 		}
 		
 
-		//좀비가 있을때 BT 실행
+		// 좀비가 있을때 BT 실행
 		for (auto& zom : zombie) {
 
-			//플레이어가 있을때 BT 실행
+			// 플레이어가 있을때 BT 실행
 			if (result == "NO PLAYER")
 				break;
+
+			// 좀비가 대기상태라면 해당 좀비 BT 잠시 대기
+			if (zom.HaveToWait == true) {
+				zom.Wait();
+				continue;
+			}
 
 			//cout << endl;
 			//cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 실행==========" << endl;
@@ -701,9 +707,20 @@ void IOCP_CORE::Zombie_BT_Thread()
 	delete(t_hasinvestigated);
 	delete(t_nothaslastknownplayerlocation);
 }
+
+
+
+
+
+
+
+//===================================================================================================================
+// 전처리문 나중에 위로 올리기
+
 #include <fstream>
 #include <sstream>
 #include <string>
+
 bool IOCP_CORE::LoadEdgesMap(const string& filePath, vector<tuple<float, float, float>>& positions, unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap)
 {
 	 ifstream file(filePath);

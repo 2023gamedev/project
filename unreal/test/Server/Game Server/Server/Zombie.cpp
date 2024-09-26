@@ -225,6 +225,8 @@ void Zombie::Attack()
 
 	IsAttacking = true;	// 좀비 공격중으로 변경
 
+	HaveToWait = true;	// 좀비 BT 대기상태로 변경
+
 	attackAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 공격 시작 시간
 }
 
@@ -428,7 +430,10 @@ void Zombie::Wait()
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> deltaTime = attackAnimStartTime - waitAfterTime;
 
-		if (deltaTime.count() >= ZombieAttackAnimDuration)
+		if (deltaTime.count() >= ZombieAttackAnimDuration) {
 			IsAttacking = false;
+
+			HaveToWait = false;
+		}
 	}
 }

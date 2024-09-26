@@ -15,8 +15,8 @@ using std::map;
 
 class Task;
 class Player;
-class IOCP_CORE;
-class ZombiePathfinder;
+class IOCP_CORE;           
+class ZombiePathfinder;     // 전방 선언 (순환 포함 문제를 피하기 위해)
 
 // 통신에서 주로 사용할 데이터 클래스
 class Zombie_Data {
@@ -78,6 +78,8 @@ public:
     bool RandPatrolSet;
 
     bool IsAttacking;       // 해당 좀비 지금 공격 중인가? (애니메이션 재생 중인 가?)
+
+    bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
 
     std::chrono::steady_clock::time_point attackAnimStartTime;      // 좀비 공격 시작 시간
 
