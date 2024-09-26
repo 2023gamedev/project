@@ -56,6 +56,13 @@ message ZombiePath {
     Vector3 location = 4;
 }
 
+message PatrolPath {
+    uint32 zombieid = 1;
+    Vector3 path = 2;
+    uint32 packet_type = 3;
+    Vector3 location = 4;
+}
+
 message Detected {
     uint32 zombieid = 1;
     uint32 playerid = 2;

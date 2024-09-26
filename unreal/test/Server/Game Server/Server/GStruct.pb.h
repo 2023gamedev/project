@@ -58,6 +58,9 @@ extern DetectedDefaultTypeInternal _Detected_default_instance_;
 class Equip_Item;
 struct Equip_ItemDefaultTypeInternal;
 extern Equip_ItemDefaultTypeInternal _Equip_Item_default_instance_;
+class PatrolPath;
+struct PatrolPathDefaultTypeInternal;
+extern PatrolPathDefaultTypeInternal _PatrolPath_default_instance_;
 class Time;
 struct TimeDefaultTypeInternal;
 extern TimeDefaultTypeInternal _Time_default_instance_;
@@ -94,6 +97,7 @@ template<> ::Protocol::Character* Arena::CreateMaybeMessage<::Protocol::Characte
 template<> ::Protocol::Character_Attack* Arena::CreateMaybeMessage<::Protocol::Character_Attack>(Arena*);
 template<> ::Protocol::Detected* Arena::CreateMaybeMessage<::Protocol::Detected>(Arena*);
 template<> ::Protocol::Equip_Item* Arena::CreateMaybeMessage<::Protocol::Equip_Item>(Arena*);
+template<> ::Protocol::PatrolPath* Arena::CreateMaybeMessage<::Protocol::PatrolPath>(Arena*);
 template<> ::Protocol::Time* Arena::CreateMaybeMessage<::Protocol::Time>(Arena*);
 template<> ::Protocol::Vector3* Arena::CreateMaybeMessage<::Protocol::Vector3>(Arena*);
 template<> ::Protocol::Zombie* Arena::CreateMaybeMessage<::Protocol::Zombie>(Arena*);
@@ -1469,6 +1473,205 @@ class ZombiePath final :
 };
 // -------------------------------------------------------------------
 
+class PatrolPath final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.PatrolPath) */ {
+ public:
+  inline PatrolPath() : PatrolPath(nullptr) {}
+  ~PatrolPath() override;
+  explicit PROTOBUF_CONSTEXPR PatrolPath(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PatrolPath(const PatrolPath& from);
+  PatrolPath(PatrolPath&& from) noexcept
+    : PatrolPath() {
+    *this = ::std::move(from);
+  }
+
+  inline PatrolPath& operator=(const PatrolPath& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PatrolPath& operator=(PatrolPath&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PatrolPath& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PatrolPath* internal_default_instance() {
+    return reinterpret_cast<const PatrolPath*>(
+               &_PatrolPath_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(PatrolPath& a, PatrolPath& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PatrolPath* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PatrolPath* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PatrolPath* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PatrolPath>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PatrolPath& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const PatrolPath& from) {
+    PatrolPath::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PatrolPath* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.PatrolPath";
+  }
+  protected:
+  explicit PatrolPath(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPathFieldNumber = 2,
+    kLocationFieldNumber = 4,
+    kZombieidFieldNumber = 1,
+    kPacketTypeFieldNumber = 3,
+  };
+  // .Protocol.Vector3 path = 2;
+  bool has_path() const;
+  private:
+  bool _internal_has_path() const;
+  public:
+  void clear_path();
+  const ::Protocol::Vector3& path() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector3* release_path();
+  ::Protocol::Vector3* mutable_path();
+  void set_allocated_path(::Protocol::Vector3* path);
+  private:
+  const ::Protocol::Vector3& _internal_path() const;
+  ::Protocol::Vector3* _internal_mutable_path();
+  public:
+  void unsafe_arena_set_allocated_path(
+      ::Protocol::Vector3* path);
+  ::Protocol::Vector3* unsafe_arena_release_path();
+
+  // .Protocol.Vector3 location = 4;
+  bool has_location() const;
+  private:
+  bool _internal_has_location() const;
+  public:
+  void clear_location();
+  const ::Protocol::Vector3& location() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector3* release_location();
+  ::Protocol::Vector3* mutable_location();
+  void set_allocated_location(::Protocol::Vector3* location);
+  private:
+  const ::Protocol::Vector3& _internal_location() const;
+  ::Protocol::Vector3* _internal_mutable_location();
+  public:
+  void unsafe_arena_set_allocated_location(
+      ::Protocol::Vector3* location);
+  ::Protocol::Vector3* unsafe_arena_release_location();
+
+  // uint32 zombieid = 1;
+  void clear_zombieid();
+  uint32_t zombieid() const;
+  void set_zombieid(uint32_t value);
+  private:
+  uint32_t _internal_zombieid() const;
+  void _internal_set_zombieid(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.PatrolPath)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::Protocol::Vector3* path_;
+    ::Protocol::Vector3* location_;
+    uint32_t zombieid_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Detected final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Detected) */ {
  public:
@@ -1517,7 +1720,7 @@ class Detected final :
                &_Detected_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(Detected& a, Detected& b) {
     a.Swap(&b);
@@ -1698,7 +1901,7 @@ class Time final :
                &_Time_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(Time& a, Time& b) {
     a.Swap(&b);
@@ -1857,7 +2060,7 @@ class Character_Attack final :
                &_Character_Attack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(Character_Attack& a, Character_Attack& b) {
     a.Swap(&b);
@@ -2027,7 +2230,7 @@ class Equip_Item final :
                &_Equip_Item_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(Equip_Item& a, Equip_Item& b) {
     a.Swap(&b);
@@ -2213,7 +2416,7 @@ class run final :
                &_run_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(run& a, run& b) {
     a.Swap(&b);
@@ -2383,7 +2586,7 @@ class jump final :
                &_jump_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(jump& a, jump& b) {
     a.Swap(&b);
@@ -2542,7 +2745,7 @@ class ping final :
                &_ping_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(ping& a, ping& b) {
     a.Swap(&b);
@@ -3528,6 +3731,230 @@ inline void ZombiePath::set_allocated_location(::Protocol::Vector3* location) {
 
 // -------------------------------------------------------------------
 
+// PatrolPath
+
+// uint32 zombieid = 1;
+inline void PatrolPath::clear_zombieid() {
+  _impl_.zombieid_ = 0u;
+}
+inline uint32_t PatrolPath::_internal_zombieid() const {
+  return _impl_.zombieid_;
+}
+inline uint32_t PatrolPath::zombieid() const {
+  // @@protoc_insertion_point(field_get:Protocol.PatrolPath.zombieid)
+  return _internal_zombieid();
+}
+inline void PatrolPath::_internal_set_zombieid(uint32_t value) {
+  
+  _impl_.zombieid_ = value;
+}
+inline void PatrolPath::set_zombieid(uint32_t value) {
+  _internal_set_zombieid(value);
+  // @@protoc_insertion_point(field_set:Protocol.PatrolPath.zombieid)
+}
+
+// .Protocol.Vector3 path = 2;
+inline bool PatrolPath::_internal_has_path() const {
+  return this != internal_default_instance() && _impl_.path_ != nullptr;
+}
+inline bool PatrolPath::has_path() const {
+  return _internal_has_path();
+}
+inline void PatrolPath::clear_path() {
+  if (GetArenaForAllocation() == nullptr && _impl_.path_ != nullptr) {
+    delete _impl_.path_;
+  }
+  _impl_.path_ = nullptr;
+}
+inline const ::Protocol::Vector3& PatrolPath::_internal_path() const {
+  const ::Protocol::Vector3* p = _impl_.path_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector3&>(
+      ::Protocol::_Vector3_default_instance_);
+}
+inline const ::Protocol::Vector3& PatrolPath::path() const {
+  // @@protoc_insertion_point(field_get:Protocol.PatrolPath.path)
+  return _internal_path();
+}
+inline void PatrolPath::unsafe_arena_set_allocated_path(
+    ::Protocol::Vector3* path) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.path_);
+  }
+  _impl_.path_ = path;
+  if (path) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.PatrolPath.path)
+}
+inline ::Protocol::Vector3* PatrolPath::release_path() {
+  
+  ::Protocol::Vector3* temp = _impl_.path_;
+  _impl_.path_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vector3* PatrolPath::unsafe_arena_release_path() {
+  // @@protoc_insertion_point(field_release:Protocol.PatrolPath.path)
+  
+  ::Protocol::Vector3* temp = _impl_.path_;
+  _impl_.path_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vector3* PatrolPath::_internal_mutable_path() {
+  
+  if (_impl_.path_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vector3>(GetArenaForAllocation());
+    _impl_.path_ = p;
+  }
+  return _impl_.path_;
+}
+inline ::Protocol::Vector3* PatrolPath::mutable_path() {
+  ::Protocol::Vector3* _msg = _internal_mutable_path();
+  // @@protoc_insertion_point(field_mutable:Protocol.PatrolPath.path)
+  return _msg;
+}
+inline void PatrolPath::set_allocated_path(::Protocol::Vector3* path) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.path_;
+  }
+  if (path) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(path);
+    if (message_arena != submessage_arena) {
+      path = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, path, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.path_ = path;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.PatrolPath.path)
+}
+
+// uint32 packet_type = 3;
+inline void PatrolPath::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t PatrolPath::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t PatrolPath::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.PatrolPath.packet_type)
+  return _internal_packet_type();
+}
+inline void PatrolPath::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void PatrolPath::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.PatrolPath.packet_type)
+}
+
+// .Protocol.Vector3 location = 4;
+inline bool PatrolPath::_internal_has_location() const {
+  return this != internal_default_instance() && _impl_.location_ != nullptr;
+}
+inline bool PatrolPath::has_location() const {
+  return _internal_has_location();
+}
+inline void PatrolPath::clear_location() {
+  if (GetArenaForAllocation() == nullptr && _impl_.location_ != nullptr) {
+    delete _impl_.location_;
+  }
+  _impl_.location_ = nullptr;
+}
+inline const ::Protocol::Vector3& PatrolPath::_internal_location() const {
+  const ::Protocol::Vector3* p = _impl_.location_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector3&>(
+      ::Protocol::_Vector3_default_instance_);
+}
+inline const ::Protocol::Vector3& PatrolPath::location() const {
+  // @@protoc_insertion_point(field_get:Protocol.PatrolPath.location)
+  return _internal_location();
+}
+inline void PatrolPath::unsafe_arena_set_allocated_location(
+    ::Protocol::Vector3* location) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.location_);
+  }
+  _impl_.location_ = location;
+  if (location) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.PatrolPath.location)
+}
+inline ::Protocol::Vector3* PatrolPath::release_location() {
+  
+  ::Protocol::Vector3* temp = _impl_.location_;
+  _impl_.location_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vector3* PatrolPath::unsafe_arena_release_location() {
+  // @@protoc_insertion_point(field_release:Protocol.PatrolPath.location)
+  
+  ::Protocol::Vector3* temp = _impl_.location_;
+  _impl_.location_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vector3* PatrolPath::_internal_mutable_location() {
+  
+  if (_impl_.location_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vector3>(GetArenaForAllocation());
+    _impl_.location_ = p;
+  }
+  return _impl_.location_;
+}
+inline ::Protocol::Vector3* PatrolPath::mutable_location() {
+  ::Protocol::Vector3* _msg = _internal_mutable_location();
+  // @@protoc_insertion_point(field_mutable:Protocol.PatrolPath.location)
+  return _msg;
+}
+inline void PatrolPath::set_allocated_location(::Protocol::Vector3* location) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.location_;
+  }
+  if (location) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(location);
+    if (message_arena != submessage_arena) {
+      location = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, location, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.location_ = location;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.PatrolPath.location)
+}
+
+// -------------------------------------------------------------------
+
 // Detected
 
 // uint32 zombieid = 1;
@@ -3987,6 +4414,8 @@ inline void ping::set_packet_type(uint32_t value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

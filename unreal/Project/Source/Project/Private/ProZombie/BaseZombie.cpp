@@ -52,8 +52,25 @@ void ABaseZombie::BeginPlay()
 	Super::BeginPlay();
 
 	CachedAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+
+	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ABaseZombie::OnOverlapBegin);
 }
+
+void ABaseZombie::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Protocol::PatrolPath Packet;
+
+	Packet.set_zombieid(ZombieId);
+	Packet.set_packet_type(14);
+
+	std::string serializedData;
+	Packet.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+}
+
 
 // Called every frame
 void ABaseZombie::Tick(float DeltaTime)
