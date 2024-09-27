@@ -193,14 +193,14 @@ void AZombieAIController::Tick(float DeltaTime)
 			if (!m_bPlayerInSight) {
 				m_bPlayerInSight = true;
 				ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
-				Send_Detected(BaseCharacter); // 플레이어 감지 메시지 전송
+				Send_Detected(); // 플레이어 감지 메시지 전송
 				LastSeenPlayer = BaseCharacter;
 			}
 		}
 		else {
 			if (m_bPlayerInSight) {
 				m_bPlayerInSight = false;
-				Send_PlayerLost(LastSeenPlayer); // 플레이어를 놓쳤을 때 메시지 전송
+				Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
 			}
 		}
 
@@ -237,11 +237,11 @@ void AZombieAIController::Tick(float DeltaTime)
 	//}
 }
 
-void AZombieAIController::Send_Detected(ABaseCharacter* Player)
+void AZombieAIController::Send_Detected()
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
 	ZombieId = ZombiePawn->GetZombieId();
-	uint32 PlayerId = Player->GetPlayerId();
+	uint32 PlayerId = GameInstance->ClientSocketPtr->MyPlayerId;
 
 	Protocol::Detected packet;
 	packet.set_zombieid(ZombieId);
@@ -255,11 +255,11 @@ void AZombieAIController::Send_Detected(ABaseCharacter* Player)
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
-void AZombieAIController::Send_PlayerLost(ABaseCharacter* Player)
+void AZombieAIController::Send_PlayerLost()
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
 	ZombieId = ZombiePawn->GetZombieId();
-	uint32 PlayerId = Player->GetPlayerId();
+	uint32 PlayerId = GameInstance->ClientSocketPtr->MyPlayerId;
 
 	Protocol::Detected packet;
 	packet.set_zombieid(ZombieId);

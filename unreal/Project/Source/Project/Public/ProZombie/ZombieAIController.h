@@ -32,9 +32,9 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	void Send_Detected(ABaseCharacter* Player);
+	void Send_Detected();
 
-	void Send_PlayerLost(ABaseCharacter* Player);
+	void Send_PlayerLost();
 
 	void Send_ZombieHP();
 
