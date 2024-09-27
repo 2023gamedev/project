@@ -146,7 +146,7 @@ public:
 
 	SOCKET Socket;
 	uint32 MyPlayerId = 0;
-	uint32 PlayerId = 0;
+	uint32 OtherPlayerId = 0;
 	uint32 ZombieId = 0;
 
 	Concurrency::concurrent_queue<PlayerData> Q_player;

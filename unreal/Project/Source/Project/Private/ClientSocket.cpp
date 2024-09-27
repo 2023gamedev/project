@@ -143,12 +143,12 @@ uint32 ClientSocket::Run()
 						Protocol::Character CharacterPacket;
 						if (CharacterPacket.ParseFromArray(buffer.data(), buffer.size()))
 						{
-							PlayerId = CharacterPacket.playerid();
+							OtherPlayerId = CharacterPacket.playerid();
 							FVector NewLocation(CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
 							FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
-							if (PlayerId != MyPlayerId) {
-								Q_player.push(PlayerData(PlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.hp()));
+							if (OtherPlayerId != MyPlayerId) {
+								Q_player.push(PlayerData(OtherPlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.hp()));
 							}
 						}
 						break;
