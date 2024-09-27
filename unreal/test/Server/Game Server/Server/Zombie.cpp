@@ -177,6 +177,7 @@ void Zombie::SetTargetLocation(TARGET t)
 		
 		std::uniform_int_distribution<int> dist(0, keys.size() - 1);
 		
+		// map 사용 할 때 주의할 점 => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
 		pl = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x,playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
 	}
 

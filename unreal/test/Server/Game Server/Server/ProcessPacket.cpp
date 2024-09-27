@@ -50,7 +50,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         pl.y = Packet.y();
         pl.z = Packet.z();
 
-       
+       // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if(Packet.playerid() != 99) {
             playerDB[Packet.playerid()] = pl;
         }
