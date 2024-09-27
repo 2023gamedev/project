@@ -25,6 +25,8 @@ Zombie::Zombie()
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
+	PrevTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+
 	PlayerInSight = false;
 
 	KnewPlayerLocation = false;
@@ -54,6 +56,8 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 	DistanceToPlayers = {};
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+
+	PrevTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	PlayerInSight = false;
 
@@ -110,70 +114,76 @@ void Zombie::RandomPatrol()
 		px = ZombieData.x + dist(mt);
 
 		if (ZombieData.x >= 2366.f) {
-			cout << "[ERROR] 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
+			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
 			return;
 		}
 	}
 
 	vector<tuple<float, float, float>> dest_test;
-	//ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
-	//pathfinderpatrol.Run(dest_test, 1);
 
-	while (dest_test.empty() == true) {
+	// 랜덤 패트롤 지점이 갈 수 있는 지 검사
+	CheckPath(dest_test, px, py, pz);
 
-		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
-		pathfinder.Run(dest_test, 1);
-
-		if (dest_test.empty() == true) {
-			cout << "랜덤 패트롤 지정 실패! 다시 검색!!!" << endl;
-		}
-
-	}
-
-	dest_test.pop_back();	// 맨 마지막은 랜덤한 위치라서... 좀비가 걸을 수 있는 지형이 아닐 수 있음 -> 빼서 무조건 걸을 수 있는 위치가 최종 목적지!
-
-	tuple<float, float, float> dest;
-	if (!dest_test.empty()) {
-		dest = dest_test.back();
-	}
-
-	TargetLocation[0][0][0] = get<0>(dest);
-	TargetLocation[0][0][1] = get<1>(dest);
-	TargetLocation[0][0][2] = pz;
-
-	//pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-	path = dest_test;
-
+	UpdatePath(dest_test);
+	
 	cout << "TargetLocation[Patrol]: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 
 	RandPatrolSet = true;
-
 }
 
 void Zombie::SetTargetLocation(TARGET t)
 {
 	targetType = t;
 
-	float min = FLT_MAX;	//float 최대값
 	vector<vector<vector<float>>> pl = {};
+
+	switch (targetType) {
+	case TARGET::PLAYER:
+		SearchClosestPlayer(pl);
+		TargetLocation = pl;
+		PrevTargetLocation = TargetLocation;
+		//cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
+		break;
+	case TARGET::SHOUTING:
+		//==================================샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
+		break;
+	case TARGET::FOOTSOUND:
+		//TargetLocation = pl;			// => 이런식으로 하면 플레이어 최신 위치를 계속 갱신받게됨!
+		break;
+	case TARGET::INVESTIGATED:
+		//TargetLocation = TargetLocation;		// 걍 명시적 표기 ========> [x]
+												// 플레이어를 따라가던 도중 놓이면 따로 작업 할 꺼 없긴하지만 아니라면 (샤우팅/발소리->플레이어 이전위치) 이 상황에서는 갱신해줘야함
+		TargetLocation = PrevTargetLocation;
+		UpdatePath();							
+		break;
+	case TARGET::PATROL:
+		if (RandPatrolSet == false) {
+			RandomPatrol();
+		}
+		break;
+	}
+}
+
+void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
+{
+	float min = FLT_MAX;	//float 최대값
 	vector<int> keys = {};
 
 	// 단 한명의 플레이어라도 마주쳤다면
 	if (DistanceToPlayers.size() != 0) {
 		// 사실상 플레이어를 마주쳤다면 BT에서 타겟 설정은 플레이어야만함
-		if (targetType != TARGET::PLAYER) {
-			cout << "DistanceToPlayers Map ERROR!!! -> Target is not set to Player" << endl;
-		}
+		//if (targetType != TARGET::PLAYER) {
+		//	cout << "DistanceToPlayers Map ERROR!!! -> Target is not set to Player" << endl;
+		//}
 
 		for (auto player : playerDB) {
 			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
 				if (min > DistanceToPlayers.at(player.first)) {
 					min = DistanceToPlayers.at(player.first);
-					//pl = vector<vector<vector<float>>>{ {{player.second.x,player.second.y, player.second.z}} };
 				}
 			}
 		}
-		
+
 		// 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
 		for (auto player : playerDB) {
 			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
@@ -184,42 +194,20 @@ void Zombie::SetTargetLocation(TARGET t)
 				}
 			}
 		}
-		
+
 		std::random_device rd;
 		std::mt19937 mt(rd());
-		
+
 		std::uniform_int_distribution<int> dist(0, keys.size() - 1);
-		
-		// map 사용 할 때 주의할 점 => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
-		pl = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x, playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
+
+		// map 사용 할 때 주의할 점 (playerDB) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
+		closest_player = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x, playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
 	}
 	else {	// (DistanceToPlayers.size() == 0)
 		// BT에서 타겟을 플레이어로 했는데, DistanceToPlayers 맵이 비어 있다면 절대 안됨
-		if (targetType == TARGET::PLAYER) {
+		//if (targetType == TARGET::PLAYER) {
 			cout << "DistanceToPlayers Map ERROR!!! -> Target is set to Player but DistanceToPlayers Map is empty" << endl;
-		}
-	}
-
-	switch (targetType) {
-	case TARGET::PLAYER:
-		TargetLocation = pl;
-		//cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
-		break;
-	case TARGET::SHOUTING:
-		//==================================샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
-		break;
-	case TARGET::FOOTSOUND:
-		TargetLocation = pl;
-		break;
-	case TARGET::INVESTIGATED:
-		TargetLocation = TargetLocation;		//걍 명시적 표기
-		break;
-	case TARGET::PATROL:
-		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
-		if (RandPatrolSet == false) {
-			RandomPatrol();
-		}
-		break;
+		//}
 	}
 }
 
@@ -252,7 +240,7 @@ void Zombie::Attack()
 
 void Zombie::MoveTo(float deltasecond)
 {
-	// 이미 최종 목표지점에 도착 -> 이제 BT 쓰레드에서 해당 함수 같이 돌리니, 해당 작업 필요 X
+	// 이미 최종 목표지점에 도착 -> 이제 BT 쓰레드에서 해당 함수 같이 돌리니, 해당 작업 필요 X (중복 작업)
 	//if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
 	//	cout << "MoveTo EQUAL" << endl;
 	//	ReachFinalDestination();
@@ -356,17 +344,46 @@ bool Zombie::IsPathUpdated()
 
 void Zombie::UpdatePath()
 {
-	// 패트롤인 경우 RandPatrol에서 해당 작업을 이미 진행해주기 때문에 A* 중복 실행방지 
-	if (RandPatrolSet == false) {
-		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-		pathfinder.Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
-	}
+	pathfinder.UpdateStartGoal(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+	pathfinder.Run(path, 0);		// [+] 목표지점의 위치 변화가 없으면 A* 를 돌리지 않는 코드 작성되어 있음
 	//cout << endl;
+}
+
+void Zombie::CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ)
+{
+	while (goalTest_path.empty() == true) {
+
+		pathfinder.UpdateStartGoal(ZombieData.x, ZombieData.y, ZombieData.z, goalTestX, goalTestY, goalTestZ);
+		pathfinder.Run(goalTest_path, 1);
+		//cout << endl;
+
+		if (goalTest_path.empty() == true) {
+			cout << "랜덤 패트롤 지정 실패! 다시 검색!!!" << endl;
+		}
+
+	}
+
+	goalTest_path.pop_back();	// 맨 마지막은 랜덤한 위치라서... 좀비가 걸을 수 있는 지형이 아닐 수 있음 -> 빼서 무조건 걸을 수 있는 위치가 최종 목적지!
+}
+
+void Zombie::UpdatePath(vector<tuple<float, float, float>> newPatrol_path)
+{
+	tuple<float, float, float> dest;
+	if (!newPatrol_path.empty()) {
+		dest = newPatrol_path.back();
+	}
+
+	TargetLocation[0][0][0] = get<0>(dest);
+	TargetLocation[0][0][1] = get<1>(dest);
+	TargetLocation[0][0][2] = ZombieData.z;
+
+	path = newPatrol_path;
+	// 참고로 pathfinder 변수의 start,goal 수정(UpdateStartGoal 함수 호출)은 CheckPath에서 미리 해줌
 }
 
 void Zombie::ReachFinalDestination()
 {
-	UpdatePath();
+	//UpdatePath();
 
 	// 혹시 몰라서 한번 더 체크
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
@@ -395,7 +412,6 @@ void Zombie::ReachFinalDestination()
 
 	}
 }
-
 
 void Zombie::SendPath()
 {

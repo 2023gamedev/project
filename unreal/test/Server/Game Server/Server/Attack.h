@@ -21,7 +21,7 @@ public:
             zom.Attack();
         else
             zom.Wait();
-        
+
         //bool result = zom.Attack(); 
         //if (result)
         //    return "Attack-Succeed";

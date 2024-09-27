@@ -5,7 +5,7 @@
 #include <map>
 
 #include "Task.h"
-#include "Player.h"
+//#include "Player.h"
 #include "ZombiePathfinder.h"
 
 using std::vector;
@@ -14,7 +14,7 @@ using std::tuple;
 using std::map;
 
 class Task;
-class Player;
+//class Player;
 class IOCP_CORE;           
 class ZombiePathfinder;     // 전방 선언 (순환 포함 문제를 피하기 위해)
 
@@ -53,7 +53,6 @@ public:
 
     const float CanAttackDistance = 150.f;          // 공격 사정거리 150.f
 
-    // 사용 안 할 듯 함
     //const float CanHearDistance = 500.f;            //========================언리얼 BaseCharacter.cpp에서 FootSound() - float DetectRadius = 500.f;에서 참조 (맞는지 확인 필요)
     //const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
 
@@ -66,6 +65,8 @@ public:
     map<int, float> DistanceToPlayers;
 
     vector<vector<vector<float>>> TargetLocation;
+
+    vector<vector<vector<float>>> PrevTargetLocation;
 
     bool PlayerInSight;
 
@@ -90,6 +91,7 @@ public:
     int bt_playerID;        //BT 돌릴때, 어떤 플레이어와 검사 할지를 설정하기 위해 사용 -> SetTargetLocation 등에서 필요
 
     int ZombiePathIndex = 0;
+
 
     Zombie();
 
@@ -117,6 +119,12 @@ public:
     void ReachFinalDestination();
 
     void UpdatePath();
+    // 얜 패트롤용
+    void UpdatePath(vector<tuple<float, float, float>> newPatrol_path); 
+
+    void CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
+
+    void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player);
 
     //void ShoutingHear();
     

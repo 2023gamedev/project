@@ -32,7 +32,7 @@ public:
 
     void Run(vector<tuple<float, float, float>>& t, int patroltype);
 
-    void UpdatePathFinder(float startX, float startY, float startZ, float goalX, float goalY, float goalZ);
+    void UpdateStartGoal(float startX, float startY, float startZ, float goalX, float goalY, float goalZ);
     float OBSTACLE_RADIUS = 25.f;
 
 private:
