@@ -50,7 +50,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         pl.y = Packet.y();
         pl.z = Packet.z();
 
-        playerDB[Packet.playerid()] = pl;
+       
+        if(Packet.playerid() != 99) {
+            playerDB[Packet.playerid()] = pl;
+        }
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
@@ -181,7 +184,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                     z.KnewPlayerLocation = true;
                     z.SetDistance(Packet.playerid());
 
-                    cout << "좀비 \'#" << z.ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
+                    //cout << "좀비 \'#" << z.ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
+                    cout << "디텍트된 아이디: " << Packet.playerid() << endl;
 
                     break;
                 }

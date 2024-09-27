@@ -373,7 +373,6 @@ void IOCP_CORE::Timer_Thread()
 	{
 		if (b_Timer) 
 		{
-
 			// 현재 시간 측정
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<float> deltaTime = currentTime - lastTime;
