@@ -76,24 +76,6 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
     }
 }
 
-vector<Node> ZombiePathfinder::FindNeighbors(const Node& current)
-{
-    vector<Node> neighbors;
-    for (const auto& pos : validPositions) {
-        float nx = get<0>(pos);
-        float ny = get<1>(pos);
-        float nz = get<2>(pos);
-        if (nz >= current.z - 400.f && nz <= current.z + 400.f && !(nx == current.x && ny == current.y)) {
-            double dist = Heuristic(current.x, current.y, nx, ny);
-            if (dist <= 800.f && !IsInObstacleRange(nx, ny, nz)) {
-                double hCost = Heuristic(nx, ny, goalX, goalY);
-                neighbors.push_back(Node(nx, ny, nz, current.gCost + dist, hCost));
-            }
-        }
-    }
-    return neighbors;
-}
-
 double ZombiePathfinder::EuclideanDistance(float x1, float y1,float x2, float y2) {
     return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 }
@@ -112,7 +94,6 @@ void ZombiePathfinder::UpdatePathFinder(float startx, float starty, float startz
 tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goalX, float goalY, float goalZ) {
 
     tuple<float, float, float> closestPosition;
-    int ifloor = 0;
     double minDistance;
     if (floor == FLOOR::FLOOR_B2) {
         closestPosition = g_valispositionsB2[0];
@@ -202,10 +183,14 @@ float ZombiePathfinder::FloorZPos()
 
 vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ)
 {
+
+    cout << "NewAStarSTART!!" << endl;
     // 시작 지점과 목표 지점이 같으면 바로 반환
     if (startX == goalX && startY == goalY && startZ == goalZ) {
+        cout << "EQUAL PATH" << endl;
         return { Node(startX, startY, startZ, 0, 0) };
     }
+
     
     // 목표 지점과 가장 가까운 유효한 지점 찾기
 

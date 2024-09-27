@@ -92,7 +92,7 @@ void Zombie::SetDistance()
 
 bool Zombie::RandomPatrol()
 {
-	//cout << "RandomPatrol!!!" << endl;
+	cout << "RandomPatrol!!!" << endl;
 
 	float px, py, pz;
 
@@ -113,9 +113,11 @@ bool Zombie::RandomPatrol()
 	}
 
 	vector<tuple<float, float, float>> dest_test;
-	ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
-	pathfinderpatrol.Run(dest_test, 1);
-	//pathfinder.Run(dest_test, 1);
+	//ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
+	//pathfinderpatrol.Run(dest_test, 1);
+
+	pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
+	pathfinder.Run(dest_test, 1);
 
 	if (!dest_test.empty()) {
 		dest_test.pop_back();
@@ -129,7 +131,7 @@ bool Zombie::RandomPatrol()
 		TargetLocation[0][0][1] = get<1>(dest);
 		TargetLocation[0][0][2] = pz;
 
-		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+		//pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
 		path = dest_test;
 
 		RandPatrolSet = true;
@@ -236,6 +238,7 @@ void Zombie::MoveTo(float deltasecond)
 {
 	// 이미 최종 목표지점에 도착
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
+		cout << "MoveTo EQUAL" << endl;
 		return;
 	}
 
