@@ -7,12 +7,14 @@ class TCanNotAttack : public Task {
 public:
 
     string CanSeePlayer(Zombie& zom) const override {
-        bool result = (zom.DistanceToPlayers.at(zom.bt_playerID) > zom.CanAttackDistance);
+        bool result = false;
+        if (zom.DistanceToPlayers.find(zom.bt_playerID) != zom.DistanceToPlayers.end())
+            result = (zom.DistanceToPlayers.at(zom.bt_playerID) > zom.CanAttackDistance);
 
         //cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
         //cout << "플레이어와 좀비의 거리: " << zom.DistanceToPlayer << endl;
         //cout << "좀비의 공격 사거리: " << zom.CanAttackDistance << endl;
-        //cout << "따라서, 플레이어 \'#" << zom.bt_playerID << "\' 에 대한 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
+        cout << "따라서, 플레이어 \'#" << zom.bt_playerID << "\' 에 대한 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
         //cout << endl;
 
         if (result)

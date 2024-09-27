@@ -602,7 +602,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 			//=============================================== 좀비가 만약 한 번에 여러명의 플레이어를 포착하면 어떤 플레이어를 우선적으로 따라가게 만들지?
 			//												======> 거리가 가장 가까운 플레이어를 따라가도록 (+만약 최단 거리가 두명 이상이면 랜덤하게 따라가게) 
 			//좀비와 플레이어들의 거리 초기화
-			zom.DistanceToPlayers.clear();
+			//zom.DistanceToPlayers.clear();
 
 
 			for (auto& player : playerDB) {

@@ -98,7 +98,7 @@ public:
     ~Zombie();
 
 
-    void SetDistance();
+    void SetDistance(int playerid);
 
     void SetTargetLocation(TARGET t);
 

@@ -82,12 +82,12 @@ Zombie::~Zombie()
 }
 
 // 플레이어를 단 한명이라도 포착해야 돌아감
-void Zombie::SetDistance()
+void Zombie::SetDistance(int playerid)
 {
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[bt_playerID].x, playerDB[bt_playerID].y, playerDB[bt_playerID].z}} };
+	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[playerid].x, playerDB[playerid].y, playerDB[playerid].z}} };
 
-	DistanceToPlayers.emplace(bt_playerID, sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2)));
+	DistanceToPlayers.emplace(playerid, sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2)));
 }
 
 bool Zombie::RandomPatrol()
@@ -147,7 +147,7 @@ void Zombie::SetTargetLocation(TARGET t)
 {
 	targetType = t;
 
-	float max = 0.f;
+	float min = 10000000.f;
 	vector<vector<vector<float>>> pl = {};
 	vector<int> keys = {};
 
@@ -156,8 +156,8 @@ void Zombie::SetTargetLocation(TARGET t)
 
 		for (auto player : playerDB) {
 			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
-				if (max < DistanceToPlayers.at(player.first)) {
-					max = DistanceToPlayers.at(player.first);
+				if (min > DistanceToPlayers.at(player.first)) {
+					min = DistanceToPlayers.at(player.first);
 					//pl = vector<vector<vector<float>>>{ {{player.second.x,player.second.y, player.second.z}} };
 				}
 			}
@@ -166,7 +166,7 @@ void Zombie::SetTargetLocation(TARGET t)
 		// 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
 		for (auto player : playerDB) {
 			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
-				if (max == DistanceToPlayers.at(player.first)) {
+				if (min == DistanceToPlayers.at(player.first)) {
 					keys.emplace_back(player.first);
 				}
 			}
