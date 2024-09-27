@@ -238,7 +238,8 @@ void Zombie::MoveTo(float deltasecond)
 {
 	// 이미 최종 목표지점에 도착
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
-		cout << "MoveTo EQUAL" << endl;
+		//cout << "MoveTo EQUAL" << endl;
+		ReachFinalDestination();
 		return;
 	}
 
@@ -303,7 +304,7 @@ void Zombie::MoveTo(float deltasecond)
 
 		// 경로의 끝에 도착 = 최종 목표지점에 도착
 		if (ZombiePathIndex >= path.size()) {
-			//cout << "Zombie 경로 끝." << endl;
+			cout << "Zombie #" << ZombieData.zombieID << " 경로 끝 도착." << endl;
 			ReachFinalDestination();
 			ZombiePathIndex = 0;
 		}
