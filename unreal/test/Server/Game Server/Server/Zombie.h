@@ -61,7 +61,7 @@ public:
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
-    ZombiePathfinder* pathfinder;
+    ZombiePathfinder pathfinder;
     
     map<int, float> DistanceToPlayers;
 
