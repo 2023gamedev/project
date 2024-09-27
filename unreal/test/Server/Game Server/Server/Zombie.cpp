@@ -429,8 +429,9 @@ void Zombie::Wait()
 	if (IsAttacking) {
 
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> deltaTime = attackAnimStartTime - waitAfterTime;
+		std::chrono::duration<float> deltaTime = waitAfterTime - attackAnimStartTime;
 
+		cout << " IsAttacking" << endl;
 		if (deltaTime.count() >= ZombieAttackAnimDuration) {
 			IsAttacking = false;
 
