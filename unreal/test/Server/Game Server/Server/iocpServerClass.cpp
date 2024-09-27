@@ -560,12 +560,12 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 		lastBTTime = currentTime;
 
-		/*for (auto& player : playerDB) {
+		for (auto& player : playerDB) {
 			float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
 			cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-			cout << endl;
+			//cout << endl;
 		}
-		cout << endl;*/
+		//cout << endl;
 
 		if (playerDB.size() == 0) {
 			cout << "연결된 플레이어가 없습니다..." << endl;
@@ -594,16 +594,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 			//cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 실행==========" << endl;
 			//cout << endl;
 			//
-			//float z_x = zom.ZombieData.x;					float z_y = zom.ZombieData.y;					float z_z = zom.ZombieData.z;
-			//cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+			float z_x = zom.ZombieData.x;					float z_y = zom.ZombieData.y;					float z_z = zom.ZombieData.z;
+			cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 			//cout << endl;
 
-			//=============================================== 좀비가 만약 한 번에 여러명의 플레이어를 포착하면 어떤 플레이어를 우선적으로 따라가게 만들지?
-			//												======> 거리가 가장 가까운 플레이어를 따라가도록 (+만약 최단 거리가 두명 이상이면 랜덤하게 따라가게) 
-			//좀비와 플레이어들의 거리 초기화
-			//zom.DistanceToPlayers.clear();
-
-
+			// 각 플레이어들에 대해 해당 좀비 BT 수행
 			for (auto& player : playerDB) {
 
 				//float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
@@ -636,7 +631,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 					}
 					else {	//result == "Fail"
-						cout << "EEEERRRROOOOOORRRR" << endl;
+						cout << "<Selector-CanSeePlayer> EEEERRRROOOOOORRRR" << endl;
 					}
 
 				}
@@ -665,7 +660,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 				}
 				else {	//result == "Fail"
-					cout << "EEEERRRROOOOOORRRR" << endl;
+					cout << "<Selector-Detect> EEEERRRROOOOOORRRR" << endl;
 				}
 
 				//p_x = player->PlayerLocation[0][0][0]; p_y = player->PlayerLocation[0][0][1]; p_z = player->PlayerLocation[0][0][2];

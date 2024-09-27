@@ -17,11 +17,11 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);
 
+        zom.UpdatePath();
+
         zom.MoveTo(IOCP_CORE::BT_INTERVAL);
 
         zom.SendPath();
-
-        zom.Wait();
         
         //bool result = zom.MoveTo(); 
         //if (result)
@@ -35,13 +35,14 @@ public:
     string HasShouting(Zombie& zom) const override {
         //cout << "{HasShouting}의 [MoveTo Task] 호출" << endl;
 
-        zom.SetTargetLocation(Zombie::TARGET::SHOUTING);
+        //zom.SetTargetLocation(Zombie::TARGET::SHOUTING);  // ==========>> 얘네는 해당 소리를 듣는 순간, 그니까 그때 그순간의 타겟의 위치로 타겟을 지정해야해서 
+                                                            //  ProcessPacket에서 받을때 초기화 해줘야 할듯하다
+
+        zom.UpdatePath();
 
         zom.MoveTo(IOCP_CORE::BT_INTERVAL);
 
         zom.SendPath();
-
-        zom.Wait();
 
         return "MoveTo-Succeed";
     }
@@ -49,13 +50,14 @@ public:
     string HasFootSound(Zombie& zom) const override {
         //cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
 
-        zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);
+        //zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);     // ==========>> 얘네는 해당 소리를 듣는 순간, 그니까 그때 그순간의 타겟의 위치로 타겟을 지정해야해서 
+                                                                //  ProcessPacket에서 받을때 초기화 해줘야 할듯하다
+
+        zom.UpdatePath();
 
         zom.MoveTo(IOCP_CORE::BT_INTERVAL);
 
         zom.SendPath();
-
-        zom.Wait();
 
         return "MoveTo-Succeed";
     }
@@ -65,11 +67,11 @@ public:
 
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
 
+        zom.UpdatePath();
+
         zom.MoveTo(IOCP_CORE::BT_INTERVAL);
 
         zom.SendPath();
-
-        zom.Wait();
 
         return "MoveTo-Succeed";
     }
@@ -77,13 +79,11 @@ public:
     string NotHasLastKnownPlayerLocation(Zombie& zom) const override {
         //cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
 
-        zom.SetTargetLocation(Zombie::TARGET::PATROL);      //원래 자리로 돌아가기 보다는 랜덤한 근처 장소로 이동하게 만들어서 배회하게끔 만들면 좋을 듯
+        zom.SetTargetLocation(Zombie::TARGET::PATROL);
 
         zom.MoveTo(IOCP_CORE::BT_INTERVAL);
 
         zom.SendPath();
-
-        zom.Wait();
 
         return "MoveTo-Succeed";
     }

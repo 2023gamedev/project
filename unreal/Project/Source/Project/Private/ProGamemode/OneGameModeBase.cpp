@@ -177,10 +177,11 @@ void AOneGameModeBase::BeginPlay()
     {
         FRecastDebugGeometry NavMeshGeometry;
         NavMesh->GetDebugGeometry(NavMeshGeometry);
-        //NavMesh->Get
+        //NavMesh->GetPathSegmentBoundaryEdges(NavMeshGeometry);       // 이거 Edge 받을 수 있는 거 처럼 생겼는데 인자 뭐 넘겨 줘야 되는 지 모르겠음;;
+        //NavMesh->GetPolyEdges();
         
-        Outlines.Append(NavMeshGeometry.NavMeshEdges);
-        OutPoly.Append(NavMeshGeometry.PolyEdges);
+        Outlines.Append(NavMeshGeometry.NavMeshEdges);  // 사실상 안 담김
+        OutPoly.Append(NavMeshGeometry.PolyEdges);      // 사실상 안 담김
 
 
 

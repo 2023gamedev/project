@@ -241,12 +241,13 @@ uint32 ClientSocket::Run()
 							localZombiePath.ZombieId = zombiepath.zombieid();
 							//UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), localZombiePath.ZombieId);
 
-							
+							// 경로 입력 (사실상 하나만 담김)
 							localZombiePath.Path.emplace_back(zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());
 							UE_LOG(LogNet, Display, TEXT("Zombie #%d's Target Location: ( %.2f, %.2f, %.2f )"), localZombiePath.ZombieId, zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());
 
 							// 위치 값도 추가
 							localZombiePath.Location = FVector(zombiepath.location().x(), zombiepath.location().y(), zombiepath.location().z());
+							UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), localZombiePath.ZombieId, localZombiePath.Location.X, localZombiePath.Location.Y, localZombiePath.Location.Z);
 
 							// 큐에 ZombiePath 객체를 추가
 							Q_path.push(localZombiePath);

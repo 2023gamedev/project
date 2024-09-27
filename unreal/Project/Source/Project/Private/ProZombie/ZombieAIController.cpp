@@ -52,7 +52,6 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 		return;
 	}
 	
-	
 	// 타겟 방향 계산
 	float dx = PathX - zomlocation.X;
 	float dy = PathY - zomlocation.Y;
@@ -182,6 +181,7 @@ void AZombieAIController::Tick(float DeltaTime)
 				NearestPawn = PlayerPawn;
 				
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
+				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
 				//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());

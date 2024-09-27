@@ -182,10 +182,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                 if (z.ZombieData.zombieID == recvzombieid) {
                     z.PlayerInSight = true;
                     z.KnewPlayerLocation = true;
-                    z.SetDistance(Packet.playerid());
+                    z.SetDistance(Packet.playerid());   //DistanceToPlayers 맵 에 해당 플레이어와 거리 추가하기
 
                     //cout << "좀비 \'#" << z.ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
-                    cout << "디텍트된 아이디: " << Packet.playerid() << endl;
+                    //cout << "디텍트된 아이디: " << Packet.playerid() << endl;
 
                     break;
                 }
@@ -196,7 +196,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             for (auto& z : zombie) {
                 if (z.ZombieData.zombieID == recvzombieid) {
                     z.PlayerInSight = false;
-                    z.DistanceToPlayers.erase(Packet.playerid());
+                    z.DistanceToPlayers.erase(Packet.playerid());   //DistanceToPlayers 맵 에 해당 플레이어 정보 삭제하기
                     
                     cout << "좀비 \'#" << z.ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!: " << endl;
 

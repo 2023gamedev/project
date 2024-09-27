@@ -75,7 +75,7 @@ public:
 
     bool HeardFootSound;
 
-    bool RandPatrolSet;
+    bool RandPatrolSet;     // 랜덤 패트롤 지점이 set 되면 true
 
     bool IsAttacking;       // 해당 좀비 지금 공격 중인가? (애니메이션 재생 중인 가?)
 
@@ -112,9 +112,11 @@ public:
 
     bool IsPathUpdated();
 
-    bool RandomPatrol();
+    void RandomPatrol();
 
     void ReachFinalDestination();
+
+    void UpdatePath();
 
     //void ShoutingHear();
     

@@ -77,11 +77,12 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 Zombie::~Zombie()
 {
 	//여기 cout 해서 출력보면 왜 zombie 클래스가 생성도 되기 전인데 여러번 미리 불림?! 
-	// -> 그래서 여기서 만약 new 할당된 메모리 delete 하려하면 할당된 메모리도 없는데 지울려 해서 에러 (지금은 다 없애어 없긴하지만... 미리 소멸자가 여러번 불리는 건 마찬가지)
+	// -> 그래서 여기서 만약 new 할당된 메모리 delete 하려하면 할당된 메모리도 없는데 지울려 해서 에러 (지금은 다 없애서 없긴하지만... 미리 소멸자가 여러번 불리는 건 마찬가지)
 	// -> 이유는 모르겠음 그냥
+	// + 혹시 전방 선언해서??
 }
 
-// 플레이어를 단 한명이라도 포착해야 돌아감
+// 플레이어를 포착하면 돌아감 -> 패킷을 받을때 처리함
 void Zombie::SetDistance(int playerid)
 {
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
@@ -90,9 +91,9 @@ void Zombie::SetDistance(int playerid)
 	DistanceToPlayers.emplace(playerid, sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2)));
 }
 
-bool Zombie::RandomPatrol()
+void Zombie::RandomPatrol()
 {
-	cout << "RandomPatrol!!!" << endl;
+	cout << "New RandomPatrol!!!" << endl;
 
 	float px, py, pz;
 
@@ -108,38 +109,44 @@ bool Zombie::RandomPatrol()
 	while (px >= 2366.f) {		// 좀비가 계단 쪽, 그리고 그쪽 벽 넘어로 자주 넘어가는 오류가 있어 이를 일단 방지하기 위해 (맵 수정 전까지는)
 		px = ZombieData.x + dist(mt);
 
-		if (ZombieData.x >= 2366.f)
-			return false;
+		if (ZombieData.x >= 2366.f) {
+			cout << "[ERROR] 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
+			return;
+		}
 	}
 
 	vector<tuple<float, float, float>> dest_test;
 	//ZombiePathfinder pathfinderpatrol(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
 	//pathfinderpatrol.Run(dest_test, 1);
 
-	pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
-	pathfinder.Run(dest_test, 1);
+	while (dest_test.empty() == true) {
 
-	if (!dest_test.empty()) {
-		dest_test.pop_back();
+		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, px, py, pz);
+		pathfinder.Run(dest_test, 1);
 
-		tuple<float, float, float> dest;
-		if (!dest_test.empty()) {
-			dest = dest_test.back();
+		if (dest_test.empty() == true) {
+			cout << "랜덤 패트롤 지정 실패! 다시 검색!!!" << endl;
 		}
 
-		TargetLocation[0][0][0] = get<0>(dest);
-		TargetLocation[0][0][1] = get<1>(dest);
-		TargetLocation[0][0][2] = pz;
-
-		//pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-		path = dest_test;
-
-		RandPatrolSet = true;
-
-		return true;
 	}
-	else
-		return false;
+
+	dest_test.pop_back();	// 맨 마지막은 랜덤한 위치라서... 좀비가 걸을 수 있는 지형이 아닐 수 있음 -> 빼서 무조건 걸을 수 있는 위치가 최종 목적지!
+
+	tuple<float, float, float> dest;
+	if (!dest_test.empty()) {
+		dest = dest_test.back();
+	}
+
+	TargetLocation[0][0][0] = get<0>(dest);
+	TargetLocation[0][0][1] = get<1>(dest);
+	TargetLocation[0][0][2] = pz;
+
+	//pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
+	path = dest_test;
+
+	cout << "TargetLocation[Patrol]: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
+
+	RandPatrolSet = true;
 
 }
 
@@ -147,12 +154,16 @@ void Zombie::SetTargetLocation(TARGET t)
 {
 	targetType = t;
 
-	float min = 10000000.f;
+	float min = FLT_MAX;	//float 최대값
 	vector<vector<vector<float>>> pl = {};
 	vector<int> keys = {};
 
 	// 단 한명의 플레이어라도 마주쳤다면
 	if (DistanceToPlayers.size() != 0) {
+		// 사실상 플레이어를 마주쳤다면 BT에서 타겟 설정은 플레이어야만함
+		if (targetType != TARGET::PLAYER) {
+			cout << "DistanceToPlayers Map ERROR!!! -> Target is not set to Player" << endl;
+		}
 
 		for (auto player : playerDB) {
 			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
@@ -168,6 +179,8 @@ void Zombie::SetTargetLocation(TARGET t)
 			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
 				if (min == DistanceToPlayers.at(player.first)) {
 					keys.emplace_back(player.first);
+					cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << player.first << " 을 따라감!!!" << endl;
+					//cout << "플레이어 #" << player.first << " 의 위치: ( " << player.second.x << " , " << player.second.y << " , " << player.second.z << " )" << endl;
 				}
 			}
 		}
@@ -178,12 +191,19 @@ void Zombie::SetTargetLocation(TARGET t)
 		std::uniform_int_distribution<int> dist(0, keys.size() - 1);
 		
 		// map 사용 할 때 주의할 점 => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
-		pl = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x,playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
+		pl = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x, playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
+	}
+	else {	// (DistanceToPlayers.size() == 0)
+		// BT에서 타겟을 플레이어로 했는데, DistanceToPlayers 맵이 비어 있다면 절대 안됨
+		if (targetType == TARGET::PLAYER) {
+			cout << "DistanceToPlayers Map ERROR!!! -> Target is set to Player but DistanceToPlayers Map is empty" << endl;
+		}
 	}
 
 	switch (targetType) {
 	case TARGET::PLAYER:
 		TargetLocation = pl;
+		//cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 		break;
 	case TARGET::SHOUTING:
 		//==================================샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
@@ -196,14 +216,9 @@ void Zombie::SetTargetLocation(TARGET t)
 		break;
 	case TARGET::PATROL:
 		//============================랜덤한 근처 장소로 이동하게 만들어서 배회
-		int cnt = 0;
-		if (RandPatrolSet == false)
-			while (RandomPatrol() == false) {
-				cnt++;
-
-				if (cnt >= 5)
-					break;
-			}
+		if (RandPatrolSet == false) {
+			RandomPatrol();
+		}
 		break;
 	}
 }
@@ -237,15 +252,14 @@ void Zombie::Attack()
 
 void Zombie::MoveTo(float deltasecond)
 {
-	// 이미 최종 목표지점에 도착
-	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
-		//cout << "MoveTo EQUAL" << endl;
-		ReachFinalDestination();
-		return;
-	}
+	// 이미 최종 목표지점에 도착 -> 이제 BT 쓰레드에서 해당 함수 같이 돌리니, 해당 작업 필요 X
+	//if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
+	//	cout << "MoveTo EQUAL" << endl;
+	//	ReachFinalDestination();
+	//	return;
+	//}
 
 	if (IsPathUpdated()) {
-		//cout << "PathUpdated!" << endl;
 		ZombiePathIndex = 0;
 	}
 
@@ -340,7 +354,7 @@ bool Zombie::IsPathUpdated()
 	return false;
 }
 
-void Zombie::ReachFinalDestination()
+void Zombie::UpdatePath()
 {
 	// 패트롤인 경우 RandPatrol에서 해당 작업을 이미 진행해주기 때문에 A* 중복 실행방지 
 	if (RandPatrolSet == false) {
@@ -348,7 +362,11 @@ void Zombie::ReachFinalDestination()
 		pathfinder.Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
 	}
 	//cout << endl;
+}
 
+void Zombie::ReachFinalDestination()
+{
+	UpdatePath();
 
 	// 혹시 몰라서 한번 더 체크
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
@@ -381,13 +399,6 @@ void Zombie::ReachFinalDestination()
 
 void Zombie::SendPath()
 {
-	// 패트롤인 경우 RandPatrol에서 해당 작업을 이미 진행해주기 때문에 A* 중복 실행방지 
-	if (RandPatrolSet == false) {
-		pathfinder.UpdatePathFinder(ZombieData.x, ZombieData.y, ZombieData.z, TargetLocation[0][0][0], TargetLocation[0][0][1], TargetLocation[0][0][2]);
-		pathfinder.Run(path, 0);	// 여기에 사용하면 쓸데없이 여러번 부르긴 하지만 내부에 목표지점이 같으면 A*를 돌리지 않는 코드가 있음
-	}
-	//cout << endl;
-
 	if (path.empty() || ZombiePathIndex >= path.size()) {
 		return;
 	}
@@ -416,7 +427,10 @@ void Zombie::SendPath()
 			iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 		}
 	}
-	
+
+	if (targetType == TARGET::PLAYER) {
+		cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
+	}
 
 	//cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
 
@@ -436,11 +450,15 @@ void Zombie::Wait()
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> deltaTime = waitAfterTime - attackAnimStartTime;
 
-		cout << " IsAttacking" << endl;
+		cout << "Zombie #" << ZombieData.zombieID  << " is Attacking!" << endl;
+		
 		if (deltaTime.count() >= ZombieAttackAnimDuration) {
 			IsAttacking = false;
 
 			HaveToWait = false;
+		}
+		else {
+			cout << "Attack Animation time left " << ZombieAttackAnimDuration - deltaTime.count() << "s" << endl;
 		}
 	}
 }
