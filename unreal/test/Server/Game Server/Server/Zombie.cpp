@@ -179,14 +179,10 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
 
 	// 단 한명의 플레이어라도 마주쳤다면
 	if (DistanceToPlayers.size() != 0) {
-		// 사실상 플레이어를 마주쳤다면 BT에서 타겟 설정은 플레이어야만함
-		//if (targetType != TARGET::PLAYER) {
-		//	cout << "DistanceToPlayers Map ERROR!!! -> Target is not set to Player" << endl;
-		//}
 
 		for (auto player : playerDB) {
 			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
-				if (min > DistanceToPlayers.at(player.first)) {
+				if (min > DistanceToPlayers.at(player.first) && DistanceToPlayers.at(player.first) > 0) {
 					min = DistanceToPlayers.at(player.first);
 				}
 			}
@@ -213,9 +209,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
 	}
 	else {	// (DistanceToPlayers.size() == 0)
 		// BT에서 타겟을 플레이어로 했는데, DistanceToPlayers 맵이 비어 있다면 절대 안됨
-		//if (targetType == TARGET::PLAYER) {
-			cout << "DistanceToPlayers Map ERROR!!! -> Target is set to Player but DistanceToPlayers Map is empty" << endl;
-		//}
+		cout << "DistanceToPlayers Map ERROR!!! -> Target is set to Player but DistanceToPlayers Map is empty" << endl;
 	}
 }
 
