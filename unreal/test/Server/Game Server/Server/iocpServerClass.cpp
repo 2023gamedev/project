@@ -590,6 +590,9 @@ void IOCP_CORE::Zombie_BT_Thread()
 				continue;
 			}
 
+			//시작하자 말자 플레이어 위치로 움직이게 설정 (A* 관찰용)
+			//zom.PlayerInSight = true;
+
 			//cout << endl;
 			//cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 실행==========" << endl;
 			//cout << endl;
