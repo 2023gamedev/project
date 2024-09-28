@@ -86,13 +86,21 @@ Zombie::~Zombie()
 	// + 혹시 전방 선언해서??
 }
 
-// 플레이어를 포착하면 돌아감 -> 패킷을 받을때 처리함
 void Zombie::SetDistance(int playerid)
 {
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[playerid].x, playerDB[playerid].y, playerDB[playerid].z}} };
 
-	DistanceToPlayers.emplace(playerid, sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2)));
+	float dist = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
+
+	if (DistanceToPlayers.find(playerid) == DistanceToPlayers.end()) {		// DistanceToPlayers map에 playerid가 없으면 -> 생성
+		DistanceToPlayers.emplace(playerid, dist);
+	}
+	else {		// DistanceToPlayers map에 이미 playerid가 있으면 -> 수정
+		DistanceToPlayers.at(playerid) = dist;
+		//DistanceToPlayers[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
+													// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 (at은 해당 키값 없으면 abort()에러 띄움)
+	}
 }
 
 void Zombie::RandomPatrol()
@@ -200,7 +208,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
 
 		std::uniform_int_distribution<int> dist(0, keys.size() - 1);
 
-		// map 사용 할 때 주의할 점 (playerDB) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
+		// {주의} map 사용 할 때 주의할 점 (playerDB) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
 		closest_player = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x, playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
 	}
 	else {	// (DistanceToPlayers.size() == 0)
@@ -236,7 +244,6 @@ void Zombie::Attack()
 
 	attackAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 공격 시작 시간
 }
-
 
 void Zombie::MoveTo(float deltasecond)
 {
@@ -393,7 +400,8 @@ void Zombie::ReachFinalDestination()
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
 		switch (targetType) {
 		case TARGET::PLAYER:
-			//사실상 실행될 일 없음
+			// 사실상 실행될 일 없음
+			// 딱히 뭐 할 것도 없고;;
 			break;
 		case TARGET::SHOUTING:
 			HeardShouting = false;

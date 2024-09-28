@@ -8,6 +8,10 @@ public:
 
     string CanSeePlayer(Zombie& zom) const override {
         bool result = false;
+
+        //zom.SetDistance(zom.bt_playerID);     //DistanceToPlayers 맵 에 해당 플레이어와 거리 갱신 
+                                                //(바로 앞에 작업인 CanAttack Task에서 이미 해당 작업을 진행하기에 또 할 필요X)
+
         if (zom.DistanceToPlayers.find(zom.bt_playerID) != zom.DistanceToPlayers.end())
             result = (zom.DistanceToPlayers.at(zom.bt_playerID) > zom.CanAttackDistance);
 
