@@ -86,5 +86,7 @@ public:
 
 	ABaseZombie* OwnerZombie;
 
+	int attackPlayerID;
+
 	float PreviousHp = 0.f;
 };

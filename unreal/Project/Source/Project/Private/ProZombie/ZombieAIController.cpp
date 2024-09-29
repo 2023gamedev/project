@@ -21,6 +21,10 @@ const FName AZombieAIController::PatrolLocationKey(TEXT("PatrolLocation"));
 
 AZombieAIController::AZombieAIController()
 {
+	//OwnerZombie = Cast<ANormalZombie>(GetPawn());		//=> OneGameModeBase.cpp에 UpdateZombie()에서 해당 새로운 AIController 생성하고 바로 새좀비와 Possess하고 OwnerZombie도 할당 하지만, 생성자가 먼저 불려 에러 일으킴
+	OwnerZombie = nullptr;
+
+	attackPlayerID = 1;	// 일단 무조건 1번 플레이어로 시선 따라가게 설정 -> 나중에 좀비 공격 패킷에서 플레이어 아이디도 받게 추가하고 해당 아이디를 이용하는 걸로 수정 필요
 }
 
 void AZombieAIController::BeginPlay()
@@ -29,6 +33,7 @@ void AZombieAIController::BeginPlay()
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
+	//OwnerZombie = Cast<ANormalZombie>(GetPawn());		//=> OneGameModeBase.cpp에 UpdateZombie()에서 해당 새로운 AIController 생성하고 바로 새좀비와 Possess하고 OwnerZombie도 할당 하지만, BeginePlay()가 먼저 불려 에러 일으킴
 }
 
 void AZombieAIController::ZombieMoveTo(float deltasecond)
@@ -92,16 +97,55 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 void AZombieAIController::ZombieTurn(float deltasecond)
 {
 	FVector zombieDest;
-	zombieDest.X = get<0>(OwnerZombie->NextPath);
-	zombieDest.Y = get<1>(OwnerZombie->NextPath);
-	zombieDest.Z = get<2>(OwnerZombie->NextPath);
+
+	// 좀비가 공격 중일때 => 플레이어 쪽으로 시선 돌리기
+	if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->AttackMontage) == true) {
+		TArray<AActor*> Players;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
+		ABaseCharacter* Char = nullptr;
+
+		// 플레이어 찾기
+		bool result = false;
+		for (AActor* Player : Players)
+		{
+			Char = Cast<ABaseCharacter>(Player);
+
+			// 플레이어 자기 자신일 때는 Char->GetPlayerId() 에 99가 담기므로
+			if (Char->GetPlayerId() == 99) {
+				if (GameInstance->ClientSocketPtr->MyPlayerId == attackPlayerID) {
+					result = true;
+					break;
+				}
+			}
+			else if (Char->GetPlayerId() == attackPlayerID) {
+				result = true;
+				break;
+			}
+		}
+
+		if (result == false) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] ZombieTurn(ToPlayer) - Couldn't find Player ID #%d"), attackPlayerID));
+			return;
+		}
+
+		// 해당 플레이어 쪽으로 회전시키기
+		zombieDest.X = Char->GetActorLocation().X;
+		zombieDest.Y = Char->GetActorLocation().Y;
+		zombieDest.Z = Char->GetActorLocation().Z;
+	}
+	else {
+		// 다음 행선지 쪽으로 회전시키기
+		zombieDest.X = get<0>(OwnerZombie->NextPath);
+		zombieDest.Y = get<1>(OwnerZombie->NextPath);
+		zombieDest.Z = get<2>(OwnerZombie->NextPath);
+	}
 
 	FVector zomTarDir = zombieDest - OwnerZombie->GetActorLocation();
 
 	FVector zomTarNDir = zomTarDir.GetSafeNormal();
 	FRotator zomTarRot = zomTarNDir.Rotation();
 	FRotator zomCurRot = OwnerZombie->GetActorRotation();
-	
+
 	// 회전 계산
 	float RotationSpeed = OwnerZombie->GetTurningSpeed() * deltasecond;
 
@@ -115,9 +159,6 @@ void AZombieAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	ZombieMoveTo(DeltaTime);
-	ZombieTurn(DeltaTime);
-
 	//static float SearchInterval = 0.5f; // 0.5초마다 플레이어 검색
 	//static float TimeSinceLastSearch = 0.0f;
 	//TimeSinceLastSearch += DeltaTime;
@@ -126,15 +167,19 @@ void AZombieAIController::Tick(float DeltaTime)
 	//{
 		//TimeSinceLastSearch = 0.0f; // 타이머 리셋
 
-	Send_ZombieHP();
-
-	OwnerZombie = Cast<ANormalZombie>(GetPawn());
+	//OwnerZombie = Cast<ANormalZombie>(GetPawn());		// 이미 OneGameModeBase.cpp에 UpdateZombie()에서 OwnerZombie 할당 처리함, 그리고 뒤에서 예외처리 했으니 괜춘
 
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
 	if (PlayerPawn == nullptr || OwnerZombie == nullptr) {
 		return;
 	}
+
+	Send_ZombieHP();
+
+	ZombieMoveTo(DeltaTime);
+	ZombieTurn(DeltaTime);
+
 
 	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
 	FVector ZombieLocation = OwnerZombie->GetActorLocation(); // 좀비의 위치

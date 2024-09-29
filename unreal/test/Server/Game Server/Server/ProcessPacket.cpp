@@ -65,6 +65,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     } break;
 
     case 2: {
+        // 예전에 클라에서 좀비 움직이면 해당 패킷을 서버로 보냈음 -> 이제는 움직임을 서버에서 담당하니 사실상 사용 안 함
+
         //printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
         Protocol::Zombie Packet;
         Packet.ParseFromArray(buffer, bufferSize);
