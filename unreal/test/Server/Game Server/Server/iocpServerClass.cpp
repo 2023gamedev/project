@@ -28,8 +28,6 @@ IOCP_CORE::IOCP_CORE()
 {	
 	playerIndex = 0;
 
-	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
-
 	bServerOn = false;
 
 	string filePath;
@@ -46,9 +44,8 @@ IOCP_CORE::IOCP_CORE()
 	filePath = "../../../../Project/EdgesF2.txt";
 	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
 	
+	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 	
-
-
 	//==========Zombie_BT 초기화
 	Zombie_BT_Initialize();
 	//==========Zombie_BT 쓰레드 시작 (Zombie BT 실행 시작)

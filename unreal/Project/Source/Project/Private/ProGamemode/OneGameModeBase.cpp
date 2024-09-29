@@ -167,96 +167,96 @@ void AOneGameModeBase::BeginPlay()
 
  
     // commit debug용 
-    TArray<FVector> OutVertices;
-    TArray<FVector> Outlines;
-    TArray<FVector> OutPoly;
-    ARecastNavMesh* NavMesh = Cast<ARecastNavMesh>(UNavigationSystemV1::GetCurrent(World)->MainNavData);
-
-
-    if (NavMesh)
-    {
-        FRecastDebugGeometry NavMeshGeometry;
-        NavMesh->GetDebugGeometry(NavMeshGeometry);
-        //NavMesh->GetPathSegmentBoundaryEdges(NavMeshGeometry);       // 이거 Edge 받을 수 있는 거 처럼 생겼는데 인자 뭐 넘겨 줘야 되는 지 모르겠음;;
-        //NavMesh->GetPolyEdges();
-        
-        Outlines.Append(NavMeshGeometry.NavMeshEdges);  // 사실상 안 담김
-        OutPoly.Append(NavMeshGeometry.PolyEdges);      // 사실상 안 담김
-
-
-
-        int i = 0;
-        // 데이터를 텍스트 파일로 저장하기 위한 문자열로 변환
-        FString OutlineData;
-        for (const FVector& Edge : Outlines)
-        {
-            i++;
-            OutlineData += FString::Printf(TEXT("%f,%f,%f\n"), Edge.X, Edge.Y, Edge.Z);
-        }
-
-        UE_LOG(LogTemp, Log, TEXT("Outlines :: %d!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), i);
-
-        // 데이터를 텍스트 파일로 저장하기 위한 문자열로 변환
-        FString OutPolyData;
-        for (const FVector& Poly : OutPoly)
-        {
-            OutPolyData += FString::Printf(TEXT("%f,%f,%f\n"), Poly.X, Poly.Y, Poly.Z);
-        }
-
-        // 저장할 파일 경로 설정 (프로젝트 디렉토리)
-        FString FilePath = FPaths::ProjectDir() + TEXT("NavMeshEdges.txt");
-        FString FilePathPol = FPaths::ProjectDir() + TEXT("NavMeshPolyes.txt");
-
-        // 파일에 데이터 저장
-        FFileHelper::SaveStringToFile(OutlineData, *FilePath);
-        FFileHelper::SaveStringToFile(OutPolyData, *FilePathPol);
-
-        OutVertices.Append(NavMeshGeometry.MeshVerts);
-
-        for (const FVector& Vertex : NavMeshGeometry.MeshVerts)
-        {
-            DrawDebugPoint(GetWorld(), Vertex, 10.0f, FColor::Red, false, -1.0f, 0);
-        }
-
-        FString FilePathB2 = FPaths::ProjectDir() + TEXT("B2.txt");
-        FString FilePathB1 = FPaths::ProjectDir() + TEXT("B1.txt");
-        FString FilePathF1 = FPaths::ProjectDir() + TEXT("F1.txt");
-        FString FilePathF2 = FPaths::ProjectDir() + TEXT("F2.txt");
-        FString FilePathF3 = FPaths::ProjectDir() + TEXT("F3.txt");
-
-
-        FString NodeDataB2;
-        FString NodeDataB1;
-        FString NodeDataF1;
-        FString NodeDataF2;
-        FString NodeDataF3;
-
-        for (const FVector& Node : OutVertices)
-        {
-            if (Node.Z < 800.f) {
-                NodeDataB2 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
-            }
-            else if (Node.Z < 1800.f) {
-                NodeDataB1 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
-            }
-            else if (Node.Z < 2500.f) {
-                NodeDataF1 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
-            }
-            else if (Node.Z < 3600.f) {
-                NodeDataF2 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
-            }
-            else {
-                NodeDataF3 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
-            }
-        }
-
-        FFileHelper::SaveStringToFile(NodeDataB2, *FilePathB2);
-        FFileHelper::SaveStringToFile(NodeDataB1, *FilePathB1);
-        FFileHelper::SaveStringToFile(NodeDataF1, *FilePathF1);
-        FFileHelper::SaveStringToFile(NodeDataF2, *FilePathF2);
-        FFileHelper::SaveStringToFile(NodeDataF3, *FilePathF3);
-
-    }
+    //TArray<FVector> OutVertices;
+    //TArray<FVector> Outlines;
+    //TArray<FVector> OutPoly;
+    //ARecastNavMesh* NavMesh = Cast<ARecastNavMesh>(UNavigationSystemV1::GetCurrent(World)->MainNavData);
+    //
+    //
+    //if (NavMesh)
+    //{
+    //    FRecastDebugGeometry NavMeshGeometry;
+    //    NavMesh->GetDebugGeometry(NavMeshGeometry);
+    //    //NavMesh->GetPathSegmentBoundaryEdges(NavMeshGeometry);       // 이거 Edge 받을 수 있는 거 처럼 생겼는데 인자 뭐 넘겨 줘야 되는 지 모르겠음;;
+    //    //NavMesh->GetPolyEdges();
+    //    
+    //    Outlines.Append(NavMeshGeometry.NavMeshEdges);  // 사실상 안 담김
+    //    OutPoly.Append(NavMeshGeometry.PolyEdges);      // 사실상 안 담김
+    //
+    //
+    //
+    //    int i = 0;
+    //    // 데이터를 텍스트 파일로 저장하기 위한 문자열로 변환
+    //    FString OutlineData;
+    //    for (const FVector& Edge : Outlines)
+    //    {
+    //        i++;
+    //        OutlineData += FString::Printf(TEXT("%f,%f,%f\n"), Edge.X, Edge.Y, Edge.Z);
+    //    }
+    //
+    //    UE_LOG(LogTemp, Log, TEXT("Outlines :: %d!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), i);
+    //
+    //    // 데이터를 텍스트 파일로 저장하기 위한 문자열로 변환
+    //    FString OutPolyData;
+    //    for (const FVector& Poly : OutPoly)
+    //    {
+    //        OutPolyData += FString::Printf(TEXT("%f,%f,%f\n"), Poly.X, Poly.Y, Poly.Z);
+    //    }
+    //
+    //    // 저장할 파일 경로 설정 (프로젝트 디렉토리)
+    //    FString FilePath = FPaths::ProjectDir() + TEXT("NavMeshEdges.txt");
+    //    FString FilePathPol = FPaths::ProjectDir() + TEXT("NavMeshPolyes.txt");
+    //
+    //    // 파일에 데이터 저장
+    //    FFileHelper::SaveStringToFile(OutlineData, *FilePath);
+    //    FFileHelper::SaveStringToFile(OutPolyData, *FilePathPol);
+    //
+    //    OutVertices.Append(NavMeshGeometry.MeshVerts);
+    //
+    //    for (const FVector& Vertex : NavMeshGeometry.MeshVerts)
+    //    {
+    //        DrawDebugPoint(GetWorld(), Vertex, 10.0f, FColor::Red, false, -1.0f, 0);
+    //    }
+    //
+    //    FString FilePathB2 = FPaths::ProjectDir() + TEXT("B2.txt");
+    //    FString FilePathB1 = FPaths::ProjectDir() + TEXT("B1.txt");
+    //    FString FilePathF1 = FPaths::ProjectDir() + TEXT("F1.txt");
+    //    FString FilePathF2 = FPaths::ProjectDir() + TEXT("F2.txt");
+    //    FString FilePathF3 = FPaths::ProjectDir() + TEXT("F3.txt");
+    //
+    //
+    //    FString NodeDataB2;
+    //    FString NodeDataB1;
+    //    FString NodeDataF1;
+    //    FString NodeDataF2;
+    //    FString NodeDataF3;
+    //
+    //    for (const FVector& Node : OutVertices)
+    //    {
+    //        if (Node.Z < 800.f) {
+    //            NodeDataB2 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+    //        }
+    //        else if (Node.Z < 1800.f) {
+    //            NodeDataB1 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+    //        }
+    //        else if (Node.Z < 2500.f) {
+    //            NodeDataF1 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+    //        }
+    //        else if (Node.Z < 3600.f) {
+    //            NodeDataF2 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+    //        }
+    //        else {
+    //            NodeDataF3 += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
+    //        }
+    //    }
+    //
+    //    FFileHelper::SaveStringToFile(NodeDataB2, *FilePathB2);
+    //    FFileHelper::SaveStringToFile(NodeDataB1, *FilePathB1);
+    //    FFileHelper::SaveStringToFile(NodeDataF1, *FilePathF1);
+    //    FFileHelper::SaveStringToFile(NodeDataF2, *FilePathF2);
+    //    FFileHelper::SaveStringToFile(NodeDataF3, *FilePathF3);
+    //
+    //}
 
     //==========================================
     {
@@ -277,9 +277,6 @@ void AOneGameModeBase::BeginPlay()
         //        FBox Tiles = NavData->GetNavMeshTileBounds(0);
         //    }
         //}
-
-
-
     }
     //==========================================
 }
