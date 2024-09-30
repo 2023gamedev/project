@@ -59,7 +59,7 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
 
     for (const FVector& Node : Nodes)
     {
-        if (Node.X > 16.f && Node.X < 2366.f && Node.Y < 3960.f) {
+        if (Node.X > 16.f && Node.X < 2366.f && Node.Y > -1220.f && Node.Y < 3960.f) {
             NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
         }
 
@@ -110,7 +110,7 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
                 EdgeData.Location = Neighbor;
                 EdgeData.Weight = bDiagonal ? sqrt(2.f) : 1.f;
 
-                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y < 3960.f) {
+                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y > -1220.f && Neighbor.Y < 3960.f) {
                     if (Nodes.Contains(Neighbor)) {
                         EdgeDatas.Add(EdgeData);
                     }
@@ -141,7 +141,7 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
     }
 
     // 파일로 저장
-    FString FilePath = FPaths::ProjectDir() + TEXT("EdgesF2.txt");
+    FString FilePath = FPaths::ProjectDir() + TEXT("EdgesB1.txt");
     FFileHelper::SaveStringToFile(EdgeData, *FilePath);
 
     return Edges;
