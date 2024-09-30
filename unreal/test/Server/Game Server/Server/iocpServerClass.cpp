@@ -558,11 +558,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 		lastBTTime = currentTime;
 
-		for (auto& player : playerDB) {
-			float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
-			cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-			//cout << endl;
-		}
+		//for (auto& player : playerDB) {
+		//	float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
+		//	cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+		//	//cout << endl;
+		//}
 		//cout << endl;
 
 		if (playerDB.size() == 0) {

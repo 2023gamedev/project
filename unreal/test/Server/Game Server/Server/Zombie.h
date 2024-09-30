@@ -60,9 +60,9 @@ public:
     //const float CanHearDistance = 500.f;            //========================언리얼 BaseCharacter.cpp에서 FootSound() - float DetectRadius = 500.f;에서 참조 (맞는지 확인 필요)
     //const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
 
-    const float ZombieAttackAnimDuration = 2.7f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
+    const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
 
-    const float ZombieBeAttackedAnimDuration = 2.1f;    // 좀비 피격 애니메이션 재생 시간 (* 정확히는 2.00초)
+    const float ZombieBeAttackedAnimDuration = 2.0f;    // 좀비 피격 애니메이션 재생 시간 (* 정확히는 2.00초)
 
     const float NormalZombieStartHP = 20.0f;        // 20.0f
 

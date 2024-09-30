@@ -131,6 +131,15 @@ void Zombie::RandomPatrol()
 		}
 	}
 
+	while (py <= -1200.f) {		// 좀비가 화장실 뒤쪽 너머 빈 공간으로 자주 넘어가서 일단 막음
+		py = ZombieData.y + dist(mt);
+
+		if (ZombieData.x <= -1200.f) {
+			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
+			return;
+		}
+	}
+
 	vector<tuple<float, float, float>> dest_test;
 
 	// 랜덤 패트롤 지점이 갈 수 있는 지 검사
@@ -219,8 +228,8 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
 
 void Zombie::Attack()
 {
-	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << bt_playerID << "\' 을 공격하였습니다!" << endl;
-	cout << endl;
+	//cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << bt_playerID << "\' 을 공격하였습니다!" << endl;
+	//cout << endl;
 
 	// 어택 통신 패킷 보내기
 
@@ -245,15 +254,8 @@ void Zombie::Attack()
 
 void Zombie::MoveTo(float deltasecond)
 {
-	// 이미 최종 목표지점에 도착 -> 이제 BT 쓰레드에서 해당 함수 같이 돌리니, 해당 작업 필요 X (중복 작업)
-	//if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
-	//	cout << "MoveTo EQUAL" << endl;
-	//	ReachFinalDestination();
-	//	return;
-	//}
-
 	if (IsPathUpdated()) {
-		ZombiePathIndex = 0;
+		ZombiePathIndex = 1;
 	}
 
 	if (ZombiePathIndex >= path.size()) {
@@ -314,7 +316,7 @@ void Zombie::MoveTo(float deltasecond)
 		if (ZombiePathIndex >= path.size()) {
 			cout << "Zombie #" << ZombieData.zombieID << " 경로 끝 도착." << endl;
 			ReachFinalDestination();
-			ZombiePathIndex = 0;
+			ZombiePathIndex = 1;
 		}
 	}
 	else {
@@ -473,7 +475,7 @@ void Zombie::Wait()
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
 
-		cout << "Zombie #" << ZombieData.zombieID << " is being Attacked!" << endl;
+		//cout << "Zombie #" << ZombieData.zombieID << " is being Attacked!" << endl;
 
 		if (deltaTime.count() >= ZombieBeAttackedAnimDuration) {
 			IsBeingAttacked = false;
@@ -483,7 +485,7 @@ void Zombie::Wait()
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
 		}
 		else {
-			cout << "Attacked Animation time left " << ZombieBeAttackedAnimDuration - deltaTime.count() << "s" << endl;
+			//cout << "Attacked Animation time left " << ZombieBeAttackedAnimDuration - deltaTime.count() << "s" << endl;
 		}
 	}
 	else if (IsAttacking) {
@@ -491,7 +493,7 @@ void Zombie::Wait()
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
 
-		cout << "Zombie #" << ZombieData.zombieID  << " is Attacking!" << endl;
+		//cout << "Zombie #" << ZombieData.zombieID  << " is Attacking!" << endl;
 		
 		if (deltaTime.count() >= ZombieAttackAnimDuration) {
 			IsAttacking = false;
@@ -499,7 +501,7 @@ void Zombie::Wait()
 			HaveToWait = false;
 		}
 		else {
-			cout << "Attack Animation time left " << ZombieAttackAnimDuration - deltaTime.count() << "s" << endl;
+			//cout << "Attack Animation time left " << ZombieAttackAnimDuration - deltaTime.count() << "s" << endl;
 		}
 	}
 
