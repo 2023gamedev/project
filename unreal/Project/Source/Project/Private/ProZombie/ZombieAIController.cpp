@@ -353,42 +353,6 @@ void AZombieAIController::Send_ZombieHP()
 	}
 }
 
-// 이전 클라에서 BT 돌릴때 쓰던 통신용 함수 같음 - 혹시 맞으면 더이상 안쓰니까 지우기
-//void AZombieAIController::CheckAndSendMovement()
-//{
-//	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-//	FVector CurrentLocation = ZombiePawn->GetActorLocation();
-//	FRotator CurrentRotation = ZombiePawn->GetActorRotation();
-//	ZombieId = ZombiePawn->GetZombieId();
-//
-//	// 이전 위치와 현재 위치 비교 (움직임 감지)
-//	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation) {
-//
-//		// Protobuf를 사용하여 TestPacket 생성
-//		Protocol::Zombie packet;
-//		packet.set_zombieid(ZombieId);
-//		packet.set_packet_type(2);
-//		packet.set_x(CurrentLocation.X);
-//		packet.set_y(CurrentLocation.Y);
-//		packet.set_z(CurrentLocation.Z);
-//		packet.set_pitch(CurrentRotation.Pitch);
-//		packet.set_yaw(CurrentRotation.Yaw);
-//		packet.set_roll(CurrentRotation.Roll);
-//
-//		// 직렬화
-//		std::string serializedData;
-//		packet.SerializeToString(&serializedData);
-//
-//		// 직렬화된 데이터를 서버로 전송
-//		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-//		//UE_LOG(LogNet, Display, TEXT("Send Zombie: ZombieId=%d"), ZombieId);
-//
-//		PreviousLocation = CurrentLocation;
-//		PreviousRotation = CurrentRotation;
-//	}
-//}
-
-
 void AZombieAIController::SetStartLocationValue(FVector startlocation)
 {
 	GetBlackboardComponent()->SetValueAsVector(StartLocationKey, startlocation);

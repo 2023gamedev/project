@@ -106,6 +106,7 @@ public:
 	PlayerRun recvRun;
 	PlayerJump recvJump;
 	ZombieData recvZombieData;
+	ZombieAttack recvZombieAttack;
 	//ZombiePath recvZombiePath;
 
 	uint32 PlayerId;

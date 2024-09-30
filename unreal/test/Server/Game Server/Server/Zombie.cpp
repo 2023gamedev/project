@@ -236,6 +236,7 @@ void Zombie::Attack()
 	Protocol::Zombie_attack attackpacket;
 
 	attackpacket.set_zombieid(ZombieData.zombieID);
+	attackpacket.set_playerid(bt_playerID);
 	attackpacket.set_packet_type(13);
 
 	string serializedData;

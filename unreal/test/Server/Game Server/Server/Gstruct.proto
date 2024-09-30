@@ -29,6 +29,7 @@ message Zombie {
 
 message Zombie_attack{
     uint32 zombieid = 1;
+    uint32 playerid = 2;
     uint32 packet_type = 3;
 }
 

@@ -728,6 +728,7 @@ class Zombie_attack final :
 
   enum : int {
     kZombieidFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
     kPacketTypeFieldNumber = 3,
   };
   // uint32 zombieid = 1;
@@ -737,6 +738,15 @@ class Zombie_attack final :
   private:
   uint32_t _internal_zombieid() const;
   void _internal_set_zombieid(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
   public:
 
   // uint32 packet_type = 3;
@@ -757,6 +767,7 @@ class Zombie_attack final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     uint32_t zombieid_;
+    uint32_t playerid_;
     uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -3290,6 +3301,26 @@ inline void Zombie_attack::_internal_set_zombieid(uint32_t value) {
 inline void Zombie_attack::set_zombieid(uint32_t value) {
   _internal_set_zombieid(value);
   // @@protoc_insertion_point(field_set:Protocol.Zombie_attack.zombieid)
+}
+
+// uint32 playerid = 2;
+inline void Zombie_attack::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t Zombie_attack::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t Zombie_attack::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie_attack.playerid)
+  return _internal_playerid();
+}
+inline void Zombie_attack::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void Zombie_attack::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie_attack.playerid)
 }
 
 // uint32 packet_type = 3;

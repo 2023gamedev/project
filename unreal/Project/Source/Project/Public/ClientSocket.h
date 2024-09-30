@@ -135,6 +135,17 @@ struct ZombieHP
 		: ZombieId(InZombieId), Hp(InHp) {}
 };
 
+struct ZombieAttack
+{
+	uint32 ZombieId;
+	uint32 PlayerId;
+
+	ZombieAttack() : ZombieId(0), PlayerId(0) {}
+
+	ZombieAttack(uint32 InZombieId, uint32 InPlayerId)
+		: ZombieId(InZombieId), PlayerId(InPlayerId) {}
+};
+
 
 class UProGameInstance;
 
@@ -159,7 +170,7 @@ public:
 	Concurrency::concurrent_queue<ZombiePath> Q_path;
 	Concurrency::concurrent_queue<bool> Q_ping;
 	Concurrency::concurrent_queue<ZombieHP> Q_zhp;
-	Concurrency::concurrent_queue<uint32> Q_zattack;
+	Concurrency::concurrent_queue<ZombieAttack> Q_zattack;
 
 
 	virtual bool Init() override;

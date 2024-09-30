@@ -283,7 +283,7 @@ uint32 ClientSocket::Run()
 						Protocol::Zombie_attack zombieattack;
 						if (zombieattack.ParseFromArray(buffer.data(), buffer.size()))
 						{
-							Q_zattack.push(zombieattack.zombieid());
+							Q_zattack.push(ZombieAttack(zombieattack.zombieid(), zombieattack.playerid()));
 							UE_LOG(LogNet, Display, TEXT("Zombie Attack"));
 						}
 						break;
