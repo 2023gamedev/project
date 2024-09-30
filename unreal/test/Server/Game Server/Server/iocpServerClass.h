@@ -118,7 +118,7 @@ public:
 	bool bServerOn;
 
 	//좀비 벡터
-	vector<Zombie*> zombie;				// 좀비 포인터 or std::reference_wrapper 로 받지 않으면 좀비 다형성 사용 X 
+	vector<Zombie*> zombie;
 
 	//======Zombie_BT 선언======
 

@@ -240,7 +240,7 @@ void Zombie::Attack()
 
 	HaveToWait = true;	// 좀비 BT 대기상태로 변경
 
-	attackAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 공격 시작 시간
+	animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 공격 시작 시간
 }
 
 void Zombie::MoveTo(float deltasecond)
@@ -467,10 +467,29 @@ void Zombie::Wait()
 	//cout << endl;
 
 
-	if (IsAttacking) {
+	// 피격이 공격 보다 위에 => 공격 중에 피격 당하면 공격 캔슬되고 피격만 되게 하게 
+	if (IsBeingAttacked) {
 
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> deltaTime = waitAfterTime - attackAnimStartTime;
+		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
+
+		cout << "Zombie #" << ZombieData.zombieID << " is being Attacked!" << endl;
+
+		if (deltaTime.count() >= ZombieBeAttackedAnimDuration) {
+			IsBeingAttacked = false;
+
+			HaveToWait = false;
+
+			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
+		}
+		else {
+			cout << "Attacked Animation time left " << ZombieBeAttackedAnimDuration - deltaTime.count() << "s" << endl;
+		}
+	}
+	else if (IsAttacking) {
+
+		auto waitAfterTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
 
 		cout << "Zombie #" << ZombieData.zombieID  << " is Attacking!" << endl;
 		
@@ -483,4 +502,6 @@ void Zombie::Wait()
 			cout << "Attack Animation time left " << ZombieAttackAnimDuration - deltaTime.count() << "s" << endl;
 		}
 	}
+
+	
 }

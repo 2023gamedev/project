@@ -582,6 +582,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 			if (result == "NO PLAYER")
 				break;
 
+			// 좀비가 사망시 BT 중지
+			if (zom->zombieHP <= 0.f) {
+				continue;
+			}
+
 			// 좀비가 대기상태라면 해당 좀비 BT 잠시 대기
 			if (zom->HaveToWait == true) {
 				zom->Wait();

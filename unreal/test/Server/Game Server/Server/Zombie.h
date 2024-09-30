@@ -26,6 +26,8 @@ public:
     float x, y, z;
     float pitch, yaw, roll;
     int zombietype;             // 0 - 일반 좀비, 1 - 샤우팅 좀비, 2 - 뛰는 좀비
+
+    // 사실상 밑에 두개는 사용 X (현재는)
     int patroltype;
     float patrolrange;
 
@@ -60,6 +62,10 @@ public:
 
     const float ZombieAttackAnimDuration = 2.7f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
 
+    const float ZombieBeAttackedAnimDuration = 2.1f;    // 좀비 피격 애니메이션 재생 시간 (* 정확히는 2.00초)
+
+    const float NormalZombieStartHP = 20.0f;        // 20.0f
+
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
     ZombiePathfinder pathfinder;
@@ -82,9 +88,11 @@ public:
 
     bool IsAttacking;       // 해당 좀비 지금 공격 중인가? (애니메이션 재생 중인 가?)
 
+    bool IsBeingAttacked;   // 해당 좀비 지금 피격 당하는 중인가? (애니메이션 재생 중인 가?)
+
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
 
-    std::chrono::steady_clock::time_point attackAnimStartTime;      // 좀비 공격 시작 시간
+    std::chrono::steady_clock::time_point animStartTime;      // 좀비 애니메이션 시작 시간
     
     //float speed;
 

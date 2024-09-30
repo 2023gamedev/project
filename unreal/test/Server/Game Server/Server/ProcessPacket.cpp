@@ -232,14 +232,34 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         Protocol::Zombie_hp Packet;
         Packet.ParseFromArray(buffer, bufferSize);
-        cout << "recv zombie" << Packet.zombieid() << "HP Packet" << endl;
+        cout << "recv zombie #" << Packet.zombieid() << " HP Packet" << endl;
 
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
+        // 다른 플레이어들에게 그대로 전송 
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }
+
+        // 좀비 HP 업데이트
+        int recvzombieid = Packet.zombieid();
+
+        for (auto& z : zombie) {
+            if (z->ZombieData.zombieID == recvzombieid) {
+                z->zombieHP = Packet.hp();
+
+                if (z->ZombieData.zombietype == 0 && z->zombieHP < z->NormalZombieStartHP) {
+                    z->IsBeingAttacked = true;  // 좀비 피격중으로 변경
+                    z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
+                    z->animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
+
+                    cout << "================================================================================================================================================================================" << endl;
+                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
+                    cout << "================================================================================================================================================================================" << endl;
+                }
             }
         }
 

@@ -41,7 +41,7 @@ NormalZombie::NormalZombie()
 
 NormalZombie::NormalZombie(Zombie_Data z_d)
 {
-	SetHP(20);
+	SetHP(NormalZombieStartHP);
 
 	path = vector<tuple<float, float, float>>{}; 
 
