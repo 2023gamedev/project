@@ -103,14 +103,6 @@ public:
 
     ~Zombie();
 
-    // 대입 연산자 오버로딩
-    //Zombie& operator=(const Zombie& from) {
-    //    cout << "Zombie& operator=(const Zombie& from)" << endl;
-    //    ZombieData = from.ZombieData;
-    //    zombieHP = from.zombieHP;
-    //    return *this;
-    //}
-
 
     void SetDistance(int playerid);
 
@@ -138,8 +130,8 @@ public:
 
     void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player);
 
-    virtual float GetHP() const { cout << "Zombie - GetHP()" << endl; return zombieHP;  }
-    virtual void SetHP(float hp) { zombieHP = hp; zombieHP = hp; cout << "Zombie - SetHP(float hp)" << endl; }
+    virtual float GetHP() const { return zombieHP;  }
+    virtual void SetHP(float hp) { zombieHP = hp; zombieHP = hp; }
 
     //void ShoutingHear();
     

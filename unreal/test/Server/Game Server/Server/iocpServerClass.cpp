@@ -524,9 +524,7 @@ void IOCP_CORE::ServerOn()
 		float z_z = zom->ZombieData.z;
 
 		cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 시작 위치: ( "
-			<< std::setw(8) << z_x << ", " << std::setw(8) << z_y << ", " << std::setw(8) << z_z << " )" << endl;
-		cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 HP: " << zom->zombieHP << endl;
-		cout << zom->GetHP() << endl;
+			<< std::setw(8) << z_x << ", " << std::setw(8) << z_y << ", " << std::setw(8) << z_z << " ) , HP: " << zom->GetHP() << endl;
 	}
 
 	cout << endl;

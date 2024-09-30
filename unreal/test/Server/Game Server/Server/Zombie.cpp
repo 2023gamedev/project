@@ -15,9 +15,7 @@ using std::endl;
 Zombie::Zombie()
 	: pathfinder(0,0,0,1,1,1)
 {
-	cout << "Zombie()" << endl;
-	SetHP(-1);
-	cout << GetHP() << endl;
+	SetHP(0);
 
 	path = vector<tuple<float, float, float>>{};
 
@@ -53,9 +51,7 @@ Zombie::Zombie()
 Zombie::Zombie(Zombie_Data z_d)
 	: pathfinder(0, 0, 0, 1, 1, 1)
 {
-	cout << "Zombie(Zombie_Data z_d)" << endl;
-	SetHP(10);
-	cout << GetHP() << endl;
+	SetHP(0);
 
 	path = vector<tuple<float, float, float>>{};
 
