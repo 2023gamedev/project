@@ -144,7 +144,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			//UE_LOG(LogNet, Display, TEXT("try_pop Zombie: ZombieId=%d"), recvZombieData.ZombieId);
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
-				MyGameMode->UpdateZombieAttack(recvZombieAttack.ZombieId);
+				MyGameMode->UpdateZombieAttack(recvZombieAttack.ZombieId, recvZombieAttack.PlayerId);
 				UE_LOG(LogNet, Display, TEXT("Update Zombie Attack: Zombieid=%d"), recvZombieAttack.ZombieId);
 			}
 		}

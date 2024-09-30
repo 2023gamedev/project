@@ -740,7 +740,7 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	StopAITree();
 }
 
-void ABaseZombie::Attack()
+void ABaseZombie::Attack(uint32 PlayerId)
 {
 	if (m_bIsAttacking) {
 		return;
@@ -752,16 +752,29 @@ void ABaseZombie::Attack()
 
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
-
 	AnimInstance->PlayAttackMontage();
 	
 	m_bIsAttacking = true;
 
+	if (GetZombieName() == "NormalZombie") {
+		AZombieAIController* NormalZombieAIController = Cast<AZombieAIController>(GetController());
 
-	if (!IsDie()) {
-		StopAITree();
+		NormalZombieAIController->attackPlayerID = PlayerId;
+	}
+	else if (GetZombieName() == "RunningZombie") {
+		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
+
+		//RunningZombieAIController->attackPlayerID = PlayerId;
+	}
+	else if (GetZombieName() == "ShoutingZombie") {
+		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
+
+		//ShoutingZombieAIController->attackPlayerID = PlayerId;
 	}
 
+	//if (!IsDie()) {
+	//	StopAITree();
+	//}
 }
 
 void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)

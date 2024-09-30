@@ -180,7 +180,7 @@ public:
 
     void UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation);
 
-    void UpdateZombieAttack(uint32 ZombieId);
+    void UpdateZombieAttack(uint32 ZombieId, uint32 PlayerId);
 
     void UpdateZombieHP(uint32 ZombieId, uint32 HP);
 

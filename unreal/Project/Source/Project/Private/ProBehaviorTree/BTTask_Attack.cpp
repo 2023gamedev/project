@@ -24,7 +24,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 	}
 
-	BaseZombie->Attack();
+	//BaseZombie->Attack();
 	m_bIsAttacking = true;
 	BaseZombie->m_DAttackEnd.AddLambda([this]() -> void {
 		m_bIsAttacking = false;

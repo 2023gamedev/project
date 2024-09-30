@@ -971,7 +971,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
 }
 
 
-void AOneGameModeBase::UpdateZombieAttack(uint32 ZombieId)
+void AOneGameModeBase::UpdateZombieAttack(uint32 ZombieId, uint32 PlayerId)
 {
     UWorld* World = GetWorld();
 
@@ -989,7 +989,7 @@ void AOneGameModeBase::UpdateZombieAttack(uint32 ZombieId)
         if (BaseZombie)
         {
             // 좀비의 공격 상태 업데이트
-            BaseZombie->Attack();
+            BaseZombie->Attack(PlayerId);
             UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d attack"), ZombieId);
         }
     }

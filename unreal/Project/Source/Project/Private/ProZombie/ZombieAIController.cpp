@@ -24,7 +24,7 @@ AZombieAIController::AZombieAIController()
 	//OwnerZombie = Cast<ANormalZombie>(GetPawn());		//=> OneGameModeBase.cpp에 UpdateZombie()에서 해당 새로운 AIController 생성하고 바로 새좀비와 Possess하고 OwnerZombie도 할당 하지만, 생성자가 먼저 불려 에러 일으킴
 	OwnerZombie = nullptr;
 
-	attackPlayerID = 1;	// 일단 무조건 1번 플레이어로 시선 따라가게 설정 -> 나중에 좀비 공격 패킷에서 플레이어 아이디도 받게 추가하고 해당 아이디를 이용하는 걸로 수정 필요
+	attackPlayerID = 0;	
 }
 
 void AZombieAIController::BeginPlay()

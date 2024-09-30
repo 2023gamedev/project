@@ -76,7 +76,7 @@ public:
 	void SetShouted(bool shouted) { m_bIsShouted = shouted; }
 		 
 
-	void Attack();
+	void Attack(uint32 PlayerId);
 
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
