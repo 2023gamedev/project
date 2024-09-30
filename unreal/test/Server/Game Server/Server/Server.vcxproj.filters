@@ -60,6 +60,9 @@
     <ClCompile Include="ZombiePathfinder.cpp">
       <Filter>소스 파일\PathFinderClass</Filter>
     </ClCompile>
+    <ClCompile Include="NormalZombie.cpp">
+      <Filter>소스 파일\Zombie_BTClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="protocol.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="ZombieController.h">
       <Filter>헤더 파일\ServerHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalZombie.h">
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -50,8 +50,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         pl.y = Packet.y();
         pl.z = Packet.z();
 
-       // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
-        if(Packet.playerid() != 99) {
+        // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
+        if (Packet.playerid() != 99) {
             playerDB[Packet.playerid()] = pl;
         }
 
@@ -181,12 +181,12 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         if (Packet.player_insight()) {
             for (auto& z : zombie) {
-                if (z.ZombieData.zombieID == recvzombieid) {
-                    z.PlayerInSight = true;
-                    z.KnewPlayerLocation = true;
-                    z.SetDistance(Packet.playerid());   //DistanceToPlayers 맵 에 해당 플레이어와 거리 추가하기
+                if (z->ZombieData.zombieID == recvzombieid) {
+                    z->PlayerInSight = true;
+                    z->KnewPlayerLocation = true;
+                    z->SetDistance(Packet.playerid());   //DistanceToPlayers 맵 에 해당 플레이어와 거리 추가하기
 
-                    //cout << "좀비 \'#" << z.ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
+                    //cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
                     //cout << "디텍트된 아이디: " << Packet.playerid() << endl;
 
                     break;
@@ -196,13 +196,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         else {
             for (auto& z : zombie) {
-                if (z.ZombieData.zombieID == recvzombieid) {
-                    z.PlayerInSight = false;
-                    //z.DistanceToPlayers.erase(Packet.playerid());   //DistanceToPlayers 맵 에 해당 플레이어 정보 삭제하기 [X]"데이터 레이스!!"-> BT 쓰레드에서 at 사용 많이해서 abort 크래쉬 생김
-                    //z.DistanceToPlayers.at(Packet.playerid()) = -1.0f;
-                    z.DistanceToPlayers[Packet.playerid()] = -1.0f;     //그냥 이렇게 마이너스값 넣어 놓고 이건 없는 데이터로 치자 (마이너스값은 절대 설정될 수 없으니)
+                if (z->ZombieData.zombieID == recvzombieid) {
+                    z->PlayerInSight = false;
+                    //z->DistanceToPlayers.erase(Packet.playerid());   //DistanceToPlayers 맵 에 해당 플레이어 정보 삭제하기 [X]"데이터 레이스!!"-> BT 쓰레드에서 at 사용 많이해서 abort 크래쉬 생김
+                    //z->DistanceToPlayers.at(Packet.playerid()) = -1.0f;
+                    z->DistanceToPlayers[Packet.playerid()] = -1.0f;     //그냥 이렇게 마이너스값 넣어 놓고 이건 없는 데이터로 치자 (마이너스값은 절대 설정될 수 없으니)
 
-                    cout << "좀비 \'#" << z.ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!: " << endl;
+                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!: " << endl;
 
                     break;
                 }
@@ -218,7 +218,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Packet.ParseFromArray(buffer, bufferSize);
 
         auto it = g_players.find(Packet.playerid());
-     
+
         if (it != g_players.end())
         {
             PLAYER_INFO* player = it->second;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <chrono>
 
 #include "Task.h"
 //#include "Player.h"
@@ -36,6 +37,7 @@ public:
 class Zombie {
 public:
     enum TARGET {
+        NULL_TARGET,
         PLAYER,
         SHOUTING,
         FOOTSOUND,
@@ -83,8 +85,8 @@ public:
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
 
     std::chrono::steady_clock::time_point attackAnimStartTime;      // 좀비 공격 시작 시간
-
-    float speed;
+    
+    //float speed;
 
     TARGET targetType;
 
@@ -92,12 +94,22 @@ public:
 
     int ZombiePathIndex = 0;
 
+    float zombieHP;
+
 
     Zombie();
 
-    Zombie(Zombie_Data zd, vector<vector<vector<float>>> zl);
+    Zombie(Zombie_Data zd);
 
     ~Zombie();
+
+    // 대입 연산자 오버로딩
+    //Zombie& operator=(const Zombie& from) {
+    //    cout << "Zombie& operator=(const Zombie& from)" << endl;
+    //    ZombieData = from.ZombieData;
+    //    zombieHP = from.zombieHP;
+    //    return *this;
+    //}
 
 
     void SetDistance(int playerid);
@@ -125,6 +137,9 @@ public:
     void CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
 
     void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player);
+
+    virtual float GetHP() const { cout << "Zombie - GetHP()" << endl; return zombieHP;  }
+    virtual void SetHP(float hp) { zombieHP = hp; zombieHP = hp; cout << "Zombie - SetHP(float hp)" << endl; }
 
     //void ShoutingHear();
     

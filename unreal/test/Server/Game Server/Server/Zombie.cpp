@@ -15,6 +15,10 @@ using std::endl;
 Zombie::Zombie()
 	: pathfinder(0,0,0,1,1,1)
 {
+	cout << "Zombie()" << endl;
+	SetHP(-1);
+	cout << GetHP() << endl;
+
 	path = vector<tuple<float, float, float>>{};
 
 	beforepath = vector<tuple<float, float, float>>{};
@@ -39,16 +43,20 @@ Zombie::Zombie()
 
 	IsAttacking = false;
 
-	speed = 0.f;
+	//speed = 0.f;
 
-	targetType = Zombie::TARGET::PATROL;
-
+	targetType = Zombie::TARGET::NULL_TARGET;
 
 	bt_playerID = 0;
 }
 
-Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
+Zombie::Zombie(Zombie_Data z_d)
+	: pathfinder(0, 0, 0, 1, 1, 1)
 {
+	cout << "Zombie(Zombie_Data z_d)" << endl;
+	SetHP(10);
+	cout << GetHP() << endl;
+
 	path = vector<tuple<float, float, float>>{};
 
 	ZombieData = z_d;
@@ -71,7 +79,7 @@ Zombie::Zombie(Zombie_Data z_d, vector<vector<vector<float>>> zl)
 
 	IsAttacking = false;
 
-	speed = 1.f;
+	//speed = 0.f;
 
 	targetType = Zombie::TARGET::PATROL;
 
@@ -83,7 +91,7 @@ Zombie::~Zombie()
 	//여기 cout 해서 출력보면 왜 zombie 클래스가 생성도 되기 전인데 여러번 미리 불림?! 
 	// -> 그래서 여기서 만약 new 할당된 메모리 delete 하려하면 할당된 메모리도 없는데 지울려 해서 에러 (지금은 다 없애서 없긴하지만... 미리 소멸자가 여러번 불리는 건 마찬가지)
 	// -> 이유는 모르겠음 그냥
-	// + 혹시 전방 선언해서??
+	// + 혹시 전방 선언해서?? / 복사 생성되서?? / 암시적 삭제??
 }
 
 void Zombie::SetDistance(int playerid)

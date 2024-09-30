@@ -118,7 +118,8 @@ public:
 	bool bServerOn;
 
 	//좀비 벡터
-	vector<Zombie> zombie;
+	vector<Zombie*> zombie;				// 좀비 포인터 / std::reference_wrapper 로 받지 않으면 좀비 상속성 사용 X 
+										// [+] 벡터에는 참조 타입을 직접 넣을 수 없다!! (예를 들어 vector<Zombie&> 안된다!)
 
 	//======Zombie_BT 선언======
 

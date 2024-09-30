@@ -1,5 +1,7 @@
 #include "ZombieController.h"
 
+#include "NormalZombie.h"
+
 ZombieController::ZombieController(IOCP_CORE& mainServer)
 {
     // 서버 설정
@@ -84,8 +86,34 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     //좀비 초기 위치
     vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
 
-    //좀비 인스턴스
-    Zombie new_zombie = Zombie(new_zombie_data, zl);
+    //좀비 인스턴스 생성
+    /*Zombie new_zombie;
+    if (zombieType == 0)
+        new_zombie = NormalZombie(new_zombie_data); // 대입 연산자 주석 풀면 사용가능 -> 그치만 슬라이스 현상 때문에 Zombie 객체 정보만 담기고 NormalZombie 정보는 날라감
+    cout << "-----------" << endl;
+    cout << new_zombie.GetHP() << endl;
+    //cout << new_zombie.Zombie::GetHP() << endl;
+    //cout << new_zombie.zombieHP << endl;
+    cout << "-----------" << endl;*/
+
+    Zombie* new_zombie;
+    if (zombieType == 0)
+       new_zombie = new NormalZombie(new_zombie_data);
+    cout << "-----------" << endl;
+    cout << new_zombie->GetHP() << endl;
+    cout << "-----------" << endl;
+
+    /*NormalZombie new_zombie;
+    if (zombieType == 0)
+        new_zombie = NormalZombie(new_zombie_data);
+    cout << "-----------" << endl;
+    cout << new_zombie.GetHP() << endl;             // -> 여기서는 NormalZombie로 잘 생성됐지만, 아래 emplace_back에서 들어가면 Zombie로 들어가게 됨;; 
+                                                    //  -> Zombie 포인터를 사용하지 않아서 다형성을 이룰 수 없음
+                                                    //   -> 그렇다고 Zombie 포인터로 바꾸고 넣어도 해당 메모리는 스택에 불린거라 해당 함수를 나가면 해제돼서 나중에 쓰레기값 들어감;;
+                                                    //    -> 그래서 그냥 new로 동적 할당 받고 넘겨줘야만 한다.
+    cout << new_zombie.Zombie::GetHP() << endl;
+    //cout << new_zombie.zombieHP << endl;
+    cout << "-----------" << endl;*/
 
     // zombiedata 벡터에 추가
     iocpServer->zombie.emplace_back(new_zombie);
@@ -100,16 +128,16 @@ void ZombieController::SendZombieData(int id)
 
     for (const auto& z : iocpServer->zombie) {
         Protocol::Zombie* zombie = zombieDataList.add_zombies();
-        zombie->set_zombieid(z.ZombieData.zombieID);
-        zombie->set_x(z.ZombieData.x);
-        zombie->set_y(z.ZombieData.y);
-        zombie->set_z(z.ZombieData.z);
-        zombie->set_pitch(z.ZombieData.pitch);
-        zombie->set_yaw(z.ZombieData.yaw);
-        zombie->set_roll(z.ZombieData.roll);
-        zombie->set_zombietype(z.ZombieData.zombietype);
-        //printf("%d\n", z.ZombieData.zombieID);
-        //printf("%d\n", z.ZombieData.zombietype);
+        zombie->set_zombieid(z->ZombieData.zombieID);
+        zombie->set_x(z->ZombieData.x);
+        zombie->set_y(z->ZombieData.y);
+        zombie->set_z(z->ZombieData.z);
+        zombie->set_pitch(z->ZombieData.pitch);
+        zombie->set_yaw(z->ZombieData.yaw);
+        zombie->set_roll(z->ZombieData.roll);
+        zombie->set_zombietype(z->ZombieData.zombietype);
+        //printf("%d\n", z->ZombieData.zombieID);
+        //printf("%d\n", z->ZombieData.zombietype);
     }
     zombieDataList.set_packet_type(8);
 

@@ -377,15 +377,16 @@ void IOCP_CORE::Timer_Thread()
 
 			// deltaTime을 누적하여 GameTime에 더함
 			GameTime += deltaTime.count();  // 초 단위
-			for (auto& zom : zombie) {
-				if (!(zom.path.empty())) {
-					//if (zom.ZombiePathIndex >= zom.path.size()) {
+			
+			//for (auto& zom : zombie) {
+			//	if (!(zom->path.empty())) {
+					//if (zom->ZombiePathIndex >= zom->path.size()) {
 					//	 // cout << "Zombie has reached the final destination." << endl;
 					//	continue; // 경로 끝에 도달
 					//}
-					//zom.MoveTo(deltaTime.count());
-				}
-			}
+					//zom->MoveTo(deltaTime.count());
+			//	}
+			//}
 
 			// GameTime을 문자열로 변환
 			//std::string gameTimeStr = std::to_string(GameTime);
@@ -518,12 +519,14 @@ void IOCP_CORE::ServerOn()
 	cout << endl;
 
 	for (const auto& zom : zombie) {
-		float z_x = zom.ZombieData.x;
-		float z_y = zom.ZombieData.y;
-		float z_z = zom.ZombieData.z;
+		float z_x = zom->ZombieData.x;
+		float z_y = zom->ZombieData.y;
+		float z_z = zom->ZombieData.z;
 
-		cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시작 위치: ( "
+		cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 시작 위치: ( "
 			<< std::setw(8) << z_x << ", " << std::setw(8) << z_y << ", " << std::setw(8) << z_z << " )" << endl;
+		cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 HP: " << zom->zombieHP << endl;
+		cout << zom->GetHP() << endl;
 	}
 
 	cout << endl;
@@ -582,20 +585,20 @@ void IOCP_CORE::Zombie_BT_Thread()
 				break;
 
 			// 좀비가 대기상태라면 해당 좀비 BT 잠시 대기
-			if (zom.HaveToWait == true) {
-				zom.Wait();
+			if (zom->HaveToWait == true) {
+				zom->Wait();
 				continue;
 			}
 
 			//시작하자 말자 플레이어 위치로 움직이게 설정 (A* 관찰용)
-			//zom.PlayerInSight = true;
+			//zom->PlayerInSight = true;
 
 			//cout << endl;
-			//cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 실행==========" << endl;
+			//cout << "========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
 			//cout << endl;
 			//
-			float z_x = zom.ZombieData.x;					float z_y = zom.ZombieData.y;					float z_z = zom.ZombieData.z;
-			cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+			float z_x = zom->ZombieData.x;					float z_y = zom->ZombieData.y;					float z_z = zom->ZombieData.z;
+			cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 			//cout << endl;
 
 			// 각 플레이어들에 대해 해당 좀비 BT 수행
@@ -606,28 +609,28 @@ void IOCP_CORE::Zombie_BT_Thread()
 				//cout << endl;
 
 				//BT 검사할 플레이어 인덱스 설정
-				zom.bt_playerID = player.first;
+				zom->bt_playerID = player.first;
 
 				//<Selector-Detect> 실행
-				result = sel_detect.Sel_Detect(zom);
+				result = sel_detect.Sel_Detect(*zom);
 
 				//<Selector-Detect> 결과 값에 따라 다음 Task들 실행
 				if (result == "CanSeePlayer-Succeed") {
 
 					//<Selector-CanSeePlayer> 실행
-					result = sel_canseeplayer.Sel_CanSeePlayer(zom);
+					result = sel_canseeplayer.Sel_CanSeePlayer(*zom);
 
 					//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 실행
 					if (result == "CanAttack-Succeed") {
 
 						//{Sequence-CanAttack} 실행
-						result = seq_canattack.Seq_CanAttack(zom);
+						result = seq_canattack.Seq_CanAttack(*zom);
 
 					}
 					else if (result == "CanNotAttack-Succeed") {
 
 						//{Sequence-CanNotAttack} 실행
-						result = seq_cannotattack.Seq_CanNotAttack(zom);
+						result = seq_cannotattack.Seq_CanNotAttack(*zom);
 
 					}
 					else {	//result == "Fail"
@@ -638,25 +641,25 @@ void IOCP_CORE::Zombie_BT_Thread()
 				else if (result == "HasShouting-Succeed") {
 
 					//{Sequence-HasShouting} 실행
-					result = seq_hasshouting.Seq_HasShouting(zom);
+					result = seq_hasshouting.Seq_HasShouting(*zom);
 
 				}
 				else if (result == "HasFootSound-Succeed") {
 
 					//{Sequence-HasFootSound} 실행
-					result = seq_hasfootsound.Seq_HasFootSound(zom);
+					result = seq_hasfootsound.Seq_HasFootSound(*zom);
 
 				}
 				else if (result == "HasInvestigated-Succeed") {
 
 					//{Sequence-HasInvestigated} 실행
-					result = seq_hasinvestigated.Seq_HasInvestigated(zom);
+					result = seq_hasinvestigated.Seq_HasInvestigated(*zom);
 
 				}
 				else if (result == "NotHasLastKnownPlayerLocation-Succeed") {
 
 					//{Sequence-NotHasLastKnownPlayerLocation} 실행
-					result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(zom);
+					result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
 
 				}
 				else {	//result == "Fail"
@@ -665,11 +668,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 				//p_x = player->PlayerLocation[0][0][0]; p_y = player->PlayerLocation[0][0][1]; p_z = player->PlayerLocation[0][0][2];
 				//cout << "플레이어의 이전 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-				//cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+				//cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 이전 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 				//cout << endl;
 			}
 
-			//cout << "========좀비 \'#" << zom.ZombieData.zombieID << "\' BT 종료==========" << endl;
+			//cout << "========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료==========" << endl;
 			//cout << endl;
 		}
 
