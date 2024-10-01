@@ -238,9 +238,18 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Packet.SerializeToString(&serializedData);
 
         // 다른 플레이어들에게 그대로 전송 
-        for (const auto& player : g_players) {
+        /*for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }*/
+
+        // 중복 방지로 클라이언트 하나의 정보만 동기화
+        if (id == min_it->first) {
+            for (const auto& player : g_players) {
+                if (player.first != id && player.second->isInGame) {
+                    IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                }
             }
         }
 

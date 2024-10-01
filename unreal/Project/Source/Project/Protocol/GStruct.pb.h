@@ -51,6 +51,9 @@ extern CharacterDefaultTypeInternal _Character_default_instance_;
 class Character_Attack;
 struct Character_AttackDefaultTypeInternal;
 extern Character_AttackDefaultTypeInternal _Character_Attack_default_instance_;
+class Character_hp;
+struct Character_hpDefaultTypeInternal;
+extern Character_hpDefaultTypeInternal _Character_hp_default_instance_;
 class Detected;
 struct DetectedDefaultTypeInternal;
 extern DetectedDefaultTypeInternal _Detected_default_instance_;
@@ -94,6 +97,7 @@ extern runDefaultTypeInternal _run_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::Character* Arena::CreateMaybeMessage<::Protocol::Character>(Arena*);
 template<> ::Protocol::Character_Attack* Arena::CreateMaybeMessage<::Protocol::Character_Attack>(Arena*);
+template<> ::Protocol::Character_hp* Arena::CreateMaybeMessage<::Protocol::Character_hp>(Arena*);
 template<> ::Protocol::Detected* Arena::CreateMaybeMessage<::Protocol::Detected>(Arena*);
 template<> ::Protocol::Equip_Item* Arena::CreateMaybeMessage<::Protocol::Equip_Item>(Arena*);
 template<> ::Protocol::PatrolPath* Arena::CreateMaybeMessage<::Protocol::PatrolPath>(Arena*);
@@ -370,6 +374,176 @@ class Character final :
 };
 // -------------------------------------------------------------------
 
+class Character_hp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Character_hp) */ {
+ public:
+  inline Character_hp() : Character_hp(nullptr) {}
+  ~Character_hp() override;
+  explicit PROTOBUF_CONSTEXPR Character_hp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Character_hp(const Character_hp& from);
+  Character_hp(Character_hp&& from) noexcept
+    : Character_hp() {
+    *this = ::std::move(from);
+  }
+
+  inline Character_hp& operator=(const Character_hp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Character_hp& operator=(Character_hp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Character_hp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Character_hp* internal_default_instance() {
+    return reinterpret_cast<const Character_hp*>(
+               &_Character_hp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(Character_hp& a, Character_hp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Character_hp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Character_hp* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Character_hp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Character_hp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Character_hp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Character_hp& from) {
+    Character_hp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Character_hp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.Character_hp";
+  }
+  protected:
+  explicit Character_hp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayeridFieldNumber = 1,
+    kHpFieldNumber = 2,
+    kPacketTypeFieldNumber = 3,
+  };
+  // uint32 playerid = 1;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
+  public:
+
+  // float hp = 2;
+  void clear_hp();
+  float hp() const;
+  void set_hp(float value);
+  private:
+  float _internal_hp() const;
+  void _internal_set_hp(float value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.Character_hp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t playerid_;
+    float hp_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Zombie final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Zombie) */ {
  public:
@@ -418,7 +592,7 @@ class Zombie final :
                &_Zombie_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   friend void swap(Zombie& a, Zombie& b) {
     a.Swap(&b);
@@ -654,7 +828,7 @@ class Zombie_attack final :
                &_Zombie_attack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(Zombie_attack& a, Zombie_attack& b) {
     a.Swap(&b);
@@ -824,7 +998,7 @@ class Zombie_hp final :
                &_Zombie_hp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(Zombie_hp& a, Zombie_hp& b) {
     a.Swap(&b);
@@ -994,7 +1168,7 @@ class ZombieDataList final :
                &_ZombieDataList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(ZombieDataList& a, ZombieDataList& b) {
     a.Swap(&b);
@@ -1162,7 +1336,7 @@ class Vector3 final :
                &_Vector3_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(Vector3& a, Vector3& b) {
     a.Swap(&b);
@@ -1332,7 +1506,7 @@ class ZombiePath final :
                &_ZombiePath_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(ZombiePath& a, ZombiePath& b) {
     a.Swap(&b);
@@ -1531,7 +1705,7 @@ class PatrolPath final :
                &_PatrolPath_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(PatrolPath& a, PatrolPath& b) {
     a.Swap(&b);
@@ -1730,7 +1904,7 @@ class Detected final :
                &_Detected_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(Detected& a, Detected& b) {
     a.Swap(&b);
@@ -1911,7 +2085,7 @@ class Time final :
                &_Time_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(Time& a, Time& b) {
     a.Swap(&b);
@@ -2070,7 +2244,7 @@ class Character_Attack final :
                &_Character_Attack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(Character_Attack& a, Character_Attack& b) {
     a.Swap(&b);
@@ -2240,7 +2414,7 @@ class Equip_Item final :
                &_Equip_Item_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(Equip_Item& a, Equip_Item& b) {
     a.Swap(&b);
@@ -2426,7 +2600,7 @@ class run final :
                &_run_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(run& a, run& b) {
     a.Swap(&b);
@@ -2596,7 +2770,7 @@ class jump final :
                &_jump_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(jump& a, jump& b) {
     a.Swap(&b);
@@ -2755,7 +2929,7 @@ class ping final :
                &_ping_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    15;
 
   friend void swap(ping& a, ping& b) {
     a.Swap(&b);
@@ -3093,6 +3267,70 @@ inline void Character::_internal_set_isingame(bool value) {
 inline void Character::set_isingame(bool value) {
   _internal_set_isingame(value);
   // @@protoc_insertion_point(field_set:Protocol.Character.isingame)
+}
+
+// -------------------------------------------------------------------
+
+// Character_hp
+
+// uint32 playerid = 1;
+inline void Character_hp::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t Character_hp::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t Character_hp::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character_hp.playerid)
+  return _internal_playerid();
+}
+inline void Character_hp::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void Character_hp::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character_hp.playerid)
+}
+
+// float hp = 2;
+inline void Character_hp::clear_hp() {
+  _impl_.hp_ = 0;
+}
+inline float Character_hp::_internal_hp() const {
+  return _impl_.hp_;
+}
+inline float Character_hp::hp() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character_hp.hp)
+  return _internal_hp();
+}
+inline void Character_hp::_internal_set_hp(float value) {
+  
+  _impl_.hp_ = value;
+}
+inline void Character_hp::set_hp(float value) {
+  _internal_set_hp(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character_hp.hp)
+}
+
+// uint32 packet_type = 3;
+inline void Character_hp::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t Character_hp::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t Character_hp::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character_hp.packet_type)
+  return _internal_packet_type();
+}
+inline void Character_hp::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void Character_hp::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character_hp.packet_type)
 }
 
 // -------------------------------------------------------------------
@@ -4444,6 +4682,8 @@ inline void ping::set_packet_type(uint32_t value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
