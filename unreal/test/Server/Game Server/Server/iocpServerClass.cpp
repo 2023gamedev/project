@@ -21,9 +21,9 @@ std::vector<tuple<float, float, float>> g_valispositionsF1;
 std::vector<tuple<float, float, float>> g_valispositionsF2;
 
 
-float IOCP_CORE::BT_INTERVAL = 0.01f;	// BT 작동 인터벌 설정	- 너무 짧게하면 플레이어 따라올 시 플레이어가 이동하면 좀비가 멈추고, 너무 길게하면 뚝뚝 끊임
+float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정
 
-std::chrono::duration<float> IOCP_CORE::BT_deltaTime;
+std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// MoveTo에서 계산용으로 사용
 
 IOCP_CORE::IOCP_CORE()
 {	

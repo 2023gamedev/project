@@ -484,6 +484,10 @@ void Zombie::Wait()
 			HaveToWait = false;
 
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
+
+			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
+			MoveTo(IOCP_CORE::BT_deltaTime.count());
+			SendPath();		
 		}
 		else {
 			//cout << "Attacked Animation time left " << ZombieBeAttackedAnimDuration - deltaTime.count() << "s" << endl;
@@ -500,6 +504,10 @@ void Zombie::Wait()
 			IsAttacking = false;
 
 			HaveToWait = false;
+
+			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
+			MoveTo(IOCP_CORE::BT_deltaTime.count());
+			SendPath();
 		}
 		else {
 			//cout << "Attack Animation time left " << ZombieAttackAnimDuration - deltaTime.count() << "s" << endl;
