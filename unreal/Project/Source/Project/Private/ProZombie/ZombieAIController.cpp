@@ -331,6 +331,7 @@ void AZombieAIController::Send_PlayerLost()
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
+// 좀비 체력의 변화가 있으면 서버로 전송
 void AZombieAIController::Send_ZombieHP()
 {
 	if (!OwnerZombie) {

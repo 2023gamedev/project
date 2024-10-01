@@ -122,6 +122,7 @@ void ABaseZombie::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
+// 좀비가 공격을 받았을 때
 float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
@@ -788,6 +789,7 @@ void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 	}
 }
 
+// 좀비가 플레이어 공격할 때 충돌체크
 void ABaseZombie::AttackCheck()
 {
 	FHitResult HitResult;

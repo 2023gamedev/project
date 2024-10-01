@@ -29,6 +29,7 @@ void ANormalWeaponActor::PlaceItem()
 {
 }
 
+// í”Œë ˆì´ì–´ ë¬´ê¸°ë¡œ ì¢€ë¹„ í›„ë‘ë¦´ë•Œ ì¶©ëŒì²´í¬
 void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABaseZombie* Zombie = Cast<ABaseZombie>(OtherActor);
@@ -40,21 +41,21 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 			FString HitResult;
 			if (OtherComp->IsA(USkeletalMeshComponent::StaticClass()))
 			{
-				// ¸Ş½¬¿Í Ãæµ¹
+				// ë©”ì‰¬ì™€ ì¶©ëŒ
 				HitResult = "Hit Skeletal Mesh";
 			}
 			else if (OtherComp->IsA(UCapsuleComponent::StaticClass()))
 			{
-				// Ä¸½¶ ÄÄÆ÷³ÍÆ®¿Í Ãæµ¹
+				// ìº¡ìŠ ì»´í¬ë„ŒíŠ¸ì™€ ì¶©ëŒ
 				HitResult = "Hit Capsule Component";
 			}
 			else
 			{
-				// ´Ù¸¥ ÄÄÆ÷³ÍÆ®¿Í Ãæµ¹
+				// ë‹¤ë¥¸ ì»´í¬ë„ŒíŠ¸ì™€ ì¶©ëŒ
 				HitResult = "Hit Other Component";
 			}
 
-			// GEngineÀ» »ç¿ëÇÏ¿© È­¸é¿¡ µğ¹ö±× ¸Ş½ÃÁö Ãâ·Â
+			// GEngineì„ ì‚¬ìš©í•˜ì—¬ í™”ë©´ì— ë””ë²„ê·¸ ë©”ì‹œì§€ ì¶œë ¥
 			if (GEngine)
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, HitResult);

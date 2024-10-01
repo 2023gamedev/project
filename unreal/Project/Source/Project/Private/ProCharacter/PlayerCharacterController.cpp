@@ -245,6 +245,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 	}
 }
 
+// 플레이어가 공격 서버로 전송-> 다른 클라도 해당 플레이어 공격 애니메이션 재생되게
 void APlayerCharacterController::Send_Attack()
 {
 	if (b_attack) {
