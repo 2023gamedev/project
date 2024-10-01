@@ -175,6 +175,8 @@ public:
 	
 	static float BT_INTERVAL;		// BT 작동 인터벌 설정
 
+	static std::chrono::duration<float> BT_deltaTime;
+
 	//==========================
 
 

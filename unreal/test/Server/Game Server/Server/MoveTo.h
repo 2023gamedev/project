@@ -20,7 +20,7 @@ public:
 
         zom.UpdatePath();
 
-        zom.MoveTo(IOCP_CORE::BT_INTERVAL);
+        zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
         zom.SendPath();
         
@@ -41,7 +41,7 @@ public:
 
         //zom.UpdatePath();                 // 얘도 맨밑에 Patrol 처럼 타겟 위치 변화 없을 테니까 매번 하지 말고 SetTargetLocation에서 한번만 작업해 주자
 
-        zom.MoveTo(IOCP_CORE::BT_INTERVAL);
+        zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
         zom.SendPath();
 
@@ -56,7 +56,7 @@ public:
 
         //zom.UpdatePath();                 // 얘도 맨밑에 Patrol 처럼 타겟 위치 변화 없을 테니까 매번 하지 말고 SetTargetLocation에서 한번만 작업해 주자
 
-        zom.MoveTo(IOCP_CORE::BT_INTERVAL);
+        zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
         zom.SendPath();
 
@@ -70,7 +70,7 @@ public:
 
         //zom.UpdatePath();                 // 얘도 맨밑에 Patrol 처럼 타겟 위치 변화 없을 테니까 매번 하지 말고 SetTargetLocation에서 한번만 작업해 주자
 
-        zom.MoveTo(IOCP_CORE::BT_INTERVAL);
+        zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
         zom.SendPath();
 
@@ -85,7 +85,7 @@ public:
         //zom.UpdatePath();         // 패트롤 지점은 위치 변화가 없기에 한번만 작업해주면 됨 => SetTargetLocation->RandPatrol 에서 이미 작업해줌
                                     // A* 내부코드로 이미 목표지점의 위치 변화가 없으면 A* 안돌리는 코드가 있지만..
 
-        zom.MoveTo(IOCP_CORE::BT_INTERVAL);
+        zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
         zom.SendPath();
 
