@@ -1,30 +1,58 @@
 ﻿#pragma once
 
 #include "Task.h"
+#include "iocpServerClass.h"
 
 
 class TCanNotAttack : public Task {
 public:
 
     string CanSeePlayer(Zombie& zom) const override {
-        bool result = false;
-
-        //zom.SetDistance(zom.bt_playerID);     //DistanceToPlayers 맵 에 해당 플레이어와 거리 갱신 
-                                                //(바로 앞에 작업인 CanAttack Task에서 이미 해당 작업을 진행하기에 또 할 필요X)
-
-        if (zom.DistanceToPlayers.find(zom.bt_playerID) != zom.DistanceToPlayers.end())
-            result = (zom.DistanceToPlayers.at(zom.bt_playerID) > zom.CanAttackDistance);
-
         //cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
-        //cout << "플레이어와 좀비의 거리: " << zom.DistanceToPlayer << endl;
-        //cout << "좀비의 공격 사거리: " << zom.CanAttackDistance << endl;
-        //cout << "따라서, 플레이어 \'#" << zom.bt_playerID << "\' 에 대한 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
-        //cout << endl;
 
-        if (result)
-            return "CanNotAttack-Succeed";
-        else
+        bool result = true;
+
+        if (zom.DistanceToPlayers.size() == 0) {
+            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: \"false\"" << endl;
+            cout << "Zombie #" << zom.ZombieData.zombieID;
+            cout << " DistanceToPlayers Map ERROR!!! -> Detected is done [Player is in sight -> (PlayerInSight == true)] but DistanceToPlayers Map is empty" << endl;
+
             return "Fail";
+        }
+
+        for (auto player : playerDB) {
+            //zom.SetDistance(player.first);        //DistanceToPlayers 맵 에 해당 플레이어와 거리 갱신 
+                                                    //(바로 앞에 작업인 CanAttack Task에서 이미 해당 작업을 진행하기에 또 할 필요X)
+
+            if (zom.DistanceToPlayers.find(player.first) != zom.DistanceToPlayers.end()) {
+                if (zom.DistanceToPlayers.at(player.first) > zom.CanAttackDistance && zom.DistanceToPlayers.at(player.first) > 0 || zom.DistanceToPlayers.at(player.first) <= 0) 
+                {   }
+                else {
+                    result = false;
+                }
+            }
+
+        }
+
+        if (result) {
+            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
+
+            return "CanNotAttack-Succeed";
+        }
+        else {
+            if (zom.PlayerInSight == false) {
+                //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
+                cout << "Zombie #" << zom.ZombieData.zombieID;
+                cout << " PlayerInSight Data Race Occured ERROR!!!" << endl;
+            }
+            else {
+                //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
+                cout << "Zombie #" << zom.ZombieData.zombieID;
+                cout << " got ERROR!!! And I dont know whhhhhyyyyy!!!" << endl;
+            }
+
+            return "Fail";
+        }
     }
 
     //사실상 더미 함수들

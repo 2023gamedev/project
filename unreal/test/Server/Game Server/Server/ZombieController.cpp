@@ -35,14 +35,14 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     SpawnZombies(17, 0, Vector3(200.f, 3200.f, 1989.212f), Rotator(0.f, 20.f, 0.f), 0, 0.f);
     SpawnZombies(18, 0, Vector3(800.f, 3600.f, 1989.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
     SpawnZombies(19, 0, Vector3(800.f, 1600.f, 1989.212f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
-    SpawnZombies(20, 0, Vector3(200.f, 2200.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
+    SpawnZombies(20, 0, Vector3(200.f, 2200.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);*/
     
     
     //Áö»ó 2Ãþ
     //SpawnZombies(21, 2, Vector3(2200.f, 600.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
     //SpawnZombies(22, 2, Vector3(670.f, 400.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
     //SpawnZombies(23, 2, Vector3(1200.f, 1820.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);
-    SpawnZombies(21, 0, Vector3(2200.f, 600.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
+    /*SpawnZombies(21, 0, Vector3(2200.f, 600.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
     SpawnZombies(22, 0, Vector3(670.f, 400.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
     SpawnZombies(23, 0, Vector3(1200.f, 1820.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);
 
@@ -52,7 +52,7 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     SpawnZombies(27, 0, Vector3(1400.f, 3000.f, 2947.212f), Rotator(0.f, 180.f, 0.f), 1, -800.f);
     SpawnZombies(28, 0, Vector3(870.f, 3660.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);
     SpawnZombies(29, 0, Vector3(2241.f, 3500.f, 2947.212f), Rotator(0.f, 30.f, 0.f), 0, 0.f);
-    SpawnZombies(30, 0, Vector3(190.f, 2600.f, 2947.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
+    SpawnZombies(30, 0, Vector3(190.f, 2600.f, 2947.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);*/
     
     
     // ÁöÇÏ 2Ãþ
@@ -61,7 +61,7 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     //SpawnZombies(33, 2, Vector3(2000.f, 3600.f, 90.212f), Rotator(0.f, -50.f, 0.f), 0, 0.f);
     //SpawnZombies(34, 2, Vector3(180.f, 2400.f, 90.212f), Rotator(0.f, 90.f, 0.f), 2, 800.f);
     //SpawnZombies(35, 2, Vector3(1000.f, 2800.f, 90.212f), Rotator(0.f, -60.f, 0.f), 0, 0.f);
-    SpawnZombies(31, 0, Vector3(600.f, 500.f, 90.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    /*SpawnZombies(31, 0, Vector3(600.f, 500.f, 90.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
     SpawnZombies(32, 0, Vector3(2000.f, 1340.f, 90.212f), Rotator(0.f, 180.f, 0.f), 1, -1200.f);
     SpawnZombies(33, 0, Vector3(2000.f, 3600.f, 90.212f), Rotator(0.f, -50.f, 0.f), 0, 0.f);
     SpawnZombies(34, 0, Vector3(180.f, 2400.f, 90.212f), Rotator(0.f, 90.f, 0.f), 2, 800.f);

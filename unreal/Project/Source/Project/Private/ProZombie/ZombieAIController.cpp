@@ -201,8 +201,8 @@ void AZombieAIController::Tick(float DeltaTime)
 
 
 	//========================================================================== 시야각 설정 설정 필요!
-	// 좀비 시야각 (전방 90도)
-	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); 
+	// 좀비 시야각 (전방 120도)
+	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(120.0f / 2.0f)); 
 
 
 	TArray<AActor*> Players;
@@ -213,7 +213,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	for (AActor* Player : Players)
 	{
-		//좀비들의 시야 검사 나 자신에 대해서만 실시==========================
+		//좀비들의 시야 검사 "나 자신"에 대해서만 실시==========================
 		ABaseCharacter* Char = Cast<ABaseCharacter>(Player);
 		//
 		uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
@@ -229,14 +229,11 @@ void AZombieAIController::Tick(float DeltaTime)
 		
 		float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 
-
 		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 		bool InZombieSight = FieldOfView <= DotProduct ? true : false;
 
 		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
 		{
-			
-
 			float Dist = FVector::Dist(GetPawn()->GetActorLocation(), PlayerPawn->GetActorLocation());
 			if (Dist < NearestDist)
 			{
@@ -244,7 +241,6 @@ void AZombieAIController::Tick(float DeltaTime)
 				NearestPawn = PlayerPawn;
 				
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
-				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
 				//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
@@ -252,52 +248,23 @@ void AZombieAIController::Tick(float DeltaTime)
 		}
 
 		// NearestPawn에 따라 상태 변경
-		if (NearestPawn) {
-			if (!m_bPlayerInSight) {
+		if (NearestPawn) {	// NearestPawn 존재 O -> 나를 포착함
+			if (m_bPlayerInSight == false) {
 				m_bPlayerInSight = true;
 				ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
 				Send_Detected(); // 플레이어 감지 메시지 전송
 				LastSeenPlayer = BaseCharacter;
+				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 			}
 		}
-		else {
-			if (m_bPlayerInSight) {
+		else {	// NearestPawn 존재 X -> 나를 못 봄
+			if (m_bPlayerInSight == true) {
 				m_bPlayerInSight = false;
 				Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
+				UE_LOG(LogNet, Display, TEXT("Zombie #%d Lost Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 			}
 		}
-
-		//if (PlayerPawn && Distance <= MaxSightRange && DotProduct > FieldOfView && LineOfSightTo(PlayerPawn))
-		//{
-		//	float Dist = FVector::Dist(GetPawn()->GetActorLocation(), PlayerPawn->GetActorLocation());
-		//	if (Dist < NearestDist)
-		//	{
-		//		NearestDist = Dist;
-		//		NearestPawn = PlayerPawn;
-		//	}
-		//}
 	}
-
-	//CheckAndSendMovement();
-
-	// 계속 공격 애니메이션 재생되니 일단 주석처리
-	//if (GameInstance->ClientSocketPtr->Q_zattack.try_pop(AttackZombieId))
-	//{
-	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-	//	{
-	//		MyGameMode->UpdateZombieAttack(AttackZombieId);
-	//		UE_LOG(LogNet, Display, TEXT("Update Attack Zombie: ZombieId=%d"), AttackZombieId);
-	//	}
-	//}
-	//
-	//if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP))
-	//{
-	//	if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-	//	{
-	//		MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Hp);
-	//		UE_LOG(LogNet, Display, TEXT("Update Zombie HP: ZombieId=%d"), recvZombieHP.ZombieId);
-	//	}
-	//}
 }
 
 void AZombieAIController::Send_Detected()

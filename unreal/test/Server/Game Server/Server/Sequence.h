@@ -31,7 +31,8 @@ public:
         }
         cout << "\"Sequence CanAttack [ERROR]!!!\"" << endl;
         cout << endl;
-        return "Fail";      //이건 실패 할 수 있음 (여기가 공격을 실행하는 Task인데 좀비의 공격이 벽에 막히는 경우를 생각해본다면)
+        return "Fail";      //이건 실패 할 수 있음 (여기가 공격을 실행하는 Task인데 좀비의 공격이 벽에 막히는 경우를 생각해본다면) 
+                            // [x] -> 공격 명령만 주고 실제 충돌체크는 클라에서 체크하고 결과 보내줌 (그래서 지금 시퀀스 CanAttack의 유일한 Task인 Attack에서 무조건 성공 리턴하게 만들어 놓음)
     }
 
     string Seq_CanNotAttack(Zombie& zom) {

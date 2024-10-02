@@ -7,6 +7,8 @@ class THasShouting : public Task {
 public:
 
     string Detect(Zombie& zom) const override {
+        //cout << "<Detect>의 [HasShouting Task] 호출" << endl;
+        
         //샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
 
         //bool result = (zom.DistanceToPlayer <= zom.CanHearShoutDistance); //DistanceToSZombie: 샤우팅 좀비로 부터의 거리, CanHearShoutDistance: 샤우팅을 들을 수 있는 거리 (const 변수)
@@ -21,7 +23,7 @@ public:
 
         bool result = zom.HeardShouting;
 
-        //cout << "따라서, 플레이어 \'#" << zom.bt_playerID << "\' 에 대한 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [HasShouting Task] 결과: \"" << boolalpha << result << "\"" << endl;
+        //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [HasShouting Task] 결과: \"" << boolalpha << result << "\"" << endl;
         //cout << endl;
 
         if (result)

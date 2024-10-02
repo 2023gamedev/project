@@ -45,7 +45,7 @@ Zombie::Zombie()
 
 	targetType = Zombie::TARGET::NULL_TARGET;
 
-	bt_playerID = 0;
+	ClosestPlayerID = 0;
 }
 
 Zombie::Zombie(Zombie_Data z_d)
@@ -79,7 +79,7 @@ Zombie::Zombie(Zombie_Data z_d)
 
 	targetType = Zombie::TARGET::PATROL;
 
-	bt_playerID = 0;
+	ClosestPlayerID = 0;
 }
 
 Zombie::~Zombie()
@@ -92,24 +92,25 @@ Zombie::~Zombie()
 
 void Zombie::SetDistance(int playerid)
 {
-	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[playerid].x, playerDB[playerid].y, playerDB[playerid].z}} };
-
-	float dist = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
-
 	if (DistanceToPlayers.find(playerid) == DistanceToPlayers.end()) {		// DistanceToPlayers map에 playerid가 없으면 -> 생성
-		DistanceToPlayers.emplace(playerid, dist);
+																			// [x] -> 이러면 시야에 들어오지도 않은 플레이어도 맵에 정보 저장하게 됨 -> 그럼 쓸데 없이 검사를 더 많이하게됨
+		//DistanceToPlayers.emplace(playerid, dist);
 	}
 	else {		// DistanceToPlayers map에 이미 playerid가 있으면 -> 수정
-		DistanceToPlayers.at(playerid) = dist;
+		vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+		vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[playerid].x, playerDB[playerid].y, playerDB[playerid].z}} };
+
+		float dist = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
+
+		DistanceToPlayers.at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 예외처리 꼭! 필요! (DistanceToPlayers.find(playerid) == DistanceToPlayers.end() -> 이거와 같이)
 		//DistanceToPlayers[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
-													// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 (at은 해당 키값 없으면 abort()에러 띄움)
+													// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 
 	}
 }
 
 bool Zombie::RandomPatrol()
 {
-	cout << "New RandomPatrol!!!" << endl;
+	//cout << "New RandomPatrol!!!" << endl;
 
 	float px, py, pz;
 
@@ -149,7 +150,8 @@ bool Zombie::RandomPatrol()
 
 	UpdatePath(dest_test);
 	
-	cout << "TargetLocation[Patrol]: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
+	//cout << "랜덤 패트롤 찾기 성공!" << endl;
+	//cout << "TargetLocation[Patrol]: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 
 	RandPatrolSet = true;
 
@@ -160,12 +162,12 @@ void Zombie::SetTargetLocation(TARGET t)
 {
 	targetType = t;
 
-	vector<vector<vector<float>>> pl = {};
+	vector<vector<vector<float>>> closest_player_pos = {};
 
 	switch (targetType) {
 	case TARGET::PLAYER:
-		SearchClosestPlayer(pl);
-		TargetLocation = pl;
+		SearchClosestPlayer(closest_player_pos);
+		TargetLocation = closest_player_pos;
 		PrevTargetLocation = TargetLocation;
 		//cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 		break;
@@ -178,6 +180,7 @@ void Zombie::SetTargetLocation(TARGET t)
 	case TARGET::INVESTIGATED:
 		//TargetLocation = TargetLocation;		// 걍 명시적 표기 ========> [x]
 												// 플레이어를 따라가던 도중 놓이면 따로 작업 할 꺼 없긴하지만 아니라면 (샤우팅/발소리->플레이어 이전위치) 이 상황에서는 갱신해줘야함
+												// 근데 위에 처럼 하면 발소리 듣고 발소리 쪽으로 갔다가 (경로 끝까지 가고) 다시 플레이어를 마지막으로 본위치로 가는게 약간 이상한 거 같음;; (회의 필요)
 		TargetLocation = PrevTargetLocation;
 		UpdatePath();							
 		break;
@@ -188,7 +191,7 @@ void Zombie::SetTargetLocation(TARGET t)
 				try_cnt++;
 				cout << "랜덤 패트롤 찾기 시도 #" << try_cnt << endl;
 
-				if (try_cnt >= 5) {
+				if (try_cnt >= 5) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
 					cout << "랜덤 패트롤 찾기 결국 실패!!!" << endl;
 				}
 			}
@@ -197,10 +200,10 @@ void Zombie::SetTargetLocation(TARGET t)
 	}
 }
 
-void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
+void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos)
 {
 	float min = FLT_MAX;	//float 최대값
-	vector<int> keys = {};
+	vector<int> closest_players = {};
 
 	// 단 한명의 플레이어라도 마주쳤다면
 	if (DistanceToPlayers.size() != 0) {
@@ -217,8 +220,8 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
 		for (auto player : playerDB) {
 			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
 				if (min == DistanceToPlayers.at(player.first)) {
-					keys.emplace_back(player.first);
-					cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << player.first << " 을 따라감!!!" << endl;
+					closest_players.emplace_back(player.first);
+					cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 와 가장 가까움! --- 거리: " << DistanceToPlayers.at(player.first) << endl;
 					//cout << "플레이어 #" << player.first << " 의 위치: ( " << player.second.x << " , " << player.second.y << " , " << player.second.z << " )" << endl;
 				}
 			}
@@ -227,10 +230,14 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
 		std::random_device rd;
 		std::mt19937 mt(rd());
 
-		std::uniform_int_distribution<int> dist(0, keys.size() - 1);
+		std::uniform_int_distribution<int> dist(0, closest_players.size() - 1);
+
+		ClosestPlayerID = closest_players[dist(mt)];		// 가장 가까운 플레이어 인덱스 저장
+
+		cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 을 따라감!!!" << endl;
 
 		// {주의} map 사용 할 때 주의할 점 (playerDB) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
-		closest_player = vector<vector<vector<float>>>{ {{playerDB[keys[dist(mt)]].x, playerDB[keys[dist(mt)]].y, playerDB[keys[dist(mt)]].z}} };
+		closest_player_pos = vector<vector<vector<float>>>{ {{playerDB[ClosestPlayerID].x, playerDB[ClosestPlayerID].y, playerDB[ClosestPlayerID].z}} };
 	}
 	else {	// (DistanceToPlayers.size() == 0)
 		// BT에서 타겟을 플레이어로 했는데, DistanceToPlayers 맵이 비어 있다면 절대 안됨
@@ -240,7 +247,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player)
 
 void Zombie::Attack()
 {
-	//cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << bt_playerID << "\' 을 공격하였습니다!" << endl;
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << ClosestPlayerID << "\' 을 공격하였습니다!" << endl;
 	//cout << endl;
 
 	// 어택 통신 패킷 보내기
@@ -248,7 +255,7 @@ void Zombie::Attack()
 	Protocol::Zombie_attack attackpacket;
 
 	attackpacket.set_zombieid(ZombieData.zombieID);
-	attackpacket.set_playerid(bt_playerID);
+	attackpacket.set_playerid(ClosestPlayerID);
 	attackpacket.set_packet_type(13);
 
 	string serializedData;
@@ -327,7 +334,7 @@ void Zombie::MoveTo(float deltasecond)
 
 		// 경로의 끝에 도착 = 최종 목표지점에 도착
 		if (ZombiePathIndex >= path.size()) {
-			cout << "Zombie #" << ZombieData.zombieID << " 경로 끝 도착." << endl;
+			//cout << "Zombie #" << ZombieData.zombieID << " 경로 끝 도착." << endl;
 			ReachFinalDestination();
 			ZombiePathIndex = 1;
 		}
@@ -466,10 +473,8 @@ void Zombie::SendPath()
 	}
 
 	if (targetType == TARGET::PLAYER) {
-		cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
+		//cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
 	}
-
-	//cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
 
 	/*cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
 	cout << endl;*/

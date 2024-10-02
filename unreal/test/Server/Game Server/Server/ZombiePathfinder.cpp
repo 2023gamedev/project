@@ -59,11 +59,11 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
 
 
             if (it != path.end() - 1) {
-                cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )" << endl;
+                //cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )" << endl;
             }
             else {
                 if (PatrolType == 0) {
-                    cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )" << endl;
+                    //cout << "( " << std::setw(8) << node.x << ", " << std::setw(8) << node.y << ", " << std::setw(8) << node.z << " )" << endl;
                 }
             }
 
@@ -72,14 +72,14 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
         }
 
         if (PatrolType == 0) {
-            cout << "PathUpdated!" << endl;
+            //cout << "PathUpdated!" << endl;
         }
         else if(PatrolType == 1) {
-            cout << "PathUpdated! -> RandPatrol" << endl;
+            //cout << "PathUpdated! -> RandPatrol" << endl;
         }
     }
     else {
-        cout << "[Error] No path found.\n";
+        //cout << "[Error] No path found.\n";
     }
 }
 
@@ -191,10 +191,10 @@ float ZombiePathfinder::FloorZPos()
 vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ, float goalX, float goalY, float goalZ)
 {
 
-    cout << "NewAStarSTART!!" << endl;
+    //cout << "NewAStarSTART!!" << endl;
     // 시작 지점과 목표 지점이 같으면 바로 반환
     if (startX == goalX && startY == goalY && startZ == goalZ) {
-        cout << "EQUAL PATH" << endl;
+        //cout << "EQUAL PATH" << endl;
         return { Node(startX, startY, startZ, 0, 0) };
     }
 
@@ -267,7 +267,7 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
             beforegoalY = goalY;
             beforegoalZ = goalZ;
 
-            cout << "Good Path" << endl;
+            //cout << "Good Path" << endl;
             return path;
         }
 

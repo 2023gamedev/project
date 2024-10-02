@@ -17,10 +17,10 @@
 #include "HasFootSound.h"
 #include "HasInvestigated.h"
 #include "NotHasLastKnownPlayerLocation.h"
-#include "CanNotAttack.h"
-#include "CanAttack.h"
-//#include "MoveTo.h"
+//#include "CanAttack.h"
+//#include "CanNotAttack.h"
 #include "Attack.h"
+//#include "MoveTo.h"
 
 
 class ZombieController;
@@ -28,7 +28,8 @@ class Zombie;
 class ZombiePathFinder;
 
 class TMoveTo;	// 전방 선언 -> static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해 (순환 포함 문제를 피하기 위해)
-
+class TCanAttack;
+class TCanNotAttack;
 
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;

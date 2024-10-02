@@ -36,7 +36,7 @@ NormalZombie::NormalZombie()
 
 	targetType = Zombie::TARGET::NULL_TARGET;
 
-	bt_playerID = 0;
+	ClosestPlayerID = 0;
 }
 
 NormalZombie::NormalZombie(Zombie_Data z_d)
@@ -69,5 +69,5 @@ NormalZombie::NormalZombie(Zombie_Data z_d)
 
 	targetType = Zombie::TARGET::PATROL;
 
-	bt_playerID = 0;
+	ClosestPlayerID = 0;
 }

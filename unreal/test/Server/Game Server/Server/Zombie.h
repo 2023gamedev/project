@@ -74,7 +74,9 @@ public:
 
     vector<vector<vector<float>>> TargetLocation;
 
-    vector<vector<vector<float>>> PrevTargetLocation;
+    vector<vector<vector<float>>> PrevTargetLocation;       // 플레이어를 마지막으로 본 위치
+
+    int ClosestPlayerID;
 
     bool PlayerInSight;
 
@@ -97,8 +99,6 @@ public:
     //float speed;
 
     TARGET targetType;
-
-    int bt_playerID;        //BT 돌릴때, 어떤 플레이어와 검사 할지를 설정하기 위해 사용 -> SetTargetLocation 등에서 필요
 
     int ZombiePathIndex = 0;
 
@@ -136,7 +136,7 @@ public:
 
     bool CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
 
-    void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player);
+    void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos);
 
     virtual float GetHP() const { return zombieHP;  }
     virtual void SetHP(float hp) { zombieHP = hp; zombieHP = hp; }
