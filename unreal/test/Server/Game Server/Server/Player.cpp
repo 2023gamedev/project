@@ -5,6 +5,8 @@ Player::Player()
 	this->x = 0;
 	this->y = 0;
 	this->z = 0;
+
+	IsRunning = false;
 }
 
 Player::Player(float x, float y, float z)
@@ -12,6 +14,8 @@ Player::Player(float x, float y, float z)
 	this->x = x;
 	this->y = y;
 	this->z = z;
+
+	IsRunning = false;
 }
 
 

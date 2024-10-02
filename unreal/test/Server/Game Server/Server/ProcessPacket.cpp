@@ -50,6 +50,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         pl.y = Packet.y();
         pl.z = Packet.z();
 
+        pl.health = Packet.hp();
+
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
             playerDB[Packet.playerid()] = pl;
@@ -144,6 +146,15 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
         Packet.SerializeToString(&serializedData);
+
+        //cout << boolalpha << Packet.b_run() << endl;  // -> protobuf bool값 잘 받는 지 확인 -> 잘,,, 받네?? (false는 직렬화 안한다고 들었는데;;) 
+        
+        // 해당 플레이어 run-bool값 변경
+        for (auto& player : playerDB) {
+            if (player.first == Packet.playerid()) {
+                player.second.IsRunning = Packet.b_run();
+            }
+        }
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
