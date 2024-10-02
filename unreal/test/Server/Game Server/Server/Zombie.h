@@ -126,7 +126,7 @@ public:
 
     bool IsPathUpdated();
 
-    void RandomPatrol();
+    bool RandomPatrol();
 
     void ReachFinalDestination();
 
@@ -134,7 +134,7 @@ public:
     // 얜 패트롤용
     void UpdatePath(vector<tuple<float, float, float>> newPatrol_path); 
 
-    void CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
+    bool CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
 
     void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player);
 

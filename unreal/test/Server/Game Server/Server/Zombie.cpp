@@ -107,7 +107,7 @@ void Zombie::SetDistance(int playerid)
 	}
 }
 
-void Zombie::RandomPatrol()
+bool Zombie::RandomPatrol()
 {
 	cout << "New RandomPatrol!!!" << endl;
 
@@ -127,7 +127,7 @@ void Zombie::RandomPatrol()
 
 		if (ZombieData.x >= 2366.f) {
 			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
-			return;
+			return false;
 		}
 	}
 
@@ -136,20 +136,24 @@ void Zombie::RandomPatrol()
 
 		if (ZombieData.x <= -1200.f) {
 			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
-			return;
+			return false;
 		}
 	}
 
 	vector<tuple<float, float, float>> dest_test;
 
 	// 랜덤 패트롤 지점이 갈 수 있는 지 검사
-	CheckPath(dest_test, px, py, pz);
+	if (CheckPath(dest_test, px, py, pz) == false) {
+		return false;
+	}
 
 	UpdatePath(dest_test);
 	
 	cout << "TargetLocation[Patrol]: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 
 	RandPatrolSet = true;
+
+	return true;
 }
 
 void Zombie::SetTargetLocation(TARGET t)
@@ -178,8 +182,16 @@ void Zombie::SetTargetLocation(TARGET t)
 		UpdatePath();							
 		break;
 	case TARGET::PATROL:
+		int try_cnt = 0;
 		if (RandPatrolSet == false) {
-			RandomPatrol();
+			while (RandomPatrol() == false) {
+				try_cnt++;
+				cout << "랜덤 패트롤 찾기 시도 #" << try_cnt << endl;
+
+				if (try_cnt >= 5) {
+					cout << "랜덤 패트롤 찾기 결국 실패!!!" << endl;
+				}
+			}
 		}
 		break;
 	}
@@ -357,21 +369,21 @@ void Zombie::UpdatePath()
 	//cout << endl;
 }
 
-void Zombie::CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ)
+bool Zombie::CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ)
 {
-	while (goalTest_path.empty() == true) {
+	pathfinder.UpdateStartGoal(ZombieData.x, ZombieData.y, ZombieData.z, goalTestX, goalTestY, goalTestZ);
+	pathfinder.Run(goalTest_path, 1);
+	//cout << endl;
 
-		pathfinder.UpdateStartGoal(ZombieData.x, ZombieData.y, ZombieData.z, goalTestX, goalTestY, goalTestZ);
-		pathfinder.Run(goalTest_path, 1);
-		//cout << endl;
+	if (goalTest_path.empty() == true) {
 
-		if (goalTest_path.empty() == true) {
-			cout << "랜덤 패트롤 지정 실패! 다시 검색!!!" << endl;
-		}
-
+		cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 지정 실패! 다시 검색!!!" << endl;
+		return false;
 	}
 
 	goalTest_path.pop_back();	// 맨 마지막은 랜덤한 위치라서... 좀비가 걸을 수 있는 지형이 아닐 수 있음 -> 빼서 무조건 걸을 수 있는 위치가 최종 목적지!
+
+	return true;
 }
 
 void Zombie::UpdatePath(vector<tuple<float, float, float>> newPatrol_path)
