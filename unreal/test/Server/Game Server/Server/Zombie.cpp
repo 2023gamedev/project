@@ -433,8 +433,6 @@ void Zombie::SendPath()
 		zPath.set_zombieid(ZombieData.zombieID);
 		zPath.set_packet_type(10);
 
-		// ================================== 전체 path 보내지 말고 ZombieIndex에 따라서 지금 이동해야할 목표점 좌표 하나만 뽑아서 보내기
-
 		Protocol::Vector3* Destination = zPath.mutable_path();
 		Destination->set_x(get<0>(path[ZombiePathIndex]));
 		Destination->set_y(get<1>(path[ZombiePathIndex]));
@@ -449,7 +447,9 @@ void Zombie::SendPath()
 		zPath.SerializeToString(&serializedData);
 
 		for (const auto& player : g_players) {
-			iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+			if (pathfinder.floor == playerDB[player.first].floor) {
+				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+			}
 		}
 	}
 

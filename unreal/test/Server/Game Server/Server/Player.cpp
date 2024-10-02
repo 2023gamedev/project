@@ -5,6 +5,8 @@ Player::Player()
 	this->x = 0;
 	this->y = 0;
 	this->z = 0;
+
+    floor = FLOOR::FLOOR_B2;
 }
 
 Player::Player(float x, float y, float z)
