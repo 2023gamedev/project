@@ -6,7 +6,9 @@ Player::Player()
 	this->y = 0;
 	this->z = 0;
 
+
 	IsRunning = false;
+    floor = FLOOR::FLOOR_B2;
 }
 
 Player::Player(float x, float y, float z)

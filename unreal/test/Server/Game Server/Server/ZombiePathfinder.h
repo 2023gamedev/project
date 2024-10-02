@@ -35,6 +35,8 @@ public:
     void UpdateStartGoal(float startX, float startY, float startZ, float goalX, float goalY, float goalZ);
     float OBSTACLE_RADIUS = 25.f;
 
+    FLOOR floor;
+
 private:
     float startX, startY, startZ;
     float goalX, goalY, goalZ;
@@ -43,8 +45,6 @@ private:
     float beforegoalZ = 0.f;
     int  PatrolType = 0; // 0일때는 일반 동작 , 1일때는 patrol
 
-
-    FLOOR floor;
     vector<tuple<float, float, float>> validPositions;
     vector<tuple<float, float, float>> obstacles;
     const float OBSTACLE_CHECK_INTERVAL = 25.0f;

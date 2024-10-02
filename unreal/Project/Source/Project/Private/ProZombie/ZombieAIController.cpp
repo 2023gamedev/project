@@ -201,8 +201,8 @@ void AZombieAIController::Tick(float DeltaTime)
 
 
 	//========================================================================== 시야각 설정 설정 필요!
-	// 시야각을 90도로 설정 (전방 180도)
-	//float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); // 전방 90도
+	// 좀비 시야각 (전방 90도)
+	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(90.0f / 2.0f)); 
 
 
 	TArray<AActor*> Players;
@@ -225,13 +225,18 @@ void AZombieAIController::Tick(float DeltaTime)
 		PlayerPawn = Cast<APawn>(Player);
 
 		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
-		//FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
-		//FVector TargetLocation = PlayerLocation + (ZombieForward * 150.f);
-		//float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
-		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+		FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+		
+		float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 
-		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn))
+
+		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+		bool InZombieSight = FieldOfView <= DotProduct ? true : false;
+
+		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
 		{
+			
+
 			float Dist = FVector::Dist(GetPawn()->GetActorLocation(), PlayerPawn->GetActorLocation());
 			if (Dist < NearestDist)
 			{

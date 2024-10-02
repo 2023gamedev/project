@@ -52,6 +52,22 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         pl.health = Packet.hp();
 
+        if(pl.z < 800.f) {
+            pl.floor = FLOOR::FLOOR_B2;
+        }
+        else if (pl.z < 1800.f) {
+            pl.floor = FLOOR::FLOOR_B1;
+        }
+        else if (pl.z < 2500.f) {
+            pl.floor = FLOOR::FLOOR_F1;
+        }
+        else if (pl.z < 3600.f) {
+            pl.floor = FLOOR::FLOOR_F2;
+        }
+        else {
+            pl.floor = FLOOR::FLOOR_F3;
+    }
+
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
             playerDB[Packet.playerid()] = pl;
