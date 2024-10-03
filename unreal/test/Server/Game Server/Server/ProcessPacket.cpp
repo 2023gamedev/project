@@ -163,7 +163,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        //cout << boolalpha << Packet.b_run() << endl;  // -> protobuf bool값 잘 받는 지 확인 -> 잘,,, 받네?? (false는 직렬화 안한다고 들었는데;;) 
+        cout << boolalpha << Packet.b_run() << endl;  // -> protobuf bool값 잘 받는 지 확인 -> 잘,,, 받네?? (false는 직렬화 안한다고 들었는데;;) 
         
         // 해당 플레이어 run-bool값 변경
         for (auto& player : playerDB) {

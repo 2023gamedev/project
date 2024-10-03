@@ -34,6 +34,8 @@ public:
 public:
 	void MoveForward(const FInputActionValue& Value);
 	void MoveLeft(const FInputActionValue& Value);
+	void MoveForwardStop();
+	void MoveLeftStop();
 	void Turn(const FInputActionValue& Value);
 	void LookUp(const FInputActionValue& Value);
 	void Run(const FInputActionValue& Value);
@@ -61,7 +63,6 @@ public:
 
 	void DisabledControllerInput();
 
-
 	void ServerHandleAttack();
 
 
@@ -74,6 +75,8 @@ public:
 	void Send_Attack();
 
 	void Send_Equipment();
+
+	void Check_run();
 
 	void Send_run();
 
@@ -123,7 +126,10 @@ public:
 	bool e_HItem = false;
 	bool e_KeyItem = false;
 	std::string ItemName;
-	bool b_run = false;
+	bool b_run = false;			// 뛰기 모드 ON/OFF
+	bool IsRlyRun = false;			// 실제 캐릭터가 뛰고 있는지
+	bool b_move_forward = false;
+	bool b_move_left = false;
 	bool sendRun = false;
 	bool sendjump = false;
 	

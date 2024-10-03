@@ -76,6 +76,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	CheckAndSendMovement();
 	Send_Attack();
 	Send_Equipment();
+	Check_run();
 	Send_run();
 	Send_jump();
 
@@ -323,13 +324,55 @@ void APlayerCharacterController::Send_Equipment()
 	}
 }
 
+void APlayerCharacterController::Check_run() {
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	if (b_run) {	// 뛰기 모드 ON
+		if (b_move_forward || b_move_left) {	// 플레이어 실제 이동 중
+
+			if (basecharacter->m_bZeroStamina) {	
+				// 캐릭터는 스태미너가 다 닳은 상태라 Run 상태 OFF 지만 IsRlyRun 은 아직 true 라면	-> 해당 작업을 해줘야 스태미너가 다 닳았을 때 false값 여러번 보내지 않게 막을 수 있음
+				if (IsRlyRun) {
+					IsRlyRun = basecharacter->IsRun();	// IsRlyRun = false;
+					sendRun = true;						// 서버로 Run 상태 OFF 전송
+				}
+			}
+
+			else if (basecharacter->IsRun() == false) {	// 아직 캐릭터 Run 상태 OFF 라면
+				basecharacter->Run();				// 캐릭터 Run 상태 ON
+				IsRlyRun = basecharacter->IsRun();	// IsRlyRun = true;
+				sendRun = true;						// 서버로 Run 상태 ON 전송
+			}
+
+		}
+		else {									// 플레이어 정지
+
+			if (basecharacter->IsRun() == true) {	// 아직 캐릭터 Run 상태 ON 라면
+				basecharacter->Run();				// 캐릭터 Run 상태 OFF
+				IsRlyRun = basecharacter->IsRun();	// IsRlyRun = false;
+				sendRun = true;						// 서버로 Run 상태 OFF 전송
+			}
+
+		}
+	}
+	else {			// 뛰기 모드 OFF
+
+		if (basecharacter->IsRun() == true) {	// 아직 캐릭터 Run 상태 ON 라면
+			basecharacter->Run();				// 캐릭터 Run 상태 OFF
+			IsRlyRun = basecharacter->IsRun();	// IsRlyRun = false;
+			sendRun = true;						// 서버로 Run 상태 OFF 전송
+		}
+
+	}
+}
+
 void APlayerCharacterController::Send_run() {
 	if (sendRun) {
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 
 		Protocol::run packet;
 		packet.set_playerid(MyPlayerId);
-		packet.set_b_run(b_run);
+		packet.set_b_run(IsRlyRun);
 		packet.set_packet_type(6);
 
 		// 직렬화
@@ -380,7 +423,9 @@ void APlayerCharacterController::SetupInputComponent()
 			{
 
 				PEI->BindAction(InputActions->InputMoveForward, ETriggerEvent::Triggered, this, &APlayerCharacterController::MoveForward);
+				PEI->BindAction(InputActions->InputMoveForward, ETriggerEvent::Completed, this, &APlayerCharacterController::MoveForwardStop);
 				PEI->BindAction(InputActions->InputMoveLeft, ETriggerEvent::Triggered, this, &APlayerCharacterController::MoveLeft);
+				PEI->BindAction(InputActions->InputMoveLeft, ETriggerEvent::Completed, this, &APlayerCharacterController::MoveLeftStop);
 				PEI->BindAction(InputActions->InputTurn, ETriggerEvent::Triggered, this, &APlayerCharacterController::Turn);
 				PEI->BindAction(InputActions->InputLookUp, ETriggerEvent::Triggered, this, &APlayerCharacterController::LookUp);
 				PEI->BindAction(InputActions->InputRun, ETriggerEvent::Completed, this, &APlayerCharacterController::Run);
@@ -420,7 +465,6 @@ void APlayerCharacterController::MoveForward(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-
 	// find out which way is forward
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -430,6 +474,13 @@ void APlayerCharacterController::MoveForward(const FInputActionValue& Value)
 
 	// add movement 
 	basecharacter->MoveForward(ForwardDirection, MovementVector.Y);
+
+	b_move_forward = true;
+}
+
+void APlayerCharacterController::MoveForwardStop()
+{
+	b_move_forward = false;
 }
 
 void APlayerCharacterController::MoveLeft(const FInputActionValue& Value)
@@ -449,6 +500,12 @@ void APlayerCharacterController::MoveLeft(const FInputActionValue& Value)
 	// add movement 
 	basecharacter->MoveLeft(RightDirection, MovementVector.Y);
 
+	b_move_left = true;
+}
+
+void APlayerCharacterController::MoveLeftStop()
+{
+	b_move_left = false;
 }
 
 void APlayerCharacterController::Turn(const FInputActionValue& Value)
@@ -473,14 +530,10 @@ void APlayerCharacterController::LookUp(const FInputActionValue& Value)
 
 void APlayerCharacterController::Run(const FInputActionValue& Value)
 {
-	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	basecharacter->Run();
-	sendRun = true;
-
-	if (!b_run) {
+	if (!b_run)
 		b_run = true;
-	}
-	else b_run = false;
+	else
+		b_run = false;
 }
 
 void APlayerCharacterController::Jump(const FInputActionValue& Value)
