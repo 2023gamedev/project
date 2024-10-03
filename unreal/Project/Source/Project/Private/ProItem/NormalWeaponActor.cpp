@@ -29,7 +29,7 @@ void ANormalWeaponActor::PlaceItem()
 {
 }
 
-// 플레이어 무기로 좀비 후두릴때 충돌체크
+// 플레이어 무기로 좀비 후두릴때 충돌체크 (좀비 피격 충돌체크)
 void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABaseZombie* Zombie = Cast<ABaseZombie>(OtherActor);
