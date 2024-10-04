@@ -401,7 +401,7 @@ public:
 	void UpdatePlayerData(FVector Location);
 
 	void SetAttack(bool b_attack);
-	void SetPlayerRun();
+	void SetPlayerRun(bool set_run);
 	void SetPlayerJump();
 	bool GetAttack();
 

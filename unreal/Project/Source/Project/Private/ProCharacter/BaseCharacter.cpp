@@ -1948,8 +1948,9 @@ void ABaseCharacter::SetAttack(bool bAttack)
 	}
 }
 
-void ABaseCharacter::SetPlayerRun()
+void ABaseCharacter::SetPlayerRun(bool set_run)
 {
+	m_bRun = set_run;
 	Run();
 }
 

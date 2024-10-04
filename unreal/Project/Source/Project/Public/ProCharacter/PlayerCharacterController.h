@@ -78,7 +78,7 @@ public:
 
 	void Check_run();
 
-	void Send_run();
+	//void Send_run();
 
 	void Send_jump();
 

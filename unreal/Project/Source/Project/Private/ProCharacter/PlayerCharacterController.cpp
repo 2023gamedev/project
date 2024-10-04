@@ -73,11 +73,11 @@ void APlayerCharacterController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	Check_run();
 	CheckAndSendMovement();
 	Send_Attack();
 	Send_Equipment();
-	Check_run();
-	Send_run();
+	//Send_run();
 	Send_jump();
 
 	if (GameInstance && GameInstance->ClientSocketPtr)
@@ -117,7 +117,12 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		{
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
-				MyGameMode->UpdatePlayerRun(recvRun.PlayerId, recvRun.b_run);
+				if (recvRun.b_run == 1) {
+					MyGameMode->UpdatePlayerRun(recvRun.PlayerId, true);
+				}
+				else if(recvRun.b_run == 2) {
+					MyGameMode->UpdatePlayerRun(recvRun.PlayerId, false);
+				}
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
 			}
 		}
@@ -213,7 +218,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 	float hp = MyBaseCharacter->GetHP();
 	
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp) {
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp || sendRun) {
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
 
@@ -229,6 +234,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_yaw(CurrentRotation.Yaw);
 		packet.set_roll(CurrentRotation.Roll);
 		packet.set_hp(hp);
+		packet.set_b_run(IsRlyRun+1);
 		packet.set_isingame(true);
 
 		// 직렬화
@@ -243,6 +249,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		PreviousRotation = CurrentRotation;
 		PreviouHP = hp;
 		b_GetItem = false;
+		sendRun = false;
 	}
 }
 
@@ -324,7 +331,8 @@ void APlayerCharacterController::Send_Equipment()
 	}
 }
 
-void APlayerCharacterController::Check_run() {
+void APlayerCharacterController::Check_run() 
+{
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
 	if (b_run) {	// 뛰기 모드 ON
@@ -366,23 +374,23 @@ void APlayerCharacterController::Check_run() {
 	}
 }
 
-void APlayerCharacterController::Send_run() {
-	if (sendRun) {
-		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-
-		Protocol::run packet;
-		packet.set_playerid(MyPlayerId);
-		packet.set_b_run(IsRlyRun);
-		packet.set_packet_type(6);
-
-		// 직렬화
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
-		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-
-		sendRun = false;
-	}
-}
+//void APlayerCharacterController::Send_run() {
+//	if (sendRun) {
+//		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+//
+//		Protocol::run packet;
+//		packet.set_playerid(MyPlayerId);
+//		packet.set_b_run(IsRlyRun);
+//		packet.set_packet_type(6);
+//
+//		// 직렬화
+//		std::string serializedData;
+//		packet.SerializeToString(&serializedData);
+//		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+//
+//		sendRun = false;
+//	}
+//}
 
 void APlayerCharacterController::Send_jump() {
 	if (sendjump) {

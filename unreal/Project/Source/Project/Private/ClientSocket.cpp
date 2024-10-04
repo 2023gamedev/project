@@ -149,6 +149,7 @@ uint32 ClientSocket::Run()
 
 							if (OtherPlayerId != MyPlayerId) {
 								Q_player.push(PlayerData(OtherPlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.hp()));
+								Q_run.push(PlayerRun(CharacterPacket.playerid(), CharacterPacket.b_run()));
 							}
 						}
 						break;
@@ -196,7 +197,7 @@ uint32 ClientSocket::Run()
 						break;
 					}
 
-					case 6:
+					/*case 6:
 					{
 						Protocol::run runPacket;
 						if (runPacket.ParseFromArray(buffer.data(), buffer.size()))
@@ -204,7 +205,7 @@ uint32 ClientSocket::Run()
 							Q_run.push(PlayerRun(runPacket.playerid(), runPacket.b_run()));
 						}
 						break;
-					}
+					}*/
 
 					case 7:
 					{

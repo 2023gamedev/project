@@ -51,7 +51,6 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			m_bIsInAir = character->GetMovementComponent()->IsFalling();
 			m_bIsHandInWeapon = character->IsNWHandIn();
 		}
-
 	}
 
 

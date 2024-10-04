@@ -73,6 +73,19 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             playerDB[Packet.playerid()] = pl;
         }
 
+        cout << boolalpha << Packet.b_run() << endl;
+
+        for (auto& player : playerDB) {
+            if (player.first == Packet.playerid()) {
+                if (Packet.b_run() == 1) {
+                    player.second.IsRunning = false;
+                }
+                else if (Packet.b_run() == 2) {
+                    player.second.IsRunning = true;
+                }
+            }
+        }
+
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
@@ -155,31 +168,31 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
         return true;
     }
-    case 6:
-    {
-        printf("\n[ No. %3u ] Run Packet Received !!\n", id);
-        Protocol::run Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
-        string serializedData;
-        Packet.SerializeToString(&serializedData);
+    //case 6:
+    //{
+    //    printf("\n[ No. %3u ] Run Packet Received !!\n", id);
+    //    Protocol::run Packet;
+    //    Packet.ParseFromArray(buffer, bufferSize);
+    //    string serializedData;
+    //    Packet.SerializeToString(&serializedData);
 
-        cout << boolalpha << Packet.b_run() << endl;  // -> protobuf bool값 잘 받는 지 확인 -> 잘,,, 받네?? (false는 직렬화 안한다고 들었는데;;) 
-        
-        // 해당 플레이어 run-bool값 변경
-        for (auto& player : playerDB) {
-            if (player.first == Packet.playerid()) {
-                player.second.IsRunning = Packet.b_run();
-            }
-        }
+    //    cout << boolalpha << Packet.b_run() << endl;  // -> protobuf bool값 잘 받는 지 확인 -> 잘,,, 받네?? (false는 직렬화 안한다고 들었는데;;) 
+    //    
+    //    // 해당 플레이어 run-bool값 변경
+    //    for (auto& player : playerDB) {
+    //        if (player.first == Packet.playerid()) {
+    //            player.second.IsRunning = Packet.b_run();
+    //        }
+    //    }
 
-        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-            }
-        }
-        return true;
-    }
+    //    // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+    //    for (const auto& player : g_players) {
+    //        if (player.first != id && player.second->isInGame) {
+    //            IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+    //        }
+    //    }
+    //    return true;
+    //}
 
     case 7:
     {
