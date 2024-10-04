@@ -50,6 +50,23 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
 
+	//if (PathX == 0.f && PathY == 0.f) {
+
+	//	//SetActorHiddenInGame(true);
+	//	//// 충돌 비활성화
+	//	//SetActorEnableCollision(false);
+	//	//// Tick 비활성화
+	//	//SetActorTickEnabled(false);
+	//	return;
+	//}
+	//else {
+	//	//SetActorHiddenInGame(false);
+	//	//// 충돌 비활성화
+	//	//SetActorEnableCollision(true);
+	//	//// Tick 비활성화
+	//	//SetActorTickEnabled(true);
+	//}
+
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
 		if (deltasecond > 0.3) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
