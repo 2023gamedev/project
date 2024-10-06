@@ -169,6 +169,7 @@ public:
 	void MoveForward(FVector RotateYaw, float NewAxisValue);
 	void MoveLeft(FVector RotateYaw, float NewAxisValue);
 	void Run();
+	void Other_Run(bool mbrun);
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
 	void GetItem();
@@ -401,7 +402,7 @@ public:
 	void UpdatePlayerData(FVector Location);
 
 	void SetAttack(bool b_attack);
-	void SetPlayerRun(bool set_run);
+	//void SetPlayerRun(bool set_run);
 	void SetPlayerJump();
 	bool GetAttack();
 

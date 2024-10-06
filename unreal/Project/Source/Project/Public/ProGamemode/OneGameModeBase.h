@@ -152,8 +152,6 @@ public:
     // 캐릭터 선택 함수
     void ChoiceCharacter();
 
-    void SpawnCharacter(int32 characterindex);
-
     // 아이템 박스 위치 정해놓고 랜덤으로 정해서 생성
     FVector RandomItemBoxLocation(EItemFloor itemfloor);
 
@@ -175,9 +173,6 @@ public:
     void SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, EItemFloor itemfloor);
 
     // 좀비 생성 함수
-    void SpawnZombiesStaticClasses();
-    //void SpawnZombies(int32 zombieindex, EZombie zombieaiconindex, FVector zombiepos, FRotator zombieroatate, EZombiePatrol zombiepatrol, float patrolrange);
-
     void UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation);
 
     void UpdateZombieAttack(uint32 ZombieId, uint32 PlayerId);

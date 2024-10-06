@@ -118,10 +118,10 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				if (recvRun.b_run == 1) {
-					MyGameMode->UpdatePlayerRun(recvRun.PlayerId, true);
+					MyGameMode->UpdatePlayerRun(recvRun.PlayerId, false);
 				}
 				else if(recvRun.b_run == 2) {
-					MyGameMode->UpdatePlayerRun(recvRun.PlayerId, false);
+					MyGameMode->UpdatePlayerRun(recvRun.PlayerId, true);
 				}
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
 			}
