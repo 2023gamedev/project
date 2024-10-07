@@ -45,7 +45,7 @@ public:
 
 	float mapminX = 16.f;
 	float mapmaxX = 2366.f;
-	float mapminY = -1220.f;
+	float mapminY = -1000.f;
 	float mapmaxY = 3960.f;
 
 	TArray<FVector> NodeArr;

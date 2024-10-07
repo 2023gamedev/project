@@ -50,22 +50,19 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
 
-	//if (PathX == 0.f && PathY == 0.f) {
+	if (PathX != 0.f || PathY != 0.f) { // 좀비 이동경로 확인용 debugline
+		FVector Pos;
+		Pos.X = get<0>(target);
+		Pos.Y = get<1>(target);
+		Pos.Z = get<2>(target);
+		FVector Start = Pos + FVector(0, 0, 100);
+		FVector End = Pos - FVector(0, 0, 100);
+		FCollisionQueryParams Params;
 
-	//	//SetActorHiddenInGame(true);
-	//	//// 충돌 비활성화
-	//	//SetActorEnableCollision(false);
-	//	//// Tick 비활성화
-	//	//SetActorTickEnabled(false);
-	//	return;
-	//}
-	//else {
-	//	//SetActorHiddenInGame(false);
-	//	//// 충돌 비활성화
-	//	//SetActorEnableCollision(true);
-	//	//// Tick 비활성화
-	//	//SetActorTickEnabled(true);
-	//}
+
+		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+	}
+
 
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
