@@ -316,9 +316,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     case 14:
     {
-        Protocol::PatrolPath Packet;
+        Protocol::patrol_hit Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         cout << "recv patrol zombie hit" << Packet.zombieid() << endl;
+
+        return true;
     }
 
     default: {

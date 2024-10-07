@@ -164,7 +164,6 @@ public:
 	UFUNCTION()
 	void BleedHealingMontageEnded(UAnimMontage* Montage, bool interrup);
 
-
 	// input
 	void MoveForward(FVector RotateYaw, float NewAxisValue);
 	void MoveLeft(FVector RotateYaw, float NewAxisValue);

@@ -85,6 +85,9 @@ extern Zombie_hpDefaultTypeInternal _Zombie_hp_default_instance_;
 class jump;
 struct jumpDefaultTypeInternal;
 extern jumpDefaultTypeInternal _jump_default_instance_;
+class patrol_hit;
+struct patrol_hitDefaultTypeInternal;
+extern patrol_hitDefaultTypeInternal _patrol_hit_default_instance_;
 class ping;
 struct pingDefaultTypeInternal;
 extern pingDefaultTypeInternal _ping_default_instance_;
@@ -103,6 +106,7 @@ template<> ::Protocol::ZombiePath* Arena::CreateMaybeMessage<::Protocol::ZombieP
 template<> ::Protocol::Zombie_attack* Arena::CreateMaybeMessage<::Protocol::Zombie_attack>(Arena*);
 template<> ::Protocol::Zombie_hp* Arena::CreateMaybeMessage<::Protocol::Zombie_hp>(Arena*);
 template<> ::Protocol::jump* Arena::CreateMaybeMessage<::Protocol::jump>(Arena*);
+template<> ::Protocol::patrol_hit* Arena::CreateMaybeMessage<::Protocol::patrol_hit>(Arena*);
 template<> ::Protocol::ping* Arena::CreateMaybeMessage<::Protocol::ping>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
@@ -2702,6 +2706,165 @@ class ping final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Gstruct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class patrol_hit final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.patrol_hit) */ {
+ public:
+  inline patrol_hit() : patrol_hit(nullptr) {}
+  ~patrol_hit() override;
+  explicit PROTOBUF_CONSTEXPR patrol_hit(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  patrol_hit(const patrol_hit& from);
+  patrol_hit(patrol_hit&& from) noexcept
+    : patrol_hit() {
+    *this = ::std::move(from);
+  }
+
+  inline patrol_hit& operator=(const patrol_hit& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline patrol_hit& operator=(patrol_hit&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const patrol_hit& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const patrol_hit* internal_default_instance() {
+    return reinterpret_cast<const patrol_hit*>(
+               &_patrol_hit_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(patrol_hit& a, patrol_hit& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(patrol_hit* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(patrol_hit* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  patrol_hit* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<patrol_hit>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const patrol_hit& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const patrol_hit& from) {
+    patrol_hit::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(patrol_hit* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.patrol_hit";
+  }
+  protected:
+  explicit patrol_hit(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kZombieidFieldNumber = 1,
+    kPacketTypeFieldNumber = 3,
+  };
+  // uint32 zombieid = 1;
+  void clear_zombieid();
+  uint32_t zombieid() const;
+  void set_zombieid(uint32_t value);
+  private:
+  uint32_t _internal_zombieid() const;
+  void _internal_set_zombieid(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.patrol_hit)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t zombieid_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
 // ===================================================================
 
 
@@ -4235,9 +4398,55 @@ inline void ping::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.ping.packet_type)
 }
 
+// -------------------------------------------------------------------
+
+// patrol_hit
+
+// uint32 zombieid = 1;
+inline void patrol_hit::clear_zombieid() {
+  _impl_.zombieid_ = 0u;
+}
+inline uint32_t patrol_hit::_internal_zombieid() const {
+  return _impl_.zombieid_;
+}
+inline uint32_t patrol_hit::zombieid() const {
+  // @@protoc_insertion_point(field_get:Protocol.patrol_hit.zombieid)
+  return _internal_zombieid();
+}
+inline void patrol_hit::_internal_set_zombieid(uint32_t value) {
+  
+  _impl_.zombieid_ = value;
+}
+inline void patrol_hit::set_zombieid(uint32_t value) {
+  _internal_set_zombieid(value);
+  // @@protoc_insertion_point(field_set:Protocol.patrol_hit.zombieid)
+}
+
+// uint32 packet_type = 3;
+inline void patrol_hit::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t patrol_hit::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t patrol_hit::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.patrol_hit.packet_type)
+  return _internal_packet_type();
+}
+inline void patrol_hit::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void patrol_hit::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.patrol_hit.packet_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -99,3 +99,8 @@ message ping{
     uint32 playerid = 1;
     uint32 packet_type=3;
 }
+
+message patrol_hit{
+    uint32 zombieid = 1;
+    uint32 packet_type=3;
+}

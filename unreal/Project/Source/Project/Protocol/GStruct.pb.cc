@@ -246,8 +246,22 @@ struct pingDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 pingDefaultTypeInternal _ping_default_instance_;
+PROTOBUF_CONSTEXPR patrol_hit::patrol_hit(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.zombieid_)*/0u
+  , /*decltype(_impl_.packet_type_)*/0u
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct patrol_hitDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR patrol_hitDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~patrol_hitDefaultTypeInternal() {}
+  union {
+    patrol_hit _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 patrol_hitDefaultTypeInternal _patrol_hit_default_instance_;
 }  // namespace Protocol
-static ::_pb::Metadata file_level_metadata_Gstruct_2eproto[14];
+static ::_pb::Metadata file_level_metadata_Gstruct_2eproto[15];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_Gstruct_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Gstruct_2eproto = nullptr;
 
@@ -393,6 +407,14 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::ping, _impl_.playerid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::ping, _impl_.packet_type_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::patrol_hit, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::patrol_hit, _impl_.zombieid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::patrol_hit, _impl_.packet_type_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::Character)},
@@ -409,6 +431,7 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 115, -1, -1, sizeof(::Protocol::Equip_Item)},
   { 125, -1, -1, sizeof(::Protocol::jump)},
   { 133, -1, -1, sizeof(::Protocol::ping)},
+  { 141, -1, -1, sizeof(::Protocol::patrol_hit)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -426,6 +449,7 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_Equip_Item_default_instance_._instance,
   &::Protocol::_jump_default_instance_._instance,
   &::Protocol::_ping_default_instance_._instance,
+  &::Protocol::_patrol_hit_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -460,13 +484,15 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "name\030\002 \001(\t\022\023\n\013packet_type\030\003 \001(\r\022\020\n\010itemt"
   "ype\030\004 \001(\r\"-\n\004jump\022\020\n\010playerid\030\001 \001(\r\022\023\n\013p"
   "acket_type\030\003 \001(\r\"-\n\004ping\022\020\n\010playerid\030\001 \001"
-  "(\r\022\023\n\013packet_type\030\003 \001(\rb\006proto3"
+  "(\r\022\023\n\013packet_type\030\003 \001(\r\"3\n\npatrol_hit\022\020\n"
+  "\010zombieid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\rb\006pr"
+  "oto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 1271, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 1324, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
-    &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 14,
+    &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 15,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
     file_level_metadata_Gstruct_2eproto, file_level_enum_descriptors_Gstruct_2eproto,
     file_level_service_descriptors_Gstruct_2eproto,
@@ -4442,6 +4468,217 @@ void ping::InternalSwap(ping* other) {
       file_level_metadata_Gstruct_2eproto[13]);
 }
 
+// ===================================================================
+
+class patrol_hit::_Internal {
+ public:
+};
+
+patrol_hit::patrol_hit(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.patrol_hit)
+}
+patrol_hit::patrol_hit(const patrol_hit& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  patrol_hit* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.zombieid_){}
+    , decltype(_impl_.packet_type_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.zombieid_, &from._impl_.zombieid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.packet_type_) -
+    reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.packet_type_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.patrol_hit)
+}
+
+inline void patrol_hit::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.zombieid_){0u}
+    , decltype(_impl_.packet_type_){0u}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+patrol_hit::~patrol_hit() {
+  // @@protoc_insertion_point(destructor:Protocol.patrol_hit)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void patrol_hit::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void patrol_hit::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void patrol_hit::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.patrol_hit)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&_impl_.zombieid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.packet_type_) -
+      reinterpret_cast<char*>(&_impl_.zombieid_)) + sizeof(_impl_.packet_type_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* patrol_hit::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint32 zombieid = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.zombieid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 packet_type = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.packet_type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* patrol_hit::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.patrol_hit)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 zombieid = 1;
+  if (this->_internal_zombieid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_zombieid(), target);
+  }
+
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.patrol_hit)
+  return target;
+}
+
+size_t patrol_hit::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.patrol_hit)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // uint32 zombieid = 1;
+  if (this->_internal_zombieid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_zombieid());
+  }
+
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData patrol_hit::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    patrol_hit::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*patrol_hit::GetClassData() const { return &_class_data_; }
+
+
+void patrol_hit::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<patrol_hit*>(&to_msg);
+  auto& from = static_cast<const patrol_hit&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.patrol_hit)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_zombieid() != 0) {
+    _this->_internal_set_zombieid(from._internal_zombieid());
+  }
+  if (from._internal_packet_type() != 0) {
+    _this->_internal_set_packet_type(from._internal_packet_type());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void patrol_hit::CopyFrom(const patrol_hit& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.patrol_hit)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool patrol_hit::IsInitialized() const {
+  return true;
+}
+
+void patrol_hit::InternalSwap(patrol_hit* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(patrol_hit, _impl_.packet_type_)
+      + sizeof(patrol_hit::_impl_.packet_type_)
+      - PROTOBUF_FIELD_OFFSET(patrol_hit, _impl_.zombieid_)>(
+          reinterpret_cast<char*>(&_impl_.zombieid_),
+          reinterpret_cast<char*>(&other->_impl_.zombieid_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata patrol_hit::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Gstruct_2eproto_getter, &descriptor_table_Gstruct_2eproto_once,
+      file_level_metadata_Gstruct_2eproto[14]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
@@ -4500,6 +4737,10 @@ Arena::CreateMaybeMessage< ::Protocol::jump >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::Protocol::ping*
 Arena::CreateMaybeMessage< ::Protocol::ping >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::ping >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::patrol_hit*
+Arena::CreateMaybeMessage< ::Protocol::patrol_hit >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::patrol_hit >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 
