@@ -43,6 +43,11 @@ public:
 	FVector(-1, 1, 0), FVector(1, -1, 0)
 	};
 
+	float mapminX = 16.f;
+	float mapmaxX = 2366.f;
+	float mapminY = -1000.f;
+	float mapmaxY = 3960.f;
+
 	TArray<FVector> NodeArr;
 	TMap<FVector, TArray<FEdgeData>> EdgesMap;
 };
