@@ -1956,17 +1956,13 @@ void ABaseCharacter::SetAttack(bool bAttack)
 	}
 }
 
-//void ABaseCharacter::SetPlayerRun(bool set_run)
-//{
-//	m_bRun = set_run;
-//	Run();
-//}
-
 void ABaseCharacter::SetPlayerJump()
 {
 	//Jump();
 	bPressedJump = true;
-	StopJumping();
+	JumpKeyHoldTime = 0.0f;
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInstance->SetIsPawnAir(true);
 	UE_LOG(LogTemp, Warning, TEXT("SetJump "));
 }
 

@@ -24,6 +24,7 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	void SetCurrentPawnSpeed(float speed) { m_fCurrentPawnSpeed = speed; }
 	void SetIsPawnRun(bool run) { m_bPawnRun = run; }
+	void SetIsPawnAir(bool air) { m_bIsInAir = air; }
 	void SetIsDead(bool dead) { m_bIsDead = dead; }
 
 	void PlayAttackMontage();
