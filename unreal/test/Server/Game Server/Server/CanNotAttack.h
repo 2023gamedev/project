@@ -12,20 +12,20 @@ public:
 
         bool result = true;
 
-        if (zom.DistanceToPlayers.size() == 0) {
+        if (zom.DistanceTo_PlayerInsight.size() == 0) {
             //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: \"false\"" << endl;
             cout << "Zombie #" << zom.ZombieData.zombieID;
-            cout << " DistanceToPlayers Map ERROR!!! -> Detected is done [Player is in sight -> (PlayerInSight == true)] but DistanceToPlayers Map is empty" << endl;
+            cout << " DistanceTo_PlayerInsight Map ERROR!!! -> Detected is done [Player is in sight -> (PlayerInSight == true)] but DistanceTo_PlayerInsight Map is empty" << endl;
 
             return "Fail";
         }
 
         for (auto player : playerDB) {
-            //zom.SetDistance(player.first);        //DistanceToPlayers 맵 에 해당 플레이어와 거리 갱신 
-                                                    //(바로 앞에 작업인 CanAttack Task에서 이미 해당 작업을 진행하기에 또 할 필요X)
+            //zom.SetDistance(player.first, 1, 2);         //DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 갱신 
+                                                        //(바로 앞에 작업인 CanAttack Task에서 이미 해당 작업을 진행하기에 또 할 필요X)
 
-            if (zom.DistanceToPlayers.find(player.first) != zom.DistanceToPlayers.end()) {
-                if (zom.DistanceToPlayers.at(player.first) > zom.CanAttackDistance && zom.DistanceToPlayers.at(player.first) > 0 || zom.DistanceToPlayers.at(player.first) <= 0) 
+            if (zom.DistanceTo_PlayerInsight.find(player.first) != zom.DistanceTo_PlayerInsight.end()) {
+                if (zom.DistanceTo_PlayerInsight.at(player.first) > zom.CanAttackDistance && zom.DistanceTo_PlayerInsight.at(player.first) > 0 || zom.DistanceTo_PlayerInsight.at(player.first) <= 0) 
                 {   }
                 else {
                     result = false;

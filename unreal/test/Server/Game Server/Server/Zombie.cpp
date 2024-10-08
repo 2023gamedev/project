@@ -23,7 +23,9 @@ Zombie::Zombie()
 
 	ZombieData = Zombie_Data();
 
-	DistanceToPlayers = {};
+	DistanceTo_PlayerInsight = {};
+
+	DistanceTo_FootSound = {};
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
@@ -57,7 +59,9 @@ Zombie::Zombie(Zombie_Data z_d)
 
 	ZombieData = z_d;
 
-	DistanceToPlayers = {};
+	DistanceTo_PlayerInsight = {};
+
+	DistanceTo_FootSound = {};
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
@@ -90,21 +94,39 @@ Zombie::~Zombie()
 	// + 혹시 전방 선언해서?? / 복사 생성되서?? / 암시적 삭제??
 }
 
-void Zombie::SetDistance(int playerid)
+// distanceType = 1: Detect , 2: FootSound / setTpye = 1: Insert(or Update) , 2: Update(no Insert)
+void Zombie::SetDistance(int playerid, int distanceType, int setType)
 {
-	if (DistanceToPlayers.find(playerid) == DistanceToPlayers.end()) {		// DistanceToPlayers map에 playerid가 없으면 -> 생성
-																			// [x] -> 이러면 시야에 들어오지도 않은 플레이어도 맵에 정보 저장하게 됨 -> 그럼 쓸데 없이 검사를 더 많이하게됨
-		//DistanceToPlayers.emplace(playerid, dist);
+	map<int, float>* setMap = {};
+
+	if (distanceType == 1)
+		setMap = &DistanceTo_PlayerInsight;
+	else if (distanceType == 2)
+		setMap = &DistanceTo_FootSound;
+
+	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[playerid].x, playerDB[playerid].y, playerDB[playerid].z}} };
+
+	float dist = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
+
+	if (setMap->find(playerid) == setMap->end() && setType == 1) {		// map에 playerid가 없고, setType != 2 -> 수정/갱신용이 아니라 setType == 1 -> 생성일때만 ==> 생성
+		setMap->emplace(playerid, dist);
 	}
-	else {		// DistanceToPlayers map에 이미 playerid가 있으면 -> 수정
-		vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-		vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[playerid].x, playerDB[playerid].y, playerDB[playerid].z}} };
-
-		float dist = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
-
-		DistanceToPlayers.at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 예외처리 꼭! 필요! (DistanceToPlayers.find(playerid) == DistanceToPlayers.end() -> 이거와 같이)
-		//DistanceToPlayers[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
+	else if (setMap->find(playerid) != setMap->end()) {		// map에 이미 playerid가 있으면 -> 수정/갱신
+		//if (setMap->at(playerid) != -1.0f) {				// 하지만 해당 값이 -1 (관측되지 않은 상태) 이면 수정/갱신 X
+			if (distanceType == 1) {
+				setMap->at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 예외처리 꼭! 필요! (DistanceTo_PlayerInsight.find(playerid) == DistanceTo_PlayerInsight.end() -> 이거와 같이)
+				//(*setMap)[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
 													// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 
+			}
+
+			else if (distanceType == 2) {
+				if (playerDB[playerid].IsRunning == true)
+					setMap->at(playerid) = dist;
+				//else
+				//	setMap->at(playerid) = -1.0f;
+			}
+		//}
 	}
 }
 
@@ -166,9 +188,11 @@ void Zombie::SetTargetLocation(TARGET t)
 
 	switch (targetType) {
 	case TARGET::PLAYER:
-		SearchClosestPlayer(closest_player_pos);
-		TargetLocation = closest_player_pos;
-		PrevTargetLocation = TargetLocation;
+		SearchClosestPlayer(closest_player_pos, 1);
+		if (closest_player_pos.size() != 0) {
+			TargetLocation = closest_player_pos;
+			PrevTargetLocation = TargetLocation;
+		}
 		//cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 		break;
 	case TARGET::SHOUTING:
@@ -176,13 +200,34 @@ void Zombie::SetTargetLocation(TARGET t)
 		break;
 	case TARGET::FOOTSOUND:
 		//TargetLocation = pl;			// => 이런식으로 하면 플레이어 최신 위치를 계속 갱신받게됨!
+
+		//if (HeardFootSound == false) {	// => 플레이어의 발소리를 들었을 당시 그 순간에 플레이어 위치를 받기
+		//	SearchClosestPlayer(closest_player_pos, 2);
+		//	HeardFootSound = true;
+		//}
+		//if (TargetLocation != closest_player_pos) {	// 타겟위치가 재설정되지 않았다면, -> 반복 UpdatePath 하지 않도록
+		//	TargetLocation = closest_player_pos;
+		//	UpdatePath();
+		//}
+
+
+
+		SearchClosestPlayer(closest_player_pos, 2);
+		if (closest_player_pos.size() != 0) {
+			TargetLocation = closest_player_pos;
+		}
+		HeardFootSound = true;
+		UpdatePath();
+
 		break;
 	case TARGET::INVESTIGATED:
 		//TargetLocation = TargetLocation;		// 걍 명시적 표기 ========> [x]
 												// 플레이어를 따라가던 도중 놓이면 따로 작업 할 꺼 없긴하지만 아니라면 (샤우팅/발소리->플레이어 이전위치) 이 상황에서는 갱신해줘야함
 												// 근데 위에 처럼 하면 발소리 듣고 발소리 쪽으로 갔다가 (경로 끝까지 가고) 다시 플레이어를 마지막으로 본위치로 가는게 약간 이상한 거 같음;; (회의 필요)
-		TargetLocation = PrevTargetLocation;
-		UpdatePath();							
+		if (TargetLocation != PrevTargetLocation && PrevTargetLocation.size() != 0) {	// 타겟위치가 재설정되지 않았다면, -> 반복 UpdatePath 하지 않도록
+			TargetLocation = PrevTargetLocation;
+			UpdatePath();
+		}
 		break;
 	case TARGET::PATROL:
 		int try_cnt = 0;
@@ -200,31 +245,62 @@ void Zombie::SetTargetLocation(TARGET t)
 	}
 }
 
-void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos)
+// distanceType = 1: Detect / 2: FootSound
+void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType)
 {
 	float min = FLT_MAX;	//float 최대값
+
+	map<int, float> searchMap = {};
+	if (distanceType == 1)
+		searchMap = DistanceTo_PlayerInsight;
+	else if (distanceType == 2)
+		searchMap = DistanceTo_FootSound;
+
 	vector<int> closest_players = {};
 
-	// 단 한명의 플레이어라도 마주쳤다면
-	if (DistanceToPlayers.size() != 0) {
+
+	if (searchMap.size() != 0) {
 
 		for (auto player : playerDB) {
-			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
-				if (min > DistanceToPlayers.at(player.first) && DistanceToPlayers.at(player.first) > 0) {
-					min = DistanceToPlayers.at(player.first);
+			if (searchMap.find(player.first) != searchMap.end()) {
+				if (min > searchMap.at(player.first) && searchMap.at(player.first) > 0) {
+					min = searchMap.at(player.first);
+					if(distanceType == 1)
+						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에 존재함! --- 거리: " << searchMap.at(player.first) << endl;
+					else if (distanceType == 2)
+						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 에게 발소리 들킴! --- 거리: " << searchMap.at(player.first) << endl;
+				}
+				else if (min > searchMap.at(player.first) && searchMap.at(player.first) <= 0) {
+					if (distanceType == 1)
+						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
+					else if (distanceType == 2)
+						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 발소리 범위에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
 				}
 			}
 		}
 
+		if (distanceType == 1 && PlayerInSight == false && min == FLT_MAX) {
+			cout << "[ERROR] Data Race!!! -> PlayerInSight is false after CanSeePlayer Sequence check!" << endl;
+			return;
+		}
+
 		// 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
 		for (auto player : playerDB) {
-			if (DistanceToPlayers.find(player.first) != DistanceToPlayers.end()) {
-				if (min == DistanceToPlayers.at(player.first)) {
+			if (searchMap.find(player.first) != searchMap.end()) {
+				if (min == searchMap.at(player.first)) {
 					closest_players.emplace_back(player.first);
-					cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 와 가장 가까움! --- 거리: " << DistanceToPlayers.at(player.first) << endl;
-					//cout << "플레이어 #" << player.first << " 의 위치: ( " << player.second.x << " , " << player.second.y << " , " << player.second.z << " )" << endl;
+					cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 와 가장 가까움! --- 거리: " << searchMap.at(player.first) << endl;
+					cout << "플레이어 #" << player.first << " 의 위치: ( " << player.second.x << " , " << player.second.y << " , " << player.second.z << " )" << endl;
 				}
 			}
+		}
+
+		if (closest_players.size() == 0) {
+			if(distanceType == 1)
+				cout << "DistanceTo_PlayerInSight is empty" << endl;
+			else if(distanceType == 2)
+				cout << "DistanceTo_FootSound is empty" << endl;
+			return;
 		}
 
 		std::random_device rd;
@@ -233,15 +309,25 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 		std::uniform_int_distribution<int> dist(0, closest_players.size() - 1);
 
 		ClosestPlayerID = closest_players[dist(mt)];		// 가장 가까운 플레이어 인덱스 저장
-
-		cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 을 따라감!!!" << endl;
+		
+		if (distanceType == 1) {
+			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 을 따라감!!!" << endl;
+		}
+		else if (distanceType == 2) {
+			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 의 발소리 따라감!!!" << endl;
+		}
 
 		// {주의} map 사용 할 때 주의할 점 (playerDB) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
 		closest_player_pos = vector<vector<vector<float>>>{ {{playerDB[ClosestPlayerID].x, playerDB[ClosestPlayerID].y, playerDB[ClosestPlayerID].z}} };
 	}
-	else {	// (DistanceToPlayers.size() == 0)
-		// BT에서 타겟을 플레이어로 했는데, DistanceToPlayers 맵이 비어 있다면 절대 안됨
-		cout << "DistanceToPlayers Map ERROR!!! -> Target is set to Player but DistanceToPlayers Map is empty" << endl;
+	else {	// (searchMap.size() == 0)
+		if (distanceType == 1) {
+			// BT에서 타겟을 플레이어로 했는데, DistanceTo_PlayerInsight 맵이 비어 있다면 절대 안됨
+			cout << "DistanceTo_PlayerInsight Map ERROR!!! -> Target is set to Player but DistanceTo_PlayerInsight Map is empty" << endl;
+		}
+		else if (distanceType == 2) {
+			cout << "DistanceTo_FootSound Map ERROR!!! -> Target is set to FootSound but DistanceTo_FootSound Map is empty" << endl;
+		}
 	}
 }
 
@@ -479,6 +565,46 @@ void Zombie::SendPath()
 	/*cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
 	cout << endl;*/
 
+}
+
+bool Zombie::FootSoundCheck() 
+{
+	bool result = false;
+
+	// 뛰고 있는 플레이어들 DistanceTo_FootSound 맵에 저장
+	for (auto player : playerDB) {
+		if (player.second.IsRunning) {
+			SetDistance(player.first, 2, 1);
+			result = true;
+		}
+		else {
+			//SetDistance(player.first, 2, 1);
+			cout << player.first << ", " << boolalpha << player.second.IsRunning << " --- BT 쓰레드" << endl;
+		}
+	}
+
+	//cout << "맵에 저장?: " << boolalpha << result << endl;
+
+	if (result == false) {
+		return false;
+	}
+
+
+	// 발소리를 들을 수 있는 거리에 좀비가 있었는지 체크
+	result = false;
+	
+	for (auto& distTo_footSound : DistanceTo_FootSound) {
+		if (distTo_footSound.second <= CanHearDistance) { 
+			result = true;
+		}
+		else {
+			distTo_footSound.second = -1.0f;		// 발소리 탐지 거리 밖이면 -1 넣기
+		}
+	}
+
+	//cout << "발소리 들음?: " << boolalpha << result << endl;
+
+	return result;
 }
 
 void Zombie::Wait()

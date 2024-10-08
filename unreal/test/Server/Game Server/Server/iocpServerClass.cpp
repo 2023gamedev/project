@@ -564,7 +564,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 		lastBTTime = currentTime;
 
 		if (playerDB.size() == 0) {
-			cout << "연결된 플레이어가 없습니다..." << endl;
+			//cout << "연결된 플레이어가 없습니다..." << endl;
 			//cout << endl;
 			result = "NO PLAYER";
 		}

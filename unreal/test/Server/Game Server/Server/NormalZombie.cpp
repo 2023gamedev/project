@@ -4,7 +4,8 @@
 
 class ZombiePathfinder;
 
-NormalZombie::NormalZombie()
+NormalZombie::NormalZombie() 
+	//: Zombie()
 {
 	SetHP(0);
 
@@ -14,7 +15,9 @@ NormalZombie::NormalZombie()
 
 	ZombieData = Zombie_Data();
 
-	DistanceToPlayers = {};
+	DistanceTo_PlayerInsight = {};
+
+	DistanceTo_FootSound = {};
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
@@ -40,6 +43,7 @@ NormalZombie::NormalZombie()
 }
 
 NormalZombie::NormalZombie(Zombie_Data z_d)
+	//: Zombie(z_d)
 {
 	SetHP(NormalZombieStartHP);
 
@@ -47,7 +51,9 @@ NormalZombie::NormalZombie(Zombie_Data z_d)
 
 	ZombieData = z_d;
 
-	DistanceToPlayers = {};
+	DistanceTo_PlayerInsight = {};
+
+	DistanceTo_FootSound = {};
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 

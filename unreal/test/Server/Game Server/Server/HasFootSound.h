@@ -18,14 +18,18 @@ public:
                                                                             // 아니면,
                                                                             //  그래도 나중에 샤우팅 지점 도착하고 나서 발소리 지점으로 가도록 만들기?)
 
-        //zom.HeardFootSound = result;
-
         //생각해보니 여기서 검사 할 필요가 없음 
         // -> 클라에서 플레이어가 뛰었을때 주변 좀비들과 거리 계산(검사)해서 들었다면, 서버로 해당 좀비들 HeardFootSound 패킷 서버로 전송 
         // -> 서버 클라로부터 HeardFootSound 패킷받으면, 해당 좀비들 HeardFootSound을 true로 바꾼다! (CanSeePlayer와 같은 방식으로)
         // [X] => 클라에서 검사하기 보다 (클라에서 검사하면 통신 작업이 더 까다로운데다가 비정확할 수 있고 비효율적임) 서버에서 판단해서 각 클라들에게 알려주자
 
-        bool result = zom.HeardFootSound;
+        bool result = zom.FootSoundCheck();
+
+        if (result == true)
+            zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);
+
+        if (zom.HeardFootSound == true)
+            result = true;
 
         //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [HasFootSound Task] 결과: \"" << boolalpha << result << "\"" << endl;
         //cout << endl;
