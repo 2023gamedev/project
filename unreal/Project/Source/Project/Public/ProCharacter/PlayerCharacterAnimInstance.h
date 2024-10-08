@@ -31,6 +31,7 @@ public:
 	void PlayPickUpMontage();
 	void PlayHealingMontage(float PlaySpeed);
 	void PlayBleedHealingMontage(float PlaySpeed);
+	void PlayJumpMontage();
 
 	FOnAttackStartCheckDelegate OnAttackStartCheck;
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
@@ -84,4 +85,7 @@ private:
 	// 애니메이션 몽타주
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* BleedHealingMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* JumpMontage;
 };

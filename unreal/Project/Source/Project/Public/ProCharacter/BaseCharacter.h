@@ -457,6 +457,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool m_bRun = false;
 
+	UPROPERTY(EditAnywhere)
+	bool m_bJump = false;
+
 	// 인벤토리
 
 	UPROPERTY(EditAnywhere)

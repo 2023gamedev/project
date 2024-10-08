@@ -344,8 +344,10 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 		AnimInstance->SetIsPawnRun(m_bRun);
 
+
 		PreviousSpeed = Speed;
 		OldLocation = NewLocation;
+		m_bJump = false;
 	}
 
 	else {
@@ -1958,12 +1960,14 @@ void ABaseCharacter::SetAttack(bool bAttack)
 
 void ABaseCharacter::SetPlayerJump()
 {
-	//Jump();
-	bPressedJump = true;
-	JumpKeyHoldTime = 0.0f;
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-	AnimInstance->SetIsPawnAir(true);
-	UE_LOG(LogTemp, Warning, TEXT("SetJump "));
+	if (AnimInstance) {
+		AnimInstance->PlayJumpMontage();
+	}
+
+	Jump();
+
+	UE_LOG(LogTemp, Warning, TEXT("SetPlayerJump"));
 }
 
 bool ABaseCharacter::GetAttack()
