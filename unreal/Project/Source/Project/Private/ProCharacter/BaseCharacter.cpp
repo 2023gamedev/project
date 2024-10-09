@@ -326,6 +326,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
 	if (!GetVelocity().Size()) {
 		if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
 			float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
@@ -335,22 +337,23 @@ void ABaseCharacter::Tick(float DeltaTime)
 		// 애니메이션 인스턴스에 속도 파라미터 설정
 		if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
 		{
-			auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 			if (AnimInstance) {
 				AnimInstance->SetCurrentPawnSpeed(Speed);
-				AnimInstance->SetIsPawnRun(m_bRun);
 			}
 		}
 
+		AnimInstance->SetIsPawnRun(m_bRun);
+
+
 		PreviousSpeed = Speed;
 		OldLocation = NewLocation;
+		m_bJump = false;
 	}
 
 	else {
-		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-		if (nullptr != CharacterAnimInstance) {
-			CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-			CharacterAnimInstance->SetIsPawnRun(m_bRun);
+		if (nullptr != AnimInstance) {
+			AnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
+			AnimInstance->SetIsPawnRun(m_bRun);
 		}
 
 		PreviousSpeed = GetVelocity().Size();
@@ -625,6 +628,13 @@ void ABaseCharacter::Run()
 			UseStamina();
 			GetWorld()->GetTimerManager().ClearTimer(HealingStaminaHandle);
 		}
+	}
+}
+
+void ABaseCharacter::Other_Run(bool mbrun)
+{
+	if(m_bRun != mbrun){
+	m_bRun = mbrun;
 	}
 }
 
@@ -1948,17 +1958,16 @@ void ABaseCharacter::SetAttack(bool bAttack)
 	}
 }
 
-void ABaseCharacter::SetPlayerRun()
-{
-	Run();
-}
-
 void ABaseCharacter::SetPlayerJump()
 {
-	//Jump();
-	bPressedJump = true;
-	StopJumping();
-	UE_LOG(LogTemp, Warning, TEXT("SetJump "));
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (AnimInstance) {
+		AnimInstance->PlayJumpMontage();
+	}
+
+	Jump();
+
+	UE_LOG(LogTemp, Warning, TEXT("SetPlayerJump"));
 }
 
 bool ABaseCharacter::GetAttack()

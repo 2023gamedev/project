@@ -50,6 +50,20 @@ void AZombieAIController::ZombieMoveTo(float deltasecond)
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
 
+	if (PathX != 0.f || PathY != 0.f) { // 좀비 이동경로 확인용 debugline
+		FVector Pos;
+		Pos.X = get<0>(target);
+		Pos.Y = get<1>(target);
+		Pos.Z = get<2>(target);
+		FVector Start = Pos + FVector(0, 0, 100);
+		FVector End = Pos - FVector(0, 0, 100);
+		FCollisionQueryParams Params;
+
+
+		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+	}
+
+
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
 		if (deltasecond > 0.3) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에

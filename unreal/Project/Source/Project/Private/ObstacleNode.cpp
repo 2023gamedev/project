@@ -40,8 +40,8 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
             FVector Location(x, y, StartLocation.Z);
             if (IsLocationNavigable(World, Location))
             {
+
                 Nodes.Add(Location);
-                // 이 부분은 네비메쉬 부분을 사용할 예정
             }
             else
             {
@@ -59,7 +59,7 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
 
     for (const FVector& Node : Nodes)
     {
-        if (Node.X > 16.f && Node.X < 2366.f && Node.Y > -1220.f && Node.Y < 3960.f) {
+        if (Node.X > mapminX && Node.X < mapmaxX && Node.Y > mapminY && Node.Y < mapmaxY) {
             NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
         }
 
@@ -82,7 +82,9 @@ bool AObstacleNode::IsLocationNavigable(UWorld* World, FVector Location)
     bool Result = !World->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
     if (Result) {
-        DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 100.f);
+        if (Location.X > mapminX && Location.X < mapmaxX && Location.Y > mapminY && Location.Y < mapmaxY) {
+            DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 100.f);
+        }
 
     }
     else {
@@ -99,7 +101,7 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
 
     for (const FVector& Node : Nodes)
     {
-        if (Node.X > 16.f && Node.X < 2366.f && Node.Y > -1220.f && Node.Y < 3960.f) {
+        if (Node.X > mapminX && Node.X < mapmaxX && Node.Y > mapminY && Node.Y < mapmaxY) {
             TArray<FEdgeData> EdgeDatas;
             for (const FVector& Offset : NeighborOffsets)
             {
@@ -110,7 +112,7 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
                 EdgeData.Location = Neighbor;
                 EdgeData.Weight = bDiagonal ? sqrt(2.f) : 1.f;
 
-                if (Neighbor.X > 16.f && Neighbor.X < 2366.f && Neighbor.Y > -1220.f && Neighbor.Y < 3960.f) {
+                if (Neighbor.X > mapminX && Neighbor.X <  mapmaxX && Neighbor.Y >mapminY && Neighbor.Y < mapmaxY) {
                     if (Nodes.Contains(Neighbor)) {
                         EdgeDatas.Add(EdgeData);
                     }

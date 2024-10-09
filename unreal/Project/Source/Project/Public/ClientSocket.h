@@ -83,11 +83,11 @@ struct EquipItem
 struct PlayerRun
 {
 	uint32 PlayerId;
-	bool b_run;
+	uint32 b_run;
 
-	PlayerRun() : PlayerId(0), b_run(false) {}
+	PlayerRun() : PlayerId(0), b_run(0) {}
 
-	PlayerRun(uint32 InPlayerId, bool Inb_run)
+	PlayerRun(uint32 InPlayerId, uint32 Inb_run)
 		: PlayerId(InPlayerId), b_run(Inb_run) {}
 };
 

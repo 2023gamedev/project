@@ -24,12 +24,14 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	void SetCurrentPawnSpeed(float speed) { m_fCurrentPawnSpeed = speed; }
 	void SetIsPawnRun(bool run) { m_bPawnRun = run; }
+	void SetIsPawnAir(bool air) { m_bIsInAir = air; }
 	void SetIsDead(bool dead) { m_bIsDead = dead; }
 
 	void PlayAttackMontage();
 	void PlayPickUpMontage();
 	void PlayHealingMontage(float PlaySpeed);
 	void PlayBleedHealingMontage(float PlaySpeed);
+	void PlayJumpMontage();
 
 	FOnAttackStartCheckDelegate OnAttackStartCheck;
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
@@ -83,4 +85,7 @@ private:
 	// 애니메이션 몽타주
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* BleedHealingMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* JumpMontage;
 };

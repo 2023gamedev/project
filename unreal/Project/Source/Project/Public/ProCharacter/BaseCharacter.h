@@ -164,11 +164,11 @@ public:
 	UFUNCTION()
 	void BleedHealingMontageEnded(UAnimMontage* Montage, bool interrup);
 
-
 	// input
 	void MoveForward(FVector RotateYaw, float NewAxisValue);
 	void MoveLeft(FVector RotateYaw, float NewAxisValue);
 	void Run();
+	void Other_Run(bool mbrun);
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
 	void GetItem();
@@ -401,8 +401,9 @@ public:
 	void UpdatePlayerData(FVector Location);
 
 	void SetAttack(bool b_attack);
-	void SetPlayerRun();
+
 	void SetPlayerJump();
+
 	bool GetAttack();
 
 	void OtherSpawnNormalWeapon(const FString& WeaponName);
@@ -455,6 +456,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	bool m_bRun = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bJump = false;
 
 	// 인벤토리
 

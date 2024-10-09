@@ -99,6 +99,10 @@ public:
 	UFUNCTION()
 	void BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup);
 
+	UFUNCTION()
+	void OnZombieHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+
 	UPROPERTY(EditAnywhere)
 	bool m_bBeAttacked = false;
 

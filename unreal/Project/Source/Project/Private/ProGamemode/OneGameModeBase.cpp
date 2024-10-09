@@ -799,7 +799,7 @@ void AOneGameModeBase::UpdatePlayerRun(uint32 PlayerID, bool b_run)
         ABaseCharacter* BasePlayer = *It;
         if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
         {
-            BasePlayer->SetPlayerRun();
+            BasePlayer->Other_Run(b_run);
             UE_LOG(LogTemp, Warning, TEXT("real update run: %d, %d"), PlayerID, b_run);
 
             return;

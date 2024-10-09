@@ -12,14 +12,9 @@ message Character {
     float yaw = 8;
     float roll = 9;
     float hp = 10;
-    bool isingame = 11;
+    uint32 b_run = 11;
+    bool isingame = 12;
 };
-
-message Character_hp{
-    uint32 playerid = 1;
-    float hp = 2;
-    uint32 packet_type = 3;
-}
 
 message Zombie {
     uint32 zombieid = 1;
@@ -95,12 +90,6 @@ message Equip_Item{
     uint32 itemtype = 4;
 }
 
-message run{
-    uint32 playerid = 1;
-    bool b_run = 2;
-    uint32 packet_type = 3;
-}
-
 message jump{
     uint32 playerid = 1;
     uint32 packet_type = 3;
@@ -108,5 +97,10 @@ message jump{
 
 message ping{
     uint32 playerid = 1;
+    uint32 packet_type=3;
+}
+
+message patrol_hit{
+    uint32 zombieid = 1;
     uint32 packet_type=3;
 }

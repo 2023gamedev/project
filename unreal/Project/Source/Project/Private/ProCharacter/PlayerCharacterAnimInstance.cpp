@@ -37,6 +37,11 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 		BleedHealingMontage = BH_MONTAGE.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> JUMP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/Other_Jump"));
+	if (JUMP_MONTAGE.Succeeded()) {
+		JumpMontage = JUMP_MONTAGE.Object;
+	}
+
 }
 
 void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -51,7 +56,6 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			m_bIsInAir = character->GetMovementComponent()->IsFalling();
 			m_bIsHandInWeapon = character->IsNWHandIn();
 		}
-
 	}
 
 
@@ -82,6 +86,12 @@ void UPlayerCharacterAnimInstance::PlayBleedHealingMontage(float PlaySpeed)
 {
 	if (!Montage_IsPlaying(BleedHealingMontage)) {
 		Montage_Play(BleedHealingMontage, PlaySpeed);
+	}
+}
+void UPlayerCharacterAnimInstance::PlayJumpMontage()
+{
+	if (!Montage_IsPlaying(JumpMontage)) {
+		Montage_Play(JumpMontage, 1.0f);
 	}
 }
 

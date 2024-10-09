@@ -54,23 +54,9 @@ void ABaseZombie::BeginPlay()
 	CachedAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	
-	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ABaseZombie::OnOverlapBegin);
+
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ABaseZombie::OnZombieHit);
 }
-
-void ABaseZombie::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	Protocol::PatrolPath Packet;
-
-	Packet.set_zombieid(ZombieId);
-	Packet.set_packet_type(14);
-
-	std::string serializedData;
-	Packet.SerializeToString(&serializedData);
-
-	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-}
-
 
 // Called every frame
 void ABaseZombie::Tick(float DeltaTime)
@@ -98,6 +84,23 @@ void ABaseZombie::Tick(float DeltaTime)
 	//
 	//PreviousSpeed = Speed;
 	//OldLocation = NewLocation;
+}
+
+void ABaseZombie::OnZombieHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) 
+{
+	if (OtherActor != nullptr && OtherActor != this) {
+		UE_LOG(LogTemp, Warning, TEXT("Zombie collided with %s"), *OtherActor->GetName());
+	}
+
+	Protocol::patrol_hit Packet;
+	Packet.set_zombieid(ZombieId);
+	Packet.set_packet_type(14);
+
+	std::string serializedData;
+	Packet.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
 }
 
 void ABaseZombie::PostInitializeComponents()
