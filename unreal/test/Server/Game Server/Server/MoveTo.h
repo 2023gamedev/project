@@ -51,8 +51,9 @@ public:
     string HasFootSound(Zombie& zom) const override {
         //cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
 
-        //zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);     // ==========>> 얘네는 해당 소리를 듣는 순간, 그니까 그때 그순간의 타겟의 위치로 타겟을 지정해야해서 
+        //zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);       // ==========>> 얘네는 해당 소리를 듣는 순간, 그니까 그때 그순간의 타겟의 위치로 타겟을 지정해야해서 
                                                                 // 여기다가 놔두면 계속 위치 갱신됨 -> ProcessPacket에서 받을때 초기화 해줘야 할듯하다
+                                                                // -> SetTargetLocation 안에 미리 예외처리를 넣어줌
 
         //zom.UpdatePath();                 // 얘도 맨밑에 Patrol 처럼 타겟 위치 변화 없을 테니까 매번 하지 말고 SetTargetLocation에서 한번만 작업해 주자
 

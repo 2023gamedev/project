@@ -45,7 +45,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        Player pl;
+        /*Player pl;
         pl.x = Packet.x();
         pl.y = Packet.y();
         pl.z = Packet.z();
@@ -66,23 +66,39 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
         else {
             pl.floor = FLOOR::FLOOR_F3;
-        }
+        }*/
 
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
-            playerDB[Packet.playerid()] = pl;
-        }
+            //playerDB[Packet.playerid()] = pl; //-> 이렇게 사용하면 초기화 빼먹은 값 더미 값 씌워질 수 있음
+           
+            playerDB[Packet.playerid()].x = Packet.x();
+            playerDB[Packet.playerid()].y = Packet.y();
+            playerDB[Packet.playerid()].z = Packet.z();
 
-        cout << boolalpha << Packet.b_run() << endl;
+            playerDB[Packet.playerid()].health = Packet.hp();
 
-        for (auto& player : playerDB) {
-            if (player.first == Packet.playerid()) {
-                if (Packet.b_run() == 1) {
-                    player.second.IsRunning = false;
-                }
-                else if (Packet.b_run() == 2) {
-                    player.second.IsRunning = true;
-                }
+            if (Packet.b_run() == 1) {
+                playerDB[Packet.playerid()].IsRunning = false;
+            }
+            else if (Packet.b_run() == 2) {
+                playerDB[Packet.playerid()].IsRunning = true;
+            }
+
+            if (Packet.z() < 800.f) {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_B2;
+            }
+            else if (Packet.z() < 1800.f) {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_B1;
+            }
+            else if (Packet.z() < 2500.f) {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F1;
+            }
+            else if (Packet.z() < 3600.f) {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F2;
+            }
+            else {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F3;
             }
         }
 
@@ -98,7 +114,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     case 2: {
         // 예전에 클라에서 좀비 움직이면 해당 패킷을 서버로 보냈음 -> 이제는 움직임을 서버에서 담당하니 사실상 사용 안 함
 
-        //printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
+        printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
         Protocol::Zombie Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -168,6 +184,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
         return true;
     }
+
     //case 6:
     //{
     //    printf("\n[ No. %3u ] Run Packet Received !!\n", id);
@@ -176,7 +193,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     //    string serializedData;
     //    Packet.SerializeToString(&serializedData);
 
-    //    cout << boolalpha << Packet.b_run() << endl;  // -> protobuf bool값 잘 받는 지 확인 -> 잘,,, 받네?? (false는 직렬화 안한다고 들었는데;;) 
     //    
     //    // 해당 플레이어 run-bool값 변경
     //    for (auto& player : playerDB) {
@@ -224,7 +240,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                 if (z->ZombieData.zombieID == recvzombieid) {
                     z->PlayerInSight = true;
                     z->KnewPlayerLocation = true;
-                    z->SetDistance(Packet.playerid());   //DistanceToPlayers 맵 에 해당 플레이어와 거리 추가하기
+                    z->SetDistance(Packet.playerid(), 1, 1);   //DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 추가하기
 
                     //cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
 
@@ -237,9 +253,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             for (auto& z : zombie) {
                 if (z->ZombieData.zombieID == recvzombieid) {
                     z->PlayerInSight = false;
-                    //z->DistanceToPlayers.erase(Packet.playerid());   //DistanceToPlayers 맵 에 해당 플레이어 정보 삭제하기 [X]"데이터 레이스!!"-> BT 쓰레드에서 at 사용 많이해서 abort 크래쉬 생김
-                    //z->DistanceToPlayers.at(Packet.playerid()) = -1.0f;
-                    z->DistanceToPlayers[Packet.playerid()] = -1.0f;     //그냥 이렇게 마이너스값 넣어 놓고 이건 없는 데이터로 치자 (마이너스값은 절대 설정될 수 없으니 & )
+                    //z->DistanceTo_PlayerInsight.erase(Packet.playerid());   //DistanceTo_PlayerInsight 맵 에 해당 플레이어 정보 삭제하기 [X]"데이터 레이스!!"-> BT 쓰레드에서 at 사용 많이해서 abort 크래쉬 생김
+                    //z->DistanceTo_PlayerInsight.at(Packet.playerid()) = -1.0f;
+                    z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     //그냥 이렇게 마이너스값 넣어 놓고 이건 없는 데이터로 치자 (마이너스값은 절대 설정될 수 없으니 & )
 
                     //cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!: " << endl;
 
@@ -304,9 +320,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
                     z->animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
 
-                    cout << "================================================================================================================================================================================" << endl;
-                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
-                    cout << "================================================================================================================================================================================" << endl;
+                    //cout << "================================================================================================================================================================================" << endl;
+                    //cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
+                    //cout << "================================================================================================================================================================================" << endl;
                 }
             }
         }

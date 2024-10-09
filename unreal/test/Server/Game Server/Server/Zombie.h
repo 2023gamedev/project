@@ -57,7 +57,8 @@ public:
 
     const float CanAttackDistance = 150.f;          // 공격 사정거리 150.f
 
-    //const float CanHearDistance = 500.f;            //========================언리얼 BaseCharacter.cpp에서 FootSound() - float DetectRadius = 500.f;에서 참조 (맞는지 확인 필요)
+    const float CanHearDistance = 500.f;            // 발소리 포착 가능거리500.f
+
     //const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
 
     const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
@@ -70,7 +71,9 @@ public:
 
     ZombiePathfinder pathfinder;
     
-    map<int, float> DistanceToPlayers;
+    map<int, float> DistanceTo_PlayerInsight;     // Detect용 맵 <플레이어 인덱스, 좀비-플레이어 거리>
+
+    map<int, float> DistanceTo_FootSound;         // FootSound용 맵 <플레이어 인덱스, 좀비-플레이어 거리>
 
     vector<vector<vector<float>>> TargetLocation;
 
@@ -112,11 +115,13 @@ public:
     ~Zombie();
 
 
-    void SetDistance(int playerid);
+    void SetDistance(int playerid, int distanceType, int setType);    // distanceType = 1: Detect / 2: FootSound, setTpye = 1: Insert / 2: Update
 
     void SetTargetLocation(TARGET t);
 
     void Attack() ;
+
+    bool FootSoundCheck();
 
     void SendPath();
 
@@ -136,7 +141,7 @@ public:
 
     bool CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
 
-    void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos);
+    void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType);
 
     virtual float GetHP() const { return zombieHP;  }
     virtual void SetHP(float hp) { zombieHP = hp; zombieHP = hp; }

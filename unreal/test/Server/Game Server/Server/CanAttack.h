@@ -13,15 +13,15 @@ public:
         bool result = false;
 
         for (auto player : playerDB) {
-            zom.SetDistance(player.first);       // DistanceToPlayers 맵 에 해당 플레이어와 거리 갱신 
+            zom.SetDistance(player.first, 1, 2);       // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 갱신 
 
-            if (zom.DistanceToPlayers.find(player.first) != zom.DistanceToPlayers.end()) {
+            if (zom.DistanceTo_PlayerInsight.find(player.first) != zom.DistanceTo_PlayerInsight.end()) {
                 //cout << "플레이어\'#" << player.first << "\' 좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시야에 있음!" << endl;
 
-                //cout << "플레이어\'#" << player.first << "\' 와 좀비 \'#" << zom.ZombieData.zombieID << "\' 의 거리: " << zom.DistanceToPlayers.at(player.first) << endl;
+                //cout << "플레이어\'#" << player.first << "\' 와 좀비 \'#" << zom.ZombieData.zombieID << "\' 의 거리: " << zom.DistanceTo_PlayerInsight.at(player.first) << endl;
                 //cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 공격 사거리: " << zom.CanAttackDistance << endl;
 
-                if (zom.DistanceToPlayers.at(player.first) <= zom.CanAttackDistance && zom.DistanceToPlayers.at(player.first) > 0) {
+                if (zom.DistanceTo_PlayerInsight.at(player.first) <= zom.CanAttackDistance && zom.DistanceTo_PlayerInsight.at(player.first) > 0) {
                     //cout << "플레이어\'#" << player.first << "\' 좀비 \'#" << zom.ZombieData.zombieID << "\' 의 공격 사거리 내에 있음!" << endl;
                     
                     result = true;  // 한명이라도 공격 범위 들어오면 -> Attack 수행
