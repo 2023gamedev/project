@@ -45,7 +45,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        Player pl;
+        /*Player pl;
         pl.x = Packet.x();
         pl.y = Packet.y();
         pl.z = Packet.z();
@@ -66,11 +66,33 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
         else {
             pl.floor = FLOOR::FLOOR_F3;
-        }
+        }*/
 
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
-            playerDB[Packet.playerid()] = pl;
+            //playerDB[Packet.playerid()] = pl; //-> 이렇게 사용하면 초기화 빼먹은 값 더미 값 씌워질 수 있음
+           
+            playerDB[Packet.playerid()].x = Packet.x();
+            playerDB[Packet.playerid()].y = Packet.y();
+            playerDB[Packet.playerid()].z = Packet.z();
+
+            playerDB[Packet.playerid()].health = Packet.hp();
+
+            if (Packet.z() < 800.f) {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_B2;
+            }
+            else if (Packet.z() < 1800.f) {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_B1;
+            }
+            else if (Packet.z() < 2500.f) {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F1;
+            }
+            else if (Packet.z() < 3600.f) {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F2;
+            }
+            else {
+                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F3;
+            }
         }
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
@@ -85,7 +107,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     case 2: {
         // 예전에 클라에서 좀비 움직이면 해당 패킷을 서버로 보냈음 -> 이제는 움직임을 서버에서 담당하니 사실상 사용 안 함
 
-        //printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
+        printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
         Protocol::Zombie Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
@@ -162,15 +184,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
         Packet.SerializeToString(&serializedData);
-
-        cout << boolalpha << Packet.b_run() << endl;  // -> protobuf bool값 잘 받는 지 확인 -> 잘,,, 받네?? (false는 직렬화 안한다고 들었는데;;) 
         
         // 해당 플레이어 run-bool값 변경
         for (auto& player : playerDB) {
             if (player.first == Packet.playerid()) {
                 player.second.IsRunning = Packet.b_run();
-
-                cout << player.first << ", " << boolalpha << player.second.IsRunning << " --- 송수신 쓰레드" << endl;
             }
         }
 
@@ -202,13 +220,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     case 9:
     {
-        //printf("\n[ No. %3u ] Detected Packet Received !!\n", id);
+        printf("\n[ No. %3u ] Detected Packet Received !!\n", id);
         Protocol::Detected Packet;
         Packet.ParseFromArray(buffer, bufferSize);
 
         int recvzombieid = Packet.zombieid();
-
-        cout << boolalpha << Packet.player_insight() << endl;
 
         if (Packet.player_insight()) {
             for (auto& z : zombie) {
@@ -295,9 +311,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
                     z->animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
 
-                    cout << "================================================================================================================================================================================" << endl;
-                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
-                    cout << "================================================================================================================================================================================" << endl;
+                    //cout << "================================================================================================================================================================================" << endl;
+                    //cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
+                    //cout << "================================================================================================================================================================================" << endl;
                 }
             }
         }

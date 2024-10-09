@@ -265,16 +265,16 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			if (searchMap.find(player.first) != searchMap.end()) {
 				if (min > searchMap.at(player.first) && searchMap.at(player.first) > 0) {
 					min = searchMap.at(player.first);
-					if(distanceType == 1)
-						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에 존재함! --- 거리: " << searchMap.at(player.first) << endl;
-					else if (distanceType == 2)
-						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 에게 발소리 들킴! --- 거리: " << searchMap.at(player.first) << endl;
+					//if(distanceType == 1)
+					//	cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에 존재함! --- 거리: " << searchMap.at(player.first) << endl;
+					//else if (distanceType == 2)
+					//	cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 에게 발소리 들킴! --- 거리: " << searchMap.at(player.first) << endl;
 				}
 				else if (min > searchMap.at(player.first) && searchMap.at(player.first) <= 0) {
-					if (distanceType == 1)
-						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
-					else if (distanceType == 2)
-						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 발소리 범위에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
+					//if (distanceType == 1)
+					//	cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
+					//else if (distanceType == 2)
+					//	cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 발소리 범위에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
 				}
 			}
 		}
@@ -289,8 +289,8 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			if (searchMap.find(player.first) != searchMap.end()) {
 				if (min == searchMap.at(player.first)) {
 					closest_players.emplace_back(player.first);
-					cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 와 가장 가까움! --- 거리: " << searchMap.at(player.first) << endl;
-					cout << "플레이어 #" << player.first << " 의 위치: ( " << player.second.x << " , " << player.second.y << " , " << player.second.z << " )" << endl;
+					//cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 와 가장 가까움! --- 거리: " << searchMap.at(player.first) << endl;
+					//cout << "플레이어 #" << player.first << " 의 위치: ( " << player.second.x << " , " << player.second.y << " , " << player.second.z << " )" << endl;
 				}
 			}
 		}
@@ -311,10 +311,10 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 		ClosestPlayerID = closest_players[dist(mt)];		// 가장 가까운 플레이어 인덱스 저장
 		
 		if (distanceType == 1) {
-			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 을 따라감!!!" << endl;
+			//cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 을 따라감!!!" << endl;
 		}
 		else if (distanceType == 2) {
-			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 의 발소리 따라감!!!" << endl;
+			//cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 의 발소리 따라감!!!" << endl;
 		}
 
 		// {주의} map 사용 할 때 주의할 점 (playerDB) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
@@ -579,11 +579,8 @@ bool Zombie::FootSoundCheck()
 		}
 		else {
 			//SetDistance(player.first, 2, 1);
-			cout << player.first << ", " << boolalpha << player.second.IsRunning << " --- BT 쓰레드" << endl;
 		}
 	}
-
-	//cout << "맵에 저장?: " << boolalpha << result << endl;
 
 	if (result == false) {
 		return false;
@@ -601,8 +598,6 @@ bool Zombie::FootSoundCheck()
 			distTo_footSound.second = -1.0f;		// 발소리 탐지 거리 밖이면 -1 넣기
 		}
 	}
-
-	//cout << "발소리 들음?: " << boolalpha << result << endl;
 
 	return result;
 }
