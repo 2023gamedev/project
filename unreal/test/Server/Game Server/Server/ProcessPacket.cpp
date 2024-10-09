@@ -238,6 +238,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         if (Packet.player_insight()) {
             for (auto& z : zombie) {
                 if (z->ZombieData.zombieID == recvzombieid) {
+                    if (z->IsAttacking)
+                        break;
+
                     z->PlayerInSight = true;
                     z->KnewPlayerLocation = true;
                     z->SetDistance(Packet.playerid(), 1, 1);   //DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 추가하기
@@ -252,10 +255,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         else {
             for (auto& z : zombie) {
                 if (z->ZombieData.zombieID == recvzombieid) {
+                    if (z->IsAttacking)
+                        break;
+
                     z->PlayerInSight = false;
-                    //z->DistanceTo_PlayerInsight.erase(Packet.playerid());   //DistanceTo_PlayerInsight 맵 에 해당 플레이어 정보 삭제하기 [X]"데이터 레이스!!"-> BT 쓰레드에서 at 사용 많이해서 abort 크래쉬 생김
-                    //z->DistanceTo_PlayerInsight.at(Packet.playerid()) = -1.0f;
-                    z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     //그냥 이렇게 마이너스값 넣어 놓고 이건 없는 데이터로 치자 (마이너스값은 절대 설정될 수 없으니 & )
+                    z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     //그냥 이렇게 마이너스값 넣어 놓고 이건 없는 데이터로 치자 (마이너스값은 절대 설정될 수 없으니)
 
                     //cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!: " << endl;
 
@@ -334,7 +338,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         Protocol::patrol_hit Packet;
         Packet.ParseFromArray(buffer, bufferSize);
-        cout << "recv patrol zombie hit" << Packet.zombieid() << endl;
+        //cout << "recv patrol zombie hit #" << Packet.zombieid() << endl;
 
         return true;
     }

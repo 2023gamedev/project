@@ -9,8 +9,7 @@ public:
     string Detect(Zombie& zom) const override {
         //cout << "<Detect>의 [HasInvestigated Task] 호출" << endl;
 
-        //bool result = zom.KnewPlayerLocation;
-        bool result = false;
+        bool result = zom.KnewPlayerLocation;
 
         //cout << "좀비 플레이어의 최신 위치 정보를 가지고 있는가?: " << boolalpha << result << endl;
         //if (result)
