@@ -292,6 +292,7 @@ uint32 ClientSocket::Run()
 
 					buffer.clear();
 					}
+
 				}
 			}
 		}

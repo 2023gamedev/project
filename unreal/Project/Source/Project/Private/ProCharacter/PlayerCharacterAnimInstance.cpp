@@ -37,7 +37,7 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 		BleedHealingMontage = BH_MONTAGE.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> JUMP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/Other_Jump"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> JUMP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/Other_Jump.Other_Jump"));
 	if (JUMP_MONTAGE.Succeeded()) {
 		JumpMontage = JUMP_MONTAGE.Object;
 	}
@@ -91,7 +91,14 @@ void UPlayerCharacterAnimInstance::PlayBleedHealingMontage(float PlaySpeed)
 void UPlayerCharacterAnimInstance::PlayJumpMontage()
 {
 	if (!Montage_IsPlaying(JumpMontage)) {
-		Montage_Play(JumpMontage, 1.0f);
+		if (Montage_Play(JumpMontage, 1.f))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("JumpMontage 재생 시작"));
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("JumpMontage 재생 실패"));
+		}
 	}
 }
 

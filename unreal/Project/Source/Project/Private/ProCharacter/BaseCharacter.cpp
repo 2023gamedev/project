@@ -333,7 +333,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 			float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
 			Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
 		}
-
+		
 		// 애니메이션 인스턴스에 속도 파라미터 설정
 		if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
 		{
@@ -342,12 +342,19 @@ void ABaseCharacter::Tick(float DeltaTime)
 			}
 		}
 
+		if (m_bJump == true) {
+			if (AnimInstance)
+			{
+				AnimInstance->PlayJumpMontage();
+			}
+			m_bJump = false;
+		}
+
 		AnimInstance->SetIsPawnRun(m_bRun);
 
 
 		PreviousSpeed = Speed;
 		OldLocation = NewLocation;
-		m_bJump = false;
 	}
 
 	else {
@@ -1960,12 +1967,7 @@ void ABaseCharacter::SetAttack(bool bAttack)
 
 void ABaseCharacter::SetPlayerJump()
 {
-	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-	if (AnimInstance) {
-		AnimInstance->PlayJumpMontage();
-	}
-
-	Jump();
+	m_bJump = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("SetPlayerJump"));
 }
