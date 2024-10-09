@@ -1,17 +1,17 @@
-#include "NormalZombie.h"
+#include "RunningZombie.h"
 
 #include "ZombiePathfinder.h"
 
 class ZombiePathfinder;
 
-NormalZombie::NormalZombie() 
-	//: Zombie()
+RunningZombie::RunningZombie()
+: Zombie()
 {
 	SetHP(0);
-
+	
 	SetSpeed(0);
 
-	path = vector<tuple<float, float, float>>{};
+	/*path = vector<tuple<float, float, float>>{};
 
 	beforepath = vector<tuple<float, float, float>>{};
 
@@ -41,17 +41,17 @@ NormalZombie::NormalZombie()
 
 	targetType = Zombie::TARGET::NULL_TARGET;
 
-	ClosestPlayerID = 0;
+	ClosestPlayerID = 0;*/
 }
 
-NormalZombie::NormalZombie(Zombie_Data z_d)
-	//: Zombie(z_d)
+RunningZombie::RunningZombie(Zombie_Data z_d)
+: Zombie(z_d)
 {
-	SetHP(NormalZombieStartHP);
+	SetHP(RunningZombieStartHP);
+	
+	SetSpeed(RunningZombieSpeed);
 
-	SetSpeed(NormalZombieSpeed);
-
-	path = vector<tuple<float, float, float>>{}; 
+	/*path = vector<tuple<float, float, float>>{};
 
 	ZombieData = z_d;
 
@@ -79,5 +79,5 @@ NormalZombie::NormalZombie(Zombie_Data z_d)
 
 	targetType = Zombie::TARGET::PATROL;
 
-	ClosestPlayerID = 0;
+	ClosestPlayerID = 0;*/
 }

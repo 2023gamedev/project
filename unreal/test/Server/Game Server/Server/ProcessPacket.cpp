@@ -78,12 +78,16 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
             playerDB[Packet.playerid()].health = Packet.hp();
 
+            //cout << "player hp: " << Packet.hp() << endl;
+
             if (Packet.b_run() == 1) {
                 playerDB[Packet.playerid()].IsRunning = false;
             }
             else if (Packet.b_run() == 2) {
                 playerDB[Packet.playerid()].IsRunning = true;
             }
+
+            //cout << "player IsRunning: " << Packet.b_run() << endl;
 
             if (Packet.z() < 800.f) {
                 playerDB[Packet.playerid()].floor = FLOOR::FLOOR_B2;

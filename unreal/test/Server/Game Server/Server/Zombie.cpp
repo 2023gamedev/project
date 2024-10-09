@@ -17,6 +17,8 @@ Zombie::Zombie()
 {
 	SetHP(0);
 
+	SetSpeed(0);
+
 	path = vector<tuple<float, float, float>>{};
 
 	beforepath = vector<tuple<float, float, float>>{};
@@ -54,6 +56,8 @@ Zombie::Zombie(Zombie_Data z_d)
 	: pathfinder(0, 0, 0, 1, 1, 1)
 {
 	SetHP(0);
+
+	SetSpeed(0);
 
 	path = vector<tuple<float, float, float>>{};
 
@@ -391,15 +395,14 @@ void Zombie::MoveTo(float deltasecond)
 	float PathX = get<0>(TargetNode);
 	float PathY = get<1>(TargetNode);
 
-	float ZombieSpeed = 0.f;
 	if (ZombieData.zombietype == 0) {
-		ZombieSpeed = 200.f;
+		//ZombieSpeed = 200.f;
 	}
 	else if (ZombieData.zombietype == 1) {
-		ZombieSpeed = 300.f;
+		//ZombieSpeed = 300.f;
 	}
 	else if (ZombieData.zombietype == 2) {
-		ZombieSpeed = 400.f;
+		//ZombieSpeed = 400.f;
 	}
 	else {
 		cout << "MOVETO ZOMBIE TYPE ERROR" << endl;
@@ -428,8 +431,6 @@ void Zombie::MoveTo(float deltasecond)
 
 	// 타겟 위치에 도달했는지 확인
 	float newDistance = sqrt((PathX - ZombieData.x) * (PathX - ZombieData.x) + (PathY - ZombieData.y) * (PathY - ZombieData.y));
-
-	cout << "뭐야???" << endl;
 
 	if (newDistance < moveDistance) {
 		ZombieData.x = PathX;
@@ -553,6 +554,10 @@ void Zombie::SendPath()
 		return;
 	}
 	else {
+
+		cout << "......." << endl;
+
+
 		// path값 전송
 		Protocol::ZombiePath zPath;
 		zPath.set_zombieid(ZombieData.zombieID);

@@ -2,12 +2,12 @@
 
 #include "Zombie.h"
 
-class NormalZombie : public Zombie
+class RunningZombie : public Zombie
 {
 public:
-	NormalZombie();
+	RunningZombie();
 
-	NormalZombie(Zombie_Data zd);
+	RunningZombie(Zombie_Data zd);
 
 	//float GetHP() const override { return zombieHP; }
 	//void SetHP(float hp) override { zombieHP = hp; }

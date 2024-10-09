@@ -1,6 +1,8 @@
 #include "ZombieController.h"
 
 #include "NormalZombie.h"
+#include "RunningZombie.h"
+
 
 ZombieController::ZombieController(IOCP_CORE& mainServer)
 {
@@ -25,26 +27,23 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     // Áö»ó 1Ãþ
     //SpawnZombies(11, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
     //SpawnZombies(12, 1, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    //SpawnZombies(11, 0, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
-    //SpawnZombies(12, 0, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    SpawnZombies(11, 0, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
+    SpawnZombies(12, 0, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
 
-    //SpawnZombies(13, 0, Vector3(220.f, 1200.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    //SpawnZombies(14, 0, Vector3(250.f, 1700.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    //SpawnZombies(15, 0, Vector3(200.f, 1780.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    //SpawnZombies(16, 0, Vector3(2100.f, 3500.f, 1989.212f), Rotator(0.f, 120.f, 0.f), 0, 0.f);
-    //SpawnZombies(17, 0, Vector3(200.f, 3200.f, 1989.212f), Rotator(0.f, 20.f, 0.f), 0, 0.f);
-    //SpawnZombies(18, 0, Vector3(800.f, 3600.f, 1989.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
-    //SpawnZombies(19, 0, Vector3(800.f, 1600.f, 1989.212f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
-    //SpawnZombies(20, 0, Vector3(200.f, 2200.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
+    SpawnZombies(13, 0, Vector3(220.f, 1200.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    SpawnZombies(14, 0, Vector3(250.f, 1700.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    SpawnZombies(15, 0, Vector3(200.f, 1780.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    SpawnZombies(16, 0, Vector3(2100.f, 3500.f, 1989.212f), Rotator(0.f, 120.f, 0.f), 0, 0.f);
+    SpawnZombies(17, 0, Vector3(200.f, 3200.f, 1989.212f), Rotator(0.f, 20.f, 0.f), 0, 0.f);
+    SpawnZombies(18, 0, Vector3(800.f, 3600.f, 1989.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
+    SpawnZombies(19, 0, Vector3(800.f, 1600.f, 1989.212f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
+    SpawnZombies(20, 0, Vector3(200.f, 2200.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
     
     
     //Áö»ó 2Ãþ
-    //SpawnZombies(21, 2, Vector3(2200.f, 600.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
-    //SpawnZombies(22, 2, Vector3(670.f, 400.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
-    //SpawnZombies(23, 2, Vector3(1200.f, 1820.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);
-    /*SpawnZombies(21, 0, Vector3(2200.f, 600.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
-    SpawnZombies(22, 0, Vector3(670.f, 400.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
-    SpawnZombies(23, 0, Vector3(1200.f, 1820.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);
+    SpawnZombies(21, 2, Vector3(2200.f, 600.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
+    SpawnZombies(22, 2, Vector3(670.f, 400.f, 2947.212f), Rotator(0.f, 90.f, 0.f), 2, 1000.f);
+    SpawnZombies(23, 2, Vector3(1200.f, 1820.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);
 
     SpawnZombies(24, 0, Vector3(580.f, 2170.f, 2947.212f), Rotator(0.f, -180.f, 0.f), 0, 0.f);
     SpawnZombies(25, 0, Vector3(1850.f, 2300.f, 2947.212f), Rotator(0.f, 20.f, 0.f), 0, 0.f);
@@ -52,26 +51,21 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     SpawnZombies(27, 0, Vector3(1400.f, 3000.f, 2947.212f), Rotator(0.f, 180.f, 0.f), 1, -800.f);
     SpawnZombies(28, 0, Vector3(870.f, 3660.f, 2947.212f), Rotator(0.f, -90.f, 0.f), 0, 0.f);
     SpawnZombies(29, 0, Vector3(2241.f, 3500.f, 2947.212f), Rotator(0.f, 30.f, 0.f), 0, 0.f);
-    SpawnZombies(30, 0, Vector3(190.f, 2600.f, 2947.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);*/
+    SpawnZombies(30, 0, Vector3(190.f, 2600.f, 2947.212f), Rotator(0.f, -30.f, 0.f), 0, 0.f);
     
     
     // ÁöÇÏ 2Ãþ
-    //SpawnZombies(31, 2, Vector3(600.f, 500.f, 90.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    //SpawnZombies(32, 2, Vector3(2000.f, 1340.f, 90.212f), Rotator(0.f, 180.f, 0.f), 1, -1200.f);
-    //SpawnZombies(33, 2, Vector3(2000.f, 3600.f, 90.212f), Rotator(0.f, -50.f, 0.f), 0, 0.f);
-    //SpawnZombies(34, 2, Vector3(180.f, 2400.f, 90.212f), Rotator(0.f, 90.f, 0.f), 2, 800.f);
-    //SpawnZombies(35, 2, Vector3(1000.f, 2800.f, 90.212f), Rotator(0.f, -60.f, 0.f), 0, 0.f);
-    /*SpawnZombies(31, 0, Vector3(600.f, 500.f, 90.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    SpawnZombies(32, 0, Vector3(2000.f, 1340.f, 90.212f), Rotator(0.f, 180.f, 0.f), 1, -1200.f);
-    SpawnZombies(33, 0, Vector3(2000.f, 3600.f, 90.212f), Rotator(0.f, -50.f, 0.f), 0, 0.f);
-    SpawnZombies(34, 0, Vector3(180.f, 2400.f, 90.212f), Rotator(0.f, 90.f, 0.f), 2, 800.f);
-    SpawnZombies(35, 0, Vector3(1000.f, 2800.f, 90.212f), Rotator(0.f, -60.f, 0.f), 0, 0.f);
+    SpawnZombies(31, 2, Vector3(600.f, 500.f, 90.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    SpawnZombies(32, 2, Vector3(2000.f, 1340.f, 90.212f), Rotator(0.f, 180.f, 0.f), 1, -1200.f);
+    SpawnZombies(33, 2, Vector3(2000.f, 3600.f, 90.212f), Rotator(0.f, -50.f, 0.f), 0, 0.f);
+    SpawnZombies(34, 2, Vector3(180.f, 2400.f, 90.212f), Rotator(0.f, 90.f, 0.f), 2, 800.f);
+    SpawnZombies(35, 2, Vector3(1000.f, 2800.f, 90.212f), Rotator(0.f, -60.f, 0.f), 0, 0.f);
 
     SpawnZombies(36, 0, Vector3(600.f, 3600.f, 90.212f), Rotator(0.f, -130.f, 0.f), 0, 0.f);
     SpawnZombies(37, 0, Vector3(570.f, 2120.f, 90.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
     SpawnZombies(38, 0, Vector3(1600.f, 2000.f, 90.212f), Rotator(0.f, -120.f, 0.f), 0, 0.f);
     SpawnZombies(39, 0, Vector3(200.f, 200.f, 90.212f), Rotator(0.f, -20.f, 0.f), 0, 0.f);
-    SpawnZombies(40, 0, Vector3(800.f, 2800.f, 90.212f), Rotator(0.f, 60.f, 0.f), 0, 0.f);*/
+    SpawnZombies(40, 0, Vector3(800.f, 2800.f, 90.212f), Rotator(0.f, 60.f, 0.f), 0, 0.f);
 }
 
 ZombieController::~ZombieController()
@@ -100,6 +94,8 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     Zombie* new_zombie;
     if (zombieType == 0)
        new_zombie = new NormalZombie(new_zombie_data);
+    else if (zombieType == 2)
+        new_zombie = new RunningZombie(new_zombie_data);
 
     // zombiedata º¤ÅÍ¿¡ Ãß°¡
     iocpServer->zombie.emplace_back(new_zombie);

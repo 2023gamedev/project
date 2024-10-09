@@ -44,7 +44,7 @@ public:
         SHOUTING,
         FOOTSOUND,
         INVESTIGATED,
-        PATROL             
+        PATROL
     };
 
 
@@ -66,11 +66,17 @@ public:
     const float ZombieBeAttackedAnimDuration = 2.0f;    // 좀비 피격 애니메이션 재생 시간 (* 정확히는 2.00초)
 
     const float NormalZombieStartHP = 20.0f;        // 20.0f
+    const float NormalZombieSpeed = 200.0f;         // 200.0f
+
+    const float RunningZombieStartHP = 20.0f;        // 20.0f
+    const float RunningZombieSpeed = 400.0f;         // 400.0f
+
+    float ZombieSpeed;
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
     ZombiePathfinder pathfinder;
-    
+
     map<int, float> DistanceTo_PlayerInsight;     // Detect용 맵 <플레이어 인덱스, 좀비-플레이어 거리>
 
     map<int, float> DistanceTo_FootSound;         // FootSound용 맵 <플레이어 인덱스, 좀비-플레이어 거리>
@@ -84,7 +90,7 @@ public:
     bool PlayerInSight;
 
     bool KnewPlayerLocation;
-  
+
     bool HeardShouting;
 
     bool HeardFootSound;
@@ -98,7 +104,7 @@ public:
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
 
     std::chrono::steady_clock::time_point animStartTime;      // 좀비 애니메이션 시작 시간
-    
+
     //float speed;
 
     TARGET targetType;
@@ -119,7 +125,7 @@ public:
 
     void SetTargetLocation(TARGET t);
 
-    void Attack() ;
+    void Attack();
 
     bool FootSoundCheck();
 
@@ -139,16 +145,19 @@ public:
 
     void UpdatePath();
     // 얜 패트롤용
-    void UpdatePath(vector<tuple<float, float, float>> newPatrol_path); 
+    void UpdatePath(vector<tuple<float, float, float>> newPatrol_path);
 
     bool CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
 
     void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType);
 
-    virtual float GetHP() const { return zombieHP;  }
-    virtual void SetHP(float hp) { zombieHP = hp; zombieHP = hp; }
+    float GetHP() const { return zombieHP; }
+    void SetHP(float hp) { zombieHP = hp; }
+
+    float GetSpeed() const { return ZombieSpeed; }
+    void SetSpeed(float speed) { ZombieSpeed = speed; }
 
     //void ShoutingHear();
-    
+
     //void FootSoundHear();
 };
