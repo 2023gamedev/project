@@ -54,7 +54,7 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
     NodeArr = Nodes;
 
     // Nodes를 파일로 저장
-    FString FilePath = FPaths::ProjectDir() + TEXT("ObstacleNodes.txt");
+    //FString FilePath = FPaths::ProjectDir() + TEXT("ObstacleNodes.txt");
     FString NodeData;
 
     for (const FVector& Node : Nodes)
@@ -66,7 +66,7 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
         //NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
     }
 
-    FFileHelper::SaveStringToFile(NodeData, *FilePath);
+    //FFileHelper::SaveStringToFile(NodeData, *FilePath);
 
     return Nodes;
 }

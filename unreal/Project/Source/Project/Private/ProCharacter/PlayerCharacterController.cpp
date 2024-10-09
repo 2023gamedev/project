@@ -196,10 +196,12 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			continue;  // 좀비를 찾을 수 없으면 다음으로 넘어감
 		}
 
+		UE_LOG(LogNet, Display, TEXT("Update Zombie path: Zombieid=%d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId);
+
 		// 좀비 위치 서버에서 받은 위치로 갱신
 		if(tmp_path.Location.IsZero() == false)
 			(*zombie)->SetActorLocation(tmp_path.Location);
-
+		
 		// 좀비 목적지 설정
 		if(tmp_path.Path.empty() == false)
 			(*zombie)->NextPath = *(tmp_path.Path.begin());
