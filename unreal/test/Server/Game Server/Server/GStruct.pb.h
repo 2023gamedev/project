@@ -245,7 +245,8 @@ class Character final :
     kRollFieldNumber = 9,
     kHpFieldNumber = 10,
     kBRunFieldNumber = 11,
-    kIsingameFieldNumber = 12,
+    kBJumpFieldNumber = 12,
+    kIsingameFieldNumber = 13,
   };
   // uint32 playerid = 1;
   void clear_playerid();
@@ -346,7 +347,16 @@ class Character final :
   void _internal_set_b_run(uint32_t value);
   public:
 
-  // bool isingame = 12;
+  // uint32 b_jump = 12;
+  void clear_b_jump();
+  uint32_t b_jump() const;
+  void set_b_jump(uint32_t value);
+  private:
+  uint32_t _internal_b_jump() const;
+  void _internal_set_b_jump(uint32_t value);
+  public:
+
+  // bool isingame = 13;
   void clear_isingame();
   bool isingame() const;
   void set_isingame(bool value);
@@ -374,6 +384,7 @@ class Character final :
     float roll_;
     float hp_;
     uint32_t b_run_;
+    uint32_t b_jump_;
     bool isingame_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -3096,7 +3107,27 @@ inline void Character::set_b_run(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.b_run)
 }
 
-// bool isingame = 12;
+// uint32 b_jump = 12;
+inline void Character::clear_b_jump() {
+  _impl_.b_jump_ = 0u;
+}
+inline uint32_t Character::_internal_b_jump() const {
+  return _impl_.b_jump_;
+}
+inline uint32_t Character::b_jump() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.b_jump)
+  return _internal_b_jump();
+}
+inline void Character::_internal_set_b_jump(uint32_t value) {
+  
+  _impl_.b_jump_ = value;
+}
+inline void Character::set_b_jump(uint32_t value) {
+  _internal_set_b_jump(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.b_jump)
+}
+
+// bool isingame = 13;
 inline void Character::clear_isingame() {
   _impl_.isingame_ = false;
 }

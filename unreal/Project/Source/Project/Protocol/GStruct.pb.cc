@@ -34,6 +34,7 @@ PROTOBUF_CONSTEXPR Character::Character(
   , /*decltype(_impl_.roll_)*/0
   , /*decltype(_impl_.hp_)*/0
   , /*decltype(_impl_.b_run_)*/0u
+  , /*decltype(_impl_.b_jump_)*/0u
   , /*decltype(_impl_.isingame_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CharacterDefaultTypeInternal {
@@ -283,6 +284,7 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.roll_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.hp_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.b_run_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.b_jump_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Character, _impl_.isingame_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie, _internal_metadata_),
@@ -418,20 +420,20 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::Character)},
-  { 18, -1, -1, sizeof(::Protocol::Zombie)},
-  { 33, -1, -1, sizeof(::Protocol::Zombie_attack)},
-  { 42, -1, -1, sizeof(::Protocol::Zombie_hp)},
-  { 51, -1, -1, sizeof(::Protocol::ZombieDataList)},
-  { 59, -1, -1, sizeof(::Protocol::Vector3)},
-  { 68, -1, -1, sizeof(::Protocol::ZombiePath)},
-  { 78, -1, -1, sizeof(::Protocol::PatrolPath)},
-  { 88, -1, -1, sizeof(::Protocol::Detected)},
-  { 98, -1, -1, sizeof(::Protocol::Time)},
-  { 106, -1, -1, sizeof(::Protocol::Character_Attack)},
-  { 115, -1, -1, sizeof(::Protocol::Equip_Item)},
-  { 125, -1, -1, sizeof(::Protocol::jump)},
-  { 133, -1, -1, sizeof(::Protocol::ping)},
-  { 141, -1, -1, sizeof(::Protocol::patrol_hit)},
+  { 19, -1, -1, sizeof(::Protocol::Zombie)},
+  { 34, -1, -1, sizeof(::Protocol::Zombie_attack)},
+  { 43, -1, -1, sizeof(::Protocol::Zombie_hp)},
+  { 52, -1, -1, sizeof(::Protocol::ZombieDataList)},
+  { 60, -1, -1, sizeof(::Protocol::Vector3)},
+  { 69, -1, -1, sizeof(::Protocol::ZombiePath)},
+  { 79, -1, -1, sizeof(::Protocol::PatrolPath)},
+  { 89, -1, -1, sizeof(::Protocol::Detected)},
+  { 99, -1, -1, sizeof(::Protocol::Time)},
+  { 107, -1, -1, sizeof(::Protocol::Character_Attack)},
+  { 116, -1, -1, sizeof(::Protocol::Equip_Item)},
+  { 126, -1, -1, sizeof(::Protocol::jump)},
+  { 134, -1, -1, sizeof(::Protocol::ping)},
+  { 142, -1, -1, sizeof(::Protocol::patrol_hit)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -453,44 +455,44 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\rGstruct.proto\022\010Protocol\"\301\001\n\tCharacter\022"
+  "\n\rGstruct.proto\022\010Protocol\"\321\001\n\tCharacter\022"
   "\020\n\010playerid\030\001 \001(\r\022\025\n\rcharactertype\030\002 \001(\r"
   "\022\023\n\013packet_type\030\003 \001(\r\022\t\n\001x\030\004 \001(\002\022\t\n\001y\030\005 "
   "\001(\002\022\t\n\001z\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001"
   "(\002\022\014\n\004roll\030\t \001(\002\022\n\n\002hp\030\n \001(\002\022\r\n\005b_run\030\013 "
-  "\001(\r\022\020\n\010isingame\030\014 \001(\010\"\216\001\n\006Zombie\022\020\n\010zomb"
-  "ieid\030\001 \001(\r\022\022\n\nzombietype\030\002 \001(\r\022\023\n\013packet"
-  "_type\030\003 \001(\r\022\t\n\001x\030\004 \001(\002\022\t\n\001y\030\005 \001(\002\022\t\n\001z\030\006"
-  " \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004roll"
-  "\030\t \001(\002\"H\n\rZombie_attack\022\020\n\010zombieid\030\001 \001("
-  "\r\022\020\n\010playerid\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r"
-  "\">\n\tZombie_hp\022\020\n\010zombieid\030\001 \001(\r\022\n\n\002hp\030\002 "
-  "\001(\002\022\023\n\013packet_type\030\003 \001(\r\"H\n\016ZombieDataLi"
-  "st\022!\n\007zombies\030\001 \003(\0132\020.Protocol.Zombie\022\023\n"
-  "\013packet_type\030\003 \001(\r\"*\n\007Vector3\022\t\n\001x\030\001 \001(\002"
-  "\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\"y\n\nZombiePath\022\020\n\010"
-  "zombieid\030\001 \001(\r\022\037\n\004path\030\002 \001(\0132\021.Protocol."
-  "Vector3\022\023\n\013packet_type\030\003 \001(\r\022#\n\010location"
-  "\030\004 \001(\0132\021.Protocol.Vector3\"y\n\nPatrolPath\022"
-  "\020\n\010zombieid\030\001 \001(\r\022\037\n\004path\030\002 \001(\0132\021.Protoc"
-  "ol.Vector3\022\023\n\013packet_type\030\003 \001(\r\022#\n\010locat"
-  "ion\030\004 \001(\0132\021.Protocol.Vector3\"[\n\010Detected"
-  "\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\023\n\013"
-  "packet_type\030\003 \001(\r\022\026\n\016player_insight\030\004 \001("
-  "\010\"*\n\004Time\022\r\n\005timer\030\001 \001(\002\022\023\n\013packet_type\030"
-  "\003 \001(\r\"I\n\020Character_Attack\022\020\n\010playerid\030\001 "
-  "\001(\r\022\016\n\006attack\030\002 \001(\010\022\023\n\013packet_type\030\003 \001(\r"
-  "\"W\n\nEquip_Item\022\020\n\010playerid\030\001 \001(\r\022\020\n\010item"
-  "name\030\002 \001(\t\022\023\n\013packet_type\030\003 \001(\r\022\020\n\010itemt"
-  "ype\030\004 \001(\r\"-\n\004jump\022\020\n\010playerid\030\001 \001(\r\022\023\n\013p"
-  "acket_type\030\003 \001(\r\"-\n\004ping\022\020\n\010playerid\030\001 \001"
-  "(\r\022\023\n\013packet_type\030\003 \001(\r\"3\n\npatrol_hit\022\020\n"
-  "\010zombieid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\rb\006pr"
-  "oto3"
+  "\001(\r\022\016\n\006b_jump\030\014 \001(\r\022\020\n\010isingame\030\r \001(\010\"\216\001"
+  "\n\006Zombie\022\020\n\010zombieid\030\001 \001(\r\022\022\n\nzombietype"
+  "\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\022\t\n\001x\030\004 \001(\002\022\t"
+  "\n\001y\030\005 \001(\002\022\t\n\001z\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003y"
+  "aw\030\010 \001(\002\022\014\n\004roll\030\t \001(\002\"H\n\rZombie_attack\022"
+  "\020\n\010zombieid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\023\n\013p"
+  "acket_type\030\003 \001(\r\">\n\tZombie_hp\022\020\n\010zombiei"
+  "d\030\001 \001(\r\022\n\n\002hp\030\002 \001(\002\022\023\n\013packet_type\030\003 \001(\r"
+  "\"H\n\016ZombieDataList\022!\n\007zombies\030\001 \003(\0132\020.Pr"
+  "otocol.Zombie\022\023\n\013packet_type\030\003 \001(\r\"*\n\007Ve"
+  "ctor3\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\"y"
+  "\n\nZombiePath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004path\030\002"
+  " \001(\0132\021.Protocol.Vector3\022\023\n\013packet_type\030\003"
+  " \001(\r\022#\n\010location\030\004 \001(\0132\021.Protocol.Vector"
+  "3\"y\n\nPatrolPath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004pat"
+  "h\030\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packet_typ"
+  "e\030\003 \001(\r\022#\n\010location\030\004 \001(\0132\021.Protocol.Vec"
+  "tor3\"[\n\010Detected\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010pl"
+  "ayerid\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\022\026\n\016pla"
+  "yer_insight\030\004 \001(\010\"*\n\004Time\022\r\n\005timer\030\001 \001(\002"
+  "\022\023\n\013packet_type\030\003 \001(\r\"I\n\020Character_Attac"
+  "k\022\020\n\010playerid\030\001 \001(\r\022\016\n\006attack\030\002 \001(\010\022\023\n\013p"
+  "acket_type\030\003 \001(\r\"W\n\nEquip_Item\022\020\n\010player"
+  "id\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013packet_typ"
+  "e\030\003 \001(\r\022\020\n\010itemtype\030\004 \001(\r\"-\n\004jump\022\020\n\010pla"
+  "yerid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\r\"-\n\004ping"
+  "\022\020\n\010playerid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\r\""
+  "3\n\npatrol_hit\022\020\n\010zombieid\030\001 \001(\r\022\023\n\013packe"
+  "t_type\030\003 \001(\rb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 1324, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 1340, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 15,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -532,6 +534,7 @@ Character::Character(const Character& from)
     , decltype(_impl_.roll_){}
     , decltype(_impl_.hp_){}
     , decltype(_impl_.b_run_){}
+    , decltype(_impl_.b_jump_){}
     , decltype(_impl_.isingame_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -558,6 +561,7 @@ inline void Character::SharedCtor(
     , decltype(_impl_.roll_){0}
     , decltype(_impl_.hp_){0}
     , decltype(_impl_.b_run_){0u}
+    , decltype(_impl_.b_jump_){0u}
     , decltype(_impl_.isingame_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -686,9 +690,17 @@ const char* Character::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         } else
           goto handle_unusual;
         continue;
-      // bool isingame = 12;
+      // uint32 b_jump = 12;
       case 12:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
+          _impl_.b_jump_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool isingame = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
           _impl_.isingame_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
@@ -817,10 +829,16 @@ uint8_t* Character::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(11, this->_internal_b_run(), target);
   }
 
-  // bool isingame = 12;
+  // uint32 b_jump = 12;
+  if (this->_internal_b_jump() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(12, this->_internal_b_jump(), target);
+  }
+
+  // bool isingame = 13;
   if (this->_internal_isingame() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(12, this->_internal_isingame(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(13, this->_internal_isingame(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -922,7 +940,12 @@ size_t Character::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_b_run());
   }
 
-  // bool isingame = 12;
+  // uint32 b_jump = 12;
+  if (this->_internal_b_jump() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_b_jump());
+  }
+
+  // bool isingame = 13;
   if (this->_internal_isingame() != 0) {
     total_size += 1 + 1;
   }
@@ -1005,6 +1028,9 @@ void Character::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   }
   if (from._internal_b_run() != 0) {
     _this->_internal_set_b_run(from._internal_b_run());
+  }
+  if (from._internal_b_jump() != 0) {
+    _this->_internal_set_b_jump(from._internal_b_jump());
   }
   if (from._internal_isingame() != 0) {
     _this->_internal_set_isingame(from._internal_isingame());

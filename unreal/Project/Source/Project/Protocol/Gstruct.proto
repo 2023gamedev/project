@@ -13,7 +13,8 @@ message Character {
     float roll = 9;
     float hp = 10;
     uint32 b_run = 11;
-    bool isingame = 12;
+    uint32 b_jump = 12;
+    bool isingame = 13;
 };
 
 message Zombie {

@@ -218,7 +218,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 	float hp = MyBaseCharacter->GetHP();
 	
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp || sendRun) {
+	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp || sendRun || sendjump) {
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
 
@@ -234,7 +234,8 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_yaw(CurrentRotation.Yaw);
 		packet.set_roll(CurrentRotation.Roll);
 		packet.set_hp(hp);
-		packet.set_b_run(IsRlyRun+1);
+		packet.set_b_run(IsRlyRun + 1);
+		//packet.set_b_jump(sendjump + 1);
 		packet.set_isingame(true);
 
 		// 직렬화
@@ -561,7 +562,6 @@ void APlayerCharacterController::Jump(const FInputActionValue& Value)
 			}
 		}
 	}
-
 }
 
 void APlayerCharacterController::GetItem(const FInputActionValue& Value)
