@@ -167,6 +167,12 @@ bool Zombie::RandomPatrol()
 
 	// 랜덤 패트롤 지점이 갈 수 있는 지 검사
 	if (CheckPath(dest_test, px, py, pz) == false) {
+		cout << "CheckPath 실패!!!" << endl;
+		return false;
+	}
+
+	if (dest_test.size() < 3) {
+		cout << "새로운 패트롤 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
 		return false;
 	}
 
@@ -179,6 +185,18 @@ bool Zombie::RandomPatrol()
 
 	return true;
 }
+
+//void NewRandomPatrol()
+//{
+//	std::random_device rd;
+//	std::mt19937 mt(rd());
+//
+//	std::uniform_int_distribution<int> dist_in(0, 5000);	
+//	std::uniform_int_distribution<int> dist_over(0, 3000);
+//
+//	float r_x = dist_in(mt) - dist_over(mt);
+//	
+//}
 
 void Zombie::SetTargetLocation(TARGET t)
 {
@@ -497,7 +515,7 @@ void Zombie::UpdatePath(vector<tuple<float, float, float>> newPatrol_path)
 void Zombie::ReachFinalDestination()
 {
 	//UpdatePath();
-
+	
 	// 혹시 몰라서 한번 더 체크
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
 		//cout << "좀비 \'#" << ZombieData.zombieID << "\' 타겟 좌표[최종 목표 지점] ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
@@ -558,9 +576,9 @@ void Zombie::SendPath()
 		}
 	}
 
-	if (targetType == TARGET::PLAYER) {
-		//cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
-	}
+	//if (targetType == TARGET::PLAYER) {
+	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
+	//}
 
 	/*cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
 	cout << endl;*/

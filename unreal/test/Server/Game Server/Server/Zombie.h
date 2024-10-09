@@ -133,6 +133,8 @@ public:
 
     bool RandomPatrol();
 
+    //void NewRandomPatrol();
+
     void ReachFinalDestination();
 
     void UpdatePath();
