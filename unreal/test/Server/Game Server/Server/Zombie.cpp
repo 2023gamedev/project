@@ -550,6 +550,7 @@ void Zombie::ReachFinalDestination()
 
 void Zombie::SendPath()
 {
+
 	if (path.empty() || ZombiePathIndex >= path.size()) {
 		return;
 	}
@@ -579,6 +580,7 @@ void Zombie::SendPath()
 				cout << "SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
 			}
 		}
+
 	}
 
 	//if (targetType == TARGET::PLAYER) {
