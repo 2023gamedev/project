@@ -13,7 +13,6 @@
 /**
  * 
  */
- // Zombie를 컨트롤하는 컨트롤러의 부모 클래스
 // AI 추가되면 수정될 것 같은 것!!
 UCLASS()
 class PROJECT_API AZombieAIController : public AAIController
@@ -38,7 +37,6 @@ public:
 
 	void Send_ZombieHP();
 
-	void Send_PatrolHit();
 
 	void SetStartLocationValue(FVector startlocation);
 	void SetPatrolLocationValue(FVector patrollocation);
@@ -84,6 +82,7 @@ public:
 
 	ABaseCharacter* LastSeenPlayer;
 
+	UPROPERTY(EditAnywhere)
 	ABaseZombie* OwnerZombie;
 
 	int attackPlayerID;
