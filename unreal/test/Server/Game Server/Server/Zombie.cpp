@@ -555,7 +555,7 @@ void Zombie::SendPath()
 	}
 	else {
 
-		cout << "......." << endl;
+		//cout << "......." << endl;
 
 
 		// path값 전송

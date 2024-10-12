@@ -47,7 +47,7 @@ using PLAYER_INFO = struct Client_INFO {
 	int previous_size;
 	Packet packet_buff[MAX_BUF_SIZE];
 	bool isInGame;
-	int pingcnt;
+	int pingcnt = 0;
 };
 
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
