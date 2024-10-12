@@ -550,6 +550,7 @@ void Zombie::ReachFinalDestination()
 
 void Zombie::SendPath()
 {
+
 	if (path.empty() || ZombiePathIndex >= path.size()) {
 		return;
 	}

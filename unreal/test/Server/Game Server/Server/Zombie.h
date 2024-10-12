@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <chrono>
+#include <mutex>
 
 #include "Task.h"
 //#include "Player.h"
@@ -49,6 +50,8 @@ public:
 
 
     IOCP_CORE* iocpServer;
+
+    std::mutex zombieMutex;
 
 
     vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장

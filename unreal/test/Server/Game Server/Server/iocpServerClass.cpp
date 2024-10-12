@@ -136,9 +136,9 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 		delete thread;
 	}
 
-	zombie_thread.join();
-
 	acceptThread.join();
+
+	zombie_thread.join();
 
 	timer_thread.join();
 }
@@ -208,6 +208,8 @@ void IOCP_CORE::IOCP_WorkerThread() {
 		else if (OP_SERVER_SEND == my_overlap->operation) {
 			// 서버에서 메세지를 보냈으면, 메모리를 해제해 준다.
 			delete my_overlap;
+
+			IOCP_SendNextPacket(user);
 		}
 		else {
 			cout << "Unknown IOCP event !!\n";
@@ -324,13 +326,40 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const char* serializedData, siz
 	}
 
 	PLAYER_INFO* user = it->second;
+	{
+		std::lock_guard<std::mutex> lock(user->sendMutex);
+		user->sendQueue.push(std::string(serializedData, dataSize));
+
+		if (user->isSending) {
+			// 이미 전송 중이라면 대기열에만 추가
+			return;
+		}
+
+		// 현재 전송 중이 아니면 전송 시작
+		user->isSending = true;
+	}
+
+	// 대기열에서 첫 번째 데이터를 꺼내 전송 시작
+	IOCP_SendNextPacket(user);
+}
+
+void IOCP_CORE::IOCP_SendNextPacket(PLAYER_INFO* user)
+{
+	std::lock_guard<std::mutex> lock(user->sendMutex);
+
+	if (user->sendQueue.empty()) {
+		user->isSending = false; 
+		return;
+	}
+
+	std::string& data = user->sendQueue.front();
 
 	OVLP_EX* over = new OVLP_EX;
 	memset(over, 0, sizeof(OVLP_EX));
 	over->operation = OP_SERVER_SEND;
 	over->wsabuf.buf = reinterpret_cast<char*>(over->iocp_buffer);
-	over->wsabuf.len = static_cast<ULONG>(dataSize); // dataSize를 ULONG으로 변환하여 할당
-	memcpy(over->iocp_buffer, serializedData, dataSize); // 직렬화된 데이터를 iocp_buffer에 복사
+	over->wsabuf.len = static_cast<ULONG>(data.size());
+	memcpy(over->iocp_buffer, data.data(), data.size());
 
 	DWORD flags{ 0 };
 	int retval = WSASend(user->s, &over->wsabuf, 1, NULL, flags, &over->original_overlap, NULL);
@@ -339,6 +368,10 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const char* serializedData, siz
 		if (ERROR_IO_PENDING != err_no) {
 			IOCP_ErrorDisplay("SendPacket::WSASend", err_no, __LINE__);
 		}
+	}
+	else {
+		// 전송 작업이 성공적으로 시작되었으므로, 대기열에서 제거
+		user->sendQueue.pop();
 	}
 }
 
