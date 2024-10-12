@@ -768,7 +768,7 @@ void ABaseZombie::Attack(uint32 PlayerId)
 	else if (GetZombieName() == "RunningZombie") {
 		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
 
-		//RunningZombieAIController->attackPlayerID = PlayerId;
+		RunningZombieAIController->attackPlayerID = PlayerId;
 	}
 	else if (GetZombieName() == "ShoutingZombie") {
 		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
