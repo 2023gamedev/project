@@ -48,6 +48,11 @@ using PLAYER_INFO = struct Client_INFO {
 	Packet packet_buff[MAX_BUF_SIZE];
 	bool isInGame;
 	int pingcnt = 0;
+	
+	// 전송 대기열 추가
+	std::queue<std::string> sendQueue;  // 전송할 데이터를 담는 대기열
+	std::mutex sendMutex;  // 큐 접근 제어용 락
+	bool isSending = false;  // 현재 전송 중인지 여부를 나타내는 플래그
 };
 
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
@@ -98,6 +103,7 @@ public:
 	void DisconnectClient(unsigned int clientId);
 
 	bool IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize);
+	void IOCP_SendNextPacket(PLAYER_INFO* user);
 	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);
 
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
