@@ -555,7 +555,7 @@ void Zombie::SendPath()
 	}
 	else {
 
-		cout << "......." << endl;
+		//cout << "......." << endl;
 
 
 		// path값 전송
@@ -579,6 +579,8 @@ void Zombie::SendPath()
 		for (const auto& player : g_players) {
 			if (pathfinder.floor == playerDB[player.first].floor) {
 				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+
+				cout << "SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
 			}
 		}
 	}
