@@ -556,7 +556,7 @@ void Zombie::SendPath()
 	}
 	else {
 
-		//cout << "......." << endl;
+		cout << "......." << endl;
 
 
 		// path값 전송
@@ -584,6 +584,7 @@ void Zombie::SendPath()
 				cout << "SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
 			}
 		}
+
 	}
 
 	//if (targetType == TARGET::PLAYER) {

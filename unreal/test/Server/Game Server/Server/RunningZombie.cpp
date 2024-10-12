@@ -11,7 +11,7 @@ RunningZombie::RunningZombie()
 	
 	SetSpeed(0);
 
-	/*path = vector<tuple<float, float, float>>{};
+	path = vector<tuple<float, float, float>>{};
 
 	beforepath = vector<tuple<float, float, float>>{};
 
@@ -41,7 +41,7 @@ RunningZombie::RunningZombie()
 
 	targetType = Zombie::TARGET::NULL_TARGET;
 
-	ClosestPlayerID = 0;*/
+	ClosestPlayerID = 0;
 }
 
 RunningZombie::RunningZombie(Zombie_Data z_d)
@@ -51,7 +51,7 @@ RunningZombie::RunningZombie(Zombie_Data z_d)
 	
 	SetSpeed(RunningZombieSpeed);
 
-	/*path = vector<tuple<float, float, float>>{};
+	path = vector<tuple<float, float, float>>{};
 
 	ZombieData = z_d;
 
@@ -79,5 +79,5 @@ RunningZombie::RunningZombie(Zombie_Data z_d)
 
 	targetType = Zombie::TARGET::PATROL;
 
-	ClosestPlayerID = 0;*/
+	ClosestPlayerID = 0;
 }

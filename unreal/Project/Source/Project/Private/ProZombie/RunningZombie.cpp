@@ -17,7 +17,6 @@ ARunningZombie::ARunningZombie()
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
 	}
 
-
 	static ConstructorHelpers::FClassFinder<UAnimInstance> ZOMBIE_ANIM(TEXT("/Game/ZombieAsset/Animation/RunningZombieAnimation/BP_RunningZombieAnimBlueprint.BP_RunningZombieAnimBlueprint_C"));
 	if (ZOMBIE_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
@@ -46,8 +45,8 @@ ARunningZombie::ARunningZombie()
 
 	SetHP(20);
 	SetStartHP(20);
-	SetSpeed(4);
-	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	SetSpeed(2);
+	GetCharacterMovement()->MaxWalkSpeed = 200.f;
 	SetSTR(FMath::RandRange(4, 8)); 
 	SetSpecialAbility(true);
 	SetZombieName("RunningZombie");
@@ -57,16 +56,18 @@ ARunningZombie::ARunningZombie()
 void ARunningZombie::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CachedAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
 void ARunningZombie::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto CharactorAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr != CharactorAnimInstance) {
-		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-	}
+	//auto CharactorAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	//if (nullptr != CharactorAnimInstance) {
+	//	CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
+	//}
 }
 
 

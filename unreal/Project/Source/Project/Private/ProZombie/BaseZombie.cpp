@@ -165,7 +165,7 @@ void ABaseZombie::StopAITree()
 	else if (GetZombieName() == "RunningZombie") {
 		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
 
-		RunningZombieAIController->StopAI();
+		//RunningZombieAIController->StopAI();
 	}
 	else if (GetZombieName() == "ShoutingZombie") {
 		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
@@ -721,7 +721,7 @@ void ABaseZombie::StartAITree()
 	else if (GetZombieName() == "RunningZombie") {
 		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
 
-		RunningZombieAIController->StartAI();
+		//RunningZombieAIController->StartAI();
 	}
 	else if (GetZombieName() == "ShoutingZombie") {
 		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
