@@ -555,10 +555,6 @@ void Zombie::SendPath()
 		return;
 	}
 	else {
-
-		cout << "......." << endl;
-
-
 		// path값 전송
 		Protocol::ZombiePath zPath;
 		zPath.set_zombieid(ZombieData.zombieID);

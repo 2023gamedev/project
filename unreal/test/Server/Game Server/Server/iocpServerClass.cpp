@@ -574,7 +574,6 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 	string result = "Initial";
 
-	auto lastTime = std::chrono::high_resolution_clock::now();
 	auto lastBTTime = std::chrono::high_resolution_clock::now();
 	
 	while (true) {
@@ -584,8 +583,6 @@ void IOCP_CORE::Zombie_BT_Thread()
 			continue;
 		
 		auto currentTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> deltaTime = currentTime - lastTime;
-		lastTime = currentTime;
 
 		BT_deltaTime = currentTime - lastBTTime;
 		if (BT_deltaTime.count() < BT_INTERVAL) {
