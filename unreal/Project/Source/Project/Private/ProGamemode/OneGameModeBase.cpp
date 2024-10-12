@@ -845,7 +845,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
     }
 
     TSubclassOf<ABaseZombie> ZombieClass = nullptr;
-    TSubclassOf<AZombieAIController> ZombieAIClass = nullptr;
+    TSubclassOf<AAIController> ZombieAIClass = nullptr;
 
     if (ZombieType == 0) {
         ZombieClass = ANormalZombie::StaticClass();
@@ -900,18 +900,50 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
 
             UE_LOG(LogTemp, Warning, TEXT("Spawned new Zombie ID: %d"), ZombieID);
 
-            AZombieAIController* AIZombieController = World->SpawnActor<AZombieAIController>(ZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-            if (AIZombieController)
-            {
-                AIZombieController->Possess(NewZombie);
-                AIZombieController->OwnerZombie = Cast<ANormalZombie>(NewZombie);
-              
-                UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
+            if (ZombieType == 0) {
+                AZombieAIController* AIZombieController = World->SpawnActor<AZombieAIController>(ZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+                if (AIZombieController)
+                {
+                    AIZombieController->Possess(NewZombie);
+                    AIZombieController->OwnerZombie = Cast<ANormalZombie>(NewZombie);
+
+                    UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
+                }
+                else
+                {
+                    UE_LOG(LogTemp, Error, TEXT("Failed to spawn AI Controller for Zombie ID: %d"), ZombieID);
+                }
             }
-            else
-            {
-                UE_LOG(LogTemp, Error, TEXT("Failed to spawn AI Controller for Zombie ID: %d"), ZombieID);
+            else if (ZombieType == 1) {
+                //AShoutingZombieAIController* AIShoutingZombieController = World->SpawnActor<AShoutingZombieAIController>(ZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+                //if (AIShoutingZombieController)
+                //{
+                //    AIShoutingZombieController->Possess(NewZombie);
+                //    AIShoutingZombieController->OwnerZombie = Cast<ARunningZombie>(NewZombie);
+
+                //    UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
+                //}
+                //else
+                //{
+                //    UE_LOG(LogTemp, Error, TEXT("Failed to spawn AI Controller for Zombie ID: %d"), ZombieID);
+                //}
             }
+            else if (ZombieType == 2) {
+                ARunningZombieAIController* AIRunningZombieController = World->SpawnActor<ARunningZombieAIController>(ZombieAIClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+                if (AIRunningZombieController)
+                {
+                    AIRunningZombieController->Possess(NewZombie);
+                    AIRunningZombieController->OwnerZombie = Cast<ARunningZombie>(NewZombie);
+
+                    UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
+                }
+                else
+                {
+                    UE_LOG(LogTemp, Error, TEXT("Failed to spawn AI Controller for Zombie ID: %d"), ZombieID);
+                }
+            }
+
+
         }
         else
         {

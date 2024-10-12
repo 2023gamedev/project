@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "ClientSocket.h"
+#include "BaseZombie.h"
 #include "RunningZombieAIController.generated.h"
 
 
@@ -30,15 +31,29 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	void CheckAndSendMovement();
+	// 추가중
+	void Send_Detected();
+
+	void Send_PlayerLost();
+
+	void Send_ZombieHP();
+
+	//void CheckAndSendMovement();
 	
 	void SetStartLocationValue(FVector startlocation);
+
 	void SetPatrolLocationValue(FVector patrollocation);
 
 	void UpdateLastKnownPositionByFootSound(FVector playerlocation);
 
-	void StopAI();
-	void StartAI();
+	void UpdateLastKnownPositionByShoutingSound(FVector playerlocation);
+
+	void ZombieMoveTo(float deltasecond);
+
+	void ZombieTurn(float deltasecond);
+
+	//void StopAI();
+	//void StartAI();
 
 	UProGameInstance* GameInstance;
 
@@ -63,12 +78,27 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bShoutingSound;
 
+	UPROPERTY(EditAnywhere)
+	bool m_bPlayerInSight;
 
-	ZombieData recvZombieData;
+	//ZombieData recvZombieData;
+	//ZombiePath recvZombiePath;
+	ZombieHP recvZombieHP;
+
 	uint32 ZombieId;
-	FVector NewLocation;
-	FVector PreviousLocation;
-	FRotator PreviousRotation;
+	uint32 AttackZombieId;
+	//FVector NewLocation;
+	//FVector PreviousLocation;
+	//FRotator PreviousRotation;
 
+	ABaseCharacter* LastSeenPlayer;
+
+	UPROPERTY(EditAnywhere)
+	ABaseZombie* OwnerZombie;
+
+	int attackPlayerID;
+
+	float PreviousHp = 0.f;
 
 };
+

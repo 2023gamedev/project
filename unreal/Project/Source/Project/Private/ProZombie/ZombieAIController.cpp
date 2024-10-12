@@ -8,7 +8,6 @@
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GStruct.pb.h"
-#include "ProZombie/BaseZombie.h"
 #include "ProGamemode/OneGameModeBase.h"
 #include "ProZombie/NormalZombie.h"
 #include "ProGamemode/ProGameInstance.h"
