@@ -58,12 +58,12 @@ public:
 	UProGameInstance* GameInstance;
 
 private:
-	UPROPERTY(EditAnywhere)
-	class UBehaviorTree* RunningZombieAIBehavior;
+	//UPROPERTY(EditAnywhere)
+	//class UBehaviorTree* RunningZombieAIBehavior;
 
-	UPROPERTY(EditAnywhere)
+	//UPROPERTY(EditAnywhere)
 
-	class UBlackboardData* RunningZombieBlackBoardAsset;
+	//class UBlackboardData* RunningZombieBlackBoardAsset;
 	
 public:
 	UPROPERTY(EditAnywhere)
