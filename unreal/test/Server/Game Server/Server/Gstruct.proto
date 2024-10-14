@@ -17,6 +17,17 @@ message Character {
     bool isingame = 13;
 };
 
+message jump{
+    uint32 playerid = 1;
+    uint32 packet_type = 3;
+}
+
+message Character_Attack {
+    uint32 playerid = 1;
+    bool attack = 2;
+    uint32 packet_type = 3;
+}
+
 message Zombie {
     uint32 zombieid = 1;
     uint32 zombietype = 2;
@@ -78,22 +89,11 @@ message Time {
     uint32 packet_type = 3;
 }
 
-message Character_Attack {
-    uint32 playerid = 1;
-    bool attack = 2;
-    uint32 packet_type = 3;
-}
-
 message Equip_Item{
     uint32 playerid = 1;
     string itemname = 2;
     uint32 packet_type = 3;
     uint32 itemtype = 4;
-}
-
-message jump{
-    uint32 playerid = 1;
-    uint32 packet_type = 3;
 }
 
 message ping{
