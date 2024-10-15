@@ -105,3 +105,9 @@ message patrol_hit{
     uint32 zombieid = 1;
     uint32 packet_type=3;
 }
+
+message set_item{
+    uint32 itemid = 1;
+    uint32 location = 2;
+    uint32 packet_type = 3;
+}
