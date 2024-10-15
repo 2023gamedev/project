@@ -66,6 +66,9 @@
     <ClCompile Include="RunningZombie.cpp">
       <Filter>소스 파일\Zombie_BTClass</Filter>
     </ClCompile>
+    <ClCompile Include="ItemController.cpp">
+      <Filter>소스 파일\ServerClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="protocol.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="RunningZombie.h">
       <Filter>헤더 파일\Zombie_BTHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemController.h">
+      <Filter>헤더 파일\ServerHeader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
