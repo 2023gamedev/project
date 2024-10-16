@@ -919,7 +919,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
                 if (AIShoutingZombieController)
                 {
                     AIShoutingZombieController->Possess(NewZombie);
-                    AIShoutingZombieController->OwnerZombie = Cast<ARunningZombie>(NewZombie);
+                    AIShoutingZombieController->OwnerZombie = Cast<AShoutingZombie>(NewZombie);
 
                     UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
                 }

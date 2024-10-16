@@ -116,6 +116,9 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond)
 	// 좀비가 피격 중일때 => 그대로 고개 멈춤
 	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->BeAttackedMontage) == true) { return; }
 
+	// 좀비가 샤우팅 중일때 => 그대로 고개 멈춤
+	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->ShoutingMontage) == true) { return; }
+
 	// 좀비가 공격 중일때 => 플레이어 쪽으로 시선 돌리기
 	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->AttackMontage) == true) {
 		TArray<AActor*> Players;
@@ -258,6 +261,11 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 				Send_Detected(); // 플레이어 감지 메시지 전송
 				LastSeenPlayer = BaseCharacter;
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
+
+				// 샤우팅 실행
+				if (OwnerZombie->m_bIsShouting == false) {
+					OwnerZombie->Shouting();
+				}
 			}
 		}
 		else {	// NearestPawn 존재 X -> 나를 못 봄

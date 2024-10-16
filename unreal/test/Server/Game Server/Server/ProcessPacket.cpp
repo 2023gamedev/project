@@ -4,6 +4,7 @@
 #include "algorithm"
 #include "ZombieController.h"
 #include "Zombie.h"
+#include "ShoutingZombie.h"
 
 bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     // g_players에서 클라이언트 정보 검색
@@ -240,7 +241,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         int recvzombieid = Packet.zombieid();
 
         if (Packet.player_insight()) {
-            for (auto& z : zombie) {
+            for (auto& z : zombieDB) {
                 if (z->ZombieData.zombieID == recvzombieid) {
                     if (z->IsAttacking)
                         break;
@@ -251,13 +252,20 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
                     //cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
 
+
+                    // 샤우팅 좀비일 경우에
+                    if (z->ZombieData.zombietype == 1) {
+                        ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);
+                        sz->Shout(zombieDB);
+                    }
+
                     break;
                 }
             }
         }
 
         else {
-            for (auto& z : zombie) {
+            for (auto& z : zombieDB) {
                 if (z->ZombieData.zombieID == recvzombieid) {
                     if (z->IsAttacking)
                         break;
@@ -319,7 +327,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         // 좀비 HP 업데이트
         int recvzombieid = Packet.zombieid();
 
-        for (auto& z : zombie) {
+        for (auto& z : zombieDB) {
             if (z->ZombieData.zombieID == recvzombieid) {
                 z->zombieHP = Packet.hp();
 

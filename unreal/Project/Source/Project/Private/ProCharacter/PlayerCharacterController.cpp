@@ -196,7 +196,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			continue;  // 좀비를 찾을 수 없으면 다음으로 넘어감
 		}
 
-		UE_LOG(LogNet, Display, TEXT("Update Zombie path: Zombieid=%d, player = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId);
+		//UE_LOG(LogNet, Display, TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId);
 
 		// 좀비 위치 서버에서 받은 위치로 갱신
 		if(tmp_path.Location.IsZero() == false)

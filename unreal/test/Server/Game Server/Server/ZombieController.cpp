@@ -99,7 +99,7 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
         new_zombie = new RunningZombie(new_zombie_data);
 
     // zombiedata º¤ÅÍ¿¡ Ãß°¡
-    iocpServer->zombie.emplace_back(new_zombie);
+    iocpServer->zombieDB.emplace_back(new_zombie);
 
 
     //cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << iocpServer->zombie.size() << endl;
@@ -109,7 +109,7 @@ void ZombieController::SendZombieData(int id)
 {
     Protocol::ZombieDataList zombieDataList;
 
-    for (const auto& z : iocpServer->zombie) {
+    for (const auto& z : iocpServer->zombieDB) {
         Protocol::Zombie* zombie = zombieDataList.add_zombies();
         zombie->set_zombieid(z->ZombieData.zombieID);
         zombie->set_x(z->ZombieData.x);

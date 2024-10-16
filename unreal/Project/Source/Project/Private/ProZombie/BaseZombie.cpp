@@ -773,7 +773,7 @@ void ABaseZombie::Attack(uint32 PlayerId)
 	else if (GetZombieName() == "ShoutingZombie") {
 		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
 
-		//ShoutingZombieAIController->attackPlayerID = PlayerId;
+		ShoutingZombieAIController->attackPlayerID = PlayerId;
 	}
 
 	//if (!IsDie()) {
@@ -851,36 +851,36 @@ void ABaseZombie::Shouting()
 	AnimInstance->PlayShoutingMontage();
 
 
-	UWorld* World = GetWorld();
-	FVector Center = GetActorLocation();
-	float DetectRadius = 2000.f;
+	//UWorld* World = GetWorld();
+	//FVector Center = GetActorLocation();
+	//float DetectRadius = 2000.f;
 
-	if (nullptr == World) return;
-	TArray<FOverlapResult> OverlapResults;
-	FCollisionQueryParams CollisionQueryParam(NAME_None, false, this);
-	bool bResult = World->OverlapMultiByChannel(
-		OverlapResults,
-		Center,
-		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel4,
-		FCollisionShape::MakeSphere(DetectRadius),
-		CollisionQueryParam
-	);
+	//if (nullptr == World) return;
+	//TArray<FOverlapResult> OverlapResults;
+	//FCollisionQueryParams CollisionQueryParam(NAME_None, false, this);
+	//bool bResult = World->OverlapMultiByChannel(
+	//	OverlapResults,
+	//	Center,
+	//	FQuat::Identity,
+	//	ECollisionChannel::ECC_GameTraceChannel4,
+	//	FCollisionShape::MakeSphere(DetectRadius),
+	//	CollisionQueryParam
+	//);
 
-	if (bResult) {
+	//if (bResult) {
 
-		for (const FOverlapResult& OverlapResult : OverlapResults)
-		{
-			// ABaseZombie인지 확인
-			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
-			if (OverlappedZombie)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEAR"));
-				OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
-			}
+	//	for (const FOverlapResult& OverlapResult : OverlapResults)
+	//	{
+	//		// ABaseZombie인지 확인
+	//		ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
+	//		if (OverlappedZombie)
+	//		{
+	//			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEAR"));
+	//			OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
+	//		}
 
-		}
-	}
+	//	}
+	//}
 
 	m_bIsShouting = true;
 

@@ -23,6 +23,9 @@ public:
 
         bool result = zom.HeardShouting;
 
+        if (result == true)
+            zom.SetTargetLocation(Zombie::TARGET::SHOUTING);
+
         //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [HasShouting Task] 결과: \"" << boolalpha << result << "\"" << endl;
         //cout << endl;
 

@@ -190,18 +190,6 @@ bool Zombie::RandomPatrol()
 	return true;
 }
 
-//void NewRandomPatrol()
-//{
-//	std::random_device rd;
-//	std::mt19937 mt(rd());
-//
-//	std::uniform_int_distribution<int> dist_in(0, 5000);	
-//	std::uniform_int_distribution<int> dist_over(0, 3000);
-//
-//	float r_x = dist_in(mt) - dist_over(mt);
-//	
-//}
-
 void Zombie::SetTargetLocation(TARGET t)
 {
 	targetType = t;
@@ -219,6 +207,8 @@ void Zombie::SetTargetLocation(TARGET t)
 		break;
 	case TARGET::SHOUTING:
 		//==================================샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
+		TargetLocation = ShoutingLocation;
+		UpdatePath();
 		break;
 	case TARGET::FOOTSOUND:
 		//TargetLocation = pl;			// => 이런식으로 하면 플레이어 최신 위치를 계속 갱신받게됨!
@@ -676,5 +666,22 @@ void Zombie::Wait()
 			//cout << "Attack Animation time left " << ZombieAttackAnimDuration - deltaTime.count() << "s" << endl;
 		}
 	}
-	
+	else {	// - 샤우팅 좀비 샤우팅 애니메이션
+
+		auto waitAfterTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
+
+		cout << "Zombie #" << ZombieData.zombieID  << " is Shouting!" << endl;
+
+		if (deltaTime.count() >= ZombieShoutingAnimDuration) {
+			HaveToWait = false;
+
+			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
+			MoveTo(IOCP_CORE::BT_deltaTime.count());
+			SendPath();
+		}
+		else {
+			cout << "Shouting Animation time left " << ZombieShoutingAnimDuration - deltaTime.count() << "s" << endl;
+		}
+	}
 }
