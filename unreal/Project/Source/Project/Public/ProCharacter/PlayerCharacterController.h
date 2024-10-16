@@ -111,6 +111,7 @@ public:
 	ZombieData recvZombieData;
 	ZombieAttack recvZombieAttack;
 	//ZombiePath recvZombiePath;
+	Set_Item recvSetItem;
 
 	uint32 PlayerId;
 	uint32 ZombieId;

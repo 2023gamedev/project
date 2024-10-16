@@ -348,6 +348,20 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				}
 				break;
 			}
+
+			case 15:
+			{
+				Protocol::ItemDataList itemdatalist;
+				if (itemdatalist.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					for (const auto& item : itemdatalist.items()) {
+						Q_setitem.push(Set_Item(item.itemid(), item.itemname(), item.itemclass(), item.texture_path(),
+							item.count(), item.floor(), FVector(item.posx(), item.posy(), item.posz())));
+						UE_LOG(LogNet, Display, TEXT("Set Itempacket"));
+					}
+				}
+				break;
+			}
 			}
 
 		}

@@ -134,6 +134,20 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_setitem.try_pop(recvSetItem)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				FName Fitemname = FName(recvSetItem.itemname.c_str());
+
+				FString Ftexture_path = FString(recvSetItem.texture_path.c_str());
+
+				// FString을 TCHAR*로 변환하여 LoadObject에 전달
+				UTexture2D* LoadedTexture = LoadObject<UTexture2D>(NULL, *Ftexture_path, NULL, LOAD_None, NULL);
+
+				MyGameMode->SpawnItemBoxes(recvSetItem.itemid, Fitemname, recvSetItem.itemclass, LoadedTexture, recvSetItem.count, recvSetItem.floor, recvSetItem.itempos);
+			}
+		}
+
 		//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);
 		if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 		{

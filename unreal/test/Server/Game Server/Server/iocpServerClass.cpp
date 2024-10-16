@@ -59,6 +59,8 @@ IOCP_CORE::IOCP_CORE()
 	//======좀비 스폰 & 초기화======
 	zombieclass = new ZombieController(*this);
 
+	itemclass = new ItemController(*this);
+
 	IOCP_GetServerIpAddress();
 	CheckThisCPUcoreCount();
 

@@ -3,6 +3,7 @@
 #include "Common.h"
 
 #include "ZombieController.h"
+#include "ItemController.h"
 
 #include "Player.h"
 
@@ -26,6 +27,7 @@
 class ZombieController;
 class Zombie;
 class ZombiePathFinder;
+class ItemController;
 
 class TMoveTo;	// 전방 선언 -> static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해 (순환 포함 문제를 피하기 위해)
 class TCanAttack;
@@ -202,6 +204,7 @@ private:
 	unsigned int playerIndex{ UINT_MAX };
 
 	ZombieController* zombieclass;
+	ItemController* itemclass;
 
 	float GameTime = 0.f;
 

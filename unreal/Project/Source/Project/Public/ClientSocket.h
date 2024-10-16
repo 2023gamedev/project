@@ -147,6 +147,22 @@ struct ZombieAttack
 		: ZombieId(InZombieId), PlayerId(InPlayerId) {}
 };
 
+struct Set_Item
+{
+	uint32 itemid;
+	std::string itemname;
+	uint32 itemclass;
+	std::string texture_path;
+	uint32 count;
+	uint32 floor;
+	FVector itempos;
+
+	Set_Item() : itemid(0), itemname(""), itemclass(0), texture_path(""), count(0), floor(0), itempos(FVector::ZeroVector) {}
+
+	Set_Item(uint32 Initemid, std::string Initemname, uint32 Initemclass, std::string Intexture_path, uint32 Incount, uint32 Infloor, FVector Initempos)
+		: itemid(Initemid), itemname(Initemname), itemclass(Initemclass), texture_path(Intexture_path), count(Incount), floor(Infloor), itempos(Initempos) {}
+};
+
 
 class UProGameInstance;
 
@@ -172,6 +188,7 @@ public:
 	Concurrency::concurrent_queue<bool> Q_ping;
 	Concurrency::concurrent_queue<ZombieHP> Q_zhp;
 	Concurrency::concurrent_queue<ZombieAttack> Q_zattack;
+	Concurrency::concurrent_queue<Set_Item> Q_setitem;
 
 
 	virtual bool Init() override;

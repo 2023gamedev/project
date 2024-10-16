@@ -57,6 +57,9 @@ extern DetectedDefaultTypeInternal _Detected_default_instance_;
 class Equip_Item;
 struct Equip_ItemDefaultTypeInternal;
 extern Equip_ItemDefaultTypeInternal _Equip_Item_default_instance_;
+class ItemDataList;
+struct ItemDataListDefaultTypeInternal;
+extern ItemDataListDefaultTypeInternal _ItemDataList_default_instance_;
 class PatrolPath;
 struct PatrolPathDefaultTypeInternal;
 extern PatrolPathDefaultTypeInternal _PatrolPath_default_instance_;
@@ -99,6 +102,7 @@ template<> ::Protocol::Character* Arena::CreateMaybeMessage<::Protocol::Characte
 template<> ::Protocol::Character_Attack* Arena::CreateMaybeMessage<::Protocol::Character_Attack>(Arena*);
 template<> ::Protocol::Detected* Arena::CreateMaybeMessage<::Protocol::Detected>(Arena*);
 template<> ::Protocol::Equip_Item* Arena::CreateMaybeMessage<::Protocol::Equip_Item>(Arena*);
+template<> ::Protocol::ItemDataList* Arena::CreateMaybeMessage<::Protocol::ItemDataList>(Arena*);
 template<> ::Protocol::PatrolPath* Arena::CreateMaybeMessage<::Protocol::PatrolPath>(Arena*);
 template<> ::Protocol::Time* Arena::CreateMaybeMessage<::Protocol::Time>(Arena*);
 template<> ::Protocol::Vector3* Arena::CreateMaybeMessage<::Protocol::Vector3>(Arena*);
@@ -3002,10 +3006,45 @@ class set_item final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kItemnameFieldNumber = 2,
+    kTexturePathFieldNumber = 5,
     kItemidFieldNumber = 1,
-    kLocationFieldNumber = 2,
     kPacketTypeFieldNumber = 3,
+    kItemclassFieldNumber = 4,
+    kCountFieldNumber = 6,
+    kFloorFieldNumber = 7,
+    kPosxFieldNumber = 8,
+    kPosyFieldNumber = 9,
+    kPoszFieldNumber = 10,
   };
+  // string itemname = 2;
+  void clear_itemname();
+  const std::string& itemname() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_itemname(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_itemname();
+  PROTOBUF_NODISCARD std::string* release_itemname();
+  void set_allocated_itemname(std::string* itemname);
+  private:
+  const std::string& _internal_itemname() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_itemname(const std::string& value);
+  std::string* _internal_mutable_itemname();
+  public:
+
+  // string texture_path = 5;
+  void clear_texture_path();
+  const std::string& texture_path() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_texture_path(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_texture_path();
+  PROTOBUF_NODISCARD std::string* release_texture_path();
+  void set_allocated_texture_path(std::string* texture_path);
+  private:
+  const std::string& _internal_texture_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_texture_path(const std::string& value);
+  std::string* _internal_mutable_texture_path();
+  public:
+
   // uint32 itemid = 1;
   void clear_itemid();
   uint32_t itemid() const;
@@ -3013,15 +3052,6 @@ class set_item final :
   private:
   uint32_t _internal_itemid() const;
   void _internal_set_itemid(uint32_t value);
-  public:
-
-  // uint32 location = 2;
-  void clear_location();
-  uint32_t location() const;
-  void set_location(uint32_t value);
-  private:
-  uint32_t _internal_location() const;
-  void _internal_set_location(uint32_t value);
   public:
 
   // uint32 packet_type = 3;
@@ -3033,6 +3063,60 @@ class set_item final :
   void _internal_set_packet_type(uint32_t value);
   public:
 
+  // uint32 itemclass = 4;
+  void clear_itemclass();
+  uint32_t itemclass() const;
+  void set_itemclass(uint32_t value);
+  private:
+  uint32_t _internal_itemclass() const;
+  void _internal_set_itemclass(uint32_t value);
+  public:
+
+  // uint32 count = 6;
+  void clear_count();
+  uint32_t count() const;
+  void set_count(uint32_t value);
+  private:
+  uint32_t _internal_count() const;
+  void _internal_set_count(uint32_t value);
+  public:
+
+  // uint32 floor = 7;
+  void clear_floor();
+  uint32_t floor() const;
+  void set_floor(uint32_t value);
+  private:
+  uint32_t _internal_floor() const;
+  void _internal_set_floor(uint32_t value);
+  public:
+
+  // float posx = 8;
+  void clear_posx();
+  float posx() const;
+  void set_posx(float value);
+  private:
+  float _internal_posx() const;
+  void _internal_set_posx(float value);
+  public:
+
+  // float posy = 9;
+  void clear_posy();
+  float posy() const;
+  void set_posy(float value);
+  private:
+  float _internal_posy() const;
+  void _internal_set_posy(float value);
+  public:
+
+  // float posz = 10;
+  void clear_posz();
+  float posz() const;
+  void set_posz(float value);
+  private:
+  float _internal_posz() const;
+  void _internal_set_posz(float value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.set_item)
  private:
   class _Internal;
@@ -3041,8 +3125,183 @@ class set_item final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr itemname_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr texture_path_;
     uint32_t itemid_;
-    uint32_t location_;
+    uint32_t packet_type_;
+    uint32_t itemclass_;
+    uint32_t count_;
+    uint32_t floor_;
+    float posx_;
+    float posy_;
+    float posz_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ItemDataList final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.ItemDataList) */ {
+ public:
+  inline ItemDataList() : ItemDataList(nullptr) {}
+  ~ItemDataList() override;
+  explicit PROTOBUF_CONSTEXPR ItemDataList(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ItemDataList(const ItemDataList& from);
+  ItemDataList(ItemDataList&& from) noexcept
+    : ItemDataList() {
+    *this = ::std::move(from);
+  }
+
+  inline ItemDataList& operator=(const ItemDataList& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ItemDataList& operator=(ItemDataList&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ItemDataList& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ItemDataList* internal_default_instance() {
+    return reinterpret_cast<const ItemDataList*>(
+               &_ItemDataList_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  friend void swap(ItemDataList& a, ItemDataList& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ItemDataList* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ItemDataList* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ItemDataList* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ItemDataList>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ItemDataList& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ItemDataList& from) {
+    ItemDataList::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ItemDataList* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.ItemDataList";
+  }
+  protected:
+  explicit ItemDataList(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kItemsFieldNumber = 1,
+    kPacketTypeFieldNumber = 3,
+  };
+  // repeated .Protocol.set_item items = 1;
+  int items_size() const;
+  private:
+  int _internal_items_size() const;
+  public:
+  void clear_items();
+  ::Protocol::set_item* mutable_items(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_item >*
+      mutable_items();
+  private:
+  const ::Protocol::set_item& _internal_items(int index) const;
+  ::Protocol::set_item* _internal_add_items();
+  public:
+  const ::Protocol::set_item& items(int index) const;
+  ::Protocol::set_item* add_items();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_item >&
+      items() const;
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.ItemDataList)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_item > items_;
     uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -4670,24 +4929,54 @@ inline void set_item::set_itemid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.set_item.itemid)
 }
 
-// uint32 location = 2;
-inline void set_item::clear_location() {
-  _impl_.location_ = 0u;
+// string itemname = 2;
+inline void set_item::clear_itemname() {
+  _impl_.itemname_.ClearToEmpty();
 }
-inline uint32_t set_item::_internal_location() const {
-  return _impl_.location_;
+inline const std::string& set_item::itemname() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.itemname)
+  return _internal_itemname();
 }
-inline uint32_t set_item::location() const {
-  // @@protoc_insertion_point(field_get:Protocol.set_item.location)
-  return _internal_location();
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void set_item::set_itemname(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.itemname_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.set_item.itemname)
 }
-inline void set_item::_internal_set_location(uint32_t value) {
+inline std::string* set_item::mutable_itemname() {
+  std::string* _s = _internal_mutable_itemname();
+  // @@protoc_insertion_point(field_mutable:Protocol.set_item.itemname)
+  return _s;
+}
+inline const std::string& set_item::_internal_itemname() const {
+  return _impl_.itemname_.Get();
+}
+inline void set_item::_internal_set_itemname(const std::string& value) {
   
-  _impl_.location_ = value;
+  _impl_.itemname_.Set(value, GetArenaForAllocation());
 }
-inline void set_item::set_location(uint32_t value) {
-  _internal_set_location(value);
-  // @@protoc_insertion_point(field_set:Protocol.set_item.location)
+inline std::string* set_item::_internal_mutable_itemname() {
+  
+  return _impl_.itemname_.Mutable(GetArenaForAllocation());
+}
+inline std::string* set_item::release_itemname() {
+  // @@protoc_insertion_point(field_release:Protocol.set_item.itemname)
+  return _impl_.itemname_.Release();
+}
+inline void set_item::set_allocated_itemname(std::string* itemname) {
+  if (itemname != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.itemname_.SetAllocated(itemname, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.itemname_.IsDefault()) {
+    _impl_.itemname_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.set_item.itemname)
 }
 
 // uint32 packet_type = 3;
@@ -4710,9 +4999,245 @@ inline void set_item::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.set_item.packet_type)
 }
 
+// uint32 itemclass = 4;
+inline void set_item::clear_itemclass() {
+  _impl_.itemclass_ = 0u;
+}
+inline uint32_t set_item::_internal_itemclass() const {
+  return _impl_.itemclass_;
+}
+inline uint32_t set_item::itemclass() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.itemclass)
+  return _internal_itemclass();
+}
+inline void set_item::_internal_set_itemclass(uint32_t value) {
+  
+  _impl_.itemclass_ = value;
+}
+inline void set_item::set_itemclass(uint32_t value) {
+  _internal_set_itemclass(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_item.itemclass)
+}
+
+// string texture_path = 5;
+inline void set_item::clear_texture_path() {
+  _impl_.texture_path_.ClearToEmpty();
+}
+inline const std::string& set_item::texture_path() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.texture_path)
+  return _internal_texture_path();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void set_item::set_texture_path(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.texture_path_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.set_item.texture_path)
+}
+inline std::string* set_item::mutable_texture_path() {
+  std::string* _s = _internal_mutable_texture_path();
+  // @@protoc_insertion_point(field_mutable:Protocol.set_item.texture_path)
+  return _s;
+}
+inline const std::string& set_item::_internal_texture_path() const {
+  return _impl_.texture_path_.Get();
+}
+inline void set_item::_internal_set_texture_path(const std::string& value) {
+  
+  _impl_.texture_path_.Set(value, GetArenaForAllocation());
+}
+inline std::string* set_item::_internal_mutable_texture_path() {
+  
+  return _impl_.texture_path_.Mutable(GetArenaForAllocation());
+}
+inline std::string* set_item::release_texture_path() {
+  // @@protoc_insertion_point(field_release:Protocol.set_item.texture_path)
+  return _impl_.texture_path_.Release();
+}
+inline void set_item::set_allocated_texture_path(std::string* texture_path) {
+  if (texture_path != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.texture_path_.SetAllocated(texture_path, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.texture_path_.IsDefault()) {
+    _impl_.texture_path_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.set_item.texture_path)
+}
+
+// uint32 count = 6;
+inline void set_item::clear_count() {
+  _impl_.count_ = 0u;
+}
+inline uint32_t set_item::_internal_count() const {
+  return _impl_.count_;
+}
+inline uint32_t set_item::count() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.count)
+  return _internal_count();
+}
+inline void set_item::_internal_set_count(uint32_t value) {
+  
+  _impl_.count_ = value;
+}
+inline void set_item::set_count(uint32_t value) {
+  _internal_set_count(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_item.count)
+}
+
+// uint32 floor = 7;
+inline void set_item::clear_floor() {
+  _impl_.floor_ = 0u;
+}
+inline uint32_t set_item::_internal_floor() const {
+  return _impl_.floor_;
+}
+inline uint32_t set_item::floor() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.floor)
+  return _internal_floor();
+}
+inline void set_item::_internal_set_floor(uint32_t value) {
+  
+  _impl_.floor_ = value;
+}
+inline void set_item::set_floor(uint32_t value) {
+  _internal_set_floor(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_item.floor)
+}
+
+// float posx = 8;
+inline void set_item::clear_posx() {
+  _impl_.posx_ = 0;
+}
+inline float set_item::_internal_posx() const {
+  return _impl_.posx_;
+}
+inline float set_item::posx() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.posx)
+  return _internal_posx();
+}
+inline void set_item::_internal_set_posx(float value) {
+  
+  _impl_.posx_ = value;
+}
+inline void set_item::set_posx(float value) {
+  _internal_set_posx(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_item.posx)
+}
+
+// float posy = 9;
+inline void set_item::clear_posy() {
+  _impl_.posy_ = 0;
+}
+inline float set_item::_internal_posy() const {
+  return _impl_.posy_;
+}
+inline float set_item::posy() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.posy)
+  return _internal_posy();
+}
+inline void set_item::_internal_set_posy(float value) {
+  
+  _impl_.posy_ = value;
+}
+inline void set_item::set_posy(float value) {
+  _internal_set_posy(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_item.posy)
+}
+
+// float posz = 10;
+inline void set_item::clear_posz() {
+  _impl_.posz_ = 0;
+}
+inline float set_item::_internal_posz() const {
+  return _impl_.posz_;
+}
+inline float set_item::posz() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.posz)
+  return _internal_posz();
+}
+inline void set_item::_internal_set_posz(float value) {
+  
+  _impl_.posz_ = value;
+}
+inline void set_item::set_posz(float value) {
+  _internal_set_posz(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_item.posz)
+}
+
+// -------------------------------------------------------------------
+
+// ItemDataList
+
+// repeated .Protocol.set_item items = 1;
+inline int ItemDataList::_internal_items_size() const {
+  return _impl_.items_.size();
+}
+inline int ItemDataList::items_size() const {
+  return _internal_items_size();
+}
+inline void ItemDataList::clear_items() {
+  _impl_.items_.Clear();
+}
+inline ::Protocol::set_item* ItemDataList::mutable_items(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.ItemDataList.items)
+  return _impl_.items_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_item >*
+ItemDataList::mutable_items() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.ItemDataList.items)
+  return &_impl_.items_;
+}
+inline const ::Protocol::set_item& ItemDataList::_internal_items(int index) const {
+  return _impl_.items_.Get(index);
+}
+inline const ::Protocol::set_item& ItemDataList::items(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.ItemDataList.items)
+  return _internal_items(index);
+}
+inline ::Protocol::set_item* ItemDataList::_internal_add_items() {
+  return _impl_.items_.Add();
+}
+inline ::Protocol::set_item* ItemDataList::add_items() {
+  ::Protocol::set_item* _add = _internal_add_items();
+  // @@protoc_insertion_point(field_add:Protocol.ItemDataList.items)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_item >&
+ItemDataList::items() const {
+  // @@protoc_insertion_point(field_list:Protocol.ItemDataList.items)
+  return _impl_.items_;
+}
+
+// uint32 packet_type = 3;
+inline void ItemDataList::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t ItemDataList::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t ItemDataList::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.ItemDataList.packet_type)
+  return _internal_packet_type();
+}
+inline void ItemDataList::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void ItemDataList::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.ItemDataList.packet_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

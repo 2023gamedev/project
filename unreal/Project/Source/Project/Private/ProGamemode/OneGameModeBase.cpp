@@ -50,9 +50,6 @@ AOneGameModeBase::AOneGameModeBase()
     // 플레이어를 선택한 것을 받아서 넘겨주려고 할 예정
     CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
 
-
-    //SpawnZombiesStaticClasses();
-
     ItemRandomLocationSetting();
 
     CarActorRandomLocationSetting();
@@ -65,78 +62,7 @@ AOneGameModeBase::AOneGameModeBase()
 void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
-    // B1
-    SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSquareWood.InvenSquareWood"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(1, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(2, "Pipe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPipe.InvenPipe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(3, "FireAxe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireAxe.InvenFireAxe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(4, "SashimiKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSasimiKnife.InvenSasimiKnife"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(5, "ButchersKnife", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenButherKnife.InvenButherKnife"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(6, "Bottle", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBottle.InvenBottle"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(7, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOORB1);
-    SpawnItemBoxes(8, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(9, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-
-    SpawnItemBoxes(10, "Drink", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDrink.InvenDrink"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(11, "Snack", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSnack.InvenSnack"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(12, "CannedTuna", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCannedTuna.InvenCannedTuna"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(13, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(14, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(15, "Drink", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDrink.InvenDrink"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOORB1);
-    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1); // 수정 필요
-    SpawnItemBoxes(17, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-
-    SpawnItemBoxes(18, "CarKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-    SpawnItemBoxes(19, "RoofKey1", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOORB1);
-
-    // F1
-    SpawnItemBoxes(20, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSquareWood.InvenSquareWood"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(21, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(22, "Pipe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPipe.InvenPipe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(23, "FireAxe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireAxe.InvenFireAxe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(24, "MannequinArm", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvnenMannequinArm.InvnenMannequinArm"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(25, "MannequinLeg", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenMannequinLeg.InvenMannequinLeg"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(26, "Book", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/Invenbook.Invenbook"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(27, "Scissors", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSissor.InvenSissor"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(28, "MagicStick", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenMagicStick.InvenMagicStick"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(29, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOOR1);
-
-    SpawnItemBoxes(30, "Bandage", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBandage.InvenBandage"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOOR1);
-    SpawnItemBoxes(31, "Clothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCloth.InvenCloth"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOOR1);
-    SpawnItemBoxes(32, "Gauze", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenGauze.InvenGauze"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOOR1);
-    SpawnItemBoxes(33, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR1);
-    SpawnItemBoxes(34, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR1);
-    SpawnItemBoxes(35, "Disinfectant", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDisinfectant.InvenDisinfectant"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR1);
-    SpawnItemBoxes(36, "Ointment", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenOintment.InvenOintment"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR1);
-    SpawnItemBoxes(37, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-
-    SpawnItemBoxes(38, "CarKey2", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-    SpawnItemBoxes(39, "RoofKey2", EItemClass::KEYITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey2.InvenRoofKey2"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR1);
-
-    // F2
-    SpawnItemBoxes(40, "SquareWood", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSquareWood.InvenSquareWood"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(41, "FireExtinguisher", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireEx.InvenFireEx"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(42, "Pipe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPipe.InvenPipe"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
-    SpawnItemBoxes(43, "FireAxe", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFireAxe.InvenFireAxe"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(44, "Plunger", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenPlunger.InvenPlunger"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(45, "FryingPan", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenFryingPan.InvenFryingPan"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(46, "Iron", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenIron.InvenIron"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(47, "Shovels", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenShovel.InvenShovel"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(48, "GolfClub", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenGolfClub.InvenGolfClub"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(49, "WoodenBat", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWoodenBat.InvenWoodenBat"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-
-    SpawnItemBoxes(50, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOOR2);
-    SpawnItemBoxes(51, "Clothes", EItemClass::BLEEDINGHEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCloth.InvenCloth"), NULL, LOAD_None, NULL), 3, EItemFloor::FLOOR2);
-    SpawnItemBoxes(52, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
-    SpawnItemBoxes(53, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
-    SpawnItemBoxes(54, "Water", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenWater.InvenWater"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
-    SpawnItemBoxes(55, "Smoke", EItemClass::HEALINGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSmoke.InvenSmoke"), NULL, LOAD_None, NULL), 2, EItemFloor::FLOOR2);
-    SpawnItemBoxes(56, "BagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-    SpawnItemBoxes(57, "BigBagActor", EItemClass::BAGITEM, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBigBag.InvenBigBag"), NULL, LOAD_None, NULL), 1, EItemFloor::FLOOR2);
-
-    SpawnItemBoxes(58, "CarKey3", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey2.InvenCarKey2"), NULL, LOAD_None, NULL), 10, EItemFloor::FLOOR2);
-    SpawnItemBoxes(59, "CarKey4", EItemClass::NORMALWEAPON, LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey2.InvenCarKey2"), NULL, LOAD_None, NULL), 20, EItemFloor::FLOOR2);
-
+    
     SpawnInterItem(0, "CarActor");
     SpawnInterItem(1, "CarActor");
     SpawnInterItem(2, "CarActor");
@@ -516,23 +442,43 @@ int32 AOneGameModeBase::RandomCarKey()
 
 
 
-void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, EItemClass itemclass, UTexture2D* texture, int count, EItemFloor itemfloor)
+void AOneGameModeBase::SpawnItemBoxes(uint32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos)
 {
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
 
     TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
 
+    EItemClass iclass;
 
-    FVector itemboxpos = RandomItemBoxLocation(itemfloor);
-
+    if (itemclass == 0) {
+        iclass = EItemClass::NORMALWEAPON;
+    }
+    else if (itemclass == 1) {
+        iclass = EItemClass::THROWINGWEAPON;
+    }
+    else if (itemclass == 2) {
+        iclass = EItemClass::HEALINGITEM;
+    }
+    else if (itemclass == 3) {
+        iclass = EItemClass::BLEEDINGHEALINGITEM;
+    }
+    else if (itemclass == 4) {
+        iclass = EItemClass::KEYITEM;
+    }
+    else if (itemclass == 5) {
+        iclass = EItemClass::BAGITEM;
+    }
+    else if (itemclass == 6) {
+        iclass = EItemClass::NONE;
+    }
 
     // 선택된 아이템 박스 클래스로 아이템 박스 생성
-    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
+    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itempos, FRotator::ZeroRotator);
 
     UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
     if (SpawnedItemBox) {
         SpawnedItemBox->ItemName = itemname;
-        SpawnedItemBox->ItemClassType = itemclass;
+        SpawnedItemBox->ItemClassType = iclass;
         SpawnedItemBox->Texture = texture;
         SpawnedItemBox->Count = count;
         SpawnedItemBox->ItemBoxId = itemboxindex;
