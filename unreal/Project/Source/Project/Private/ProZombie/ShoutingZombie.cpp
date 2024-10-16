@@ -48,6 +48,7 @@ AShoutingZombie::AShoutingZombie()
 	SetSTR(FMath::RandRange(4, 8)); // 수정 필요 4 ~ 8
 	SetSpecialAbility(true);
 	SetZombieName("ShoutingZombie");
+	SetTurningSpeed(135.f);
 }
 
 void AShoutingZombie::BeginPlay()

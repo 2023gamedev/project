@@ -666,7 +666,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 				}
 				else {	//result == "Fail"
-					cout << "<Selector-CanSeePlayer> EEEERRRROOOOOORRRR" << endl;
+					cout << "<Selector-CanSeePlayer> EEEERRRROOOOOORRRR - ZombieID #" << zom->ZombieData.zombieID << endl;
 				}
 
 			}
@@ -695,7 +695,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 			}
 			else {	//result == "Fail"
-				cout << "<Selector-Detect> EEEERRRROOOOOORRRR" << endl;
+				cout << "<Selector-Detect> EEEERRRROOOOOORRRR - ZombieID #" << zom->ZombieData.zombieID << endl;
 			}
 
 			

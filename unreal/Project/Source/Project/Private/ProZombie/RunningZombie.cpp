@@ -50,7 +50,7 @@ ARunningZombie::ARunningZombie()
 	SetSTR(FMath::RandRange(4, 8)); 
 	SetSpecialAbility(true);
 	SetZombieName("RunningZombie");
-
+	SetTurningSpeed(180.f);
 }
 
 void ARunningZombie::BeginPlay()

@@ -37,6 +37,10 @@ RunningZombie::RunningZombie()
 
 	IsAttacking = false;
 
+	IsBeingAttacked = false;
+
+	HaveToWait = false;
+
 	//speed = 0.f;
 
 	targetType = Zombie::TARGET::NULL_TARGET;
@@ -74,6 +78,10 @@ RunningZombie::RunningZombie(Zombie_Data z_d)
 	RandPatrolSet = false;
 
 	IsAttacking = false;
+
+	IsBeingAttacked = false;
+
+	HaveToWait = false;
 
 	//speed = 0.f;
 

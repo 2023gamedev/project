@@ -45,6 +45,10 @@ Zombie::Zombie()
 
 	IsAttacking = false;
 
+	IsBeingAttacked = false;
+
+	HaveToWait = false;
+
 	//speed = 0.f;
 
 	targetType = Zombie::TARGET::NULL_TARGET;
@@ -82,6 +86,10 @@ Zombie::Zombie(Zombie_Data z_d)
 	RandPatrolSet = false;
 
 	IsAttacking = false;
+
+	IsBeingAttacked = false;
+
+	HaveToWait = false;
 
 	//speed = 0.f;
 
@@ -385,7 +393,7 @@ void Zombie::MoveTo(float deltasecond)
 	float PathX = get<0>(TargetNode);
 	float PathY = get<1>(TargetNode);
 
-	if (ZombieData.zombietype == 0) {
+	/*if (ZombieData.zombietype == 0) {
 		//ZombieSpeed = 200.f;
 	}
 	else if (ZombieData.zombietype == 1) {
@@ -397,7 +405,7 @@ void Zombie::MoveTo(float deltasecond)
 	else {
 		cout << "MOVETO ZOMBIE TYPE ERROR" << endl;
 		return;
-	}
+	}*/
 
 
 	// 타겟 방향 계산
@@ -671,7 +679,7 @@ void Zombie::Wait()
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
 
-		cout << "Zombie #" << ZombieData.zombieID  << " is Shouting!" << endl;
+		//cout << "Zombie #" << ZombieData.zombieID  << " is Shouting!" << endl;
 
 		if (deltaTime.count() >= ZombieShoutingAnimDuration) {
 			HaveToWait = false;
@@ -681,7 +689,7 @@ void Zombie::Wait()
 			SendPath();
 		}
 		else {
-			cout << "Shouting Animation time left " << ZombieShoutingAnimDuration - deltaTime.count() << "s" << endl;
+			//cout << "Shouting Animation time left " << ZombieShoutingAnimDuration - deltaTime.count() << "s" << endl;
 		}
 	}
 }

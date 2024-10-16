@@ -240,7 +240,7 @@ private:
 
 	// 1초당 고개 돌리는 각도
 	UPROPERTY(EditAnywhere)
-	float m_fTurningSpeedDegree = 90.f;
+	float m_fTurningSpeedDegree;
 
 public:
 	UZombieAnimInstance* CachedAnimInstance;

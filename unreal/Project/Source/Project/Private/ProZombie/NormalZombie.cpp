@@ -56,6 +56,7 @@ ANormalZombie::ANormalZombie()
 	SetSTR(FMath::RandRange(4, 8));
 	SetSpecialAbility(false);
 	SetZombieName("NormalZombie");
+	SetTurningSpeed(90.f);
 }
 
 void ANormalZombie::BeginPlay()

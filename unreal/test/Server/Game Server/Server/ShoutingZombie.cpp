@@ -34,7 +34,10 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies)
 		// 다른 좀비들 샤우팅 소리 포착 체크
 		for (auto& zom : zombies) {
 			if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// 샤우팅 좀비와 같은 층 좀비만 검사
-				break;
+				continue;
+
+			if (zom->ZombieData.zombieID == ZombieData.zombieID)	// 나 자신은 넘어가기
+				continue;
 
 			vector<vector<vector<float>>> szl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 			vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{zom->ZombieData.x, zom->ZombieData.y, zom->ZombieData.z}} };
