@@ -567,7 +567,7 @@ void Zombie::SendPath()
 			if (pathfinder.floor == playerDB[player.first].floor) {
 				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 
-				cout << "SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
+				//cout << "플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
 			}
 		}
 

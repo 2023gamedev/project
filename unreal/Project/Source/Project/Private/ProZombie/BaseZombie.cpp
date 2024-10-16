@@ -850,6 +850,8 @@ void ABaseZombie::Shouting()
 
 	AnimInstance->PlayShoutingMontage();
 
+	AnimInstance->SetCurrentPawnSpeed(0);
+
 
 	//UWorld* World = GetWorld();
 	//FVector Center = GetActorLocation();

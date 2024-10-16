@@ -196,6 +196,11 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 		return;
 	}
 
+	// 좀비 샤우팅 시에
+	if (OwnerZombie->m_bIsShouting) {
+		return;
+	}
+
 	ZombieMoveTo(DeltaTime);
 	ZombieTurn(DeltaTime);
 
@@ -263,7 +268,7 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 
 				// 샤우팅 실행
-				if (OwnerZombie->m_bIsShouting == false) {
+				if (OwnerZombie->IsShouted() == false) {
 					OwnerZombie->Shouting();
 				}
 			}

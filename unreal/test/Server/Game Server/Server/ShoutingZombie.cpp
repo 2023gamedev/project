@@ -29,6 +29,8 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies)
 	if (bShouted == false) {
 		bShouted = true;
 
+		cout << "샤우팅 좀비 #" << ZombieData.zombieID << " 샤우팅!!!" << endl;
+
 		// 다른 좀비들 샤우팅 소리 포착 체크
 		for (auto& zom : zombies) {
 			if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// 샤우팅 좀비와 같은 층 좀비만 검사
