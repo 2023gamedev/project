@@ -180,6 +180,7 @@
     <ClCompile Include="ProcessPacket.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RunningZombie.cpp" />
+    <ClCompile Include="ShoutingZombie.cpp" />
     <ClCompile Include="Zombie.cpp" />
     <ClCompile Include="ZombieController.cpp" />
     <ClCompile Include="ZombiePathfinder.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="RunningZombie.h" />
     <ClInclude Include="Selector.h" />
     <ClInclude Include="Sequence.h" />
+    <ClInclude Include="ShoutingZombie.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="Zombie.h" />
     <ClInclude Include="ZombieController.h" />

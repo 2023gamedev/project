@@ -127,7 +127,7 @@ public:
 	bool bServerOn;
 
 	//좀비 벡터
-	vector<Zombie*> zombie;
+	vector<Zombie*> zombieDB;
 
 	//======Zombie_BT 선언======
 

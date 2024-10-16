@@ -116,6 +116,7 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond)
 	OwnerZombie->SetActorLocation(zomlocation);
 	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->GetSpeed());
 }
+
 void ARunningZombieAIController::ZombieTurn(float deltasecond)
 {
 	FVector zombieDest;
@@ -280,6 +281,7 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 	}
 
 }
+
 void ARunningZombieAIController::Send_Detected()
 {
 	auto* ZombiePawn = Cast<ARunningZombie>(GetPawn());
@@ -297,6 +299,7 @@ void ARunningZombieAIController::Send_Detected()
 
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
+
 void ARunningZombieAIController::Send_PlayerLost()
 {
 	auto* ZombiePawn = Cast<ARunningZombie>(GetPawn());

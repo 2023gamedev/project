@@ -416,7 +416,7 @@ void IOCP_CORE::Timer_Thread()
 			// deltaTime을 누적하여 GameTime에 더함
 			GameTime += deltaTime.count();  // 초 단위
 			
-			//for (auto& zom : zombie) {
+			//for (auto& zom : zombieDB) {
 			//	if (!(zom->path.empty())) {
 					//if (zom->ZombiePathIndex >= zom->path.size()) {
 					//	 // cout << "Zombie has reached the final destination." << endl;
@@ -556,7 +556,7 @@ void IOCP_CORE::ServerOn()
 
 	cout << endl;
 
-	for (const auto zom : zombie) {
+	for (const auto zom : zombieDB) {
 		float z_x = zom->ZombieData.x;
 		float z_y = zom->ZombieData.y;
 		float z_z = zom->ZombieData.z;
@@ -595,6 +595,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 		lastBTTime = currentTime;
 
+
 		if (playerDB.size() == 0) {
 			//cout << "연결된 플레이어가 없습니다..." << endl;
 			//cout << endl;
@@ -613,7 +614,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 		
 
 		// 좀비가 있을때 BT 실행
-		for (auto& zom : zombie) {
+		for (auto& zom : zombieDB) {
 
 			// 플레이어가 있을때 BT 실행
 			if (result == "NO PLAYER")

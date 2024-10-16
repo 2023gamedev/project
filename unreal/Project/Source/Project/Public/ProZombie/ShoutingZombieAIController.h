@@ -29,27 +29,37 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+	
+	void Send_Detected();
 
-	void CheckAndSendMovement();
+	void Send_PlayerLost();
 
-	void SetStartLocationValue(FVector startlocation);
-	void SetPatrolLocationValue(FVector patrollocation);
+	void Send_ZombieHP();
+	
+	//void CheckAndSendMovement();
 
+	//void SetStartLocationValue(FVector startlocation);
+	
+	//void SetPatrolLocationValue(FVector patrollocation);
 
 	void UpdateLastKnownPositionByFootSound(FVector playerlocation);
 
-	void StopAI();
-	void StartAI();
+	void ZombieMoveTo(float deltasecond);
+
+	void ZombieTurn(float deltasecond);
+
+	//void StopAI();
+	//void StartAI();
 
 	UProGameInstance* GameInstance;
 
 private:
-	UPROPERTY(EditAnywhere)
-	class UBehaviorTree* ShoutingZombieAIBehavior;
+	//UPROPERTY(EditAnywhere)
+	//class UBehaviorTree* ShoutingZombieAIBehavior;
 
-	UPROPERTY(EditAnywhere)
+	//UPROPERTY(EditAnywhere)
 
-	class UBlackboardData* ShoutingZombieBlackBoardAsset;
+	//class UBlackboardData* ShoutingZombieBlackBoardAsset;
 
 public:
 	UPROPERTY(EditAnywhere)
@@ -64,12 +74,24 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bShoutingSound;
 
+	UPROPERTY(EditAnywhere)
+	bool m_bPlayerInSight;
 
-	ZombieData recvZombieData;
+	ZombieHP recvZombieHP;
+
 	uint32 ZombieId;
-	FVector NewLocation;
-	FVector PreviousLocation;
-	FRotator PreviousRotation;
+	uint32 AttackZombieId;
+	//FVector NewLocation;
+	//FVector PreviousLocation;
+	//FRotator PreviousRotation;
 
+	ABaseCharacter* LastSeenPlayer;
+
+	UPROPERTY(EditAnywhere)
+	ABaseZombie* OwnerZombie;
+
+	int attackPlayerID;
+
+	float PreviousHp = 0.f;
 
 };

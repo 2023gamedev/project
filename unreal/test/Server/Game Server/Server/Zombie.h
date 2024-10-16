@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <chrono>
-#include <mutex>
+//#include <mutex>
 
 #include "Task.h"
 //#include "Player.h"
@@ -51,7 +51,7 @@ public:
 
     IOCP_CORE* iocpServer;
 
-    std::mutex zombieMutex;
+    //std::mutex zombieMutex;
 
 
     vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
@@ -62,17 +62,22 @@ public:
 
     const float CanHearDistance = 500.f;            // 발소리 포착 가능거리500.f
 
-    //const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
+    const float CanHearShoutDistance = 2000.f;      // 샤우팅 소리 포착 가능 거리 2000.f
 
     const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
 
     const float ZombieBeAttackedAnimDuration = 2.0f;    // 좀비 피격 애니메이션 재생 시간 (* 정확히는 2.00초)
 
+    const float ZombieShoutingAnimDuration = 4.3f;    // 좀비 샤우팅 애니메이션 재생 시간 (* 정확히는 4.30초)
+
     const float NormalZombieStartHP = 20.0f;        // 20.0f
     const float NormalZombieSpeed = 200.0f;         // 200.0f
 
     const float RunningZombieStartHP = 20.0f;        // 20.0f
-    const float RunningZombieSpeed = 200.0f;         // 400.0f
+    const float RunningZombieSpeed = 400.0f;         // 400.0f
+
+    const float ShoutingZombieStartHP = 30.0f;        // 30.0f
+    const float ShoutingZombieSpeed = 300.0f;         // 300.0f
 
     float ZombieSpeed;
 
@@ -87,6 +92,8 @@ public:
     vector<vector<vector<float>>> TargetLocation;
 
     vector<vector<vector<float>>> PrevTargetLocation;       // 플레이어를 마지막으로 본 위치
+
+    vector<vector<vector<float>>> ShoutingLocation;       // 샤우팅 좀비 위치
 
     int ClosestPlayerID;
 
@@ -108,8 +115,6 @@ public:
 
     std::chrono::steady_clock::time_point animStartTime;      // 좀비 애니메이션 시작 시간
 
-    //float speed;
-
     TARGET targetType;
 
     int ZombiePathIndex = 0;
@@ -121,7 +126,7 @@ public:
 
     Zombie(Zombie_Data zd);
 
-    ~Zombie();
+    virtual ~Zombie();
 
 
     void SetDistance(int playerid, int distanceType, int setType);    // distanceType = 1: Detect / 2: FootSound, setTpye = 1: Insert / 2: Update
@@ -142,8 +147,6 @@ public:
 
     bool RandomPatrol();
 
-    //void NewRandomPatrol();
-
     void ReachFinalDestination();
 
     void UpdatePath();
@@ -160,7 +163,4 @@ public:
     float GetSpeed() const { return ZombieSpeed; }
     void SetSpeed(float speed) { ZombieSpeed = speed; }
 
-    //void ShoutingHear();
-
-    //void FootSoundHear();
 };
