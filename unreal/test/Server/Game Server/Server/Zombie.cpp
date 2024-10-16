@@ -676,6 +676,5 @@ void Zombie::Wait()
 			//cout << "Attack Animation time left " << ZombieAttackAnimDuration - deltaTime.count() << "s" << endl;
 		}
 	}
-
 	
 }

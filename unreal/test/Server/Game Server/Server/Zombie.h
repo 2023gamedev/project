@@ -62,7 +62,7 @@ public:
 
     const float CanHearDistance = 500.f;            // 발소리 포착 가능거리500.f
 
-    //const float CanHearShoutDistance = 2000.f;      //========================언리얼 BaseZombie.cpp에서 Shouting() - float DetectRadius = 2000.f;에서 참조 (맞는지 확인 필요)
+    const float CanHearShoutDistance = 2000.f;      // 샤우팅 소리 포착 가능 거리 2000.f
 
     const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
 
@@ -73,6 +73,9 @@ public:
 
     const float RunningZombieStartHP = 20.0f;        // 20.0f
     const float RunningZombieSpeed = 400.0f;         // 400.0f
+
+    const float ShoutingZombieStartHP = 30.0f;        // 30.0f
+    const float ShoutingZombieSpeed = 300.0f;         // 300.0f
 
     float ZombieSpeed;
 
@@ -107,8 +110,6 @@ public:
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
 
     std::chrono::steady_clock::time_point animStartTime;      // 좀비 애니메이션 시작 시간
-
-    //float speed;
 
     TARGET targetType;
 
@@ -160,7 +161,4 @@ public:
     float GetSpeed() const { return ZombieSpeed; }
     void SetSpeed(float speed) { ZombieSpeed = speed; }
 
-    //void ShoutingHear();
-
-    //void FootSoundHear();
 };

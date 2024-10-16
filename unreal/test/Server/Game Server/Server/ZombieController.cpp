@@ -2,6 +2,7 @@
 
 #include "NormalZombie.h"
 #include "RunningZombie.h"
+#include "ShoutingZombie.h"
 
 
 ZombieController::ZombieController(IOCP_CORE& mainServer)
@@ -25,10 +26,8 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     
     
     // Áö»ó 1Ãþ
-    //SpawnZombies(11, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
-    //SpawnZombies(12, 1, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
-    SpawnZombies(11, 0, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
-    SpawnZombies(12, 0, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
+    SpawnZombies(11, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
+    SpawnZombies(12, 1, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
 
     SpawnZombies(13, 0, Vector3(220.f, 1200.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
     SpawnZombies(14, 0, Vector3(250.f, 1700.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
@@ -94,6 +93,8 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     Zombie* new_zombie;
     if (zombieType == 0)
        new_zombie = new NormalZombie(new_zombie_data);
+    else if (zombieType == 1)
+        new_zombie = new ShoutingZombie(new_zombie_data);
     else if (zombieType == 2)
         new_zombie = new RunningZombie(new_zombie_data);
 
