@@ -558,10 +558,18 @@ void Zombie::SendPath()
 		zPath.set_zombieid(ZombieData.zombieID);
 		zPath.set_packet_type(10);
 
-		Protocol::Vector3* Destination = zPath.mutable_path();
-		Destination->set_x(get<0>(path[ZombiePathIndex]));
-		Destination->set_y(get<1>(path[ZombiePathIndex]));
-		Destination->set_z(get<2>(path[ZombiePathIndex]));
+		Protocol::Vector3* Destination1 = zPath.mutable_path1();
+		Destination1->set_x(get<0>(path[ZombiePathIndex]));
+		Destination1->set_y(get<1>(path[ZombiePathIndex]));
+		Destination1->set_z(get<2>(path[ZombiePathIndex]));
+
+		if (not path.empty() || not (ZombiePathIndex + 1) >= path.size()) {
+			Protocol::Vector3* Destination2 = zPath.mutable_path2();
+			Destination2->set_x(get<0>(path[ZombiePathIndex + 1]));
+			Destination2->set_y(get<1>(path[ZombiePathIndex + 1]));
+			Destination2->set_z(get<2>(path[ZombiePathIndex + 1]));
+		}
+
 
 		Protocol::Vector3* currentLocation = zPath.mutable_location();
 		currentLocation->set_x(ZombieData.x);

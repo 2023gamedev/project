@@ -116,13 +116,14 @@ struct CharacterSelect
 struct ZombiePath
 {
 	uint32 ZombieId;
-	std::vector<std::tuple<float, float, float>> Path;
+	std::vector<std::tuple<float, float, float>> Path1;
+	std::vector<std::tuple<float, float, float>> Path2;
 	FVector Location;
 
-	ZombiePath() : ZombieId(0), Path(), Location(FVector::ZeroVector) {}
+	ZombiePath() : ZombieId(0), Path1(), Path2(), Location(FVector::ZeroVector) {}
 
-	ZombiePath(uint32 InZombieId, const std::vector<std::tuple<float, float, float>>& InPath, const FVector& InLocation)
-		: ZombieId(InZombieId), Path(InPath), Location(InLocation) {}
+	ZombiePath(uint32 InZombieId, const std::vector<std::tuple<float, float, float>>& InPath1, const std::vector<std::tuple<float, float, float>>& InPath2, const FVector& InLocation)
+		: ZombieId(InZombieId), Path1(InPath1), Path2(InPath2), Location(InLocation) {}
 };
 
 struct ZombieHP

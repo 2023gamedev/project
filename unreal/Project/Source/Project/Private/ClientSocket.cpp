@@ -301,9 +301,9 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 					localZombiePath.ZombieId = zombiepath.zombieid();
 					//UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), localZombiePath.ZombieId);
 
-					// 경로 입력 (사실상 하나만 담김)
-					localZombiePath.Path.emplace_back(zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());
-					//UE_LOG(LogNet, Display, TEXT("Zombie #%d's Target Location: ( %.2f, %.2f, %.2f )"), localZombiePath.ZombieId, zombiepath.path().x(), zombiepath.path().y(), zombiepath.path().z());
+					// 경로 입력
+					localZombiePath.Path1.emplace_back(zombiepath.path1().x(), zombiepath.path1().y(), zombiepath.path1().z());
+					localZombiePath.Path2.emplace_back(zombiepath.path2().x(), zombiepath.path2().y(), zombiepath.path2().z());
 
 					// 위치 값도 추가
 					localZombiePath.Location = FVector(zombiepath.location().x(), zombiepath.location().y(), zombiepath.location().z());

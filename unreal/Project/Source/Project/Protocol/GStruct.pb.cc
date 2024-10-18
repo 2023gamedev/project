@@ -157,7 +157,8 @@ struct Vector3DefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 Vector3DefaultTypeInternal _Vector3_default_instance_;
 PROTOBUF_CONSTEXPR ZombiePath::ZombiePath(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.path_)*/nullptr
+    /*decltype(_impl_.path1_)*/nullptr
+  , /*decltype(_impl_.path2_)*/nullptr
   , /*decltype(_impl_.location_)*/nullptr
   , /*decltype(_impl_.zombieid_)*/0u
   , /*decltype(_impl_.packet_type_)*/0u
@@ -396,8 +397,9 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::ZombiePath, _impl_.zombieid_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::ZombiePath, _impl_.path_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::ZombiePath, _impl_.path1_),
   PROTOBUF_FIELD_OFFSET(::Protocol::ZombiePath, _impl_.packet_type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::ZombiePath, _impl_.path2_),
   PROTOBUF_FIELD_OFFSET(::Protocol::ZombiePath, _impl_.location_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::PatrolPath, _internal_metadata_),
@@ -488,14 +490,14 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 69, -1, -1, sizeof(::Protocol::ZombieDataList)},
   { 77, -1, -1, sizeof(::Protocol::Vector3)},
   { 86, -1, -1, sizeof(::Protocol::ZombiePath)},
-  { 96, -1, -1, sizeof(::Protocol::PatrolPath)},
-  { 106, -1, -1, sizeof(::Protocol::Detected)},
-  { 116, -1, -1, sizeof(::Protocol::Time)},
-  { 124, -1, -1, sizeof(::Protocol::Equip_Item)},
-  { 134, -1, -1, sizeof(::Protocol::ping)},
-  { 142, -1, -1, sizeof(::Protocol::patrol_hit)},
-  { 150, -1, -1, sizeof(::Protocol::set_item)},
-  { 166, -1, -1, sizeof(::Protocol::ItemDataList)},
+  { 97, -1, -1, sizeof(::Protocol::PatrolPath)},
+  { 107, -1, -1, sizeof(::Protocol::Detected)},
+  { 117, -1, -1, sizeof(::Protocol::Time)},
+  { 125, -1, -1, sizeof(::Protocol::Equip_Item)},
+  { 135, -1, -1, sizeof(::Protocol::ping)},
+  { 143, -1, -1, sizeof(::Protocol::patrol_hit)},
+  { 151, -1, -1, sizeof(::Protocol::set_item)},
+  { 167, -1, -1, sizeof(::Protocol::ItemDataList)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -538,31 +540,32 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "(\r\"H\n\016ZombieDataList\022!\n\007zombies\030\001 \003(\0132\020."
   "Protocol.Zombie\022\023\n\013packet_type\030\003 \001(\r\"*\n\007"
   "Vector3\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002"
-  "\"y\n\nZombiePath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004path"
-  "\030\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packet_type"
-  "\030\003 \001(\r\022#\n\010location\030\004 \001(\0132\021.Protocol.Vect"
-  "or3\"y\n\nPatrolPath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004p"
-  "ath\030\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packet_t"
-  "ype\030\003 \001(\r\022#\n\010location\030\004 \001(\0132\021.Protocol.V"
-  "ector3\"[\n\010Detected\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010"
-  "playerid\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\022\026\n\016p"
-  "layer_insight\030\004 \001(\010\"*\n\004Time\022\r\n\005timer\030\001 \001"
-  "(\002\022\023\n\013packet_type\030\003 \001(\r\"W\n\nEquip_Item\022\020\n"
-  "\010playerid\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013pac"
-  "ket_type\030\003 \001(\r\022\020\n\010itemtype\030\004 \001(\r\"-\n\004ping"
-  "\022\020\n\010playerid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\r\""
-  "3\n\npatrol_hit\022\020\n\010zombieid\030\001 \001(\r\022\023\n\013packe"
-  "t_type\030\003 \001(\r\"\262\001\n\010set_item\022\016\n\006itemid\030\001 \001("
-  "\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013packet_type\030\003 \001(\r"
-  "\022\021\n\titemclass\030\004 \001(\r\022\024\n\014texture_path\030\005 \001("
-  "\t\022\r\n\005count\030\006 \001(\r\022\r\n\005floor\030\007 \001(\r\022\014\n\004posx\030"
-  "\010 \001(\002\022\014\n\004posy\030\t \001(\002\022\014\n\004posz\030\n \001(\002\"F\n\014Ite"
-  "mDataList\022!\n\005items\030\001 \003(\0132\022.Protocol.set_"
-  "item\022\023\n\013packet_type\030\003 \001(\rb\006proto3"
+  "\"\234\001\n\nZombiePath\022\020\n\010zombieid\030\001 \001(\r\022 \n\005pat"
+  "h1\030\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packet_ty"
+  "pe\030\003 \001(\r\022 \n\005path2\030\004 \001(\0132\021.Protocol.Vecto"
+  "r3\022#\n\010location\030\005 \001(\0132\021.Protocol.Vector3\""
+  "y\n\nPatrolPath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004path\030"
+  "\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packet_type\030"
+  "\003 \001(\r\022#\n\010location\030\004 \001(\0132\021.Protocol.Vecto"
+  "r3\"[\n\010Detected\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010play"
+  "erid\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\022\026\n\016playe"
+  "r_insight\030\004 \001(\010\"*\n\004Time\022\r\n\005timer\030\001 \001(\002\022\023"
+  "\n\013packet_type\030\003 \001(\r\"W\n\nEquip_Item\022\020\n\010pla"
+  "yerid\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013packet_"
+  "type\030\003 \001(\r\022\020\n\010itemtype\030\004 \001(\r\"-\n\004ping\022\020\n\010"
+  "playerid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\r\"3\n\np"
+  "atrol_hit\022\020\n\010zombieid\030\001 \001(\r\022\023\n\013packet_ty"
+  "pe\030\003 \001(\r\"\262\001\n\010set_item\022\016\n\006itemid\030\001 \001(\r\022\020\n"
+  "\010itemname\030\002 \001(\t\022\023\n\013packet_type\030\003 \001(\r\022\021\n\t"
+  "itemclass\030\004 \001(\r\022\024\n\014texture_path\030\005 \001(\t\022\r\n"
+  "\005count\030\006 \001(\r\022\r\n\005floor\030\007 \001(\r\022\014\n\004posx\030\010 \001("
+  "\002\022\014\n\004posy\030\t \001(\002\022\014\n\004posz\030\n \001(\002\"F\n\014ItemDat"
+  "aList\022!\n\005items\030\001 \003(\0132\022.Protocol.set_item"
+  "\022\023\n\013packet_type\030\003 \001(\rb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 1593, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 1629, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 17,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -3002,13 +3005,18 @@ void Vector3::InternalSwap(Vector3* other) {
 
 class ZombiePath::_Internal {
  public:
-  static const ::Protocol::Vector3& path(const ZombiePath* msg);
+  static const ::Protocol::Vector3& path1(const ZombiePath* msg);
+  static const ::Protocol::Vector3& path2(const ZombiePath* msg);
   static const ::Protocol::Vector3& location(const ZombiePath* msg);
 };
 
 const ::Protocol::Vector3&
-ZombiePath::_Internal::path(const ZombiePath* msg) {
-  return *msg->_impl_.path_;
+ZombiePath::_Internal::path1(const ZombiePath* msg) {
+  return *msg->_impl_.path1_;
+}
+const ::Protocol::Vector3&
+ZombiePath::_Internal::path2(const ZombiePath* msg) {
+  return *msg->_impl_.path2_;
 }
 const ::Protocol::Vector3&
 ZombiePath::_Internal::location(const ZombiePath* msg) {
@@ -3024,15 +3032,19 @@ ZombiePath::ZombiePath(const ZombiePath& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   ZombiePath* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.path_){nullptr}
+      decltype(_impl_.path1_){nullptr}
+    , decltype(_impl_.path2_){nullptr}
     , decltype(_impl_.location_){nullptr}
     , decltype(_impl_.zombieid_){}
     , decltype(_impl_.packet_type_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_path()) {
-    _this->_impl_.path_ = new ::Protocol::Vector3(*from._impl_.path_);
+  if (from._internal_has_path1()) {
+    _this->_impl_.path1_ = new ::Protocol::Vector3(*from._impl_.path1_);
+  }
+  if (from._internal_has_path2()) {
+    _this->_impl_.path2_ = new ::Protocol::Vector3(*from._impl_.path2_);
   }
   if (from._internal_has_location()) {
     _this->_impl_.location_ = new ::Protocol::Vector3(*from._impl_.location_);
@@ -3048,7 +3060,8 @@ inline void ZombiePath::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.path_){nullptr}
+      decltype(_impl_.path1_){nullptr}
+    , decltype(_impl_.path2_){nullptr}
     , decltype(_impl_.location_){nullptr}
     , decltype(_impl_.zombieid_){0u}
     , decltype(_impl_.packet_type_){0u}
@@ -3067,7 +3080,8 @@ ZombiePath::~ZombiePath() {
 
 inline void ZombiePath::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.path_;
+  if (this != internal_default_instance()) delete _impl_.path1_;
+  if (this != internal_default_instance()) delete _impl_.path2_;
   if (this != internal_default_instance()) delete _impl_.location_;
 }
 
@@ -3081,10 +3095,14 @@ void ZombiePath::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  if (GetArenaForAllocation() == nullptr && _impl_.path_ != nullptr) {
-    delete _impl_.path_;
+  if (GetArenaForAllocation() == nullptr && _impl_.path1_ != nullptr) {
+    delete _impl_.path1_;
   }
-  _impl_.path_ = nullptr;
+  _impl_.path1_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.path2_ != nullptr) {
+    delete _impl_.path2_;
+  }
+  _impl_.path2_ = nullptr;
   if (GetArenaForAllocation() == nullptr && _impl_.location_ != nullptr) {
     delete _impl_.location_;
   }
@@ -3109,10 +3127,10 @@ const char* ZombiePath::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
         } else
           goto handle_unusual;
         continue;
-      // .Protocol.Vector3 path = 2;
+      // .Protocol.Vector3 path1 = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_path(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_path1(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3125,9 +3143,17 @@ const char* ZombiePath::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
         } else
           goto handle_unusual;
         continue;
-      // .Protocol.Vector3 location = 4;
+      // .Protocol.Vector3 path2 = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_path2(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.Vector3 location = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_location(), ptr);
           CHK_(ptr);
         } else
@@ -3168,11 +3194,11 @@ uint8_t* ZombiePath::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_zombieid(), target);
   }
 
-  // .Protocol.Vector3 path = 2;
-  if (this->_internal_has_path()) {
+  // .Protocol.Vector3 path1 = 2;
+  if (this->_internal_has_path1()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::path(this),
-        _Internal::path(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(2, _Internal::path1(this),
+        _Internal::path1(this).GetCachedSize(), target, stream);
   }
 
   // uint32 packet_type = 3;
@@ -3181,10 +3207,17 @@ uint8_t* ZombiePath::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
   }
 
-  // .Protocol.Vector3 location = 4;
+  // .Protocol.Vector3 path2 = 4;
+  if (this->_internal_has_path2()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::path2(this),
+        _Internal::path2(this).GetCachedSize(), target, stream);
+  }
+
+  // .Protocol.Vector3 location = 5;
   if (this->_internal_has_location()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::location(this),
+      InternalWriteMessage(5, _Internal::location(this),
         _Internal::location(this).GetCachedSize(), target, stream);
   }
 
@@ -3204,14 +3237,21 @@ size_t ZombiePath::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .Protocol.Vector3 path = 2;
-  if (this->_internal_has_path()) {
+  // .Protocol.Vector3 path1 = 2;
+  if (this->_internal_has_path1()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.path_);
+        *_impl_.path1_);
   }
 
-  // .Protocol.Vector3 location = 4;
+  // .Protocol.Vector3 path2 = 4;
+  if (this->_internal_has_path2()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.path2_);
+  }
+
+  // .Protocol.Vector3 location = 5;
   if (this->_internal_has_location()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -3246,9 +3286,13 @@ void ZombiePath::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_has_path()) {
-    _this->_internal_mutable_path()->::Protocol::Vector3::MergeFrom(
-        from._internal_path());
+  if (from._internal_has_path1()) {
+    _this->_internal_mutable_path1()->::Protocol::Vector3::MergeFrom(
+        from._internal_path1());
+  }
+  if (from._internal_has_path2()) {
+    _this->_internal_mutable_path2()->::Protocol::Vector3::MergeFrom(
+        from._internal_path2());
   }
   if (from._internal_has_location()) {
     _this->_internal_mutable_location()->::Protocol::Vector3::MergeFrom(
@@ -3280,9 +3324,9 @@ void ZombiePath::InternalSwap(ZombiePath* other) {
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ZombiePath, _impl_.packet_type_)
       + sizeof(ZombiePath::_impl_.packet_type_)
-      - PROTOBUF_FIELD_OFFSET(ZombiePath, _impl_.path_)>(
-          reinterpret_cast<char*>(&_impl_.path_),
-          reinterpret_cast<char*>(&other->_impl_.path_));
+      - PROTOBUF_FIELD_OFFSET(ZombiePath, _impl_.path1_)>(
+          reinterpret_cast<char*>(&_impl_.path1_),
+          reinterpret_cast<char*>(&other->_impl_.path1_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ZombiePath::GetMetadata() const {
