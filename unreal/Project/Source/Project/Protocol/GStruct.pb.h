@@ -1764,30 +1764,49 @@ class ZombiePath final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPathFieldNumber = 2,
-    kLocationFieldNumber = 4,
+    kPath1FieldNumber = 2,
+    kPath2FieldNumber = 4,
+    kLocationFieldNumber = 5,
     kZombieidFieldNumber = 1,
     kPacketTypeFieldNumber = 3,
   };
-  // .Protocol.Vector3 path = 2;
-  bool has_path() const;
+  // .Protocol.Vector3 path1 = 2;
+  bool has_path1() const;
   private:
-  bool _internal_has_path() const;
+  bool _internal_has_path1() const;
   public:
-  void clear_path();
-  const ::Protocol::Vector3& path() const;
-  PROTOBUF_NODISCARD ::Protocol::Vector3* release_path();
-  ::Protocol::Vector3* mutable_path();
-  void set_allocated_path(::Protocol::Vector3* path);
+  void clear_path1();
+  const ::Protocol::Vector3& path1() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector3* release_path1();
+  ::Protocol::Vector3* mutable_path1();
+  void set_allocated_path1(::Protocol::Vector3* path1);
   private:
-  const ::Protocol::Vector3& _internal_path() const;
-  ::Protocol::Vector3* _internal_mutable_path();
+  const ::Protocol::Vector3& _internal_path1() const;
+  ::Protocol::Vector3* _internal_mutable_path1();
   public:
-  void unsafe_arena_set_allocated_path(
-      ::Protocol::Vector3* path);
-  ::Protocol::Vector3* unsafe_arena_release_path();
+  void unsafe_arena_set_allocated_path1(
+      ::Protocol::Vector3* path1);
+  ::Protocol::Vector3* unsafe_arena_release_path1();
 
-  // .Protocol.Vector3 location = 4;
+  // .Protocol.Vector3 path2 = 4;
+  bool has_path2() const;
+  private:
+  bool _internal_has_path2() const;
+  public:
+  void clear_path2();
+  const ::Protocol::Vector3& path2() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector3* release_path2();
+  ::Protocol::Vector3* mutable_path2();
+  void set_allocated_path2(::Protocol::Vector3* path2);
+  private:
+  const ::Protocol::Vector3& _internal_path2() const;
+  ::Protocol::Vector3* _internal_mutable_path2();
+  public:
+  void unsafe_arena_set_allocated_path2(
+      ::Protocol::Vector3* path2);
+  ::Protocol::Vector3* unsafe_arena_release_path2();
+
+  // .Protocol.Vector3 location = 5;
   bool has_location() const;
   private:
   bool _internal_has_location() const;
@@ -1831,7 +1850,8 @@ class ZombiePath final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::Protocol::Vector3* path_;
+    ::Protocol::Vector3* path1_;
+    ::Protocol::Vector3* path2_;
     ::Protocol::Vector3* location_;
     uint32_t zombieid_;
     uint32_t packet_type_;
@@ -4151,45 +4171,45 @@ inline void ZombiePath::set_zombieid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.ZombiePath.zombieid)
 }
 
-// .Protocol.Vector3 path = 2;
-inline bool ZombiePath::_internal_has_path() const {
-  return this != internal_default_instance() && _impl_.path_ != nullptr;
+// .Protocol.Vector3 path1 = 2;
+inline bool ZombiePath::_internal_has_path1() const {
+  return this != internal_default_instance() && _impl_.path1_ != nullptr;
 }
-inline bool ZombiePath::has_path() const {
-  return _internal_has_path();
+inline bool ZombiePath::has_path1() const {
+  return _internal_has_path1();
 }
-inline void ZombiePath::clear_path() {
-  if (GetArenaForAllocation() == nullptr && _impl_.path_ != nullptr) {
-    delete _impl_.path_;
+inline void ZombiePath::clear_path1() {
+  if (GetArenaForAllocation() == nullptr && _impl_.path1_ != nullptr) {
+    delete _impl_.path1_;
   }
-  _impl_.path_ = nullptr;
+  _impl_.path1_ = nullptr;
 }
-inline const ::Protocol::Vector3& ZombiePath::_internal_path() const {
-  const ::Protocol::Vector3* p = _impl_.path_;
+inline const ::Protocol::Vector3& ZombiePath::_internal_path1() const {
+  const ::Protocol::Vector3* p = _impl_.path1_;
   return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector3&>(
       ::Protocol::_Vector3_default_instance_);
 }
-inline const ::Protocol::Vector3& ZombiePath::path() const {
-  // @@protoc_insertion_point(field_get:Protocol.ZombiePath.path)
-  return _internal_path();
+inline const ::Protocol::Vector3& ZombiePath::path1() const {
+  // @@protoc_insertion_point(field_get:Protocol.ZombiePath.path1)
+  return _internal_path1();
 }
-inline void ZombiePath::unsafe_arena_set_allocated_path(
-    ::Protocol::Vector3* path) {
+inline void ZombiePath::unsafe_arena_set_allocated_path1(
+    ::Protocol::Vector3* path1) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.path_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.path1_);
   }
-  _impl_.path_ = path;
-  if (path) {
+  _impl_.path1_ = path1;
+  if (path1) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.ZombiePath.path)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.ZombiePath.path1)
 }
-inline ::Protocol::Vector3* ZombiePath::release_path() {
+inline ::Protocol::Vector3* ZombiePath::release_path1() {
   
-  ::Protocol::Vector3* temp = _impl_.path_;
-  _impl_.path_ = nullptr;
+  ::Protocol::Vector3* temp = _impl_.path1_;
+  _impl_.path1_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -4201,44 +4221,44 @@ inline ::Protocol::Vector3* ZombiePath::release_path() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::Protocol::Vector3* ZombiePath::unsafe_arena_release_path() {
-  // @@protoc_insertion_point(field_release:Protocol.ZombiePath.path)
+inline ::Protocol::Vector3* ZombiePath::unsafe_arena_release_path1() {
+  // @@protoc_insertion_point(field_release:Protocol.ZombiePath.path1)
   
-  ::Protocol::Vector3* temp = _impl_.path_;
-  _impl_.path_ = nullptr;
+  ::Protocol::Vector3* temp = _impl_.path1_;
+  _impl_.path1_ = nullptr;
   return temp;
 }
-inline ::Protocol::Vector3* ZombiePath::_internal_mutable_path() {
+inline ::Protocol::Vector3* ZombiePath::_internal_mutable_path1() {
   
-  if (_impl_.path_ == nullptr) {
+  if (_impl_.path1_ == nullptr) {
     auto* p = CreateMaybeMessage<::Protocol::Vector3>(GetArenaForAllocation());
-    _impl_.path_ = p;
+    _impl_.path1_ = p;
   }
-  return _impl_.path_;
+  return _impl_.path1_;
 }
-inline ::Protocol::Vector3* ZombiePath::mutable_path() {
-  ::Protocol::Vector3* _msg = _internal_mutable_path();
-  // @@protoc_insertion_point(field_mutable:Protocol.ZombiePath.path)
+inline ::Protocol::Vector3* ZombiePath::mutable_path1() {
+  ::Protocol::Vector3* _msg = _internal_mutable_path1();
+  // @@protoc_insertion_point(field_mutable:Protocol.ZombiePath.path1)
   return _msg;
 }
-inline void ZombiePath::set_allocated_path(::Protocol::Vector3* path) {
+inline void ZombiePath::set_allocated_path1(::Protocol::Vector3* path1) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.path_;
+    delete _impl_.path1_;
   }
-  if (path) {
+  if (path1) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(path);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(path1);
     if (message_arena != submessage_arena) {
-      path = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, path, submessage_arena);
+      path1 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, path1, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.path_ = path;
-  // @@protoc_insertion_point(field_set_allocated:Protocol.ZombiePath.path)
+  _impl_.path1_ = path1;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.ZombiePath.path1)
 }
 
 // uint32 packet_type = 3;
@@ -4261,7 +4281,97 @@ inline void ZombiePath::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.ZombiePath.packet_type)
 }
 
-// .Protocol.Vector3 location = 4;
+// .Protocol.Vector3 path2 = 4;
+inline bool ZombiePath::_internal_has_path2() const {
+  return this != internal_default_instance() && _impl_.path2_ != nullptr;
+}
+inline bool ZombiePath::has_path2() const {
+  return _internal_has_path2();
+}
+inline void ZombiePath::clear_path2() {
+  if (GetArenaForAllocation() == nullptr && _impl_.path2_ != nullptr) {
+    delete _impl_.path2_;
+  }
+  _impl_.path2_ = nullptr;
+}
+inline const ::Protocol::Vector3& ZombiePath::_internal_path2() const {
+  const ::Protocol::Vector3* p = _impl_.path2_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector3&>(
+      ::Protocol::_Vector3_default_instance_);
+}
+inline const ::Protocol::Vector3& ZombiePath::path2() const {
+  // @@protoc_insertion_point(field_get:Protocol.ZombiePath.path2)
+  return _internal_path2();
+}
+inline void ZombiePath::unsafe_arena_set_allocated_path2(
+    ::Protocol::Vector3* path2) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.path2_);
+  }
+  _impl_.path2_ = path2;
+  if (path2) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.ZombiePath.path2)
+}
+inline ::Protocol::Vector3* ZombiePath::release_path2() {
+  
+  ::Protocol::Vector3* temp = _impl_.path2_;
+  _impl_.path2_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vector3* ZombiePath::unsafe_arena_release_path2() {
+  // @@protoc_insertion_point(field_release:Protocol.ZombiePath.path2)
+  
+  ::Protocol::Vector3* temp = _impl_.path2_;
+  _impl_.path2_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vector3* ZombiePath::_internal_mutable_path2() {
+  
+  if (_impl_.path2_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vector3>(GetArenaForAllocation());
+    _impl_.path2_ = p;
+  }
+  return _impl_.path2_;
+}
+inline ::Protocol::Vector3* ZombiePath::mutable_path2() {
+  ::Protocol::Vector3* _msg = _internal_mutable_path2();
+  // @@protoc_insertion_point(field_mutable:Protocol.ZombiePath.path2)
+  return _msg;
+}
+inline void ZombiePath::set_allocated_path2(::Protocol::Vector3* path2) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.path2_;
+  }
+  if (path2) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(path2);
+    if (message_arena != submessage_arena) {
+      path2 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, path2, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.path2_ = path2;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.ZombiePath.path2)
+}
+
+// .Protocol.Vector3 location = 5;
 inline bool ZombiePath::_internal_has_location() const {
   return this != internal_default_instance() && _impl_.location_ != nullptr;
 }
