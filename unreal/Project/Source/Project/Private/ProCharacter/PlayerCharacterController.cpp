@@ -217,9 +217,15 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			(*zombie)->SetActorLocation(tmp_path.Location);
 		
 		// 좀비 목적지 설정
-		// Path1, Path2로 변경되어 Path->Path1로 임시 변경
-		if(tmp_path.Path1.empty() == false)
-			(*zombie)->NextPath = *(tmp_path.Path1.begin());
+		if (tmp_path.Path1.empty() == false) 
+			(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
+		else
+			(*zombie)->NextPath[0] = std::tuple<float, float, float>();
+		
+		if (tmp_path.Path2.empty() == false)
+			(*zombie)->NextPath[1] = *(tmp_path.Path2.begin());
+		else
+			(*zombie)->NextPath[1] = std::tuple<float, float, float>();
 	}
 
 }

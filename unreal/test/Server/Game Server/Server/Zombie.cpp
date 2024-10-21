@@ -393,21 +393,6 @@ void Zombie::MoveTo(float deltasecond)
 	float PathX = get<0>(TargetNode);
 	float PathY = get<1>(TargetNode);
 
-	/*if (ZombieData.zombietype == 0) {
-		//ZombieSpeed = 200.f;
-	}
-	else if (ZombieData.zombietype == 1) {
-		//ZombieSpeed = 300.f;
-	}
-	else if (ZombieData.zombietype == 2) {
-		//ZombieSpeed = 400.f;
-	}
-	else {
-		cout << "MOVETO ZOMBIE TYPE ERROR" << endl;
-		return;
-	}*/
-
-
 	// 타겟 방향 계산
 	float dx = PathX - ZombieData.x;
 	float dy = PathY - ZombieData.y;
@@ -442,6 +427,12 @@ void Zombie::MoveTo(float deltasecond)
 			//cout << "Zombie #" << ZombieData.zombieID << " 경로 끝 도착." << endl;
 			ReachFinalDestination();
 			ZombiePathIndex = 1;
+		}
+		else {	// 꼭지점을 넘어 갈 때
+			float mid_deltasecond = newDistance / ZombieSpeed;
+			float after_deltasecond = deltasecond - mid_deltasecond;
+
+			MoveTo(after_deltasecond);
 		}
 	}
 	else {

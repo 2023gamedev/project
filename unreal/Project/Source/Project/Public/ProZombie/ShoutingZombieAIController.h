@@ -44,9 +44,9 @@ public:
 
 	void UpdateLastKnownPositionByFootSound(FVector playerlocation);
 
-	void ZombieMoveTo(float deltasecond);
+	void ZombieMoveTo(float deltasecond, int& indx);
 
-	void ZombieTurn(float deltasecond);
+	void ZombieTurn(float deltasecond, int& indx);
 
 	//void StopAI();
 	//void StartAI();

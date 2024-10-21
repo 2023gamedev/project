@@ -254,7 +254,7 @@ public:
 
 	FVector OldLocation = FVector(0.0f, 0.0f, 0.0f);
 
-	std::tuple<float, float, float> NextPath;
+	std::tuple<float, float, float> NextPath[2];
 
 	//float Speed;
 	//float PreviousSpeed;

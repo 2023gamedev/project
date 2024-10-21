@@ -44,7 +44,7 @@ void ARunningZombieAIController::BeginPlay()
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
-void ARunningZombieAIController::ZombieMoveTo(float deltasecond)
+void ARunningZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 {
 	FVector zomlocation;
 
@@ -52,7 +52,7 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond)
 		zomlocation = OwnerZombie->GetActorLocation();
 	}
 
-	std::tuple<float, float, float> target = OwnerZombie->NextPath;
+	std::tuple<float, float, float> target = OwnerZombie->NextPath[indx];
 
 	// 현재 목표 노드
 	float PathX = get<0>(target);
@@ -67,10 +67,8 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond)
 		FVector End = Pos - FVector(0, 0, 100);
 		FCollisionQueryParams Params;
 
-
 		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
 	}
-
 
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
@@ -98,13 +96,26 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond)
 	float moveX = directionX * moveDistance;
 	float moveY = directionY * moveDistance;
 
-
 	// 목표에 도착했는지 확인
 	float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
 
 	if (newDistance < moveDistance) {
 		zomlocation.X = PathX;
 		zomlocation.Y = PathY;
+
+		// 다음 목표 노드로 이동
+		indx++;
+
+		// 경로의 끝에 도착 = 최종 목표지점에 도착
+		if (get<0>(OwnerZombie->NextPath[indx]) == 0 && get<1>(OwnerZombie->NextPath[indx]) == 0 && get<2>(OwnerZombie->NextPath[indx]) == 0) {
+			indx--;
+		}
+		else {	// 꼭지점을 넘어 갈 때
+			float mid_deltasecond = newDistance / OwnerZombie->GetSpeed() * 100.f;
+			float after_deltasecond = deltasecond - mid_deltasecond;
+
+			ZombieMoveTo(after_deltasecond, indx);
+		}
 	}
 	else {
 		// 타겟 방향으로 이동
@@ -117,7 +128,7 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond)
 	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->GetSpeed());
 }
 
-void ARunningZombieAIController::ZombieTurn(float deltasecond)
+void ARunningZombieAIController::ZombieTurn(float deltasecond, int& indx)
 {
 	FVector zombieDest;
 
@@ -165,9 +176,9 @@ void ARunningZombieAIController::ZombieTurn(float deltasecond)
 	// 다 아니면 이동 중이므로
 	else {
 		// 다음 행선지 쪽으로 회전시키기
-		zombieDest.X = get<0>(OwnerZombie->NextPath);
-		zombieDest.Y = get<1>(OwnerZombie->NextPath);
-		zombieDest.Z = get<2>(OwnerZombie->NextPath);
+		zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
+		zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
+		zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
 	}
 
 	FVector zomTarDir = zombieDest - OwnerZombie->GetActorLocation();
@@ -204,8 +215,9 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 		return;
 	}
 
-	ZombieMoveTo(DeltaTime);
-	ZombieTurn(DeltaTime);
+	int indx = 0;
+	ZombieMoveTo(DeltaTime, indx);
+	ZombieTurn(DeltaTime, indx);
 
 
 	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
