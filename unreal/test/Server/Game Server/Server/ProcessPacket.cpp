@@ -29,7 +29,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         clientInfo->isInGame = true;
         b_Timer = true;
         zombieclass->SendZombieData(id);
-        //itemclass->SendItemData(id);
+        itemclass->SendItemData(id);
         //printf("SendZombieData!! Playerid=#%d\n", id);
     }
 
