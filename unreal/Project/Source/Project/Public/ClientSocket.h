@@ -18,7 +18,7 @@
 #include "Windows/HideWindowsPlatformTypes.h"
 
 
-constexpr int BUFSIZE = 1024;
+constexpr int BUFSIZE = 8192;
 
 enum class ServerType { LOBBY_SERVER, GAME_SERVER };
 

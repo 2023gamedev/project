@@ -1,12 +1,15 @@
 #include "ItemController.h"
 
-uniform_int_distribution uid;
+random_device rd;
+uniform_int_distribution Cuid(0, 6);
 
 ItemController::ItemController(IOCP_CORE& mainServer)
 {
 	iocpServer = &mainServer;
 
     ItemRandomLocationSetting();
+    CarActorRandomLocationSetting();
+    CarKeyRandomSetting();
 
     SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_B1);
     SpawnItemBoxes(1, "FireExtinguisher", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireEx.InvenFireEx", 1, FLOOR::FLOOR_B1);
@@ -79,14 +82,14 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     SpawnItemBoxes(58, "CarKey3", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 10, FLOOR::FLOOR_F2);
     SpawnItemBoxes(59, "CarKey4", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 20, FLOOR::FLOOR_F2);
 
-    //SpawnInterItem(0, "CarActor");
-    //SpawnInterItem(1, "CarActor");
-    //SpawnInterItem(2, "CarActor");
-    //SpawnInterItem(3, "CarActor");
-    //SpawnInterItem(4, "CarActor");
-    //SpawnInterItem(5, "CarActor");
-    //SpawnInterItem(6, "CarActor");
-    //SpawnInterItem(7, "RoofTopDoorActor");
+    SpawnInterItem(0, "CarActor");
+    SpawnInterItem(1, "CarActor");
+    SpawnInterItem(2, "CarActor");
+    SpawnInterItem(3, "CarActor");
+    SpawnInterItem(4, "CarActor");
+    SpawnInterItem(5, "CarActor");
+    SpawnInterItem(6, "CarActor");
+    SpawnInterItem(7, "RoofTopDoorActor");
 
     
 }
@@ -211,11 +214,10 @@ FVector ItemController::RandomItemLocation(FLOOR itemfloor)
         MaxIndex = 59;
     }
 
-    random_device rd;
-    uniform_int_distribution<> uid(MinIndex, MaxIndex);
+    uniform_int_distribution Iuid(MinIndex, MaxIndex);
 
     while (true) {
-        RandomNumber = uid(rd);
+        RandomNumber = Iuid(rd);
 
         if (!ItemRandomLocationStruct[RandomNumber].bIsSeatLocation) {
             ItemRandomLocationStruct[RandomNumber].bIsSeatLocation = true;
@@ -245,7 +247,7 @@ void ItemController::SpawnItemBoxes(int itemID, std::string itemName, EItemClass
 
     items.push_back(newItemData);
 
-    printf("Spawned Item ID: %d, itemName: %s\n", itemID, itemName.c_str());
+    //printf("Spawned Item ID: %d, itemName: %s\n", itemID, itemName.c_str());
 }
 
 void ItemController::SendItemData(int id)
@@ -274,4 +276,91 @@ void ItemController::SendItemData(int id)
     cout << "Serialized data size: " << serializedData.size() << endl;
 
     iocpServer->IOCP_SendPacket(id, serializedData.data(), serializedData.size());
+}
+
+
+int ItemController::RandomCarActorLocation()
+{
+    int RandomNumber = 0;
+
+    while (true) {
+        RandomNumber = Cuid(rd);
+
+        if (!CarActorRandomLocationStruct[RandomNumber].bIsSeatLocation) {
+            CarActorRandomLocationStruct[RandomNumber].bIsSeatLocation = true;
+            return RandomNumber;
+        }
+    }
+
+
+    return -1;
+}
+
+int ItemController::RandomCarKey()
+{
+    int RandomNumber = 0;
+
+    while (true) {
+        RandomNumber = Cuid(rd);
+
+        if (!CarKeyRandom[RandomNumber].bIsSeatCarKey) {
+            CarKeyRandom[RandomNumber].bIsSeatCarKey = true;
+            return RandomNumber;
+        }
+    }
+
+    return -1;
+}
+
+void ItemController::CarActorRandomLocationSetting()
+{
+    CarActorRandomLocationStruct[0].sLocation = FVector(1772.f, 978.f, 60.f);
+    CarActorRandomLocationStruct[1].sLocation = FVector(1662.f, 1678.f, 60.f);
+    CarActorRandomLocationStruct[2].sLocation = FVector(722.f, 978.f, 60.f);
+    CarActorRandomLocationStruct[3].sLocation = FVector(1142.f, 2068.f, 60.f);
+    CarActorRandomLocationStruct[4].sLocation = FVector(632.f, 2688.f, 60.f);
+    CarActorRandomLocationStruct[5].sLocation = FVector(1492.f, 2680.f, 60.f);
+    CarActorRandomLocationStruct[6].sLocation = FVector(1122.f, 3468.f, 60.f);
+
+    CarActorRandomLocationStruct[0].sRotation = FRotator(0.f, -30.f, 0.f);
+    CarActorRandomLocationStruct[1].sRotation = FRotator(0.f, 30.f, 0.f);
+    CarActorRandomLocationStruct[2].sRotation = FRotator(0.f, -50.f, 0.f);
+    CarActorRandomLocationStruct[3].sRotation = FRotator(0.f, 30.f, 0.f);
+    CarActorRandomLocationStruct[4].sRotation = FRotator(0.f, -30.f, 0.f);
+    CarActorRandomLocationStruct[5].sRotation = FRotator(0.f, -130.f, 0.f);
+    CarActorRandomLocationStruct[6].sRotation = FRotator(0.f, -70.f, 0.f);
+
+    for (int i = 0; i < 7; ++i) {
+        CarActorRandomLocationStruct[i].bIsSeatLocation = false;
+    }
+
+}
+
+void ItemController::CarKeyRandomSetting()
+{
+    CarKeyRandom[0].CarKeyName = "CarKey1";
+    CarKeyRandom[1].CarKeyName = "CarKey2";
+    CarKeyRandom[2].CarKeyName = "CarKey3";
+    CarKeyRandom[3].CarKeyName = "CarKey4";
+    CarKeyRandom[4].CarKeyName = "None";
+    CarKeyRandom[5].CarKeyName = "None";
+    CarKeyRandom[6].CarKeyName = "None";
+
+    for (int i = 0; i < 7; ++i) {
+        CarKeyRandom[i].bIsSeatCarKey = false;
+    }
+}
+
+void ItemController::SpawnInterItem(int carid, const std::string carname)
+{
+    Car_Data newCarData;
+
+    newCarData.carID = carid;
+    newCarData.carName = carname;
+
+    // 아이템 초기 위치 설정 (예: 임의의 위치 설정)
+    int RandomValue = RandomCarActorLocation();
+    int Randomkey = RandomCarKey();
+    FVector Location = CarActorRandomLocationStruct[RandomValue].sLocation;
+    FRotator Rotation = CarActorRandomLocationStruct[RandomValue].sRotation;
 }

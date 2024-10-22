@@ -256,16 +256,6 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				break;
 			}
 
-			/*case 6:
-			{
-				Protocol::run runPacket;
-				if (runPacket.ParseFromArray(buffer.data(), buffer.size()))
-				{
-					Q_run.push(PlayerRun(runPacket.playerid(), runPacket.b_run()));
-				}
-				break;
-			}*/
-
 			case 7:
 			{
 				Protocol::jump jumpPacket;
@@ -357,7 +347,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 					for (const auto& item : itemdatalist.items()) {
 						Q_setitem.push(Set_Item(item.itemid(), item.itemname(), item.itemclass(), item.texture_path(),
 							item.count(), item.floor(), FVector(item.posx(), item.posy(), item.posz())));
-						UE_LOG(LogNet, Display, TEXT("Set Itempacket"));
+						//UE_LOG(LogNet, Display, TEXT("Set Itempacket"));
 					}
 				}
 				break;

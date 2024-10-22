@@ -34,15 +34,43 @@ struct Item_Data {
 		count(cnt), itemFloor(floor), x(posX), y(posY), z(posZ) {}
 };
 
+struct Car_Data {
+	int carID;
+	std::string carName;
+
+	Car_Data()
+		: carID(0), carName("") {}
+
+	Car_Data(int id, const std::string& name)
+		: carID(id), carName(name) {}
+};
+
 
 struct FVector {
 	float x, y, z;
+};
+
+struct FRotator {
+	float Pitch, Yaw, Roll;
 };
 
 struct ItemRandomLocation
 {
 	FVector sLocation;                  // 위치가 어딘가
 	bool    bIsSeatLocation = false;    // 위치에 누가 이미 차지하고 있는가 true 
+};
+
+struct CarActorRandomLocation
+{
+	FVector sLocation;
+	FRotator sRotation;
+	bool bIsSeatLocation = false;
+};
+
+struct CarKeyRandom
+{
+	std::string CarKeyName;
+	bool bIsSeatCarKey = false;
 };
 
 
@@ -53,18 +81,24 @@ public:
 	~ItemController();
 
 	void ItemRandomLocationSetting();
-
     FVector RandomItemLocation(FLOOR itemfloor);
-
 	void SpawnItemBoxes(int itemboxindex, std::string itemname, EItemClass itemclass, string texture, int count, FLOOR itemfloor);
-
 	void SendItemData(int id);
+
+	int RandomCarActorLocation();
+	int RandomCarKey();
+	void CarActorRandomLocationSetting();
+	void CarKeyRandomSetting();
+	void SpawnInterItem(int carid, const std::string carname);
 
 public:
 	IOCP_CORE* iocpServer;
 
 	ItemRandomLocation  ItemRandomLocationStruct[60];
+	CarActorRandomLocation CarActorRandomLocationStruct[7];
+	CarKeyRandom CarKeyRandom[7];
 
 	std::vector<Item_Data> items;
+	std::vector<Car_Data> cars;
 };
 

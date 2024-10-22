@@ -444,10 +444,11 @@ int32 AOneGameModeBase::RandomCarKey()
 
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos)
 {
-    if (ItemBoxClasses.Num() <= itemboxindex) {
-        ItemBoxClasses.SetNum(itemboxindex + 1); // 필요한 만큼 확장
-    }
+    //if (ItemBoxClasses.Num() <= itemboxindex) {
+    //    ItemBoxClasses.SetNum(itemboxindex + 1); // 필요한 만큼 확장
+    //}
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    //ItemBoxClasses[itemboxindex] = AItemBoxActor::StaticClass();
     UE_LOG(LogTemp, Log, TEXT("ItemBoxClasses size: %d"), ItemBoxClasses.Num());
 
     TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
