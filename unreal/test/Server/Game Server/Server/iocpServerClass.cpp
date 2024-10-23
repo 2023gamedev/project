@@ -47,7 +47,7 @@ IOCP_CORE::IOCP_CORE()
 	filePath = "../../../../Project/EdgesF2.txt";
 	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
 	
-	//timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
+	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 	
 	//==========Zombie_BT √ ±‚»≠
 	Zombie_BT_Initialize();

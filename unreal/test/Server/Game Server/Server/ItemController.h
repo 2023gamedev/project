@@ -105,7 +105,7 @@ public:
 
 	ItemRandomLocation  ItemRandomLocationStruct[60];
 	CarActorRandomLocation CarActorRandomLocationStruct[7];
-	CarKeyRandom CarKeyRandom[7];
+	CarKeyRandom CarKeyRandomStruct[7];
 
 	std::vector<Item_Data> items;
 	std::vector<Car_Data> cars;

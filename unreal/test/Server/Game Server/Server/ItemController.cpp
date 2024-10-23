@@ -303,8 +303,8 @@ int ItemController::RandomCarKey()
     while (true) {
         RandomNumber = Cuid(rd);
 
-        if (!CarKeyRandom[RandomNumber].bIsSeatCarKey) {
-            CarKeyRandom[RandomNumber].bIsSeatCarKey = true;
+        if (!CarKeyRandomStruct[RandomNumber].bIsSeatCarKey) {
+            CarKeyRandomStruct[RandomNumber].bIsSeatCarKey = true;
             return RandomNumber;
         }
     }
@@ -338,16 +338,16 @@ void ItemController::CarActorRandomLocationSetting()
 
 void ItemController::CarKeyRandomSetting()
 {
-    CarKeyRandom[0].CarKeyName = "CarKey1";
-    CarKeyRandom[1].CarKeyName = "CarKey2";
-    CarKeyRandom[2].CarKeyName = "CarKey3";
-    CarKeyRandom[3].CarKeyName = "CarKey4";
-    CarKeyRandom[4].CarKeyName = "None";
-    CarKeyRandom[5].CarKeyName = "None";
-    CarKeyRandom[6].CarKeyName = "None";
+    CarKeyRandomStruct[0].CarKeyName = "CarKey1";
+    CarKeyRandomStruct[1].CarKeyName = "CarKey2";
+    CarKeyRandomStruct[2].CarKeyName = "CarKey3";
+    CarKeyRandomStruct[3].CarKeyName = "CarKey4";
+    CarKeyRandomStruct[4].CarKeyName = "None";
+    CarKeyRandomStruct[5].CarKeyName = "None";
+    CarKeyRandomStruct[6].CarKeyName = "None";
 
     for (int i = 0; i < 7; ++i) {
-        CarKeyRandom[i].bIsSeatCarKey = false;
+        CarKeyRandomStruct[i].bIsSeatCarKey = false;
     }
 }
 
@@ -358,22 +358,36 @@ void ItemController::SpawnInterItem(int carid, const std::string carname)
     newCarData.carID = carid;
     newCarData.carName = carname;
 
-    // 아이템 초기 위치 설정 (예: 임의의 위치 설정)
-    int RandomValue = RandomCarActorLocation();
-    int Randomkey = RandomCarKey();
-    FVector Location = CarActorRandomLocationStruct[RandomValue].sLocation;
-    FRotator Rotation = CarActorRandomLocationStruct[RandomValue].sRotation;
-    std::string CarKey = CarKeyRandom[Randomkey].CarKeyName;
+    if (carname == "RoofTopDoorActor"){
+        newCarData.x = 2410.f;
+        newCarData.y = 200.f;
+        newCarData.z = 3940.f;
 
-    newCarData.x = Location.x;
-    newCarData.y = Location.y;
-    newCarData.z = Location.z;
+        newCarData.pitch = 0.f;
+        newCarData.yaw = 0.f;
+        newCarData.roll = 0.f;
 
-    newCarData.pitch = Rotation.Pitch;
-    newCarData.yaw = Rotation.Yaw;
-    newCarData.roll = Rotation.Roll;
+        newCarData.carkeyName = "";
+    }
 
-    newCarData.carkeyName = CarKey;
+    else {
+        // 아이템 초기 위치 설정 (예: 임의의 위치 설정)
+        int RandomValue = RandomCarActorLocation();
+        int Randomkey = RandomCarKey();
+        FVector Location = CarActorRandomLocationStruct[RandomValue].sLocation;
+        FRotator Rotation = CarActorRandomLocationStruct[RandomValue].sRotation;
+        std::string CarKey = CarKeyRandomStruct[Randomkey].CarKeyName;
+
+        newCarData.x = Location.x;
+        newCarData.y = Location.y;
+        newCarData.z = Location.z;
+
+        newCarData.pitch = Rotation.Pitch;
+        newCarData.yaw = Rotation.Yaw;
+        newCarData.roll = Rotation.Roll;
+
+        newCarData.carkeyName = CarKey;
+    }
 
     cars.push_back(newCarData);
 }
