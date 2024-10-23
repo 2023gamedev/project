@@ -164,6 +164,23 @@ struct Set_Item
 		: itemid(Initemid), itemname(Initemname), itemclass(Initemclass), texture_path(Intexture_path), count(Incount), floor(Infloor), itempos(Initempos) {}
 };
 
+struct Set_Car
+{
+	uint32 carid;
+	std::string carname;
+	FVector carpos;
+	FRotator carrotator;
+	std::string carkeyname;
+
+	Set_Car()
+		: carid(0), carname(""), carpos(FVector::ZeroVector),
+		carrotator(FRotator::ZeroRotator), carkeyname("") {}
+
+	Set_Car(uint32 id, const std::string& name, const FVector& pos, const FRotator& rot, const std::string& keyname)
+		: carid(id), carname(name), carpos(pos), carrotator(rot), carkeyname(keyname) {}
+};
+
+
 
 class UProGameInstance;
 
@@ -190,6 +207,7 @@ public:
 	Concurrency::concurrent_queue<ZombieHP> Q_zhp;
 	Concurrency::concurrent_queue<ZombieAttack> Q_zattack;
 	Concurrency::concurrent_queue<Set_Item> Q_setitem;
+	Concurrency::concurrent_queue<Set_Car> Q_setcar;
 
 
 	virtual bool Init() override;

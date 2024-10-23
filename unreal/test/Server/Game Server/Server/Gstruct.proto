@@ -124,3 +124,21 @@ message ItemDataList {
     repeated set_item items = 1;
     uint32 packet_type = 3;
 }
+
+message set_car{
+    uint32 carid = 1;
+    string carname = 2;
+    uint32 packet_type = 3;
+    float posx = 4;
+    float posy = 5;
+    float posz = 6;
+    float pitch = 7;
+    float yaw = 8;
+    float roll = 9;
+    string carkeyname = 10;
+}
+
+message CarDataList{
+    repeated set_car cars = 1;
+    uint32 packet_type = 3;
+}

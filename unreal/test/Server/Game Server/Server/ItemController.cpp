@@ -363,4 +363,43 @@ void ItemController::SpawnInterItem(int carid, const std::string carname)
     int Randomkey = RandomCarKey();
     FVector Location = CarActorRandomLocationStruct[RandomValue].sLocation;
     FRotator Rotation = CarActorRandomLocationStruct[RandomValue].sRotation;
+    std::string CarKey = CarKeyRandom[Randomkey].CarKeyName;
+
+    newCarData.x = Location.x;
+    newCarData.y = Location.y;
+    newCarData.z = Location.z;
+
+    newCarData.pitch = Rotation.Pitch;
+    newCarData.yaw = Rotation.Yaw;
+    newCarData.roll = Rotation.Roll;
+
+    newCarData.carkeyName = CarKey;
+
+    cars.push_back(newCarData);
+}
+
+void ItemController::SendCarData(int id)
+{
+    Protocol::CarDataList carDataList;
+
+    for (const auto& car : cars) {
+        Protocol::set_car* carProto = carDataList.add_cars();
+        carProto->set_carid(car.carID);
+        carProto->set_carname(car.carName);
+        carProto->set_posx(car.x);
+        carProto->set_posy(car.y);
+        carProto->set_posz(car.z);
+        carProto->set_pitch(car.pitch);
+        carProto->set_yaw(car.yaw);
+        carProto->set_roll(car.roll);
+        carProto->set_carkeyname(car.carkeyName);
+    }
+
+    carDataList.set_packet_type(16);
+
+    std::string serializedData;
+    carDataList.SerializeToString(&serializedData);
+    cout << "Serialized data size: " << serializedData.size() << endl;
+
+    iocpServer->IOCP_SendPacket(id, serializedData.data(), serializedData.size());
 }

@@ -30,6 +30,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         b_Timer = true;
         zombieclass->SendZombieData(id);
         itemclass->SendItemData(id);
+        itemclass->SendCarData(id);
         //printf("SendZombieData!! Playerid=#%d\n", id);
     }
 

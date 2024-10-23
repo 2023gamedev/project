@@ -148,6 +148,16 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_setcar.try_pop(recvSetCar)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				FName Fcarname = FName(recvSetCar.carname.c_str());
+				FName Fcarkeyname = FName(recvSetCar.carkeyname.c_str());
+
+				MyGameMode->SpawnItemBoxes(recvSetItem.itemid, Fitemname, recvSetItem.itemclass, LoadedTexture, recvSetItem.count, recvSetItem.floor, recvSetItem.itempos);
+			}
+		}
+
 		//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);
 		if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 		{

@@ -62,15 +62,6 @@ AOneGameModeBase::AOneGameModeBase()
 void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
-    
-    SpawnInterItem(0, "CarActor");
-    SpawnInterItem(1, "CarActor");
-    SpawnInterItem(2, "CarActor");
-    SpawnInterItem(3, "CarActor");
-    SpawnInterItem(4, "CarActor");
-    SpawnInterItem(5, "CarActor");
-    SpawnInterItem(6, "CarActor");
-    SpawnInterItem(7, "RoofTopDoorActor");
 
 
     ZombieMap.Empty(); // ZombieMap 초기화
@@ -277,133 +268,6 @@ void AOneGameModeBase::ChoiceCharacter()
 }
 
 
-void AOneGameModeBase::ItemRandomLocationSetting()
-{
-    // 0~19은 B1 20~39는 F1 40~59는 F2
-// B1
-    ItemRandomLocationStruct[0].sLocation = FVector(2330.f, 3200.f, 975.0626f);
-    ItemRandomLocationStruct[1].sLocation = FVector(1880.f, 3870.f, 975.0626f);
-    ItemRandomLocationStruct[2].sLocation = FVector(400.f, 3650.f, 975.0626f);
-
-    ItemRandomLocationStruct[3].sLocation = FVector(1000.f, 2800.f, 975.0626f);
-    ItemRandomLocationStruct[4].sLocation = FVector(2200.f, 3300.f, 975.0626f);
-    ItemRandomLocationStruct[5].sLocation = FVector(1770.f, 2170.f, 975.0626f);
-
-    ItemRandomLocationStruct[6].sLocation = FVector(440.f, 2310.f, 975.0626f);
-    ItemRandomLocationStruct[7].sLocation = FVector(2300.f, 1800.f, 975.0626f);
-    ItemRandomLocationStruct[8].sLocation = FVector(820.f, 1650.f, 975.0626f);
-
-    ItemRandomLocationStruct[9].sLocation = FVector(120.f, 1200.f, 975.0626f);
-    ItemRandomLocationStruct[10].sLocation = FVector(270.f, 2000.f, 975.0626f);
-    ItemRandomLocationStruct[11].sLocation = FVector(1870.f, 800.f, 975.0626f);
-
-    ItemRandomLocationStruct[12].sLocation = FVector(1200.f, 100.f, 975.0626f);
-    ItemRandomLocationStruct[13].sLocation = FVector(30.f, 540.f, 975.0626f);
-    ItemRandomLocationStruct[14].sLocation = FVector(500.f, -238.f, 975.0626f);
-
-    ItemRandomLocationStruct[15].sLocation = FVector(1200.f, -976.f, 975.0626f);
-    ItemRandomLocationStruct[16].sLocation = FVector(480.f, 800.f, 975.0626f);
-    ItemRandomLocationStruct[17].sLocation = FVector(2330.f, 400.f, 975.0626f);
-
-    ItemRandomLocationStruct[18].sLocation = FVector(730.f, 2130.f, 975.0626f);
-    ItemRandomLocationStruct[19].sLocation = FVector(30.f, 3540.f, 975.0626f);
-
-
-    // F1
-    ItemRandomLocationStruct[20].sLocation = FVector(1200.f, 70.f, 1929.0626f);
-    ItemRandomLocationStruct[21].sLocation = FVector(180.f, 520.f, 1929.0626f);
-    ItemRandomLocationStruct[22].sLocation = FVector(1200.f, -817.f, 1929.0626f);
-
-    ItemRandomLocationStruct[23].sLocation = FVector(800.f, -817.f, 1929.0626f);
-    ItemRandomLocationStruct[24].sLocation = FVector(165.f, 960.f, 1929.0626f);
-    ItemRandomLocationStruct[25].sLocation = FVector(1980.f, 1100.f, 1929.0626f);
-
-    ItemRandomLocationStruct[26].sLocation = FVector(1390.f, 800.f, 1929.0626f);
-    ItemRandomLocationStruct[27].sLocation = FVector(400.f, 1680.f, 1929.0626f);
-    ItemRandomLocationStruct[28].sLocation = FVector(1100.f, 1260.f, 1929.0626f);
-
-    ItemRandomLocationStruct[29].sLocation = FVector(70.f, 2390.f, 1929.0626f);
-    ItemRandomLocationStruct[30].sLocation = FVector(550.f, 2520.f, 1929.0626f);
-    ItemRandomLocationStruct[31].sLocation = FVector(200.f, 2800.f, 1929.0626f);
-
-    ItemRandomLocationStruct[32].sLocation = FVector(1600.f, 3050.f, 1929.0626f);
-    ItemRandomLocationStruct[33].sLocation = FVector(1530.f, 3900.f, 1929.0626f);
-    ItemRandomLocationStruct[34].sLocation = FVector(2340.f, 3850.f, 1929.0626f);
-
-    ItemRandomLocationStruct[35].sLocation = FVector(290.f, 3020.f, 1929.0626f);
-    ItemRandomLocationStruct[36].sLocation = FVector(90.f, 3770.f, 1929.0626f);
-    ItemRandomLocationStruct[37].sLocation = FVector(1050.f, 3350.f, 1929.0626f);
-
-    ItemRandomLocationStruct[38].sLocation = FVector(50.f, 1740.f, 1929.0626f);
-    ItemRandomLocationStruct[39].sLocation = FVector(2280.f, 2620.f, 1929.0626f);
-
-
-    // F2                                                              
-    ItemRandomLocationStruct[40].sLocation = FVector(870.f, -926.f, 2888.0626f);
-    ItemRandomLocationStruct[41].sLocation = FVector(1260.f, -467.f, 2888.0626f);
-    ItemRandomLocationStruct[42].sLocation = FVector(2170.f, 60.f, 2888.0626f);
-
-    ItemRandomLocationStruct[43].sLocation = FVector(460.f, 800.f, 2888.0626f);
-    ItemRandomLocationStruct[44].sLocation = FVector(1100.f, 600.f, 2888.0626f);
-    ItemRandomLocationStruct[45].sLocation = FVector(1600.f, 1140.f, 2888.0626f);
-
-    ItemRandomLocationStruct[46].sLocation = FVector(1200.f, 1300.f, 2888.0626f);
-    ItemRandomLocationStruct[47].sLocation = FVector(1980.f, 1600.f, 2888.0626f);
-    ItemRandomLocationStruct[48].sLocation = FVector(550.f, 1770.f, 2888.0626f);
-
-    ItemRandomLocationStruct[49].sLocation = FVector(170.f, 1120.f, 2888.0626f);
-    ItemRandomLocationStruct[50].sLocation = FVector(1240.f, 2270.f, 2888.0626f);
-    ItemRandomLocationStruct[51].sLocation = FVector(1410.f, 2650.f, 2888.0626f);
-
-    ItemRandomLocationStruct[52].sLocation = FVector(410.f, 3030.f, 2888.0626f);
-    ItemRandomLocationStruct[53].sLocation = FVector(801.f, 3780.f, 2888.0626f);
-    ItemRandomLocationStruct[54].sLocation = FVector(2001.f, 3470.f, 2888.0626f);
-
-    ItemRandomLocationStruct[55].sLocation = FVector(1730.f, 1200.f, 2888.0626f);
-    ItemRandomLocationStruct[56].sLocation = FVector(260.f, 3780.f, 2888.0626f);
-    ItemRandomLocationStruct[57].sLocation = FVector(2310.f, 2040.f, 2888.0626f);
-
-    ItemRandomLocationStruct[58].sLocation = FVector(869.f, 3120.f, 2888.0626f);
-    ItemRandomLocationStruct[59].sLocation = FVector(1140.f, 1460.f, 2888.0626f);
-
-    for (int i = 0; i < 60; ++i) {
-        ItemRandomLocationStruct[i].bIsSeatLocation = false;
-    }
-
-}
-
-FVector AOneGameModeBase::RandomItemBoxLocation(EItemFloor itemfloor)
-{
-    int32 RandomNumber = 0;
-
-    int32 MinIndex = 0;
-    int32 MaxIndex = 0;
-
-
-    if (itemfloor == EItemFloor::FLOORB1) {
-        MinIndex = 0;
-        MaxIndex = 19;
-    }
-    else if (itemfloor == EItemFloor::FLOOR1) {
-        MinIndex = 20;
-        MaxIndex = 39;
-    }
-    else if (itemfloor == EItemFloor::FLOOR2) {
-        MinIndex = 40;
-        MaxIndex = 59;
-    }
-
-    while (true) {
-        RandomNumber = FMath::RandRange(MinIndex, MaxIndex);
-
-        if (!ItemRandomLocationStruct[RandomNumber].bIsSeatLocation) {
-            ItemRandomLocationStruct[RandomNumber].bIsSeatLocation = true;
-            return ItemRandomLocationStruct[RandomNumber].sLocation;
-        }
-    }
-
-    return FVector::ZeroVector;
-}
 
 int32 AOneGameModeBase::RandomCarActorLocation()
 {
@@ -564,7 +428,7 @@ void AOneGameModeBase::CarKeyRandomSetting()
     }
 }
 
-void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName)
+void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FVector carpos, FRotator carrotator, FName carkeyname)
 {
 
     TSubclassOf<AInterActor> SelectedInterActorClass = InterActorClasses[InterActorindex];
@@ -573,12 +437,10 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName)
     FVector Location;
     FRotator Rotation;
     if (InterName == "CarActor") {
-        int RandomValue = RandomCarActorLocation();
-        int Randomkey = RandomCarKey();
-        Location = CarActorRandomLocationStruct[RandomValue].sLocation;
-        Rotation = CarActorRandomLocationStruct[RandomValue].sRotation;
+        Location = carpos;
+        Rotation = carrotator;
 
-        FName CarKey = CarKeyRandom[Randomkey].CarKeyName;
+        FName CarKey = carkeyname;
 
         // 선택된 아이템 박스 클래스로 아이템 박스 생성
         ACarActor* SpawnedCarActor = GetWorld()->SpawnActor<ACarActor>(SelectedInterActorClass, Location, Rotation);

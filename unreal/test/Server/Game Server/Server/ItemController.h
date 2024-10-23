@@ -37,12 +37,19 @@ struct Item_Data {
 struct Car_Data {
 	int carID;
 	std::string carName;
+	float x, y, z;
+	float pitch, yaw, roll;
+	std::string carkeyName;
 
+	// 기본 생성자
 	Car_Data()
-		: carID(0), carName("") {}
+		: carID(0), carName(""), x(0.0f), y(0.0f), z(0.0f),
+		pitch(0.0f), yaw(0.0f), roll(0.0f), carkeyName("") {}
 
+	// 매개변수가 있는 생성자
 	Car_Data(int id, const std::string& name)
-		: carID(id), carName(name) {}
+		: carID(id), carName(name), x(0.0f), y(0.0f), z(0.0f),
+		pitch(0.0f), yaw(0.0f), roll(0.0f), carkeyName("") {}
 };
 
 
@@ -90,6 +97,8 @@ public:
 	void CarActorRandomLocationSetting();
 	void CarKeyRandomSetting();
 	void SpawnInterItem(int carid, const std::string carname);
+
+	void SendCarData(int id);
 
 public:
 	IOCP_CORE* iocpServer;

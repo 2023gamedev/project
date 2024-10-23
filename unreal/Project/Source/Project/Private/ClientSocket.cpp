@@ -352,6 +352,20 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				}
 				break;
 			}
+
+			case 16:
+			{
+				Protocol::CarDataList cardatalist;
+				if (cardatalist.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					for (const auto& car : cardatalist.cars()) {
+						Q_setcar.push(Set_Car(car.carid(), car.carname(), FVector(car.posx(), car.posy(), car.posz()), FRotator(car.pitch(), car.yaw(), car.roll()),
+							car.carkeyname()));
+						//UE_LOG(LogNet, Display, TEXT("Set carpacket"));
+					}
+				}
+				break;
+			}
 			}
 
 		}

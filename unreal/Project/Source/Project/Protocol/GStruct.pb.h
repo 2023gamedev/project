@@ -45,6 +45,9 @@ struct TableStruct_Gstruct_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Gstruct_2eproto;
 namespace Protocol {
+class CarDataList;
+struct CarDataListDefaultTypeInternal;
+extern CarDataListDefaultTypeInternal _CarDataList_default_instance_;
 class Character;
 struct CharacterDefaultTypeInternal;
 extern CharacterDefaultTypeInternal _Character_default_instance_;
@@ -93,11 +96,15 @@ extern patrol_hitDefaultTypeInternal _patrol_hit_default_instance_;
 class ping;
 struct pingDefaultTypeInternal;
 extern pingDefaultTypeInternal _ping_default_instance_;
+class set_car;
+struct set_carDefaultTypeInternal;
+extern set_carDefaultTypeInternal _set_car_default_instance_;
 class set_item;
 struct set_itemDefaultTypeInternal;
 extern set_itemDefaultTypeInternal _set_item_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
+template<> ::Protocol::CarDataList* Arena::CreateMaybeMessage<::Protocol::CarDataList>(Arena*);
 template<> ::Protocol::Character* Arena::CreateMaybeMessage<::Protocol::Character>(Arena*);
 template<> ::Protocol::Character_Attack* Arena::CreateMaybeMessage<::Protocol::Character_Attack>(Arena*);
 template<> ::Protocol::Detected* Arena::CreateMaybeMessage<::Protocol::Detected>(Arena*);
@@ -114,6 +121,7 @@ template<> ::Protocol::Zombie_hp* Arena::CreateMaybeMessage<::Protocol::Zombie_h
 template<> ::Protocol::jump* Arena::CreateMaybeMessage<::Protocol::jump>(Arena*);
 template<> ::Protocol::patrol_hit* Arena::CreateMaybeMessage<::Protocol::patrol_hit>(Arena*);
 template<> ::Protocol::ping* Arena::CreateMaybeMessage<::Protocol::ping>(Arena*);
+template<> ::Protocol::set_car* Arena::CreateMaybeMessage<::Protocol::set_car>(Arena*);
 template<> ::Protocol::set_item* Arena::CreateMaybeMessage<::Protocol::set_item>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
@@ -3328,6 +3336,431 @@ class ItemDataList final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Gstruct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class set_car final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.set_car) */ {
+ public:
+  inline set_car() : set_car(nullptr) {}
+  ~set_car() override;
+  explicit PROTOBUF_CONSTEXPR set_car(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  set_car(const set_car& from);
+  set_car(set_car&& from) noexcept
+    : set_car() {
+    *this = ::std::move(from);
+  }
+
+  inline set_car& operator=(const set_car& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline set_car& operator=(set_car&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const set_car& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const set_car* internal_default_instance() {
+    return reinterpret_cast<const set_car*>(
+               &_set_car_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    17;
+
+  friend void swap(set_car& a, set_car& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(set_car* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(set_car* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  set_car* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<set_car>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const set_car& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const set_car& from) {
+    set_car::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(set_car* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.set_car";
+  }
+  protected:
+  explicit set_car(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCarnameFieldNumber = 2,
+    kCarkeynameFieldNumber = 10,
+    kCaridFieldNumber = 1,
+    kPacketTypeFieldNumber = 3,
+    kPosxFieldNumber = 4,
+    kPosyFieldNumber = 5,
+    kPoszFieldNumber = 6,
+    kPitchFieldNumber = 7,
+    kYawFieldNumber = 8,
+    kRollFieldNumber = 9,
+  };
+  // string carname = 2;
+  void clear_carname();
+  const std::string& carname() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_carname(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_carname();
+  PROTOBUF_NODISCARD std::string* release_carname();
+  void set_allocated_carname(std::string* carname);
+  private:
+  const std::string& _internal_carname() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_carname(const std::string& value);
+  std::string* _internal_mutable_carname();
+  public:
+
+  // string carkeyname = 10;
+  void clear_carkeyname();
+  const std::string& carkeyname() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_carkeyname(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_carkeyname();
+  PROTOBUF_NODISCARD std::string* release_carkeyname();
+  void set_allocated_carkeyname(std::string* carkeyname);
+  private:
+  const std::string& _internal_carkeyname() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_carkeyname(const std::string& value);
+  std::string* _internal_mutable_carkeyname();
+  public:
+
+  // uint32 carid = 1;
+  void clear_carid();
+  uint32_t carid() const;
+  void set_carid(uint32_t value);
+  private:
+  uint32_t _internal_carid() const;
+  void _internal_set_carid(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // float posx = 4;
+  void clear_posx();
+  float posx() const;
+  void set_posx(float value);
+  private:
+  float _internal_posx() const;
+  void _internal_set_posx(float value);
+  public:
+
+  // float posy = 5;
+  void clear_posy();
+  float posy() const;
+  void set_posy(float value);
+  private:
+  float _internal_posy() const;
+  void _internal_set_posy(float value);
+  public:
+
+  // float posz = 6;
+  void clear_posz();
+  float posz() const;
+  void set_posz(float value);
+  private:
+  float _internal_posz() const;
+  void _internal_set_posz(float value);
+  public:
+
+  // float pitch = 7;
+  void clear_pitch();
+  float pitch() const;
+  void set_pitch(float value);
+  private:
+  float _internal_pitch() const;
+  void _internal_set_pitch(float value);
+  public:
+
+  // float yaw = 8;
+  void clear_yaw();
+  float yaw() const;
+  void set_yaw(float value);
+  private:
+  float _internal_yaw() const;
+  void _internal_set_yaw(float value);
+  public:
+
+  // float roll = 9;
+  void clear_roll();
+  float roll() const;
+  void set_roll(float value);
+  private:
+  float _internal_roll() const;
+  void _internal_set_roll(float value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.set_car)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr carname_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr carkeyname_;
+    uint32_t carid_;
+    uint32_t packet_type_;
+    float posx_;
+    float posy_;
+    float posz_;
+    float pitch_;
+    float yaw_;
+    float roll_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
+// -------------------------------------------------------------------
+
+class CarDataList final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.CarDataList) */ {
+ public:
+  inline CarDataList() : CarDataList(nullptr) {}
+  ~CarDataList() override;
+  explicit PROTOBUF_CONSTEXPR CarDataList(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  CarDataList(const CarDataList& from);
+  CarDataList(CarDataList&& from) noexcept
+    : CarDataList() {
+    *this = ::std::move(from);
+  }
+
+  inline CarDataList& operator=(const CarDataList& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CarDataList& operator=(CarDataList&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CarDataList& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CarDataList* internal_default_instance() {
+    return reinterpret_cast<const CarDataList*>(
+               &_CarDataList_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    18;
+
+  friend void swap(CarDataList& a, CarDataList& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CarDataList* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CarDataList* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CarDataList* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CarDataList>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const CarDataList& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const CarDataList& from) {
+    CarDataList::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CarDataList* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.CarDataList";
+  }
+  protected:
+  explicit CarDataList(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCarsFieldNumber = 1,
+    kPacketTypeFieldNumber = 3,
+  };
+  // repeated .Protocol.set_car cars = 1;
+  int cars_size() const;
+  private:
+  int _internal_cars_size() const;
+  public:
+  void clear_cars();
+  ::Protocol::set_car* mutable_cars(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_car >*
+      mutable_cars();
+  private:
+  const ::Protocol::set_car& _internal_cars(int index) const;
+  ::Protocol::set_car* _internal_add_cars();
+  public:
+  const ::Protocol::set_car& cars(int index) const;
+  ::Protocol::set_car* add_cars();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_car >&
+      cars() const;
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.CarDataList)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_car > cars_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
 // ===================================================================
 
 
@@ -5343,9 +5776,341 @@ inline void ItemDataList::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.ItemDataList.packet_type)
 }
 
+// -------------------------------------------------------------------
+
+// set_car
+
+// uint32 carid = 1;
+inline void set_car::clear_carid() {
+  _impl_.carid_ = 0u;
+}
+inline uint32_t set_car::_internal_carid() const {
+  return _impl_.carid_;
+}
+inline uint32_t set_car::carid() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.carid)
+  return _internal_carid();
+}
+inline void set_car::_internal_set_carid(uint32_t value) {
+  
+  _impl_.carid_ = value;
+}
+inline void set_car::set_carid(uint32_t value) {
+  _internal_set_carid(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.carid)
+}
+
+// string carname = 2;
+inline void set_car::clear_carname() {
+  _impl_.carname_.ClearToEmpty();
+}
+inline const std::string& set_car::carname() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.carname)
+  return _internal_carname();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void set_car::set_carname(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.carname_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.set_car.carname)
+}
+inline std::string* set_car::mutable_carname() {
+  std::string* _s = _internal_mutable_carname();
+  // @@protoc_insertion_point(field_mutable:Protocol.set_car.carname)
+  return _s;
+}
+inline const std::string& set_car::_internal_carname() const {
+  return _impl_.carname_.Get();
+}
+inline void set_car::_internal_set_carname(const std::string& value) {
+  
+  _impl_.carname_.Set(value, GetArenaForAllocation());
+}
+inline std::string* set_car::_internal_mutable_carname() {
+  
+  return _impl_.carname_.Mutable(GetArenaForAllocation());
+}
+inline std::string* set_car::release_carname() {
+  // @@protoc_insertion_point(field_release:Protocol.set_car.carname)
+  return _impl_.carname_.Release();
+}
+inline void set_car::set_allocated_carname(std::string* carname) {
+  if (carname != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.carname_.SetAllocated(carname, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.carname_.IsDefault()) {
+    _impl_.carname_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.set_car.carname)
+}
+
+// uint32 packet_type = 3;
+inline void set_car::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t set_car::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t set_car::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.packet_type)
+  return _internal_packet_type();
+}
+inline void set_car::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void set_car::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.packet_type)
+}
+
+// float posx = 4;
+inline void set_car::clear_posx() {
+  _impl_.posx_ = 0;
+}
+inline float set_car::_internal_posx() const {
+  return _impl_.posx_;
+}
+inline float set_car::posx() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.posx)
+  return _internal_posx();
+}
+inline void set_car::_internal_set_posx(float value) {
+  
+  _impl_.posx_ = value;
+}
+inline void set_car::set_posx(float value) {
+  _internal_set_posx(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.posx)
+}
+
+// float posy = 5;
+inline void set_car::clear_posy() {
+  _impl_.posy_ = 0;
+}
+inline float set_car::_internal_posy() const {
+  return _impl_.posy_;
+}
+inline float set_car::posy() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.posy)
+  return _internal_posy();
+}
+inline void set_car::_internal_set_posy(float value) {
+  
+  _impl_.posy_ = value;
+}
+inline void set_car::set_posy(float value) {
+  _internal_set_posy(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.posy)
+}
+
+// float posz = 6;
+inline void set_car::clear_posz() {
+  _impl_.posz_ = 0;
+}
+inline float set_car::_internal_posz() const {
+  return _impl_.posz_;
+}
+inline float set_car::posz() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.posz)
+  return _internal_posz();
+}
+inline void set_car::_internal_set_posz(float value) {
+  
+  _impl_.posz_ = value;
+}
+inline void set_car::set_posz(float value) {
+  _internal_set_posz(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.posz)
+}
+
+// float pitch = 7;
+inline void set_car::clear_pitch() {
+  _impl_.pitch_ = 0;
+}
+inline float set_car::_internal_pitch() const {
+  return _impl_.pitch_;
+}
+inline float set_car::pitch() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.pitch)
+  return _internal_pitch();
+}
+inline void set_car::_internal_set_pitch(float value) {
+  
+  _impl_.pitch_ = value;
+}
+inline void set_car::set_pitch(float value) {
+  _internal_set_pitch(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.pitch)
+}
+
+// float yaw = 8;
+inline void set_car::clear_yaw() {
+  _impl_.yaw_ = 0;
+}
+inline float set_car::_internal_yaw() const {
+  return _impl_.yaw_;
+}
+inline float set_car::yaw() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.yaw)
+  return _internal_yaw();
+}
+inline void set_car::_internal_set_yaw(float value) {
+  
+  _impl_.yaw_ = value;
+}
+inline void set_car::set_yaw(float value) {
+  _internal_set_yaw(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.yaw)
+}
+
+// float roll = 9;
+inline void set_car::clear_roll() {
+  _impl_.roll_ = 0;
+}
+inline float set_car::_internal_roll() const {
+  return _impl_.roll_;
+}
+inline float set_car::roll() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.roll)
+  return _internal_roll();
+}
+inline void set_car::_internal_set_roll(float value) {
+  
+  _impl_.roll_ = value;
+}
+inline void set_car::set_roll(float value) {
+  _internal_set_roll(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.roll)
+}
+
+// string carkeyname = 10;
+inline void set_car::clear_carkeyname() {
+  _impl_.carkeyname_.ClearToEmpty();
+}
+inline const std::string& set_car::carkeyname() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.carkeyname)
+  return _internal_carkeyname();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void set_car::set_carkeyname(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.carkeyname_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.set_car.carkeyname)
+}
+inline std::string* set_car::mutable_carkeyname() {
+  std::string* _s = _internal_mutable_carkeyname();
+  // @@protoc_insertion_point(field_mutable:Protocol.set_car.carkeyname)
+  return _s;
+}
+inline const std::string& set_car::_internal_carkeyname() const {
+  return _impl_.carkeyname_.Get();
+}
+inline void set_car::_internal_set_carkeyname(const std::string& value) {
+  
+  _impl_.carkeyname_.Set(value, GetArenaForAllocation());
+}
+inline std::string* set_car::_internal_mutable_carkeyname() {
+  
+  return _impl_.carkeyname_.Mutable(GetArenaForAllocation());
+}
+inline std::string* set_car::release_carkeyname() {
+  // @@protoc_insertion_point(field_release:Protocol.set_car.carkeyname)
+  return _impl_.carkeyname_.Release();
+}
+inline void set_car::set_allocated_carkeyname(std::string* carkeyname) {
+  if (carkeyname != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.carkeyname_.SetAllocated(carkeyname, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.carkeyname_.IsDefault()) {
+    _impl_.carkeyname_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.set_car.carkeyname)
+}
+
+// -------------------------------------------------------------------
+
+// CarDataList
+
+// repeated .Protocol.set_car cars = 1;
+inline int CarDataList::_internal_cars_size() const {
+  return _impl_.cars_.size();
+}
+inline int CarDataList::cars_size() const {
+  return _internal_cars_size();
+}
+inline void CarDataList::clear_cars() {
+  _impl_.cars_.Clear();
+}
+inline ::Protocol::set_car* CarDataList::mutable_cars(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.CarDataList.cars)
+  return _impl_.cars_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_car >*
+CarDataList::mutable_cars() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.CarDataList.cars)
+  return &_impl_.cars_;
+}
+inline const ::Protocol::set_car& CarDataList::_internal_cars(int index) const {
+  return _impl_.cars_.Get(index);
+}
+inline const ::Protocol::set_car& CarDataList::cars(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.CarDataList.cars)
+  return _internal_cars(index);
+}
+inline ::Protocol::set_car* CarDataList::_internal_add_cars() {
+  return _impl_.cars_.Add();
+}
+inline ::Protocol::set_car* CarDataList::add_cars() {
+  ::Protocol::set_car* _add = _internal_add_cars();
+  // @@protoc_insertion_point(field_add:Protocol.CarDataList.cars)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_car >&
+CarDataList::cars() const {
+  // @@protoc_insertion_point(field_list:Protocol.CarDataList.cars)
+  return _impl_.cars_;
+}
+
+// uint32 packet_type = 3;
+inline void CarDataList::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t CarDataList::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t CarDataList::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.CarDataList.packet_type)
+  return _internal_packet_type();
+}
+inline void CarDataList::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void CarDataList::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.CarDataList.packet_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

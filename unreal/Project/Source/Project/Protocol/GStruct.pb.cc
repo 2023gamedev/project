@@ -298,8 +298,44 @@ struct ItemDataListDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ItemDataListDefaultTypeInternal _ItemDataList_default_instance_;
+PROTOBUF_CONSTEXPR set_car::set_car(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.carname_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.carkeyname_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.carid_)*/0u
+  , /*decltype(_impl_.packet_type_)*/0u
+  , /*decltype(_impl_.posx_)*/0
+  , /*decltype(_impl_.posy_)*/0
+  , /*decltype(_impl_.posz_)*/0
+  , /*decltype(_impl_.pitch_)*/0
+  , /*decltype(_impl_.yaw_)*/0
+  , /*decltype(_impl_.roll_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct set_carDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR set_carDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~set_carDefaultTypeInternal() {}
+  union {
+    set_car _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 set_carDefaultTypeInternal _set_car_default_instance_;
+PROTOBUF_CONSTEXPR CarDataList::CarDataList(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.cars_)*/{}
+  , /*decltype(_impl_.packet_type_)*/0u
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CarDataListDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CarDataListDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CarDataListDefaultTypeInternal() {}
+  union {
+    CarDataList _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CarDataListDefaultTypeInternal _CarDataList_default_instance_;
 }  // namespace Protocol
-static ::_pb::Metadata file_level_metadata_Gstruct_2eproto[17];
+static ::_pb::Metadata file_level_metadata_Gstruct_2eproto[19];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_Gstruct_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Gstruct_2eproto = nullptr;
 
@@ -479,6 +515,30 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::ItemDataList, _impl_.items_),
   PROTOBUF_FIELD_OFFSET(::Protocol::ItemDataList, _impl_.packet_type_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.carid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.carname_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.packet_type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.posx_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.posy_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.posz_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.pitch_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.yaw_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.roll_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::set_car, _impl_.carkeyname_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::CarDataList, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::CarDataList, _impl_.cars_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::CarDataList, _impl_.packet_type_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::Character)},
@@ -498,6 +558,8 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 143, -1, -1, sizeof(::Protocol::patrol_hit)},
   { 151, -1, -1, sizeof(::Protocol::set_item)},
   { 167, -1, -1, sizeof(::Protocol::ItemDataList)},
+  { 175, -1, -1, sizeof(::Protocol::set_car)},
+  { 191, -1, -1, sizeof(::Protocol::CarDataList)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -518,6 +580,8 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_patrol_hit_default_instance_._instance,
   &::Protocol::_set_item_default_instance_._instance,
   &::Protocol::_ItemDataList_default_instance_._instance,
+  &::Protocol::_set_car_default_instance_._instance,
+  &::Protocol::_CarDataList_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -561,13 +625,19 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "\005count\030\006 \001(\r\022\r\n\005floor\030\007 \001(\r\022\014\n\004posx\030\010 \001("
   "\002\022\014\n\004posy\030\t \001(\002\022\014\n\004posz\030\n \001(\002\"F\n\014ItemDat"
   "aList\022!\n\005items\030\001 \003(\0132\022.Protocol.set_item"
-  "\022\023\n\013packet_type\030\003 \001(\rb\006proto3"
+  "\022\023\n\013packet_type\030\003 \001(\r\"\246\001\n\007set_car\022\r\n\005car"
+  "id\030\001 \001(\r\022\017\n\007carname\030\002 \001(\t\022\023\n\013packet_type"
+  "\030\003 \001(\r\022\014\n\004posx\030\004 \001(\002\022\014\n\004posy\030\005 \001(\002\022\014\n\004po"
+  "sz\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004"
+  "roll\030\t \001(\002\022\022\n\ncarkeyname\030\n \001(\t\"C\n\013CarDat"
+  "aList\022\037\n\004cars\030\001 \003(\0132\021.Protocol.set_car\022\023"
+  "\n\013packet_type\030\003 \001(\rb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 1629, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 1867, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
-    &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 17,
+    &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 19,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
     file_level_metadata_Gstruct_2eproto, file_level_enum_descriptors_Gstruct_2eproto,
     file_level_service_descriptors_Gstruct_2eproto,
@@ -5524,6 +5594,747 @@ void ItemDataList::InternalSwap(ItemDataList* other) {
       file_level_metadata_Gstruct_2eproto[16]);
 }
 
+// ===================================================================
+
+class set_car::_Internal {
+ public:
+};
+
+set_car::set_car(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.set_car)
+}
+set_car::set_car(const set_car& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  set_car* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.carname_){}
+    , decltype(_impl_.carkeyname_){}
+    , decltype(_impl_.carid_){}
+    , decltype(_impl_.packet_type_){}
+    , decltype(_impl_.posx_){}
+    , decltype(_impl_.posy_){}
+    , decltype(_impl_.posz_){}
+    , decltype(_impl_.pitch_){}
+    , decltype(_impl_.yaw_){}
+    , decltype(_impl_.roll_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.carname_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.carname_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_carname().empty()) {
+    _this->_impl_.carname_.Set(from._internal_carname(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.carkeyname_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.carkeyname_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_carkeyname().empty()) {
+    _this->_impl_.carkeyname_.Set(from._internal_carkeyname(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.carid_, &from._impl_.carid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.roll_) -
+    reinterpret_cast<char*>(&_impl_.carid_)) + sizeof(_impl_.roll_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.set_car)
+}
+
+inline void set_car::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.carname_){}
+    , decltype(_impl_.carkeyname_){}
+    , decltype(_impl_.carid_){0u}
+    , decltype(_impl_.packet_type_){0u}
+    , decltype(_impl_.posx_){0}
+    , decltype(_impl_.posy_){0}
+    , decltype(_impl_.posz_){0}
+    , decltype(_impl_.pitch_){0}
+    , decltype(_impl_.yaw_){0}
+    , decltype(_impl_.roll_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.carname_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.carname_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.carkeyname_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.carkeyname_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+set_car::~set_car() {
+  // @@protoc_insertion_point(destructor:Protocol.set_car)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void set_car::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.carname_.Destroy();
+  _impl_.carkeyname_.Destroy();
+}
+
+void set_car::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void set_car::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.set_car)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.carname_.ClearToEmpty();
+  _impl_.carkeyname_.ClearToEmpty();
+  ::memset(&_impl_.carid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.roll_) -
+      reinterpret_cast<char*>(&_impl_.carid_)) + sizeof(_impl_.roll_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* set_car::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint32 carid = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.carid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string carname = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_carname();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "Protocol.set_car.carname"));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 packet_type = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.packet_type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // float posx = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 37)) {
+          _impl_.posx_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float posy = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
+          _impl_.posy_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float posz = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
+          _impl_.posz_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float pitch = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
+          _impl_.pitch_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float yaw = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
+          _impl_.yaw_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float roll = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
+          _impl_.roll_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // string carkeyname = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          auto str = _internal_mutable_carkeyname();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "Protocol.set_car.carkeyname"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* set_car::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.set_car)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 carid = 1;
+  if (this->_internal_carid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_carid(), target);
+  }
+
+  // string carname = 2;
+  if (!this->_internal_carname().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_carname().data(), static_cast<int>(this->_internal_carname().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.set_car.carname");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_carname(), target);
+  }
+
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
+  }
+
+  // float posx = 4;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posx = this->_internal_posx();
+  uint32_t raw_posx;
+  memcpy(&raw_posx, &tmp_posx, sizeof(tmp_posx));
+  if (raw_posx != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(4, this->_internal_posx(), target);
+  }
+
+  // float posy = 5;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posy = this->_internal_posy();
+  uint32_t raw_posy;
+  memcpy(&raw_posy, &tmp_posy, sizeof(tmp_posy));
+  if (raw_posy != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_posy(), target);
+  }
+
+  // float posz = 6;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posz = this->_internal_posz();
+  uint32_t raw_posz;
+  memcpy(&raw_posz, &tmp_posz, sizeof(tmp_posz));
+  if (raw_posz != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_posz(), target);
+  }
+
+  // float pitch = 7;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_pitch = this->_internal_pitch();
+  uint32_t raw_pitch;
+  memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
+  if (raw_pitch != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_pitch(), target);
+  }
+
+  // float yaw = 8;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_yaw = this->_internal_yaw();
+  uint32_t raw_yaw;
+  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
+  if (raw_yaw != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_yaw(), target);
+  }
+
+  // float roll = 9;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_roll = this->_internal_roll();
+  uint32_t raw_roll;
+  memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
+  if (raw_roll != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_roll(), target);
+  }
+
+  // string carkeyname = 10;
+  if (!this->_internal_carkeyname().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_carkeyname().data(), static_cast<int>(this->_internal_carkeyname().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.set_car.carkeyname");
+    target = stream->WriteStringMaybeAliased(
+        10, this->_internal_carkeyname(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.set_car)
+  return target;
+}
+
+size_t set_car::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.set_car)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string carname = 2;
+  if (!this->_internal_carname().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_carname());
+  }
+
+  // string carkeyname = 10;
+  if (!this->_internal_carkeyname().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_carkeyname());
+  }
+
+  // uint32 carid = 1;
+  if (this->_internal_carid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_carid());
+  }
+
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
+  }
+
+  // float posx = 4;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posx = this->_internal_posx();
+  uint32_t raw_posx;
+  memcpy(&raw_posx, &tmp_posx, sizeof(tmp_posx));
+  if (raw_posx != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float posy = 5;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posy = this->_internal_posy();
+  uint32_t raw_posy;
+  memcpy(&raw_posy, &tmp_posy, sizeof(tmp_posy));
+  if (raw_posy != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float posz = 6;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posz = this->_internal_posz();
+  uint32_t raw_posz;
+  memcpy(&raw_posz, &tmp_posz, sizeof(tmp_posz));
+  if (raw_posz != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float pitch = 7;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_pitch = this->_internal_pitch();
+  uint32_t raw_pitch;
+  memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
+  if (raw_pitch != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float yaw = 8;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_yaw = this->_internal_yaw();
+  uint32_t raw_yaw;
+  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
+  if (raw_yaw != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float roll = 9;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_roll = this->_internal_roll();
+  uint32_t raw_roll;
+  memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
+  if (raw_roll != 0) {
+    total_size += 1 + 4;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData set_car::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    set_car::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*set_car::GetClassData() const { return &_class_data_; }
+
+
+void set_car::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<set_car*>(&to_msg);
+  auto& from = static_cast<const set_car&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.set_car)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_carname().empty()) {
+    _this->_internal_set_carname(from._internal_carname());
+  }
+  if (!from._internal_carkeyname().empty()) {
+    _this->_internal_set_carkeyname(from._internal_carkeyname());
+  }
+  if (from._internal_carid() != 0) {
+    _this->_internal_set_carid(from._internal_carid());
+  }
+  if (from._internal_packet_type() != 0) {
+    _this->_internal_set_packet_type(from._internal_packet_type());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posx = from._internal_posx();
+  uint32_t raw_posx;
+  memcpy(&raw_posx, &tmp_posx, sizeof(tmp_posx));
+  if (raw_posx != 0) {
+    _this->_internal_set_posx(from._internal_posx());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posy = from._internal_posy();
+  uint32_t raw_posy;
+  memcpy(&raw_posy, &tmp_posy, sizeof(tmp_posy));
+  if (raw_posy != 0) {
+    _this->_internal_set_posy(from._internal_posy());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_posz = from._internal_posz();
+  uint32_t raw_posz;
+  memcpy(&raw_posz, &tmp_posz, sizeof(tmp_posz));
+  if (raw_posz != 0) {
+    _this->_internal_set_posz(from._internal_posz());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_pitch = from._internal_pitch();
+  uint32_t raw_pitch;
+  memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
+  if (raw_pitch != 0) {
+    _this->_internal_set_pitch(from._internal_pitch());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_yaw = from._internal_yaw();
+  uint32_t raw_yaw;
+  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
+  if (raw_yaw != 0) {
+    _this->_internal_set_yaw(from._internal_yaw());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_roll = from._internal_roll();
+  uint32_t raw_roll;
+  memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
+  if (raw_roll != 0) {
+    _this->_internal_set_roll(from._internal_roll());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void set_car::CopyFrom(const set_car& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.set_car)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool set_car::IsInitialized() const {
+  return true;
+}
+
+void set_car::InternalSwap(set_car* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.carname_, lhs_arena,
+      &other->_impl_.carname_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.carkeyname_, lhs_arena,
+      &other->_impl_.carkeyname_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(set_car, _impl_.roll_)
+      + sizeof(set_car::_impl_.roll_)
+      - PROTOBUF_FIELD_OFFSET(set_car, _impl_.carid_)>(
+          reinterpret_cast<char*>(&_impl_.carid_),
+          reinterpret_cast<char*>(&other->_impl_.carid_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata set_car::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Gstruct_2eproto_getter, &descriptor_table_Gstruct_2eproto_once,
+      file_level_metadata_Gstruct_2eproto[17]);
+}
+
+// ===================================================================
+
+class CarDataList::_Internal {
+ public:
+};
+
+CarDataList::CarDataList(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.CarDataList)
+}
+CarDataList::CarDataList(const CarDataList& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CarDataList* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.cars_){from._impl_.cars_}
+    , decltype(_impl_.packet_type_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.packet_type_ = from._impl_.packet_type_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.CarDataList)
+}
+
+inline void CarDataList::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.cars_){arena}
+    , decltype(_impl_.packet_type_){0u}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+CarDataList::~CarDataList() {
+  // @@protoc_insertion_point(destructor:Protocol.CarDataList)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void CarDataList::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.cars_.~RepeatedPtrField();
+}
+
+void CarDataList::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void CarDataList::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.CarDataList)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.cars_.Clear();
+  _impl_.packet_type_ = 0u;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CarDataList::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated .Protocol.set_car cars = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_cars(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 packet_type = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.packet_type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* CarDataList::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.CarDataList)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .Protocol.set_car cars = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_cars_size()); i < n; i++) {
+    const auto& repfield = this->_internal_cars(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_packet_type(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.CarDataList)
+  return target;
+}
+
+size_t CarDataList::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.CarDataList)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .Protocol.set_car cars = 1;
+  total_size += 1UL * this->_internal_cars_size();
+  for (const auto& msg : this->_impl_.cars_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // uint32 packet_type = 3;
+  if (this->_internal_packet_type() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CarDataList::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CarDataList::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CarDataList::GetClassData() const { return &_class_data_; }
+
+
+void CarDataList::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CarDataList*>(&to_msg);
+  auto& from = static_cast<const CarDataList&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.CarDataList)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.cars_.MergeFrom(from._impl_.cars_);
+  if (from._internal_packet_type() != 0) {
+    _this->_internal_set_packet_type(from._internal_packet_type());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CarDataList::CopyFrom(const CarDataList& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.CarDataList)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CarDataList::IsInitialized() const {
+  return true;
+}
+
+void CarDataList::InternalSwap(CarDataList* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.cars_.InternalSwap(&other->_impl_.cars_);
+  swap(_impl_.packet_type_, other->_impl_.packet_type_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CarDataList::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Gstruct_2eproto_getter, &descriptor_table_Gstruct_2eproto_once,
+      file_level_metadata_Gstruct_2eproto[18]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
@@ -5594,6 +6405,14 @@ Arena::CreateMaybeMessage< ::Protocol::set_item >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::Protocol::ItemDataList*
 Arena::CreateMaybeMessage< ::Protocol::ItemDataList >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::ItemDataList >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::set_car*
+Arena::CreateMaybeMessage< ::Protocol::set_car >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::set_car >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::CarDataList*
+Arena::CreateMaybeMessage< ::Protocol::CarDataList >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::CarDataList >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

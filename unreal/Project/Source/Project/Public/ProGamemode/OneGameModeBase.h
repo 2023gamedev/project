@@ -152,16 +152,10 @@ public:
     // 캐릭터 선택 함수
     void ChoiceCharacter();
 
-    // 아이템 박스 위치 정해놓고 랜덤으로 정해서 생성
-    FVector RandomItemBoxLocation(EItemFloor itemfloor);
-
     // 카 액터 위치 정해놓고 랜덤으로 정해서 생성
     int32 RandomCarActorLocation();
 
     int32 RandomCarKey();
-
-    // 아이템 랜덤 위치 정해놓는 배열
-    SItemRandomLocation ItemRandomLocationStruct[60];
 
     // Car 랜덤 위치 정해놓는 배열
     SCarActorRandomLocation CarActorRandomLocationStruct[7];
@@ -189,7 +183,8 @@ public:
 
     void CarKeyRandomSetting();
 
-    void SpawnInterItem(int32 InterActorindex, FName InterName);
+    void SpawnInterItem(int32 InterActorindex, FName InterName, FVector carpos, FRotator carrotator, FName carkeyname);
+
     void SpawnInterActorStaticClasses();
 
 
