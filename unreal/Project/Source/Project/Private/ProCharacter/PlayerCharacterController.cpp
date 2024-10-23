@@ -154,7 +154,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				FName Fcarname = FName(recvSetCar.carname.c_str());
 				FName Fcarkeyname = FName(recvSetCar.carkeyname.c_str());
 
-				MyGameMode->SpawnItemBoxes(recvSetItem.itemid, Fitemname, recvSetItem.itemclass, LoadedTexture, recvSetItem.count, recvSetItem.floor, recvSetItem.itempos);
+				MyGameMode->SpawnInterItem(recvSetCar.carid, Fcarname, recvSetCar.carpos, recvSetCar.carrotator, Fcarkeyname);
 			}
 		}
 
