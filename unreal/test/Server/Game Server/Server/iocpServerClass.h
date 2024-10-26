@@ -7,6 +7,9 @@
 
 #include "Player.h"
 
+#include <concurrent_queue.h>
+#include <atomic>
+
 
 // BT
 #include "Task.h"
@@ -52,9 +55,9 @@ using PLAYER_INFO = struct Client_INFO {
 	int pingcnt = 0;
 	
 	// 전송 대기열 추가
-	std::queue<std::string> sendQueue;  // 전송할 데이터를 담는 대기열
+	Concurrency::concurrent_queue<std::string> sendQueue;  // 전송할 데이터를 담는 대기열
 	std::mutex sendMutex;  // 큐 접근 제어용 락
-	bool isSending = false;  // 현재 전송 중인지 여부를 나타내는 플래그
+	atomic<bool> isSending = false;  // 현재 전송 중인지 여부를 나타내는 플래그
 };
 
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;

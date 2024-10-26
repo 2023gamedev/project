@@ -328,33 +328,26 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const char* serializedData, siz
 	}
 
 	PLAYER_INFO* user = it->second;
-	{
-		std::lock_guard<std::mutex> lock(user->sendMutex);
-		user->sendQueue.push(std::string(serializedData, dataSize));
 
-		if (user->isSending) {
-			// 이미 전송 중이라면 대기열에만 추가
-			return;
-		}
+	// Lock-free queue에 데이터 삽입
+	user->sendQueue.push(std::string(serializedData, dataSize));
 
-		// 현재 전송 중이 아니면 전송 시작
-		user->isSending = true;
+	// 현재 전송 중이 아닌 경우에만 전송 시작
+	bool expected = false;
+	if (user->isSending.compare_exchange_strong(expected, true)) {
+		// 전송 시작 플래그를 true로 설정 후 전송 작업 시작
+		IOCP_SendNextPacket(user);
 	}
-
-	// 대기열에서 첫 번째 데이터를 꺼내 전송 시작
-	IOCP_SendNextPacket(user);
 }
 
 void IOCP_CORE::IOCP_SendNextPacket(PLAYER_INFO* user)
 {
-	std::lock_guard<std::mutex> lock(user->sendMutex);
+	std::string data;
 
-	if (user->sendQueue.empty()) {
+	if (!user->sendQueue.try_pop(data)) {
 		user->isSending = false; 
 		return;
 	}
-
-	std::string& data = user->sendQueue.front();
 
 	OVLP_EX* over = new OVLP_EX;
 	memset(over, 0, sizeof(OVLP_EX));
@@ -370,10 +363,6 @@ void IOCP_CORE::IOCP_SendNextPacket(PLAYER_INFO* user)
 		if (ERROR_IO_PENDING != err_no) {
 			IOCP_ErrorDisplay("SendPacket::WSASend", err_no, __LINE__);
 		}
-	}
-	else {
-		// 전송 작업이 성공적으로 시작되었으므로, 대기열에서 제거
-		user->sendQueue.pop();
 	}
 }
 
