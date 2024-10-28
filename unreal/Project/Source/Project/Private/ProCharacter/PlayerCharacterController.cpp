@@ -158,6 +158,13 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_ditem.try_pop(recvDestroyItem)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->DestroyItem(recvDestroyItem);
+			}
+		}
+
 		//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);
 		if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 		{

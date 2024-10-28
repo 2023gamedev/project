@@ -366,6 +366,16 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				}
 				break;
 			}
+
+			case 17:
+			{
+				Protocol::destroy_item destroyitem;
+				if (destroyitem.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					Q_ditem.push(destroyitem.itemid());
+					UE_LOG(LogNet, Display, TEXT("Destroy item %d"), destroyitem.itemid());
+				}
+			}
 			}
 
 		}

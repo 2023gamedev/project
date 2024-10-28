@@ -208,6 +208,7 @@ public:
 	Concurrency::concurrent_queue<ZombieAttack> Q_zattack;
 	Concurrency::concurrent_queue<Set_Item> Q_setitem;
 	Concurrency::concurrent_queue<Set_Car> Q_setcar;
+	Concurrency::concurrent_queue<uint32> Q_ditem;
 
 
 	virtual bool Init() override;

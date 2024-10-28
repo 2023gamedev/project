@@ -142,3 +142,8 @@ message CarDataList{
     repeated set_car cars = 1;
     uint32 packet_type = 3;
 }
+
+message destroy_item{
+    uint32 itemid = 1;
+    uint32 packet_type = 3;
+}

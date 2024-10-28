@@ -88,6 +88,9 @@ extern Zombie_attackDefaultTypeInternal _Zombie_attack_default_instance_;
 class Zombie_hp;
 struct Zombie_hpDefaultTypeInternal;
 extern Zombie_hpDefaultTypeInternal _Zombie_hp_default_instance_;
+class destroy_item;
+struct destroy_itemDefaultTypeInternal;
+extern destroy_itemDefaultTypeInternal _destroy_item_default_instance_;
 class jump;
 struct jumpDefaultTypeInternal;
 extern jumpDefaultTypeInternal _jump_default_instance_;
@@ -119,6 +122,7 @@ template<> ::Protocol::ZombieDataList* Arena::CreateMaybeMessage<::Protocol::Zom
 template<> ::Protocol::ZombiePath* Arena::CreateMaybeMessage<::Protocol::ZombiePath>(Arena*);
 template<> ::Protocol::Zombie_attack* Arena::CreateMaybeMessage<::Protocol::Zombie_attack>(Arena*);
 template<> ::Protocol::Zombie_hp* Arena::CreateMaybeMessage<::Protocol::Zombie_hp>(Arena*);
+template<> ::Protocol::destroy_item* Arena::CreateMaybeMessage<::Protocol::destroy_item>(Arena*);
 template<> ::Protocol::jump* Arena::CreateMaybeMessage<::Protocol::jump>(Arena*);
 template<> ::Protocol::patrol_hit* Arena::CreateMaybeMessage<::Protocol::patrol_hit>(Arena*);
 template<> ::Protocol::ping* Arena::CreateMaybeMessage<::Protocol::ping>(Arena*);
@@ -3762,6 +3766,165 @@ class CarDataList final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Gstruct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class destroy_item final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.destroy_item) */ {
+ public:
+  inline destroy_item() : destroy_item(nullptr) {}
+  ~destroy_item() override;
+  explicit PROTOBUF_CONSTEXPR destroy_item(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  destroy_item(const destroy_item& from);
+  destroy_item(destroy_item&& from) noexcept
+    : destroy_item() {
+    *this = ::std::move(from);
+  }
+
+  inline destroy_item& operator=(const destroy_item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline destroy_item& operator=(destroy_item&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const destroy_item& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const destroy_item* internal_default_instance() {
+    return reinterpret_cast<const destroy_item*>(
+               &_destroy_item_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    19;
+
+  friend void swap(destroy_item& a, destroy_item& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(destroy_item* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(destroy_item* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  destroy_item* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<destroy_item>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const destroy_item& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const destroy_item& from) {
+    destroy_item::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(destroy_item* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.destroy_item";
+  }
+  protected:
+  explicit destroy_item(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kItemidFieldNumber = 1,
+    kPacketTypeFieldNumber = 3,
+  };
+  // uint32 itemid = 1;
+  void clear_itemid();
+  uint32_t itemid() const;
+  void set_itemid(uint32_t value);
+  private:
+  uint32_t _internal_itemid() const;
+  void _internal_set_itemid(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.destroy_item)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t itemid_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
 // ===================================================================
 
 
@@ -6105,9 +6268,55 @@ inline void CarDataList::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.CarDataList.packet_type)
 }
 
+// -------------------------------------------------------------------
+
+// destroy_item
+
+// uint32 itemid = 1;
+inline void destroy_item::clear_itemid() {
+  _impl_.itemid_ = 0u;
+}
+inline uint32_t destroy_item::_internal_itemid() const {
+  return _impl_.itemid_;
+}
+inline uint32_t destroy_item::itemid() const {
+  // @@protoc_insertion_point(field_get:Protocol.destroy_item.itemid)
+  return _internal_itemid();
+}
+inline void destroy_item::_internal_set_itemid(uint32_t value) {
+  
+  _impl_.itemid_ = value;
+}
+inline void destroy_item::set_itemid(uint32_t value) {
+  _internal_set_itemid(value);
+  // @@protoc_insertion_point(field_set:Protocol.destroy_item.itemid)
+}
+
+// uint32 packet_type = 3;
+inline void destroy_item::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t destroy_item::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t destroy_item::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.destroy_item.packet_type)
+  return _internal_packet_type();
+}
+inline void destroy_item::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void destroy_item::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.destroy_item.packet_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
