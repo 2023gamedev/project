@@ -421,7 +421,7 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 
 	if (serverType == ServerType::GAME_SERVER)
 	{
-		ServerAddr.sin_port = htons(8888);
+		ServerAddr.sin_port = htons(8777);
 	}
 
 	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
