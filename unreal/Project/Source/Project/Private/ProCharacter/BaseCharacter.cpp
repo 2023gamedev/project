@@ -7,6 +7,7 @@
 #include "ProItem/ItemBoxActor.h"
 #include "ProCharacter/PlayerSight.h"
 #include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "ProZombie/BaseZombie.h"
 
@@ -207,6 +208,8 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 
 	if (GameUIClass != nullptr) {
@@ -700,8 +703,9 @@ void ABaseCharacter::GetItem()
 
 			ItemBoxId = itembox->GetItemBoxId();
 			PlayerSight->GetHitActor()->Destroy();
-		}
 
+			Send_Destroy(ItemBoxId);
+		}
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
@@ -2281,4 +2285,16 @@ void ABaseCharacter::OtherSpawnKeyItem(const FString& ItemName)
 
 	SetBringCurrentKeyItem(true);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnKeyItem"));
+}
+
+void ABaseCharacter::Send_Destroy(uint32 itemboxid)
+{
+	Protocol::destroy_item Packet;
+	Packet.set_itemid(itemboxid);
+	Packet.set_packet_type(17);
+
+	std::string serializedData;
+	Packet.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }

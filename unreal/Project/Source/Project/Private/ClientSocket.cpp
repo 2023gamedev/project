@@ -71,18 +71,14 @@ uint32 ClientSocket::Run()
 			return 0;
 		}
 
-		// 수신 완료된 데이터를 처리합니다.
+		// 수신 완료된 데이터를 처리
 		if (overlapped == &recvOverlap)
 		{
-			// 수신 데이터를 큐에 넣음
-			{
-				std::lock_guard<std::mutex> lock(recvMutex);
-				recvQueue.push(std::vector<char>(recvData, recvData + bytesTransferred));
-			}
-
-			// 다음 데이터를 수신
+			// lock-free 큐에 데이터 추가
+			recvQueue.push(std::vector<char>(recvData, recvData + bytesTransferred));
 			StartRecv();
 
+			// 수신 큐 처리
 			ProcessRecvQueue();
 		}
 	}
@@ -90,24 +86,14 @@ uint32 ClientSocket::Run()
 
 void ClientSocket::ProcessRecvQueue()
 {
-	while (true)
+	std::vector<char> buffer;
+	while (recvQueue.try_pop(buffer))
 	{
-		std::vector<char> buffer;
-
-		{
-			std::lock_guard<std::mutex> lock(recvMutex);
-			if (recvQueue.empty())
-			{
-				return;  // 큐가 비어있으면 종료
-			}
-			buffer = recvQueue.front();
-			recvQueue.pop();
-		}
-
-		// 수신된 데이터를 처리합니다.
+		// 수신된 데이터 처리
 		ProcessPacket(buffer);
 	}
 }
+
 
 void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 {
@@ -421,7 +407,7 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 
 	if (serverType == ServerType::GAME_SERVER)
 	{
-		ServerAddr.sin_port = htons(8888);
+		ServerAddr.sin_port = htons(8777);
 	}
 
 	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");

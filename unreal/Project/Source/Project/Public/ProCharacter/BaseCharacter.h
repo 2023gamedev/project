@@ -9,6 +9,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "ProGamemode/ProGameInstance.h"
+
 #include <atomic>
 
 // 구조체
@@ -416,6 +418,8 @@ public:
 
 	void OtherSpawnKeyItem(const FString& ItemName);
 
+	void Send_Destroy(uint32 itemboxid);
+
 	void OtherPlayerDead();
 
 	void DestroyItem(uint32 ItemId);
@@ -545,6 +549,8 @@ private:
 	float PreviousSpeed;
 
 public:
+	UProGameInstance* GameInstance;
+
 	std::atomic<bool> b_attack{ false };
 	bool b_run = false;
 

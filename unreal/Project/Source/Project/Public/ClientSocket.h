@@ -240,9 +240,9 @@ public:
 private:
 
 	HANDLE hIocp;  // I/O 완료 포트 핸들
-	std::mutex recvMutex;  // 수신 큐를 보호하기 위한 뮤텍스
-	std::mutex playerQueueMutex;
-	std::queue<std::vector<char>> recvQueue;  // 수신된 데이터를 담을 큐
+	//std::mutex recvMutex;  // 수신 큐를 보호하기 위한 뮤텍스
+	//std::mutex playerQueueMutex;
+	Concurrency::concurrent_queue<std::vector<char>> recvQueue;
 
 	WSAOVERLAPPED recvOverlap = {};  // 수신 작업에 사용할 OVERLAPPED 구조체
 	WSABUF recvBuffer;               // 수신 버퍼 설정
