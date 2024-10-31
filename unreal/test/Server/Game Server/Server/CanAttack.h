@@ -13,6 +13,10 @@ public:
         bool result = false;
 
         for (auto player : playerDB) {
+            if (player.second.health <= 0) {
+                continue;
+            }
+
             zom.SetDistance(player.first, 1, 2);       // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 갱신 
 
             if (zom.DistanceTo_PlayerInsight.find(player.first) != zom.DistanceTo_PlayerInsight.end()) {

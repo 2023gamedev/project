@@ -21,6 +21,10 @@ public:
         }
 
         for (auto player : playerDB) {
+            if (player.second.health <= 0) {
+                continue;
+            }
+
             //zom.SetDistance(player.first, 1, 2);         //DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 갱신 
                                                         //(바로 앞에 작업인 CanAttack Task에서 이미 해당 작업을 진행하기에 또 할 필요X)
 

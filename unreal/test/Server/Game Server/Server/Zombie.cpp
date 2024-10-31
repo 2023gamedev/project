@@ -179,12 +179,12 @@ bool Zombie::RandomPatrol()
 
 	// 랜덤 패트롤 지점이 갈 수 있는 지 검사
 	if (CheckPath(dest_test, px, py, pz) == false) {
-		cout << "CheckPath 실패!!!" << endl;
+		//cout << "CheckPath 실패!!!" << endl;
 		return false;
 	}
 
 	if (dest_test.size() < 3) {
-		cout << "새로운 패트롤 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
+		//cout << "좀비 #" << ZombieData.zombieID << " 새로운 패트롤 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
 		return false;
 	}
 
@@ -254,7 +254,7 @@ void Zombie::SetTargetLocation(TARGET t)
 		if (RandPatrolSet == false) {
 			while (RandomPatrol() == false) {
 				try_cnt++;
-				cout << "랜덤 패트롤 찾기 시도 #" << try_cnt << endl;
+				//cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 찾기 시도 - #" << try_cnt << endl;
 
 				if (try_cnt >= 5) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
 					cout << "랜덤 패트롤 찾기 결국 실패!!!" << endl;
@@ -480,7 +480,7 @@ bool Zombie::CheckPath(vector<tuple<float, float, float>>& goalTest_path, float 
 
 	if (goalTest_path.empty() == true) {
 
-		cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 지정 실패! 다시 검색!!!" << endl;
+		//cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 지정 실패! 다시 검색!!!" << endl;
 		return false;
 	}
 

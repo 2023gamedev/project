@@ -119,6 +119,7 @@ void ZombieController::SendZombieData(int id)
         zombie->set_yaw(z->ZombieData.yaw);
         zombie->set_roll(z->ZombieData.roll);
         zombie->set_zombietype(z->ZombieData.zombietype);
+        
         //printf("%d\n", z->ZombieData.zombieID);
         //printf("%d\n", z->ZombieData.zombietype);
     }

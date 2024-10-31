@@ -169,9 +169,18 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 	// 다 아니면 이동 중이므로
 	else {
 		// 다음 행선지 쪽으로 회전시키기
-		zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
-		zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
-		zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+		if (indx + 1 < 2) {	// 더 자연스러운 고개 돌림을 위함
+			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == 0 && get<1>(OwnerZombie->NextPath[indx + 1]) == 0 && get<2>(OwnerZombie->NextPath[indx + 1]) == 0)) {
+				zombieDest.X = get<0>(OwnerZombie->NextPath[indx + 1]);
+				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx + 1]);
+				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx + 1]);
+			}
+		}
+		else {
+			zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
+			zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
+			zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+		}
 	}
 
 	FVector zomTarDir = zombieDest - OwnerZombie->GetActorLocation();
