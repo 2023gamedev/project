@@ -554,7 +554,7 @@ void Zombie::SendPath()
 		Destination1->set_y(get<1>(path[ZombiePathIndex]));
 		Destination1->set_z(get<2>(path[ZombiePathIndex]));
 
-		if (not path.empty() || not (ZombiePathIndex + 1) >= path.size()) {
+		if ((ZombiePathIndex + 1) < path.size()) {
 			Protocol::Vector3* Destination2 = zPath.mutable_path2();
 			Destination2->set_x(get<0>(path[ZombiePathIndex + 1]));
 			Destination2->set_y(get<1>(path[ZombiePathIndex + 1]));
