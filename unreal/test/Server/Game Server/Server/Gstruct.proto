@@ -145,5 +145,6 @@ message CarDataList{
 
 message destroy_item{
     uint32 itemid = 1;
+    uint32 playerid = 2;
     uint32 packet_type = 3;
 }

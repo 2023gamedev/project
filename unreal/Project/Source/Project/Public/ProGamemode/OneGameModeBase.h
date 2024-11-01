@@ -173,7 +173,7 @@ public:
 
     void UpdateZombieHP(uint32 ZombieId, uint32 HP);
 
-    void DestroyItem(uint32 ItemId);
+    void DestroyItem(uint32 Itemid, uint32 Playerid);
 
     int32 GetItemBoxNumber() { return m_iItemBoxNumber; }
 

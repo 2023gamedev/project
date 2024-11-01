@@ -823,12 +823,33 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, uint32 HP)
     }
 }
 
-void AOneGameModeBase::DestroyItem(uint32 ItemId)
+void AOneGameModeBase::DestroyItem(uint32 Itemid, uint32 Playerid)
 {
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // 캐릭터 검색
+    for (TActorIterator<ABaseCharacter> It(World); It; ++It)
+    {
+        ABaseCharacter* BasePlayer = *It;
+        if (BasePlayer && BasePlayer->GetPlayerId() == Playerid)
+        {
+            BasePlayer->PickUp();
+            UE_LOG(LogTemp, Warning, TEXT("real update jump: %d"), Playerid);
+
+            break;
+        }
+    }
+
     for (TActorIterator<AItemBoxActor> It(GetWorld()); It; ++It)
     {
         AItemBoxActor* ItemBox = *It;
-        if (ItemBox && ItemBox->ItemBoxId == ItemId)
+        if (ItemBox && ItemBox->ItemBoxId == Itemid)
         {
             ItemBox->Destroy();
             break;

@@ -180,6 +180,18 @@ struct Set_Car
 		: carid(id), carname(name), carpos(pos), carrotator(rot), carkeyname(keyname) {}
 };
 
+struct Destroy_Item
+{
+	uint32 itemid;
+	uint32 playerid;
+
+	Destroy_Item() : itemid(0), playerid(0) {}
+
+	Destroy_Item(uint32 Initemid, uint32 Inplayerid)
+		: itemid(Initemid), playerid(Inplayerid) {}
+
+};
+
 
 
 class UProGameInstance;
@@ -208,7 +220,7 @@ public:
 	Concurrency::concurrent_queue<ZombieAttack> Q_zattack;
 	Concurrency::concurrent_queue<Set_Item> Q_setitem;
 	Concurrency::concurrent_queue<Set_Car> Q_setcar;
-	Concurrency::concurrent_queue<uint32> Q_ditem;
+	Concurrency::concurrent_queue<Destroy_Item> Q_ditem;
 
 
 	virtual bool Init() override;

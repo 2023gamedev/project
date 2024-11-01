@@ -337,6 +337,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR destroy_item::destroy_item(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.itemid_)*/0u
+  , /*decltype(_impl_.playerid_)*/0u
   , /*decltype(_impl_.packet_type_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct destroy_itemDefaultTypeInternal {
@@ -560,6 +561,7 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::destroy_item, _impl_.itemid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::destroy_item, _impl_.playerid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::destroy_item, _impl_.packet_type_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -655,12 +657,13 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "sz\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004"
   "roll\030\t \001(\002\022\022\n\ncarkeyname\030\n \001(\t\"C\n\013CarDat"
   "aList\022\037\n\004cars\030\001 \003(\0132\021.Protocol.set_car\022\023"
-  "\n\013packet_type\030\003 \001(\r\"3\n\014destroy_item\022\016\n\006i"
-  "temid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\rb\006proto3"
+  "\n\013packet_type\030\003 \001(\r\"E\n\014destroy_item\022\016\n\006i"
+  "temid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\023\n\013packet_"
+  "type\030\003 \001(\rb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 1920, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 1938, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 20,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -6377,6 +6380,7 @@ destroy_item::destroy_item(const destroy_item& from)
   destroy_item* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.itemid_){}
+    , decltype(_impl_.playerid_){}
     , decltype(_impl_.packet_type_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -6393,6 +6397,7 @@ inline void destroy_item::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.itemid_){0u}
+    , decltype(_impl_.playerid_){0u}
     , decltype(_impl_.packet_type_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -6441,6 +6446,14 @@ const char* destroy_item::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
         } else
           goto handle_unusual;
         continue;
+      // uint32 playerid = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.playerid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       // uint32 packet_type = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
@@ -6484,6 +6497,12 @@ uint8_t* destroy_item::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_itemid(), target);
   }
 
+  // uint32 playerid = 2;
+  if (this->_internal_playerid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_playerid(), target);
+  }
+
   // uint32 packet_type = 3;
   if (this->_internal_packet_type() != 0) {
     target = stream->EnsureSpace(target);
@@ -6511,6 +6530,11 @@ size_t destroy_item::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_itemid());
   }
 
+  // uint32 playerid = 2;
+  if (this->_internal_playerid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_playerid());
+  }
+
   // uint32 packet_type = 3;
   if (this->_internal_packet_type() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_packet_type());
@@ -6536,6 +6560,9 @@ void destroy_item::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
 
   if (from._internal_itemid() != 0) {
     _this->_internal_set_itemid(from._internal_itemid());
+  }
+  if (from._internal_playerid() != 0) {
+    _this->_internal_set_playerid(from._internal_playerid());
   }
   if (from._internal_packet_type() != 0) {
     _this->_internal_set_packet_type(from._internal_packet_type());

@@ -113,7 +113,7 @@ public:
 	//ZombiePath recvZombiePath;
 	Set_Item recvSetItem;
 	Set_Car recvSetCar;
-	uint32 recvDestroyItem;
+	Destroy_Item recvDestroyItem;
 
 	uint32 PlayerId;
 	uint32 ZombieId;

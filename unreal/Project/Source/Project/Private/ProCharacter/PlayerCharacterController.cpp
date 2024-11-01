@@ -161,7 +161,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (GameInstance->ClientSocketPtr->Q_ditem.try_pop(recvDestroyItem)) {
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
-				MyGameMode->DestroyItem(recvDestroyItem);
+				MyGameMode->DestroyItem(recvDestroyItem.itemid, recvDestroyItem.playerid);
 			}
 		}
 

@@ -358,7 +358,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::destroy_item destroyitem;
 				if (destroyitem.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					Q_ditem.push(destroyitem.itemid());
+					Q_ditem.push(Destroy_Item(destroyitem.itemid(), destroyitem.playerid()));
 					UE_LOG(LogNet, Display, TEXT("Destroy item %d"), destroyitem.itemid());
 				}
 			}

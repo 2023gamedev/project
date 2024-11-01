@@ -3889,6 +3889,7 @@ class destroy_item final :
 
   enum : int {
     kItemidFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
     kPacketTypeFieldNumber = 3,
   };
   // uint32 itemid = 1;
@@ -3898,6 +3899,15 @@ class destroy_item final :
   private:
   uint32_t _internal_itemid() const;
   void _internal_set_itemid(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
   public:
 
   // uint32 packet_type = 3;
@@ -3918,6 +3928,7 @@ class destroy_item final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     uint32_t itemid_;
+    uint32_t playerid_;
     uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -6289,6 +6300,26 @@ inline void destroy_item::_internal_set_itemid(uint32_t value) {
 inline void destroy_item::set_itemid(uint32_t value) {
   _internal_set_itemid(value);
   // @@protoc_insertion_point(field_set:Protocol.destroy_item.itemid)
+}
+
+// uint32 playerid = 2;
+inline void destroy_item::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t destroy_item::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t destroy_item::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.destroy_item.playerid)
+  return _internal_playerid();
+}
+inline void destroy_item::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void destroy_item::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.destroy_item.playerid)
 }
 
 // uint32 packet_type = 3;
