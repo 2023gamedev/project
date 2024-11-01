@@ -13,7 +13,12 @@ public:
         bool result = false;
 
         for (auto player : playerDB) {
+            // 죽은 플레이어 무시
             if (player.second.health <= 0) {
+                continue;
+            }
+            // 연결 끊긴 플레이어 무시
+            if (g_players[player.first]->connected == false) {
                 continue;
             }
 
