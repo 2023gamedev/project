@@ -20,7 +20,7 @@ public:
             return "Fail";
         }
 
-        for (auto player : playerDB) {
+        for (auto player : playerDB_BT) {
             // 죽은 플레이어 무시
             if (player.second.health <= 0) {
                 continue;

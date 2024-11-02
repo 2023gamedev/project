@@ -11,6 +11,9 @@
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
 
+//std::unordered_map<unsigned int, PLAYER_INFO*> g_players_BT;
+std::unordered_map<int, Player> playerDB_BT;
+
 
 std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB2;
 std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB1;
@@ -602,8 +605,13 @@ void IOCP_CORE::Zombie_BT_Thread()
 		}
 		
 
+		// BT-송수신 쓰레드간의 데이터 레이스 방지를 위해
+		zombieDB_BT = zombieDB;
+		playerDB_BT = playerDB;
+		//g_players_BT = g_players;
+
 		// 좀비가 있을때 BT 실행
-		for (auto& zom : zombieDB) {
+		for (auto& zom : zombieDB_BT) {
 
 			// 플레이어가 있을때 BT 실행
 			if (result == "NO PLAYER")

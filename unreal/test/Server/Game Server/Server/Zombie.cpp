@@ -6,7 +6,7 @@
 
 #include "Zombie.h"
 //#include "ZombiePathfinder.h"
-#include "iocpServerClass.h"		// 전역변수 playerDB 사용하려구
+#include "iocpServerClass.h"		// 전역변수 playerDB_BT 사용하려구
 
 using std::cout;
 using std::endl;
@@ -117,7 +117,7 @@ void Zombie::SetDistance(int playerid, int distanceType, int setType)
 		setMap = &DistanceTo_FootSound;
 
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB[playerid].x, playerDB[playerid].y, playerDB[playerid].z}} };
+	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB_BT[playerid].x, playerDB_BT[playerid].y, playerDB_BT[playerid].z}} };
 
 	float dist = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 
@@ -133,7 +133,7 @@ void Zombie::SetDistance(int playerid, int distanceType, int setType)
 			}
 
 			else if (distanceType == 2) {
-				if (playerDB[playerid].IsRunning == true)
+				if (playerDB_BT[playerid].IsRunning == true)
 					setMap->at(playerid) = dist;
 				//else
 				//	setMap->at(playerid) = -1.0f;
@@ -257,7 +257,7 @@ void Zombie::SetTargetLocation(TARGET t)
 				//cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 찾기 시도 - #" << try_cnt << endl;
 
 				if (try_cnt >= 5) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
-					cout << "랜덤 패트롤 찾기 결국 실패!!!" << endl;
+					cout << "좀비 #" << ZombieData.zombieID << "랜덤 패트롤 찾기 결국 실패!!!" << endl;
 				}
 			}
 		}
@@ -281,7 +281,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 
 	if (searchMap.size() != 0) {
 
-		for (auto player : playerDB) {
+		for (auto player : playerDB_BT) {
 			if (searchMap.find(player.first) != searchMap.end()) {
 				if (min > searchMap.at(player.first) && searchMap.at(player.first) > 0) {
 					min = searchMap.at(player.first);
@@ -305,7 +305,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 		}
 
 		// 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
-		for (auto player : playerDB) {
+		for (auto player : playerDB_BT) {
 			if (searchMap.find(player.first) != searchMap.end()) {
 				if (min == searchMap.at(player.first)) {
 					closest_players.emplace_back(player.first);
@@ -337,8 +337,8 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			//cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 의 발소리 따라감!!!" << endl;
 		}
 
-		// {주의} map 사용 할 때 주의할 점 (playerDB) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
-		closest_player_pos = vector<vector<vector<float>>>{ {{playerDB[ClosestPlayerID].x, playerDB[ClosestPlayerID].y, playerDB[ClosestPlayerID].z}} };
+		// {주의} map 사용 할 때 주의할 점 (playerDB_BT) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
+		closest_player_pos = vector<vector<vector<float>>>{ {{playerDB_BT[ClosestPlayerID].x, playerDB_BT[ClosestPlayerID].y, playerDB_BT[ClosestPlayerID].z}} };
 	}
 	else {	// (searchMap.size() == 0)
 		if (distanceType == 1) {
@@ -571,7 +571,7 @@ void Zombie::SendPath()
 		zPath.SerializeToString(&serializedData);
 
 		for (const auto& player : g_players) {
-			if (pathfinder.floor == playerDB[player.first].floor) {
+			if (pathfinder.floor == playerDB_BT[player.first].floor) {
 				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 
 				//cout << "플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
@@ -594,7 +594,7 @@ bool Zombie::FootSoundCheck()
 	bool result = false;
 
 	// 뛰고 있는 플레이어들 DistanceTo_FootSound 맵에 저장
-	for (auto player : playerDB) {
+	for (auto player : playerDB_BT) {
 		if (player.second.IsRunning) {
 			SetDistance(player.first, 2, 1);
 			result = true;

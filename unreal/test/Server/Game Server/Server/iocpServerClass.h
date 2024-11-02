@@ -63,6 +63,9 @@ using PLAYER_INFO = struct Client_INFO {
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 extern std::unordered_map<int, Player> playerDB;
 
+//extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players_BT;
+extern std::unordered_map<int, Player> playerDB_BT;
+
 struct TupleHash {
 	size_t operator()(const tuple<float, float, float>& t) const {
 		size_t h1 = hash<float>{}(get<0>(t));
@@ -131,6 +134,7 @@ public:
 
 	//좀비 벡터
 	vector<Zombie*> zombieDB;
+	vector<Zombie*> zombieDB_BT;
 
 	//======Zombie_BT 선언======
 
