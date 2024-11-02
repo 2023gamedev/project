@@ -203,6 +203,7 @@ public:
 	~ClientSocket() override;
 
 	SOCKET Socket;
+	//UPROPERTY(VisibleAnywhere)
 	uint32 MyPlayerId = 0;
 	uint32 OtherPlayerId = 0;
 	uint32 ZombieId = 0;

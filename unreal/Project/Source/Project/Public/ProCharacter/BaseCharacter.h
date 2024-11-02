@@ -539,6 +539,7 @@ private:
 	int m_iBleedHealingMontageFlag;
 
 private:
+	UPROPERTY(VisibleAnywhere)
 	uint32 PlayerId = 99;
 
 	FVector NewLocation;

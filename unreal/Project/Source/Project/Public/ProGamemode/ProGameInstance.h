@@ -49,7 +49,7 @@ public:
 
     void ChangeOneGameMode();
 
-
+    //UPROPERTY(VisibleAnywhere)
     ClientSocket* ClientSocketPtr;
 
     bool ConnectNetwork;

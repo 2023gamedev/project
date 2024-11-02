@@ -243,21 +243,24 @@ private:
 	float m_fTurningSpeedDegree;
 
 public:
+	UPROPERTY(EditAnywhere)
 	UZombieAnimInstance* CachedAnimInstance;
 
 	UProGameInstance* GameInstance;
 
+	UPROPERTY(EditAnywhere)
 	uint32 ZombieId = 99;
-	//FVector NewLocation;
 
 	FVector NewLocation;
 
 	FVector OldLocation = FVector(0.0f, 0.0f, 0.0f);
 
+	//UPROPERTY(VisibleAnywhere)
 	std::tuple<float, float, float> NextPath[2];
 
 	//float Speed;
 	//float PreviousSpeed;
 
+	UPROPERTY(EditAnywhere)
 	FVector TargetLocation;
 };
