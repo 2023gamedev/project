@@ -57,7 +57,7 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		FVector End = Pos - FVector(0, 0, 100);
 		FCollisionQueryParams Params;
 
-		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+		//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
 	}
 
 	//이미 도착지점에 도착했을때

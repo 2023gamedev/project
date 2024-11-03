@@ -6,26 +6,54 @@
 AObstacleNode::AObstacleNode()
 {
     PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void AObstacleNode::BeginPlay()
 {
     Super::BeginPlay();
-
-    FTimerHandle TimerHandle;
-    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AObstacleNode::GenerateNodesAndEdges, 1.0f, false);
 }
 
 void AObstacleNode::GenerateNodesAndEdges()
 {
-    GenerateEdges(GenerateNodes(GetWorld(), _GridSize), _GridSize);
-    UE_LOG(LogTemp, Warning, TEXT("DebugTest"));
+    int floor;
+
+    if (Activate_Floor_B2) {
+        floor = 1;
+        StartLocation.Z = B2_Z;
+        GenerateEdges(GenerateNodes(GetWorld(), _GridSize), _GridSize, floor);
+    }
+
+    if (Activate_Floor_B1) {
+        floor = 2;
+        StartLocation.Z = B1_Z;
+        GenerateEdges(GenerateNodes(GetWorld(), _GridSize), _GridSize, floor);
+    }
+
+    if (Activate_Floor_F1) {
+        floor = 3;
+        StartLocation.Z = F1_Z;
+        GenerateEdges(GenerateNodes(GetWorld(), _GridSize), _GridSize, floor);
+    }
+   
+    if (Activate_Floor_F2) {
+        floor = 4;
+        StartLocation.Z = F2_Z;
+        GenerateEdges(GenerateNodes(GetWorld(), _GridSize), _GridSize, floor);
+    }
+    
+    UE_LOG(LogTemp, Warning, TEXT("GenerateEdges_DebugTest"));
 }
 
 void AObstacleNode::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    if (Activate == true && Activated == false) {
+        Activate = false;
+        Activated = true;
+
+        GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AObstacleNode::GenerateNodesAndEdges, 1.0f, false);
+    }
 }
 
 TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
@@ -40,7 +68,6 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
             FVector Location(x, y, StartLocation.Z);
             if (IsLocationNavigable(World, Location))
             {
-
                 Nodes.Add(Location);
             }
             else
@@ -53,9 +80,13 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
 
     NodeArr = Nodes;
 
+
+    if (SaveNodeFile == false)
+        return Nodes;
+
     // Nodes를 파일로 저장
     //FString FilePath = FPaths::ProjectDir() + TEXT("ObstacleNodes.txt");
-    FString NodeData;
+    /*FString NodeData;
 
     for (const FVector& Node : Nodes)
     {
@@ -64,7 +95,7 @@ TArray<FVector> AObstacleNode::GenerateNodes(UWorld* World, float GridSize)
         }
 
         //NodeData += FString::Printf(TEXT("%f,%f,%f\n"), Node.X, Node.Y, Node.Z);
-    }
+    }*/
 
     //FFileHelper::SaveStringToFile(NodeData, *FilePath);
 
@@ -75,27 +106,29 @@ bool AObstacleNode::IsLocationNavigable(UWorld* World, FVector Location)
 {
     // 레이캐스트 등을 사용하여 Location이 이동 가능한지 확인
     FHitResult Hit;
-    FVector Start = Location + FVector(0, 0, 100);
+    FVector Start = Location + FVector(0, 0, 10);
     FVector End = Location - FVector(0, 0, 100);
     FCollisionQueryParams Params;
 
     bool Result = !World->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
 
-    if (Result) {
-        if (Location.X > mapminX && Location.X < mapmaxX && Location.Y > mapminY && Location.Y < mapmaxY) {
-            DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 100.f);
+    if (DrawNodes) {
+        if (Result) {
+            if (Location.X > mapminX && Location.X < mapmaxX && Location.Y > mapminY && Location.Y < mapmaxY) {
+                DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, DrawNode_LifeTime);
+            }
+
         }
-
-    }
-    else {
-       // DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 100.f);
-
+        else {
+            DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, DrawNode_LifeTime);
+        }
     }
 
     return Result;
 }
 
-TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVector>& Nodes, float GridSize)
+// floor: 1 - B2 / 2 - B1 / 3 - F1 / 4 - F2
+TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVector>& Nodes, float GridSize, int floor)
 {
     TMap<FVector, TArray<FEdgeData>> Edges;
 
@@ -124,6 +157,10 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
 
     EdgesMap = Edges;
 
+
+    if (SaveNodeFile == false)
+        return Edges;
+
     // 엣지 데이터를 문자열로 변환
     FString EdgeData;
     for (const auto& Edge : Edges)
@@ -143,7 +180,14 @@ TMap<FVector, TArray<FEdgeData>> AObstacleNode::GenerateEdges(const TArray<FVect
     }
 
     // 파일로 저장
-    FString FilePath = FPaths::ProjectDir() + TEXT("EdgesF2.txt");
+    FString Floor = TEXT("");
+    switch (floor) {
+    case 1: Floor = TEXT("EdgesB2.txt"); break;
+    case 2: Floor = TEXT("EdgesB1.txt"); break;
+    case 3: Floor = TEXT("EdgesF1.txt"); break;
+    case 4: Floor = TEXT("EdgesF2.txt"); break;
+    }
+    FString FilePath = FPaths::ProjectDir() + Floor;
     FFileHelper::SaveStringToFile(EdgeData, *FilePath);
 
     return Edges;
