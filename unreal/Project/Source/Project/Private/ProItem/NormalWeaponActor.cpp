@@ -18,6 +18,8 @@ void ANormalWeaponActor::BeginPlay()
 	if (BoxComponent) {
 		BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ANormalWeaponActor::WeaponBeginOverlap);
 	}
+
+	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 void ANormalWeaponActor::Tick(float DeltaTime)
@@ -116,6 +118,20 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Damaged!"));
 	}
+
+	
+	int ZombieId = Zombie->GetZombieId();
+
+	Protocol::Zombie_hp packet;
+	packet.set_zombieid(ZombieId);
+	packet.set_damage(m_fWeaponSTR);
+	packet.set_packet_type(12);
+
+	std::string serializedData;
+	packet.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+	
 }
 
 

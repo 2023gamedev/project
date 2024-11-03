@@ -114,7 +114,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR Zombie_hp::Zombie_hp(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.zombieid_)*/0u
-  , /*decltype(_impl_.hp_)*/0
+  , /*decltype(_impl_.damage_)*/0
   , /*decltype(_impl_.packet_type_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct Zombie_hpDefaultTypeInternal {
@@ -422,7 +422,7 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie_hp, _impl_.zombieid_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::Zombie_hp, _impl_.hp_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Zombie_hp, _impl_.damage_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Zombie_hp, _impl_.packet_type_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::ZombieDataList, _internal_metadata_),
@@ -625,45 +625,45 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "\022\t\n\001y\030\005 \001(\002\022\t\n\001z\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n"
   "\003yaw\030\010 \001(\002\022\014\n\004roll\030\t \001(\002\"H\n\rZombie_attac"
   "k\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\023\n"
-  "\013packet_type\030\003 \001(\r\">\n\tZombie_hp\022\020\n\010zombi"
-  "eid\030\001 \001(\r\022\n\n\002hp\030\002 \001(\002\022\023\n\013packet_type\030\003 \001"
-  "(\r\"H\n\016ZombieDataList\022!\n\007zombies\030\001 \003(\0132\020."
-  "Protocol.Zombie\022\023\n\013packet_type\030\003 \001(\r\"*\n\007"
-  "Vector3\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002"
-  "\"\234\001\n\nZombiePath\022\020\n\010zombieid\030\001 \001(\r\022 \n\005pat"
-  "h1\030\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packet_ty"
-  "pe\030\003 \001(\r\022 \n\005path2\030\004 \001(\0132\021.Protocol.Vecto"
-  "r3\022#\n\010location\030\005 \001(\0132\021.Protocol.Vector3\""
-  "y\n\nPatrolPath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004path\030"
-  "\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packet_type\030"
-  "\003 \001(\r\022#\n\010location\030\004 \001(\0132\021.Protocol.Vecto"
-  "r3\"[\n\010Detected\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010play"
-  "erid\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\022\026\n\016playe"
-  "r_insight\030\004 \001(\010\"*\n\004Time\022\r\n\005timer\030\001 \001(\002\022\023"
-  "\n\013packet_type\030\003 \001(\r\"W\n\nEquip_Item\022\020\n\010pla"
-  "yerid\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013packet_"
-  "type\030\003 \001(\r\022\020\n\010itemtype\030\004 \001(\r\"-\n\004ping\022\020\n\010"
-  "playerid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\r\"3\n\np"
-  "atrol_hit\022\020\n\010zombieid\030\001 \001(\r\022\023\n\013packet_ty"
-  "pe\030\003 \001(\r\"\262\001\n\010set_item\022\016\n\006itemid\030\001 \001(\r\022\020\n"
-  "\010itemname\030\002 \001(\t\022\023\n\013packet_type\030\003 \001(\r\022\021\n\t"
-  "itemclass\030\004 \001(\r\022\024\n\014texture_path\030\005 \001(\t\022\r\n"
-  "\005count\030\006 \001(\r\022\r\n\005floor\030\007 \001(\r\022\014\n\004posx\030\010 \001("
-  "\002\022\014\n\004posy\030\t \001(\002\022\014\n\004posz\030\n \001(\002\"F\n\014ItemDat"
-  "aList\022!\n\005items\030\001 \003(\0132\022.Protocol.set_item"
-  "\022\023\n\013packet_type\030\003 \001(\r\"\246\001\n\007set_car\022\r\n\005car"
-  "id\030\001 \001(\r\022\017\n\007carname\030\002 \001(\t\022\023\n\013packet_type"
-  "\030\003 \001(\r\022\014\n\004posx\030\004 \001(\002\022\014\n\004posy\030\005 \001(\002\022\014\n\004po"
-  "sz\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002\022\014\n\004"
-  "roll\030\t \001(\002\022\022\n\ncarkeyname\030\n \001(\t\"C\n\013CarDat"
-  "aList\022\037\n\004cars\030\001 \003(\0132\021.Protocol.set_car\022\023"
-  "\n\013packet_type\030\003 \001(\r\"E\n\014destroy_item\022\016\n\006i"
-  "temid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\023\n\013packet_"
-  "type\030\003 \001(\rb\006proto3"
+  "\013packet_type\030\003 \001(\r\"B\n\tZombie_hp\022\020\n\010zombi"
+  "eid\030\001 \001(\r\022\016\n\006damage\030\002 \001(\002\022\023\n\013packet_type"
+  "\030\003 \001(\r\"H\n\016ZombieDataList\022!\n\007zombies\030\001 \003("
+  "\0132\020.Protocol.Zombie\022\023\n\013packet_type\030\003 \001(\r"
+  "\"*\n\007Vector3\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003"
+  " \001(\002\"\234\001\n\nZombiePath\022\020\n\010zombieid\030\001 \001(\r\022 \n"
+  "\005path1\030\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packe"
+  "t_type\030\003 \001(\r\022 \n\005path2\030\004 \001(\0132\021.Protocol.V"
+  "ector3\022#\n\010location\030\005 \001(\0132\021.Protocol.Vect"
+  "or3\"y\n\nPatrolPath\022\020\n\010zombieid\030\001 \001(\r\022\037\n\004p"
+  "ath\030\002 \001(\0132\021.Protocol.Vector3\022\023\n\013packet_t"
+  "ype\030\003 \001(\r\022#\n\010location\030\004 \001(\0132\021.Protocol.V"
+  "ector3\"[\n\010Detected\022\020\n\010zombieid\030\001 \001(\r\022\020\n\010"
+  "playerid\030\002 \001(\r\022\023\n\013packet_type\030\003 \001(\r\022\026\n\016p"
+  "layer_insight\030\004 \001(\010\"*\n\004Time\022\r\n\005timer\030\001 \001"
+  "(\002\022\023\n\013packet_type\030\003 \001(\r\"W\n\nEquip_Item\022\020\n"
+  "\010playerid\030\001 \001(\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013pac"
+  "ket_type\030\003 \001(\r\022\020\n\010itemtype\030\004 \001(\r\"-\n\004ping"
+  "\022\020\n\010playerid\030\001 \001(\r\022\023\n\013packet_type\030\003 \001(\r\""
+  "3\n\npatrol_hit\022\020\n\010zombieid\030\001 \001(\r\022\023\n\013packe"
+  "t_type\030\003 \001(\r\"\262\001\n\010set_item\022\016\n\006itemid\030\001 \001("
+  "\r\022\020\n\010itemname\030\002 \001(\t\022\023\n\013packet_type\030\003 \001(\r"
+  "\022\021\n\titemclass\030\004 \001(\r\022\024\n\014texture_path\030\005 \001("
+  "\t\022\r\n\005count\030\006 \001(\r\022\r\n\005floor\030\007 \001(\r\022\014\n\004posx\030"
+  "\010 \001(\002\022\014\n\004posy\030\t \001(\002\022\014\n\004posz\030\n \001(\002\"F\n\014Ite"
+  "mDataList\022!\n\005items\030\001 \003(\0132\022.Protocol.set_"
+  "item\022\023\n\013packet_type\030\003 \001(\r\"\246\001\n\007set_car\022\r\n"
+  "\005carid\030\001 \001(\r\022\017\n\007carname\030\002 \001(\t\022\023\n\013packet_"
+  "type\030\003 \001(\r\022\014\n\004posx\030\004 \001(\002\022\014\n\004posy\030\005 \001(\002\022\014"
+  "\n\004posz\030\006 \001(\002\022\r\n\005pitch\030\007 \001(\002\022\013\n\003yaw\030\010 \001(\002"
+  "\022\014\n\004roll\030\t \001(\002\022\022\n\ncarkeyname\030\n \001(\t\"C\n\013Ca"
+  "rDataList\022\037\n\004cars\030\001 \003(\0132\021.Protocol.set_c"
+  "ar\022\023\n\013packet_type\030\003 \001(\r\"E\n\014destroy_item\022"
+  "\016\n\006itemid\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\023\n\013pac"
+  "ket_type\030\003 \001(\rb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 1938, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 1942, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 20,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -2386,7 +2386,7 @@ Zombie_hp::Zombie_hp(const Zombie_hp& from)
   Zombie_hp* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.zombieid_){}
-    , decltype(_impl_.hp_){}
+    , decltype(_impl_.damage_){}
     , decltype(_impl_.packet_type_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -2403,7 +2403,7 @@ inline void Zombie_hp::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.zombieid_){0u}
-    , decltype(_impl_.hp_){0}
+    , decltype(_impl_.damage_){0}
     , decltype(_impl_.packet_type_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -2452,10 +2452,10 @@ const char* Zombie_hp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         } else
           goto handle_unusual;
         continue;
-      // float hp = 2;
+      // float damage = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 21)) {
-          _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          _impl_.damage_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
@@ -2503,14 +2503,14 @@ uint8_t* Zombie_hp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_zombieid(), target);
   }
 
-  // float hp = 2;
+  // float damage = 2;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_hp = this->_internal_hp();
-  uint32_t raw_hp;
-  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
-  if (raw_hp != 0) {
+  float tmp_damage = this->_internal_damage();
+  uint32_t raw_damage;
+  memcpy(&raw_damage, &tmp_damage, sizeof(tmp_damage));
+  if (raw_damage != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(2, this->_internal_hp(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(2, this->_internal_damage(), target);
   }
 
   // uint32 packet_type = 3;
@@ -2540,12 +2540,12 @@ size_t Zombie_hp::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_zombieid());
   }
 
-  // float hp = 2;
+  // float damage = 2;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_hp = this->_internal_hp();
-  uint32_t raw_hp;
-  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
-  if (raw_hp != 0) {
+  float tmp_damage = this->_internal_damage();
+  uint32_t raw_damage;
+  memcpy(&raw_damage, &tmp_damage, sizeof(tmp_damage));
+  if (raw_damage != 0) {
     total_size += 1 + 4;
   }
 
@@ -2576,11 +2576,11 @@ void Zombie_hp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
     _this->_internal_set_zombieid(from._internal_zombieid());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_hp = from._internal_hp();
-  uint32_t raw_hp;
-  memcpy(&raw_hp, &tmp_hp, sizeof(tmp_hp));
-  if (raw_hp != 0) {
-    _this->_internal_set_hp(from._internal_hp());
+  float tmp_damage = from._internal_damage();
+  uint32_t raw_damage;
+  memcpy(&raw_damage, &tmp_damage, sizeof(tmp_damage));
+  if (raw_damage != 0) {
+    _this->_internal_set_damage(from._internal_damage());
   }
   if (from._internal_packet_type() != 0) {
     _this->_internal_set_packet_type(from._internal_packet_type());
