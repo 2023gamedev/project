@@ -795,7 +795,7 @@ void AOneGameModeBase::UpdateZombieAttack(uint32 ZombieId, uint32 PlayerId)
     }
 }
 
-void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, uint32 HP)
+void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
 {
     UWorld* World = GetWorld();
 
@@ -813,8 +813,9 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, uint32 HP)
         if (BaseZombie)
         {
             //좀비의 체력상태 업데이트
-            BaseZombie->SetHP(HP);
-            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %d"), ZombieId, HP);
+            float NewHP = BaseZombie->GetHP() - Damage;
+            BaseZombie->SetHP(NewHP);
+            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %d"), ZombieId, NewHP);
         }
     }
     else

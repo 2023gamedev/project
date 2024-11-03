@@ -33,8 +33,6 @@ public:
 	void Send_Detected();
 
 	void Send_PlayerLost();
-
-	void Send_ZombieHP();
 	
 	//void CheckAndSendMovement();
 

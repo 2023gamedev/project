@@ -110,6 +110,7 @@ public:
 	PlayerJump recvJump;
 	ZombieData recvZombieData;
 	ZombieAttack recvZombieAttack;
+	ZombieHP recvZombieHP;
 	//ZombiePath recvZombiePath;
 	Set_Item recvSetItem;
 	Set_Car recvSetCar;

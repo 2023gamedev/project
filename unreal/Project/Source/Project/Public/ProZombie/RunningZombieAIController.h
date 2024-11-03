@@ -36,8 +36,6 @@ public:
 
 	void Send_PlayerLost();
 
-	void Send_ZombieHP();
-
 	//void CheckAndSendMovement();
 	
 	void SetStartLocationValue(FVector startlocation);

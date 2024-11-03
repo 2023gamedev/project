@@ -308,7 +308,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::Zombie_hp zombiehp;
 				if (zombiehp.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					Q_zhp.push(ZombieHP(zombiehp.zombieid(), zombiehp.hp()));
+					Q_zhp.push(ZombieHP(zombiehp.zombieid(), zombiehp.damage()));
 					UE_LOG(LogNet, Display, TEXT("Zombie HP"));
 				}
 				break;

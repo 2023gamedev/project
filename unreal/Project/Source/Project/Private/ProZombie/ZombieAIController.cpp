@@ -216,7 +216,7 @@ void AZombieAIController::Tick(float DeltaTime)
 		return;
 	}
 
-	Send_ZombieHP();
+	//Send_ZombieHP();
 
 	// 좀비 사망시
 	if (OwnerZombie->GetHP() < 0) {
@@ -335,30 +335,6 @@ void AZombieAIController::Send_PlayerLost()
 	packet.SerializeToString(&serializedData);
 
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-}
-
-// 좀비 체력의 변화가 있으면 서버로 전송
-void AZombieAIController::Send_ZombieHP()
-{
-	if (!OwnerZombie) {
-		UE_LOG(LogTemp, Warning, TEXT("ZombiePawn is null."));
-		return;
-	}
-
-	if (PreviousHp != OwnerZombie->GetHP()) {
-		ZombieId = OwnerZombie->GetZombieId();
-
-		Protocol::Zombie_hp packet;
-		packet.set_zombieid(ZombieId);
-		packet.set_hp(OwnerZombie->GetHP());
-		packet.set_packet_type(12);
-
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
-		PreviousHp = OwnerZombie->GetHP();
-
-		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-	}
 }
 
 void AZombieAIController::SetStartLocationValue(FVector startlocation)

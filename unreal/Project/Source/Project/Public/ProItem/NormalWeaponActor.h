@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "ItemActor.h"
+#include "ProGamemode/ProGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 #include "Components/BoxComponent.h"
 #include "NormalWeaponActor.generated.h"
 
@@ -11,7 +13,7 @@
  * 
  */
 
-// ¹«±â ¾×ÅÍ
+// ë¬´ê¸° ì•¡í„°
 class ABaseCharacter;
 
 UCLASS()
@@ -54,7 +56,7 @@ public:
 	FName WeaponName;
 
 
-	// ¹«±âÀÇ ½ºÅÈµé
+	// ë¬´ê¸°ì˜ ìŠ¤íƒ¯ë“¤
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fWeaponSTR;
 
@@ -64,7 +66,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fWeaponRange;
 
-	// ¹«±âÀÇ ½ºÅÈµé
+	// ë¬´ê¸°ì˜ ìŠ¤íƒ¯ë“¤
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fCharacterSTR;
+
+public:
+	UProGameInstance* GameInstance;
 };

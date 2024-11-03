@@ -186,6 +186,13 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_zhp.try_pop(recvZombieHP)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Damage);
+			}
+		}
+
 		bool recvping = false;
 		if (GameInstance->ClientSocketPtr->Q_ping.try_pop(recvping))
 		{

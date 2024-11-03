@@ -129,12 +129,12 @@ struct ZombiePath
 struct ZombieHP
 {
 	uint32 ZombieId;
-	uint32 Hp;
+	float Damage;
 
-	ZombieHP() : ZombieId(0), Hp(0) {}
+	ZombieHP() : ZombieId(0), Damage(0) {}
 
-	ZombieHP(uint32 InZombieId, uint32 InHp)
-		: ZombieId(InZombieId), Hp(InHp) {}
+	ZombieHP(uint32 InZombieId, float InDamage)
+		: ZombieId(InZombieId), Damage(InDamage) {}
 };
 
 struct ZombieAttack

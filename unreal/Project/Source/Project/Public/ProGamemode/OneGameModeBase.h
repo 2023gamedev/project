@@ -171,7 +171,7 @@ public:
 
     void UpdateZombieAttack(uint32 ZombieId, uint32 PlayerId);
 
-    void UpdateZombieHP(uint32 ZombieId, uint32 HP);
+    void UpdateZombieHP(uint32 ZombieId, float Damage);
 
     void DestroyItem(uint32 Itemid, uint32 Playerid);
 

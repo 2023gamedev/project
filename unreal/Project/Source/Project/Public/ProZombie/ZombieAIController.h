@@ -35,8 +35,6 @@ public:
 
 	void Send_PlayerLost();
 
-	void Send_ZombieHP();
-
 
 	void SetStartLocationValue(FVector startlocation);
 	void SetPatrolLocationValue(FVector patrollocation);
