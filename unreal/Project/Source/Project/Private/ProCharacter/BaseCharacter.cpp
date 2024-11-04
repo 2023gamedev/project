@@ -222,6 +222,37 @@ void ABaseCharacter::BeginPlay()
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 
+	if (TextMissionUIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+
+		TextMissionUIWidget = CreateWidget<UTextMissionUI>(controller, TextMissionUIClass);
+
+		if (!TextMissionUIWidget) {
+			return;
+		}
+
+		FText KText = FText::FromString(TEXT("게임 시작"));
+		ShowActionText(KText, 5.f);
+
+		FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하라"));
+		ShowMissionText(KMissionText1, 1);
+
+		FText KMissionText2 = FText::FromString(TEXT("- 옥상열쇠를 구하라"));
+		ShowMissionText(KMissionText2, 2);
+
+		FText KMissionText3 = FText::FromString(TEXT("지하로 탈출하라"));
+		ShowMissionText(KMissionText3, 3);
+
+		FText KMissionText4 = FText::FromString(TEXT("- 차 키를 구하라"));
+		ShowMissionText(KMissionText4, 4);
+
+		TextMissionUIWidget->AddToViewport();
+	}
+
 	if (GameUIClass != nullptr) {
 
 		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
@@ -310,36 +341,6 @@ void ABaseCharacter::BeginPlay()
 		CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
 	}
 
-	if (TextMissionUIClass != nullptr) {
-
-		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
-		if (controller == nullptr) {
-			return;
-		}
-
-		TextMissionUIWidget = CreateWidget<UTextMissionUI>(controller, TextMissionUIClass);
-
-		if (!TextMissionUIWidget) {
-			return;
-		}
-
-		FText KText = FText::FromString(TEXT("게임 시작"));
-		ShowActionText(KText, 5.f);
-
-		FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하라"));
-		ShowMissionText(KMissionText1, 1);
-
-		FText KMissionText2 = FText::FromString(TEXT("- 옥상열쇠를 구하라"));
-		ShowMissionText(KMissionText2, 2);
-
-		FText KMissionText3 = FText::FromString(TEXT("지하로 탈출하라"));
-		ShowMissionText(KMissionText3, 3);
-
-		FText KMissionText4 = FText::FromString(TEXT("- 차 키를 구하라"));
-		ShowMissionText(KMissionText4, 4);
-
-		TextMissionUIWidget->AddToViewport();
-	}
 
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
