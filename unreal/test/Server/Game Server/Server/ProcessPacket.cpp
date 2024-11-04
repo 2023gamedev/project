@@ -312,7 +312,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Packet.SerializeToString(&serializedData);
 
         for (const auto& player : g_players) {
-            if (player.second->isInGame) {
+            if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
