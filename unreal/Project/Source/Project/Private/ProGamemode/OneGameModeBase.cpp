@@ -744,7 +744,8 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
                         Char = Cast<ABaseCharacter>(Player);
 
                         if (Char->GetPlayerId() == 99) {
-                            AIZombieController->MyChar = Char;
+                            //AIZombieController->OwnerZombie->MyChar = Char; //결국 아래랑 같음
+                            NewZombie->MyChar = Char;
                         }
                     }
                     
@@ -772,7 +773,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
                         Char = Cast<ABaseCharacter>(Player);
 
                         if (Char->GetPlayerId() == 99) {
-                            //AIShoutingZombieController->MyChar = Char;
+                            NewZombie->MyChar = Char;
                         }
                     }
 
@@ -800,7 +801,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
                         Char = Cast<ABaseCharacter>(Player);
 
                         if (Char->GetPlayerId() == 99) {
-                            //AIRunningZombieController->MyChar = Char;
+                            NewZombie->MyChar = Char;
                         }
                     }
 

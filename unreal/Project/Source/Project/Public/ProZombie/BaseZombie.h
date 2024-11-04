@@ -271,4 +271,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int floor = FLOOR::Zero;
+
+	UPROPERTY(EditAnywhere)
+	ABaseCharacter* MyChar;
 };

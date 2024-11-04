@@ -242,7 +242,7 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 
 	// 좀비들의 시야 검사 "나 자신"에 대해서만 실시==========================
-	PlayerPawn = Cast<APawn>(MyChar);
+	PlayerPawn = Cast<APawn>(OwnerZombie->MyChar);
 
 	if (PlayerPawn == nullptr)
 		return;
