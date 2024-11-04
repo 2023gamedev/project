@@ -198,7 +198,19 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 
 void AZombieAIController::Tick(float DeltaTime)
 {
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+
+	if (PlayerPawn == nullptr || OwnerZombie == nullptr || OwnerZombie->MyChar == nullptr) {
+		return;
+	}
+
+	if (OwnerZombie->MyChar->floor != OwnerZombie->floor) {
+		return;
+	}
+
+
 	Super::Tick(DeltaTime);
+
 
 	//static float SearchInterval = 0.5f; // 0.5초마다 플레이어 검색
 	//static float TimeSinceLastSearch = 0.0f;
@@ -209,12 +221,6 @@ void AZombieAIController::Tick(float DeltaTime)
 		//TimeSinceLastSearch = 0.0f; // 타이머 리셋
 
 	//OwnerZombie = Cast<ANormalZombie>(GetPawn());		// 이미 OneGameModeBase.cpp에 UpdateZombie()에서 OwnerZombie 할당 처리함, 그리고 뒤에서 예외처리 했으니 괜춘
-
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-
-	if (PlayerPawn == nullptr || OwnerZombie == nullptr) {
-		return;
-	}
 
 	//Send_ZombieHP();
 

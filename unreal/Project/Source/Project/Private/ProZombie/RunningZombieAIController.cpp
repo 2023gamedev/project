@@ -207,15 +207,19 @@ void ARunningZombieAIController::ZombieTurn(float deltasecond, int& indx)
 
 void ARunningZombieAIController::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
-	ARunningZombie* RunningZombie = Cast<ARunningZombie>(GetPawn());
-
-	if (PlayerPawn == nullptr || OwnerZombie == nullptr) {
+	if (PlayerPawn == nullptr || OwnerZombie == nullptr || OwnerZombie->MyChar == nullptr) {
 		return;
 	}
+
+	if (OwnerZombie->MyChar->floor != OwnerZombie->floor) {
+		return;
+	}
+
+
+	Super::Tick(DeltaTime);
+
 
 	// 좀비 사망시
 	if (OwnerZombie->GetHP() < 0) {

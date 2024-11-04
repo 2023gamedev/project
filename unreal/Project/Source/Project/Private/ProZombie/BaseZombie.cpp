@@ -65,23 +65,25 @@ void ABaseZombie::Tick(float DeltaTime)
 		return;
 
 	if (MyChar->floor != floor) {
-		SetActorTickEnabled(false);	// tick 연산 중지
 		SetActorHiddenInGame(true);	// 렌더링 중지
 		UStaticMeshComponent* MeshComponent = Cast<UStaticMeshComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass()));
 		if (MeshComponent)
 		{
 			MeshComponent->SetSimulatePhysics(false); // 물리 시뮬레이션 중지
 		}
+		return;
+		//SetActorTickEnabled(false);	// tick 연산 중지
 	}
 	else {
-		SetActorTickEnabled(true);	// tick 연산 다시 시작
 		SetActorHiddenInGame(false);	// 렌더링 다시 시작
 		UStaticMeshComponent* MeshComponent = Cast<UStaticMeshComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass()));
 		if (MeshComponent)
 		{
 			MeshComponent->SetSimulatePhysics(true); // 물리 시뮬레이션 다시 시작
 		}
+		//SetActorTickEnabled(true);	// tick 연산 다시 시작
 	}
+
 
 	Super::Tick(DeltaTime);
 
