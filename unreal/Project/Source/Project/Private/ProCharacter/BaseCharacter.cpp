@@ -369,6 +369,25 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// 플레이어 floor 계산
+	if (PlayerId == 99) {	// 자기 자신에 대해서만 계산
+		if (GetActorLocation().Z < 800.f) {
+			floor = FLOOR::B2;
+		}
+		else if (GetActorLocation().Z < 1800.f) {
+			floor = FLOOR::B1;
+		}
+		else if (GetActorLocation().Z < 2500.f) {
+			floor = FLOOR::F1;
+		}
+		else if (GetActorLocation().Z < 3600.f) {
+			floor = FLOOR::F2;
+		}
+		else {
+			floor = FLOOR::F3;
+		}
+	}
+
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
 	if (!GetVelocity().Size()) {

@@ -568,6 +568,14 @@ public:
 	std::atomic<bool> b_attack{ false };
 	bool b_run = false;
 
-	uint32 ItemBoxId = 999;
+	uint32 ItemBoxId = 9;
+
+
+	enum FLOOR {
+		Zero, B2, B1, F1, F2, F3
+	};
+
+	UPROPERTY(EditAnywhere)
+	int floor = FLOOR::Zero;
 
 };

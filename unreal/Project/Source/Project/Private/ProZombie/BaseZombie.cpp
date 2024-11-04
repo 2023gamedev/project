@@ -61,6 +61,8 @@ void ABaseZombie::BeginPlay()
 // Called every frame
 void ABaseZombie::Tick(float DeltaTime)
 {
+
+
 	Super::Tick(DeltaTime);
 
 	//auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());

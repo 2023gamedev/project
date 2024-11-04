@@ -83,6 +83,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	ABaseZombie* OwnerZombie;
 
+	UPROPERTY(EditAnywhere)
+	ABaseCharacter* MyChar;
+
 	int attackPlayerID;
 
 	float PreviousHp = 0.f;

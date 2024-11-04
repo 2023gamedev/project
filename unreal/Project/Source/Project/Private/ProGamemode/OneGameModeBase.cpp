@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "Kismet/GameplayStatics.h"
 
 #include "ProGamemode/OneGameModeBase.h"
 #include "ProCharacter/BaseCharacter.h"
@@ -694,7 +695,7 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             //좀비 애니메이션 업데이트용
             BaseZombie->UpdateZombieData(NewLocation);
 
-            
+
             //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
         }
     }
@@ -711,6 +712,20 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             NewZombie->SetZombieId(ZombieID);
             ZombieMap.Add(ZombieID, NewZombie);
 
+            // 새 좀비 floor 설정
+            if (NewLocation.Z < 800.f) {
+                NewZombie->floor = ABaseZombie::FLOOR::B2;
+            }
+            else if (NewLocation.Z < 1800.f) {
+                NewZombie->floor = ABaseZombie::FLOOR::B1;
+            }
+            else if (NewLocation.Z < 2500.f) {
+                NewZombie->floor = ABaseZombie::FLOOR::F1;
+            }
+            else if (NewLocation.Z < 3600.f) {
+                NewZombie->floor = ABaseZombie::FLOOR::F2;
+            }
+
             UE_LOG(LogTemp, Warning, TEXT("Spawned new Zombie ID: %d"), ZombieID);
 
             if (ZombieType == 0) {
@@ -719,6 +734,20 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
                 {
                     AIZombieController->Possess(NewZombie);
                     AIZombieController->OwnerZombie = Cast<ANormalZombie>(NewZombie);
+
+                    // 나 자신 ABaseCharacter 데이터 미리 찾아서 저장해놓기
+                    TArray<AActor*> Players;
+                    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
+                    ABaseCharacter* Char = nullptr;
+                    for (AActor* Player : Players)
+                    {
+                        Char = Cast<ABaseCharacter>(Player);
+
+                        if (Char->GetPlayerId() == 99) {
+                            AIZombieController->MyChar = Char;
+                        }
+                    }
+                    
 
                     UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
                 }
@@ -734,6 +763,20 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
                     AIShoutingZombieController->Possess(NewZombie);
                     AIShoutingZombieController->OwnerZombie = Cast<AShoutingZombie>(NewZombie);
 
+                    // 나 자신 ABaseCharacter 데이터 미리 찾아서 저장해놓기
+                    TArray<AActor*> Players;
+                    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
+                    ABaseCharacter* Char = nullptr;
+                    for (AActor* Player : Players)
+                    {
+                        Char = Cast<ABaseCharacter>(Player);
+
+                        if (Char->GetPlayerId() == 99) {
+                            //AIShoutingZombieController->MyChar = Char;
+                        }
+                    }
+
+
                     UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
                 }
                 else
@@ -747,6 +790,20 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
                 {
                     AIRunningZombieController->Possess(NewZombie);
                     AIRunningZombieController->OwnerZombie = Cast<ARunningZombie>(NewZombie);
+
+                    // 나 자신 ABaseCharacter 데이터 미리 찾아서 저장해놓기
+                    TArray<AActor*> Players;
+                    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
+                    ABaseCharacter* Char = nullptr;
+                    for (AActor* Player : Players)
+                    {
+                        Char = Cast<ABaseCharacter>(Player);
+
+                        if (Char->GetPlayerId() == 99) {
+                            //AIRunningZombieController->MyChar = Char;
+                        }
+                    }
+
 
                     UE_LOG(LogTemp, Warning, TEXT("Spawned and possessed new Zombie ID: %d"), ZombieID);
                 }
