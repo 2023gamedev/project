@@ -6,6 +6,7 @@
 #include "ProItem/ItemActor.h"
 #include "ProItem/ItemBoxActor.h"
 #include "ProCharacter/PlayerSight.h"
+#include "Components/TextBlock.h"
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -72,6 +73,7 @@
 #include "ProUI/GameTimerUI.h"
 #include "ProUI/PickUpUI.h"
 #include "ProUI/CircularPB_UI.h"
+#include "ProUI/TextMissionUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 #include "ProNiagaFX/HealingNiagaEffect.h"
 
@@ -170,6 +172,13 @@ ABaseCharacter::ABaseCharacter()
 		CircularPB_Class = PLAYER_CIRCULARPB_UI.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder <UTextMissionUI> PLAYER_TEXTMISSIONUI(TEXT("/Game/UI/BP_TextMissionUI.BP_TextMissionUI_C"));
+
+	if (PLAYER_TEXTMISSIONUI.Succeeded()) {
+		TextMissionUIClass = PLAYER_TEXTMISSIONUI.Class;
+	}
+
+
 
 	//SpringArm->TargetArmLength = 300.f;
 	SpringArm->TargetArmLength = 170.f;
@@ -212,6 +221,37 @@ void ABaseCharacter::BeginPlay()
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
+
+	if (TextMissionUIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+
+		TextMissionUIWidget = CreateWidget<UTextMissionUI>(controller, TextMissionUIClass);
+
+		if (!TextMissionUIWidget) {
+			return;
+		}
+
+		FText KText = FText::FromString(TEXT("게임 시작"));
+		ShowActionText(KText, 5.f);
+
+		FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하라"));
+		ShowMissionText(KMissionText1, 1);
+
+		FText KMissionText2 = FText::FromString(TEXT("- 옥상열쇠를 구하라"));
+		ShowMissionText(KMissionText2, 2);
+
+		FText KMissionText3 = FText::FromString(TEXT("지하로 탈출하라"));
+		ShowMissionText(KMissionText3, 3);
+
+		FText KMissionText4 = FText::FromString(TEXT("- 차 키를 구하라"));
+		ShowMissionText(KMissionText4, 4);
+
+		TextMissionUIWidget->AddToViewport();
+	}
 
 	if (GameUIClass != nullptr) {
 
@@ -329,6 +369,25 @@ void ABaseCharacter::BeginPlay()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// 플레이어 floor 계산
+	if (PlayerId == 99) {	// 자기 자신에 대해서만 계산
+		if (GetActorLocation().Z < 800.f) {
+			floor = FLOOR::B2;
+		}
+		else if (GetActorLocation().Z < 1800.f) {
+			floor = FLOOR::B1;
+		}
+		else if (GetActorLocation().Z < 2500.f) {
+			floor = FLOOR::F1;
+		}
+		else if (GetActorLocation().Z < 3600.f) {
+			floor = FLOOR::F2;
+		}
+		else {
+			floor = FLOOR::F3;
+		}
+	}
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -710,6 +769,65 @@ void ABaseCharacter::GetItem()
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
+}
+
+void ABaseCharacter::ShowActionText(FText Text, float DisplayTime)
+{
+	if (TextMissionUIWidget)
+	{
+		// 텍스트 위젯을 찾고 설정 (이름이 ActionText인 TextBlock 위젯을 찾음)
+		UTextBlock* ActionTextBlock = Cast<UTextBlock>(TextMissionUIWidget->GetWidgetFromName("ActionText"));
+		if (ActionTextBlock)
+		{
+			// 텍스트 설정
+			ActionTextBlock->SetText(Text);
+
+			// 텍스트 보이기
+			TextMissionUIWidget->SetVisibility(ESlateVisibility::Visible);
+
+			Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutAnimation();
+
+			//// 일정 시간이 지나면 숨기기 위한 타이머 설정
+			//FTimerHandle TimerHandle;
+			//GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]() {
+			//	if (TextMissionUIWidget)
+			//	{
+			//		TextMissionUIWidget->SetVisibility(ESlateVisibility::Collapsed);
+			//	}
+			//	}, DisplayTime, false);
+		}
+	}
+
+}
+
+void ABaseCharacter::ShowMissionText(FText Text, int TextNumber)
+{
+	if (TextMissionUIWidget)
+	{
+		UTextBlock* MissionTextBlock;
+		if (TextNumber == 1) {
+			MissionTextBlock = Cast<UTextBlock>(TextMissionUIWidget->GetWidgetFromName("MissionText1"));
+		}
+		else if (TextNumber == 2) {
+			MissionTextBlock = Cast<UTextBlock>(TextMissionUIWidget->GetWidgetFromName("MissionText2"));
+		}
+		else if (TextNumber == 3) {
+			MissionTextBlock = Cast<UTextBlock>(TextMissionUIWidget->GetWidgetFromName("MissionText3"));
+		}
+		else if (TextNumber == 4) {
+			MissionTextBlock = Cast<UTextBlock>(TextMissionUIWidget->GetWidgetFromName("MissionText4"));
+		}
+		else {
+			return;
+		}
+
+		if (MissionTextBlock)
+		{
+			// 텍스트 설정
+			MissionTextBlock->SetText(Text);
+
+		}
+	}
 }
 
 void ABaseCharacter::OnPickUPUISlot()

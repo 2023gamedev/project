@@ -31,6 +31,7 @@ class UGameTimerUI;
 class UPickUpUI;
 class UCircularPB_UI;
 class AHealingNiagaEffect;
+class UTextMissionUI;
 
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
@@ -142,6 +143,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UPickUpUI* PickUpUIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UTextMissionUI> TextMissionUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UTextMissionUI* TextMissionUIWidget;
+
+	// 텍스트를 화면에 표시하는 함수
+	void ShowActionText(FText Text, float DisplayTime = 5); // fadeout이 5초
+
+	void ShowMissionText(FText Text, int TextNumber);
+
 
 	void OnPickUPUISlot();
 
@@ -555,6 +568,14 @@ public:
 	std::atomic<bool> b_attack{ false };
 	bool b_run = false;
 
-	uint32 ItemBoxId = 999;
+	uint32 ItemBoxId = 9;
+
+
+	enum FLOOR {
+		Zero, B2, B1, F1, F2, F3
+	};
+
+	UPROPERTY(EditAnywhere)
+	int floor = FLOOR::Zero;
 
 };

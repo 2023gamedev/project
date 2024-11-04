@@ -263,4 +263,15 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	FVector TargetLocation;
+
+
+	enum FLOOR {
+		Zero, B2, B1, F1, F2
+	};
+
+	UPROPERTY(EditAnywhere)
+	int floor = FLOOR::Zero;
+
+	UPROPERTY(EditAnywhere)
+	ABaseCharacter* MyChar;
 };

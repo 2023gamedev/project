@@ -91,5 +91,4 @@ public:
 	int attackPlayerID;
 
 	float PreviousHp = 0.f;
-
 };
