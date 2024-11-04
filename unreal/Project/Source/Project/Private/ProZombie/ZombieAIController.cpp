@@ -123,14 +123,8 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 {
 	FVector zombieDest;
 	
-	// 좀비 사망시 => 그대로 고개 멈춤
-	if (OwnerZombie->GetHP() < 0) { return; }
-
-	// 좀비가 피격 중일때 => 그대로 고개 멈춤
-	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->BeAttackedMontage) == true) { return; }
-
 	// 좀비가 공격 중일때 => 플레이어 쪽으로 시선 돌리기
-	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->AttackMontage) == true) {
+	if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->AttackMontage) == true) {
 		TArray<AActor*> Players;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
 		ABaseCharacter* Char = nullptr;
@@ -164,7 +158,7 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 		zombieDest.Y = Char->GetActorLocation().Y;
 		zombieDest.Z = Char->GetActorLocation().Z;
 	}
-	// 다 아니면 이동 중이므로
+	// 아니면 이동 중이므로
 	else {
 		// 다음 행선지 쪽으로 회전시키기
 		if (indx + 1 < 2) {	// 더 자연스러운 고개 돌림을 위함
@@ -211,23 +205,11 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	Super::Tick(DeltaTime);
 
+	// 좀비 사망시 => 그대로 고개 멈춤
+	if (OwnerZombie->GetHP() <= 0) { return; }
 
-	//static float SearchInterval = 0.5f; // 0.5초마다 플레이어 검색
-	//static float TimeSinceLastSearch = 0.0f;
-	//TimeSinceLastSearch += DeltaTime;
-
-	//if (GameInstance->ClientSocketPtr->GetMyPlayerId() == 1)
-	//{
-		//TimeSinceLastSearch = 0.0f; // 타이머 리셋
-
-	//OwnerZombie = Cast<ANormalZombie>(GetPawn());		// 이미 OneGameModeBase.cpp에 UpdateZombie()에서 OwnerZombie 할당 처리함, 그리고 뒤에서 예외처리 했으니 괜춘
-
-	//Send_ZombieHP();
-
-	// 좀비 사망시
-	if (OwnerZombie->GetHP() < 0) {
-		return;
-	}
+	// 좀비가 피격 중일때 => 그대로 고개 멈춤
+	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->BeAttackedMontage) == true) { return; }
 
 	int indx = 0;
 	ZombieMoveTo(DeltaTime, indx);
