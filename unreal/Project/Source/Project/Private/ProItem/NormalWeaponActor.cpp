@@ -65,6 +65,19 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		}
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
+
+		int ZombieId = Zombie->GetZombieId();
+
+		Protocol::Zombie_hp packet;
+		packet.set_zombieid(ZombieId);
+		packet.set_damage(m_fCharacterSTR * m_fWeaponSTR);
+		packet.set_packet_type(12);
+
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
 		if (Zombie->GetHP() <= 0) {
 			Zombie->SetDie(true);
 			if (WeaponName == "ButchersKnife" || WeaponName == "FireAxe" || WeaponName == "SashimiKnife") {
@@ -118,19 +131,6 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Damaged!"));
 	}
-
-	
-	int ZombieId = Zombie->GetZombieId();
-
-	Protocol::Zombie_hp packet;
-	packet.set_zombieid(ZombieId);
-	packet.set_damage(m_fWeaponSTR);
-	packet.set_packet_type(12);
-
-	std::string serializedData;
-	packet.SerializeToString(&serializedData);
-
-	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 	
 }
 
