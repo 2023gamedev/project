@@ -7,6 +7,8 @@
 #include "Zombie.h"
 #include "ShoutingZombie.h"
 
+#include <algorithm>
+
 bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     // g_players에서 클라이언트 정보 검색
     auto it = g_players.find(id);
@@ -322,9 +324,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         for (auto& z : zombieDB) {
             if (z->ZombieData.zombieID == recvzombieid) {
-                if (z->zombieHP > 0) {
-                    z->zombieHP -= Packet.damage();
-                }
+                z->zombieHP = max(0, z->zombieHP - Packet.damage());
 
                 if (z->ZombieData.zombietype == 0 && z->zombieHP < z->NormalZombieStartHP) {
                     z->IsBeingAttacked = true;  // 좀비 피격중으로 변경
