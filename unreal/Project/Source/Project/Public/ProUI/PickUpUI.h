@@ -27,7 +27,7 @@ public:
 	void RefreshSlot(int slotindex);
 
 public:
-	// ÅØ½ºÃÄ ÇÊ¿ä
+	// í…ìŠ¤ì³ í•„ìš”
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* DefTex;
 

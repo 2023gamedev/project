@@ -32,6 +32,7 @@ class UPickUpUI;
 class UCircularPB_UI;
 class AHealingNiagaEffect;
 class UTextMissionUI;
+class UOtherPlayerUI;
 
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
@@ -149,6 +150,24 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UTextMissionUI* TextMissionUIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UOtherPlayerUI> OtherPlayerUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UOtherPlayerUI* OtherPlayerUIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UOtherPlayerUI> OtherPlayer2UIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UOtherPlayerUI* OtherPlayer2UIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UOtherPlayerUI> OtherPlayer3UIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UOtherPlayerUI* OtherPlayer3UIWidget;
 
 	// 텍스트를 화면에 표시하는 함수
 	void ShowActionText(FText Text, const FSlateColor& Color, float DisplayTime = 5); // fadeout이 5초

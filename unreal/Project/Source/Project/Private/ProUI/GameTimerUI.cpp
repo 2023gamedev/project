@@ -38,7 +38,7 @@ void UGameTimerUI::UpdateTimer()
 
 
 	TimerTxt->SetText(TimerText);
-	if (!RoofTopClose && 10 - m_iMinites >= 5) {
+	if (!RoofTopClose && 10 - m_iMinites > 5) {
 		RoofTopClose = true;
 		if (Character) {
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("!RoofTopClose && m_iMinites >= 5")));
@@ -49,6 +49,7 @@ void UGameTimerUI::UpdateTimer()
 			// 5분 지날 시 옥상문 잠기는 Text
 			Character->ShowMissionText(KMissionText1, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 1);
 			Character->ShowMissionText(KMissionText2, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 2);
+			Character->ShowMissionText(KMissionText2, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 3);
 		}
 
 	}

@@ -14,7 +14,7 @@ class UHPBar;
 class UStaminaBar;
 class UHealingPB;
 
-// Player Ä³¸¯ÅÍÀÇ ÄÁµğ¼ÇÀ» ³ªÅ¸³»´Â Class
+// Player ìºë¦­í„°ì˜ ì»¨ë””ì…˜ì„ ë‚˜íƒ€ë‚´ëŠ” Class
 
 UCLASS()
 class PROJECT_API UConditionUI : public UBaseUI
