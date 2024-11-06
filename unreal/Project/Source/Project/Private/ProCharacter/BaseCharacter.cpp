@@ -765,6 +765,10 @@ void ABaseCharacter::GetItem()
 			PlayerSight->GetHitActor()->Destroy();
 
 			Send_Destroy(ItemBoxId);
+			if (itembox->ItemClassType == EItemClass::KEYITEM) {
+				// 아이템 id부분 수정 필요
+				Send_GetKey(1);
+			}
 		}
 	}
 
@@ -2411,6 +2415,18 @@ void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 	Protocol::destroy_item Packet;
 	Packet.set_itemid(itemboxid);
 	Packet.set_packet_type(17);
+
+	std::string serializedData;
+	Packet.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+}
+
+void ABaseCharacter::Send_GetKey(uint32 itemid)
+{
+	Protocol::get_key Packet;
+	Packet.set_itemid(itemid);
+	Packet.set_packet_type(18);
 
 	std::string serializedData;
 	Packet.SerializeToString(&serializedData);

@@ -245,7 +245,6 @@ public:
 	Concurrency::concurrent_queue<Set_Car> Q_setcar;
 	Concurrency::concurrent_queue<Destroy_Item> Q_ditem;
 	Concurrency::concurrent_queue<Get_Key> Q_getkey;
-	Concurrency::concurrent_queue<Get_Key> Q_getkey;
 	Concurrency::concurrent_queue<Escape_Root> Q_escape;
 
 

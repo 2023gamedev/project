@@ -379,7 +379,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				if (escapepacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
 					Q_escape.push(Escape_Root(escapepacket.playerid(), escapepacket.root()));
-					UE_LOG(LogNet, Display, TEXT("escape root open %d"), escapepacket.itemid());
+					UE_LOG(LogNet, Display, TEXT("escape root open %d"), escapepacket.root());
 				}
 				break;
 			}
