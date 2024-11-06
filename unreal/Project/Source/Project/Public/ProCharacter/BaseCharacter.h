@@ -151,9 +151,9 @@ public:
 	UTextMissionUI* TextMissionUIWidget;
 
 	// 텍스트를 화면에 표시하는 함수
-	void ShowActionText(FText Text, float DisplayTime = 5); // fadeout이 5초
+	void ShowActionText(FText Text, const FSlateColor& Color, float DisplayTime = 5); // fadeout이 5초
 
-	void ShowMissionText(FText Text, int TextNumber);
+	void ShowMissionText(FText Text, const FSlateColor& Color, int TextNumber);
 
 
 	void OnPickUPUISlot();

@@ -235,20 +235,23 @@ void ABaseCharacter::BeginPlay()
 			return;
 		}
 
-		FText KText = FText::FromString(TEXT("게임 시작"));
-		ShowActionText(KText, 5.f);
+		// 시작시 Text
+		FText KText = FText::FromString(TEXT("이 건물에서 탈출하라"));
+		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 
+
+		// 시작시 오른쪽 MissionText
 		FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하라"));
-		ShowMissionText(KMissionText1, 1);
+		ShowMissionText(KMissionText1, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 1);
 
 		FText KMissionText2 = FText::FromString(TEXT("- 옥상열쇠를 구하라"));
-		ShowMissionText(KMissionText2, 2);
+		ShowMissionText(KMissionText2, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 2);
 
 		FText KMissionText3 = FText::FromString(TEXT("지하로 탈출하라"));
-		ShowMissionText(KMissionText3, 3);
+		ShowMissionText(KMissionText3, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 3);
 
 		FText KMissionText4 = FText::FromString(TEXT("- 차 키를 구하라"));
-		ShowMissionText(KMissionText4, 4);
+		ShowMissionText(KMissionText4, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 4);
 
 		TextMissionUIWidget->AddToViewport();
 	}
@@ -496,6 +499,10 @@ void ABaseCharacter::PlayDead()
 		CharacterAnimInstance->SetCurrentPawnSpeed(0.f);
 		CharacterAnimInstance->SetIsDead(IsDead());
 	}
+
+	FText KText = FText::FromString(TEXT("당신은 죽었습니다."));
+	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+
 
 	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 	if (controller != nullptr) {
@@ -771,7 +778,7 @@ void ABaseCharacter::GetItem()
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
 }
 
-void ABaseCharacter::ShowActionText(FText Text, float DisplayTime)
+void ABaseCharacter::ShowActionText(FText Text, const FSlateColor& Color, float DisplayTime)
 {
 	if (TextMissionUIWidget)
 	{
@@ -781,9 +788,11 @@ void ABaseCharacter::ShowActionText(FText Text, float DisplayTime)
 		{
 			// 텍스트 설정
 			ActionTextBlock->SetText(Text);
+			ActionTextBlock->SetColorAndOpacity(Color);
 
 			// 텍스트 보이기
 			TextMissionUIWidget->SetVisibility(ESlateVisibility::Visible);
+
 
 			Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutAnimation();
 
@@ -800,7 +809,7 @@ void ABaseCharacter::ShowActionText(FText Text, float DisplayTime)
 
 }
 
-void ABaseCharacter::ShowMissionText(FText Text, int TextNumber)
+void ABaseCharacter::ShowMissionText(FText Text, const FSlateColor& Color, int TextNumber)
 {
 	if (TextMissionUIWidget)
 	{

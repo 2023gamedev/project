@@ -39,6 +39,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int32 m_iSeconds;
 
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool RoofTopClose = false;
+
 protected:
     virtual void NativeConstruct() override;
 };
