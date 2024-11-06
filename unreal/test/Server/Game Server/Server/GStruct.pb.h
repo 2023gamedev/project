@@ -91,6 +91,12 @@ extern Zombie_hpDefaultTypeInternal _Zombie_hp_default_instance_;
 class destroy_item;
 struct destroy_itemDefaultTypeInternal;
 extern destroy_itemDefaultTypeInternal _destroy_item_default_instance_;
+class escape;
+struct escapeDefaultTypeInternal;
+extern escapeDefaultTypeInternal _escape_default_instance_;
+class get_key;
+struct get_keyDefaultTypeInternal;
+extern get_keyDefaultTypeInternal _get_key_default_instance_;
 class jump;
 struct jumpDefaultTypeInternal;
 extern jumpDefaultTypeInternal _jump_default_instance_;
@@ -123,6 +129,8 @@ template<> ::Protocol::ZombiePath* Arena::CreateMaybeMessage<::Protocol::ZombieP
 template<> ::Protocol::Zombie_attack* Arena::CreateMaybeMessage<::Protocol::Zombie_attack>(Arena*);
 template<> ::Protocol::Zombie_hp* Arena::CreateMaybeMessage<::Protocol::Zombie_hp>(Arena*);
 template<> ::Protocol::destroy_item* Arena::CreateMaybeMessage<::Protocol::destroy_item>(Arena*);
+template<> ::Protocol::escape* Arena::CreateMaybeMessage<::Protocol::escape>(Arena*);
+template<> ::Protocol::get_key* Arena::CreateMaybeMessage<::Protocol::get_key>(Arena*);
 template<> ::Protocol::jump* Arena::CreateMaybeMessage<::Protocol::jump>(Arena*);
 template<> ::Protocol::patrol_hit* Arena::CreateMaybeMessage<::Protocol::patrol_hit>(Arena*);
 template<> ::Protocol::ping* Arena::CreateMaybeMessage<::Protocol::ping>(Arena*);
@@ -3936,6 +3944,346 @@ class destroy_item final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Gstruct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class get_key final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.get_key) */ {
+ public:
+  inline get_key() : get_key(nullptr) {}
+  ~get_key() override;
+  explicit PROTOBUF_CONSTEXPR get_key(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  get_key(const get_key& from);
+  get_key(get_key&& from) noexcept
+    : get_key() {
+    *this = ::std::move(from);
+  }
+
+  inline get_key& operator=(const get_key& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline get_key& operator=(get_key&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const get_key& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const get_key* internal_default_instance() {
+    return reinterpret_cast<const get_key*>(
+               &_get_key_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(get_key& a, get_key& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(get_key* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(get_key* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  get_key* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<get_key>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const get_key& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const get_key& from) {
+    get_key::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(get_key* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.get_key";
+  }
+  protected:
+  explicit get_key(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kItemidFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
+    kPacketTypeFieldNumber = 3,
+  };
+  // uint32 itemid = 1;
+  void clear_itemid();
+  uint32_t itemid() const;
+  void set_itemid(uint32_t value);
+  private:
+  uint32_t _internal_itemid() const;
+  void _internal_set_itemid(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.get_key)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t itemid_;
+    uint32_t playerid_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
+// -------------------------------------------------------------------
+
+class escape final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.escape) */ {
+ public:
+  inline escape() : escape(nullptr) {}
+  ~escape() override;
+  explicit PROTOBUF_CONSTEXPR escape(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  escape(const escape& from);
+  escape(escape&& from) noexcept
+    : escape() {
+    *this = ::std::move(from);
+  }
+
+  inline escape& operator=(const escape& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline escape& operator=(escape&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const escape& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const escape* internal_default_instance() {
+    return reinterpret_cast<const escape*>(
+               &_escape_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    21;
+
+  friend void swap(escape& a, escape& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(escape* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(escape* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  escape* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<escape>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const escape& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const escape& from) {
+    escape::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(escape* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.escape";
+  }
+  protected:
+  explicit escape(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayeridFieldNumber = 1,
+    kRootFieldNumber = 2,
+    kPacketTypeFieldNumber = 3,
+  };
+  // uint32 playerid = 1;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
+  public:
+
+  // uint32 root = 2;
+  void clear_root();
+  uint32_t root() const;
+  void set_root(uint32_t value);
+  private:
+  uint32_t _internal_root() const;
+  void _internal_set_root(uint32_t value);
+  public:
+
+  // uint32 packet_type = 3;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.escape)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t playerid_;
+    uint32_t root_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
 // ===================================================================
 
 
@@ -6343,9 +6691,141 @@ inline void destroy_item::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.destroy_item.packet_type)
 }
 
+// -------------------------------------------------------------------
+
+// get_key
+
+// uint32 itemid = 1;
+inline void get_key::clear_itemid() {
+  _impl_.itemid_ = 0u;
+}
+inline uint32_t get_key::_internal_itemid() const {
+  return _impl_.itemid_;
+}
+inline uint32_t get_key::itemid() const {
+  // @@protoc_insertion_point(field_get:Protocol.get_key.itemid)
+  return _internal_itemid();
+}
+inline void get_key::_internal_set_itemid(uint32_t value) {
+  
+  _impl_.itemid_ = value;
+}
+inline void get_key::set_itemid(uint32_t value) {
+  _internal_set_itemid(value);
+  // @@protoc_insertion_point(field_set:Protocol.get_key.itemid)
+}
+
+// uint32 playerid = 2;
+inline void get_key::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t get_key::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t get_key::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.get_key.playerid)
+  return _internal_playerid();
+}
+inline void get_key::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void get_key::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.get_key.playerid)
+}
+
+// uint32 packet_type = 3;
+inline void get_key::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t get_key::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t get_key::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.get_key.packet_type)
+  return _internal_packet_type();
+}
+inline void get_key::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void get_key::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.get_key.packet_type)
+}
+
+// -------------------------------------------------------------------
+
+// escape
+
+// uint32 playerid = 1;
+inline void escape::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t escape::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t escape::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.escape.playerid)
+  return _internal_playerid();
+}
+inline void escape::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void escape::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.escape.playerid)
+}
+
+// uint32 root = 2;
+inline void escape::clear_root() {
+  _impl_.root_ = 0u;
+}
+inline uint32_t escape::_internal_root() const {
+  return _impl_.root_;
+}
+inline uint32_t escape::root() const {
+  // @@protoc_insertion_point(field_get:Protocol.escape.root)
+  return _internal_root();
+}
+inline void escape::_internal_set_root(uint32_t value) {
+  
+  _impl_.root_ = value;
+}
+inline void escape::set_root(uint32_t value) {
+  _internal_set_root(value);
+  // @@protoc_insertion_point(field_set:Protocol.escape.root)
+}
+
+// uint32 packet_type = 3;
+inline void escape::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t escape::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t escape::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.escape.packet_type)
+  return _internal_packet_type();
+}
+inline void escape::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void escape::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.escape.packet_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

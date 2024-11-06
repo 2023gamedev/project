@@ -192,6 +192,28 @@ struct Destroy_Item
 
 };
 
+struct Get_Key
+{
+	uint32 itemid;
+	uint32 playerid;
+
+	Get_Key() : itemid(0), playerid(0) {}
+
+	Get_Key(uint32 Initemid, uint32 Inplayerid)
+		: itemid(Initemid), playerid(Inplayerid) {}
+};
+
+struct Escape_Root
+{
+	uint32 playerid;
+	uint32 root;
+
+	Escape_Root() : playerid(0), root(0) {}
+
+	Escape_Root(uint32 Inplayerid, uint32 Inroot)
+		: playerid(Inplayerid), root(Inroot) {}
+};
+
 
 
 class UProGameInstance;
@@ -222,6 +244,9 @@ public:
 	Concurrency::concurrent_queue<Set_Item> Q_setitem;
 	Concurrency::concurrent_queue<Set_Car> Q_setcar;
 	Concurrency::concurrent_queue<Destroy_Item> Q_ditem;
+	Concurrency::concurrent_queue<Get_Key> Q_getkey;
+	Concurrency::concurrent_queue<Get_Key> Q_getkey;
+	Concurrency::concurrent_queue<Escape_Root> Q_escape;
 
 
 	virtual bool Init() override;
