@@ -361,6 +361,27 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 					Q_ditem.push(Destroy_Item(destroyitem.itemid(), destroyitem.playerid()));
 					UE_LOG(LogNet, Display, TEXT("Destroy item %d"), destroyitem.itemid());
 				}
+				break;
+			}
+			case 18:
+			{
+				Protocol::get_key getkey;
+				if (getkey.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					Q_getkey.push(Get_Key(getkey.itemid(), getkey.playerid()));
+					UE_LOG(LogNet, Display, TEXT("get key %d"), getkey.itemid());
+				}
+				break;
+			}
+			case 19:
+			{
+				Protocol::escape escapepacket;
+				if (escapepacket.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					Q_escape.push(Escape_Root(escapepacket.playerid(), escapepacket.root()));
+					UE_LOG(LogNet, Display, TEXT("escape root open %d"), escapepacket.root());
+				}
+				break;
 			}
 			}
 

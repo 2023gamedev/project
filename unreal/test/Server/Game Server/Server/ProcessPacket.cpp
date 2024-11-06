@@ -77,7 +77,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
             //playerDB[Packet.playerid()] = pl; //-> 이렇게 사용하면 초기화 빼먹은 값 더미 값 씌워질 수 있음
-           
+
             playerDB[Packet.playerid()].x = Packet.x();
             playerDB[Packet.playerid()].y = Packet.y();
             playerDB[Packet.playerid()].z = Packet.z();
@@ -354,6 +354,40 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] Destroy Item Packet Received !!\n", id);
         Protocol::destroy_item Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }
+        return true;
+    }
+
+    case 18:
+    {
+        printf("\n[ No. %3u ] get key item !!\n", id);
+        Protocol::get_key Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            }
+        }
+        return true;
+    }
+
+    case 19:
+    {
+        printf("\n[ No. %3u ] escape root open !!\n", id);
+        Protocol::escape Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
         Packet.SerializeToString(&serializedData);

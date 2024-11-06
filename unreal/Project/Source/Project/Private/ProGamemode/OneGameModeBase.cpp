@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kismet/GameplayStatics.h"
-
 #include "ProGamemode/OneGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "ProCharacter/BaseCharacter.h"
 #include "ProCharacter/EmployeeCharacter.h"
 #include "ProCharacter/FireFighterCharacter.h"
