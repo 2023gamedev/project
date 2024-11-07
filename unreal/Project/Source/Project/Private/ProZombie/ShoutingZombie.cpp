@@ -22,10 +22,10 @@ AShoutingZombie::AShoutingZombie()
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SHOUTINGSTATIC(TEXT("/Game/ZombieAsset/ShoutingZombie/ShoutingZombieStaticMesh.ShoutingZombieStaticMesh"));
-	if (SM_SHOUTINGSTATIC.Succeeded()) {
-		CopyStaticMesh->SetStaticMesh(SM_SHOUTINGSTATIC.Object);
-	}
+	//ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SHOUTINGSTATIC(TEXT("/Game/ZombieAsset/ShoutingZombie/ShoutingZombieStaticMesh.ShoutingZombieStaticMesh"));
+	//if (SM_SHOUTINGSTATIC.Succeeded()) {
+	//	CopyStaticMesh->SetStaticMesh(SM_SHOUTINGSTATIC.Object);
+	//}
 	
 	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/ZombieAsset/ShoutingZombie/parasitezombie_Material.parasitezombie_Material"));
 	if (MaterialFinder.Succeeded())
