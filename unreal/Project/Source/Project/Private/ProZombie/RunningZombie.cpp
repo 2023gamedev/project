@@ -22,10 +22,10 @@ ARunningZombie::ARunningZombie()
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}
 	
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_RUNNINGSTATIC(TEXT("/Game/ZombieAsset/RunningZombie/RunningZombieStaticMesh.RunningZombieStaticMesh"));
-	if (SM_RUNNINGSTATIC.Succeeded()) {
-		CopyStaticMesh->SetStaticMesh(SM_RUNNINGSTATIC.Object);
-	}
+	//ConstructorHelpers::FObjectFinder<UStaticMesh> SM_RUNNINGSTATIC(TEXT("/Game/ZombieAsset/RunningZombie/RunningZombieStaticMesh.RunningZombieStaticMesh"));
+	//if (SM_RUNNINGSTATIC.Succeeded()) {
+	//	CopyStaticMesh->SetStaticMesh(SM_RUNNINGSTATIC.Object);
+	//}
 
 	
 	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/ZombieAsset/RunningZombie/body_M.body_M"));

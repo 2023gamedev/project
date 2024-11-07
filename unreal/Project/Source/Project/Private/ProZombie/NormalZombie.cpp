@@ -25,18 +25,18 @@ ANormalZombie::ANormalZombie()
 		GetMesh()->SetAnimInstanceClass(ZOMBIE_ANIM.Class);
 	}
 	
-	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_NORMALSTATIC(TEXT("/Game/ZombieAsset/NormalZombie/NormalZombieStaticMesh.NormalZombieStaticMesh"));
-	if (SM_NORMALSTATIC.Succeeded()) {
-		CopyStaticMesh->SetStaticMesh(SM_NORMALSTATIC.Object);
-	}
-	
+	//ConstructorHelpers::FObjectFinder<UStaticMesh> SM_NORMALSTATIC(TEXT("/Game/ZombieAsset/NormalZombie/NormalZombieStaticMesh.NormalZombieStaticMesh"));
+	//if (SM_NORMALSTATIC.Succeeded()) {
+	//	CopyStaticMesh->SetStaticMesh(SM_NORMALSTATIC.Object);
+	//}
+	//
 	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/ZombieAsset/NormalZombie/ZombieGirl_body_Material.ZombieGirl_body_Material"));
 	if (MaterialFinder.Succeeded())
 	{
 		Material = MaterialFinder.Object;
 	}
 	
-	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder2(TEXT("/Game/ZombieAsset/NormalZombie/ZombieGirl_body_Material.ZombieGirl_body_Material"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder2(TEXT("/Game/ZombieAsset/NormalZombie/ZombieGirl_Material.ZombieGirl_Material"));
 	if (MaterialFinder2.Succeeded())
 	{
 		Material2 = MaterialFinder2.Object;

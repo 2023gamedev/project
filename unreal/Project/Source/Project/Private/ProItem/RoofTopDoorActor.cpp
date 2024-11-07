@@ -57,6 +57,30 @@ void ARoofTopDoorActor::StartDisableUnlock()
 void ARoofTopDoorActor::DisableUnlock()
 {
 	bIsDisableUnlock = true;
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("ARoofTopDoorActor::DisableUnlock()")));
+	//TArray<ABaseCharacter*> Players;
+
+
+
+	//// 5ë¶„ì§€ë‚  ì‹œ ì˜¥ìƒë¬¸ ì ê¸°ëŠ” Text
+	//FText KText = FText::FromString(TEXT("í—¬ê¸°ê°€ ë– ë‚¬ìŠµë‹ˆë‹¤."));
+	//FText KMissionText1 = FText::FromString(TEXT("ì‹¤íŒ¨"));
+	//FText KMissionText2 = FText::FromString(TEXT(""));
+	//for (TActorIterator<ABaseCharacter> It(GetWorld()); It; ++It)
+	//{
+	//	ABaseCharacter* PlayerCharacter = *It;
+	//	if (PlayerCharacter)
+	//	{
+	//		PlayerCharacter->ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+
+	//		// 5ë¶„ ì§€ë‚  ì‹œ ì˜¥ìƒë¬¸ ì ê¸°ëŠ” Text
+
+	//		PlayerCharacter->ShowMissionText(KMissionText1, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 1);
+
+
+	//		PlayerCharacter->ShowMissionText(KMissionText2, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 2);
+	//	}
+	//}
 }
 
 void ARoofTopDoorActor::UnlockKey1()
@@ -89,14 +113,14 @@ void ARoofTopDoorActor::UnlockDoor()
 
 void ARoofTopDoorActor::ClearAddScore()
 {
-	// ÀÏÁ¤ ¹üÀ§ ³»¿¡ ÀÖ´Â ÇÃ·¹ÀÌ¾î¸¦ °Ë»öÇÕ´Ï´Ù.
+	// ì¼ì • ë²”ìœ„ ë‚´ì— ìˆëŠ” í”Œë ˆì´ì–´ë¥¼ ê²€ìƒ‰í•©ë‹ˆë‹¤.
 	FVector CarLocation = GetActorLocation();
-	const float ScoreRadius = 500.0f; // Á¡¼ö¸¦ ÁÖ°í ½ÍÀº ¹üÀ§ÀÇ ¹İ°æ
+	const float ScoreRadius = 500.0f; // ì ìˆ˜ë¥¼ ì£¼ê³  ì‹¶ì€ ë²”ìœ„ì˜ ë°˜ê²½
 	int32 Score = 0;
 	TArray<ABaseCharacter*> PlayersInRange;
 
 
-	const int32 ScorePerPlayer = 1000; // °¢ ÇÃ·¹ÀÌ¾î´ç ºÎ¿©ÇÒ Á¡¼ö
+	const int32 ScorePerPlayer = 1000; // ê° í”Œë ˆì´ì–´ë‹¹ ë¶€ì—¬í•  ì ìˆ˜
 	for (TActorIterator<ABaseCharacter> It(GetWorld()); It; ++It)
 	{
 		ABaseCharacter* PlayerCharacter = *It;
@@ -114,7 +138,7 @@ void ARoofTopDoorActor::ClearAddScore()
 
 	for (ABaseCharacter* Player : PlayersInRange)
 	{
-		// Á¡¼ö¸¦ ºÎ¿©ÇÏ´Â ÄÚµå Ãß°¡
+		// ì ìˆ˜ë¥¼ ë¶€ì—¬í•˜ëŠ” ì½”ë“œ ì¶”ê°€
 		Player->AddScore(Score);
 	}
 
