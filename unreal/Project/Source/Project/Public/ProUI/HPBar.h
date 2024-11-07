@@ -28,16 +28,16 @@ public:
 
 
 
-    // ÇöÀç Ã¼·Â
+    // í˜„ìž¬ ì²´ë ¥
     UPROPERTY(BlueprintReadWrite, Category = "HPBar")
     float m_fCurrentHPRatio = 0.f;
 
 
-    // ÇöÀç Ã¼·Â
+    // í˜„ìž¬ ì²´ë ¥
     UPROPERTY(BlueprintReadWrite, Category = "HPBar")
     float m_fCurrentHealth = 0.f;
 
-    // ÃÖ´ë Ã¼·Â
+    // ìµœëŒ€ ì²´ë ¥
     UPROPERTY(BlueprintReadWrite, Category = "HPBar")
     float m_fMaxHealth = 0.f;
 };

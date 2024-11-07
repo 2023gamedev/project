@@ -9,7 +9,7 @@
  * 
  */
 
-// Inventory Slot¿¡ µé¾îÀÖ´Â ¼Ó¼ºµé(±¸Á¶Ã¼,Enum)ÀÌ µé¾îÀÖ´Â .h
+// Inventory Slotì— ë“¤ì–´ìˆëŠ” ì†ì„±ë“¤(êµ¬ì¡°ì²´,Enum)ì´ ë“¤ì–´ìˆëŠ” .h
 
 class USlot;
 
@@ -45,14 +45,14 @@ enum class EItemClass
 USTRUCT(Atomic, BlueprintType)
 struct FItemDataStructure
 {
-	// ½½·Ô¿¡ »ç¿ëµÇ´Â ±¸Á¶Ã¼
+	// ìŠ¬ë¡¯ì— ì‚¬ìš©ë˜ëŠ” êµ¬ì¡°ì²´
 	GENERATED_USTRUCT_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) // ¹«½¼ ¾ÆÀÌÅÛÀÎÁø Èú¸µÀÎÁö ³ë¸»¹«±âÀÎÁö, ÅõÃ´¹«±âÀÎÁö
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) // ë¬´ìŠ¨ ì•„ì´í…œì¸ì§„ íë§ì¸ì§€ ë…¸ë§ë¬´ê¸°ì¸ì§€, íˆ¬ì²™ë¬´ê¸°ì¸ì§€
 	EItemClass ItemClassType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -64,7 +64,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Count;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) // Äü½½·Ô¸¸ ÇØ´ç
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) // í€µìŠ¬ë¡¯ë§Œ í•´ë‹¹
 	int SlotReference;
 };
 
@@ -76,5 +76,6 @@ enum class ESlotType
 	SLOT_QUICK				UMETA(DisplayName = "Quick"),
 	SLOT_QUICK_ITEM			UMETA(DisplayName = "QuickItem"),
 	SLOT_PICK_UP			UMETA(DisplayName = "PickUpItem"),
+	SLOT_OTHER_PLAYER		UMETA(DisplayName = "OtherPlayerItem"),
 };
 

@@ -74,6 +74,7 @@
 #include "ProUI/PickUpUI.h"
 #include "ProUI/CircularPB_UI.h"
 #include "ProUI/TextMissionUI.h"
+#include "ProUI/OtherPlayerUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 #include "ProNiagaFX/HealingNiagaEffect.h"
 
@@ -178,7 +179,23 @@ ABaseCharacter::ABaseCharacter()
 		TextMissionUIClass = PLAYER_TEXTMISSIONUI.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder <UOtherPlayerUI> PLAYER_OTHERPLAYERUI(TEXT("/Game/UI/BP_OtherPlayerUI.BP_OtherPlayerUI_C"));
 
+	if (PLAYER_OTHERPLAYERUI.Succeeded()) {
+		OtherPlayerUIClass = PLAYER_OTHERPLAYERUI.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder <UOtherPlayerUI> PLAYER_OTHERPLAYER2UI(TEXT("/Game/UI/BP_OtherPlayerUI.BP_OtherPlayerUI_C"));
+
+	if (PLAYER_OTHERPLAYER2UI.Succeeded()) {
+		OtherPlayer2UIClass = PLAYER_OTHERPLAYER2UI.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder <UOtherPlayerUI> PLAYER_OTHERPLAYER3UI(TEXT("/Game/UI/BP_OtherPlayerUI.BP_OtherPlayerUI_C"));
+
+	if (PLAYER_OTHERPLAYER3UI.Succeeded()) {
+		OtherPlayer3UIClass = PLAYER_OTHERPLAYER3UI.Class;
+	}
 
 	//SpringArm->TargetArmLength = 300.f;
 	SpringArm->TargetArmLength = 170.f;
@@ -235,23 +252,93 @@ void ABaseCharacter::BeginPlay()
 			return;
 		}
 
-		FText KText = FText::FromString(TEXT("게임 시작"));
-		ShowActionText(KText, 5.f);
+		// 시작시 Text
+		FText KText = FText::FromString(TEXT("이 건물에서 탈출하라"));
+		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 
+
+		// 시작시 오른쪽 MissionText
 		FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하라"));
-		ShowMissionText(KMissionText1, 1);
+		ShowMissionText(KMissionText1, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 1);
 
-		FText KMissionText2 = FText::FromString(TEXT("- 옥상열쇠를 구하라"));
-		ShowMissionText(KMissionText2, 2);
+		FText KMissionText2 = FText::FromString(TEXT("- 옥상열쇠1을 구하라"));
+		ShowMissionText(KMissionText2, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 2);
 
-		FText KMissionText3 = FText::FromString(TEXT("지하로 탈출하라"));
-		ShowMissionText(KMissionText3, 3);
+		FText KMissionText3 = FText::FromString(TEXT("- 옥상열쇠2를 구하라"));
+		ShowMissionText(KMissionText3, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 3);
 
-		FText KMissionText4 = FText::FromString(TEXT("- 차 키를 구하라"));
-		ShowMissionText(KMissionText4, 4);
+		FText KMissionText4 = FText::FromString(TEXT("지하로 탈출하라"));
+		ShowMissionText(KMissionText4, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 4);
+
+		FText KMissionText5 = FText::FromString(TEXT("- 차 키를 구하라"));
+		ShowMissionText(KMissionText5, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5);
 
 		TextMissionUIWidget->AddToViewport();
 	}
+
+	if (OtherPlayerUIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+		OtherPlayerUIWidget = CreateWidget<UOtherPlayerUI>(controller, OtherPlayerUIClass);
+
+		if (!OtherPlayerUIWidget) {
+			return;
+		}
+
+		OtherPlayerUIWidget->Character = this;
+		OtherPlayerUIWidget->Init();
+		OtherPlayerUIWidget->AddToViewport();
+		OtherPlayerUIWidget->SetVisibility(ESlateVisibility::Visible);
+
+		FVector2D Offset(0, 300); 
+		OtherPlayerUIWidget->SetRenderTranslation(Offset);
+	}
+
+	if (OtherPlayer2UIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+		OtherPlayer2UIWidget = CreateWidget<UOtherPlayerUI>(controller, OtherPlayer2UIClass);
+
+		if (!OtherPlayer2UIWidget) {
+			return;
+		}
+
+		OtherPlayer2UIWidget->Character = this;
+		OtherPlayer2UIWidget->Init();
+		OtherPlayer2UIWidget->AddToViewport();
+		OtherPlayer2UIWidget->SetVisibility(ESlateVisibility::Visible);
+
+		FVector2D Offset(0, 500); 
+		OtherPlayer2UIWidget->SetRenderTranslation(Offset);
+	}
+
+	if (OtherPlayer3UIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+		OtherPlayer3UIWidget = CreateWidget<UOtherPlayerUI>(controller, OtherPlayer3UIClass);
+
+		if (!OtherPlayer3UIWidget) {
+			return;
+		}
+
+		OtherPlayer3UIWidget->Character = this;
+		OtherPlayer3UIWidget->Init();
+		OtherPlayer3UIWidget->AddToViewport();
+		OtherPlayer3UIWidget->SetVisibility(ESlateVisibility::Visible);
+
+		FVector2D Offset(0, 700); 
+		OtherPlayer3UIWidget->SetRenderTranslation(Offset);
+	}
+
 
 	if (GameUIClass != nullptr) {
 
@@ -496,6 +583,10 @@ void ABaseCharacter::PlayDead()
 		CharacterAnimInstance->SetCurrentPawnSpeed(0.f);
 		CharacterAnimInstance->SetIsDead(IsDead());
 	}
+
+	FText KText = FText::FromString(TEXT("당신은 죽었습니다."));
+	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+
 
 	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 	if (controller != nullptr) {
@@ -775,7 +866,7 @@ void ABaseCharacter::GetItem()
 	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
 }
 
-void ABaseCharacter::ShowActionText(FText Text, float DisplayTime)
+void ABaseCharacter::ShowActionText(FText Text, const FSlateColor& Color, float DisplayTime)
 {
 	if (TextMissionUIWidget)
 	{
@@ -785,9 +876,11 @@ void ABaseCharacter::ShowActionText(FText Text, float DisplayTime)
 		{
 			// 텍스트 설정
 			ActionTextBlock->SetText(Text);
+			ActionTextBlock->SetColorAndOpacity(Color);
 
 			// 텍스트 보이기
 			TextMissionUIWidget->SetVisibility(ESlateVisibility::Visible);
+
 
 			Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutAnimation();
 
@@ -804,7 +897,7 @@ void ABaseCharacter::ShowActionText(FText Text, float DisplayTime)
 
 }
 
-void ABaseCharacter::ShowMissionText(FText Text, int TextNumber)
+void ABaseCharacter::ShowMissionText(FText Text, const FSlateColor& Color, int TextNumber)
 {
 	if (TextMissionUIWidget)
 	{
@@ -821,6 +914,9 @@ void ABaseCharacter::ShowMissionText(FText Text, int TextNumber)
 		else if (TextNumber == 4) {
 			MissionTextBlock = Cast<UTextBlock>(TextMissionUIWidget->GetWidgetFromName("MissionText4"));
 		}
+		else if (TextNumber == 5) {
+			MissionTextBlock = Cast<UTextBlock>(TextMissionUIWidget->GetWidgetFromName("MissionText5"));
+		}
 		else {
 			return;
 		}
@@ -829,7 +925,7 @@ void ABaseCharacter::ShowMissionText(FText Text, int TextNumber)
 		{
 			// 텍스트 설정
 			MissionTextBlock->SetText(Text);
-
+			MissionTextBlock->SetColorAndOpacity(Color);
 		}
 	}
 }
