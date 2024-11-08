@@ -38,16 +38,16 @@ IOCP_CORE::IOCP_CORE()
 
 	string filePath;
 
-	filePath = "../../../../Project/EdgesB2.txt";
+	filePath = "EdgesB2.txt";
 	LoadEdgesMap(filePath, g_valispositionsB2, g_EdgesMapB2);
 
-	filePath = "../../../../Project/EdgesB1.txt";
+	filePath = "EdgesB1.txt";
 	LoadEdgesMap(filePath, g_valispositionsB1, g_EdgesMapB1);
 
-	filePath = "../../../../Project/EdgesF1.txt";
+	filePath = "EdgesF1.txt";
 	LoadEdgesMap(filePath, g_valispositionsF1, g_EdgesMapF1);
 
-	filePath = "../../../../Project/EdgesF2.txt";
+	filePath = "EdgesF2.txt";
 	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
 	
 	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
