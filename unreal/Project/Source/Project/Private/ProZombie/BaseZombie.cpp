@@ -214,7 +214,7 @@ void ABaseZombie::CutZombie(FName bonename)
 		CutProceduralMesh = NewObject<UProceduralMeshComponent>(this);
 		if (!CutProceduralMesh) return;
 
-		//CreativeProceduralMesh(bonename);
+		CreativeProceduralMesh(bonename);
 		// CreateProceduralMeshFromBoneVertices(GetMesh(), bonename, CutProceduralMesh);
 
 		Skeleton->HideBoneByName(bonename, EPhysBodyOp::PBO_None);
@@ -222,7 +222,7 @@ void ABaseZombie::CutZombie(FName bonename)
 	}
 }
 
-
+// 프로시저럴 메쉬 생성되는 부분
 void ABaseZombie::CreativeProceduralMesh(FName bonename)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
@@ -234,281 +234,214 @@ void ABaseZombie::CreativeProceduralMesh(FName bonename)
 
 
 	USkeletalMeshComponent* Skeleton = GetMesh();
-	//if (!Skeleton) return;
-
-	//int32 BoneIndex = Skeleton->GetBoneIndex(bonename);
-	//if (BoneIndex == INDEX_NONE) return; // 지정된 bone이 없는 경우 중단
-
-	// ProceduralMeshComponent 생성 및 설정
-	//CutProceduralMesh = NewObject<UProceduralMeshComponent>(this);
-	//if (!CutProceduralMesh) return;
-
-	//CutProceduralMesh->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
-	//CutProceduralMesh->bUseComplexAsSimpleCollision = false;
-	//CutProceduralMesh->SetSimulatePhysics(true);
-	//CutProceduralMesh->SetEnableGravity(true);
-	//CutProceduralMesh->AddForce(FVector(0.f, 0.f, 1000.f));
-	//CutProceduralMesh->SetCollisionProfileName("BlockAllDynamic");
-	//CutProceduralMesh->RegisterComponent();
-
-	//// StaticMesh 데이터 추출
-	//if (!CopyStaticMesh)
-	//{
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("CopyStaticMesh = nullptr"));
-	//	return;
-	//}
-
-	//UStaticMesh* StaticMesh = CopyStaticMesh->GetStaticMesh();
-	//if (!StaticMesh) return;
-
-	//const FStaticMeshLODResources& LODResource = StaticMesh->GetRenderData()->LODResources[0];
-
-	//// 절단된 부분 확인
-	//FVector CutLocation = Skeleton->GetBoneLocation(bonename);
-	//FVector CutDirection = FVector(0.0f, 0.0f, 1.0f); // x축 기준으로 절단된 부분만 생성
-	//FVector CutLocation2 = Skeleton->GetBoneLocation(bonename, EBoneSpaces::ComponentSpace);
-
-	//// 버텍스 데이터 추출
-	//TArray<FVector> Vertices;
-
-	//uint32 LODResourcePosNumVetices = LODResource.VertexBuffers.PositionVertexBuffer.GetNumVertices();
-
-	//if (LODResourcePosNumVetices > 0) {
-	//	for (uint32 Index = 0; Index < LODResourcePosNumVetices; ++Index)
-	//	{
-	//		FVector3f VP3f = LODResource.VertexBuffers.PositionVertexBuffer.VertexPosition(Index);
-	//		FVector VertexPosition = FVector(VP3f.X, VP3f.Y, VP3f.Z);
-
-	//		// 절단된 부분 확인
-	//		if (FVector::DotProduct(VertexPosition - CutLocation2, CutDirection) > 0)
-	//		{
-	//			Vertices.Add(VertexPosition);
-	//		}
-	//	}
-	//}
-
-
-
-	////// 왼쪽과 오른쪽 절단된 부분의 버텍스 분리
-	////TArray<FVector> LeftVertices;
-	////TArray<FVector> RightVertices;
-	////for (const FVector& Vertex : Vertices)
-	////{
-	////	if (Vertex.X < CutLocation2.X)
-	////	{
-	////		LeftVertices.Add(Vertex);
-	////	}
-	////	else
-	////	{
-	////		RightVertices.Add(Vertex);
-	////	}
-	////}
-
-	////// 절단된 부분의 왼쪽과 오른쪽 버텍스를 각각 이어서 사용합니다.
-	////Vertices = LeftVertices;
-	////Vertices.Append(RightVertices);
-
-	//// 인덱스 데이터 추출
-	//TArray<int32> Triangles;
-	//const int32 NumIndices = LODResource.IndexBuffer.GetListIndex();
-	//if (NumIndices > 0) {
-	//	for (int32 Index = 0; Index < NumIndices; ++Index)
-	//	{
-	//		// 버텍스의 인덱스를 가져옵니다.
-	//		int32 VertexIndex = LODResource.IndexBuffer.GetIndex(Index);
-
-	//		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Invalid VertexIndex: %d, Total Vertices: %d"), VertexIndex, LODResource.VertexBuffers.PositionVertexBuffer.GetListIndex()));
-
-	//		// 인덱스가 범위를 벗어나지 않는지 확인
-	//		if (VertexIndex < 0 || VertexIndex >= static_cast<int32>(LODResource.VertexBuffers.PositionVertexBuffer.GetListIndex()))
-	//		{
-	//			// 유효하지 않은 인덱스 접근 시 로그 출력
-	//			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Invalid VertexIndex: %d, Total Vertices: %d"), VertexIndex, LODResource.VertexBuffers.PositionVertexBuffer.GetListIndex()));
-	//			break;
-	//		}
-
-	//		// 해당 버텍스의 위치를 가져옵니다.
-	//		FVector3f VP3f = LODResource.VertexBuffers.PositionVertexBuffer.VertexPosition(VertexIndex);
-	//		FVector VertexPosition = FVector(VP3f.X, VP3f.Y, VP3f.Z);
-
-	//		// 버텍스 배열에서 해당 버텍스의 인덱스를 찾습니다.
-	//		for (int32 VertIndex = 0; VertIndex < Vertices.Num(); ++VertIndex)
-	//		{
-	//			// 버텍스의 위치가 인덱스 버퍼에 있는 위치와 같다면 해당 인덱스를 추가합니다.
-	//			if (Vertices[VertIndex].Equals(VertexPosition, KINDA_SMALL_NUMBER))
-	//			{
-	//				Triangles.Add(VertIndex);
-	//			}
-	//		}
-	//	}
-	//}
-
-
-	////// 인덱스 데이터 추출
-	////TArray<int32> Triangles;
-
-	////// 버텍스 배열을 사용하여 삼각형을 형성합니다.
-	//const int32 NumVertices = Vertices.Num();
-	////if (NumVertices >= 3) {
-	////	for (int32 Index = 0; Index < NumVertices - 2; ++Index)
-	////	{
-	////		// 첫 번째 버텍스의 인덱스
-	////		Triangles.Add(Index);
-	////		// 두 번째 버텍스의 인덱스
-	////		Triangles.Add(Index + 1);
-	////		// 세 번째 버텍스의 인덱스
-	////		Triangles.Add(Index + 2);
-	////	}
-
-	////	// 남은 두 개의 버텍스로 마지막 삼각형을 형성합니다.
-	////	if (NumVertices % 3 != 0) {
-	////		Triangles.Add(NumVertices - 3);
-	////		Triangles.Add(NumVertices - 2);
-	////		Triangles.Add(NumVertices - 1);
-	////	}
-	////}
-
-	//// Normal 및 UV 데이터 추출
-	//TArray<FVector> Normals;
-	//TArray<FVector2D> UVs;
-	//const FStaticMeshVertexBuffer& VertexBuffer = LODResource.VertexBuffers.StaticMeshVertexBuffer;
-
-	//for (uint32 Index = 0; Index < (uint32)NumVertices; ++Index)
-	//{
-	//	FVector4f Normal4f = VertexBuffer.VertexTangentZ(Index);
-	//	Normals.Add(FVector(Normal4f.X, Normal4f.Y, Normal4f.Z));
-	//}
-
-	//for (uint32 Index = 0; Index < (uint32)NumVertices; ++Index)
-	//{
-	//	FVector2f UVf = VertexBuffer.GetVertexUV(Index, 0);
-	//	UVs.Add(FVector2D(UVf.X, UVf.Y));
-	//}
 
 
 
 
-	//if (Vertices.Num() > 0 && Triangles.Num() > 0)
-	//{
-
-	//	// Mesh 생성
-	//	CutProceduralMesh->CreateMeshSection(0, Vertices, Triangles, TArray<FVector>(), TArray<FVector2D>(), TArray<FColor>(), TArray<FProcMeshTangent>(), true);
-	//	//CutProceduralMesh->CreateMeshSection(1, Vertices, Triangles, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
-	//	//CutProceduralMesh->CreateMeshSection(2, Vertices, Triangles, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
-
-	//	// 머터리얼 인스턴스 생성 및 적용
-	//	if (Material)
-	//	{
-	//		UMaterialInstanceDynamic* MaterialInstance = UMaterialInstanceDynamic::Create(Material, this);
-	//		CutProceduralMesh->SetMaterial(0, MaterialInstance);
-	//	}
-
-	//	if (Material2)
-	//	{
-	//		UMaterialInstanceDynamic* MaterialInstance2 = UMaterialInstanceDynamic::Create(Material2, this);
-	//		CutProceduralMesh->SetMaterial(1, MaterialInstance2);
-	//	}
-
-	//	if (Material3)
-	//	{
-	//		UMaterialInstanceDynamic* MaterialInstance3 = UMaterialInstanceDynamic::Create(Material3, this);
-	//		CutProceduralMesh->SetMaterial(2, MaterialInstance3);
-	//	}
-
-	//}
-	//float Mass = 1.0f; // 예시로 100.0f로 설정
-	//CutProceduralMesh->GetMass();
-	//CutProceduralMesh->SetMassOverrideInKg(NAME_None, Mass, true);
-
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("GetMass = %f"), CutProceduralMesh->GetMass()));
+	FSkeletalMeshRenderData* SkMeshRenderData = Skeleton->GetSkeletalMeshRenderData();
+	const FSkeletalMeshLODRenderData& DataArray = SkMeshRenderData->LODRenderData[0];
+	FSkinWeightVertexBuffer& SkinWeights = *Skeleton->GetSkinWeightBuffer(0);
 
 	TArray<FVector> Vertices;
-	TArray<int32> Triangles;
+	TArray<FVector> Normals;
+	TArray<FVector2D> UV;
+	TArray<FColor> Colors;
+	TArray<FProcMeshTangent> Tangents;
 
-	if (Skeleton == nullptr)
+	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
 	{
-		return;
+		const int32 NumSourceVertices = DataArray.RenderSections[j].NumVertices;
+		const int32 BaseVertexIndex = DataArray.RenderSections[j].BaseVertexIndex;
+
+		for (int32 i = 0; i < NumSourceVertices; i++)
+		{
+			const int32 VertexIndex = i + BaseVertexIndex;
+			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
+			
+			Vertices.Add(FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z));
+
+			const FVector3f ZTangentStatic = DataArray.StaticVertexBuffers.StaticMeshVertexBuffer.VertexTangentZ(VertexIndex);
+			const FVector3f XTangentStatic = DataArray.StaticVertexBuffers.StaticMeshVertexBuffer.VertexTangentX(VertexIndex);
+
+			Normals.Add(FVector(ZTangentStatic.X, ZTangentStatic.Y, ZTangentStatic.Z));
+			Tangents.Add(FProcMeshTangent(FVector(XTangentStatic.X, XTangentStatic.Y, XTangentStatic.Z), false));
+
+			const FVector2f SourceUVs = DataArray.StaticVertexBuffers.StaticMeshVertexBuffer.GetVertexUV(VertexIndex, 0);
+			FVector2d ResUVs;
+
+			ResUVs.X = SourceUVs.X;
+			ResUVs.Y = SourceUVs.Y;
+
+			UV.Add(ResUVs);
+
+			Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+		}
 	}
 
-	const FSkeletalMeshRenderData* RenderData = Skeleton->GetSkeletalMeshRenderData();
-	if (RenderData == nullptr)
-	{
-		return;
-	}
-	const FSkeletalMeshLODRenderData& LODData = RenderData->LODRenderData[0]; // LOD0 사용
+	FMultiSizeIndexContainerData IndicesData;
+	DataArray.MultiSizeIndexContainer.GetIndexBuffer(IndicesData.Indices);
 
-	const int32 NumVertices = LODData.StaticVertexBuffers.PositionVertexBuffer.GetNumVertices();
-	for (int32 i = 0; i < NumVertices; ++i)
-	{
-		// PositionVertexBuffer의 버텍스 위치를 가져와 Vertices 배열에 추가합니다.
-		FVector3f VertexPos = LODData.StaticVertexBuffers.PositionVertexBuffer.VertexPosition(i);
-		Vertices.Add(FVector(VertexPos.X, VertexPos.Y, VertexPos.Z));
-	}
 
-	const FRawStaticIndexBuffer16or32Interface* IndexBuffer = LODData.MultiSizeIndexContainer.GetIndexBuffer();
-	if (!IndexBuffer)
+	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("IndexBuffer is nullptr"));
-		return;
-	}
-	const int32 NumIndices = IndexBuffer->Num();
-	for (int32 i = 0; i < NumIndices; i += 3)
-	{
-		int32 Index0 = IndexBuffer->Get(i);
-		int32 Index1 = IndexBuffer->Get(i + 1);
-		int32 Index2 = IndexBuffer->Get(i + 2);
+		TArray<int32> Triangles;
 
-		Triangles.Add(Index0);
-		Triangles.Add(Index1);
-		Triangles.Add(Index2);
-	}
-	
+		const int32 SectionNumTriangles = DataArray.RenderSections[j].NumTriangles;
+		const int32 SectionBaseIndex = DataArray.RenderSections[j].BaseIndex;
 
-	//const FStaticMeshVertexBuffer& VertexBuffer = LODData.StaticVertexBuffers.StaticMeshVertexBuffer;
-	//// 모든 본을 순회
-	//for (int32 BoneIndex = 0; BoneIndex < Skeleton->GetNumBones(); ++BoneIndex)
+		for (int32 i = 0; i < SectionNumTriangles; i++)
+		{
+			int32 TriVertexIndex = i * 3 + SectionBaseIndex;
+			Triangles.Add(IndicesData.Indices[TriVertexIndex]);
+			Triangles.Add(IndicesData.Indices[TriVertexIndex + 1]);
+			Triangles.Add(IndicesData.Indices[TriVertexIndex + 2]);
+		}
+
+		CutProceduralMesh->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
+		CutProceduralMesh->CreateMeshSection(j, Vertices, Triangles, Normals, UV, Colors, Tangents, true);
+		CutProceduralMesh->SetMaterial(0, Material);
+		CutProceduralMesh->SetMaterial(1, Material2);
+		CutProceduralMesh->SetMaterial(2, Material3);
+		CutProceduralMesh->SetVisibility(true);
+		CutProceduralMesh->SetHiddenInGame(false);
+		CutProceduralMesh->RegisterComponent();
+
+	}
+	// 기존 SkeletalMesh 안 보이게 설정
+	GetMesh()->SetVisibility(false);
+	UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
+
+
+
+
+	//TArray<FVector> Vertices;
+	//TArray<int32> Triangles;
+
+	//USkeletalMesh* SkeletalMesh = GetMesh()->SkeletalMesh/* 스켈레탈 메쉬 객체 */;
+	//const TArray<FTransform>& BoneTransforms = GetMesh()->GetComponentSpaceTransforms();
+	//if (SkeletalMesh && SkeletalMesh->GetResourceForRendering())
 	//{
-	//	
-	//	// 각 본의 트랜스폼을 가져옴
-	//	FTransform BoneTransform = Skeleton->GetBoneTransform(BoneIndex);
-	//	FVector BoneLocation = BoneTransform.GetLocation();
-	//	FQuat BoneRotation = BoneTransform.GetRotation();
-	//	UE_LOG(LogTemp, Warning, TEXT("Bone %d Location: %s"), BoneIndex, *BoneLocation.ToString());
-	//	for (int32 VertexIndex = 0; VertexIndex < NumVertices; ++VertexIndex)
+	//	const FSkeletalMeshRenderData* RenderData = SkeletalMesh->GetResourceForRendering();
+	//	const FSkeletalMeshLODRenderData& LODRenderData = RenderData->LODRenderData[0]; // LOD 0을 가져옴
+
+	//	const FSkinWeightVertexBuffer& SkinWeights = LODRenderData.SkinWeightVertexBuffer;
+
+	//	FString Message = FString::Printf(TEXT("Number of Vertices: %d"), LODRenderData.GetNumVertices());
+	//	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, Message);
+
+	//	for (uint32 VertexIndex = 0; VertexIndex < LODRenderData.GetNumVertices(); ++VertexIndex)
 	//	{
 
+	//		uint32 VertexWeightOffset = 0;
+	//		uint32 VertexInfluenceCount = 0;
+	//		SkinWeights.GetVertexInfluenceOffsetCount(VertexIndex, VertexWeightOffset, VertexInfluenceCount);
+	//		FVector3f OriginalVertexPosition3f = LODRenderData.StaticVertexBuffers.PositionVertexBuffer.VertexPosition(VertexIndex);
+	//		FVector OriginalVertexPosition = FVector(OriginalVertexPosition3f.X, OriginalVertexPosition3f.Y, OriginalVertexPosition3f.Z);
+	//		FVector TransformedVertexPosition = FVector::ZeroVector;
 
-	//		FVector UpdatedPosition = BoneLocation + BoneRotation.RotateVector(Vertices[VertexIndex]);
-	//		Vertices[VertexIndex] = UpdatedPosition;
+	//		// 버텍스에 영향을 미치는 본들을 기반으로 변형 계산
+	//		for (uint32 InfluenceIndex = 0; InfluenceIndex < VertexInfluenceCount; ++InfluenceIndex)
+	//		{
+	//			uint8 BoneIndex = SkinWeights.GetBoneIndex(VertexIndex, InfluenceIndex);
+	//			float BoneWeight = (float)(SkinWeights.GetBoneWeight(VertexIndex, InfluenceIndex) / 255.0f);
+	//			float BoneWeightOrigin = (float)(SkinWeights.GetBoneWeight(VertexIndex, InfluenceIndex));
+	//			UE_LOG(LogTemp, Log, TEXT("Weight (int) %d"),SkinWeights.GetBoneWeight(VertexIndex, InfluenceIndex));
 
+	//			//UE_LOG(LogTemp, Log, TEXT("Vertex %d, Bone %d: Weight %.2f, Weight2 %.2f"), VertexIndex, BoneIndex, BoneWeight, BoneWeightOrigin);
+
+	//			if (BoneIndex < BoneTransforms.Num())
+	//			{
+	//				// 본의 변환 행렬 적용
+	//				FVector SkinnedPosition = BoneTransforms[BoneIndex].TransformPosition(OriginalVertexPosition);
+	//				TransformedVertexPosition += SkinnedPosition * BoneWeight;
+	//			}
+	//		}
+
+	//		// 결과 출력
+	//		Vertices.Add(FVector(TransformedVertexPosition.X, TransformedVertexPosition.Y, TransformedVertexPosition.Z));
+	//		UE_LOG(LogTemp, Log, TEXT("Transformed Vertex %d: Position (%f, %f, %f)"), VertexIndex, TransformedVertexPosition.X, TransformedVertexPosition.Y, TransformedVertexPosition.Z);
 	//	}
 	//}
-	
-	// 2. 추출한 데이터로 프로시저럴 메쉬 생성
+
+	//const FSkeletalMeshRenderData* RenderData = Skeleton->GetSkeletalMeshRenderData();
+	//if (RenderData == nullptr)
+	//{
+	//	return;
+	//}
+	//const FSkeletalMeshLODRenderData& LODData = RenderData->LODRenderData[0]; // LOD0 사용
+
+	////const int32 NumVertices = LODData.StaticVertexBuffers.PositionVertexBuffer.GetNumVertices();
+	////for (int32 i = 0; i < NumVertices; ++i)
+	////{
+	////	// PositionVertexBuffer의 버텍스 위치를 가져와 Vertices 배열에 추가합니다.
+	////	FVector3f VertexPos = LODData.StaticVertexBuffers.PositionVertexBuffer.VertexPosition(i);
+	////	Vertices.Add(FVector(VertexPos.X, VertexPos.Y, VertexPos.Z));
+	////}
+
+	//const FRawStaticIndexBuffer16or32Interface* IndexBuffer = LODData.MultiSizeIndexContainer.GetIndexBuffer();
+	//if (!IndexBuffer)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("IndexBuffer is nullptr"));
+	//	return;
+	//}
+	//const int32 NumIndices = IndexBuffer->Num();
+	//for (int32 i = 0; i < NumIndices; i += 3)
+	//{
+	//	int32 Index0 = IndexBuffer->Get(i);
+	//	int32 Index1 = IndexBuffer->Get(i + 1);
+	//	int32 Index2 = IndexBuffer->Get(i + 2);
+
+	//	Triangles.Add(Index0);
+	//	Triangles.Add(Index1);
+	//	Triangles.Add(Index2);
+	//}
+	//
+
+	////const FStaticMeshVertexBuffer& VertexBuffer = LODData.StaticVertexBuffers.StaticMeshVertexBuffer;
+	////// 모든 본을 순회
+	////for (int32 BoneIndex = 0; BoneIndex < Skeleton->GetNumBones(); ++BoneIndex)
+	////{
+	////	
+	////	// 각 본의 트랜스폼을 가져옴
+	////	FTransform BoneTransform = Skeleton->GetBoneTransform(BoneIndex);
+	////	FVector BoneLocation = BoneTransform.GetLocation();
+	////	FQuat BoneRotation = BoneTransform.GetRotation();
+	////	UE_LOG(LogTemp, Warning, TEXT("Bone %d Location: %s"), BoneIndex, *BoneLocation.ToString());
+	////	for (int32 VertexIndex = 0; VertexIndex < NumVertices; ++VertexIndex)
+	////	{
+
+
+	////		FVector UpdatedPosition = BoneLocation + BoneRotation.RotateVector(Vertices[VertexIndex]);
+	////		Vertices[VertexIndex] = UpdatedPosition;
+
+	////	}
+	////}
+	//
+	//// 2. 추출한 데이터로 프로시저럴 메쉬 생성
+	////TArray<FVector> Normals;
+	//TArray<FVector2D> UVs;
+	//TArray<FLinearColor> VertexColors;
+	////TArray<FProcMeshTangent> Tangents;
+
+	//// 기본 값을 설정
+	////Normals.Init(FVector(0, 0, 1), Vertices.Num());
+	//UVs.Init(FVector2D(0, 0), Vertices.Num());
+	//VertexColors.Init(FLinearColor::Black, Vertices.Num());
+
+	//UE_LOG(LogTemp, Warning, TEXT("Vertices count: %d"), Vertices.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("Triangles count: %d"), Triangles.Num());
 	//TArray<FVector> Normals;
-	TArray<FVector2D> UVs;
-	TArray<FLinearColor> VertexColors;
 	//TArray<FProcMeshTangent> Tangents;
-
-	// 기본 값을 설정
-	//Normals.Init(FVector(0, 0, 1), Vertices.Num());
-	UVs.Init(FVector2D(0, 0), Vertices.Num());
-	VertexColors.Init(FLinearColor::Black, Vertices.Num());
-
-	UE_LOG(LogTemp, Warning, TEXT("Vertices count: %d"), Vertices.Num());
-	UE_LOG(LogTemp, Warning, TEXT("Triangles count: %d"), Triangles.Num());
-	TArray<FVector> Normals;
-	TArray<FProcMeshTangent> Tangents;
-	UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UVs, Normals, Tangents);
-	CutProceduralMesh->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
-	CutProceduralMesh->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, VertexColors, Tangents, true);
-	//CutProceduralMesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
-	CutProceduralMesh->SetMaterial(0, Material);
-	CutProceduralMesh->SetMaterial(1, Material2);
-	CutProceduralMesh->SetMaterial(2, Material3);
-	CutProceduralMesh->SetVisibility(true);
-	CutProceduralMesh->SetHiddenInGame(false);
-	CutProceduralMesh->RegisterComponent();
+	//UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UVs, Normals, Tangents);
+	//CutProceduralMesh->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
+	//CutProceduralMesh->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, VertexColors, Tangents, true);
+	////CutProceduralMesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
+	//CutProceduralMesh->SetMaterial(0, Material);
+	//CutProceduralMesh->SetMaterial(1, Material2);
+	//CutProceduralMesh->SetMaterial(2, Material3);
+	//CutProceduralMesh->SetVisibility(true);
+	//CutProceduralMesh->SetHiddenInGame(false);
+	//CutProceduralMesh->RegisterComponent();
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
