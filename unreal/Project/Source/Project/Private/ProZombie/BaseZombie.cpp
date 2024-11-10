@@ -452,8 +452,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 	}
 	CutProceduralMesh->SetSimulatePhysics(true);
 	CutProceduralMesh->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+	UE_LOG(LogTemp, Log, TEXT("Velocity: %s"), *CutProceduralMesh->GetComponentVelocity().ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("(%f, %f, %f)"), CutProceduralMesh->GetComponentVelocity().X, CutProceduralMesh->GetComponentVelocity().Y, CutProceduralMesh->GetComponentVelocity().Z));
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
-
+	
 }
 
 void ABaseZombie::SetCuttingDeadWithAnim()
