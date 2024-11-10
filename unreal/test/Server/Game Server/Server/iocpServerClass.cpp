@@ -1,4 +1,7 @@
 #include <iomanip>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 #include "iocpServerClass.h"
 
@@ -7,6 +10,7 @@
 #include "MoveTo.h"
 #include "CanAttack.h"
 #include "CanNotAttack.h"
+
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
@@ -30,6 +34,8 @@ float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정
 
 std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// MoveTo에서 계산용으로 사용
 
+bool UPDATEMAP = false;
+
 IOCP_CORE::IOCP_CORE()
 {	
 	playerIndex = 0;
@@ -37,17 +43,22 @@ IOCP_CORE::IOCP_CORE()
 	bServerOn = false;
 
 	string filePath;
+	string unrealFilePath = "../../../../Project/";
 
 	filePath = "EdgesB2.txt";
+	UpdateEdgesMap(unrealFilePath + filePath, filePath);
 	LoadEdgesMap(filePath, g_valispositionsB2, g_EdgesMapB2);
 
 	filePath = "EdgesB1.txt";
+	UpdateEdgesMap(unrealFilePath + filePath, filePath);
 	LoadEdgesMap(filePath, g_valispositionsB1, g_EdgesMapB1);
 
 	filePath = "EdgesF1.txt";
+	UpdateEdgesMap(unrealFilePath + filePath, filePath);
 	LoadEdgesMap(filePath, g_valispositionsF1, g_EdgesMapF1);
 
 	filePath = "EdgesF2.txt";
+	UpdateEdgesMap(unrealFilePath + filePath, filePath);
 	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
 	
 	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
@@ -735,21 +746,32 @@ void IOCP_CORE::Zombie_BT_Thread()
 }
 
 
+bool IOCP_CORE::UpdateEdgesMap(const string& originalFilePath, const string& copiedFilePath)
+{
+	if (UPDATEMAP == false)
+		return false;
 
+	ifstream file(originalFilePath);
+	if (!file.is_open()) {
+		cerr << "Cannot open file: " << originalFilePath << endl;
+		return false;
+	}
+	
+	bool result = CopyFileA(originalFilePath.c_str(), copiedFilePath.c_str(), false);
 
+	if (result == true) {
+		cout << "Update " << copiedFilePath << " complete!" << endl;
+	}
+	else {
+		cout << "Update " << copiedFilePath << " fail!" << endl;
+	}
 
-
-
-//===================================================================================================================
-// 전처리문 나중에 위로 올리기
-
-#include <fstream>
-#include <sstream>
-#include <string>
+	return result;
+}
 
 bool IOCP_CORE::LoadEdgesMap(const string& filePath, vector<tuple<float, float, float>>& positions, unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap)
 {
-	 ifstream file(filePath);
+	ifstream file(filePath);
     if (!file.is_open()) {
         cerr << "Cannot open file: " << filePath << endl;
         return false;

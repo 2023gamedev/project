@@ -462,6 +462,9 @@ void ABaseCharacter::BeginPlay()
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
 		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
 		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
+		CurrentWeapon->OwnerCharacter = this;
+		CurrentWeapon->m_fCharacterSTR = m_fSTR;
+
 		SetNWHandIn(true);
 	}
 
