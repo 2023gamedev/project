@@ -124,6 +124,8 @@ public:
 		vector<tuple<float, float, float>>& positions,
 		unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
 
+	bool UpdateEdgesMap(const string& originalFilePath, const string& copiedFilePath);
+
 	void SendPingToClients();
 
 	void Zombie_BT_Initialize();
