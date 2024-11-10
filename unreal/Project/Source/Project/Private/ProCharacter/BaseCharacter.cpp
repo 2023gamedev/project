@@ -450,6 +450,22 @@ void ABaseCharacter::BeginPlay()
 		FootSound();
 		});
 
+
+	// Slice 용 Weapon - TEST
+	if (CurrentWeapon == nullptr) {
+
+		CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		CurrentWeapon->ItemHandPos = FVector(-0.875394f, 0.097068f, 5.049547f);
+		CurrentWeapon->ItemHandRot = FRotator(-32.919045f, -47.588981f, 125.017375f);
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
+		FName WeaponSocket = TEXT("RightHandSocket");
+		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
+		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
+		SetNWHandIn(true);
+	}
+
+
 }
 
 // Called every frame
