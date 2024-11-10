@@ -1218,6 +1218,7 @@ void ABaseCharacter::PlayKey()
 					CarActor->UnLock();
 					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
 					UpdateKeySlot();
+					Send_OpenRoot(1);
 				}
 				else {
 					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
@@ -1231,11 +1232,13 @@ void ABaseCharacter::PlayKey()
 					RoofTopDoorActor->UnlockKey1();
 					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
 					UpdateKeySlot();
+					Send_OpenRoot(2);
 				}
 				else if (CurrentKeyItem->KeyName == "RoofKey2") {
 					RoofTopDoorActor->UnlockKey2();
 					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
 					UpdateKeySlot();
+					Send_OpenRoot(2);
 				}
 
 			}
@@ -2204,6 +2207,11 @@ void ABaseCharacter::SetAttack(bool bAttack)
 	}
 }
 
+void ABaseCharacter::SetPickUp()
+{
+	PickUp();
+}
+
 void ABaseCharacter::SetPlayerJump()
 {
 	m_bJump = true;
@@ -2526,6 +2534,7 @@ void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 {
 	Protocol::destroy_item Packet;
 	Packet.set_itemid(itemboxid);
+	Packet.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
 	Packet.set_packet_type(17);
 
 	std::string serializedData;
@@ -2539,6 +2548,19 @@ void ABaseCharacter::Send_GetKey(uint32 itemid)
 	Protocol::get_key Packet;
 	Packet.set_itemid(itemid);
 	Packet.set_packet_type(18);
+
+	std::string serializedData;
+	Packet.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+}
+
+void ABaseCharacter::Send_OpenRoot(uint32 itemid)
+{
+	Protocol::escape Packet;
+	// itemid 1 = car, 2 = rooftopdoor
+	Packet.set_root(itemid);
+	Packet.set_packet_type(19);
 
 	std::string serializedData;
 	Packet.SerializeToString(&serializedData);

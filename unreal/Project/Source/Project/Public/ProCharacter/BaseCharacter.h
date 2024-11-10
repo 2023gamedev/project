@@ -226,6 +226,8 @@ public:
 	FPickUpEndPlayerDelegate m_DPickUpEnd;
 	void PickUp();
 
+	void OtherPickUp();
+
 
 	void QuickNWeapon();
 	void QuickBHItem();
@@ -436,6 +438,8 @@ public:
 
 	void SetAttack(bool b_attack);
 
+	void SetPickUp();
+
 	void SetPlayerJump();
 
 	bool GetAttack();
@@ -453,6 +457,8 @@ public:
 	void Send_Destroy(uint32 itemboxid);
 
 	void Send_GetKey(uint32 itemid);
+
+	void Send_OpenRoot(uint32 itemid);
 
 	void OtherPlayerDead();
 
