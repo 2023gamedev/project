@@ -897,8 +897,8 @@ void AOneGameModeBase::DestroyItem(uint32 Itemid, uint32 Playerid)
         ABaseCharacter* BasePlayer = *It;
         if (BasePlayer && BasePlayer->GetPlayerId() == Playerid)
         {
-            BasePlayer->PickUp();
-            UE_LOG(LogTemp, Warning, TEXT("real update jump: %d"), Playerid);
+            BasePlayer->SetPickUp();
+            UE_LOG(LogTemp, Warning, TEXT("real update pickup: %d"), Playerid);
 
             break;
         }

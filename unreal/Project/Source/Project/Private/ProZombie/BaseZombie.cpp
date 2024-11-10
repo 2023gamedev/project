@@ -438,24 +438,64 @@ void ABaseZombie::StartAITree()
 		//ShoutingZombieAIController->StartAI();
 	}
 }
-
+//
+//void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenoraml)
+//{
+//	if (CutProceduralMesh)
+//	{
+//		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
+//		UProceduralMeshComponent* Otherhalf;
+//		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh);
+//		UKismetProceduralMeshLibrary::SliceProceduralMesh(procHit, planeposition, planenoraml, true, Otherhalf, EProcMeshSliceCapOption::CreateNewSectionForCap, procHit->GetMaterial(0));
+//		this->AddInstanceComponent(Otherhalf);
+//		Otherhalf->SetSimulatePhysics(true);
+//	}
+//	CutProceduralMesh->SetSimulatePhysics(true);
+//	CutProceduralMesh->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
+//
+//}
 void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenoraml)
 {
 	if (CutProceduralMesh)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
+
 		UProceduralMeshComponent* Otherhalf;
 		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh);
-		UKismetProceduralMeshLibrary::SliceProceduralMesh(procHit, planeposition, planenoraml, true, Otherhalf, EProcMeshSliceCapOption::CreateNewSectionForCap, procHit->GetMaterial(0));
-		this->AddInstanceComponent(Otherhalf);
-		Otherhalf->SetSimulatePhysics(true);
+
+		UKismetProceduralMeshLibrary::SliceProceduralMesh(
+			procHit,
+			planeposition,
+			planenoraml,
+			true,
+			Otherhalf,
+			EProcMeshSliceCapOption::CreateNewSectionForCap,
+			procHit->GetMaterial(0)
+		);
+
+		if (Otherhalf)
+		{
+			this->AddInstanceComponent(Otherhalf);
+			Otherhalf->RegisterComponent(); // 컴포넌트 등록
+			Otherhalf->SetSimulatePhysics(true);
+			Otherhalf->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+			Otherhalf->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+			Otherhalf->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
+		}
+
+		CutProceduralMesh->SetSimulatePhysics(true);
+		CutProceduralMesh->AddImpulseAtLocation(FVector(0.f,0.f,100.0f), GetActorLocation());
+		CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+		CutProceduralMesh->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+
+		UE_LOG(LogTemp, Log, TEXT("Velocity: %s"), *CutProceduralMesh->GetComponentVelocity().ToString());
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("(%f, %f, %f)"), CutProceduralMesh->GetComponentVelocity().X, CutProceduralMesh->GetComponentVelocity().Y, CutProceduralMesh->GetComponentVelocity().Z));
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("GetVelocity % f % f % f"),GetVelocity().X, GetVelocity().Y, GetVelocity().Z));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("GetVelocity % f % f % f"), CutProceduralMesh->GetPhysicsLinearVelocity().X, CutProceduralMesh->GetPhysicsLinearVelocity().Y, CutProceduralMesh->GetPhysicsLinearVelocity().Z));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
-	CutProceduralMesh->SetSimulatePhysics(true);
-	CutProceduralMesh->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-	UE_LOG(LogTemp, Log, TEXT("Velocity: %s"), *CutProceduralMesh->GetComponentVelocity().ToString());
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("(%f, %f, %f)"), CutProceduralMesh->GetComponentVelocity().X, CutProceduralMesh->GetComponentVelocity().Y, CutProceduralMesh->GetComponentVelocity().Z));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
-	
 }
 
 void ABaseZombie::SetCuttingDeadWithAnim()

@@ -86,8 +86,8 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 				if (Skeleton) {
 					if (OwnerCharacter)
 					{
-						FVector CameraLocation = OwnerCharacter->Camera->GetComponentLocation();
-						FVector CameraUpVector = OwnerCharacter->Camera->GetUpVector();
+						FVector OCLocation = OwnerCharacter->GetActorLocation();
+						OCLocation.Z += 20.f;
 						FVector ForwardVector = OwnerCharacter->GetActorForwardVector() * 1000;
 
 						FCollisionQueryParams QueryParams;
@@ -98,14 +98,13 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						bool bHit;
 						bHit = GetWorld()->LineTraceSingleByChannel(
 							HitResult,
-							CameraLocation,
+							OCLocation,
 							ForwardVector,
 							ECC_Visibility,
 							QueryParams,
 							ResponseParams
 						);
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("CameraLocation: %s"), *CameraLocation.ToString()));
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("CameraUpVector: %s"), *CameraUpVector.ToString()));
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("OCLocation: %s"), *OCLocation.ToString()));
 						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ForwardVector: %s"), *ForwardVector.ToString()));
 
 						if (bHit) {
