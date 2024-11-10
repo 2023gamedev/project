@@ -170,15 +170,16 @@ public:
 	void StopAITree();
 	void StartAITree();
 
+	void SliceProceduralmeshTest(FVector planeposition, FVector planenoraml);
 
 	UFUNCTION(BlueprintCallable)
-	void CutZombie(FName bonename);
+	void CutZombie(FVector planeposition, FVector planenoraml);
 
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UProceduralMeshComponent* CutProceduralMesh;
 
-	void CreativeProceduralMesh(FName bonename);
+	void CreativeProceduralMesh(FVector planeposition, FVector planenoraml);
 
 	UPROPERTY(EditAnywhere, Category = StaticMesh)
 	UStaticMeshComponent* CopyStaticMesh;

@@ -83,36 +83,47 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 			if (WeaponName == "ButchersKnife" || WeaponName == "FireAxe" || WeaponName == "SashimiKnife") {
 
 				USkeletalMeshComponent* Skeleton = Zombie->GetMesh();
-				if (Skeleton)
-				{
-
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("ClosetBone!"));
-					FName ClosestBoneName;
-					float ClosestBoneDistance = TNumericLimits<float>::Max();
-
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Impact Point: %f, %f, %f"), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
-					TArray<FName> BoneNames;
-					Skeleton->GetBoneNames(BoneNames);
-					for (const FName& BoneName : BoneNames)
+				if (Skeleton) {
+					if (OwnerCharacter)
 					{
-						FVector BoneLocation = Skeleton->GetBoneLocation(BoneName);
-						FVector BoneLocationIgnoreZ = FVector(BoneLocation.X, 0, BoneLocation.Z);
+						FVector CameraLocation = OwnerCharacter->Camera->GetComponentLocation();
+						FVector CameraUpVector = OwnerCharacter->Camera->GetUpVector();
+						FVector ForwardVector = OwnerCharacter->GetActorForwardVector() * 1000;
 
-						float DistanceSquared = FVector::DistSquared(BoneLocation, GetActorLocation());
-						if (DistanceSquared < ClosestBoneDistance)
-						{
-							ClosestBoneDistance = DistanceSquared;
-							ClosestBoneName = BoneName;
+						FCollisionQueryParams QueryParams;
+
+						FCollisionResponseParams ResponseParams;
+
+						FHitResult HitResult;
+						bool bHit;
+						bHit = GetWorld()->LineTraceSingleByChannel(
+							HitResult,
+							CameraLocation,
+							ForwardVector,
+							ECC_Visibility,
+							QueryParams,
+							ResponseParams
+						);
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("CameraLocation: %s"), *CameraLocation.ToString()));
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("CameraUpVector: %s"), *CameraUpVector.ToString()));
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ForwardVector: %s"), *ForwardVector.ToString()));
+
+						if (bHit) {
+							GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Hit detected!"));
+							GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Hit Location: %s"), *HitResult.Location.ToString()));
+							GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Hit Normal: %s"), *HitResult.Normal.ToString()));
+
+							Zombie->CutZombie(HitResult.Location, HitResult.Normal);
 						}
-					}
-					int32 BoneIndex = Skeleton->GetBoneIndex(ClosestBoneName);
-					if (BoneIndex != INDEX_NONE)
-					{
+						else
+						{
+							GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("No hit detected."));
+						}
 
-						GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("ClosestBone: %s, BoneIndex: %d"), *ClosestBoneName.ToString(), BoneIndex));
-						Zombie->CutZombie(ClosestBoneName);
+						
 					}
 				}
+
 				Zombie->SetCuttingDeadWithAnim();
 			}
 			else {
