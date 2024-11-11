@@ -1,8 +1,10 @@
 #pragma once
 #include"Common.h"
+#include "Room.h"
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<unsigned int, bool> players_ready;
+std::unordered_map<int, Room> rooms;
 std::mutex g_players_mutex;
 
 IOCP_CORE::IOCP_CORE()
@@ -53,6 +55,11 @@ void IOCP_CORE::IOCP_Initialize()
 	if (g_hIocp == NULL) {
 		int err_no = WSAGetLastError();
 		IOCP_ErrorQuit(L"IOCP_CORE::IOCP_Initialize", err_no);
+	}
+
+	for (int i = 1; i <= 4; ++i) {
+		rooms.emplace(i, Room(i)); // room ID를 key로 하여 room 4개 생성
+		printf("Room %d 생성 완료\n", i);
 	}
 }
 

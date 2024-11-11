@@ -33,7 +33,7 @@
     <ClInclude Include="LobbyServer\LoginManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Room.h">
+    <ClInclude Include="LobbyServer\Room.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClCompile Include="LobbyServer\LoginManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Room.cpp">
+    <ClCompile Include="LobbyServer\Room.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

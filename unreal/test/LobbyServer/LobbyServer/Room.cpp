@@ -1,7 +1,9 @@
 #include "Room.h"
 
-Room::Room()
+Room::Room(int id)
 {
+    current_players = 0;
+    room_id = id;
 }
 
 Room::~Room()
@@ -9,7 +11,7 @@ Room::~Room()
 }
 
 bool Room::JoinRoom() {
-    if (current_players < max_players) {
+    if (current_players < MAX_PLAYERS) {
         current_players++;
         return true;
     }
@@ -20,4 +22,14 @@ void Room::LeaveRoom() {
     if (current_players > 0) {
         current_players--;
     }
+}
+
+int Room::GetRoomID()
+{
+    return room_id;
+}
+
+int Room::GetCurrentPlayers()
+{
+    return current_players;
 }
