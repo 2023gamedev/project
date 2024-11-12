@@ -171,6 +171,27 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 				break;
 			}
+
+			case 9:
+			{
+				UE_LOG(LogNet, Display, TEXT("Received Join:"));
+
+				break;
+			}
+
+			case 10:
+			{
+				UE_LOG(LogNet, Display, TEXT("Received Join Player:"));
+
+				break;
+			}
+
+			case 12:
+			{
+				UE_LOG(LogNet, Display, TEXT("Received Leave Player:"));
+
+				break;
+			}
 			}
 		}
 	}
