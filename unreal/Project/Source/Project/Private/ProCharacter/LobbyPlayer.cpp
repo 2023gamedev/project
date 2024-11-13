@@ -34,7 +34,7 @@ ALobbyPlayer::ALobbyPlayer()
 		StartGameUI = PLAYER_STARTUI.Class;
 	}*/
 
-	static ConstructorHelpers::FClassFinder <USelect_RoomUI> PLAYER_SELECT_ROOMUI(TEXT("/Game/UI/BP_SelectRoom.BP_SelectRoom"));
+	static ConstructorHelpers::FClassFinder <USelect_RoomUI> PLAYER_SELECT_ROOMUI(TEXT("/Game/UI/BP_SelectRoom.BP_SelectRoom_C"));
 
 	if (PLAYER_SELECT_ROOMUI.Succeeded()) {
 		StartGameUI = PLAYER_SELECT_ROOMUI.Class;

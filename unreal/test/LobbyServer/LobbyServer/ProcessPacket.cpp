@@ -96,6 +96,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("[ No. %3u ] Join Packet Received !!\n", id);
 
+        Protocol::CS_Join Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+
+        printf("Player %d : join room %d", id, Packet.roomid());
+
         return true;
     }
 

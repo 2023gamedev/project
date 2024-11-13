@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "ProGamemode/ProGameInstance.h"
 #include "Select_RoomUI.generated.h"
 
 /**
@@ -17,6 +18,10 @@ class USelect_RoomUI : public UUserWidget
 
 public:
 	void Init();
+
+	void SendJoin(uint32 roomid);
+
+	UProGameInstance* GameInstance;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* Room1Button;
