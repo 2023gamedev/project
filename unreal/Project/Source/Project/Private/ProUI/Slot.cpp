@@ -93,6 +93,25 @@ void USlot::Refresh()
 		}
 		break;
 	}
+	case ESlotType::SLOT_OTHER_PLAYER:
+	{
+		FItemDataStructure& dataquick = Character->OtherPlayerInven[SlotIndex];
+
+		if (dataquick.Texture != nullptr) {
+			SetTexture(dataquick.Texture);
+		}
+
+		ItemCount = dataquick.Count;
+
+		if (ItemCount <= 1) {
+			Text->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else {
+			Text->SetVisibility(ESlateVisibility::Visible);
+			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
+		}
+		break;
+	}
 	}
 }
 

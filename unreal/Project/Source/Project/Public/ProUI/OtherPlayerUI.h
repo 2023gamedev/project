@@ -23,6 +23,8 @@ public:
 
 	void Init() override;
 	void Update() override;
+	void UpdateOtherPlayerUI(float otherplayerid, float hp);
+	void UpdateHPBar(float hp);
 
 	void RefreshSlot(int slotindex);
 
@@ -41,6 +43,9 @@ public:
 	UTexture2D* DefTex;
 
 
+	int m_iOtherPlayerUINumber;
+	int iMaxHealthFlag = 0;
+	float m_fMaxHealth;
 private:
 	TArray<USlot*> Slots;
 };
