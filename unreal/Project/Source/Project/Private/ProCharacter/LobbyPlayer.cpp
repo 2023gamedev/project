@@ -3,6 +3,7 @@
 
 #include "ProCharacter/LobbyPlayer.h"
 #include "ProUI/StartGameUI.h"
+#include "ProUI/Select_RoomUI.h"
 #include "ProUI/ChoiceCharacterUI.h"
 #include "ProUI/LoginUI.h"
 #include "Kismet/GameplayStatics.h"
@@ -27,10 +28,16 @@ ALobbyPlayer::ALobbyPlayer()
 		LoginUI = PLAYER_LOGINUI.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder <UStartGameUI> PLAYER_STARTUI(TEXT("/Game/UI/BP_StartGameUI.BP_StartGameUI_C"));
+	/*static ConstructorHelpers::FClassFinder <UStartGameUI> PLAYER_STARTUI(TEXT("/Game/UI/BP_StartGameUI.BP_StartGameUI_C"));
 
 	if (PLAYER_STARTUI.Succeeded()) {
 		StartGameUI = PLAYER_STARTUI.Class;
+	}*/
+
+	static ConstructorHelpers::FClassFinder <USelect_RoomUI> PLAYER_SELECT_ROOMUI(TEXT("/Game/UI/BP_SelectRoom.BP_SelectRoom"));
+
+	if (PLAYER_SELECT_ROOMUI.Succeeded()) {
+		StartGameUI = PLAYER_SELECT_ROOMUI.Class;
 	}
 
 	static ConstructorHelpers::FClassFinder <UChoiceCharacterUI> PLAYER_CHOICEUI(TEXT("/Game/UI/BP_ChoiceCharacterUI.BP_ChoiceCharacterUI_C"));
@@ -205,7 +212,7 @@ void ALobbyPlayer::MoveStartGameUI()
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
 			return;
 		}
-		StartGameUIWidget = CreateWidget<UStartGameUI>(controller, StartGameUI);
+		StartGameUIWidget = CreateWidget<USelect_RoomUI>(controller, StartGameUI);
 
 		if (!StartGameUIWidget) {
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!StartGameUIWidget");
@@ -219,7 +226,7 @@ void ALobbyPlayer::MoveStartGameUI()
 		StartGameUIWidget->Init();
 		StartGameUIWidget->AddToViewport();
 
-		StartGameUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
+		//StartGameUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
 
 	}
 
@@ -231,7 +238,7 @@ void ALobbyPlayer::OnMouseLeftClick()
 	if (StartGameUIWidget) {
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Left Mouse Button Clicked");
 
-		StartGameUIWidget->StartButton->OnClicked.Broadcast();
+		//StartGameUIWidget->StartButton->OnClicked.Broadcast();
 		
 	}
 }

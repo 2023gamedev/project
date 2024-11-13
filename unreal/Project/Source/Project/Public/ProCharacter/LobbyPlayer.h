@@ -11,6 +11,7 @@
 #include "LobbyPlayer.generated.h"
 
 class UStartGameUI;
+class USelect_RoomUI;
 class UChoiceCharacterUI;
 class ULoginUI;
 
@@ -66,10 +67,10 @@ public:
 	UCapsuleComponent* Capsule;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UStartGameUI> StartGameUI;
+	TSubclassOf<USelect_RoomUI> StartGameUI;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	UStartGameUI* StartGameUIWidget;
+	USelect_RoomUI* StartGameUIWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UChoiceCharacterUI> ChoiceCharacterUI;
