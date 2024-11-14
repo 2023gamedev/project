@@ -39,3 +39,32 @@ message Select_Character {
     uint32 playerid = 2;
     uint32 character_type = 3;
 }
+
+message CS_Join{
+    uint32 type = 1;
+    uint32 playerid = 2;
+    uint32 roomid = 3;
+}
+
+message SC_Join{
+    uint32 type = 1;
+    bool b_join = 2;
+}
+
+message SC_JoinPlayer{
+    uint32 type = 1;
+    uint32 playerid = 2;
+    string name = 3;
+}
+
+message CS_Leave{
+    uint32 type = 1;
+    uint32 playerid = 2;
+    uint32 roomid = 3;
+}
+
+message SC_LeavePlayer{
+    uint32 type = 1;
+    uint32 playerid = 2;
+}
+

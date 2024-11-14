@@ -158,16 +158,26 @@ public:
 	UOtherPlayerUI* OtherPlayerUIWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TArray<FItemDataStructure> OtherPlayerInven;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UOtherPlayerUI> OtherPlayer2UIClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UOtherPlayerUI* OtherPlayer2UIWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TArray<FItemDataStructure> OtherPlayer2Inven;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UOtherPlayerUI> OtherPlayer3UIClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UOtherPlayerUI* OtherPlayer3UIWidget;
+
+	// 게임 전체 UI
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TArray<FItemDataStructure> OtherPlayer3Inven;
 
 	// 텍스트를 화면에 표시하는 함수
 	void ShowActionText(FText Text, const FSlateColor& Color, float DisplayTime = 5); // fadeout이 5초

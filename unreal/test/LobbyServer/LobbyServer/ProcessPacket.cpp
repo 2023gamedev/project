@@ -41,7 +41,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         return true;
 
-    } break;
+    }
 
     case 2: {
         printf("[ No. %3u ] Register Packet Received !!\n", id);
@@ -60,7 +60,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         return true;
 
-    } break;
+    }
 
     case 5: {
         printf("[ No. %3u ] Ready Packet Received !!\n", id);
@@ -72,7 +72,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         return true;
 
-    } break;
+    }
 
     case 7:
     {
@@ -90,8 +90,26 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
         }
         return true;
+    }
 
-    } break;
+    case 8:
+    {
+        printf("[ No. %3u ] Join Packet Received !!\n", id);
+
+        Protocol::CS_Join Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+
+        printf("Player %d : join room %d", id, Packet.roomid());
+
+        return true;
+    }
+
+    case 11:
+    {
+        printf("[ No. %3u ] Leave Packet Received !!\n", id);
+        return true;
+    }
+
 
     default: {
         printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.type());
