@@ -179,10 +179,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UProceduralMeshComponent* CutProceduralMesh;
 
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	//UCapsuleComponent* CapsuleComponent_Z;
+
 	void CreativeProceduralMesh(FVector planeposition, FVector planenoraml);
 
-	UPROPERTY(EditAnywhere, Category = StaticMesh)
-	UStaticMeshComponent* CopyStaticMesh;
+	//UPROPERTY(EditAnywhere, Category = StaticMesh)
+	//UStaticMeshComponent* CopyStaticMesh;
 
 	void GetBoneInfluencedVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, TArray<int32>& OutVertexIndices);
 	void CreateProceduralMeshFromBoneVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, UProceduralMeshComponent* ProceduralMeshComp);

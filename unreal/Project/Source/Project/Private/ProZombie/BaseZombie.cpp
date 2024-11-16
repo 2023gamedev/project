@@ -209,6 +209,8 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
 
 		// ProceduralMeshComponent 생성 및 설정
 		CutProceduralMesh = NewObject<UProceduralMeshComponent>(this);
+		//CapsuleComponent_Z = NewObject<UCapsuleComponent>(CutProceduralMesh);
+		//CapsuleComponent_Z->SetupAttachment(CutProceduralMesh); // ProceduralMesh의 자식으로 설정
 		if (!CutProceduralMesh) return;
 
 		CreativeProceduralMesh(planeposition, planenoraml);
@@ -300,6 +302,57 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 		CutProceduralMesh->SetVisibility(true);
 		CutProceduralMesh->SetHiddenInGame(false);
 		CutProceduralMesh->RegisterComponent();
+
+
+		// 스켈레탈 메시에서 물리 에셋을 가져옴
+		//UPhysicsAsset* PhysicsAsset = Skeleton->GetPhysicsAsset();
+
+		//if (PhysicsAsset)
+		//{
+		//	TArray<UPrimitiveComponent*> CollisionBodies;
+		//	PhysicsAsset->GetBodies(CollisionBodies);
+
+		//	for (UPrimitiveComponent* Body : CollisionBodies)
+		//	{
+		//		if (Body)
+		//		{
+		//			// 콜리전 바디를 ProceduralMeshComponent에 수동으로 추가하거나 설정
+		//			// 예: ProceduralMeshComponent에 Attach
+		//			Body->SetupAttachment(CutProceduralMesh);  // 필요시 attach
+		//			Body->RegisterComponent();  // 월드에 등록
+		//		}
+		//	}
+		//}
+
+
+
+
+
+		// 캡슐 충돌 컴포넌트 생성 및 설정
+		//CapsuleComponent_Z->SetCapsuleHalfHeight(100.0f);  // 캡슐의 높이 설정
+		//CapsuleComponent_Z->SetCapsuleRadius(50.0f);       // 캡슐의 반지름 설정
+
+		//// 캡슐 콜리전의 물리 시뮬레이션 활성화
+		//CapsuleComponent_Z->SetSimulatePhysics(true);
+		//CapsuleComponent_Z->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		//CapsuleComponent_Z->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+		//// ProceduralMeshComponent와 함께 월드에 등록
+		//CapsuleComponent_Z->RegisterComponent();
+
+
+
+
+		//CutProceduralMesh->SetSimulatePhysics(true);
+		//CutProceduralMesh->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
+		//CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		//CutProceduralMesh->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+		//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+		//2CutProceduralMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+		UE_LOG(LogTemp, Log, TEXT("GetVelocity: %s"), *CutProceduralMesh->GetComponentVelocity().ToString());
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("GetVelocity (%f, %f, %f)"), CutProceduralMesh->GetComponentVelocity().X, CutProceduralMesh->GetComponentVelocity().Y, CutProceduralMesh->GetComponentVelocity().Z));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("GetVelocity (%f, %f, %f)"), CutProceduralMesh->GetPhysicsLinearVelocity().X, CutProceduralMesh->GetPhysicsLinearVelocity().Y, CutProceduralMesh->GetPhysicsLinearVelocity().Z));
 
 	}
 	// 기존 SkeletalMesh 안 보이게 설정
@@ -484,12 +537,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			Otherhalf->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
 		}
 
-		CutProceduralMesh->SetSimulatePhysics(true);
-		CutProceduralMesh->AddImpulseAtLocation(FVector(0.f,0.f,100.0f), GetActorLocation());
-		CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-		CutProceduralMesh->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("GetVelocity % f % f % f"),GetVelocity().X, GetVelocity().Y, GetVelocity().Z));
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("GetVelocity % f % f % f"), CutProceduralMesh->GetPhysicsLinearVelocity().X, CutProceduralMesh->GetPhysicsLinearVelocity().Y, CutProceduralMesh->GetPhysicsLinearVelocity().Z));
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
 }

@@ -34,7 +34,7 @@ float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정
 
 std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// MoveTo에서 계산용으로 사용
 
-bool UPDATEMAP = false;
+bool UPDATEMAP = false;		// 맵 txt 업데이트 유무
 
 IOCP_CORE::IOCP_CORE()
 {	
