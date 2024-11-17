@@ -54,4 +54,6 @@ public:
 
     bool ConnectNetwork;
 
+    FString MyUserName;
+
 };

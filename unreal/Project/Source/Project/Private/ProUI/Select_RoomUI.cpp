@@ -8,6 +8,7 @@
 void USelect_RoomUI::OnRoom1ButtonClicked()
 {
     SendJoin(1);
+    MoveWaitingRoomUI.Execute();
     RemoveFromParent();
 }
 

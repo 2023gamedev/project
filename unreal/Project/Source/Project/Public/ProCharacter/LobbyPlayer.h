@@ -14,6 +14,7 @@ class UStartGameUI;
 class USelect_RoomUI;
 class UChoiceCharacterUI;
 class ULoginUI;
+class UWaitingRoomUI;
 
 DECLARE_DELEGATE(FChoicedGirlCharcaterD);
 DECLARE_DELEGATE(FChoicedEmployeeCharcaterD);
@@ -53,10 +54,11 @@ public:
 	
 	void MoveChoiceCharacterUI();
 	void MoveStartGameUI();
+	void MoveWaitingRoomUI();
 	void OnMouseLeftClick();
 
 	CharacterSelect recvSelect;
-
+	Chatting recvChat;
 	
 
 	// 카메라
@@ -83,6 +85,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	ULoginUI* LoginUIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UWaitingRoomUI> WaitingRoomUI;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UWaitingRoomUI* WaitingRoomUIWidget;
 
 
 };

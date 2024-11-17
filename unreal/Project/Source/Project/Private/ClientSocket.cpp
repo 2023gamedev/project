@@ -7,20 +7,20 @@
 ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
-	//CurrentServerType = ServerType::LOBBY_SERVER;
-	CurrentServerType = ServerType::GAME_SERVER;
+	CurrentServerType = ServerType::LOBBY_SERVER;
+	//CurrentServerType = ServerType::GAME_SERVER;
 
 	recvBuffer.buf = recvData;
 	recvBuffer.len = BUFSIZE;
 
-	/*if (ConnectServer(ServerType::LOBBY_SERVER)) {
-		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
-	}*/
-
-	if (ConnectServer(ServerType::GAME_SERVER)) {
-
+	if (ConnectServer(ServerType::LOBBY_SERVER)) {
 		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
 	}
+
+	/*if (ConnectServer(ServerType::GAME_SERVER)) {
+
+		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
+	}*/
 }
 
 ClientSocket::~ClientSocket()
@@ -189,6 +189,22 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 			case 12:
 			{
 				UE_LOG(LogNet, Display, TEXT("Received Leave Player:"));
+
+				break;
+			}
+
+			case 13:
+			{
+				UE_LOG(LogNet, Display, TEXT("Received Chatting:"));
+
+				Protocol::SC_Chatting Chat_Packet;
+
+				if (Chat_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+
+					FString FStringchat = FString(UTF8_TO_TCHAR(Chat_Packet.chat().c_str()));
+
+					Q_chat.push(Chatting(Chat_Packet.playerid(), FStringchat));
+				}
 
 				break;
 			}

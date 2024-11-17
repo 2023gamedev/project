@@ -60,6 +60,8 @@ void ULoginUI::OnLoginButtonClicked()
     }
 
     if (GameInstance->ClientSocketPtr->b_login) {
+        GameInstance->MyUserName = UEUsername;
+
         MoveStartGameUI.Execute();
 
         RemoveFromParent();

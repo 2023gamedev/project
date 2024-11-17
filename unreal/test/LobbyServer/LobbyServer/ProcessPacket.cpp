@@ -110,6 +110,23 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         return true;
     }
 
+    case 13:
+    {
+        printf("[ No. %3u ] Chatting Packet Received !!\n", id);
+
+        Protocol::CS_Chatting Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        for (const auto& player : g_players) {
+            IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+        }
+        return true;
+    }
+
 
     default: {
         printf("ERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.type());
