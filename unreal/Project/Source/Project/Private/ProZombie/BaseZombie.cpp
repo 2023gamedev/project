@@ -21,6 +21,17 @@
 #include "Kismet/GameplayStatics.h"
 #include "ProceduralMeshComponent.h"
 
+#include "Components/BoxComponent.h"
+#include "Engine/SkeletalMesh.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "ProceduralMeshComponent.h"
+#include "PhysicsEngine/PhysicsAsset.h"
+#include "PhysicsEngine/BodySetup.h"
+#include "PhysicsEngine/BoxElem.h"
+#include "PhysicsEngine/SphereElem.h"
+#include "PhysicsEngine/SphylElem.h"
+#include "PhysicsEngine/BodyInstance.h"
+
 // Sets default values
 ABaseZombie::ABaseZombie()
 {
@@ -294,7 +305,11 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 			Triangles.Add(IndicesData.Indices[TriVertexIndex + 2]);
 		}
 
-		CutProceduralMesh->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
+		FTransform SkeletonTransform = Skeleton->GetComponentTransform();
+
+		CutProceduralMesh->SetWorldTransform(SkeletonTransform);
+		//CutProceduralMesh->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
+		CutProceduralMesh->ContainsPhysicsTriMeshData(true);
 		CutProceduralMesh->CreateMeshSection(j, Vertices, Triangles, Normals, UV, Colors, Tangents, true);
 		CutProceduralMesh->SetMaterial(0, Material);
 		CutProceduralMesh->SetMaterial(1, Material2);
@@ -355,8 +370,83 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("GetVelocity (%f, %f, %f)"), CutProceduralMesh->GetPhysicsLinearVelocity().X, CutProceduralMesh->GetPhysicsLinearVelocity().Y, CutProceduralMesh->GetPhysicsLinearVelocity().Z));
 
 	}
+
+	//UPhysicsAsset* PhysicsAsset = Skeleton->GetPhysicsAsset();
+
+	//// 새로운 BodySetup 생성
+	//UBodySetup* NewBodySetup = NewObject<UBodySetup>(CutProceduralMesh);
+	//NewBodySetup->AggGeom = FKAggregateGeom(); // 초기화
+
+	//// 각 BodySetup에서 충돌 요소 복사
+	//for (UBodySetup* BodySetup : PhysicsAsset->SkeletalBodySetups) {
+	//	if (BodySetup) {
+	//		// 박스 요소 복사
+	//		for (const FKBoxElem& BoxElem : BodySetup->AggGeom.BoxElems) {
+	//			NewBodySetup->AggGeom.BoxElems.Add(BoxElem);
+	//		}
+	//		// 구체 요소 복사
+	//		for (const FKSphereElem& SphereElem : BodySetup->AggGeom.SphereElems) {
+	//			NewBodySetup->AggGeom.SphereElems.Add(SphereElem);
+	//		}
+	//		// 캡슐 요소 복사
+	//		for (const FKSphylElem& SphylElem : BodySetup->AggGeom.SphylElems) {
+	//			NewBodySetup->AggGeom.SphylElems.Add(SphylElem);
+	//		}
+	//	}
+	//}
+	//CutProceduralMesh->bUseComplexAsSimpleCollision = false;
+	//CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//CutProceduralMesh->SetCollisionResponseToAllChannels(ECR_Block);
+	//CutProceduralMesh->RecreatePhysicsState();
+	//CutProceduralMesh->SetSimulatePhysics(true);
+	//CutProceduralMesh->RegisterComponent();
+
+	//UE_LOG(LogTemp, Log, TEXT("BoxElems: %d, SphereElems: %d, SphylElems: %d"),
+	//	NewBodySetup->AggGeom.BoxElems.Num(),
+	//	NewBodySetup->AggGeom.SphereElems.Num(),
+	//	NewBodySetup->AggGeom.SphylElems.Num());
+
+
+
+	// 프로시저럴 메쉬에 대한 충돌 설정
+	CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	CutProceduralMesh->SetCollisionResponseToAllChannels(ECR_Block);
+	//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCh"));
+
+	//CutProceduralMesh->bUseComplexAsSimpleCollision = false;
+
+	//// 프로시저럴 메쉬의 바운딩 박스를 가져오기
+	//FBoxSphereBounds Bounds = CutProceduralMesh->GetLocalBounds();
+	//FVector BoxExtent = Bounds.BoxExtent;  // 박스 크기
+	//FVector BoxLocation = Bounds.Origin;   // 박스의 중심 위치
+
+	//// 새로운 충돌 박스를 생성
+	//UBoxComponent* BoxComponent = NewObject<UBoxComponent>(this);
+
+	//// BoxComponent의 크기와 위치를 설정 (프로시저럴 메쉬의 크기에 맞게)
+	//BoxComponent->SetBoxExtent(BoxExtent);  // 박스 크기 설정
+	//BoxComponent->SetRelativeLocation(BoxLocation);  // 박스 위치 설정
+
+	//// 프로시저럴 메쉬와 BoxComponent를 부모-자식 관계로 연결
+	//BoxComponent->SetupAttachment(CutProceduralMesh);
+
+	//// BoxComponent에 대한 충돌 활성화
+	//BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//BoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	//BoxComponent->SetCollisionProfileName("ZombieCol");
+	//BoxComponent->SetSimulatePhysics(true);
+
+	//// BoxComponent 등록
+	//BoxComponent->RegisterComponent();
+
+	// 프로시저럴 메쉬도 등록
+	CutProceduralMesh->SetCollisionProfileName(TEXT("Zombie"));
+	CutProceduralMesh->RegisterComponent();
+
+
+
 	// 기존 SkeletalMesh 안 보이게 설정
-	GetMesh()->SetVisibility(false);
+	//GetMesh()->SetVisibility(false);
 	UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
 
 
@@ -510,36 +600,316 @@ void ABaseZombie::StartAITree()
 //}
 void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenoraml)
 {
+	// 간단한 충돌박스로 생성한 버전
+
+	//if (CutProceduralMesh)
+	//{
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("SliceProceduralmeshTest START"));
+
+	//	UProceduralMeshComponent* Otherhalf = nullptr;
+	//	UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh);
+
+	//	// 메쉬 절단
+	//	UKismetProceduralMeshLibrary::SliceProceduralMesh(
+	//		procHit,
+	//		planeposition,
+	//		planenoraml,
+	//		true,
+	//		Otherhalf,
+	//		EProcMeshSliceCapOption::CreateNewSectionForCap,
+	//		procHit->GetMaterial(0)
+	//	);
+
+	//	// 첫 번째 메쉬 바운드 가져오기
+	//	FBoxSphereBounds FirstBounds = CutProceduralMesh->GetLocalBounds();
+	//	FVector FirstBoxExtent = FirstBounds.BoxExtent;
+	//	FVector FirstBoxLocation = FirstBounds.Origin;
+
+	//	// 첫 번째 충돌 박스 생성 및 설정
+	//	UBoxComponent* FirstBoxComponent = NewObject<UBoxComponent>(this);
+	//	if (FirstBoxComponent) {
+	//		this->AddInstanceComponent(FirstBoxComponent);
+	//		FirstBoxComponent->SetBoxExtent(FirstBoxExtent);
+	//		FirstBoxComponent->SetRelativeLocation(FirstBoxLocation);
+
+
+	//		//FirstBoxComponent->SetupAttachment(CutProceduralMesh); // 첫 번째 메쉬에 첨부
+	//		FirstBoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//		FirstBoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	//		FirstBoxComponent->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+	//		//FirstBoxComponent->SetSimulatePhysics(true);
+
+
+
+	//		FirstBoxComponent->SetHiddenInGame(false);
+	//		FirstBoxComponent->SetVisibility(true);
+	//		FirstBoxComponent->RegisterComponent();
+
+	//		CutProceduralMesh->SetupAttachment(FirstBoxComponent);
+	//		FirstBoxComponent->SetRelativeLocation(CutProceduralMesh->GetComponentLocation());
+	//			
+	//	}
+
+	//	//CutProceduralMesh->SetSimulatePhysics(true);
+	//	CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//	CutProceduralMesh->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+
+	//	if (Otherhalf)
+	//	{
+	//		// 두 번째 메쉬 바운드 가져오기
+	//		FBoxSphereBounds SecondBounds = Otherhalf->GetLocalBounds();
+	//		FVector SecondBoxExtent = SecondBounds.BoxExtent;
+	//		FVector SecondBoxLocation = SecondBounds.Origin;
+
+	//		// 두 번째 충돌 박스 생성 및 설정
+	//		UBoxComponent* SecondBoxComponent = NewObject<UBoxComponent>(this);
+	//		SecondBoxComponent->SetBoxExtent(SecondBoxExtent);
+	//		SecondBoxComponent->SetRelativeLocation(SecondBoxLocation);
+	//		SecondBoxComponent->SetupAttachment(Otherhalf); // 두 번째 메쉬에 첨부
+	//		SecondBoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//		SecondBoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	//		SecondBoxComponent->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+
+
+	//		SecondBoxComponent->SetHiddenInGame(false);
+	//		SecondBoxComponent->SetVisibility(true);
+	//		SecondBoxComponent->RegisterComponent();
+
+	//		// 두 번째 메쉬 등록 및 물리 시뮬레이션 활성화
+	//		this->AddInstanceComponent(Otherhalf);
+	//		this->AddInstanceComponent(SecondBoxComponent);
+	//		Otherhalf->RegisterComponent();
+	//		//Otherhalf->SetSimulatePhysics(true);
+	//		//Otherhalf->SetCollisionProfileName(TEXT("ZombieCh"));
+	//		Otherhalf->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+
+	//		// 두 번째 메쉬에 임펄스 적용
+	//		//Otherhalf->AddImpulseAtLocation(FVector(0.f, 100.f, 0.f), GetActorLocation());
+	//	}
+
+
+	////	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("SliceProceduralmeshTest END"));
+	////}
+
+	//if (CutProceduralMesh)
+	//{
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("SliceProceduralmeshTest START"));
+
+	//	UProceduralMeshComponent* Otherhalf = nullptr;
+	//	UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh);
+
+	//	// 메쉬 절단
+	//	UKismetProceduralMeshLibrary::SliceProceduralMesh(
+	//		procHit,
+	//		planeposition,
+	//		planenoraml,
+	//		true,
+	//		Otherhalf,
+	//		EProcMeshSliceCapOption::CreateNewSectionForCap,
+	//		procHit->GetMaterial(0)
+	//	);
+
+	//	// 절단 후 바운드 업데이트
+	//	CutProceduralMesh->UpdateBounds();
+
+	//	// 첫 번째 메쉬
+	//	if (CutProceduralMesh)
+	//	{
+	//		FBoxSphereBounds FirstBounds = CutProceduralMesh->GetLocalBounds();
+	//		FVector FirstBoxExtent = FirstBounds.BoxExtent;
+
+	//		// 월드 좌표로 변환된 Origin 계산
+	//		FVector FirstBoxxLocationWorld = Otherhalf->GetComponentTransform().TransformPosition(FirstBounds.Origin);
+
+
+	//		// 박스 생성
+	//		UBoxComponent* FirstBoxComponent = NewObject<UBoxComponent>(this);
+	//		if (FirstBoxComponent)
+	//		{
+	//			FirstBoxComponent->SetBoxExtent(FirstBoxExtent);
+	//			FirstBoxComponent->SetWorldLocation(FirstBoxxLocationWorld); // 월드 좌표 설정
+	//			FirstBoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//			FirstBoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	//			FirstBoxComponent->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+	//			FirstBoxComponent->RegisterComponent();
+
+	//			FirstBoxComponent->SetHiddenInGame(false);
+	//			FirstBoxComponent->SetVisibility(true);
+	//			FirstBoxComponent->SetSimulatePhysics(true);
+	//			this->AddInstanceComponent(FirstBoxComponent);
+
+	//			// 메쉬를 박스에 첨부
+	//			CutProceduralMesh->AttachToComponent(FirstBoxComponent, FAttachmentTransformRules::KeepWorldTransform);
+	//			CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision); // 충돌은 박스에서 처리
+
+	//			FirstBoxComponent->AddImpulseAtLocation(FVector(0.f, 0.f, 1000.f), GetActorLocation());
+	//		}
+	//	}
+
+	//	if (Otherhalf)
+	//	{
+	//		Otherhalf->UpdateBounds(); // 절단 후 바운드 업데이트
+
+	//		FBoxSphereBounds SecondBounds = Otherhalf->GetLocalBounds();
+	//		FVector SecondBoxExtent = SecondBounds.BoxExtent;
+
+	//		// 월드 좌표로 변환된 Origin 계산
+	//		FVector SecondBoxLocationWorld = Otherhalf->GetComponentTransform().TransformPosition(SecondBounds.Origin);
+
+	//		// 박스 생성
+	//		UBoxComponent* SecondBoxComponent = NewObject<UBoxComponent>(this);
+	//		if (SecondBoxComponent)
+	//		{
+	//			SecondBoxComponent->SetBoxExtent(SecondBoxExtent); // 크기 설정
+	//			SecondBoxComponent->SetWorldLocation(SecondBoxLocationWorld); // 정확한 월드 좌표 적용
+	//			SecondBoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//			SecondBoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	//			SecondBoxComponent->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+	//			SecondBoxComponent->RegisterComponent();
+
+	//			SecondBoxComponent->SetHiddenInGame(false);
+	//			SecondBoxComponent->SetVisibility(true);
+	//			SecondBoxComponent->SetSimulatePhysics(true);
+	//			this->AddInstanceComponent(SecondBoxComponent);
+	//			this->AddInstanceComponent(Otherhalf);
+
+	//			// 메쉬를 박스에 첨부
+	//			
+	//			Otherhalf->AttachToComponent(SecondBoxComponent, FAttachmentTransformRules::KeepWorldTransform);
+	//			Otherhalf->SetCollisionEnabled(ECollisionEnabled::NoCollision); // 충돌은 박스에서 처리
+	//		}
+	//	}
+
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("SliceProceduralmeshTest END"));
+	//}
+
+	// 간단한 충돌캡슐로 생성한 버전
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("SliceProceduralmeshTest START"));
+
+	UProceduralMeshComponent* Otherhalf = nullptr;
+	UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh);
+
+	// 메쉬 절단
+	UKismetProceduralMeshLibrary::SliceProceduralMesh(
+		procHit,
+		planeposition,
+		planenoraml,
+		true,
+		Otherhalf,
+		EProcMeshSliceCapOption::CreateNewSectionForCap,
+		procHit->GetMaterial(0)
+	);
+
+	// 절단 후 바운드 업데이트
+	CutProceduralMesh->UpdateBounds();
+
+	// 절단된 면을 빨간색 머터리얼로 바꿀 필요
+	//if (Otherhalf)
+	//{
+	//	UMaterialInstanceDynamic* RedCapMaterial = UMaterialInstanceDynamic::Create(Material, this); // SomeMaterialInstance는 기본 머티리얼 인스턴스
+	//	if (RedCapMaterial)
+	//	{
+	//		RedCapMaterial->SetVectorParameterValue("BaseColor", FLinearColor::Red); // 빨간색으로 변경
+	//		// RedCapMaterial을 절단된 면에 적용
+	//		Otherhalf->SetMaterial(0, RedCapMaterial);
+	//	}
+	//}
+
+	// 첫 번째 메쉬
 	if (CutProceduralMesh)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
+		FBoxSphereBounds FirstBounds = CutProceduralMesh->GetLocalBounds();
+		FVector FirstBoxExtent = FirstBounds.BoxExtent;
 
-		UProceduralMeshComponent* Otherhalf;
-		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh);
+		// 월드 좌표로 변환된 Origin 계산
+		FVector FirstBoxxLocationWorld = Otherhalf->GetComponentTransform().TransformPosition(FirstBounds.Origin);
 
-		UKismetProceduralMeshLibrary::SliceProceduralMesh(
-			procHit,
-			planeposition,
-			planenoraml,
-			true,
-			Otherhalf,
-			EProcMeshSliceCapOption::CreateNewSectionForCap,
-			procHit->GetMaterial(0)
-		);
-
-		if (Otherhalf)
+		// 캡슐 생성
+		UCapsuleComponent* FirstCapsuleComponent = NewObject<UCapsuleComponent>(this);
+		if (FirstCapsuleComponent)
 		{
-			this->AddInstanceComponent(Otherhalf);
-			Otherhalf->RegisterComponent(); // 컴포넌트 등록
-			Otherhalf->SetSimulatePhysics(true);
-			Otherhalf->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-			Otherhalf->SetCollisionProfileName(TEXT("BlockAllDynamic"));
-			Otherhalf->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
-		}
+			// 캡슐 크기 설정
+			float CapsuleRadius = FMath::Max(FirstBounds.BoxExtent.X, FirstBounds.BoxExtent.Y); // X, Y 중 더 큰 값 사용
+			float CapsuleHalfHeight = FirstBounds.BoxExtent.Z; // Z 값을 높이로 사용
+			FirstCapsuleComponent->SetCapsuleSize(CapsuleRadius, CapsuleHalfHeight);
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("GetVelocity % f % f % f"),GetVelocity().X, GetVelocity().Y, GetVelocity().Z));
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
+			// 캡슐 위치 설정
+			FirstCapsuleComponent->SetWorldLocation(FirstBoxxLocationWorld);
+
+			// 캡슐 충돌 및 물리 설정
+			FirstCapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			FirstCapsuleComponent->SetCollisionResponseToAllChannels(ECR_Block);
+			FirstCapsuleComponent->SetSimulatePhysics(true);
+			FirstCapsuleComponent->SetCollisionProfileName(TEXT("Ragdoll"));
+			FirstCapsuleComponent->RegisterComponent();
+
+			FirstCapsuleComponent->SetHiddenInGame(false);
+			FirstCapsuleComponent->SetVisibility(true);
+			this->AddInstanceComponent(FirstCapsuleComponent);
+
+			// 메쉬를 캡슐에 첨부
+			CutProceduralMesh->AttachToComponent(FirstCapsuleComponent, FAttachmentTransformRules::KeepWorldTransform);
+			CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision); // 충돌은 캡슐에서 처리
+
+
+			FirstCapsuleComponent->SetMassOverrideInKg(NAME_None, 10.0f, true);
+
+			// 임펄스를 이용하여 첫 번째 메쉬에 힘을 가함
+			//FVector ImpulseDirection = FVector(1.f, 0.f, 0.f);  // x축 방향으로 힘을 가함
+			//float ImpulseStrength = 1000.f;  // 힘의 크기
+			//FirstCapsuleComponent->AddImpulse(ImpulseDirection * ImpulseStrength); // 임펄스를 적용
+
+			//// 지속적인 힘을 이용해 첫 번째 메쉬에 힘을 가함
+			FVector ForceDirection = FVector(1.f, 0.f, 0.f);  // x축 방향으로 힘을 가함
+			float ForceStrength = 500.f;  // 힘의 크기
+			FirstCapsuleComponent->AddForce(ForceDirection * ForceStrength); // 힘을 적용
+		}
 	}
+
+	if (Otherhalf)
+	{
+		Otherhalf->UpdateBounds(); // 절단 후 바운드 업데이트
+
+		FBoxSphereBounds SecondBounds = Otherhalf->GetLocalBounds();
+		FVector SecondBoxExtent = SecondBounds.BoxExtent;
+
+		// 월드 좌표로 변환된 Origin 계산
+		FVector SecondBoxLocationWorld = Otherhalf->GetComponentTransform().TransformPosition(SecondBounds.Origin);
+
+		// 캡슐 생성
+		UCapsuleComponent* SecondCapsuleComponent = NewObject<UCapsuleComponent>(this);
+		if (SecondCapsuleComponent)
+		{
+			// 캡슐 크기 설정
+			float CapsuleRadius = FMath::Max(SecondBounds.BoxExtent.X, SecondBounds.BoxExtent.Y);
+			float CapsuleHalfHeight = SecondBounds.BoxExtent.Z;
+			SecondCapsuleComponent->SetCapsuleSize(CapsuleRadius, CapsuleHalfHeight);
+
+			// 캡슐 위치 설정
+			SecondCapsuleComponent->SetWorldLocation(SecondBoxLocationWorld);
+
+			// 캡슐 충돌 및 물리 설정
+			SecondCapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			SecondCapsuleComponent->SetCollisionResponseToAllChannels(ECR_Block);
+			SecondCapsuleComponent->SetSimulatePhysics(true);
+			SecondCapsuleComponent->SetCollisionProfileName(TEXT("Ragdoll"));
+			SecondCapsuleComponent->RegisterComponent();
+
+			SecondCapsuleComponent->SetHiddenInGame(false);
+			SecondCapsuleComponent->SetVisibility(true);
+			this->AddInstanceComponent(SecondCapsuleComponent);
+			this->AddInstanceComponent(Otherhalf);
+
+			// 메쉬를 캡슐에 첨부
+			Otherhalf->AttachToComponent(SecondCapsuleComponent, FAttachmentTransformRules::KeepWorldTransform);
+			Otherhalf->SetCollisionEnabled(ECollisionEnabled::NoCollision); // 충돌은 캡슐에서 처리
+		}
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("SliceProceduralmeshTest END"));
+
 }
 
 void ABaseZombie::SetCuttingDeadWithAnim()
@@ -549,7 +919,8 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	if (nullptr != CharacterAnimInstance) {
 		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 	}
-	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+	//GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+	//GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
 
 	StartResurrectionTimer();
 
