@@ -30,10 +30,10 @@
     <ClInclude Include="LobbyServer\LStruct.pb.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LobbyServer\LoginManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="LobbyServer\Room.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyServer\LoginManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
