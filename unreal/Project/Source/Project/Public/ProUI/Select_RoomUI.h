@@ -11,6 +11,9 @@
 /**
  *
  */
+
+DECLARE_DELEGATE(FMoveWaitingRoomUI);
+
 UCLASS()
 class USelect_RoomUI : public UUserWidget
 {
@@ -22,6 +25,8 @@ public:
 	void SendJoin(uint32 roomid);
 
 	UProGameInstance* GameInstance;
+
+	FMoveWaitingRoomUI MoveWaitingRoomUI;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* Room1Button;

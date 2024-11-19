@@ -68,3 +68,14 @@ message SC_LeavePlayer{
     uint32 playerid = 2;
 }
 
+message CS_Chatting{
+    uint32 type = 1;
+    uint32 playerid = 2;
+    string chat = 3;
+}
+
+message SC_Chatting{
+    uint32 type = 1;
+    uint32 playerid = 2;
+    string chat = 3;
+}

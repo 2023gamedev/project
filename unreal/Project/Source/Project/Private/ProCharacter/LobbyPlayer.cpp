@@ -6,6 +6,7 @@
 #include "ProUI/Select_RoomUI.h"
 #include "ProUI/ChoiceCharacterUI.h"
 #include "ProUI/LoginUI.h"
+#include "ProUI/WaitingRoomUI.h"
 #include "Kismet/GameplayStatics.h"
 #include "ProCharacter/LobbyPlayerController.h"
 
@@ -38,6 +39,12 @@ ALobbyPlayer::ALobbyPlayer()
 
 	if (PLAYER_SELECT_ROOMUI.Succeeded()) {
 		StartGameUI = PLAYER_SELECT_ROOMUI.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder <UWaitingRoomUI> PLAYER_WAITINGROOMUI(TEXT("/Game/UI/BP_WaitingRoom.BP_WaitingRoom_C"));
+
+	if (PLAYER_WAITINGROOMUI.Succeeded()) {
+		WaitingRoomUI = PLAYER_WAITINGROOMUI.Class;
 	}
 
 	static ConstructorHelpers::FClassFinder <UChoiceCharacterUI> PLAYER_CHOICEUI(TEXT("/Game/UI/BP_ChoiceCharacterUI.BP_ChoiceCharacterUI_C"));
@@ -149,6 +156,13 @@ void ALobbyPlayer::Tick(float DeltaTime)
         }
     }
 
+	if (GameInstance->ClientSocketPtr->Q_chat.try_pop(recvChat)) {
+		if (WaitingRoomUIWidget)
+		{
+			WaitingRoomUIWidget->AddChatMessage(recvChat.chat);
+		}
+	}
+
 }
 
 void ALobbyPlayer::ChoicedGirlCharacter()
@@ -226,7 +240,34 @@ void ALobbyPlayer::MoveStartGameUI()
 		StartGameUIWidget->Init();
 		StartGameUIWidget->AddToViewport();
 
-		//StartGameUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
+		StartGameUIWidget->MoveWaitingRoomUI.BindUObject(this, &ALobbyPlayer::MoveWaitingRoomUI);
+
+	}
+
+}
+
+void ALobbyPlayer::MoveWaitingRoomUI()
+{
+	if (WaitingRoomUI != nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "WaitingRoomUI != nullptr");
+		ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
+		if (controller == nullptr) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
+			return;
+		}
+		WaitingRoomUIWidget = CreateWidget<UWaitingRoomUI>(controller, WaitingRoomUI);
+
+		if (!WaitingRoomUIWidget) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!WaitingRoomUIWidget");
+			return;
+		}
+
+
+
+		WaitingRoomUIWidget->Init();
+		WaitingRoomUIWidget->AddToViewport();
+
+		WaitingRoomUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
 
 	}
 

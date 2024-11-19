@@ -9,7 +9,7 @@
 /**
  * 
  */
- // Lobby¿¡¼­ UI¸¦ °í¸£´Â Player Å¬·¡½º¸¦ ÄÁÆ®·ÑÇÏ´Â ÄÁÆ®·Ñ·¯
+ // Lobbyì—ì„œ UIë¥¼ ê³ ë¥´ëŠ” Player í´ë˜ìŠ¤ë¥¼ ì»¨íŠ¸ë¡¤í•˜ëŠ” ì»¨íŠ¸ë¡¤ëŸ¬
 UCLASS()
 class PROJECT_API ALobbyPlayerController : public APlayerController
 {

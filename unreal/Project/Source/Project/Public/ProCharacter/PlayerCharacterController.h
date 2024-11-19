@@ -115,6 +115,8 @@ public:
 	Set_Item recvSetItem;
 	Set_Car recvSetCar;
 	Destroy_Item recvDestroyItem;
+	Get_Key recvGetkey;
+	Escape_Root recvEscapeRoot;
 
 	uint32 PlayerId;
 	uint32 ZombieId;

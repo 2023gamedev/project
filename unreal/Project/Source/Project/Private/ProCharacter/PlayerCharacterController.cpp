@@ -165,6 +165,20 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_getkey.try_pop(recvGetkey)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				//처리 recvGetKey.itemid, recvGetKey.playerid
+			}
+		}
+		
+		if (GameInstance->ClientSocketPtr->Q_escape.try_pop(recvEscapeRoot)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				//처리 recvEscapeRoot.playerid, recvEscapeRoot.root
+			}
+		}
+
 		//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);
 		if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 		{
