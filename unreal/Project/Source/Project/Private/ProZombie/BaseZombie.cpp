@@ -21,6 +21,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "ProceduralMeshComponent.h"
 
+#include "Components/BoxComponent.h"
+#include "PhysicsEngine/BodyInstance.h"
+#include "PhysicsEngine/ConvexElem.h"
+#include "PhysicsEngine/PhysicsAsset.h"
+
 // Sets default values
 ABaseZombie::ABaseZombie()
 {
@@ -57,7 +62,7 @@ void ABaseZombie::BeginPlay()
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
-	//GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ABaseZombie::OnZombieHit);
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ABaseZombie::OnZombieHit);
 }
 
 // Called every frame
@@ -175,7 +180,7 @@ void ABaseZombie::SetNormalDeadWithAnim()
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-	StartResurrectionTimer();
+	//StartResurrectionTimer();
 
 	StopAITree();
 }
@@ -212,6 +217,8 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
 		//CapsuleComponent_Z = NewObject<UCapsuleComponent>(CutProceduralMesh);
 		//CapsuleComponent_Z->SetupAttachment(CutProceduralMesh); // ProceduralMesh의 자식으로 설정
 		if (!CutProceduralMesh) return;
+
+		//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
 
 		CreativeProceduralMesh(planeposition, planenoraml);
 
@@ -254,7 +261,7 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 		{
 			const int32 VertexIndex = i + BaseVertexIndex;
 			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
-			
+
 			Vertices.Add(FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z));
 
 			const FVector3f ZTangentStatic = DataArray.StaticVertexBuffers.StaticMeshVertexBuffer.VertexTangentZ(VertexIndex);
@@ -293,80 +300,81 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 			Triangles.Add(IndicesData.Indices[TriVertexIndex + 1]);
 			Triangles.Add(IndicesData.Indices[TriVertexIndex + 2]);
 		}
-
+		
+		CutProceduralMesh->bUseComplexAsSimpleCollision = false;
 		CutProceduralMesh->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
+		//CutProceduralMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
 		CutProceduralMesh->CreateMeshSection(j, Vertices, Triangles, Normals, UV, Colors, Tangents, true);
 		CutProceduralMesh->SetMaterial(0, Material);
 		CutProceduralMesh->SetMaterial(1, Material2);
 		CutProceduralMesh->SetMaterial(2, Material3);
+	
+		
+		//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
 		CutProceduralMesh->SetVisibility(true);
 		CutProceduralMesh->SetHiddenInGame(false);
+		CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+		CutProceduralMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+		//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
 		CutProceduralMesh->RegisterComponent();
 
 
-		// 스켈레탈 메시에서 물리 에셋을 가져옴
-		//UPhysicsAsset* PhysicsAsset = Skeleton->GetPhysicsAsset();
 
-		//if (PhysicsAsset)
-		//{
-		//	TArray<UPrimitiveComponent*> CollisionBodies;
-		//	PhysicsAsset->GetBodies(CollisionBodies);
-
-		//	for (UPrimitiveComponent* Body : CollisionBodies)
-		//	{
-		//		if (Body)
-		//		{
-		//			// 콜리전 바디를 ProceduralMeshComponent에 수동으로 추가하거나 설정
-		//			// 예: ProceduralMeshComponent에 Attach
-		//			Body->SetupAttachment(CutProceduralMesh);  // 필요시 attach
-		//			Body->RegisterComponent();  // 월드에 등록
-		//		}
-		//	}
-		//}
+		//GetCapsuleComponent()->SetSimulatePhysics(true);
 
 
-
-
-
-		// 캡슐 충돌 컴포넌트 생성 및 설정
-		//CapsuleComponent_Z->SetCapsuleHalfHeight(100.0f);  // 캡슐의 높이 설정
-		//CapsuleComponent_Z->SetCapsuleRadius(50.0f);       // 캡슐의 반지름 설정
-
-		//// 캡슐 콜리전의 물리 시뮬레이션 활성화
-		//CapsuleComponent_Z->SetSimulatePhysics(true);
-		//CapsuleComponent_Z->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		//CapsuleComponent_Z->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
-		//// ProceduralMeshComponent와 함께 월드에 등록
-		//CapsuleComponent_Z->RegisterComponent();
-
-
-
-
-		//CutProceduralMesh->SetSimulatePhysics(true);
-		//CutProceduralMesh->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
+		//CutProceduralMesh->SetSimulatePhysics(true);	//-> 설정하면 다른 층으로 날라감(순간이동?)
+		////CutProceduralMesh->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
 		//CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		//CutProceduralMesh->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+		//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
 		//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-		//2CutProceduralMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+		//CutProceduralMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
-		UE_LOG(LogTemp, Log, TEXT("GetVelocity: %s"), *CutProceduralMesh->GetComponentVelocity().ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("GetVelocity (%f, %f, %f)"), CutProceduralMesh->GetComponentVelocity().X, CutProceduralMesh->GetComponentVelocity().Y, CutProceduralMesh->GetComponentVelocity().Z));
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("GetVelocity (%f, %f, %f)"), CutProceduralMesh->GetPhysicsLinearVelocity().X, CutProceduralMesh->GetPhysicsLinearVelocity().Y, CutProceduralMesh->GetPhysicsLinearVelocity().Z));
 
+		UE_LOG(LogTemp, Log, TEXT("Physics Active: %s"), CutProceduralMesh->ShouldCreatePhysicsState() ? TEXT("true") : TEXT("false"));
 	}
+
+
+	// ProceduralMesh의 BodyInstance에 Convex Collision 추가
+	CutProceduralMesh->AddCollisionConvexMesh(Vertices);
+
+	SliceProceduralmeshTest(planeposition, planenoraml);
+
+	
+
+	//CutProceduralMesh->SetWorldTransform(this->GetTransform());
+
+	//CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
+	//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+
+	CutProceduralMesh->SetSimulatePhysics(true);
+	//CutProceduralMesh->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
+	//CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
+	//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+	//CutProceduralMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+	//CutProceduralMesh->SetVisibility(true);
+	//CutProceduralMesh->SetHiddenInGame(false);
+	//CutProceduralMesh->RegisterComponent();
+
+	
+	GetMesh()->SetCollisionProfileName("NoCollision");
+	GetMesh()->SetGenerateOverlapEvents(false);
 	// 기존 SkeletalMesh 안 보이게 설정
 	GetMesh()->SetVisibility(false);
+
 	UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
 
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
 
-	SliceProceduralmeshTest(planeposition, planenoraml);
+	//SliceProceduralmeshTest(planeposition, planenoraml);
 }
 
 void ABaseZombie::GetBoneInfluencedVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, TArray<int32>& OutVertexIndices)
@@ -530,14 +538,25 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 		if (Otherhalf)
 		{
 			this->AddInstanceComponent(Otherhalf);
-			Otherhalf->RegisterComponent(); // 컴포넌트 등록
-			Otherhalf->SetSimulatePhysics(true);
+		
+			//Otherhalf->SetSimulatePhysics(true);
+			
 			Otherhalf->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-			Otherhalf->SetCollisionProfileName(TEXT("BlockAllDynamic"));
-			Otherhalf->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
+			Otherhalf->SetCollisionProfileName(TEXT("Ragdoll"));
+
+			Otherhalf->RegisterComponent(); // 컴포넌트 등록
+
+			//Otherhalf->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
+			//Otherhalf->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+			//Otherhalf->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+			Otherhalf->SetSimulatePhysics(true);
+			
+			//Otherhalf->SetCollisionProfileName("ZombieCol");
+			
 		}
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("GetVelocity % f % f % f"),GetVelocity().X, GetVelocity().Y, GetVelocity().Z));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("GetVelocity % f % f % f"),GetVelocity().X, GetVelocity().Y, GetVelocity().Z));
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
 }
@@ -551,7 +570,7 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-	StartResurrectionTimer();
+	//StartResurrectionTimer();
 
 	StopAITree();
 }
@@ -812,7 +831,7 @@ void ABaseZombie::WaittingTimerElapsed()
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
 	}
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
-	GetCapsuleComponent()->SetCollisionProfileName("Zombie");
+	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
 	SetHP(GetStartHP());
 
 	SetDie(true);

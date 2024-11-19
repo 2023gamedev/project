@@ -13,6 +13,7 @@
 #include "ProGamemode/ProGameInstance.h"
 #include "BaseZombie.generated.h"
 
+
 DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
 
@@ -178,9 +179,6 @@ public:
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UProceduralMeshComponent* CutProceduralMesh;
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	//UCapsuleComponent* CapsuleComponent_Z;
 
 	void CreativeProceduralMesh(FVector planeposition, FVector planenoraml);
 
