@@ -2,6 +2,7 @@
 
 
 #include "ProZombie/BaseZombie.h"
+
 #include "Engine/DamageEvents.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardData.h"
@@ -21,10 +22,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "ProceduralMeshComponent.h"
 
-#include "Components/BoxComponent.h"
 #include "PhysicsEngine/BodyInstance.h"
 #include "PhysicsEngine/ConvexElem.h"
 #include "PhysicsEngine/PhysicsAsset.h"
+
 
 // Sets default values
 ABaseZombie::ABaseZombie()
@@ -50,7 +51,12 @@ ABaseZombie::ABaseZombie()
 	ShoutingFX = CreateDefaultSubobject<AShoutingNiagaEffect>(TEXT("ShoutingFX"));
 
 	ShoutingFX = nullptr;
-
+	
+	ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Engine/EngineDebugMaterials/VertexColorViewMode_RedOnly.VertexColorViewMode_RedOnly"));
+	if (MaterialFinder.Succeeded())
+	{
+		Material_Blood = MaterialFinder.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -68,6 +74,47 @@ void ABaseZombie::BeginPlay()
 // Called every frame
 void ABaseZombie::Tick(float DeltaTime)
 {
+	if (CutProceduralMesh_1) {
+		if (procMesh_AddImpulse_1 == false) {
+			CutProceduralMesh_1->AddImpulseAtLocation(FVector(0.f, 0.f, 10000.0f), CutProceduralMesh_1->K2_GetComponentLocation());
+			procMesh_AddImpulse_1 = true;
+		}
+
+
+		if (CutProceduralMesh_1->GetComponentVelocity().X != 0 || CutProceduralMesh_1->GetComponentVelocity().Y != 0 || CutProceduralMesh_1->GetComponentVelocity().Z != 0) {
+			UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_1 ( %f , %f , %f )"), CutProceduralMesh_1->GetComponentVelocity().X, CutProceduralMesh_1->GetComponentVelocity().Y, CutProceduralMesh_1->GetComponentVelocity().Z);
+			if (print_Velocity_1 == false)
+				print_Velocity_1 = true;
+		}
+		else {
+			if(print_Velocity_1)
+				UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_1 ( 0.000000 , 0.000000 , 0.000000 )"));
+
+			if (procMesh_AddImpulse_1)
+				print_Velocity_1 = false;
+		}
+	}
+
+	if (CutProceduralMesh_2) {
+		if (procMesh_AddImpulse_2 == false) {
+			CutProceduralMesh_2->AddImpulseAtLocation(FVector(10000.f, 10000.f, 0.f), CutProceduralMesh_2->K2_GetComponentLocation());
+			procMesh_AddImpulse_2 = true;
+		}
+
+		if (CutProceduralMesh_2->GetComponentVelocity().X != 0 || CutProceduralMesh_2->GetComponentVelocity().Y != 0 || CutProceduralMesh_2->GetComponentVelocity().Z != 0) {
+			UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_2 ( %f , %f , %f )"), CutProceduralMesh_2->GetComponentVelocity().X, CutProceduralMesh_2->GetComponentVelocity().Y, CutProceduralMesh_2->GetComponentVelocity().Z);
+			if (print_Velocity_2 == false)
+				print_Velocity_2 = true;
+		}
+		else {
+			if (print_Velocity_2)
+				UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_2 ( 0.000000 , 0.000000 , 0.000000 )"));
+
+			if (procMesh_AddImpulse_2)
+				print_Velocity_2 = false;
+		}
+	}
+
 	if (MyChar == nullptr)
 		return;
 
@@ -91,30 +138,8 @@ void ABaseZombie::Tick(float DeltaTime)
 		//SetActorTickEnabled(true);	// tick 연산 다시 시작
 	}
 
-
 	Super::Tick(DeltaTime);
 
-	//auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
-	//if (nullptr != CharacterAnimInstance) {
-	//	CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-	//}
-
-	//if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
-	//	float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
-	//	Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
-	//	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("zombie speed: %f"), Speed));
-	//}
-	//
-	//// 애니메이션 인스턴스에 속도 파라미터 설정
-	//if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
-	//{
-	//	if (CachedAnimInstance) {
-	//		CachedAnimInstance->SetCurrentPawnSpeed(Speed);
-	//	}
-	//}
-	//
-	//PreviousSpeed = Speed;
-	//OldLocation = NewLocation;
 }
 
 void ABaseZombie::OnZombieHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) 
@@ -126,7 +151,7 @@ void ABaseZombie::OnZombieHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	Protocol::patrol_hit Packet;
 	Packet.set_zombieid(ZombieId);
 	Packet.set_packet_type(14);
-
+	 
 	std::string serializedData;
 	Packet.SerializeToString(&serializedData);
 
@@ -182,46 +207,19 @@ void ABaseZombie::SetNormalDeadWithAnim()
 
 	//StartResurrectionTimer();
 
-	StopAITree();
-}
-
-void ABaseZombie::StopAITree()
-{
-	if (GetZombieName() == "NormalZombie") {
-		AZombieAIController* NormalZombieAIController = Cast<AZombieAIController>(GetController());
-
-		//NormalZombieAIController->StopAI();
-
-	}
-	else if (GetZombieName() == "RunningZombie") {
-		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
-
-		//RunningZombieAIController->StopAI();
-	}
-	else if (GetZombieName() == "ShoutingZombie") {
-		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
-
-		//ShoutingZombieAIController->StopAI();
-	}
-
 }
 
 void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
 {
-	//FName TestBone = "Head";
 	USkeletalMeshComponent* Skeleton = GetMesh();
 	if (Skeleton) {
 
 		// ProceduralMeshComponent 생성 및 설정
-		CutProceduralMesh = NewObject<UProceduralMeshComponent>(this);
-		//CapsuleComponent_Z = NewObject<UCapsuleComponent>(CutProceduralMesh);
-		//CapsuleComponent_Z->SetupAttachment(CutProceduralMesh); // ProceduralMesh의 자식으로 설정
-		if (!CutProceduralMesh) return;
+		CutProceduralMesh_1 = NewObject<UProceduralMeshComponent>(this);
 
-		//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
+		if (!CutProceduralMesh_1) return;
 
 		CreativeProceduralMesh(planeposition, planenoraml);
-
 
 	}
 }
@@ -230,17 +228,8 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
 void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenoraml)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
-
-
 
 	USkeletalMeshComponent* Skeleton = GetMesh();
-
-
-
 
 	FSkeletalMeshRenderData* SkMeshRenderData = Skeleton->GetSkeletalMeshRenderData();
 	const FSkeletalMeshLODRenderData& DataArray = SkMeshRenderData->LODRenderData[0];
@@ -251,6 +240,8 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	TArray<FVector2D> UV;
 	TArray<FColor> Colors;
 	TArray<FProcMeshTangent> Tangents;
+
+	UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
 
 	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
 	{
@@ -282,9 +273,11 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 		}
 	}
 
+	// ProceduralMesh에 Convex Collision 추가하기 위해서
+	CutProceduralMesh_1->bUseComplexAsSimpleCollision = false;
+
 	FMultiSizeIndexContainerData IndicesData;
 	DataArray.MultiSizeIndexContainer.GetIndexBuffer(IndicesData.Indices);
-
 
 	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
 	{
@@ -301,262 +294,80 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 			Triangles.Add(IndicesData.Indices[TriVertexIndex + 2]);
 		}
 		
-		CutProceduralMesh->bUseComplexAsSimpleCollision = false;
-		CutProceduralMesh->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
-		//CutProceduralMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
-		CutProceduralMesh->CreateMeshSection(j, Vertices, Triangles, Normals, UV, Colors, Tangents, true);
-		CutProceduralMesh->SetMaterial(0, Material);
-		CutProceduralMesh->SetMaterial(1, Material2);
-		CutProceduralMesh->SetMaterial(2, Material3);
-	
+
+		CutProceduralMesh_1->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
+		CutProceduralMesh_1->CreateMeshSection(j, Vertices, Triangles, Normals, UV, Colors, Tangents, true);
 		
-		//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
-		CutProceduralMesh->SetVisibility(true);
-		CutProceduralMesh->SetHiddenInGame(false);
-		CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-		CutProceduralMesh->SetCollisionProfileName(TEXT("Ragdoll"));
-		//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-		CutProceduralMesh->RegisterComponent();
+		CutProceduralMesh_1->SetMaterial(0, Material);
+		CutProceduralMesh_1->SetMaterial(1, Material2);
+		CutProceduralMesh_1->SetMaterial(2, Material3);
 
-
-
-		//GetCapsuleComponent()->SetSimulatePhysics(true);
-
-
-		//CutProceduralMesh->SetSimulatePhysics(true);	//-> 설정하면 다른 층으로 날라감(순간이동?)
-		////CutProceduralMesh->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
-		//CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
-		//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-		//CutProceduralMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
-
-		UE_LOG(LogTemp, Log, TEXT("Physics Active: %s"), CutProceduralMesh->ShouldCreatePhysicsState() ? TEXT("true") : TEXT("false"));
 	}
 
 
-	// ProceduralMesh의 BodyInstance에 Convex Collision 추가
-	CutProceduralMesh->AddCollisionConvexMesh(Vertices);
+	CutProceduralMesh_1->SetVisibility(true);
+	CutProceduralMesh_1->SetHiddenInGame(false);
+	CutProceduralMesh_1->RegisterComponent();
 
+	// ProceduralMesh에 Convex Collision 추가
+	CutProceduralMesh_1->AddCollisionConvexMesh(Vertices);
+
+	CutProceduralMesh_1->SetSimulatePhysics(true);
+	CutProceduralMesh_1->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	CutProceduralMesh_1->SetCollisionProfileName(TEXT("Ragdoll"));
+
+
+	// 절단 부위 proceduralmesh 생성
 	SliceProceduralmeshTest(planeposition, planenoraml);
 
-	
+	//UE_LOG(LogTemp, Log, TEXT("IsPhysicsStateCreated: %s"), CutProceduralMesh_1->IsPhysicsStateCreated() ? TEXT("true") : TEXT("false"));
+	//UE_LOG(LogTemp, Log, TEXT("ShouldCreatePhysicsState: %s"), CutProceduralMesh_1->ShouldCreatePhysicsState() ? TEXT("true") : TEXT("false"));
+	//UE_LOG(LogTemp, Log, TEXT("IsSimulatingPhysics: %s"), CutProceduralMesh_1->IsSimulatingPhysics() ? TEXT("true") : TEXT("false"));
 
-	//CutProceduralMesh->SetWorldTransform(this->GetTransform());
 
-	//CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
-	//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-
-	CutProceduralMesh->SetSimulatePhysics(true);
-	//CutProceduralMesh->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
-	//CutProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	//CutProceduralMesh->SetCollisionProfileName(TEXT("ZombieCol"));
-	//CutProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-	//CutProceduralMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
-	//CutProceduralMesh->SetVisibility(true);
-	//CutProceduralMesh->SetHiddenInGame(false);
-	//CutProceduralMesh->RegisterComponent();
-
-	
 	GetMesh()->SetCollisionProfileName("NoCollision");
 	GetMesh()->SetGenerateOverlapEvents(false);
 	// 기존 SkeletalMesh 안 보이게 설정
 	GetMesh()->SetVisibility(false);
 
-	UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
 
-
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
 
-	//SliceProceduralmeshTest(planeposition, planenoraml);
 }
 
-void ABaseZombie::GetBoneInfluencedVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, TArray<int32>& OutVertexIndices)
-{
-	//
-	//if (!SkeletalMeshComp || !SkeletalMeshComp->SkeletalMesh)
-	//{
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("SkeletalMeshComp or SkeletalMesh is invalid!"));
-	//	return;
-	//}
-
-	//const int32 BoneIndex = SkeletalMeshComp->GetBoneIndex(BoneName);
-	//if (BoneIndex == INDEX_NONE)
-	//{
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bone index is invalid!"));
-	//	return;
-	//}
-
-	//// Get the location of the bone
-	//FVector BoneLocation = SkeletalMeshComp->GetBoneLocation(BoneName);
-
-	//FVector BoneLocation2 = SkeletalMeshComp->GetBoneLocation(BoneName, EBoneSpaces::ComponentSpace);
-
-	//FSkeletalMeshRenderData* RenderData = SkeletalMeshComp->GetSkeletalMeshRenderData();
-	//if (!RenderData)
-	//{
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Render data is invalid!"));
-	//	return;
-	//}
-
-	//for (int32 LODIndex = 0; LODIndex < 1; ++LODIndex)
-	//{
-	//	const FSkeletalMeshLODRenderData& LODRenderData = RenderData->LODRenderData[LODIndex];
-	//	const FPositionVertexBuffer& PositionVertexBuffer = LODRenderData.StaticVertexBuffers.PositionVertexBuffer;
-
-	//	for (int32 VertexIndex = 0; VertexIndex < (int32)(PositionVertexBuffer.GetNumVertices()); ++VertexIndex)
-	//	{
-	//		FVector3f VL3f = PositionVertexBuffer.VertexPosition(VertexIndex);
-	//		FVector VertexLocation = FVector(VL3f.X, VL3f.Y, VL3f.Z);
-
-
-	//		// 디버그 메시지로 X 좌표 출력
-	//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Vertex X: %f"), VertexLocation.X));
-	//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Bone X: %f"), BoneLocation2.X));
-
-	//		// Check if the vertex is on the right side of the bone
-	//		if (VertexLocation.X > BoneLocation2.X)
-	//		{
-	//			OutVertexIndices.Add(VertexIndex);
-	//		}
-	//	}
-	//}
-
-}
-
-void ABaseZombie::CreateProceduralMeshFromBoneVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, UProceduralMeshComponent* ProceduralMeshComp)
-{
-	//TArray<int32> InfluencedVertices;
-	//ProceduralMeshComp->AttachToComponent(SkeletalMeshComp, FAttachmentTransformRules::KeepRelativeTransform);
-	//ProceduralMeshComp->RegisterComponent();
-
-	//GetBoneInfluencedVertices(SkeletalMeshComp, BoneName, InfluencedVertices);
-
-	//if (InfluencedVertices.Num() == 0)
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("No vertices influenced by bone: %s"), *BoneName.ToString());
-	//	return;
-	//}
-
-	//TArray<FVector> Vertices;
-	//TArray<int32> Triangles;
-	//TArray<FVector> Normals;
-	//TArray<FVector2D> UVs;
-
-	//FSkeletalMeshRenderData* RenderData = SkeletalMeshComp->GetSkeletalMeshRenderData();
-	//if (!RenderData) return;
-
-	//const FSkeletalMeshLODRenderData& LODRenderData = RenderData->LODRenderData[0];
-	//const FPositionVertexBuffer& PositionVertexBuffer = LODRenderData.StaticVertexBuffers.PositionVertexBuffer;
-	//const FStaticMeshVertexBuffer& StaticMeshVertexBuffer = LODRenderData.StaticVertexBuffers.StaticMeshVertexBuffer;
-
-	//for (int32 VertexIdx : InfluencedVertices)
-	//{
-	//	auto Position = PositionVertexBuffer.VertexPosition(VertexIdx);
-	//	Vertices.Add(FVector(Position.X, Position.Y, Position.Z));
-
-	//	FVector4f Normal4f = LODRenderData.StaticVertexBuffers.StaticMeshVertexBuffer.VertexTangentZ(VertexIdx);
-	//	FVector Normal(Normal4f.X, Normal4f.Y, Normal4f.Z);
-	//	Normals.Add(Normal);
-
-	//	FVector2f UVf = LODRenderData.StaticVertexBuffers.StaticMeshVertexBuffer.GetVertexUV(VertexIdx, 0);
-	//	UVs.Add(FVector2D(UVf.X, UVf.Y));
-	//}
-
-	//// Create triangles (indices)
-	//for (int32 i = 0; i < Vertices.Num() - 2; i += 3)
-	//{
-	//	Triangles.Add(i);
-	//	Triangles.Add(i + 1);
-	//	Triangles.Add(i + 2);
-	//}
-
-	//ProceduralMeshComp->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
-	//ProceduralMeshComp->SetSimulatePhysics(true);
-}
-
-void ABaseZombie::StartAITree()
-{
-	if (GetZombieName() == "NormalZombie") {
-		AZombieAIController* NormalZombieAIController = Cast<AZombieAIController>(GetController());
-
-		//NormalZombieAIController->StartAI();
-	}
-	else if (GetZombieName() == "RunningZombie") {
-		ARunningZombieAIController* RunningZombieAIController = Cast<ARunningZombieAIController>(GetController());
-
-		//RunningZombieAIController->StartAI();
-	}
-	else if (GetZombieName() == "ShoutingZombie") {
-		AShoutingZombieAIController* ShoutingZombieAIController = Cast<AShoutingZombieAIController>(GetController());
-
-		//ShoutingZombieAIController->StartAI();
-	}
-}
-//
-//void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenoraml)
-//{
-//	if (CutProceduralMesh)
-//	{
-//		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
-//		UProceduralMeshComponent* Otherhalf;
-//		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh);
-//		UKismetProceduralMeshLibrary::SliceProceduralMesh(procHit, planeposition, planenoraml, true, Otherhalf, EProcMeshSliceCapOption::CreateNewSectionForCap, procHit->GetMaterial(0));
-//		this->AddInstanceComponent(Otherhalf);
-//		Otherhalf->SetSimulatePhysics(true);
-//	}
-//	CutProceduralMesh->SetSimulatePhysics(true);
-//	CutProceduralMesh->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
-//
-//}
 void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenoraml)
 {
-	if (CutProceduralMesh)
+	if (CutProceduralMesh_1)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
 
-		UProceduralMeshComponent* Otherhalf;
-		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh);
+		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh_1);
 
 		UKismetProceduralMeshLibrary::SliceProceduralMesh(
 			procHit,
 			planeposition,
 			planenoraml,
 			true,
-			Otherhalf,
+			CutProceduralMesh_2,
 			EProcMeshSliceCapOption::CreateNewSectionForCap,
-			procHit->GetMaterial(0)
+			Material_Blood
 		);
 
-		if (Otherhalf)
+		if (CutProceduralMesh_2)
 		{
-			this->AddInstanceComponent(Otherhalf);
-		
-			//Otherhalf->SetSimulatePhysics(true);
-			
-			Otherhalf->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-			Otherhalf->SetCollisionProfileName(TEXT("Ragdoll"));
+			//this->AddInstanceComponent(CutProceduralMesh_2);
 
-			Otherhalf->RegisterComponent(); // 컴포넌트 등록
+			CutProceduralMesh_2->RegisterComponent(); // 컴포넌트 등록
 
-			//Otherhalf->AddImpulseAtLocation(FVector(0.f, 0.f, 100.0f), GetActorLocation());
-			//Otherhalf->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-			//Otherhalf->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+			// 절단 부위 material 설정
+			CutProceduralMesh_2->SetMaterial(CutProceduralMesh_2->GetNumMaterials() - 1, Material_Blood);
+			
+			CutProceduralMesh_2->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+			CutProceduralMesh_2->SetCollisionProfileName(TEXT("Ragdoll"));
+			CutProceduralMesh_2->SetSimulatePhysics(true);
 
-			Otherhalf->SetSimulatePhysics(true);
-			
-			//Otherhalf->SetCollisionProfileName("ZombieCol");
-			
 		}
 
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("GetVelocity % f % f % f"),GetVelocity().X, GetVelocity().Y, GetVelocity().Z));
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
 }
@@ -571,8 +382,6 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
 	//StartResurrectionTimer();
-
-	StopAITree();
 }
 
 void ABaseZombie::Attack(uint32 PlayerId)
@@ -606,10 +415,6 @@ void ABaseZombie::Attack(uint32 PlayerId)
 
 		ShoutingZombieAIController->attackPlayerID = PlayerId;
 	}
-
-	//if (!IsDie()) {
-	//	StopAITree();
-	//}
 }
 
 void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
@@ -617,10 +422,6 @@ void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 	m_bIsAttacking = false;
 
 	m_DAttackEnd.Broadcast();
-
-	if (!IsDie()) {
-		StartAITree();
-	}
 }
 
 // 좀비가 플레이어 공격할 때 충돌체크
@@ -762,8 +563,6 @@ void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 	}
 }
 
-
-
 void ABaseZombie::SetZombieId(uint32 NewZombieId)
 {
 	ZombieId = NewZombieId;
@@ -791,10 +590,8 @@ void ABaseZombie::StartResurrectionTimer()
 
 }
 
-
 void ABaseZombie::ResurrectionTimerElapsed()
 {
-
 	m_bIsCuttingDead = false;
 	m_bIsNormalDead = false;
 
@@ -835,71 +632,6 @@ void ABaseZombie::WaittingTimerElapsed()
 	SetHP(GetStartHP());
 
 	SetDie(true);
-	StartAITree();
 }
-
-void ABaseZombie::StartAttackedStunHandle()
-{
-	StopAITree();
-	GetWorld()->GetTimerManager().SetTimer(AttakcedStunHandle, this, &ABaseZombie::AttackedStunTimerElapsed, 2.0f, false);
-}
-
-void ABaseZombie::AttackedStunTimerElapsed()
-{
-	StartAITree();
-}
-
-void ABaseZombie::UpdateLastKnownPositionByFootSound(FVector playerlocation)
-{
-	if (GetController()) {
-		if (GetZombieName() == "NormalZombie") {
-			AZombieAIController* AIZombieController = Cast<AZombieAIController>(GetController());
-			if (AIZombieController) {
-				AIZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
-			}
-		}
-		else if (GetZombieName() == "RunningZombie") {
-			ARunningZombieAIController* AIRunningZombieController = Cast<ARunningZombieAIController>(GetController());
-			if (AIRunningZombieController) {
-				AIRunningZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
-			}
-		}
-		else if (GetZombieName() == "ShoutingZombie") {
-			AShoutingZombieAIController* AIShoutingZombieController = Cast<AShoutingZombieAIController>(GetController());
-			if (AIShoutingZombieController) {
-				AIShoutingZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
-			}
-		}
-	}
-
-
-}
-
-void ABaseZombie::UpdateLastKnownPositionByShoutingSound(FVector playerlocation)
-{
-	if (GetController()) {
-		if (GetZombieName() == "NormalZombie") {
-			AZombieAIController* AIZombieController = Cast<AZombieAIController>(GetController());
-			if (AIZombieController) {
-				AIZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
-			}
-		}
-		else if (GetZombieName() == "RunningZombie") {
-			ARunningZombieAIController* AIRunningZombieController = Cast<ARunningZombieAIController>(GetController());
-			if (AIRunningZombieController) {
-				AIRunningZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
-			}
-		}
-		else if (GetZombieName() == "ShoutingZombie") {
-			AShoutingZombieAIController* AIShoutingZombieController = Cast<AShoutingZombieAIController>(GetController());
-			if (AIShoutingZombieController) {
-				AIShoutingZombieController->UpdateLastKnownPositionByFootSound(playerlocation);
-			}
-		}
-	}
-}
-
-
-
 
 

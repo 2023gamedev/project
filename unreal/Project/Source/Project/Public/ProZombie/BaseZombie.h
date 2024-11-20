@@ -11,6 +11,8 @@
 #include "ProceduralMeshComponent.h"
 #include "ProZombie/ZombieAnimInstance.h"
 #include "ProGamemode/ProGameInstance.h"
+#include "ProCharacter/BaseCharacter.h"
+
 #include "BaseZombie.generated.h"
 
 
@@ -132,6 +134,12 @@ public:
 	bool m_bIsCuttingDead = false;
 
 
+	UPROPERTY(EditAnywhere)
+	bool procMesh_AddImpulse_1 = false;
+
+	UPROPERTY(EditAnywhere)
+	bool procMesh_AddImpulse_2 = false;
+
 
 	FShoutingEndDelegate m_DShoutingEnd;
 
@@ -156,45 +164,19 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool m_bIsStanding = false;
 
-	FTimerHandle AttakcedStunHandle;
-
-	void StartAttackedStunHandle();
-
-	void AttackedStunTimerElapsed();
-
-	void UpdateLastKnownPositionByFootSound(FVector playerlocation);
-
-	void UpdateLastKnownPositionByShoutingSound(FVector playerlocation);
-
-	void SetAttack(bool battack);
-
-	void StopAITree();
-	void StartAITree();
-
-	void SliceProceduralmeshTest(FVector planeposition, FVector planenoraml);
-
 	UFUNCTION(BlueprintCallable)
 	void CutZombie(FVector planeposition, FVector planenoraml);
 
+	void SliceProceduralmeshTest(FVector planeposition, FVector planenoraml);
+
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
-	UProceduralMeshComponent* CutProceduralMesh;
+	UProceduralMeshComponent* CutProceduralMesh_1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
+	UProceduralMeshComponent* CutProceduralMesh_2;
 
 	void CreativeProceduralMesh(FVector planeposition, FVector planenoraml);
-
-	//UPROPERTY(EditAnywhere, Category = StaticMesh)
-	//UStaticMeshComponent* CopyStaticMesh;
-
-	void GetBoneInfluencedVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, TArray<int32>& OutVertexIndices);
-	void CreateProceduralMeshFromBoneVertices(USkeletalMeshComponent* SkeletalMeshComp, FName BoneName, UProceduralMeshComponent* ProceduralMeshComp);
-
-
-	void FillCutMeshGap(USkeletalMeshComponent* SkeletalMeshComp, const TArray<FVector>& CutVertices);
-	void FindVertexIndices(USkeletalMeshComponent* SkeletalMeshComp, const TArray<FVector>& CutVertices, TArray<int32>& OutVertexIndices);
-	void FindAdjacentVertices(USkeletalMeshComponent* SkeletalMeshComp, const TArray<int32>& VertexIndices, TArray<int32>& OutAdjacentVertices);
-	void GenerateNewVertices(USkeletalMeshComponent* SkeletalMeshComp, const TArray<int32>& VertexIndices, const TArray<int32>& AdjacentVertices, TArray<FVector>& OutNewVertices);
-	void GenerateNewTriangles(const TArray<int32>& VertexIndices, const TArray<int32>& AdjacentVertices, TArray<int32>& OutNewTriangles);
-	void AddNewGeometryToMesh(UProceduralMeshComponent* ProceduralMeshComp, const TArray<FVector>& NewVertices, const TArray<int32>& NewTriangles);
 
 	UPROPERTY(EditAnywhere, Category = "Materials")
 	UMaterialInterface* Material;
@@ -204,6 +186,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Materials")
 	UMaterialInterface* Material3;
+
+	UPROPERTY(EditAnywhere, Category = "Materials")
+	UMaterialInterface* Material_Blood;
 
 	UPROPERTY(EditAnywhere)
 	ABloodNiagaEffect* BloodFX;
@@ -260,12 +245,8 @@ public:
 	//UPROPERTY(VisibleAnywhere)
 	std::tuple<float, float, float> NextPath[2];
 
-	//float Speed;
-	//float PreviousSpeed;
-
 	UPROPERTY(EditAnywhere)
 	FVector TargetLocation;
-
 
 	enum FLOOR {
 		Zero, B2, B1, F1, F2
@@ -276,4 +257,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	ABaseCharacter* MyChar;
+
+	bool print_Velocity_1 = true;
+	bool print_Velocity_2 = true;
+
 };

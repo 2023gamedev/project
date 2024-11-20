@@ -1995,7 +1995,7 @@ void ABaseCharacter::FootSound()
 			ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
 			if (OverlappedZombie)
 			{
-				OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
+				//OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
 			}
 
 		}
