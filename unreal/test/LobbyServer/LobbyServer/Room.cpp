@@ -13,6 +13,7 @@ Room::~Room()
 bool Room::JoinRoom() {
     if (current_players < MAX_PLAYERS) {
         current_players++;
+
         return true;
     }
     return false;

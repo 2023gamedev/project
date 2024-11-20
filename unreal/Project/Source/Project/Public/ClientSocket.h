@@ -225,6 +225,18 @@ struct Chatting
 		: playerid(Inplayerid), chat(Inchat) {}
 };
 
+struct JoinPlayer
+{
+	std::string username;
+	uint32 playerid;
+
+
+	JoinPlayer() : username(""), playerid(0) {}
+
+	JoinPlayer(std::string Inusername, uint32 Inplayerid)
+		:username(Inusername), playerid(Inplayerid) {}
+};
+
 
 class UProGameInstance;
 
@@ -257,6 +269,7 @@ public:
 	Concurrency::concurrent_queue<Get_Key> Q_getkey;
 	Concurrency::concurrent_queue<Escape_Root> Q_escape;
 	Concurrency::concurrent_queue<Chatting> Q_chat;
+	Concurrency::concurrent_queue<JoinPlayer> Q_jplayer;
 
 
 	virtual bool Init() override;

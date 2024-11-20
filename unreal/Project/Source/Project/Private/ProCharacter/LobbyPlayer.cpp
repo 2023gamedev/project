@@ -163,6 +163,14 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		}
 	}
 
+	if (GameInstance->ClientSocketPtr->Q_jplayer.try_pop(recvJplayer)) {
+		if (WaitingRoomUIWidget)
+		{
+			FString FStringname = FString(UTF8_TO_TCHAR(recvJplayer.username.c_str()));
+			WaitingRoomUIWidget->AddPlayerToList(FStringname);
+		}
+	}
+
 }
 
 void ALobbyPlayer::ChoicedGirlCharacter()

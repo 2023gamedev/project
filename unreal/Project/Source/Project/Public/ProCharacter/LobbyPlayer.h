@@ -59,6 +59,7 @@ public:
 
 	CharacterSelect recvSelect;
 	Chatting recvChat;
+	JoinPlayer recvJplayer;
 	
 
 	// 카메라

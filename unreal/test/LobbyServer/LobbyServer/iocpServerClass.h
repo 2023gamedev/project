@@ -1,6 +1,9 @@
 #pragma once
 
 #include"LoginManager.h"
+#include "Room.h"
+
+class Room;
 
 using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;
@@ -18,10 +21,13 @@ using PLAYER_INFO = struct Client_INFO {
 	int previous_size;
 	Packet packet_buff[MAX_BUF_SIZE];
 	bool isInGame;
+	std::string username;
+	int room_num;
 };
 
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 extern std::unordered_map<unsigned int, bool> players_ready;
+extern std::unordered_map<int, Room*> rooms;
 extern std::mutex g_players_mutex;
 
 class IOCP_CORE

@@ -31,8 +31,14 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         Protocol::SC_Login SC_Packet;
 
+        bool b_login = loginmanager.Login(CS_Packet.id(), CS_Packet.password());
+
         SC_Packet.set_type(3);
-        SC_Packet.set_b_login(loginmanager.Login(CS_Packet.id(), CS_Packet.password()));
+        SC_Packet.set_b_login(b_login);
+
+        if (b_login) {
+            g_players[id]->username = CS_Packet.id();
+        }
 
         string serializedData;
         SC_Packet.SerializeToString(&serializedData);
@@ -96,10 +102,50 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("[ No. %3u ] Join Packet Received !!\n", id);
 
-        Protocol::CS_Join Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Protocol::CS_Join CS_Packet;
+        CS_Packet.ParseFromArray(buffer, bufferSize);
+        
+        int room_id = CS_Packet.roomid();
+        int player_id = CS_Packet.playerid();
 
-        printf("Player %d : join room %d", id, Packet.roomid());
+        Room* room = nullptr;
+
+        auto it = rooms.find(room_id);
+        if (it != rooms.end()) {
+            Room* room = it->second;
+        }
+
+        if (room->JoinRoom()) {
+            g_players[id]->room_num = room_id;
+
+            Protocol::SC_JoinPlayer SC_Packet;
+
+            SC_Packet.set_name(g_players[id]->username);
+            SC_Packet.set_playerid(id);
+            SC_Packet.set_type(10);
+            string serializedData;
+            SC_Packet.SerializeToString(&serializedData);
+
+            for (const auto& player : g_players) {
+                if (player.second->room_num == room_id) {
+                    IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                }
+            }
+            return true;
+        }
+
+        else {
+            Protocol::SC_Join SC_Packet;
+
+            SC_Packet.set_b_join(false);
+            SC_Packet.set_type(9);
+            string serializedData;
+            SC_Packet.SerializeToString(&serializedData);
+        }
+
+
+
+        printf("Player %d : join room %d", id, CS_Packet.roomid());
 
         return true;
     }
