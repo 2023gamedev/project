@@ -21,6 +21,7 @@ using PLAYER_INFO = struct Client_INFO {
 	int previous_size;
 	Packet packet_buff[MAX_BUF_SIZE];
 	bool isInGame;
+	bool ready;
 	std::string username;
 	int room_num;
 };

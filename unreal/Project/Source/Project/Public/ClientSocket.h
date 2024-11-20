@@ -237,6 +237,18 @@ struct JoinPlayer
 		:username(Inusername), playerid(Inplayerid) {}
 };
 
+struct LeavePlayer
+{
+	std::string username;
+	uint32 playerid;
+
+
+	LeavePlayer() : username(""), playerid(0) {}
+
+	LeavePlayer(std::string Inusername, uint32 Inplayerid)
+		:username(Inusername), playerid(Inplayerid) {}
+};
+
 
 class UProGameInstance;
 
@@ -270,6 +282,8 @@ public:
 	Concurrency::concurrent_queue<Escape_Root> Q_escape;
 	Concurrency::concurrent_queue<Chatting> Q_chat;
 	Concurrency::concurrent_queue<JoinPlayer> Q_jplayer;
+	Concurrency::concurrent_queue<LeavePlayer> Q_lplayer;
+	Concurrency::concurrent_queue<bool> Q_wready;
 
 
 	virtual bool Init() override;
