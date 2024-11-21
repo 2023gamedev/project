@@ -188,11 +188,11 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	BloodFX->OwnerZombie = this;
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	SetHP(GetHP() - Damage);
 	BeAttacked();
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	return Damage;
 }
 
@@ -227,7 +227,7 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
 // 프로시저럴 메쉬 생성되는 부분
 void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenoraml)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
 
 	USkeletalMeshComponent* Skeleton = GetMesh();
 
@@ -240,6 +240,9 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	TArray<FVector2D> UV;
 	TArray<FColor> Colors;
 	TArray<FProcMeshTangent> Tangents;
+
+	TArray<FVector> Vertices_Convex;
+	int interval_Convex = 100;			// Convex 에서 사용할 vertices 개수 조절 (원래 vertices의 1/? 개)
 
 	UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
 
@@ -254,6 +257,10 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
 
 			Vertices.Add(FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z));
+
+			if (i % interval_Convex == 0) {
+				Vertices_Convex.Add(FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z));
+			}
 
 			const FVector3f ZTangentStatic = DataArray.StaticVertexBuffers.StaticMeshVertexBuffer.VertexTangentZ(VertexIndex);
 			const FVector3f XTangentStatic = DataArray.StaticVertexBuffers.StaticMeshVertexBuffer.VertexTangentX(VertexIndex);
@@ -311,7 +318,7 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	CutProceduralMesh_1->RegisterComponent();
 
 	// ProceduralMesh에 Convex Collision 추가
-	CutProceduralMesh_1->AddCollisionConvexMesh(Vertices);
+	CutProceduralMesh_1->AddCollisionConvexMesh(Vertices_Convex);
 
 	CutProceduralMesh_1->SetSimulatePhysics(true);
 	CutProceduralMesh_1->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
@@ -332,7 +339,7 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	GetMesh()->SetVisibility(false);
 
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
 
 }
 
@@ -340,7 +347,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 {
 	if (CutProceduralMesh_1)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
 
 		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh_1);
 
@@ -372,7 +379,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		}
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
 }
 
@@ -464,7 +471,7 @@ void ABaseZombie::AttackCheck()
 
 	if (bResult) {
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
 		//UE_LOG(LogNet, Display, TEXT("Player #%d got hit - HP: %d"), HitResult.GetActor()->PlayerId, HitResult.GetActor()->GetHp());
 		FDamageEvent DamageEvent;
 		HitResult.GetActor()->TakeDamage(GetSTR(), DamageEvent, GetController(), this);
