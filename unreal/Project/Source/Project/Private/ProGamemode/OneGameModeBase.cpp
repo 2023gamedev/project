@@ -221,16 +221,16 @@ void AOneGameModeBase::ChoiceCharacterBefore()
         UProGameInstance* GameInstance = Cast<UProGameInstance>(CurrentGameInstance);
         if (GameInstance) {
             int CharacterNumber = GameInstance->GetChoicedCharacterNumber();
-            if (CharacterNumber == 0) {
+            if (CharacterNumber == 1) {
                 CharacterIconIndex = EPlayerCharacter::GIRL;
             }
-            else if (CharacterNumber == 1) {
+            else if (CharacterNumber == 2) {
                 CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
             }
-            else if (CharacterNumber == 2) {
+            else if (CharacterNumber == 3) {
                 CharacterIconIndex = EPlayerCharacter::IDOL;
             }
-            else if (CharacterNumber == 3) {
+            else if (CharacterNumber == 4) {
                 CharacterIconIndex = EPlayerCharacter::FIREFIGHTER;
             }
         }

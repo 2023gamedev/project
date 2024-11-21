@@ -65,25 +65,46 @@ void UChoiceCharacterUI::HandleAllReady()
 void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
 {
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "NewTexture?");
-    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/testgirl.testgirl"));
+    UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Girl/girl.girl"));
     if (NewTexture)
     {
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "NewTexture!");
+        if (recvSelect.Character_type == 1) {
+            NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Girl/girl.girl"));
+        }
+        else if (recvSelect.Character_type == 2) {
+            NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Employee/emp.emp"));
+        }
+        else if (recvSelect.Character_type == 3) {
+            NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Idol/idol.idol"));
+        }
+        else if (recvSelect.Character_type == 4) {
+            NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/FireFighter/fire.fire"));
+        }
+
         if (recvSelect.PlayerId == 1)
         {
-            First_Image->SetBrushFromTexture(NewTexture);
+            FSlateBrush Brush;
+            Brush.SetResourceObject(NewTexture);   // 텍스처를 브러시에 설정
+            First_Image->SetBrush(Brush);      // UImage에 브러시 설정
         }
         else if (recvSelect.PlayerId == 2)
         {
-            Second_Image->SetBrushFromTexture(NewTexture);
+            FSlateBrush Brush;
+            Brush.SetResourceObject(NewTexture);
+            Second_Image->SetBrush(Brush);
         }
         else if (recvSelect.PlayerId == 3)
         {
-            Third_Image->SetBrushFromTexture(NewTexture);
+            FSlateBrush Brush;
+            Brush.SetResourceObject(NewTexture);
+            Third_Image->SetBrush(Brush);
         }
         else if (recvSelect.PlayerId == 4)
         {
-            Fourth_Image->SetBrushFromTexture(NewTexture);
+            FSlateBrush Brush;
+            Brush.SetResourceObject(NewTexture);
+            Fourth_Image->SetBrush(Brush);
         }
     }
 }

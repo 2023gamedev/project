@@ -142,7 +142,9 @@ void ALobbyPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (GameInstance->ClientSocketPtr->Q_select.try_pop(recvSelect)){
-		choicecharacterui->UpdateSelectImage(recvSelect);
+		if (ChoiceCharacterUIWidget) {
+			ChoiceCharacterUIWidget->UpdateSelectImage(recvSelect);
+		}
 	}
 
     if (GameInstance->ClientSocketPtr->b_allready){

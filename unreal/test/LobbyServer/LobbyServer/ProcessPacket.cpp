@@ -92,10 +92,12 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             std::string serializedData;
             SC_Packet.SerializeToString(&serializedData);
 
+            int player_num_cnt = 0;
             for (const auto& player : g_players) {
                 if (player.second->room_num == g_players[CS_Packet.playerid()]->room_num) {
                     IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                     g_players[player.first]->ready = false;
+                    g_players[player.first]->player_num = ++player_num_cnt;
                 }
             }
         }
@@ -111,6 +113,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Protocol::Select_Character Select_Packet;
         Select_Packet.ParseFromArray(buffer, bufferSize);
         cout << Select_Packet.character_type() << endl;
+
+        Select_Packet.set_playerid(g_players[Select_Packet.playerid()]->player_num);
+        Select_Packet.set_character_type(Select_Packet.character_type());
+        Select_Packet.set_type(7);
 
         string serializedData;
         Select_Packet.SerializeToString(&serializedData);

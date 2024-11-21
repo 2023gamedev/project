@@ -24,6 +24,7 @@ using PLAYER_INFO = struct Client_INFO {
 	bool ready;
 	std::string username;
 	int room_num;
+	int player_num;
 };
 
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
