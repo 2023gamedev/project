@@ -30,7 +30,7 @@
 // Sets default values
 ABaseZombie::ABaseZombie()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationYaw = false;
@@ -40,7 +40,7 @@ ABaseZombie::ABaseZombie()
 	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
 	GetMesh()->SetCollisionProfileName("Zombie");
 	GetMesh()->SetGenerateOverlapEvents(true);
-	
+
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 400.f;
 
@@ -51,7 +51,7 @@ ABaseZombie::ABaseZombie()
 	ShoutingFX = CreateDefaultSubobject<AShoutingNiagaEffect>(TEXT("ShoutingFX"));
 
 	ShoutingFX = nullptr;
-	
+
 	ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Engine/EngineDebugMaterials/VertexColorViewMode_RedOnly.VertexColorViewMode_RedOnly"));
 	if (MaterialFinder.Succeeded())
 	{
@@ -87,7 +87,7 @@ void ABaseZombie::Tick(float DeltaTime)
 				print_Velocity_1 = true;
 		}
 		else {
-			if(print_Velocity_1)
+			if (print_Velocity_1)
 				UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_1 ( 0.000000 , 0.000000 , 0.000000 )"));
 
 			if (procMesh_AddImpulse_1)
@@ -142,7 +142,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 }
 
-void ABaseZombie::OnZombieHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) 
+void ABaseZombie::OnZombieHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor != nullptr && OtherActor != this) {
 		UE_LOG(LogTemp, Warning, TEXT("Zombie collided with %s"), *OtherActor->GetName());
@@ -151,7 +151,7 @@ void ABaseZombie::OnZombieHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	Protocol::patrol_hit Packet;
 	Packet.set_zombieid(ZombieId);
 	Packet.set_packet_type(14);
-	 
+
 	std::string serializedData;
 	Packet.SerializeToString(&serializedData);
 
@@ -293,11 +293,13 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 			Triangles.Add(IndicesData.Indices[TriVertexIndex + 1]);
 			Triangles.Add(IndicesData.Indices[TriVertexIndex + 2]);
 		}
-		
 
-		CutProceduralMesh_1->AttachToComponent(Skeleton, FAttachmentTransformRules::KeepRelativeTransform);
+
+		FTransform SkeletonTransform = Skeleton->GetComponentTransform();
+		CutProceduralMesh_1->SetWorldTransform(SkeletonTransform);
+
 		CutProceduralMesh_1->CreateMeshSection(j, Vertices, Triangles, Normals, UV, Colors, Tangents, true);
-		
+
 		CutProceduralMesh_1->SetMaterial(0, Material);
 		CutProceduralMesh_1->SetMaterial(1, Material2);
 		CutProceduralMesh_1->SetMaterial(2, Material3);
@@ -361,7 +363,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			// 절단 부위 material 설정
 			CutProceduralMesh_2->SetMaterial(CutProceduralMesh_2->GetNumMaterials() - 1, Material_Blood);
-			
+
 			CutProceduralMesh_2->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 			CutProceduralMesh_2->SetCollisionProfileName(TEXT("Ragdoll"));
 			CutProceduralMesh_2->SetSimulatePhysics(true);
@@ -397,7 +399,7 @@ void ABaseZombie::Attack(uint32 PlayerId)
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
 	AnimInstance->PlayAttackMontage();
-	
+
 	m_bIsAttacking = true;
 
 	if (GetZombieName() == "NormalZombie") {
@@ -437,7 +439,7 @@ void ABaseZombie::AttackCheck()
 		ECollisionChannel::ECC_GameTraceChannel3,
 		FCollisionShape::MakeSphere(m_fAttackRadius),
 		Params
-		);
+	);
 
 
 	// debug 용(충돌 범위 확인 용)
@@ -473,8 +475,8 @@ void ABaseZombie::Shouting()
 		return;
 	}
 
-	FVector SpawnOffset = FVector (GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 5.0f);
-	
+	FVector SpawnOffset = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 5.0f);
+
 	ShoutingFX = GetWorld()->SpawnActor<AShoutingNiagaEffect>(AShoutingNiagaEffect::StaticClass(), SpawnOffset, FRotator::ZeroRotator);
 	ShoutingFX->OwnerZombie = this;
 
@@ -518,7 +520,7 @@ void ABaseZombie::Shouting()
 
 	m_bIsShouting = true;
 
-	
+
 	UE_LOG(LogTemp, Log, TEXT("Character is Die :: %s"), IsShouted() ? TEXT("true") : TEXT("false"));
 	UE_LOG(LogTemp, Error, TEXT("PLAYSHOUTINHGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
 }

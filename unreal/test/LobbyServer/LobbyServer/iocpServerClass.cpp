@@ -1,10 +1,9 @@
 #pragma once
 #include"Common.h"
-#include "Room.h"
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<unsigned int, bool> players_ready;
-std::unordered_map<int, Room> rooms;
+std::unordered_map<int, Room*> rooms;
 std::mutex g_players_mutex;
 
 IOCP_CORE::IOCP_CORE()
@@ -58,7 +57,7 @@ void IOCP_CORE::IOCP_Initialize()
 	}
 
 	for (int i = 1; i <= 4; ++i) {
-		rooms.emplace(i, Room(i)); // room ID를 key로 하여 room 4개 생성
+		rooms.emplace(i, new Room(i)); // room ID를 key로 하여 room 4개 생성
 		printf("Room %d 생성 완료\n", i);
 	}
 }
@@ -137,23 +136,6 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				if (IOCP_CORE::IOCP_ProcessPacket(key, user->packet_buff, user->previous_size)) {
 					// 파싱 및 처리가 성공적으로 완료되면 버퍼 초기화
 					user->previous_size = 0;
-				}
-			}
-
-			if (CheckAllPlayersReady()) {
-				Protocol::SC_Ready SC_Packet;
-
-				SC_Packet.set_type(6);
-				SC_Packet.set_allready(true);
-
-				string serializedData;
-				SC_Packet.SerializeToString(&serializedData);
-				{
-					std::lock_guard<std::mutex> lock(g_players_mutex);
-					for (const auto& player : g_players) {
-						IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-						printf("send allready packet\n");
-					}
 				}
 			}
 
@@ -326,18 +308,4 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
 	MessageBox(NULL, (LPCTSTR)lpMsgBuf, msg, MB_ICONERROR);
 	LocalFree(lpMsgBuf);
-}
-
-bool IOCP_CORE::CheckAllPlayersReady() 
-{
-	if (players_ready.size() != 2) {
-		return false;
-	}
-
-	for (const auto& player : players_ready) {
-		if (!player.second) {
-			return false;
-		}
-	}
-	return true;
 }

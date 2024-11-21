@@ -8,6 +8,7 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "ProGamemode/ProGameInstance.h"
+#include "ProCharacter/LobbyPlayer.h"
 #include "LoginUI.generated.h"
 
 /**

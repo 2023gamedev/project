@@ -110,7 +110,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 	}
 
 	if (CurrentServerType == ServerType::LOBBY_SERVER) {
-		Protocol::SC_Ready Packet;
+		Protocol::SC_SelectReady Packet;
 		if (Packet.ParseFromArray(buffer.data(), buffer.size()))
 		{
 			switch (Packet.type())
@@ -136,7 +136,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 			case 6:
 			{
-				Protocol::SC_Ready Ready_Packet;
+				Protocol::SC_SelectReady Ready_Packet;
 				if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 					if (Ready_Packet.allready())
 					{
@@ -176,11 +176,18 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 			{
 				UE_LOG(LogNet, Display, TEXT("Received Join:"));
 
+
 				break;
 			}
 
 			case 10:
 			{
+				Protocol::SC_JoinPlayer JP_Packet;
+
+				if (JP_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					Q_jplayer.push(JoinPlayer(JP_Packet.name(), JP_Packet.playerid()));
+				}
+
 				UE_LOG(LogNet, Display, TEXT("Received Join Player:"));
 
 				break;
@@ -188,10 +195,41 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 			case 12:
 			{
+				Protocol::SC_LeavePlayer LP_Packet;
+
+				if (LP_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					Q_lplayer.push(LeavePlayer(LP_Packet.username(), LP_Packet.playerid()));
+				}
+
 				UE_LOG(LogNet, Display, TEXT("Received Leave Player:"));
 
 				break;
 			}
+
+			case 13:
+			{
+				UE_LOG(LogNet, Display, TEXT("Received Chatting:"));
+
+				Protocol::SC_Chatting Chat_Packet;
+
+				if (Chat_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+
+					FString FStringchat = FString(UTF8_TO_TCHAR(Chat_Packet.chat().c_str()));
+
+					Q_chat.push(Chatting(Chat_Packet.playerid(), FStringchat));
+				}
+
+				break;
+			}
+			case 14:
+			{
+				Protocol::SC_WaitingReady Ready_Packet;
+				if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					Q_wready.push(true);
+				}
+				break;
+			}
+
 			}
 		}
 	}
