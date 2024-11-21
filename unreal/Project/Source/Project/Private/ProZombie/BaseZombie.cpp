@@ -300,10 +300,9 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 
 		CutProceduralMesh_1->CreateMeshSection(j, Vertices, Triangles, Normals, UV, Colors, Tangents, true);
 
-		CutProceduralMesh_1->SetMaterial(0, Material);
-		CutProceduralMesh_1->SetMaterial(1, Material2);
-		CutProceduralMesh_1->SetMaterial(2, Material3);
-
+		for (int n = 0; n < Skeleton->GetNumMaterials(); n++) {
+			CutProceduralMesh_1->SetMaterial(n, GetMesh()->GetMaterial(n));
+		}
 	}
 
 
@@ -357,9 +356,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		if (CutProceduralMesh_2)
 		{
-			//this->AddInstanceComponent(CutProceduralMesh_2);
-
 			CutProceduralMesh_2->RegisterComponent(); // 컴포넌트 등록
+
+			// 러닝 좀비 텍스쳐 깨짐 해결
+			if (m_sZombieName == "RunningZombie") {
+				CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(2));
+			}
 
 			// 절단 부위 material 설정
 			CutProceduralMesh_2->SetMaterial(CutProceduralMesh_2->GetNumMaterials() - 1, Material_Blood);
