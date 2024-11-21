@@ -37,6 +37,11 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 		BleedHealingMontage = BH_MONTAGE.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> OK_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeeOpenKey.BP_AMEmployeeOpenKey"));
+	if (OK_MONTAGE.Succeeded()) {
+		OpenKeyMontage = OK_MONTAGE.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> JUMP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/Other_Jump.Other_Jump"));
 	if (JUMP_MONTAGE.Succeeded()) {
 		JumpMontage = JUMP_MONTAGE.Object;
@@ -102,6 +107,21 @@ void UPlayerCharacterAnimInstance::PlayJumpMontage()
 	}
 }
 
+
+void UPlayerCharacterAnimInstance::PlayKeyMontage()
+{
+	if (!Montage_IsPlaying(OpenKeyMontage)) {
+		if (Montage_Play(OpenKeyMontage, 1.f))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OpenKeyMontage 재생 시작"));
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("OpenKeyMontage 재생 실패"));
+		}
+	}
+}
+
 void UPlayerCharacterAnimInstance::AnimNotify_AttackStart()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackStart"));
@@ -159,3 +179,10 @@ UAnimMontage* UPlayerCharacterAnimInstance::GetBleedingMontage()
 	return nullptr;
 }
 
+UAnimMontage* UPlayerCharacterAnimInstance::GetOpenKeyMontage()
+{
+	if (OpenKeyMontage) {
+		return OpenKeyMontage;
+	}
+	return nullptr;
+}

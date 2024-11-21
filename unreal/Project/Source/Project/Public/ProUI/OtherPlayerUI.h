@@ -23,8 +23,9 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void UpdateOtherPlayerUI(float otherplayerid, float hp);
+	void UpdateOtherPlayerUI(float hp, uint32 charactertype);
 	void UpdateHPBar(float hp);
+
 
 	void RefreshSlot(int slotindex);
 
@@ -45,6 +46,8 @@ public:
 
 	int m_iOtherPlayerUINumber;
 	int iMaxHealthFlag = 0;
+	bool m_bPlayerImg = false;
+	bool m_bPlayerid = false;
 	float m_fMaxHealth;
 private:
 	TArray<USlot*> Slots;

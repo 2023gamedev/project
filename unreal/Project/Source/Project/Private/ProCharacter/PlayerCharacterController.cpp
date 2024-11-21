@@ -91,6 +91,21 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
 				MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
 					recvPlayerData.hp);
+
+				// 현재 컨트롤러가 빙의한 Pawn 가져오기
+				APawn* ControlledPawn = GetPawn();
+
+				//UE_LOG(LogNet, Display, TEXT("Update Other Player12432543543535: PlayerId=%d"), recvPlayerData.PlayerId);
+				//UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%f"), recvPlayerData.hp);
+				UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%d"), recvPlayerData.charactertype);
+
+				// 빙의된 Pawn이 ACharacter라면 캐스팅
+				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
+				{
+					if (ControlledCharacter) {
+						ControlledCharacter->UpdateOtherPlayerUI(recvPlayerData.PlayerId, recvPlayerData.hp, recvPlayerData.charactertype);
+					}
+				}
 			}
 		}
 
@@ -109,7 +124,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			{
 				FString EquipItem = *FString(recvEquipItem.Itemname.c_str());
 				MyGameMode->UpdateEquipItem(recvEquipItem.PlayerId, EquipItem, recvEquipItem.Itemtype);
-				UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvEquipItem.PlayerId);
+				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvEquipItem.PlayerId);
 			}
 		}
 

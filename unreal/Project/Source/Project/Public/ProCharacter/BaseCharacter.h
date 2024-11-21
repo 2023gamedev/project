@@ -427,11 +427,16 @@ public:
 	void HealingStamina();
 	void HealingStaminaTimerElapsed();
 
+	void PlayKeyAnim();
+
 
 	UPROPERTY(EditAnywhere)
 	bool m_bZeroStamina = false;
 
 	void PlayDead();
+
+	void OtherPlayerUIOffset(uint32 playerid);
+	void UpdateOtherPlayerUI(uint32 playerid, float hp, uint32 charactertype);
 
 	FTimerHandle GameDeadEndHandle;
 	void ProStartGameDeadEnd();

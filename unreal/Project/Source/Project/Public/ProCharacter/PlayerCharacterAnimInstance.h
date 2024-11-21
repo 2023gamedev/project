@@ -29,6 +29,7 @@ public:
 
 	void PlayAttackMontage();
 	void PlayPickUpMontage();
+	void PlayKeyMontage();
 	void PlayHealingMontage(float PlaySpeed);
 	void PlayBleedHealingMontage(float PlaySpeed);
 	void PlayJumpMontage();
@@ -39,8 +40,10 @@ public:
 
 	UAnimMontage* GetAttackMontage();
 	UAnimMontage* GetPickupMontage();
+	UAnimMontage* GetOpenKeyMontage();
 	UAnimMontage* GetHealingMontage();
 	UAnimMontage* GetBleedingMontage();
+
 
 private:
 	UFUNCTION()
@@ -85,6 +88,10 @@ private:
 	// 애니메이션 몽타주
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* BleedHealingMontage;
+
+	// 애니메이션 몽타주
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* OpenKeyMontage;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* JumpMontage;
