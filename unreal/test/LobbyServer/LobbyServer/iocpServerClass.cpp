@@ -139,23 +139,6 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				}
 			}
 
-			if (CheckAllPlayersReady()) {
-				Protocol::SC_Ready SC_Packet;
-
-				SC_Packet.set_type(6);
-				SC_Packet.set_allready(true);
-
-				string serializedData;
-				SC_Packet.SerializeToString(&serializedData);
-				{
-					std::lock_guard<std::mutex> lock(g_players_mutex);
-					for (const auto& player : g_players) {
-						IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-						printf("send allready packet\n");
-					}
-				}
-			}
-
 			// 다음 데이터를 받기 위한 WSARecv 호출
 			DWORD flags = 0;
 			int retval = WSARecv(user->s, &user->recv_overlap.wsabuf, 1, NULL, &flags, &user->recv_overlap.original_overlap, NULL);
@@ -325,18 +308,4 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
 	MessageBox(NULL, (LPCTSTR)lpMsgBuf, msg, MB_ICONERROR);
 	LocalFree(lpMsgBuf);
-}
-
-bool IOCP_CORE::CheckAllPlayersReady() 
-{
-	if (players_ready.size() != 2) {
-		return false;
-	}
-
-	for (const auto& player : players_ready) {
-		if (!player.second) {
-			return false;
-		}
-	}
-	return true;
 }

@@ -129,11 +129,6 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 				Zombie->SetNormalDeadWithAnim();
 			}
 		}
-		else {
-
-			Zombie->StartAttackedStunHandle();
-
-		}
 		BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 		--m_fWeaponDurability;
 		if (m_fWeaponDurability <= 0) {

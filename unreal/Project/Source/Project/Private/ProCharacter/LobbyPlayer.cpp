@@ -171,6 +171,21 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		}
 	}
 
+	if (GameInstance->ClientSocketPtr->Q_lplayer.try_pop(recvLplayer)) {
+		if (WaitingRoomUIWidget)
+		{
+			FString FStringname = FString(UTF8_TO_TCHAR(recvLplayer.username.c_str()));
+			WaitingRoomUIWidget->RemovePlayerFromList(FStringname);
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_wready.try_pop(waitingready)) {
+		if (WaitingRoomUIWidget)
+		{
+			WaitingRoomUIWidget->AllReady();
+		}
+	}
+
 }
 
 void ALobbyPlayer::ChoicedGirlCharacter()
@@ -234,6 +249,12 @@ void ALobbyPlayer::MoveStartGameUI()
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
 			return;
 		}
+
+		if (WaitingRoomUIWidget) {
+			WaitingRoomUIWidget->RemoveFromParent();
+			WaitingRoomUIWidget = nullptr;
+		}
+
 		StartGameUIWidget = CreateWidget<USelect_RoomUI>(controller, StartGameUI);
 
 		if (!StartGameUIWidget) {
@@ -270,11 +291,10 @@ void ALobbyPlayer::MoveWaitingRoomUI()
 			return;
 		}
 
-
-
 		WaitingRoomUIWidget->Init();
 		WaitingRoomUIWidget->AddToViewport();
 
+		WaitingRoomUIWidget->MoveStartGameUI.BindUObject(this, &ALobbyPlayer::MoveStartGameUI);
 		WaitingRoomUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
 
 	}

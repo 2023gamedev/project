@@ -29,7 +29,12 @@ message CS_Ready{
     bool ready = 3;
 }
 
-message SC_Ready{
+message SC_SelectReady{
+    uint32 type = 1;
+    bool allready = 2;
+}
+
+message SC_WaitingReady{
     uint32 type = 1;
     bool allready = 2;
 }
@@ -65,7 +70,8 @@ message CS_Leave{
 
 message SC_LeavePlayer{
     uint32 type = 1;
-    uint32 playerid = 2;
+    string username = 2;
+    uint32 playerid = 3;
 }
 
 message CS_Chatting{

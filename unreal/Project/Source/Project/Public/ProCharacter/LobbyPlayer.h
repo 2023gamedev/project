@@ -60,7 +60,9 @@ public:
 	CharacterSelect recvSelect;
 	Chatting recvChat;
 	JoinPlayer recvJplayer;
-	
+	LeavePlayer recvLplayer;
+
+	bool waitingready = false;
 
 	// 카메라
 	UPROPERTY(EditAnywhere)

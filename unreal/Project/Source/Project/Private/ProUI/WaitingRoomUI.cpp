@@ -7,10 +7,54 @@
 
 void UWaitingRoomUI::OnReadyButtonClicked()
 {
+    if (!bIsReady) {
+        Protocol::CS_Ready ReadyPacket;
+        ReadyPacket.set_type(5);
+        ReadyPacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
+        ReadyPacket.set_ready(true);
+
+        std::string SerializedData;
+        ReadyPacket.SerializeToString(&SerializedData);
+
+        GameInstance->ClientSocketPtr->Send(SerializedData.size(), (void*)SerializedData.data());
+
+        Ready_TextBlock->SetText(FText::FromString("Cancel"));
+        bIsReady = true;
+    }
+    else {
+        Protocol::CS_Ready ReadyPacket;
+        ReadyPacket.set_type(5);
+        ReadyPacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
+        ReadyPacket.set_ready(false);
+
+        std::string SerializedData;
+        ReadyPacket.SerializeToString(&SerializedData);
+
+        GameInstance->ClientSocketPtr->Send(SerializedData.size(), (void*)SerializedData.data());
+
+        Ready_TextBlock->SetText(FText::FromString("Ready"));
+        bIsReady = false;
+    }
+
+}
+
+void UWaitingRoomUI::AllReady()
+{
+    MoveChoiceCharacterUI.Execute();
+    RemoveFromParent();
 }
 
 void UWaitingRoomUI::OnBackButtonClicked()
 {
+    Protocol::CS_Leave LeavePacket;
+    LeavePacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
+    LeavePacket.set_type(11);
+
+    std::string serializedData;
+    LeavePacket.SerializeToString(&serializedData);
+    bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+    MoveStartGameUI.Execute();
 }
 
 void UWaitingRoomUI::OnSendButtonClicked()
@@ -38,6 +82,24 @@ void UWaitingRoomUI::AddPlayerToList(const FString& PlayerName)
 
     PlayerList->AddChild(NewPlayerText);
 }
+
+void UWaitingRoomUI::RemovePlayerFromList(const FString& PlayerName)
+{
+    if (!PlayerList) return;
+
+    // PlayerList의 모든 자식을 순회하며 해당 이름의 항목을 찾음
+    for (int32 i = 0; i < PlayerList->GetChildrenCount(); ++i) {
+        UWidget* Child = PlayerList->GetChildAt(i);
+        if (UTextBlock* PlayerText = Cast<UTextBlock>(Child)) {
+            if (PlayerText->GetText().ToString() == PlayerName) {
+                // 해당 이름의 항목을 제거
+                PlayerList->RemoveChild(PlayerText);
+                return; // 제거 후 함수 종료
+            }
+        }
+    }
+}
+
 
 void UWaitingRoomUI::AddChatMessage(const FString& Message)
 {
@@ -82,13 +144,6 @@ void UWaitingRoomUI::Init()
         SendButton->SetClickMethod(EButtonClickMethod::DownAndUp);
         SendButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnSendButtonClicked);
         SendButton->SetIsEnabled(true);
-    }
-
-    if (PlayerList)
-    {
-        //test
-        AddPlayerToList("Player1");
-        AddPlayerToList("Player2");
     }
 }
 

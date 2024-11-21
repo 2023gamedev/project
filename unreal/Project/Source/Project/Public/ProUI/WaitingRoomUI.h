@@ -17,6 +17,7 @@
  */
 
 DECLARE_DELEGATE(FMoveChoiceCharacterUI);
+DECLARE_DELEGATE(FMoveStartGameUI);
 
 UCLASS()
 class PROJECT_API UWaitingRoomUI : public UUserWidget
@@ -28,10 +29,13 @@ public:
 	void Init();
 	void SendChat(const FString& FormattedMessage);
 	void AddPlayerToList(const FString& PlayerName);
+	void RemovePlayerFromList(const FString& PlayerName);
 	void AddChatMessage(const FString& Message);
+	void AllReady();
 
 	UProGameInstance* GameInstance;
 	FMoveChoiceCharacterUI MoveChoiceCharacterUI;
+	FMoveStartGameUI MoveStartGameUI;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ReadyButton;
@@ -51,6 +55,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UEditableTextBox* ChatText;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* Ready_TextBlock;
+
 
 private:
 
@@ -62,5 +69,9 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	void OnSendButtonClicked();
+
+public:
+
+	bool bIsReady = false;
 	
 };

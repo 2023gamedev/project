@@ -110,7 +110,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 	}
 
 	if (CurrentServerType == ServerType::LOBBY_SERVER) {
-		Protocol::SC_Ready Packet;
+		Protocol::SC_SelectReady Packet;
 		if (Packet.ParseFromArray(buffer.data(), buffer.size()))
 		{
 			switch (Packet.type())
@@ -136,7 +136,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 			case 6:
 			{
-				Protocol::SC_Ready Ready_Packet;
+				Protocol::SC_SelectReady Ready_Packet;
 				if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 					if (Ready_Packet.allready())
 					{
@@ -195,6 +195,12 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 			case 12:
 			{
+				Protocol::SC_LeavePlayer LP_Packet;
+
+				if (LP_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					Q_lplayer.push(LeavePlayer(LP_Packet.username(), LP_Packet.playerid()));
+				}
+
 				UE_LOG(LogNet, Display, TEXT("Received Leave Player:"));
 
 				break;
@@ -215,6 +221,15 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 				break;
 			}
+			case 14:
+			{
+				Protocol::SC_WaitingReady Ready_Packet;
+				if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					Q_wready.push(true);
+				}
+				break;
+			}
+
 			}
 		}
 	}

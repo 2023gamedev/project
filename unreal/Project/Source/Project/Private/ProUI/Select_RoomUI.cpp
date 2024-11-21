@@ -15,18 +15,21 @@ void USelect_RoomUI::OnRoom1ButtonClicked()
 void USelect_RoomUI::OnRoom2ButtonClicked()
 {
     SendJoin(2);
+    MoveWaitingRoomUI.Execute();
     RemoveFromParent();
 }
 
 void USelect_RoomUI::OnRoom3ButtonClicked()
 {
     SendJoin(3);
+    MoveWaitingRoomUI.Execute();
     RemoveFromParent();
 }
 
 void USelect_RoomUI::OnRoom4ButtonClicked()
 {
     SendJoin(4);
+    MoveWaitingRoomUI.Execute();
     RemoveFromParent();
 }
 
