@@ -107,7 +107,7 @@ void ALobbyGameMode::SendReady()
 {
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-    Protocol::CS_Ready Packet;
+    Protocol::SelectReady Packet;
 
     Packet.set_playerid(MyPlayerId);
     Packet.set_type(5);

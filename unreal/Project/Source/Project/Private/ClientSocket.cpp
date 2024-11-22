@@ -16,7 +16,6 @@ ClientSocket::ClientSocket(UProGameInstance* Inst)
 	if (ConnectServer(CurrentServerType)) {
 		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
 	}
-
 }
 
 ClientSocket::~ClientSocket()
@@ -106,7 +105,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 	}
 
 	if (CurrentServerType == ServerType::LOBBY_SERVER) {
-		Protocol::SC_SelectReady Packet;
+		Protocol::SC_Login Packet;
 		if (Packet.ParseFromArray(buffer.data(), buffer.size()))
 		{
 			switch (Packet.type())
@@ -129,12 +128,23 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				}
 				break;
 			}
+			case 5:
+			{
+				Protocol::WaitingReady WR_Packet;
+
+				if (WR_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					Q_wready.push(WaitingReady(WR_Packet.playerid(), WR_Packet.ready()));
+				}
+
+				UE_LOG(LogNet, Display, TEXT("Received WaitingReady"));
+				break;
+			}
 
 			case 6:
 			{
-				Protocol::SC_SelectReady Ready_Packet;
+				Protocol::SelectAllReady Ready_Packet;
 				if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
-					if (Ready_Packet.allready())
+					if (Ready_Packet.ready())
 					{
 						b_allready = true;
 						// 로비 서버 연결 종료
@@ -219,9 +229,9 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 			}
 			case 14:
 			{
-				Protocol::SC_WaitingReady Ready_Packet;
+				Protocol::WaitingAllReady Ready_Packet;
 				if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
-					Q_wready.push(true);
+					Q_wAllready.push(true);
 				}
 				break;
 			}

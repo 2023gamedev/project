@@ -5,10 +5,45 @@
 #include "Kismet/GameplayStatics.h"
 #include "LStruct.pb.h"
 
+void UWaitingRoomUI::Init()
+{
+    GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+    if (ReadyButton)
+    {
+        ReadyButton->SetClickMethod(EButtonClickMethod::DownAndUp);
+        ReadyButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnReadyButtonClicked);
+
+        ReadyButton->SetIsEnabled(true);
+
+    }
+
+    if (BackButton)
+    {
+        BackButton->SetClickMethod(EButtonClickMethod::DownAndUp);
+        BackButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnBackButtonClicked);
+        BackButton->SetIsEnabled(true);
+    }
+
+    if (SendButton)
+    {
+        SendButton->SetClickMethod(EButtonClickMethod::DownAndUp);
+        SendButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnSendButtonClicked);
+        SendButton->SetIsEnabled(true);
+    }
+
+    PlayerSlots.Add(PlayerSlot1);
+    PlayerSlots.Add(PlayerSlot2);
+    PlayerSlots.Add(PlayerSlot3);
+    PlayerSlots.Add(PlayerSlot4);
+
+    SlotOccupied.Init(false, PlayerSlots.Num());
+}
+
 void UWaitingRoomUI::OnReadyButtonClicked()
 {
     if (!bIsReady) {
-        Protocol::CS_Ready ReadyPacket;
+        Protocol::WaitingReady ReadyPacket;
         ReadyPacket.set_type(5);
         ReadyPacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
         ReadyPacket.set_ready(true);
@@ -22,7 +57,7 @@ void UWaitingRoomUI::OnReadyButtonClicked()
         bIsReady = true;
     }
     else {
-        Protocol::CS_Ready ReadyPacket;
+        Protocol::WaitingReady ReadyPacket;
         ReadyPacket.set_type(5);
         ReadyPacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
         ReadyPacket.set_ready(false);
@@ -42,6 +77,11 @@ void UWaitingRoomUI::AllReady()
 {
     MoveChoiceCharacterUI.Execute();
     RemoveFromParent();
+}
+
+void UWaitingRoomUI::PlayerReady(uint32 playerid, bool ready)
+{
+
 }
 
 void UWaitingRoomUI::OnBackButtonClicked()
@@ -74,31 +114,65 @@ void UWaitingRoomUI::OnSendButtonClicked()
 
 void UWaitingRoomUI::AddPlayerToList(const FString& PlayerName)
 {
-    if (!PlayerList) return;
+    int32 SlotIndex = FindEmptySlot();
+    if (SlotIndex == -1 || SlotIndex >= PlayerSlots.Num())
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No available slots for new player!"));
+        return;
+    }
 
-    UTextBlock* NewPlayerText = NewObject<UTextBlock>(this);
-    NewPlayerText->SetText(FText::FromString(PlayerName));
-    NewPlayerText->Font.Size = 60;
+    UHorizontalBox* PlayerSlot = PlayerSlots[SlotIndex];
+    if (!PlayerSlot) return;
 
-    PlayerList->AddChild(NewPlayerText);
+    UTextBlock* PlayerNameText = NewObject<UTextBlock>(this);
+    PlayerNameText->SetText(FText::FromString(PlayerName));
+    PlayerNameText->Font.Size = 60;
+
+    UTextBlock* ReadyStateText = NewObject<UTextBlock>(this);
+    ReadyStateText->SetText(FText::FromString(""));
+    ReadyStateText->Font.Size = 60;
+    ReadyStateText->SetColorAndOpacity(FSlateColor(FLinearColor::Transparent));
+
+
+    PlayerSlot->ClearChildren();
+
+    UHorizontalBoxSlot* NameSlot = PlayerSlot->AddChildToHorizontalBox(PlayerNameText);
+    NameSlot->SetSize(FSlateChildSize(ESlateSizeRule::Fill)); // 비율로 공간 분배
+    NameSlot->SetHorizontalAlignment(EHorizontalAlignment::HAlign_Left);
+
+    // READY 상태 텍스트 추가 (슬롯 비율 1)
+    UHorizontalBoxSlot* ReadySlot = PlayerSlot->AddChildToHorizontalBox(ReadyStateText);
+    ReadySlot->SetSize(FSlateChildSize(ESlateSizeRule::Automatic)); // READY는 필요한 공간만 차지
+    ReadySlot->SetHorizontalAlignment(EHorizontalAlignment::HAlign_Right);
+
+    SlotOccupied[SlotIndex] = true;
+    UE_LOG(LogTemp, Log, TEXT("Added player %s to slot %d"), *PlayerName, SlotIndex);
 }
+
 
 void UWaitingRoomUI::RemovePlayerFromList(const FString& PlayerName)
 {
     if (!PlayerList) return;
 
-    // PlayerList의 모든 자식을 순회하며 해당 이름의 항목을 찾음
-    for (int32 i = 0; i < PlayerList->GetChildrenCount(); ++i) {
+    for (int i = 0; i < PlayerList->GetChildrenCount(); ++i)
+    {
         UWidget* Child = PlayerList->GetChildAt(i);
-        if (UTextBlock* PlayerText = Cast<UTextBlock>(Child)) {
-            if (PlayerText->GetText().ToString() == PlayerName) {
-                // 해당 이름의 항목을 제거
-                PlayerList->RemoveChild(PlayerText);
-                return; // 제거 후 함수 종료
+        if (UHorizontalBox* PlayerRow = Cast<UHorizontalBox>(Child))
+        {
+            if (UTextBlock* PlayerText = Cast<UTextBlock>(PlayerRow->GetChildAt(0)))
+            {
+                if (PlayerText->GetText().ToString() == PlayerName)
+                {
+                    SlotOccupied[i] = false;
+
+                    PlayerList->RemoveChild(PlayerRow);
+                    return;
+                }
             }
         }
     }
 }
+
 
 
 void UWaitingRoomUI::AddChatMessage(const FString& Message)
@@ -119,34 +193,6 @@ void UWaitingRoomUI::AddChatMessage(const FString& Message)
     }
 }
 
-void UWaitingRoomUI::Init()
-{
-    GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-
-    if (ReadyButton)
-    {
-        ReadyButton->SetClickMethod(EButtonClickMethod::DownAndUp);
-        ReadyButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnReadyButtonClicked);
-
-        ReadyButton->SetIsEnabled(true);
-
-    }
-
-    if (BackButton)
-    {
-        BackButton->SetClickMethod(EButtonClickMethod::DownAndUp);
-        BackButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnBackButtonClicked);
-        BackButton->SetIsEnabled(true);
-    }
-
-    if (SendButton)
-    {
-        SendButton->SetClickMethod(EButtonClickMethod::DownAndUp);
-        SendButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnSendButtonClicked);
-        SendButton->SetIsEnabled(true);
-    }
-}
-
 void UWaitingRoomUI::SendChat(const FString& FormattedMessage)
 {
     Protocol::CS_Chatting Packet;
@@ -161,4 +207,44 @@ void UWaitingRoomUI::SendChat(const FString& FormattedMessage)
     Packet.SerializeToString(&serializedData);
 
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+}
+
+int32 UWaitingRoomUI::FindEmptySlot()
+{
+    for (int32 i = 0; i < SlotOccupied.Num(); ++i)
+    {
+        if (!SlotOccupied[i]) // 빈 슬롯 찾기
+        {
+            return i;
+        }
+    }
+    return -1; // 빈 슬롯 없음
+}
+
+void UWaitingRoomUI::UpdatePlayerReadyState(uint32 playerid, bool Ready)
+{
+    FString PlayerName = Waiting_LobbyPlayers[playerid];
+
+    for (int32 i = 0; i < PlayerSlots.Num(); ++i)
+    {
+        UHorizontalBox* PlayerSlot = PlayerSlots[i];
+        if (PlayerSlot && SlotOccupied[i])
+        {
+            // TextBlock에서 PlayerName 찾기
+            UTextBlock* PlayerNameText = Cast<UTextBlock>(PlayerSlot->GetChildAt(0));
+            if (PlayerNameText && PlayerNameText->GetText().ToString() == PlayerName)
+            {
+                // READY 상태 TextBlock 업데이트
+                UTextBlock* ReadyStateText = Cast<UTextBlock>(PlayerSlot->GetChildAt(1));
+                if (ReadyStateText)
+                {
+                    ReadyStateText->SetText(Ready ? FText::FromString("READY") : FText::FromString(""));
+                    ReadyStateText->SetColorAndOpacity(Ready ? FSlateColor(FLinearColor::Green) : FSlateColor(FLinearColor::Transparent));
+                }
+                return;
+            }
+        }
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("Player %s not found for READY state update"), *PlayerName);
 }
