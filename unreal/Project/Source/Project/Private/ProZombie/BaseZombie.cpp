@@ -81,7 +81,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		}
 
 
-		if (CutProceduralMesh_1->GetComponentVelocity().X != 0 || CutProceduralMesh_1->GetComponentVelocity().Y != 0 || CutProceduralMesh_1->GetComponentVelocity().Z != 0) {
+		/*if (CutProceduralMesh_1->GetComponentVelocity().X != 0 || CutProceduralMesh_1->GetComponentVelocity().Y != 0 || CutProceduralMesh_1->GetComponentVelocity().Z != 0) {
 			UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_1 ( %f , %f , %f )"), CutProceduralMesh_1->GetComponentVelocity().X, CutProceduralMesh_1->GetComponentVelocity().Y, CutProceduralMesh_1->GetComponentVelocity().Z);
 			if (print_Velocity_1 == false)
 				print_Velocity_1 = true;
@@ -92,7 +92,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 			if (procMesh_AddImpulse_1)
 				print_Velocity_1 = false;
-		}
+		}*/
 	}
 
 	if (CutProceduralMesh_2) {
@@ -101,7 +101,7 @@ void ABaseZombie::Tick(float DeltaTime)
 			procMesh_AddImpulse_2 = true;
 		}
 
-		if (CutProceduralMesh_2->GetComponentVelocity().X != 0 || CutProceduralMesh_2->GetComponentVelocity().Y != 0 || CutProceduralMesh_2->GetComponentVelocity().Z != 0) {
+		/*if (CutProceduralMesh_2->GetComponentVelocity().X != 0 || CutProceduralMesh_2->GetComponentVelocity().Y != 0 || CutProceduralMesh_2->GetComponentVelocity().Z != 0) {
 			UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_2 ( %f , %f , %f )"), CutProceduralMesh_2->GetComponentVelocity().X, CutProceduralMesh_2->GetComponentVelocity().Y, CutProceduralMesh_2->GetComponentVelocity().Z);
 			if (print_Velocity_2 == false)
 				print_Velocity_2 = true;
@@ -112,7 +112,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 			if (procMesh_AddImpulse_2)
 				print_Velocity_2 = false;
-		}
+		}*/
 	}
 
 	if (MyChar == nullptr)
@@ -209,7 +209,7 @@ void ABaseZombie::SetNormalDeadWithAnim()
 
 }
 
-void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
+void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal)
 {
 	USkeletalMeshComponent* Skeleton = GetMesh();
 	if (Skeleton) {
@@ -219,13 +219,13 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
 
 		if (!CutProceduralMesh_1) return;
 
-		CreativeProceduralMesh(planeposition, planenoraml);
+		CreativeProceduralMesh(planeposition, planenormal);
 
 	}
 }
 
 // 프로시저럴 메쉬 생성되는 부분
-void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenoraml)
+void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenormal)
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
 
@@ -250,6 +250,8 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	{
 		const int32 NumSourceVertices = DataArray.RenderSections[j].NumVertices;
 		const int32 BaseVertexIndex = DataArray.RenderSections[j].BaseVertexIndex;
+
+		UE_LOG(LogTemp, Log, TEXT("RenderSections[%d] - NumSourceVertices.Num (int) %d"), j, DataArray.RenderSections[j].NumVertices);
 
 		for (int32 i = 0; i < NumSourceVertices; i++)
 		{
@@ -326,7 +328,7 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 
 
 	// 절단 부위 proceduralmesh 생성
-	SliceProceduralmeshTest(planeposition, planenoraml);
+	SliceProceduralmeshTest(planeposition, planenormal);
 
 	//UE_LOG(LogTemp, Log, TEXT("IsPhysicsStateCreated: %s"), CutProceduralMesh_1->IsPhysicsStateCreated() ? TEXT("true") : TEXT("false"));
 	//UE_LOG(LogTemp, Log, TEXT("ShouldCreatePhysicsState: %s"), CutProceduralMesh_1->ShouldCreatePhysicsState() ? TEXT("true") : TEXT("false"));
@@ -343,7 +345,7 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 
 }
 
-void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenoraml)
+void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenormal)
 {
 	if (CutProceduralMesh_1)
 	{
@@ -354,7 +356,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 		UKismetProceduralMeshLibrary::SliceProceduralMesh(
 			procHit,
 			planeposition,
-			planenoraml,
+			planenormal,
 			true,
 			CutProceduralMesh_2,
 			EProcMeshSliceCapOption::CreateNewSectionForCap,
