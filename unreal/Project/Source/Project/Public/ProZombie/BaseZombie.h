@@ -165,9 +165,9 @@ public:
 	bool m_bIsStanding = false;
 
 	UFUNCTION(BlueprintCallable)
-	void CutZombie(FVector planeposition, FVector planenoraml);
+	void CutZombie(FVector planeposition, FVector planenormal);
 
-	void SliceProceduralmeshTest(FVector planeposition, FVector planenoraml);
+	void SliceProceduralmeshTest(FVector planeposition, FVector planenormal);
 
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
@@ -176,7 +176,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UProceduralMeshComponent* CutProceduralMesh_2;
 
-	void CreativeProceduralMesh(FVector planeposition, FVector planenoraml);
+	void CreativeProceduralMesh(FVector planeposition, FVector planenormal);
 
 	UPROPERTY(EditAnywhere, Category = "Materials")
 	UMaterialInterface* Material;

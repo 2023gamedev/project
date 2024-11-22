@@ -81,7 +81,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		}
 
 
-		if (CutProceduralMesh_1->GetComponentVelocity().X != 0 || CutProceduralMesh_1->GetComponentVelocity().Y != 0 || CutProceduralMesh_1->GetComponentVelocity().Z != 0) {
+		/*if (CutProceduralMesh_1->GetComponentVelocity().X != 0 || CutProceduralMesh_1->GetComponentVelocity().Y != 0 || CutProceduralMesh_1->GetComponentVelocity().Z != 0) {
 			UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_1 ( %f , %f , %f )"), CutProceduralMesh_1->GetComponentVelocity().X, CutProceduralMesh_1->GetComponentVelocity().Y, CutProceduralMesh_1->GetComponentVelocity().Z);
 			if (print_Velocity_1 == false)
 				print_Velocity_1 = true;
@@ -92,7 +92,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 			if (procMesh_AddImpulse_1)
 				print_Velocity_1 = false;
-		}
+		}*/
 	}
 
 	if (CutProceduralMesh_2) {
@@ -101,7 +101,7 @@ void ABaseZombie::Tick(float DeltaTime)
 			procMesh_AddImpulse_2 = true;
 		}
 
-		if (CutProceduralMesh_2->GetComponentVelocity().X != 0 || CutProceduralMesh_2->GetComponentVelocity().Y != 0 || CutProceduralMesh_2->GetComponentVelocity().Z != 0) {
+		/*if (CutProceduralMesh_2->GetComponentVelocity().X != 0 || CutProceduralMesh_2->GetComponentVelocity().Y != 0 || CutProceduralMesh_2->GetComponentVelocity().Z != 0) {
 			UE_LOG(LogTemp, Log, TEXT("GetVelocity - CutProcedural_2 ( %f , %f , %f )"), CutProceduralMesh_2->GetComponentVelocity().X, CutProceduralMesh_2->GetComponentVelocity().Y, CutProceduralMesh_2->GetComponentVelocity().Z);
 			if (print_Velocity_2 == false)
 				print_Velocity_2 = true;
@@ -112,7 +112,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 			if (procMesh_AddImpulse_2)
 				print_Velocity_2 = false;
-		}
+		}*/
 	}
 
 	if (MyChar == nullptr)
@@ -188,11 +188,11 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	BloodFX->OwnerZombie = this;
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	SetHP(GetHP() - Damage);
 	BeAttacked();
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	return Damage;
 }
 
@@ -209,7 +209,7 @@ void ABaseZombie::SetNormalDeadWithAnim()
 
 }
 
-void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
+void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal)
 {
 	USkeletalMeshComponent* Skeleton = GetMesh();
 	if (Skeleton) {
@@ -219,15 +219,15 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenoraml)
 
 		if (!CutProceduralMesh_1) return;
 
-		CreativeProceduralMesh(planeposition, planenoraml);
+		CreativeProceduralMesh(planeposition, planenormal);
 
 	}
 }
 
 // 프로시저럴 메쉬 생성되는 부분
-void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenoraml)
+void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenormal)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh")));
 
 	USkeletalMeshComponent* Skeleton = GetMesh();
 
@@ -241,6 +241,9 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	TArray<FColor> Colors;
 	TArray<FProcMeshTangent> Tangents;
 
+	TArray<FVector> Vertices_Convex;
+	int interval_Convex = 100;			// Convex 에서 사용할 vertices 개수 조절 (원래 vertices의 1/? 개)
+
 	UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
 
 	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
@@ -248,12 +251,18 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 		const int32 NumSourceVertices = DataArray.RenderSections[j].NumVertices;
 		const int32 BaseVertexIndex = DataArray.RenderSections[j].BaseVertexIndex;
 
+		UE_LOG(LogTemp, Log, TEXT("RenderSections[%d] - NumSourceVertices.Num (int) %d"), j, DataArray.RenderSections[j].NumVertices);
+
 		for (int32 i = 0; i < NumSourceVertices; i++)
 		{
 			const int32 VertexIndex = i + BaseVertexIndex;
 			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
 
 			Vertices.Add(FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z));
+
+			if (i % interval_Convex == 0) {
+				Vertices_Convex.Add(FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z));
+			}
 
 			const FVector3f ZTangentStatic = DataArray.StaticVertexBuffers.StaticMeshVertexBuffer.VertexTangentZ(VertexIndex);
 			const FVector3f XTangentStatic = DataArray.StaticVertexBuffers.StaticMeshVertexBuffer.VertexTangentX(VertexIndex);
@@ -300,10 +309,9 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 
 		CutProceduralMesh_1->CreateMeshSection(j, Vertices, Triangles, Normals, UV, Colors, Tangents, true);
 
-		CutProceduralMesh_1->SetMaterial(0, Material);
-		CutProceduralMesh_1->SetMaterial(1, Material2);
-		CutProceduralMesh_1->SetMaterial(2, Material3);
-
+		for (int n = 0; n < Skeleton->GetNumMaterials(); n++) {
+			CutProceduralMesh_1->SetMaterial(n, GetMesh()->GetMaterial(n));
+		}
 	}
 
 
@@ -312,7 +320,7 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	CutProceduralMesh_1->RegisterComponent();
 
 	// ProceduralMesh에 Convex Collision 추가
-	CutProceduralMesh_1->AddCollisionConvexMesh(Vertices);
+	CutProceduralMesh_1->AddCollisionConvexMesh(Vertices_Convex);
 
 	CutProceduralMesh_1->SetSimulatePhysics(true);
 	CutProceduralMesh_1->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
@@ -320,7 +328,7 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 
 
 	// 절단 부위 proceduralmesh 생성
-	SliceProceduralmeshTest(planeposition, planenoraml);
+	SliceProceduralmeshTest(planeposition, planenormal);
 
 	//UE_LOG(LogTemp, Log, TEXT("IsPhysicsStateCreated: %s"), CutProceduralMesh_1->IsPhysicsStateCreated() ? TEXT("true") : TEXT("false"));
 	//UE_LOG(LogTemp, Log, TEXT("ShouldCreatePhysicsState: %s"), CutProceduralMesh_1->ShouldCreatePhysicsState() ? TEXT("true") : TEXT("false"));
@@ -333,22 +341,22 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	GetMesh()->SetVisibility(false);
 
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CreativeProceduralMesh END")));
 
 }
 
-void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenoraml)
+void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planenormal)
 {
 	if (CutProceduralMesh_1)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
 
 		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh_1);
 
 		UKismetProceduralMeshLibrary::SliceProceduralMesh(
 			procHit,
 			planeposition,
-			planenoraml,
+			planenormal,
 			true,
 			CutProceduralMesh_2,
 			EProcMeshSliceCapOption::CreateNewSectionForCap,
@@ -357,9 +365,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		if (CutProceduralMesh_2)
 		{
-			//this->AddInstanceComponent(CutProceduralMesh_2);
-
 			CutProceduralMesh_2->RegisterComponent(); // 컴포넌트 등록
+
+			// 러닝 좀비 텍스쳐 깨짐 해결
+			if (m_sZombieName == "RunningZombie") {
+				CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(2));
+			}
 
 			// 절단 부위 material 설정
 			CutProceduralMesh_2->SetMaterial(CutProceduralMesh_2->GetNumMaterials() - 1, Material_Blood);
@@ -370,7 +381,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		}
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
 }
 
@@ -462,7 +473,7 @@ void ABaseZombie::AttackCheck()
 
 	if (bResult) {
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
 		//UE_LOG(LogNet, Display, TEXT("Player #%d got hit - HP: %d"), HitResult.GetActor()->PlayerId, HitResult.GetActor()->GetHp());
 		FDamageEvent DamageEvent;
 		HitResult.GetActor()->TakeDamage(GetSTR(), DamageEvent, GetController(), this);
