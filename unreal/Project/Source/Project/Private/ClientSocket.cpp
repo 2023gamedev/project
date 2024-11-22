@@ -7,8 +7,8 @@
 ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
-	//CurrentServerType = ServerType::LOBBY_SERVER;
-	CurrentServerType = ServerType::GAME_SERVER;
+	CurrentServerType = ServerType::LOBBY_SERVER;
+	//CurrentServerType = ServerType::GAME_SERVER;
 
 	recvBuffer.buf = recvData;
 	recvBuffer.len = BUFSIZE;

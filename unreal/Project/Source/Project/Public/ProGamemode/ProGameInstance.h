@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "ClientSocket.h"
+#include "TimerManager.h"
 #include "ProGameInstance.generated.h"
 
 /**
@@ -12,6 +13,8 @@
  */
 
 // Instance들 (전달하고 싶은(Global 변수처럼) 모은 Class
+
+class ULoadingUI;
 
 UCLASS()
 class PROJECT_API UProGameInstance : public UGameInstance
@@ -26,6 +29,16 @@ public:
     virtual void Init() override;
 
     void InitSocket();
+
+    UFUNCTION(BlueprintCallable, Category = "LevelLoading")
+    void LoadLevelWithLoadingUI(FName LevelName);
+
+    // 로딩 진행 상태 업데이트
+    void UpdateLoadingProgress();
+
+    // 로딩 완료 후 호출되는 함수
+    void OnLevelLoadComplete(FName LevelName);
+
 
 public:
 
@@ -46,6 +59,12 @@ public:
 
     UPROPERTY(VisibleAnywhere)
     int m_iChoicedCharacterNumber;
+
+
+    UPROPERTY()
+    ULoadingUI* LoadingUI;
+
+    FTimerHandle LoadingProgressHandle;
 
     void ChangeOneGameMode();
 
