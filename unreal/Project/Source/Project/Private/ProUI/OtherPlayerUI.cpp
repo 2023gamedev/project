@@ -64,7 +64,7 @@ void UOtherPlayerUI::UpdateOtherPlayerUI(float hp, uint32 charactertype)
 	if (!m_bPlayerImg) {
 		m_bPlayerImg = true;
 
-		if (charactertype == 0) {
+		if (charactertype == 1) {
 			UTexture2D* LoadedTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Girl/girl.girl"));
 			if (LoadedTexture) {
 
@@ -75,32 +75,35 @@ void UOtherPlayerUI::UpdateOtherPlayerUI(float hp, uint32 charactertype)
 
 			}
 		}
-		else if (charactertype == 1) {
+		else if (charactertype == 2) {
 			UTexture2D* LoadedTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Employee/emp.emp"));
 			if (LoadedTexture) {
 
 				FSlateBrush Brush;
 				Brush.SetResourceObject(LoadedTexture);   // 텍스처를 브러시에 설정
-				OtherPlayerImg->SetBrush(Brush);      // UImage에 브러시 설정
-
-			}
-		}
-		else if (charactertype == 2) {
-			UTexture2D* LoadedTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Idol/idol.idol"));
-			if (LoadedTexture) {
-
-				FSlateBrush Brush;
-				Brush.SetResourceObject(LoadedTexture);   // 텍스처를 브러시에 설정
+				Brush.ImageSize = FVector2D(64.0f, 32.0f); // 이미지 크기 설정 (가로 128, 세로 128)
 				OtherPlayerImg->SetBrush(Brush);      // UImage에 브러시 설정
 
 			}
 		}
 		else if (charactertype == 3) {
+			UTexture2D* LoadedTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Idol/idol.idol"));
+			if (LoadedTexture) {
+
+				FSlateBrush Brush;
+				Brush.SetResourceObject(LoadedTexture);   // 텍스처를 브러시에 설정
+				Brush.ImageSize = FVector2D(64.0f, 32.0f); // 이미지 크기 설정 (가로 128, 세로 128)
+				OtherPlayerImg->SetBrush(Brush);      // UImage에 브러시 설정
+
+			}
+		}
+		else if (charactertype == 4) {
 			UTexture2D* LoadedTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/FireFighter/fire.fire"));
 			if (LoadedTexture) {
 
 				FSlateBrush Brush;
 				Brush.SetResourceObject(LoadedTexture);   // 텍스처를 브러시에 설정
+				Brush.ImageSize = FVector2D(64.0f, 32.0f); // 이미지 크기 설정 (가로 128, 세로 128)
 				OtherPlayerImg->SetBrush(Brush);      // UImage에 브러시 설정
 
 			}
@@ -116,7 +119,7 @@ void UOtherPlayerUI::UpdateHPBar(float hp)
 {
 	if (iMaxHealthFlag == 0) {
 		m_fMaxHealth = hp;
-
+		++iMaxHealthFlag;
 	}
 	HPBar->UpdateHealthBar(hp, m_fMaxHealth);
 }

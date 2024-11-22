@@ -52,7 +52,8 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 
 void ABloodNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
-	BloodFXComponent->Deactivate();
+	if(BloodFXComponent)
+		BloodFXComponent->Deactivate();
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX ended");
 

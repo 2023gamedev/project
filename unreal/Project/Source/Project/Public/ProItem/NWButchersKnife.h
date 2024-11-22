@@ -9,7 +9,7 @@
 /**
  * 
  */
-// Á¤À°Á¡Ä®
+// ì •ìœ¡ì ì¹¼
 UCLASS()
 class PROJECT_API ANWButchersKnife : public ANormalWeaponActor
 {

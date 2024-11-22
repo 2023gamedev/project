@@ -48,7 +48,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UStaticMeshComponent* PlaneComponent;
+	
 	UPROPERTY(EditAnywhere)
 	ABaseCharacter* OwnerCharacter;
 
