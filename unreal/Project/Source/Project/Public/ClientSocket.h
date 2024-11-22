@@ -249,6 +249,17 @@ struct LeavePlayer
 		:username(Inusername), playerid(Inplayerid) {}
 };
 
+struct WaitingReady
+{
+	uint32 playerid;
+	bool ready;
+
+	WaitingReady() : playerid(0), ready(false) {}
+
+	WaitingReady(uint32 Inplayerid, bool Inready)
+		: playerid(Inplayerid), ready(Inready) {}
+};
+
 
 class UProGameInstance;
 
@@ -283,7 +294,8 @@ public:
 	Concurrency::concurrent_queue<Chatting> Q_chat;
 	Concurrency::concurrent_queue<JoinPlayer> Q_jplayer;
 	Concurrency::concurrent_queue<LeavePlayer> Q_lplayer;
-	Concurrency::concurrent_queue<bool> Q_wready;
+	Concurrency::concurrent_queue<WaitingReady> Q_wready;
+	Concurrency::concurrent_queue<bool> Q_wAllready;
 
 
 	virtual bool Init() override;

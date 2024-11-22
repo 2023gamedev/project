@@ -79,49 +79,64 @@ struct SC_RegisterDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SC_RegisterDefaultTypeInternal _SC_Register_default_instance_;
-PROTOBUF_CONSTEXPR CS_Ready::CS_Ready(
+PROTOBUF_CONSTEXPR WaitingReady::WaitingReady(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.playerid_)*/0u
   , /*decltype(_impl_.ready_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct CS_ReadyDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR CS_ReadyDefaultTypeInternal()
+struct WaitingReadyDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR WaitingReadyDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~CS_ReadyDefaultTypeInternal() {}
+  ~WaitingReadyDefaultTypeInternal() {}
   union {
-    CS_Ready _instance;
+    WaitingReady _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CS_ReadyDefaultTypeInternal _CS_Ready_default_instance_;
-PROTOBUF_CONSTEXPR SC_SelectReady::SC_SelectReady(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WaitingReadyDefaultTypeInternal _WaitingReady_default_instance_;
+PROTOBUF_CONSTEXPR WaitingAllReady::WaitingAllReady(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.allready_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct SC_SelectReadyDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR SC_SelectReadyDefaultTypeInternal()
+struct WaitingAllReadyDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR WaitingAllReadyDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~SC_SelectReadyDefaultTypeInternal() {}
+  ~WaitingAllReadyDefaultTypeInternal() {}
   union {
-    SC_SelectReady _instance;
+    WaitingAllReady _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SC_SelectReadyDefaultTypeInternal _SC_SelectReady_default_instance_;
-PROTOBUF_CONSTEXPR SC_WaitingReady::SC_WaitingReady(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WaitingAllReadyDefaultTypeInternal _WaitingAllReady_default_instance_;
+PROTOBUF_CONSTEXPR SelectReady::SelectReady(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.type_)*/0u
-  , /*decltype(_impl_.allready_)*/false
+  , /*decltype(_impl_.playerid_)*/0u
+  , /*decltype(_impl_.ready_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct SC_WaitingReadyDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR SC_WaitingReadyDefaultTypeInternal()
+struct SelectReadyDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SelectReadyDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~SC_WaitingReadyDefaultTypeInternal() {}
+  ~SelectReadyDefaultTypeInternal() {}
   union {
-    SC_WaitingReady _instance;
+    SelectReady _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SC_WaitingReadyDefaultTypeInternal _SC_WaitingReady_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SelectReadyDefaultTypeInternal _SelectReady_default_instance_;
+PROTOBUF_CONSTEXPR SelectAllReady::SelectAllReady(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.type_)*/0u
+  , /*decltype(_impl_.ready_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct SelectAllReadyDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SelectAllReadyDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SelectAllReadyDefaultTypeInternal() {}
+  union {
+    SelectAllReady _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SelectAllReadyDefaultTypeInternal _SelectAllReady_default_instance_;
 PROTOBUF_CONSTEXPR Select_Character::Select_Character(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.type_)*/0u
@@ -242,7 +257,7 @@ struct SC_ChattingDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SC_ChattingDefaultTypeInternal _SC_Chatting_default_instance_;
 }  // namespace Protocol
-static ::_pb::Metadata file_level_metadata_Lstruct_2eproto[15];
+static ::_pb::Metadata file_level_metadata_Lstruct_2eproto[16];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_Lstruct_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Lstruct_2eproto = nullptr;
 
@@ -282,30 +297,39 @@ const uint32_t TableStruct_Lstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_Register, _impl_.type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_Register, _impl_.b_register_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Protocol::CS_Ready, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::WaitingReady, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::CS_Ready, _impl_.type_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::CS_Ready, _impl_.playerid_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::CS_Ready, _impl_.ready_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::WaitingReady, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::WaitingReady, _impl_.playerid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::WaitingReady, _impl_.ready_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Protocol::SC_SelectReady, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::WaitingAllReady, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::SC_SelectReady, _impl_.type_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::SC_SelectReady, _impl_.allready_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::WaitingAllReady, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::WaitingAllReady, _impl_.allready_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Protocol::SC_WaitingReady, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SelectReady, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::SC_WaitingReady, _impl_.type_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::SC_WaitingReady, _impl_.allready_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SelectReady, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SelectReady, _impl_.playerid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SelectReady, _impl_.ready_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::SelectAllReady, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::SelectAllReady, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SelectAllReady, _impl_.ready_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::Select_Character, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -357,8 +381,8 @@ const uint32_t TableStruct_Lstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_LeavePlayer, _impl_.type_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::SC_LeavePlayer, _impl_.username_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_LeavePlayer, _impl_.playerid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SC_LeavePlayer, _impl_.username_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::CS_Chatting, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -383,17 +407,18 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 9, -1, -1, sizeof(::Protocol::CS_Register)},
   { 18, -1, -1, sizeof(::Protocol::SC_Login)},
   { 26, -1, -1, sizeof(::Protocol::SC_Register)},
-  { 34, -1, -1, sizeof(::Protocol::CS_Ready)},
-  { 43, -1, -1, sizeof(::Protocol::SC_SelectReady)},
-  { 51, -1, -1, sizeof(::Protocol::SC_WaitingReady)},
-  { 59, -1, -1, sizeof(::Protocol::Select_Character)},
-  { 68, -1, -1, sizeof(::Protocol::CS_Join)},
-  { 77, -1, -1, sizeof(::Protocol::SC_Join)},
-  { 85, -1, -1, sizeof(::Protocol::SC_JoinPlayer)},
-  { 94, -1, -1, sizeof(::Protocol::CS_Leave)},
-  { 103, -1, -1, sizeof(::Protocol::SC_LeavePlayer)},
-  { 112, -1, -1, sizeof(::Protocol::CS_Chatting)},
-  { 121, -1, -1, sizeof(::Protocol::SC_Chatting)},
+  { 34, -1, -1, sizeof(::Protocol::WaitingReady)},
+  { 43, -1, -1, sizeof(::Protocol::WaitingAllReady)},
+  { 51, -1, -1, sizeof(::Protocol::SelectReady)},
+  { 60, -1, -1, sizeof(::Protocol::SelectAllReady)},
+  { 68, -1, -1, sizeof(::Protocol::Select_Character)},
+  { 77, -1, -1, sizeof(::Protocol::CS_Join)},
+  { 86, -1, -1, sizeof(::Protocol::SC_Join)},
+  { 94, -1, -1, sizeof(::Protocol::SC_JoinPlayer)},
+  { 103, -1, -1, sizeof(::Protocol::CS_Leave)},
+  { 112, -1, -1, sizeof(::Protocol::SC_LeavePlayer)},
+  { 121, -1, -1, sizeof(::Protocol::CS_Chatting)},
+  { 130, -1, -1, sizeof(::Protocol::SC_Chatting)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -401,9 +426,10 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_CS_Register_default_instance_._instance,
   &::Protocol::_SC_Login_default_instance_._instance,
   &::Protocol::_SC_Register_default_instance_._instance,
-  &::Protocol::_CS_Ready_default_instance_._instance,
-  &::Protocol::_SC_SelectReady_default_instance_._instance,
-  &::Protocol::_SC_WaitingReady_default_instance_._instance,
+  &::Protocol::_WaitingReady_default_instance_._instance,
+  &::Protocol::_WaitingAllReady_default_instance_._instance,
+  &::Protocol::_SelectReady_default_instance_._instance,
+  &::Protocol::_SelectAllReady_default_instance_._instance,
   &::Protocol::_Select_Character_default_instance_._instance,
   &::Protocol::_CS_Join_default_instance_._instance,
   &::Protocol::_SC_Join_default_instance_._instance,
@@ -420,30 +446,31 @@ const char descriptor_table_protodef_Lstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "\t\"9\n\013CS_Register\022\014\n\004type\030\001 \001(\r\022\n\n\002id\030\002 \001"
   "(\t\022\020\n\010password\030\003 \001(\t\")\n\010SC_Login\022\014\n\004type"
   "\030\001 \001(\r\022\017\n\007b_login\030\002 \001(\010\"/\n\013SC_Register\022\014"
-  "\n\004type\030\001 \001(\r\022\022\n\nb_register\030\002 \001(\010\"9\n\010CS_R"
-  "eady\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\r\n\005"
-  "ready\030\003 \001(\010\"0\n\016SC_SelectReady\022\014\n\004type\030\001 "
-  "\001(\r\022\020\n\010allready\030\002 \001(\010\"1\n\017SC_WaitingReady"
-  "\022\014\n\004type\030\001 \001(\r\022\020\n\010allready\030\002 \001(\010\"J\n\020Sele"
-  "ct_Character\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002"
-  " \001(\r\022\026\n\016character_type\030\003 \001(\r\"9\n\007CS_Join\022"
-  "\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\016\n\006roomi"
-  "d\030\003 \001(\r\"\'\n\007SC_Join\022\014\n\004type\030\001 \001(\r\022\016\n\006b_jo"
-  "in\030\002 \001(\010\"=\n\rSC_JoinPlayer\022\014\n\004type\030\001 \001(\r\022"
-  "\020\n\010playerid\030\002 \001(\r\022\014\n\004name\030\003 \001(\t\":\n\010CS_Le"
-  "ave\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\016\n\006r"
-  "oomid\030\003 \001(\r\"B\n\016SC_LeavePlayer\022\014\n\004type\030\001 "
-  "\001(\r\022\020\n\010username\030\002 \001(\t\022\020\n\010playerid\030\003 \001(\r\""
-  ";\n\013CS_Chatting\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid"
-  "\030\002 \001(\r\022\014\n\004chat\030\003 \001(\t\";\n\013SC_Chatting\022\014\n\004t"
-  "ype\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004chat\030\003 \001("
-  "\tb\006proto3"
+  "\n\004type\030\001 \001(\r\022\022\n\nb_register\030\002 \001(\010\"=\n\014Wait"
+  "ingReady\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r"
+  "\022\r\n\005ready\030\003 \001(\010\"1\n\017WaitingAllReady\022\014\n\004ty"
+  "pe\030\001 \001(\r\022\020\n\010allready\030\002 \001(\010\"<\n\013SelectRead"
+  "y\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\r\n\005rea"
+  "dy\030\003 \001(\010\"-\n\016SelectAllReady\022\014\n\004type\030\001 \001(\r"
+  "\022\r\n\005ready\030\002 \001(\010\"J\n\020Select_Character\022\014\n\004t"
+  "ype\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\026\n\016character"
+  "_type\030\003 \001(\r\"9\n\007CS_Join\022\014\n\004type\030\001 \001(\r\022\020\n\010"
+  "playerid\030\002 \001(\r\022\016\n\006roomid\030\003 \001(\r\"\'\n\007SC_Joi"
+  "n\022\014\n\004type\030\001 \001(\r\022\016\n\006b_join\030\002 \001(\010\"=\n\rSC_Jo"
+  "inPlayer\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r"
+  "\022\014\n\004name\030\003 \001(\t\":\n\010CS_Leave\022\014\n\004type\030\001 \001(\r"
+  "\022\020\n\010playerid\030\002 \001(\r\022\016\n\006roomid\030\003 \001(\r\"B\n\016SC"
+  "_LeavePlayer\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002"
+  " \001(\r\022\020\n\010username\030\003 \001(\t\";\n\013CS_Chatting\022\014\n"
+  "\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004chat\030\003 "
+  "\001(\t\";\n\013SC_Chatting\022\014\n\004type\030\001 \001(\r\022\020\n\010play"
+  "erid\030\002 \001(\r\022\014\n\004chat\030\003 \001(\tb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Lstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Lstruct_2eproto = {
-    false, false, 889, descriptor_table_protodef_Lstruct_2eproto,
+    false, false, 952, descriptor_table_protodef_Lstruct_2eproto,
     "Lstruct.proto",
-    &descriptor_table_Lstruct_2eproto_once, nullptr, 0, 15,
+    &descriptor_table_Lstruct_2eproto_once, nullptr, 0, 16,
     schemas, file_default_instances, TableStruct_Lstruct_2eproto::offsets,
     file_level_metadata_Lstruct_2eproto, file_level_enum_descriptors_Lstruct_2eproto,
     file_level_service_descriptors_Lstruct_2eproto,
@@ -1440,19 +1467,19 @@ void SC_Register::InternalSwap(SC_Register* other) {
 
 // ===================================================================
 
-class CS_Ready::_Internal {
+class WaitingReady::_Internal {
  public:
 };
 
-CS_Ready::CS_Ready(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+WaitingReady::WaitingReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:Protocol.CS_Ready)
+  // @@protoc_insertion_point(arena_constructor:Protocol.WaitingReady)
 }
-CS_Ready::CS_Ready(const CS_Ready& from)
+WaitingReady::WaitingReady(const WaitingReady& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  CS_Ready* const _this = this; (void)_this;
+  WaitingReady* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.type_){}
     , decltype(_impl_.playerid_){}
@@ -1463,10 +1490,10 @@ CS_Ready::CS_Ready(const CS_Ready& from)
   ::memcpy(&_impl_.type_, &from._impl_.type_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.ready_) -
     reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.ready_));
-  // @@protoc_insertion_point(copy_constructor:Protocol.CS_Ready)
+  // @@protoc_insertion_point(copy_constructor:Protocol.WaitingReady)
 }
 
-inline void CS_Ready::SharedCtor(
+inline void WaitingReady::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
@@ -1478,8 +1505,8 @@ inline void CS_Ready::SharedCtor(
   };
 }
 
-CS_Ready::~CS_Ready() {
-  // @@protoc_insertion_point(destructor:Protocol.CS_Ready)
+WaitingReady::~WaitingReady() {
+  // @@protoc_insertion_point(destructor:Protocol.WaitingReady)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -1487,16 +1514,16 @@ CS_Ready::~CS_Ready() {
   SharedDtor();
 }
 
-inline void CS_Ready::SharedDtor() {
+inline void WaitingReady::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void CS_Ready::SetCachedSize(int size) const {
+void WaitingReady::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void CS_Ready::Clear() {
-// @@protoc_insertion_point(message_clear_start:Protocol.CS_Ready)
+void WaitingReady::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.WaitingReady)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1507,7 +1534,7 @@ void CS_Ready::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CS_Ready::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* WaitingReady::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -1560,9 +1587,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* CS_Ready::_InternalSerialize(
+uint8_t* WaitingReady::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Protocol.CS_Ready)
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.WaitingReady)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1588,12 +1615,12 @@ uint8_t* CS_Ready::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Protocol.CS_Ready)
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.WaitingReady)
   return target;
 }
 
-size_t CS_Ready::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Protocol.CS_Ready)
+size_t WaitingReady::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.WaitingReady)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -1618,17 +1645,17 @@ size_t CS_Ready::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CS_Ready::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData WaitingReady::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    CS_Ready::MergeImpl
+    WaitingReady::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CS_Ready::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*WaitingReady::GetClassData() const { return &_class_data_; }
 
 
-void CS_Ready::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<CS_Ready*>(&to_msg);
-  auto& from = static_cast<const CS_Ready&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.CS_Ready)
+void WaitingReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<WaitingReady*>(&to_msg);
+  auto& from = static_cast<const WaitingReady&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.WaitingReady)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -1645,29 +1672,29 @@ void CS_Ready::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTO
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void CS_Ready::CopyFrom(const CS_Ready& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.CS_Ready)
+void WaitingReady::CopyFrom(const WaitingReady& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.WaitingReady)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool CS_Ready::IsInitialized() const {
+bool WaitingReady::IsInitialized() const {
   return true;
 }
 
-void CS_Ready::InternalSwap(CS_Ready* other) {
+void WaitingReady::InternalSwap(WaitingReady* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CS_Ready, _impl_.ready_)
-      + sizeof(CS_Ready::_impl_.ready_)
-      - PROTOBUF_FIELD_OFFSET(CS_Ready, _impl_.type_)>(
+      PROTOBUF_FIELD_OFFSET(WaitingReady, _impl_.ready_)
+      + sizeof(WaitingReady::_impl_.ready_)
+      - PROTOBUF_FIELD_OFFSET(WaitingReady, _impl_.type_)>(
           reinterpret_cast<char*>(&_impl_.type_),
           reinterpret_cast<char*>(&other->_impl_.type_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata CS_Ready::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata WaitingReady::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
       file_level_metadata_Lstruct_2eproto[4]);
@@ -1675,19 +1702,19 @@ void CS_Ready::InternalSwap(CS_Ready* other) {
 
 // ===================================================================
 
-class SC_SelectReady::_Internal {
+class WaitingAllReady::_Internal {
  public:
 };
 
-SC_SelectReady::SC_SelectReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+WaitingAllReady::WaitingAllReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:Protocol.SC_SelectReady)
+  // @@protoc_insertion_point(arena_constructor:Protocol.WaitingAllReady)
 }
-SC_SelectReady::SC_SelectReady(const SC_SelectReady& from)
+WaitingAllReady::WaitingAllReady(const WaitingAllReady& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  SC_SelectReady* const _this = this; (void)_this;
+  WaitingAllReady* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.type_){}
     , decltype(_impl_.allready_){}
@@ -1697,10 +1724,10 @@ SC_SelectReady::SC_SelectReady(const SC_SelectReady& from)
   ::memcpy(&_impl_.type_, &from._impl_.type_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.allready_) -
     reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.allready_));
-  // @@protoc_insertion_point(copy_constructor:Protocol.SC_SelectReady)
+  // @@protoc_insertion_point(copy_constructor:Protocol.WaitingAllReady)
 }
 
-inline void SC_SelectReady::SharedCtor(
+inline void WaitingAllReady::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
@@ -1711,8 +1738,8 @@ inline void SC_SelectReady::SharedCtor(
   };
 }
 
-SC_SelectReady::~SC_SelectReady() {
-  // @@protoc_insertion_point(destructor:Protocol.SC_SelectReady)
+WaitingAllReady::~WaitingAllReady() {
+  // @@protoc_insertion_point(destructor:Protocol.WaitingAllReady)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -1720,16 +1747,16 @@ SC_SelectReady::~SC_SelectReady() {
   SharedDtor();
 }
 
-inline void SC_SelectReady::SharedDtor() {
+inline void WaitingAllReady::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void SC_SelectReady::SetCachedSize(int size) const {
+void WaitingAllReady::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void SC_SelectReady::Clear() {
-// @@protoc_insertion_point(message_clear_start:Protocol.SC_SelectReady)
+void WaitingAllReady::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.WaitingAllReady)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1740,7 +1767,7 @@ void SC_SelectReady::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* SC_SelectReady::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* WaitingAllReady::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -1785,9 +1812,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* SC_SelectReady::_InternalSerialize(
+uint8_t* WaitingAllReady::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Protocol.SC_SelectReady)
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.WaitingAllReady)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1807,12 +1834,12 @@ uint8_t* SC_SelectReady::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Protocol.SC_SelectReady)
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.WaitingAllReady)
   return target;
 }
 
-size_t SC_SelectReady::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Protocol.SC_SelectReady)
+size_t WaitingAllReady::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.WaitingAllReady)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -1832,17 +1859,17 @@ size_t SC_SelectReady::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SC_SelectReady::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData WaitingAllReady::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    SC_SelectReady::MergeImpl
+    WaitingAllReady::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SC_SelectReady::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*WaitingAllReady::GetClassData() const { return &_class_data_; }
 
 
-void SC_SelectReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<SC_SelectReady*>(&to_msg);
-  auto& from = static_cast<const SC_SelectReady&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.SC_SelectReady)
+void WaitingAllReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<WaitingAllReady*>(&to_msg);
+  auto& from = static_cast<const WaitingAllReady&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.WaitingAllReady)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -1856,29 +1883,29 @@ void SC_SelectReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void SC_SelectReady::CopyFrom(const SC_SelectReady& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.SC_SelectReady)
+void WaitingAllReady::CopyFrom(const WaitingAllReady& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.WaitingAllReady)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool SC_SelectReady::IsInitialized() const {
+bool WaitingAllReady::IsInitialized() const {
   return true;
 }
 
-void SC_SelectReady::InternalSwap(SC_SelectReady* other) {
+void WaitingAllReady::InternalSwap(WaitingAllReady* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SC_SelectReady, _impl_.allready_)
-      + sizeof(SC_SelectReady::_impl_.allready_)
-      - PROTOBUF_FIELD_OFFSET(SC_SelectReady, _impl_.type_)>(
+      PROTOBUF_FIELD_OFFSET(WaitingAllReady, _impl_.allready_)
+      + sizeof(WaitingAllReady::_impl_.allready_)
+      - PROTOBUF_FIELD_OFFSET(WaitingAllReady, _impl_.type_)>(
           reinterpret_cast<char*>(&_impl_.type_),
           reinterpret_cast<char*>(&other->_impl_.type_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata SC_SelectReady::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata WaitingAllReady::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
       file_level_metadata_Lstruct_2eproto[5]);
@@ -1886,44 +1913,46 @@ void SC_SelectReady::InternalSwap(SC_SelectReady* other) {
 
 // ===================================================================
 
-class SC_WaitingReady::_Internal {
+class SelectReady::_Internal {
  public:
 };
 
-SC_WaitingReady::SC_WaitingReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+SelectReady::SelectReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:Protocol.SC_WaitingReady)
+  // @@protoc_insertion_point(arena_constructor:Protocol.SelectReady)
 }
-SC_WaitingReady::SC_WaitingReady(const SC_WaitingReady& from)
+SelectReady::SelectReady(const SelectReady& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  SC_WaitingReady* const _this = this; (void)_this;
+  SelectReady* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.type_){}
-    , decltype(_impl_.allready_){}
+    , decltype(_impl_.playerid_){}
+    , decltype(_impl_.ready_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.type_, &from._impl_.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.allready_) -
-    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.allready_));
-  // @@protoc_insertion_point(copy_constructor:Protocol.SC_WaitingReady)
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.ready_) -
+    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.ready_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.SelectReady)
 }
 
-inline void SC_WaitingReady::SharedCtor(
+inline void SelectReady::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.type_){0u}
-    , decltype(_impl_.allready_){false}
+    , decltype(_impl_.playerid_){0u}
+    , decltype(_impl_.ready_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
 
-SC_WaitingReady::~SC_WaitingReady() {
-  // @@protoc_insertion_point(destructor:Protocol.SC_WaitingReady)
+SelectReady::~SelectReady() {
+  // @@protoc_insertion_point(destructor:Protocol.SelectReady)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -1931,27 +1960,27 @@ SC_WaitingReady::~SC_WaitingReady() {
   SharedDtor();
 }
 
-inline void SC_WaitingReady::SharedDtor() {
+inline void SelectReady::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void SC_WaitingReady::SetCachedSize(int size) const {
+void SelectReady::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void SC_WaitingReady::Clear() {
-// @@protoc_insertion_point(message_clear_start:Protocol.SC_WaitingReady)
+void SelectReady::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.SelectReady)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   ::memset(&_impl_.type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.allready_) -
-      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.allready_));
+      reinterpret_cast<char*>(&_impl_.ready_) -
+      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.ready_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* SC_WaitingReady::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* SelectReady::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -1965,10 +1994,18 @@ const char* SC_WaitingReady::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // bool allready = 2;
+      // uint32 playerid = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.allready_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          _impl_.playerid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool ready = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.ready_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1996,9 +2033,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* SC_WaitingReady::_InternalSerialize(
+uint8_t* SelectReady::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Protocol.SC_WaitingReady)
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.SelectReady)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2008,22 +2045,28 @@ uint8_t* SC_WaitingReady::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_type(), target);
   }
 
-  // bool allready = 2;
-  if (this->_internal_allready() != 0) {
+  // uint32 playerid = 2;
+  if (this->_internal_playerid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(2, this->_internal_allready(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_playerid(), target);
+  }
+
+  // bool ready = 3;
+  if (this->_internal_ready() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_ready(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Protocol.SC_WaitingReady)
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.SelectReady)
   return target;
 }
 
-size_t SC_WaitingReady::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Protocol.SC_WaitingReady)
+size_t SelectReady::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.SelectReady)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -2035,25 +2078,30 @@ size_t SC_WaitingReady::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_type());
   }
 
-  // bool allready = 2;
-  if (this->_internal_allready() != 0) {
+  // uint32 playerid = 2;
+  if (this->_internal_playerid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_playerid());
+  }
+
+  // bool ready = 3;
+  if (this->_internal_ready() != 0) {
     total_size += 1 + 1;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SC_WaitingReady::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SelectReady::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    SC_WaitingReady::MergeImpl
+    SelectReady::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SC_WaitingReady::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SelectReady::GetClassData() const { return &_class_data_; }
 
 
-void SC_WaitingReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<SC_WaitingReady*>(&to_msg);
-  auto& from = static_cast<const SC_WaitingReady&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.SC_WaitingReady)
+void SelectReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<SelectReady*>(&to_msg);
+  auto& from = static_cast<const SelectReady&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.SelectReady)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -2061,38 +2109,252 @@ void SC_WaitingReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   if (from._internal_type() != 0) {
     _this->_internal_set_type(from._internal_type());
   }
-  if (from._internal_allready() != 0) {
-    _this->_internal_set_allready(from._internal_allready());
+  if (from._internal_playerid() != 0) {
+    _this->_internal_set_playerid(from._internal_playerid());
+  }
+  if (from._internal_ready() != 0) {
+    _this->_internal_set_ready(from._internal_ready());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void SC_WaitingReady::CopyFrom(const SC_WaitingReady& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.SC_WaitingReady)
+void SelectReady::CopyFrom(const SelectReady& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.SelectReady)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool SC_WaitingReady::IsInitialized() const {
+bool SelectReady::IsInitialized() const {
   return true;
 }
 
-void SC_WaitingReady::InternalSwap(SC_WaitingReady* other) {
+void SelectReady::InternalSwap(SelectReady* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SC_WaitingReady, _impl_.allready_)
-      + sizeof(SC_WaitingReady::_impl_.allready_)
-      - PROTOBUF_FIELD_OFFSET(SC_WaitingReady, _impl_.type_)>(
+      PROTOBUF_FIELD_OFFSET(SelectReady, _impl_.ready_)
+      + sizeof(SelectReady::_impl_.ready_)
+      - PROTOBUF_FIELD_OFFSET(SelectReady, _impl_.type_)>(
           reinterpret_cast<char*>(&_impl_.type_),
           reinterpret_cast<char*>(&other->_impl_.type_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata SC_WaitingReady::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata SelectReady::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
       file_level_metadata_Lstruct_2eproto[6]);
+}
+
+// ===================================================================
+
+class SelectAllReady::_Internal {
+ public:
+};
+
+SelectAllReady::SelectAllReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.SelectAllReady)
+}
+SelectAllReady::SelectAllReady(const SelectAllReady& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  SelectAllReady* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.type_){}
+    , decltype(_impl_.ready_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.type_, &from._impl_.type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.ready_) -
+    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.ready_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.SelectAllReady)
+}
+
+inline void SelectAllReady::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.type_){0u}
+    , decltype(_impl_.ready_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+SelectAllReady::~SelectAllReady() {
+  // @@protoc_insertion_point(destructor:Protocol.SelectAllReady)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void SelectAllReady::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void SelectAllReady::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void SelectAllReady::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.SelectAllReady)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&_impl_.type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.ready_) -
+      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.ready_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* SelectAllReady::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint32 type = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool ready = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.ready_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* SelectAllReady::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.SelectAllReady)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 type = 1;
+  if (this->_internal_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_type(), target);
+  }
+
+  // bool ready = 2;
+  if (this->_internal_ready() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(2, this->_internal_ready(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.SelectAllReady)
+  return target;
+}
+
+size_t SelectAllReady::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.SelectAllReady)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // uint32 type = 1;
+  if (this->_internal_type() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_type());
+  }
+
+  // bool ready = 2;
+  if (this->_internal_ready() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SelectAllReady::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    SelectAllReady::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SelectAllReady::GetClassData() const { return &_class_data_; }
+
+
+void SelectAllReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<SelectAllReady*>(&to_msg);
+  auto& from = static_cast<const SelectAllReady&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.SelectAllReady)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_type() != 0) {
+    _this->_internal_set_type(from._internal_type());
+  }
+  if (from._internal_ready() != 0) {
+    _this->_internal_set_ready(from._internal_ready());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void SelectAllReady::CopyFrom(const SelectAllReady& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.SelectAllReady)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SelectAllReady::IsInitialized() const {
+  return true;
+}
+
+void SelectAllReady::InternalSwap(SelectAllReady* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(SelectAllReady, _impl_.ready_)
+      + sizeof(SelectAllReady::_impl_.ready_)
+      - PROTOBUF_FIELD_OFFSET(SelectAllReady, _impl_.type_)>(
+          reinterpret_cast<char*>(&_impl_.type_),
+          reinterpret_cast<char*>(&other->_impl_.type_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SelectAllReady::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
+      file_level_metadata_Lstruct_2eproto[7]);
 }
 
 // ===================================================================
@@ -2327,7 +2589,7 @@ void Select_Character::InternalSwap(Select_Character* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Select_Character::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
-      file_level_metadata_Lstruct_2eproto[7]);
+      file_level_metadata_Lstruct_2eproto[8]);
 }
 
 // ===================================================================
@@ -2562,7 +2824,7 @@ void CS_Join::InternalSwap(CS_Join* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CS_Join::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
-      file_level_metadata_Lstruct_2eproto[8]);
+      file_level_metadata_Lstruct_2eproto[9]);
 }
 
 // ===================================================================
@@ -2773,7 +3035,7 @@ void SC_Join::InternalSwap(SC_Join* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SC_Join::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
-      file_level_metadata_Lstruct_2eproto[9]);
+      file_level_metadata_Lstruct_2eproto[10]);
 }
 
 // ===================================================================
@@ -3036,7 +3298,7 @@ void SC_JoinPlayer::InternalSwap(SC_JoinPlayer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SC_JoinPlayer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
-      file_level_metadata_Lstruct_2eproto[10]);
+      file_level_metadata_Lstruct_2eproto[11]);
 }
 
 // ===================================================================
@@ -3271,7 +3533,7 @@ void CS_Leave::InternalSwap(CS_Leave* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CS_Leave::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
-      file_level_metadata_Lstruct_2eproto[11]);
+      file_level_metadata_Lstruct_2eproto[12]);
 }
 
 // ===================================================================
@@ -3371,21 +3633,21 @@ const char* SC_LeavePlayer::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string username = 2;
+      // uint32 playerid = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.playerid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string username = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           auto str = _internal_mutable_username();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "Protocol.SC_LeavePlayer.username"));
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 playerid = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          _impl_.playerid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -3424,20 +3686,20 @@ uint8_t* SC_LeavePlayer::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_type(), target);
   }
 
-  // string username = 2;
+  // uint32 playerid = 2;
+  if (this->_internal_playerid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_playerid(), target);
+  }
+
+  // string username = 3;
   if (!this->_internal_username().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "Protocol.SC_LeavePlayer.username");
     target = stream->WriteStringMaybeAliased(
-        2, this->_internal_username(), target);
-  }
-
-  // uint32 playerid = 3;
-  if (this->_internal_playerid() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_playerid(), target);
+        3, this->_internal_username(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3456,7 +3718,7 @@ size_t SC_LeavePlayer::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string username = 2;
+  // string username = 3;
   if (!this->_internal_username().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -3468,7 +3730,7 @@ size_t SC_LeavePlayer::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_type());
   }
 
-  // uint32 playerid = 3;
+  // uint32 playerid = 2;
   if (this->_internal_playerid() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_playerid());
   }
@@ -3534,7 +3796,7 @@ void SC_LeavePlayer::InternalSwap(SC_LeavePlayer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SC_LeavePlayer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
-      file_level_metadata_Lstruct_2eproto[12]);
+      file_level_metadata_Lstruct_2eproto[13]);
 }
 
 // ===================================================================
@@ -3797,7 +4059,7 @@ void CS_Chatting::InternalSwap(CS_Chatting* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CS_Chatting::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
-      file_level_metadata_Lstruct_2eproto[13]);
+      file_level_metadata_Lstruct_2eproto[14]);
 }
 
 // ===================================================================
@@ -4060,7 +4322,7 @@ void SC_Chatting::InternalSwap(SC_Chatting* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SC_Chatting::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_Lstruct_2eproto_getter, &descriptor_table_Lstruct_2eproto_once,
-      file_level_metadata_Lstruct_2eproto[14]);
+      file_level_metadata_Lstruct_2eproto[15]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -4082,17 +4344,21 @@ template<> PROTOBUF_NOINLINE ::Protocol::SC_Register*
 Arena::CreateMaybeMessage< ::Protocol::SC_Register >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::SC_Register >(arena);
 }
-template<> PROTOBUF_NOINLINE ::Protocol::CS_Ready*
-Arena::CreateMaybeMessage< ::Protocol::CS_Ready >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::Protocol::CS_Ready >(arena);
+template<> PROTOBUF_NOINLINE ::Protocol::WaitingReady*
+Arena::CreateMaybeMessage< ::Protocol::WaitingReady >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::WaitingReady >(arena);
 }
-template<> PROTOBUF_NOINLINE ::Protocol::SC_SelectReady*
-Arena::CreateMaybeMessage< ::Protocol::SC_SelectReady >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::Protocol::SC_SelectReady >(arena);
+template<> PROTOBUF_NOINLINE ::Protocol::WaitingAllReady*
+Arena::CreateMaybeMessage< ::Protocol::WaitingAllReady >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::WaitingAllReady >(arena);
 }
-template<> PROTOBUF_NOINLINE ::Protocol::SC_WaitingReady*
-Arena::CreateMaybeMessage< ::Protocol::SC_WaitingReady >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::Protocol::SC_WaitingReady >(arena);
+template<> PROTOBUF_NOINLINE ::Protocol::SelectReady*
+Arena::CreateMaybeMessage< ::Protocol::SelectReady >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::SelectReady >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::SelectAllReady*
+Arena::CreateMaybeMessage< ::Protocol::SelectAllReady >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::SelectAllReady >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::Select_Character*
 Arena::CreateMaybeMessage< ::Protocol::Select_Character >(Arena* arena) {

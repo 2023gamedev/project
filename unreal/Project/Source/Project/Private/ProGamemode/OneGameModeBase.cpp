@@ -500,19 +500,19 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
     // 캐릭터 타입에 따라 스폰할 클래스를 결정
     TSubclassOf<ABaseCharacter> CharacterClass = nullptr;
 
-    if (charactertype == 1) {
+    if (charactertype == 2) {
         CharacterClass = AEmployeeCharacter::StaticClass();
         //OtherCharacterClasses.Add(AEmployeeCharacter::StaticClass());
     }
-    else if (charactertype == 3) {
+    else if (charactertype == 4) {
         CharacterClass = AFireFighterCharacter::StaticClass();
         //OtherCharacterClasses.Add(AFireFighterCharacter::StaticClass());
     }
-    else if (charactertype == 0) {
+    else if (charactertype == 1) {
         CharacterClass = AGirlCharacter::StaticClass();
         //OtherCharacterClasses.Add(AGirlCharacter::StaticClass());
     }
-    else if (charactertype == 2) {
+    else if (charactertype == 3) {
         CharacterClass = AIdolCharacter::StaticClass();
         //OtherCharacterClasses.Add(AIdolCharacter::StaticClass());
     }
@@ -528,6 +528,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         {
             // 새 캐릭터에 PlayerId 설정
             NewCharacter->SetPlayerId(PlayerID);
+            //NewCharacter->SetPlayerName();
             NewCharacter->SetHP(hp);  // 초기 HP 설정
         }
     }

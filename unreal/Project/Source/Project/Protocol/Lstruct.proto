@@ -23,20 +23,26 @@ message SC_Register {
     bool b_register = 2;
 }
 
-message CS_Ready{
+message WaitingReady{
     uint32 type = 1;
     uint32 playerid = 2;
     bool ready = 3;
 }
 
-message SC_SelectReady{
+message WaitingAllReady{
     uint32 type = 1;
     bool allready = 2;
 }
 
-message SC_WaitingReady{
+message SelectReady{
     uint32 type = 1;
-    bool allready = 2;
+    uint32 playerid = 2;
+    bool ready = 3;
+}
+
+message SelectAllReady{
+    uint32 type = 1;
+    bool ready = 2;
 }
 
 message Select_Character {
@@ -70,8 +76,8 @@ message CS_Leave{
 
 message SC_LeavePlayer{
     uint32 type = 1;
-    string username = 2;
-    uint32 playerid = 3;
+    uint32 playerid = 2;
+    string username = 3;
 }
 
 message CS_Chatting{

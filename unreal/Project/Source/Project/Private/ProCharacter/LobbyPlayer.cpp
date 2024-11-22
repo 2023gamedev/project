@@ -150,7 +150,7 @@ void ALobbyPlayer::Tick(float DeltaTime)
     if (GameInstance->ClientSocketPtr->b_allready){
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All players are ready!");
 
-		choicecharacterui->RemoveFromParent();
+		ChoiceCharacterUIWidget->RemoveFromParent();
 
         if (ALobbyGameMode* MyGameMode = Cast<ALobbyGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
         {
@@ -170,6 +170,7 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		{
 			FString FStringname = FString(UTF8_TO_TCHAR(recvJplayer.username.c_str()));
 			WaitingRoomUIWidget->AddPlayerToList(FStringname);
+			WaitingRoomUIWidget->Waiting_LobbyPlayers.FindOrAdd(recvJplayer.playerid, FStringname);
 		}
 	}
 
@@ -181,10 +182,17 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		}
 	}
 
-	if (GameInstance->ClientSocketPtr->Q_wready.try_pop(waitingready)) {
+	if (GameInstance->ClientSocketPtr->Q_wAllready.try_pop(waitingready)) {
 		if (WaitingRoomUIWidget)
 		{
 			WaitingRoomUIWidget->AllReady();
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_wready.try_pop(recvWready)) {
+		if (WaitingRoomUIWidget)
+		{
+			WaitingRoomUIWidget->UpdatePlayerReadyState(recvWready.playerid, recvWready.ready);
 		}
 	}
 

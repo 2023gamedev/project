@@ -21,7 +21,7 @@ void UProGameInstance::Init()
 {
     Super::Init();
     
-    m_iChoicedCharacterNumber = 0;
+    m_iChoicedCharacterNumber = 1;
     GameStateClass = nullptr;
     InitSocket();
 }

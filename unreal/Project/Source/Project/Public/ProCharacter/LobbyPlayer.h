@@ -31,6 +31,8 @@ public:
 	// Sets default values for this pawn's properties
 	ALobbyPlayer();
 
+	TMap <uint32, FString> LobbyPlayers;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -61,6 +63,7 @@ public:
 	Chatting recvChat;
 	JoinPlayer recvJplayer;
 	LeavePlayer recvLplayer;
+	WaitingReady recvWready;
 
 	bool waitingready = false;
 
