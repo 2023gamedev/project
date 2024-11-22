@@ -27,11 +27,12 @@ public:
 	UPROPERTY()
 	UStaticMeshComponent* Mesh;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "FX")
 	UNiagaraSystem* HealingFXSystem;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "FX")
 	UNiagaraComponent* HealingFXComponent;
 
+	UPROPERTY(EditAnywhere)
 	ABaseCharacter* OwnerChar;
 };

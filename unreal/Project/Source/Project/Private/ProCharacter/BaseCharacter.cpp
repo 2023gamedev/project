@@ -473,6 +473,7 @@ void ABaseCharacter::BeginPlay()
 		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
 		CurrentWeapon->OwnerCharacter = this;
 		CurrentWeapon->m_fCharacterSTR = m_fSTR;
+		CurrentWeapon->m_fWeaponDurability = 50.f;
 		SetNWHandIn(true);
 
 

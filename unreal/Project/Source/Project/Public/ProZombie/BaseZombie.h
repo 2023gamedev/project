@@ -170,22 +170,13 @@ public:
 	void SliceProceduralmeshTest(FVector planeposition, FVector planenormal);
 
 	// Procedural mesh component for the cut part
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
 	UProceduralMeshComponent* CutProceduralMesh_1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
 	UProceduralMeshComponent* CutProceduralMesh_2;
 
 	void CreativeProceduralMesh(FVector planeposition, FVector planenormal);
-
-	UPROPERTY(EditAnywhere, Category = "Materials")
-	UMaterialInterface* Material;
-
-	UPROPERTY(EditAnywhere, Category = "Materials")
-	UMaterialInterface* Material2;
-
-	UPROPERTY(EditAnywhere, Category = "Materials")
-	UMaterialInterface* Material3;
 
 	UPROPERTY(EditAnywhere, Category = "Materials")
 	UMaterialInterface* Material_Blood;

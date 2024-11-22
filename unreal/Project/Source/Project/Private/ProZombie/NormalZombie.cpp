@@ -30,23 +30,6 @@ ANormalZombie::ANormalZombie()
 	//	CopyStaticMesh->SetStaticMesh(SM_NORMALSTATIC.Object);
 	//}
 	//
-	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/ZombieAsset/NormalZombie/ZombieGirl_body_Material.ZombieGirl_body_Material"));
-	if (MaterialFinder.Succeeded())
-	{
-		Material = MaterialFinder.Object;
-	}
-	
-	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder2(TEXT("/Game/ZombieAsset/NormalZombie/ZombieGirl_Material.ZombieGirl_Material"));
-	if (MaterialFinder2.Succeeded())
-	{
-		Material2 = MaterialFinder2.Object;
-	} 
-	
-	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder3(TEXT("/Game/ZombieAsset/NormalZombie/ZombieGirl_Material_ncl1_1.ZombieGirl_Material_ncl1_1"));
-	if (MaterialFinder3.Succeeded())
-	{
-		Material3 = MaterialFinder3.Object;
-	}
 
 
 	SetHP(20);

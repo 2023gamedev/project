@@ -27,21 +27,6 @@ ARunningZombie::ARunningZombie()
 	//	CopyStaticMesh->SetStaticMesh(SM_RUNNINGSTATIC.Object);
 	//}
 
-	
-	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/ZombieAsset/RunningZombie/body_M.body_M"));
-	if (MaterialFinder.Succeeded())
-	{
-		Material = MaterialFinder.Object;
-	}
-	
-	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder2(TEXT("/Game/ZombieAsset/RunningZombie/body_M1.body_M1"));
-	if (MaterialFinder2.Succeeded())
-	{
-		Material2 = MaterialFinder2.Object;
-	}
-
-
-
 
 	SetHP(20);
 	SetStartHP(20);

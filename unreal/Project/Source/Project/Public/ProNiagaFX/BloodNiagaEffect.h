@@ -28,10 +28,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "FX")
 	UNiagaraSystem* BloodFXSystem;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "FX")
 	UNiagaraComponent* BloodFXComponent;
 
 	UPROPERTY(EditAnywhere)

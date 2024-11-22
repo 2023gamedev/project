@@ -52,8 +52,8 @@ ABaseZombie::ABaseZombie()
 	ShoutingFX = CreateDefaultSubobject<AShoutingNiagaEffect>(TEXT("ShoutingFX"));
 
 	ShoutingFX = nullptr;
-
-	ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Engine/EngineDebugMaterials/VertexColorViewMode_RedOnly.VertexColorViewMode_RedOnly"));
+	
+	ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/Mesh/SlicedBloodMaterial.SlicedBloodMaterial"));
 	if (MaterialFinder.Succeeded())
 	{
 		Material_Blood = MaterialFinder.Object;
@@ -203,16 +203,13 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 
 	
 	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation());
-	UE_LOG(LogTemp, Log, TEXT("BloodFX SpawnActor"));
 	if (GetHP() <= 0) {	// 죽을때(절단 될 때)는 피가 더 많이 튀도록
 		BloodFX->blood_spawncount = FMath::RandRange(300, 400);
 	}
 	else {
 		BloodFX->blood_spawncount = FMath::RandRange(80, 100);
 	}
-	UE_LOG(LogTemp, Log, TEXT("BloodFX SpawnCounter Set - %d"), BloodFX->blood_spawncount);
 	BloodFX->spawn_flag = true;
-	UE_LOG(LogTemp, Log, TEXT("BloodFX SpawnFlag True"));
 
 	BeAttacked();
 
@@ -392,7 +389,24 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			// 러닝 좀비 텍스쳐 깨짐 해결
 			if (m_sZombieName == "RunningZombie") {
-				CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(2));
+				if (CutProceduralMesh_2->GetNumMaterials() == 2) {
+					CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(2));
+				}
+				else if (CutProceduralMesh_2->GetNumMaterials() == 3) {
+					CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(2));
+					CutProceduralMesh_2->SetMaterial(1, GetMesh()->GetMaterial(3));
+				}
+				else if (CutProceduralMesh_2->GetNumMaterials() == 4) {
+					CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(1));
+					CutProceduralMesh_2->SetMaterial(1, GetMesh()->GetMaterial(2));
+					CutProceduralMesh_2->SetMaterial(2, GetMesh()->GetMaterial(3));
+				}
+				else if (CutProceduralMesh_2->GetNumMaterials() == 5) {
+					CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(0));
+					CutProceduralMesh_2->SetMaterial(1, GetMesh()->GetMaterial(1));
+					CutProceduralMesh_2->SetMaterial(2, GetMesh()->GetMaterial(2));
+					CutProceduralMesh_2->SetMaterial(3, GetMesh()->GetMaterial(3));
+				}
 			}
 
 			// 절단 부위 material 설정
@@ -512,7 +526,6 @@ void ABaseZombie::Shouting()
 	FVector SpawnOffset = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 5.0f);
 
 	ShoutingFX = GetWorld()->SpawnActor<AShoutingNiagaEffect>(AShoutingNiagaEffect::StaticClass(), SpawnOffset, FRotator::ZeroRotator);
-	ShoutingFX->OwnerZombie = this;
 
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 

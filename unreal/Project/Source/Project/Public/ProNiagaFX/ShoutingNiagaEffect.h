@@ -28,11 +28,9 @@ public:
 	UPROPERTY()
 	UStaticMeshComponent* Mesh;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "FX")
 	UNiagaraSystem* ShoutingFXSystem;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "FX")
 	UNiagaraComponent* ShoutingFXComponent;
-
-	ABaseZombie* OwnerZombie;
 };
