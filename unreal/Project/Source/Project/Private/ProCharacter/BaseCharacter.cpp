@@ -459,8 +459,13 @@ void ABaseCharacter::BeginPlay()
 	if (CurrentWeapon == nullptr) {
 
 		CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-		CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
-		CurrentWeapon->ItemHandRot = FRotator(4.949407f, -31.214014f, -172.213653f);
+		//CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
+		//CurrentWeapon->ItemHandRot = FRotator(4.949407f, -31.214014f, -172.213653f);
+
+		CurrentWeapon->ItemHandPos = FVector(-0.757521f, 1.883819f, 1.937180f);
+		CurrentWeapon->ItemHandRot = FRotator(-12.172822f, -34.649834f, -158.006864f);
+
+
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
 		FName WeaponSocket = TEXT("RightHandSocket");
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
@@ -1575,108 +1580,98 @@ void ABaseCharacter::SpawnNormalWeapon()
 			CurrentWeapon = GetWorld()->SpawnActor<ANWBook>(ANWBook::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(4.963954f, -3.163849f, 1.415202f);
 			CurrentWeapon->ItemHandRot = FRotator(-49.169772f, 77.43936f, 19.22938f);
-
-			//// 기존 본 변환을 저장
-			//FTransform OriginalTransform = SkeletalMesh->GetBoneTransform(SkeletalMesh->GetBoneIndex("thumb_01_r"));
-			//
-			//// 새 회전으로 본 회전 변경
-			//FTransform NewTransform = OriginalTransform;
-			//FRotator NewRotation(2.931057f, 26.780522f, 21.615626f);
-			//NewTransform.SetRotation(NewRotation.Quaternion());
-
-			//SkeletalMesh->SetBoneTransform("thumb_01_r", NewTransform, EBoneSpaces::WorldSpace)
 		}
 
-		if (QuickSlot[4].Name == "Bottle") {
+		else if (QuickSlot[4].Name == "Bottle") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWBottle>(ANWBottle::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-1.46633f, 4.540913f, 3.060996f);
 			CurrentWeapon->ItemHandRot = FRotator(-0.000289f, 39.999591f, 79.999289f);
 		}
 
-		if (QuickSlot[4].Name == "ButchersKnife") {
+		else if (QuickSlot[4].Name == "ButchersKnife") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
-			CurrentWeapon->ItemHandRot = FRotator(4.949407f, -31.214014f, -172.213653f);
+			CurrentWeapon->ItemHandPos = FVector(-0.757521f, 1.883819f, 1.937180f);
+			CurrentWeapon->ItemHandRot = FRotator(-12.172822f, -34.649834f, -158.006864f);
 		}
 
-		if (QuickSlot[4].Name == "FireAxe") {
+		else if (QuickSlot[4].Name == "FireAxe") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWFireAxe>(ANWFireAxe::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(1.241818f, 0.621437f, -0.044616f);
 			CurrentWeapon->ItemHandRot = FRotator(65.529377f, 122.729752f, 303.71118f);
 		}
 
 		
-		if (QuickSlot[4].Name == "FireExtinguisher") { //*
+		else if (QuickSlot[4].Name == "FireExtinguisher") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWFireExtinguisher>(ANWFireExtinguisher::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(1.346740f, -0.000092f, 16.967230f);
 			CurrentWeapon->ItemHandRot = FRotator(-60.000240f, -179.999764f, -179.999233f);
 		}
 
 
-		if (QuickSlot[4].Name == "FryingPan") { //*
+		else if (QuickSlot[4].Name == "FryingPan") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWFryingPan>(ANWFryingPan::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(0.499642f, -0.89209f, -1.988601f);
 			CurrentWeapon->ItemHandRot = FRotator(29.999483f, -109.999095f, -0.000121f);
 		}
 
 
-		if (QuickSlot[4].Name == "GolfClub") {
+		else if (QuickSlot[4].Name == "GolfClub") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWGolfClub>(ANWGolfClub::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-0.09167f, -1.358051f, 0.250882f);
 			CurrentWeapon->ItemHandRot = FRotator(-0.00006f, -99.99988f, -0.000023f);
 		}
 
 
-		if (QuickSlot[4].Name == "Iron") { //*
+		else if (QuickSlot[4].Name == "Iron") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWIron>(ANWIron::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-0.00006f, 2.036528f, 3.535635f);
 			CurrentWeapon->ItemHandRot = FRotator(0.000322f, 0.001126f, 69.999473f);
 		}
 
 
-		if (QuickSlot[4].Name == "MagicStick") { //*
+		else if (QuickSlot[4].Name == "MagicStick") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWMagicStick>(ANWMagicStick::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(12.221718f, -0.955271f, 0.690505f);
 			CurrentWeapon->ItemHandRot = FRotator(0.926526f, -4.243007f, -180.634745f);
 		}
 
 
-		if (QuickSlot[4].Name == "MannequinArm") { //**
+		else if (QuickSlot[4].Name == "MannequinArm") { //**
 			CurrentWeapon = GetWorld()->SpawnActor<ANWMannequinArm>(ANWMannequinArm::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-1.987761f, -9.628748f, 1.854362f);
 			CurrentWeapon->ItemHandRot = FRotator(-30.000611f, -159.998858f, 0.000562f);
 		}
 
 
-		if (QuickSlot[4].Name == "MannequinLeg") { //**
+		else if (QuickSlot[4].Name == "MannequinLeg") { //**
 			CurrentWeapon = GetWorld()->SpawnActor<ANWMannequinLeg>(ANWMannequinLeg::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-6.11014f, -0.906533f, 3.864085f);
 			CurrentWeapon->ItemHandRot = FRotator(80.000082f, -0.000489f, -0.000798f);
 		}
 
 
-		if (QuickSlot[4].Name == "Pipe") { 
+		else if (QuickSlot[4].Name == "Pipe") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWPipe>(ANWPipe::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(26.137358f, 13.137087f, 0.643183f);
 			CurrentWeapon->ItemHandRot = FRotator(-5.44398f, 17.537948f, -33.423673f);
 		}
 
 
-		if (QuickSlot[4].Name == "Plunger") { //*
+		else if (QuickSlot[4].Name == "Plunger") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWPlunger>(ANWPlunger::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-8.434205f, -1.096508f, -1.012945f);
 			CurrentWeapon->ItemHandRot = FRotator(82.25204f, -119.327506f, -131.361975);
 		}
 
 
-		if (QuickSlot[4].Name == "SashimiKnife") {
+		else if (QuickSlot[4].Name == "SashimiKnife") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWSashimiKnife>(ANWSashimiKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-6.766818f, 5.129228f, -0.58278f);
 			CurrentWeapon->ItemHandRot = FRotator(15.53382f, -60.800216f, 184.87332f);
 		}
 
 
-		if (QuickSlot[4].Name == "Scissors") { //**
+		else if (QuickSlot[4].Name == "Scissors") { //**
 			CurrentWeapon = GetWorld()->SpawnActor<ANWScissors>(ANWScissors::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-1.193205f, -1.628935f, 2.40875f);
 			CurrentWeapon->ItemHandRot = FRotator(20.000335f, -90.000792f, -9.999781f);
@@ -1684,24 +1679,27 @@ void ABaseCharacter::SpawnNormalWeapon()
 		}
 
 
-		if (QuickSlot[4].Name == "Shovels") {
+		else if (QuickSlot[4].Name == "Shovels") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWShovels>(ANWShovels::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(7.668457f, -0.797488f, -0.431196f);
 			CurrentWeapon->ItemHandRot = FRotator(26.807803f, 68.108858f, 84.914172f);
 		}
 
 
-		if (QuickSlot[4].Name == "SquareWood") {
+		else if (QuickSlot[4].Name == "SquareWood") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWSquareWood>(ANWSquareWood::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-11.797672f, 0.419462f, 7.687267f);
 			CurrentWeapon->ItemHandRot = FRotator(-6.285888f, -101.190543f, 111.478725f);
 		}
 
 
-		if (QuickSlot[4].Name == "WoodenBat") {
+		else if (QuickSlot[4].Name == "WoodenBat") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWWoodenBat>(ANWWoodenBat::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(29.212954f, -3.556313f, -0.245431f);
 			CurrentWeapon->ItemHandRot = FRotator(-26.286617f, 81.560518f, 0.445659f);
+		}
+		else {
+			return;
 		}
 
 		CurrentWeapon->OwnerCharacter = this;
@@ -1730,32 +1728,36 @@ void ABaseCharacter::SpawnHealingItem()
 		}
 
 
-		if (QuickSlot[1].Name == "Disinfectant") {
+		else if (QuickSlot[1].Name == "Disinfectant") {
 			CurrentHealingItem = GetWorld()->SpawnActor<AHDisinfectant>(AHDisinfectant::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[1].Name == "Drink") {
+		else if (QuickSlot[1].Name == "Drink") {
 			CurrentHealingItem = GetWorld()->SpawnActor<AHDrink>(AHDrink::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[1].Name == "Ointment") {
+		else if (QuickSlot[1].Name == "Ointment") {
 			CurrentHealingItem = GetWorld()->SpawnActor<AHOintment>(AHOintment::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[1].Name == "Smoke") {
+		else if (QuickSlot[1].Name == "Smoke") {
 			CurrentHealingItem = GetWorld()->SpawnActor<AHSmoke>(AHSmoke::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[1].Name == "Snack") {
+		else if (QuickSlot[1].Name == "Snack") {
 			CurrentHealingItem = GetWorld()->SpawnActor<AHSnack>(AHSnack::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[1].Name == "Water") {
+		else if (QuickSlot[1].Name == "Water") {
 			CurrentHealingItem = GetWorld()->SpawnActor<AHWater>(AHWater::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
+		else {
+			return;
+		}
 
-		CurrentHealingItem->ItemHandPos = FVector(-0.887761f, -3.927181f, 3.489489f);
+		CurrentHealingItem->ItemHandPos = FVector(-1.616189f, -3.900112f, 1.626949f);
 		CurrentHealingItem->ItemHandRot = FRotator(-0.005714f, -70.00028f, 90.03065f);
+
 
 
 		CurrentHealingItem->OwnerCharacter = this;
@@ -1777,19 +1779,21 @@ void ABaseCharacter::SpawnBleedingHealingItem()
 			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHBandage>(ABHBandage::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[0].Name == "Clothes") {
+		else if (QuickSlot[0].Name == "Clothes") {
 			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHClothes>(ABHClothes::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[0].Name == "DirtyClothes") {
+		else if (QuickSlot[0].Name == "DirtyClothes") {
 			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHDirtyClothes>(ABHDirtyClothes::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[0].Name == "Gauze") {
+		else if (QuickSlot[0].Name == "Gauze") {
 			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHGauze>(ABHGauze::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
-
-		CurrentBleedingHealingItem->ItemHandPos = FVector(-0.162329f, -2.606654f, 0.f);
+		else {
+			return;
+		}
+		CurrentBleedingHealingItem->ItemHandPos = FVector(0.211861f, -1.554539f, -1.946655f);
 		CurrentBleedingHealingItem->ItemHandRot = FRotator(0.f, 0.f, 0.f);
 
 		CurrentBleedingHealingItem->OwnerCharacter = this;
@@ -1810,24 +1814,27 @@ void ABaseCharacter::SpawnKeyItem()
 			CurrentKeyItem = GetWorld()->SpawnActor<AKCarkey1>(AKCarkey1::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[3].Name == "CarKey2") {
+		else if (QuickSlot[3].Name == "CarKey2") {
 			CurrentKeyItem = GetWorld()->SpawnActor<AKCarKey2>(AKCarKey2::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[3].Name == "CarKey3") {
+		else if (QuickSlot[3].Name == "CarKey3") {
 			CurrentKeyItem = GetWorld()->SpawnActor<AKCarKey3>(AKCarKey3::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[3].Name == "CarKey4") {
+		else if (QuickSlot[3].Name == "CarKey4") {
 			CurrentKeyItem = GetWorld()->SpawnActor<AKCarKey4>(AKCarKey4::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[3].Name == "RoofKey1") {
+		else if (QuickSlot[3].Name == "RoofKey1") {
 			CurrentKeyItem = GetWorld()->SpawnActor<AKRoofKey1>(AKRoofKey1::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		if (QuickSlot[3].Name == "RoofKey2") {
+		else if (QuickSlot[3].Name == "RoofKey2") {
 			CurrentKeyItem = GetWorld()->SpawnActor<AKRoofKey2>(AKRoofKey2::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+		else {
+			return;
 		}
 
 		CurrentKeyItem->ItemHandPos = FVector(2.595437f, 1.093417f, 2.838135f);
@@ -2301,10 +2308,10 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 		DestroyNormalWeapon();
 	}
 	if (CurrentWeapon == nullptr) {
-		if (WeaponName == "Book") {
+		if (WeaponName == "Book") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWBook>(ANWBook::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(0.f, -8.394180f, 0.f);
-			CurrentWeapon->ItemHandRot = FRotator(-0.000076f, -20.000723f, 0.000053f);
+			CurrentWeapon->ItemHandPos = FVector(4.963954f, -3.163849f, 1.415202f);
+			CurrentWeapon->ItemHandRot = FRotator(-49.169772f, 77.43936f, 19.22938f);
 		}
 
 		else if (WeaponName == "Bottle") {
@@ -2315,60 +2322,60 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 
 		else if (WeaponName == "ButchersKnife") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(-0.875394f, 0.097068f, 5.049547f);
-			CurrentWeapon->ItemHandRot = FRotator(-32.919045f, -47.588981f, 125.017375f);
+			CurrentWeapon->ItemHandPos = FVector(-0.757521f, 1.883819f, 1.937180f);
+			CurrentWeapon->ItemHandRot = FRotator(-12.172822f, -34.649834f, -158.006864f);
 		}
 
 		else if (WeaponName == "FireAxe") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWFireAxe>(ANWFireAxe::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(1.144813f, 1.155373f, 3.070750f);
-			CurrentWeapon->ItemHandRot = FRotator(39.998732f, -89.996450f, 109.998967f);
+			CurrentWeapon->ItemHandPos = FVector(1.241818f, 0.621437f, -0.044616f);
+			CurrentWeapon->ItemHandRot = FRotator(65.529377f, 122.729752f, 303.71118f);
 		}
 
 
-		else if (WeaponName == "FireExtinguisher") {
+		else if (WeaponName == "FireExtinguisher") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWFireExtinguisher>(ANWFireExtinguisher::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(1.346740f, -0.000092f, 16.967230f);
 			CurrentWeapon->ItemHandRot = FRotator(-60.000240f, -179.999764f, -179.999233f);
 		}
 
 
-		else if (WeaponName == "FryingPan") {
+		else if (WeaponName == "FryingPan") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWFryingPan>(ANWFryingPan::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(0.f, 0.f, 0.f);
+			CurrentWeapon->ItemHandPos = FVector(0.499642f, -0.89209f, -1.988601f);
 			CurrentWeapon->ItemHandRot = FRotator(29.999483f, -109.999095f, -0.000121f);
 		}
 
 
 		else if (WeaponName == "GolfClub") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWGolfClub>(ANWGolfClub::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(0.290323f, 1.646531f, 2.207044f);
+			CurrentWeapon->ItemHandPos = FVector(-0.09167f, -1.358051f, 0.250882f);
 			CurrentWeapon->ItemHandRot = FRotator(-0.00006f, -99.99988f, -0.000023f);
 		}
 
 
-		else if (WeaponName == "Iron") {
+		else if (WeaponName == "Iron") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWIron>(ANWIron::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-0.00006f, 2.036528f, 3.535635f);
 			CurrentWeapon->ItemHandRot = FRotator(0.000322f, 0.001126f, 69.999473f);
 		}
 
 
-		else if (WeaponName == "MagicStick") {
+		else if (WeaponName == "MagicStick") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWMagicStick>(ANWMagicStick::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(13.836398f, -1.132924f, 2.523876f);
-			CurrentWeapon->ItemHandRot = FRotator(-3.500636f, 2.346632f, -139.099251f);
+			CurrentWeapon->ItemHandPos = FVector(12.221718f, -0.955271f, 0.690505f);
+			CurrentWeapon->ItemHandRot = FRotator(0.926526f, -4.243007f, -180.634745f);
 		}
 
 
-		else if (WeaponName == "MannequinArm") {
+		else if (WeaponName == "MannequinArm") { //**
 			CurrentWeapon = GetWorld()->SpawnActor<ANWMannequinArm>(ANWMannequinArm::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-1.987761f, -9.628748f, 1.854362f);
 			CurrentWeapon->ItemHandRot = FRotator(-30.000611f, -159.998858f, 0.000562f);
 		}
 
 
-		else if (WeaponName == "MannequinLeg") {
+		else if (WeaponName == "MannequinLeg") { //**
 			CurrentWeapon = GetWorld()->SpawnActor<ANWMannequinLeg>(ANWMannequinLeg::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-6.11014f, -0.906533f, 3.864085f);
 			CurrentWeapon->ItemHandRot = FRotator(80.000082f, -0.000489f, -0.000798f);
@@ -2377,26 +2384,26 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 
 		else if (WeaponName == "Pipe") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWPipe>(ANWPipe::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(8.966057f, -0.497388f, 2.445295f);
-			CurrentWeapon->ItemHandRot = FRotator(-32.779877f, -11.015485f, -11.327502f);
+			CurrentWeapon->ItemHandPos = FVector(26.137358f, 13.137087f, 0.643183f);
+			CurrentWeapon->ItemHandRot = FRotator(-5.44398f, 17.537948f, -33.423673f);
 		}
 
 
-		else if (WeaponName == "Plunger") {
+		else if (WeaponName == "Plunger") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWPlunger>(ANWPlunger::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(-7.861762f, -1.430725f, 1.912907f);
-			CurrentWeapon->ItemHandRot = FRotator(90.f, -121.468288f, -121.468809f);
+			CurrentWeapon->ItemHandPos = FVector(-8.434205f, -1.096508f, -1.012945f);
+			CurrentWeapon->ItemHandRot = FRotator(82.25204f, -119.327506f, -131.361975);
 		}
 
 
 		else if (WeaponName == "SashimiKnife") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWSashimiKnife>(ANWSashimiKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(-6.330677f, -1.369697f, 3.234779f);
-			CurrentWeapon->ItemHandRot = FRotator(-32.088640f, -39.686686f, 156.209422f);
+			CurrentWeapon->ItemHandPos = FVector(-6.766818f, 5.129228f, -0.58278f);
+			CurrentWeapon->ItemHandRot = FRotator(15.53382f, -60.800216f, 184.87332f);
 		}
 
 
-		else if (WeaponName == "Scissors") {
+		else if (WeaponName == "Scissors") { //**
 			CurrentWeapon = GetWorld()->SpawnActor<ANWScissors>(ANWScissors::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 			CurrentWeapon->ItemHandPos = FVector(-1.193205f, -1.628935f, 2.40875f);
 			CurrentWeapon->ItemHandRot = FRotator(20.000335f, -90.000792f, -9.999781f);
@@ -2406,8 +2413,8 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 
 		else if (WeaponName == "Shovels") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWShovels>(ANWShovels::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(11.889708f, -1.393209f, -1.340132f);
-			CurrentWeapon->ItemHandRot = FRotator(6.285656f, 78.808997f, 68.521189f);
+			CurrentWeapon->ItemHandPos = FVector(7.668457f, -0.797488f, -0.431196f);
+			CurrentWeapon->ItemHandRot = FRotator(26.807803f, 68.108858f, 84.914172f);
 		}
 
 
@@ -2420,8 +2427,8 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 
 		else if (WeaponName == "WoodenBat") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWWoodenBat>(ANWWoodenBat::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(24.767272f, -5.275784f, -6.783428f);
-			CurrentWeapon->ItemHandRot = FRotator(6.286317f, 78.810309f, -21.478568f);
+			CurrentWeapon->ItemHandPos = FVector(29.212954f, -3.556313f, -0.245431f);
+			CurrentWeapon->ItemHandRot = FRotator(-26.286617f, 81.560518f, 0.445659f);
 		}
 
 		else {
@@ -2436,58 +2443,14 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OtherSpawnNormalWeapon"));
 
 		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-		CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("hand_r"));
+		CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("RightHandSocket"));
 
-		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
 		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
+		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
 
 	}
 
 	SetBringCurrentWeapon(true);
-}
-
-void ABaseCharacter::OtherSpawnBleedingHealingItem(const FString& ItemName)
-{
-	if (CurrentBleedingHealingItem != nullptr) {
-		DestroyBleedingHealingItem();
-	}
-	if (CurrentBleedingHealingItem == nullptr) {
-
-
-		if (ItemName == "Bandage") {
-			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHBandage>(ABHBandage::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-		}
-
-		else if (ItemName == "Clothes") {
-			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHClothes>(ABHClothes::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-		}
-
-		else if (ItemName == "DirtyClothes") {
-			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHDirtyClothes>(ABHDirtyClothes::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-		}
-
-		else if (ItemName == "Gauze") {
-			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHGauze>(ABHGauze::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-		}
-
-		else {
-			return;
-		}
-
-		CurrentBleedingHealingItem->ItemHandPos = FVector(-0.162329f, -2.606654f, 0.f);
-		CurrentBleedingHealingItem->ItemHandRot = FRotator(0.f, 0.f, 0.f);
-
-		CurrentBleedingHealingItem->OwnerCharacter = this;
-
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-		CurrentBleedingHealingItem->AttachToComponent(GetMesh(), AttachmentRules, FName("hand_r"));
-
-		CurrentBleedingHealingItem->SetActorRelativeLocation(CurrentBleedingHealingItem->ItemHandPos);
-		CurrentBleedingHealingItem->SetActorRelativeRotation(CurrentBleedingHealingItem->ItemHandRot);
-	}
-
-	SetBringCurrentBleedingHealingItem(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnBleedingHealingItem"));
 }
 
 void ABaseCharacter::OtherSpawnHealingItem(const FString& ItemName)
@@ -2526,26 +2489,68 @@ void ABaseCharacter::OtherSpawnHealingItem(const FString& ItemName)
 			CurrentHealingItem = GetWorld()->SpawnActor<AHWater>(AHWater::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
-		else {
-			return;
-		}
-
-		CurrentHealingItem->ItemHandPos = FVector(-0.887761f, -3.927181f, 3.489489f);
+		CurrentHealingItem->ItemHandPos = FVector(-1.616189f, -3.900112f, 1.626949f);
 		CurrentHealingItem->ItemHandRot = FRotator(-0.005714f, -70.00028f, 90.03065f);
-
 
 		CurrentHealingItem->OwnerCharacter = this;
 
 		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-		CurrentHealingItem->AttachToComponent(GetMesh(), AttachmentRules, FName("hand_r"));
+		CurrentHealingItem->AttachToComponent(GetMesh(), AttachmentRules, FName("RightHandSocket"));
 
-		CurrentHealingItem->SetActorRelativeLocation(CurrentHealingItem->ItemHandPos);
 		CurrentHealingItem->SetActorRelativeRotation(CurrentHealingItem->ItemHandRot);
+		CurrentHealingItem->SetActorRelativeLocation(CurrentHealingItem->ItemHandPos);
 	}
 
 	SetBringCurrentHealingItem(true);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnHealingItem"));
 }
+
+void ABaseCharacter::OtherSpawnBleedingHealingItem(const FString& ItemName)
+{
+	if (CurrentBleedingHealingItem != nullptr) {
+		DestroyBleedingHealingItem();
+	}
+	if (CurrentBleedingHealingItem == nullptr) {
+
+
+		if (ItemName == "Bandage") {
+			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHBandage>(ABHBandage::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		else if (ItemName == "Clothes") {
+			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHClothes>(ABHClothes::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		else if (ItemName == "DirtyClothes") {
+			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHDirtyClothes>(ABHDirtyClothes::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+
+		else if (ItemName == "Gauze") {
+			CurrentBleedingHealingItem = GetWorld()->SpawnActor<ABHGauze>(ABHGauze::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+		}
+		else {
+			return;
+		}
+
+		CurrentBleedingHealingItem->ItemHandPos = FVector(0.211861f, -1.554539f, -1.946655f);
+		CurrentBleedingHealingItem->ItemHandRot = FRotator(0.f, 0.f, 0.f);
+
+		CurrentBleedingHealingItem->OwnerCharacter = this;
+
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+		CurrentBleedingHealingItem->AttachToComponent(GetMesh(), AttachmentRules, FName("RightHandSocket"));
+
+		CurrentBleedingHealingItem->SetActorRelativeRotation(CurrentBleedingHealingItem->ItemHandRot);
+		CurrentBleedingHealingItem->SetActorRelativeLocation(CurrentBleedingHealingItem->ItemHandPos);
+
+
+	}
+
+	SetBringCurrentBleedingHealingItem(true);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnBleedingHealingItem"));
+}
+
+
 
 void ABaseCharacter::OtherSpawnThrowWeapon(const FString& ItemName)
 {
@@ -2591,10 +2596,10 @@ void ABaseCharacter::OtherSpawnKeyItem(const FString& ItemName)
 		CurrentKeyItem->ItemHandRot = FRotator(69.997202f, -20.036148f, 29.978793f);
 
 		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-		CurrentKeyItem->AttachToComponent(GetMesh(), AttachmentRules, FName("hand_r"));
+		CurrentKeyItem->AttachToComponent(GetMesh(), AttachmentRules, FName("RightHandSocket"));
 
-		CurrentKeyItem->SetActorRelativeLocation(CurrentKeyItem->ItemHandPos);
 		CurrentKeyItem->SetActorRelativeRotation(CurrentKeyItem->ItemHandRot);
+		CurrentKeyItem->SetActorRelativeLocation(CurrentKeyItem->ItemHandPos);
 	}
 
 	SetBringCurrentKeyItem(true);

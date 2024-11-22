@@ -13,7 +13,7 @@ ItemController::ItemController(IOCP_CORE& mainServer)
 
     SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_B1);
     SpawnItemBoxes(1, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(2, "Pipe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenPipe.InvenPipe", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(2, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_B1);
     SpawnItemBoxes(3, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_B1);
     SpawnItemBoxes(4, "SashimiKnife", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSasimiKnife.InvenSasimiKnife", 1, FLOOR::FLOOR_B1);
     SpawnItemBoxes(5, "ButchersKnife", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenButherKnife.InvenButherKnife", 1, FLOOR::FLOOR_B1);
@@ -37,12 +37,12 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     // F1
     SpawnItemBoxes(20, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(21, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(22, "Pipe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenPipe.InvenPipe", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(22, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(23, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(24, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(25, "Book", EItemClass::NORMALWEAPON, "/Game/InvenPng/Invenbook.Invenbook", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(26, "Book", EItemClass::NORMALWEAPON, "/Game/InvenPng/Invenbook.Invenbook", 1, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(27, "Pipe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenPipe.InvenPipe", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(27, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(28, "MagicStick", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenMagicStick.InvenMagicStick", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(29, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth", 3, FLOOR::FLOOR_F1);
 
@@ -61,7 +61,7 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     // F2
     SpawnItemBoxes(40, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(41, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(42, "Pipe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenPipe.InvenPipe", 2, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(42, "WoodenBat", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenWoodenBat.InvenWoodenBat", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(43, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(44, "Plunger", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenPlunger.InvenPlunger", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(45, "FryingPan", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFryingPan.InvenFryingPan", 1, FLOOR::FLOOR_F2);

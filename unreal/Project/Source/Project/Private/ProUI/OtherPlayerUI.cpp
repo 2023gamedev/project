@@ -116,7 +116,7 @@ void UOtherPlayerUI::UpdateHPBar(float hp)
 {
 	if (iMaxHealthFlag == 0) {
 		m_fMaxHealth = hp;
-
+		++iMaxHealthFlag;
 	}
 	HPBar->UpdateHealthBar(hp, m_fMaxHealth);
 }
