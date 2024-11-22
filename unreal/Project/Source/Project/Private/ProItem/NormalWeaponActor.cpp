@@ -174,7 +174,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						DrawDebugLine(
 							GetWorld(),
 							planeposition_center,
-							planeposition_center + planenormal * 5.0f,
+							planeposition_center + planenormal * 10.0f,
 							FColor::Yellow,
 							false,
 							5.0f,

@@ -192,10 +192,10 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		return 0;
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("Attacker Location: %s"), *Weapon->GetActorLocation().ToString());
-	UE_LOG(LogTemp, Log, TEXT("Attacker Rotation: %s"), *Weapon->OwnerCharacter->GetViewRotation().ToString());
+	UE_LOG(LogTemp, Log, TEXT("Weapon Location: %s"), *Weapon->GetActorLocation().ToString());
+	UE_LOG(LogTemp, Log, TEXT("Weapon Rotation: %s"), *Weapon->GetActorRotation().ToString());
 
-	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->OwnerCharacter->GetViewRotation());
+	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation());
 	BloodFX->OwnerZombie = this;
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
