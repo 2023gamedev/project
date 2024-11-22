@@ -185,6 +185,12 @@ void ABaseZombie::PossessedBy(AController* NewController)
 // 좀비가 공격을 받았을 때
 float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+
+	SetHP(GetHP() - Damage);
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+
 	ANormalWeaponActor* Weapon = Cast<ANormalWeaponActor>(DamageCauser);
 
 	if (Weapon == nullptr) {
@@ -195,16 +201,21 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	UE_LOG(LogTemp, Log, TEXT("Weapon Location: %s"), *Weapon->GetActorLocation().ToString());
 	UE_LOG(LogTemp, Log, TEXT("Weapon Rotation: %s"), *Weapon->GetActorRotation().ToString());
 
+	
 	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation());
-	BloodFX->OwnerZombie = this;
+	UE_LOG(LogTemp, Log, TEXT("BloodFX SpawnActor"));
+	if (GetHP() <= 0) {	// 죽을때(절단 될 때)는 피가 더 많이 튀도록
+		BloodFX->blood_spawncount = FMath::RandRange(300, 400);
+	}
+	else {
+		BloodFX->blood_spawncount = FMath::RandRange(80, 100);
+	}
+	UE_LOG(LogTemp, Log, TEXT("BloodFX SpawnCounter Set - %d"), BloodFX->blood_spawncount);
+	BloodFX->spawn_flag = true;
+	UE_LOG(LogTemp, Log, TEXT("BloodFX SpawnFlag True"));
 
-	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
-
-	SetHP(GetHP() - Damage);
 	BeAttacked();
 
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	return Damage;
 }
 

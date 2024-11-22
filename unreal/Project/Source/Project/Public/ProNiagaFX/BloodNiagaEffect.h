@@ -25,7 +25,7 @@ public:
 
 	virtual void EndPlay(EEndPlayReason::Type type) override;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
@@ -34,6 +34,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	UNiagaraComponent* BloodFXComponent;
 
-	ABaseZombie* OwnerZombie;
+	UPROPERTY(EditAnywhere)
+	int32 blood_spawncount;
+
+	UPROPERTY(EditAnywhere)
+	bool spawn_flag = false;
 
 };

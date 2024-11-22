@@ -24,23 +24,16 @@ ABloodNiagaEffect::ABloodNiagaEffect()
 		BloodFXSystem = NE.Object;
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX working fine");
 	}
+
+	UE_LOG(LogTemp, Log, TEXT("BloodFX Actor Initialized"));
 }
 
 // Called when the game starts or when spawned
 void ABloodNiagaEffect::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	BloodFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem, 
-		FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z), 
-		FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
 
-	if (BloodFXComponent)
-	{
-		BloodFXComponent->Activate();
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
-	}
-
+	UE_LOG(LogTemp, Log, TEXT("BloodFX BeginPlay"));
 }
 
 // Called every frame
@@ -48,14 +41,31 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//BloodFXComponent->SetWorldLocation(OwnerChar->GetActorLocation());
+	if (spawn_flag) {
+		BloodFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
+			FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z),
+			FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
+		UE_LOG(LogTemp, Log, TEXT("BloodFX SpawnSystemAtLocation"));
 
+		if (BloodFXComponent)
+		{
+			BloodFXComponent->SetNiagaraVariableInt(FString("User.Blood_SpawnCount"), blood_spawncount);
+			UE_LOG(LogTemp, Log, TEXT("BloodFX SetNiagaraVariableInt SpawnCount Set - %d"), blood_spawncount);
+
+			BloodFXComponent->Activate();
+			UE_LOG(LogTemp, Log, TEXT("BloodFX Activate"));
+
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
+		}
+
+		spawn_flag = false;
+	}
 }
 
 
 void ABloodNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
-	if(BloodFXComponent)
+	if (BloodFXComponent)
 		BloodFXComponent->Deactivate();
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX ended");
