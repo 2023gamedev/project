@@ -7,20 +7,16 @@
 ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
-	CurrentServerType = ServerType::LOBBY_SERVER;
-	//CurrentServerType = ServerType::GAME_SERVER;
+	//CurrentServerType = ServerType::LOBBY_SERVER;
+	CurrentServerType = ServerType::GAME_SERVER;
 
 	recvBuffer.buf = recvData;
 	recvBuffer.len = BUFSIZE;
 
-	if (ConnectServer(ServerType::LOBBY_SERVER)) {
+	if (ConnectServer(CurrentServerType)) {
 		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
 	}
 
-	/*if (ConnectServer(ServerType::GAME_SERVER)) {
-
-		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
-	}*/
 }
 
 ClientSocket::~ClientSocket()

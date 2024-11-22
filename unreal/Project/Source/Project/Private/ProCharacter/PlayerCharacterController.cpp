@@ -97,7 +97,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player12432543543535: PlayerId=%d"), recvPlayerData.PlayerId);
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%f"), recvPlayerData.hp);
-				UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%d"), recvPlayerData.charactertype);
+				UE_LOG(LogNet, Display, TEXT("Update Other Player        : hp=%f"), recvPlayerData.hp);
 
 				// 빙의된 Pawn이 ACharacter라면 캐스팅
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
