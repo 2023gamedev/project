@@ -528,6 +528,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         {
             // 새 캐릭터에 PlayerId 설정
             NewCharacter->SetPlayerId(PlayerID);
+            //NewCharacter->SetPlayerName();
             NewCharacter->SetHP(hp);  // 초기 HP 설정
         }
     }

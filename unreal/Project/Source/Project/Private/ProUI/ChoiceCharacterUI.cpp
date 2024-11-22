@@ -38,10 +38,10 @@ void UChoiceCharacterUI::OnClickedReadyButton()
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedReadyButton");
 
     uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-    Protocol::CS_Ready Packet;
+    Protocol::SelectReady Packet;
 
     Packet.set_playerid(MyPlayerId);
-    Packet.set_type(5);
+    Packet.set_type(15);
     Packet.set_ready(b_ready);
 
     // 직렬화

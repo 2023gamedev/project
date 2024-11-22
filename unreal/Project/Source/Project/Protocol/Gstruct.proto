@@ -159,5 +159,4 @@ message escape{
     uint32 playerid = 1;
     uint32 root = 2;
     uint32 packet_type = 3;
-
 }

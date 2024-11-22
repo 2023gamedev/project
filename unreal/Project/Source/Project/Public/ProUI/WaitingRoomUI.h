@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/VerticalBox.h"
+#include "Components/HorizontalBox.h"
+#include "Components/HorizontalBoxSlot.h"
 #include "Components/ScrollBox.h"
 #include "Components/TextBlock.h"
 #include "Components/EditableTextBox.h"
@@ -28,14 +30,22 @@ public:
 
 	void Init();
 	void SendChat(const FString& FormattedMessage);
+	int32 FindEmptySlot();
+	void UpdatePlayerReadyState(uint32 playerid, bool Ready);
 	void AddPlayerToList(const FString& PlayerName);
 	void RemovePlayerFromList(const FString& PlayerName);
 	void AddChatMessage(const FString& Message);
 	void AllReady();
+	void PlayerReady(uint32 playerid, bool ready);
 
 	UProGameInstance* GameInstance;
 	FMoveChoiceCharacterUI MoveChoiceCharacterUI;
 	FMoveStartGameUI MoveStartGameUI;
+
+	TMap <uint32, FString> Waiting_LobbyPlayers;
+
+	TArray<UHorizontalBox*> PlayerSlots;
+	TArray<bool> SlotOccupied;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ReadyButton;
@@ -48,6 +58,18 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UVerticalBox* PlayerList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UHorizontalBox* PlayerSlot1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UHorizontalBox* PlayerSlot2;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UHorizontalBox* PlayerSlot3;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UHorizontalBox* PlayerSlot4;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UScrollBox* ChattingList;
