@@ -31,7 +31,10 @@ void ABloodNiagaEffect::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	BloodFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
+	BloodFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem, 
+		FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z), 
+		FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
+
 	if (BloodFXComponent)
 	{
 		BloodFXComponent->Activate();

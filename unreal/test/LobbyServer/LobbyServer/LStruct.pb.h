@@ -58,9 +58,6 @@ extern CS_LeaveDefaultTypeInternal _CS_Leave_default_instance_;
 class CS_Login;
 struct CS_LoginDefaultTypeInternal;
 extern CS_LoginDefaultTypeInternal _CS_Login_default_instance_;
-class CS_Ready;
-struct CS_ReadyDefaultTypeInternal;
-extern CS_ReadyDefaultTypeInternal _CS_Ready_default_instance_;
 class CS_Register;
 struct CS_RegisterDefaultTypeInternal;
 extern CS_RegisterDefaultTypeInternal _CS_Register_default_instance_;
@@ -82,22 +79,27 @@ extern SC_LoginDefaultTypeInternal _SC_Login_default_instance_;
 class SC_Register;
 struct SC_RegisterDefaultTypeInternal;
 extern SC_RegisterDefaultTypeInternal _SC_Register_default_instance_;
-class SC_SelectReady;
-struct SC_SelectReadyDefaultTypeInternal;
-extern SC_SelectReadyDefaultTypeInternal _SC_SelectReady_default_instance_;
-class SC_WaitingReady;
-struct SC_WaitingReadyDefaultTypeInternal;
-extern SC_WaitingReadyDefaultTypeInternal _SC_WaitingReady_default_instance_;
+class SelectAllReady;
+struct SelectAllReadyDefaultTypeInternal;
+extern SelectAllReadyDefaultTypeInternal _SelectAllReady_default_instance_;
+class SelectReady;
+struct SelectReadyDefaultTypeInternal;
+extern SelectReadyDefaultTypeInternal _SelectReady_default_instance_;
 class Select_Character;
 struct Select_CharacterDefaultTypeInternal;
 extern Select_CharacterDefaultTypeInternal _Select_Character_default_instance_;
+class WaitingAllReady;
+struct WaitingAllReadyDefaultTypeInternal;
+extern WaitingAllReadyDefaultTypeInternal _WaitingAllReady_default_instance_;
+class WaitingReady;
+struct WaitingReadyDefaultTypeInternal;
+extern WaitingReadyDefaultTypeInternal _WaitingReady_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::CS_Chatting* Arena::CreateMaybeMessage<::Protocol::CS_Chatting>(Arena*);
 template<> ::Protocol::CS_Join* Arena::CreateMaybeMessage<::Protocol::CS_Join>(Arena*);
 template<> ::Protocol::CS_Leave* Arena::CreateMaybeMessage<::Protocol::CS_Leave>(Arena*);
 template<> ::Protocol::CS_Login* Arena::CreateMaybeMessage<::Protocol::CS_Login>(Arena*);
-template<> ::Protocol::CS_Ready* Arena::CreateMaybeMessage<::Protocol::CS_Ready>(Arena*);
 template<> ::Protocol::CS_Register* Arena::CreateMaybeMessage<::Protocol::CS_Register>(Arena*);
 template<> ::Protocol::SC_Chatting* Arena::CreateMaybeMessage<::Protocol::SC_Chatting>(Arena*);
 template<> ::Protocol::SC_Join* Arena::CreateMaybeMessage<::Protocol::SC_Join>(Arena*);
@@ -105,9 +107,11 @@ template<> ::Protocol::SC_JoinPlayer* Arena::CreateMaybeMessage<::Protocol::SC_J
 template<> ::Protocol::SC_LeavePlayer* Arena::CreateMaybeMessage<::Protocol::SC_LeavePlayer>(Arena*);
 template<> ::Protocol::SC_Login* Arena::CreateMaybeMessage<::Protocol::SC_Login>(Arena*);
 template<> ::Protocol::SC_Register* Arena::CreateMaybeMessage<::Protocol::SC_Register>(Arena*);
-template<> ::Protocol::SC_SelectReady* Arena::CreateMaybeMessage<::Protocol::SC_SelectReady>(Arena*);
-template<> ::Protocol::SC_WaitingReady* Arena::CreateMaybeMessage<::Protocol::SC_WaitingReady>(Arena*);
+template<> ::Protocol::SelectAllReady* Arena::CreateMaybeMessage<::Protocol::SelectAllReady>(Arena*);
+template<> ::Protocol::SelectReady* Arena::CreateMaybeMessage<::Protocol::SelectReady>(Arena*);
 template<> ::Protocol::Select_Character* Arena::CreateMaybeMessage<::Protocol::Select_Character>(Arena*);
+template<> ::Protocol::WaitingAllReady* Arena::CreateMaybeMessage<::Protocol::WaitingAllReady>(Arena*);
+template<> ::Protocol::WaitingReady* Arena::CreateMaybeMessage<::Protocol::WaitingReady>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
 
@@ -791,24 +795,24 @@ class SC_Register final :
 };
 // -------------------------------------------------------------------
 
-class CS_Ready final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.CS_Ready) */ {
+class WaitingReady final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.WaitingReady) */ {
  public:
-  inline CS_Ready() : CS_Ready(nullptr) {}
-  ~CS_Ready() override;
-  explicit PROTOBUF_CONSTEXPR CS_Ready(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline WaitingReady() : WaitingReady(nullptr) {}
+  ~WaitingReady() override;
+  explicit PROTOBUF_CONSTEXPR WaitingReady(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  CS_Ready(const CS_Ready& from);
-  CS_Ready(CS_Ready&& from) noexcept
-    : CS_Ready() {
+  WaitingReady(const WaitingReady& from);
+  WaitingReady(WaitingReady&& from) noexcept
+    : WaitingReady() {
     *this = ::std::move(from);
   }
 
-  inline CS_Ready& operator=(const CS_Ready& from) {
+  inline WaitingReady& operator=(const WaitingReady& from) {
     CopyFrom(from);
     return *this;
   }
-  inline CS_Ready& operator=(CS_Ready&& from) noexcept {
+  inline WaitingReady& operator=(WaitingReady&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -831,20 +835,20 @@ class CS_Ready final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const CS_Ready& default_instance() {
+  static const WaitingReady& default_instance() {
     return *internal_default_instance();
   }
-  static inline const CS_Ready* internal_default_instance() {
-    return reinterpret_cast<const CS_Ready*>(
-               &_CS_Ready_default_instance_);
+  static inline const WaitingReady* internal_default_instance() {
+    return reinterpret_cast<const WaitingReady*>(
+               &_WaitingReady_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     4;
 
-  friend void swap(CS_Ready& a, CS_Ready& b) {
+  friend void swap(WaitingReady& a, WaitingReady& b) {
     a.Swap(&b);
   }
-  inline void Swap(CS_Ready* other) {
+  inline void Swap(WaitingReady* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -857,7 +861,7 @@ class CS_Ready final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(CS_Ready* other) {
+  void UnsafeArenaSwap(WaitingReady* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -865,14 +869,14 @@ class CS_Ready final :
 
   // implements Message ----------------------------------------------
 
-  CS_Ready* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<CS_Ready>(arena);
+  WaitingReady* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<WaitingReady>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const CS_Ready& from);
+  void CopyFrom(const WaitingReady& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const CS_Ready& from) {
-    CS_Ready::MergeImpl(*this, from);
+  void MergeFrom( const WaitingReady& from) {
+    WaitingReady::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -890,15 +894,15 @@ class CS_Ready final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(CS_Ready* other);
+  void InternalSwap(WaitingReady* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Protocol.CS_Ready";
+    return "Protocol.WaitingReady";
   }
   protected:
-  explicit CS_Ready(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit WaitingReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -943,7 +947,7 @@ class CS_Ready final :
   void _internal_set_ready(bool value);
   public:
 
-  // @@protoc_insertion_point(class_scope:Protocol.CS_Ready)
+  // @@protoc_insertion_point(class_scope:Protocol.WaitingReady)
  private:
   class _Internal;
 
@@ -961,24 +965,24 @@ class CS_Ready final :
 };
 // -------------------------------------------------------------------
 
-class SC_SelectReady final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.SC_SelectReady) */ {
+class WaitingAllReady final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.WaitingAllReady) */ {
  public:
-  inline SC_SelectReady() : SC_SelectReady(nullptr) {}
-  ~SC_SelectReady() override;
-  explicit PROTOBUF_CONSTEXPR SC_SelectReady(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline WaitingAllReady() : WaitingAllReady(nullptr) {}
+  ~WaitingAllReady() override;
+  explicit PROTOBUF_CONSTEXPR WaitingAllReady(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  SC_SelectReady(const SC_SelectReady& from);
-  SC_SelectReady(SC_SelectReady&& from) noexcept
-    : SC_SelectReady() {
+  WaitingAllReady(const WaitingAllReady& from);
+  WaitingAllReady(WaitingAllReady&& from) noexcept
+    : WaitingAllReady() {
     *this = ::std::move(from);
   }
 
-  inline SC_SelectReady& operator=(const SC_SelectReady& from) {
+  inline WaitingAllReady& operator=(const WaitingAllReady& from) {
     CopyFrom(from);
     return *this;
   }
-  inline SC_SelectReady& operator=(SC_SelectReady&& from) noexcept {
+  inline WaitingAllReady& operator=(WaitingAllReady&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1001,20 +1005,20 @@ class SC_SelectReady final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const SC_SelectReady& default_instance() {
+  static const WaitingAllReady& default_instance() {
     return *internal_default_instance();
   }
-  static inline const SC_SelectReady* internal_default_instance() {
-    return reinterpret_cast<const SC_SelectReady*>(
-               &_SC_SelectReady_default_instance_);
+  static inline const WaitingAllReady* internal_default_instance() {
+    return reinterpret_cast<const WaitingAllReady*>(
+               &_WaitingAllReady_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     5;
 
-  friend void swap(SC_SelectReady& a, SC_SelectReady& b) {
+  friend void swap(WaitingAllReady& a, WaitingAllReady& b) {
     a.Swap(&b);
   }
-  inline void Swap(SC_SelectReady* other) {
+  inline void Swap(WaitingAllReady* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1027,7 +1031,7 @@ class SC_SelectReady final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(SC_SelectReady* other) {
+  void UnsafeArenaSwap(WaitingAllReady* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1035,14 +1039,14 @@ class SC_SelectReady final :
 
   // implements Message ----------------------------------------------
 
-  SC_SelectReady* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<SC_SelectReady>(arena);
+  WaitingAllReady* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<WaitingAllReady>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const SC_SelectReady& from);
+  void CopyFrom(const WaitingAllReady& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const SC_SelectReady& from) {
-    SC_SelectReady::MergeImpl(*this, from);
+  void MergeFrom( const WaitingAllReady& from) {
+    WaitingAllReady::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1060,15 +1064,15 @@ class SC_SelectReady final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(SC_SelectReady* other);
+  void InternalSwap(WaitingAllReady* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Protocol.SC_SelectReady";
+    return "Protocol.WaitingAllReady";
   }
   protected:
-  explicit SC_SelectReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit WaitingAllReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1103,7 +1107,7 @@ class SC_SelectReady final :
   void _internal_set_allready(bool value);
   public:
 
-  // @@protoc_insertion_point(class_scope:Protocol.SC_SelectReady)
+  // @@protoc_insertion_point(class_scope:Protocol.WaitingAllReady)
  private:
   class _Internal;
 
@@ -1120,24 +1124,24 @@ class SC_SelectReady final :
 };
 // -------------------------------------------------------------------
 
-class SC_WaitingReady final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.SC_WaitingReady) */ {
+class SelectReady final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.SelectReady) */ {
  public:
-  inline SC_WaitingReady() : SC_WaitingReady(nullptr) {}
-  ~SC_WaitingReady() override;
-  explicit PROTOBUF_CONSTEXPR SC_WaitingReady(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline SelectReady() : SelectReady(nullptr) {}
+  ~SelectReady() override;
+  explicit PROTOBUF_CONSTEXPR SelectReady(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  SC_WaitingReady(const SC_WaitingReady& from);
-  SC_WaitingReady(SC_WaitingReady&& from) noexcept
-    : SC_WaitingReady() {
+  SelectReady(const SelectReady& from);
+  SelectReady(SelectReady&& from) noexcept
+    : SelectReady() {
     *this = ::std::move(from);
   }
 
-  inline SC_WaitingReady& operator=(const SC_WaitingReady& from) {
+  inline SelectReady& operator=(const SelectReady& from) {
     CopyFrom(from);
     return *this;
   }
-  inline SC_WaitingReady& operator=(SC_WaitingReady&& from) noexcept {
+  inline SelectReady& operator=(SelectReady&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1160,20 +1164,20 @@ class SC_WaitingReady final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const SC_WaitingReady& default_instance() {
+  static const SelectReady& default_instance() {
     return *internal_default_instance();
   }
-  static inline const SC_WaitingReady* internal_default_instance() {
-    return reinterpret_cast<const SC_WaitingReady*>(
-               &_SC_WaitingReady_default_instance_);
+  static inline const SelectReady* internal_default_instance() {
+    return reinterpret_cast<const SelectReady*>(
+               &_SelectReady_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     6;
 
-  friend void swap(SC_WaitingReady& a, SC_WaitingReady& b) {
+  friend void swap(SelectReady& a, SelectReady& b) {
     a.Swap(&b);
   }
-  inline void Swap(SC_WaitingReady* other) {
+  inline void Swap(SelectReady* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1186,7 +1190,7 @@ class SC_WaitingReady final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(SC_WaitingReady* other) {
+  void UnsafeArenaSwap(SelectReady* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1194,14 +1198,14 @@ class SC_WaitingReady final :
 
   // implements Message ----------------------------------------------
 
-  SC_WaitingReady* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<SC_WaitingReady>(arena);
+  SelectReady* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SelectReady>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const SC_WaitingReady& from);
+  void CopyFrom(const SelectReady& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const SC_WaitingReady& from) {
-    SC_WaitingReady::MergeImpl(*this, from);
+  void MergeFrom( const SelectReady& from) {
+    SelectReady::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1219,15 +1223,15 @@ class SC_WaitingReady final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(SC_WaitingReady* other);
+  void InternalSwap(SelectReady* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Protocol.SC_WaitingReady";
+    return "Protocol.SelectReady";
   }
   protected:
-  explicit SC_WaitingReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit SelectReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1242,7 +1246,8 @@ class SC_WaitingReady final :
 
   enum : int {
     kTypeFieldNumber = 1,
-    kAllreadyFieldNumber = 2,
+    kPlayeridFieldNumber = 2,
+    kReadyFieldNumber = 3,
   };
   // uint32 type = 1;
   void clear_type();
@@ -1253,16 +1258,25 @@ class SC_WaitingReady final :
   void _internal_set_type(uint32_t value);
   public:
 
-  // bool allready = 2;
-  void clear_allready();
-  bool allready() const;
-  void set_allready(bool value);
+  // uint32 playerid = 2;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
   private:
-  bool _internal_allready() const;
-  void _internal_set_allready(bool value);
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:Protocol.SC_WaitingReady)
+  // bool ready = 3;
+  void clear_ready();
+  bool ready() const;
+  void set_ready(bool value);
+  private:
+  bool _internal_ready() const;
+  void _internal_set_ready(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.SelectReady)
  private:
   class _Internal;
 
@@ -1271,7 +1285,167 @@ class SC_WaitingReady final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     uint32_t type_;
-    bool allready_;
+    uint32_t playerid_;
+    bool ready_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Lstruct_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SelectAllReady final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.SelectAllReady) */ {
+ public:
+  inline SelectAllReady() : SelectAllReady(nullptr) {}
+  ~SelectAllReady() override;
+  explicit PROTOBUF_CONSTEXPR SelectAllReady(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SelectAllReady(const SelectAllReady& from);
+  SelectAllReady(SelectAllReady&& from) noexcept
+    : SelectAllReady() {
+    *this = ::std::move(from);
+  }
+
+  inline SelectAllReady& operator=(const SelectAllReady& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SelectAllReady& operator=(SelectAllReady&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SelectAllReady& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SelectAllReady* internal_default_instance() {
+    return reinterpret_cast<const SelectAllReady*>(
+               &_SelectAllReady_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(SelectAllReady& a, SelectAllReady& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SelectAllReady* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SelectAllReady* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SelectAllReady* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SelectAllReady>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SelectAllReady& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SelectAllReady& from) {
+    SelectAllReady::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SelectAllReady* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.SelectAllReady";
+  }
+  protected:
+  explicit SelectAllReady(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTypeFieldNumber = 1,
+    kReadyFieldNumber = 2,
+  };
+  // uint32 type = 1;
+  void clear_type();
+  uint32_t type() const;
+  void set_type(uint32_t value);
+  private:
+  uint32_t _internal_type() const;
+  void _internal_set_type(uint32_t value);
+  public:
+
+  // bool ready = 2;
+  void clear_ready();
+  bool ready() const;
+  void set_ready(bool value);
+  private:
+  bool _internal_ready() const;
+  void _internal_set_ready(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.SelectAllReady)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t type_;
+    bool ready_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1327,7 +1501,7 @@ class Select_Character final :
                &_Select_Character_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(Select_Character& a, Select_Character& b) {
     a.Swap(&b);
@@ -1497,7 +1671,7 @@ class CS_Join final :
                &_CS_Join_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(CS_Join& a, CS_Join& b) {
     a.Swap(&b);
@@ -1667,7 +1841,7 @@ class SC_Join final :
                &_SC_Join_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(SC_Join& a, SC_Join& b) {
     a.Swap(&b);
@@ -1826,7 +2000,7 @@ class SC_JoinPlayer final :
                &_SC_JoinPlayer_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(SC_JoinPlayer& a, SC_JoinPlayer& b) {
     a.Swap(&b);
@@ -2001,7 +2175,7 @@ class CS_Leave final :
                &_CS_Leave_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(CS_Leave& a, CS_Leave& b) {
     a.Swap(&b);
@@ -2171,7 +2345,7 @@ class SC_LeavePlayer final :
                &_SC_LeavePlayer_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(SC_LeavePlayer& a, SC_LeavePlayer& b) {
     a.Swap(&b);
@@ -2244,11 +2418,11 @@ class SC_LeavePlayer final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kUsernameFieldNumber = 2,
+    kUsernameFieldNumber = 3,
     kTypeFieldNumber = 1,
-    kPlayeridFieldNumber = 3,
+    kPlayeridFieldNumber = 2,
   };
-  // string username = 2;
+  // string username = 3;
   void clear_username();
   const std::string& username() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2271,7 +2445,7 @@ class SC_LeavePlayer final :
   void _internal_set_type(uint32_t value);
   public:
 
-  // uint32 playerid = 3;
+  // uint32 playerid = 2;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
@@ -2346,7 +2520,7 @@ class CS_Chatting final :
                &_CS_Chatting_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(CS_Chatting& a, CS_Chatting& b) {
     a.Swap(&b);
@@ -2521,7 +2695,7 @@ class SC_Chatting final :
                &_SC_Chatting_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    15;
 
   friend void swap(SC_Chatting& a, SC_Chatting& b) {
     a.Swap(&b);
@@ -2991,154 +3165,218 @@ inline void SC_Register::set_b_register(bool value) {
 
 // -------------------------------------------------------------------
 
-// CS_Ready
+// WaitingReady
 
 // uint32 type = 1;
-inline void CS_Ready::clear_type() {
+inline void WaitingReady::clear_type() {
   _impl_.type_ = 0u;
 }
-inline uint32_t CS_Ready::_internal_type() const {
+inline uint32_t WaitingReady::_internal_type() const {
   return _impl_.type_;
 }
-inline uint32_t CS_Ready::type() const {
-  // @@protoc_insertion_point(field_get:Protocol.CS_Ready.type)
+inline uint32_t WaitingReady::type() const {
+  // @@protoc_insertion_point(field_get:Protocol.WaitingReady.type)
   return _internal_type();
 }
-inline void CS_Ready::_internal_set_type(uint32_t value) {
+inline void WaitingReady::_internal_set_type(uint32_t value) {
   
   _impl_.type_ = value;
 }
-inline void CS_Ready::set_type(uint32_t value) {
+inline void WaitingReady::set_type(uint32_t value) {
   _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.CS_Ready.type)
+  // @@protoc_insertion_point(field_set:Protocol.WaitingReady.type)
 }
 
 // uint32 playerid = 2;
-inline void CS_Ready::clear_playerid() {
+inline void WaitingReady::clear_playerid() {
   _impl_.playerid_ = 0u;
 }
-inline uint32_t CS_Ready::_internal_playerid() const {
+inline uint32_t WaitingReady::_internal_playerid() const {
   return _impl_.playerid_;
 }
-inline uint32_t CS_Ready::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.CS_Ready.playerid)
+inline uint32_t WaitingReady::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.WaitingReady.playerid)
   return _internal_playerid();
 }
-inline void CS_Ready::_internal_set_playerid(uint32_t value) {
+inline void WaitingReady::_internal_set_playerid(uint32_t value) {
   
   _impl_.playerid_ = value;
 }
-inline void CS_Ready::set_playerid(uint32_t value) {
+inline void WaitingReady::set_playerid(uint32_t value) {
   _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.CS_Ready.playerid)
+  // @@protoc_insertion_point(field_set:Protocol.WaitingReady.playerid)
 }
 
 // bool ready = 3;
-inline void CS_Ready::clear_ready() {
+inline void WaitingReady::clear_ready() {
   _impl_.ready_ = false;
 }
-inline bool CS_Ready::_internal_ready() const {
+inline bool WaitingReady::_internal_ready() const {
   return _impl_.ready_;
 }
-inline bool CS_Ready::ready() const {
-  // @@protoc_insertion_point(field_get:Protocol.CS_Ready.ready)
+inline bool WaitingReady::ready() const {
+  // @@protoc_insertion_point(field_get:Protocol.WaitingReady.ready)
   return _internal_ready();
 }
-inline void CS_Ready::_internal_set_ready(bool value) {
+inline void WaitingReady::_internal_set_ready(bool value) {
   
   _impl_.ready_ = value;
 }
-inline void CS_Ready::set_ready(bool value) {
+inline void WaitingReady::set_ready(bool value) {
   _internal_set_ready(value);
-  // @@protoc_insertion_point(field_set:Protocol.CS_Ready.ready)
+  // @@protoc_insertion_point(field_set:Protocol.WaitingReady.ready)
 }
 
 // -------------------------------------------------------------------
 
-// SC_SelectReady
+// WaitingAllReady
 
 // uint32 type = 1;
-inline void SC_SelectReady::clear_type() {
+inline void WaitingAllReady::clear_type() {
   _impl_.type_ = 0u;
 }
-inline uint32_t SC_SelectReady::_internal_type() const {
+inline uint32_t WaitingAllReady::_internal_type() const {
   return _impl_.type_;
 }
-inline uint32_t SC_SelectReady::type() const {
-  // @@protoc_insertion_point(field_get:Protocol.SC_SelectReady.type)
+inline uint32_t WaitingAllReady::type() const {
+  // @@protoc_insertion_point(field_get:Protocol.WaitingAllReady.type)
   return _internal_type();
 }
-inline void SC_SelectReady::_internal_set_type(uint32_t value) {
+inline void WaitingAllReady::_internal_set_type(uint32_t value) {
   
   _impl_.type_ = value;
 }
-inline void SC_SelectReady::set_type(uint32_t value) {
+inline void WaitingAllReady::set_type(uint32_t value) {
   _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.SC_SelectReady.type)
+  // @@protoc_insertion_point(field_set:Protocol.WaitingAllReady.type)
 }
 
 // bool allready = 2;
-inline void SC_SelectReady::clear_allready() {
+inline void WaitingAllReady::clear_allready() {
   _impl_.allready_ = false;
 }
-inline bool SC_SelectReady::_internal_allready() const {
+inline bool WaitingAllReady::_internal_allready() const {
   return _impl_.allready_;
 }
-inline bool SC_SelectReady::allready() const {
-  // @@protoc_insertion_point(field_get:Protocol.SC_SelectReady.allready)
+inline bool WaitingAllReady::allready() const {
+  // @@protoc_insertion_point(field_get:Protocol.WaitingAllReady.allready)
   return _internal_allready();
 }
-inline void SC_SelectReady::_internal_set_allready(bool value) {
+inline void WaitingAllReady::_internal_set_allready(bool value) {
   
   _impl_.allready_ = value;
 }
-inline void SC_SelectReady::set_allready(bool value) {
+inline void WaitingAllReady::set_allready(bool value) {
   _internal_set_allready(value);
-  // @@protoc_insertion_point(field_set:Protocol.SC_SelectReady.allready)
+  // @@protoc_insertion_point(field_set:Protocol.WaitingAllReady.allready)
 }
 
 // -------------------------------------------------------------------
 
-// SC_WaitingReady
+// SelectReady
 
 // uint32 type = 1;
-inline void SC_WaitingReady::clear_type() {
+inline void SelectReady::clear_type() {
   _impl_.type_ = 0u;
 }
-inline uint32_t SC_WaitingReady::_internal_type() const {
+inline uint32_t SelectReady::_internal_type() const {
   return _impl_.type_;
 }
-inline uint32_t SC_WaitingReady::type() const {
-  // @@protoc_insertion_point(field_get:Protocol.SC_WaitingReady.type)
+inline uint32_t SelectReady::type() const {
+  // @@protoc_insertion_point(field_get:Protocol.SelectReady.type)
   return _internal_type();
 }
-inline void SC_WaitingReady::_internal_set_type(uint32_t value) {
+inline void SelectReady::_internal_set_type(uint32_t value) {
   
   _impl_.type_ = value;
 }
-inline void SC_WaitingReady::set_type(uint32_t value) {
+inline void SelectReady::set_type(uint32_t value) {
   _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.SC_WaitingReady.type)
+  // @@protoc_insertion_point(field_set:Protocol.SelectReady.type)
 }
 
-// bool allready = 2;
-inline void SC_WaitingReady::clear_allready() {
-  _impl_.allready_ = false;
+// uint32 playerid = 2;
+inline void SelectReady::clear_playerid() {
+  _impl_.playerid_ = 0u;
 }
-inline bool SC_WaitingReady::_internal_allready() const {
-  return _impl_.allready_;
+inline uint32_t SelectReady::_internal_playerid() const {
+  return _impl_.playerid_;
 }
-inline bool SC_WaitingReady::allready() const {
-  // @@protoc_insertion_point(field_get:Protocol.SC_WaitingReady.allready)
-  return _internal_allready();
+inline uint32_t SelectReady::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.SelectReady.playerid)
+  return _internal_playerid();
 }
-inline void SC_WaitingReady::_internal_set_allready(bool value) {
+inline void SelectReady::_internal_set_playerid(uint32_t value) {
   
-  _impl_.allready_ = value;
+  _impl_.playerid_ = value;
 }
-inline void SC_WaitingReady::set_allready(bool value) {
-  _internal_set_allready(value);
-  // @@protoc_insertion_point(field_set:Protocol.SC_WaitingReady.allready)
+inline void SelectReady::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.SelectReady.playerid)
+}
+
+// bool ready = 3;
+inline void SelectReady::clear_ready() {
+  _impl_.ready_ = false;
+}
+inline bool SelectReady::_internal_ready() const {
+  return _impl_.ready_;
+}
+inline bool SelectReady::ready() const {
+  // @@protoc_insertion_point(field_get:Protocol.SelectReady.ready)
+  return _internal_ready();
+}
+inline void SelectReady::_internal_set_ready(bool value) {
+  
+  _impl_.ready_ = value;
+}
+inline void SelectReady::set_ready(bool value) {
+  _internal_set_ready(value);
+  // @@protoc_insertion_point(field_set:Protocol.SelectReady.ready)
+}
+
+// -------------------------------------------------------------------
+
+// SelectAllReady
+
+// uint32 type = 1;
+inline void SelectAllReady::clear_type() {
+  _impl_.type_ = 0u;
+}
+inline uint32_t SelectAllReady::_internal_type() const {
+  return _impl_.type_;
+}
+inline uint32_t SelectAllReady::type() const {
+  // @@protoc_insertion_point(field_get:Protocol.SelectAllReady.type)
+  return _internal_type();
+}
+inline void SelectAllReady::_internal_set_type(uint32_t value) {
+  
+  _impl_.type_ = value;
+}
+inline void SelectAllReady::set_type(uint32_t value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.SelectAllReady.type)
+}
+
+// bool ready = 2;
+inline void SelectAllReady::clear_ready() {
+  _impl_.ready_ = false;
+}
+inline bool SelectAllReady::_internal_ready() const {
+  return _impl_.ready_;
+}
+inline bool SelectAllReady::ready() const {
+  // @@protoc_insertion_point(field_get:Protocol.SelectAllReady.ready)
+  return _internal_ready();
+}
+inline void SelectAllReady::_internal_set_ready(bool value) {
+  
+  _impl_.ready_ = value;
+}
+inline void SelectAllReady::set_ready(bool value) {
+  _internal_set_ready(value);
+  // @@protoc_insertion_point(field_set:Protocol.SelectAllReady.ready)
 }
 
 // -------------------------------------------------------------------
@@ -3495,7 +3733,27 @@ inline void SC_LeavePlayer::set_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.SC_LeavePlayer.type)
 }
 
-// string username = 2;
+// uint32 playerid = 2;
+inline void SC_LeavePlayer::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t SC_LeavePlayer::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t SC_LeavePlayer::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.SC_LeavePlayer.playerid)
+  return _internal_playerid();
+}
+inline void SC_LeavePlayer::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void SC_LeavePlayer::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.SC_LeavePlayer.playerid)
+}
+
+// string username = 3;
 inline void SC_LeavePlayer::clear_username() {
   _impl_.username_.ClearToEmpty();
 }
@@ -3543,26 +3801,6 @@ inline void SC_LeavePlayer::set_allocated_username(std::string* username) {
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:Protocol.SC_LeavePlayer.username)
-}
-
-// uint32 playerid = 3;
-inline void SC_LeavePlayer::clear_playerid() {
-  _impl_.playerid_ = 0u;
-}
-inline uint32_t SC_LeavePlayer::_internal_playerid() const {
-  return _impl_.playerid_;
-}
-inline uint32_t SC_LeavePlayer::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.SC_LeavePlayer.playerid)
-  return _internal_playerid();
-}
-inline void SC_LeavePlayer::_internal_set_playerid(uint32_t value) {
-  
-  _impl_.playerid_ = value;
-}
-inline void SC_LeavePlayer::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.SC_LeavePlayer.playerid)
 }
 
 // -------------------------------------------------------------------
@@ -3756,6 +3994,8 @@ inline void SC_Chatting::set_allocated_chat(std::string* chat) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

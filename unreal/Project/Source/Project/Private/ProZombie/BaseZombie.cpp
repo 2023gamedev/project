@@ -13,6 +13,7 @@
 #include "Engine/SkeletalMesh.h"
 #include "ProNiagaFX/BloodNiagaEffect.h"
 #include "ProNiagaFX/ShoutingNiagaEffect.h"
+#include "ProItem/NormalWeaponActor.h"
 
 #include "Rendering/SkeletalMeshRenderData.h"
 #include "Rendering/SkeletalMeshLODRenderData.h"
@@ -184,11 +185,22 @@ void ABaseZombie::PossessedBy(AController* NewController)
 // 좀비가 공격을 받았을 때
 float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
+	ANormalWeaponActor* Weapon = Cast<ANormalWeaponActor>(DamageCauser);
+
+	if (Weapon == nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] TakeDamage - Weapon is nullptr!!! No Damage!")));
+		return 0;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Attacker Location: %s"), *Weapon->GetActorLocation().ToString());
+	UE_LOG(LogTemp, Log, TEXT("Attacker Rotation: %s"), *Weapon->OwnerCharacter->GetViewRotation().ToString());
+
+	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->OwnerCharacter->GetViewRotation());
 	BloodFX->OwnerZombie = this;
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+
 	SetHP(GetHP() - Damage);
 	BeAttacked();
 
