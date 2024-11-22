@@ -14,6 +14,8 @@ public class Project : ModuleRules
 
         PrivateDependencyModuleNames.AddRange(new string[] { "Sockets", "Networking" });
 
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+
         PrivateIncludePaths.AddRange(new string[]
         {
             "Project/Protocol/"

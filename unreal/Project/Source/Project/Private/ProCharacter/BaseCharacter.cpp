@@ -289,7 +289,6 @@ void ABaseCharacter::BeginPlay()
 		}
 
 		OtherPlayerUIWidget->Character = this;
-		OtherPlayerUIWidget->m_iOtherPlayerUINumber = 1;
 		OtherPlayerUIWidget->Init();
 		OtherPlayerUIWidget->AddToViewport();
 		OtherPlayerUIWidget->SetVisibility(ESlateVisibility::Visible);
@@ -311,7 +310,6 @@ void ABaseCharacter::BeginPlay()
 		}
 
 		OtherPlayer2UIWidget->Character = this;
-		OtherPlayer2UIWidget->m_iOtherPlayerUINumber = 2;
 		OtherPlayer2UIWidget->Init();
 		OtherPlayer2UIWidget->AddToViewport();
 		OtherPlayer2UIWidget->SetVisibility(ESlateVisibility::Visible);
@@ -333,14 +331,17 @@ void ABaseCharacter::BeginPlay()
 		}
 
 		OtherPlayer3UIWidget->Character = this;
-		OtherPlayer3UIWidget->m_iOtherPlayerUINumber = 3;
 		OtherPlayer3UIWidget->Init();
 		OtherPlayer3UIWidget->AddToViewport();
 		OtherPlayer3UIWidget->SetVisibility(ESlateVisibility::Visible);
 
 		FVector2D Offset(0, 700); 
 		OtherPlayer3UIWidget->SetRenderTranslation(Offset);
+
+		OtherPlayerUIOffset(GameInstance->ClientSocketPtr->GetMyPlayerId());
 	}
+
+	
 
 
 	if (GameUIClass != nullptr) {
@@ -553,15 +554,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 		GameTimerUIWidget->UpdateTimer();
 	}
 
-	if (OtherPlayerUIWidget) {
-		//OtherPlayerUIWidget->UpdateOtherPlayerUI(float otherplayerid, float hp);
-	}
-	if (OtherPlayer2UIWidget) {
-		//OtherPlayer2UIWidget->UpdateOtherPlayerUI(float otherplayerid, float hp);
-	}
-	if (OtherPlayer3UIWidget) {
-		//OtherPlayer3UIWidget->UpdateOtherPlayerUI(float otherplayerid, float hp);
-	}
 
 }
 
@@ -630,6 +622,44 @@ void ABaseCharacter::PlayDead()
 	}
 
 	ProStartGameDeadEnd();
+}
+
+void ABaseCharacter::OtherPlayerUIOffset(uint32 playerid)
+{
+	if (playerid == 1) {
+		OtherPlayerUIWidget->m_iOtherPlayerUINumber = 2;
+		OtherPlayer2UIWidget->m_iOtherPlayerUINumber = 3;
+		OtherPlayer3UIWidget->m_iOtherPlayerUINumber = 4;
+	}
+	if (playerid == 2) {
+		OtherPlayerUIWidget->m_iOtherPlayerUINumber = 1;
+		OtherPlayer2UIWidget->m_iOtherPlayerUINumber = 3;
+		OtherPlayer3UIWidget->m_iOtherPlayerUINumber = 4;
+	}
+	else if (playerid == 3) {
+		OtherPlayerUIWidget->m_iOtherPlayerUINumber = 1;
+		OtherPlayer2UIWidget->m_iOtherPlayerUINumber = 2;
+		OtherPlayer3UIWidget->m_iOtherPlayerUINumber = 4;
+	}
+	else if (playerid == 4) {
+		OtherPlayerUIWidget->m_iOtherPlayerUINumber = 1;
+		OtherPlayer2UIWidget->m_iOtherPlayerUINumber = 2;
+		OtherPlayer3UIWidget->m_iOtherPlayerUINumber = 3;
+	}
+
+}
+
+void ABaseCharacter::UpdateOtherPlayerUI(uint32 playerid, float hp , uint32 charactertype) // playername 추가 필요
+{
+	if (OtherPlayerUIWidget->m_iOtherPlayerUINumber == playerid) {
+		OtherPlayerUIWidget->UpdateOtherPlayerUI(hp, charactertype);
+	}
+	else if (OtherPlayer2UIWidget->m_iOtherPlayerUINumber == playerid) {
+		OtherPlayer2UIWidget->UpdateOtherPlayerUI(hp, charactertype);
+	}
+	else if (OtherPlayer3UIWidget->m_iOtherPlayerUINumber == playerid) {
+		OtherPlayer3UIWidget->UpdateOtherPlayerUI(hp, charactertype);
+	}
 }
 
 
@@ -1058,6 +1088,8 @@ void ABaseCharacter::InventoryOnOff()
 
 void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
+	UE_LOG(LogTemp, Warning, TEXT("GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
+	
 	if (m_bIsAttacking) {
 		return;
 	}
@@ -1230,7 +1262,7 @@ void ABaseCharacter::PlayKey()
 
 		AInterActor* InterActor = Cast<AInterActor>(PlayerSight->GetHitActor());
 		if (InterActor) {
-			PickUp();
+			PlayKeyAnim();
 			if (InterActor->InterActorName == "CarActor") {
 				ACarActor* CarActor = Cast<ACarActor>(InterActor);
 
@@ -2168,6 +2200,24 @@ void ABaseCharacter::HealingStaminaTimerElapsed()
 	if (GetStamina() > 100) {
 		SetStamina(100);
 	}
+}
+
+void ABaseCharacter::PlayKeyAnim() // 애니메이션 실행 후 로딩 원 없애도록 수정 필요
+{
+
+	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
+
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	float WidgetPlaySpeed = 1.f;
+	float AnimPlaySpeed = 1.f;
+
+	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
+	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+	AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
+	AnimInstance->PlayKeyMontage();
+
 }
 
 
