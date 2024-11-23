@@ -185,12 +185,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			{
 				//처리 recvGetKey.itemid, recvGetKey.playerid
 
-				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID=%d"), recvGetkey.itemid);
-				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID"));
-				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID=%d"), recvGetkey.itemid);
-				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID=%d"), recvGetkey.itemid);
-				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID=%d"), recvGetkey.itemid);
-
+				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: itemid= %d"), recvGetkey.itemid);
 				APawn* ControlledPawn = GetPawn();
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
 				{
@@ -206,6 +201,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				//처리 recvEscapeRoot.playerid, recvEscapeRoot.root
+
 			}
 		}
 

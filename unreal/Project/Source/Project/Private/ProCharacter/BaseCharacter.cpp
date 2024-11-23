@@ -681,24 +681,132 @@ void ABaseCharacter::UpdateOtherPlayerUI(uint32 playerid, float hp , uint32 char
 void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 {
 	// 옥상 키였을때는 5분 지났는지 timerwidget 확인 플레이어id 활용해서 해당 ui로 이동
-	
 	if (keyid == 0) {
-
+		++(TextMissionUIWidget->m_iFindCarKey);
 	}
 	else if (keyid == 1) {
-
+		++(TextMissionUIWidget->m_iFindRoofKey);
 	}
+	//key = 1만 id=0만 받음
+	UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: playerid= %d"), playerid);
+	UE_LOG(LogNet, Display, TEXT("OtherPlayerUIWidget->m_iOtherPlayerUINumber= %d"), OtherPlayerUIWidget->m_iOtherPlayerUINumber);
+	UE_LOG(LogNet, Display, TEXT("OtherPlayerUIWidget->m_iOtherPlayerUINumber= %d"), OtherPlayer2UIWidget->m_iOtherPlayerUINumber);
+	UE_LOG(LogNet, Display, TEXT("OtherPlayerUIWidget->m_iOtherPlayerUINumber= %d"), OtherPlayer3UIWidget->m_iOtherPlayerUINumber);
+	UE_LOG(LogNet, Display, TEXT("OtherPlayerInven[keyid].Count = %d"), OtherPlayerInven[keyid].Count);
 
-	if (OtherPlayerUIWidget->m_iOtherPlayerUINumber == playerid) {
-		// 해당 슬롯에 카운트부여 카운트가 1이면 이미지 생성해주기 
+	if (0 == playerid) {
+		if (keyid == 0) {
+			if (OtherPlayerInven[keyid].Count == 0) {
+				OtherPlayerInven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
+				OtherPlayerInven[keyid].Count = 1;
+			}
+			else {
+				++(OtherPlayerInven[keyid].Count);
+			}
+		}
+		else if (keyid == 1) {
+			if (OtherPlayerInven[keyid].Count == 0) {
+				OtherPlayerInven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
+				OtherPlayerInven[keyid].Count = 1;
+			}
+			else {
+				++(OtherPlayerInven[keyid].Count);
+			}
+		}
+		OtherPlayerUIWidget->Update();
 	}
 	else if (OtherPlayer2UIWidget->m_iOtherPlayerUINumber == playerid) {
+		if (keyid == 0) {
+			if (OtherPlayer2Inven[keyid].Count == 0) {
+				OtherPlayer2Inven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
+				OtherPlayer2Inven[keyid].Count = 1;
+			}
+			else {
+				++(OtherPlayer2Inven[keyid].Count);
+			}
 
+
+		}
+		else if (keyid == 1) {
+			if (OtherPlayer2Inven[keyid].Count == 0) {
+				OtherPlayer2Inven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
+				OtherPlayer2Inven[keyid].Count = 1;
+			}
+			else {
+				++(OtherPlayer2Inven[keyid].Count);
+			}
+		}
+		OtherPlayer2UIWidget->Update();
 	}
 	else if (OtherPlayer3UIWidget->m_iOtherPlayerUINumber == playerid) {
+		if (keyid == 0) {
+			if (OtherPlayer3Inven[keyid].Count == 0) {
+				OtherPlayer3Inven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
+				OtherPlayer3Inven[keyid].Count = 1;
+			}
+			else {
+				++(OtherPlayer3Inven[keyid].Count);
+			}
+
+
+		}
+		else if (keyid == 1) {
+			if (OtherPlayer3Inven[keyid].Count == 0) {
+				OtherPlayer3Inven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
+				OtherPlayer3Inven[keyid].Count = 1;
+			}
+			else {
+				++(OtherPlayer3Inven[keyid].Count);
+			}
+		}
+		OtherPlayer3UIWidget->Update();
+	}
+
+	if (keyid == 0 && TextMissionUIWidget->m_iFindCarKey == 1) {
+		if (!(GameTimerUIWidget->RoofTopClose)) {
+			FText KText = FText::FromString(TEXT("차 키를 찾았습니다."));
+			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
+			PlaySoundForPlayer(Sound);
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+			Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT2();
+		}
 
 	}
+	else if (keyid == 1 && TextMissionUIWidget->m_iFindRoofKey == 1) {
+		FText KText = FText::FromString(TEXT("옥상 키를 찾았습니다."));
+		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
+		PlaySoundForPlayer(Sound);
+		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+		Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT1();
+	}
+	else if (keyid == 1 && TextMissionUIWidget->m_iFindRoofKey == 2) {
+		FText KText = FText::FromString(TEXT("옥상 키를 찾았습니다."));
+		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
+		PlaySoundForPlayer(Sound);
+		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+		Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT11();
+	}
+
 }
+
+void ABaseCharacter::PlaySoundAtLocationForPlayer(USoundBase* Sound, FVector Location)
+{
+	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+	if (controller && controller->IsLocalController() && Sound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(controller, Sound, Location);
+	}
+}
+
+void ABaseCharacter::PlaySoundForPlayer(USoundBase* Sound)
+{
+	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+	if (controller && controller->IsLocalController() && Sound)
+	{
+		UGameplayStatics::PlaySound2D(controller, Sound);
+	}
+}
+
 
 
 bool ABaseCharacter::DraggingSwap(int from, ESlotType fromtype, int to, ESlotType totype)
@@ -1084,7 +1192,10 @@ void ABaseCharacter::InventoryOnOff()
 			controller->bShowMouseCursor = false;
 
 			FInputModeGameOnly InputModeGameOnly;
+
 			controller->SetInputMode(InputModeGameOnly);
+			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/invenopen.invenopen")); // 에셋 경로
+			PlaySoundForPlayer(Sound);
 		}
 		else {
 			SetInventory(true);
@@ -1095,6 +1206,8 @@ void ABaseCharacter::InventoryOnOff()
 			FInputModeGameAndUI InputModeUIOnly;
 			//FInputModeUIOnly InputModeUIOnly;
 			controller->SetInputMode(InputModeUIOnly);
+			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/invenclose.invenclose")); // 에셋 경로
+			PlaySoundForPlayer(Sound);
 
 		}
 	}

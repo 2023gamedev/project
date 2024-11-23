@@ -101,7 +101,7 @@ ItemController::~ItemController()
 void ItemController::ItemRandomLocationSetting()
 {
     // 0~19Àº B1 20~39´Â F1 40~59´Â F2
-// B1
+    // B1
     ItemRandomLocationStruct[0].sLocation = FVector(2330.f, 3200.f, 975.0626f);
     ItemRandomLocationStruct[1].sLocation = FVector(1880.f, 3870.f, 975.0626f);
     ItemRandomLocationStruct[2].sLocation = FVector(400.f, 3650.f, 975.0626f);
