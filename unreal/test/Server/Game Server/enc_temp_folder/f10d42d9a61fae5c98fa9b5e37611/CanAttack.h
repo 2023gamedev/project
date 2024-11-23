@@ -18,7 +18,7 @@ public:
                 continue;
             }
             // 연결 끊긴 플레이어 무시
-            if (!g_players[player.first]) {
+            if (g_players[player.first]->connected == false) {
                 continue;
             }
 
