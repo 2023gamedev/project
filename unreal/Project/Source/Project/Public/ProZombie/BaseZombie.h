@@ -173,7 +173,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
 	UProceduralMeshComponent* CutProceduralMesh_1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh") 
 	UProceduralMeshComponent* CutProceduralMesh_2;
 
 	void CreativeProceduralMesh(FVector planeposition, FVector planenormal);

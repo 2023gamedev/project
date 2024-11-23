@@ -12,9 +12,9 @@ ABloodNiagaEffect::ABloodNiagaEffect()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
+	ProcMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Blood's ProcMesh"));
 
-	RootComponent = Mesh;
+	RootComponent = ProcMesh;
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX generated");
 
@@ -38,15 +38,17 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (spawn_flag) {
-		BloodFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
+		UNiagaraComponent* NewBloodFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
 			FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z),
 			FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
 
-		if (BloodFXComponent)
+		if (NewBloodFX)
 		{
-			BloodFXComponent->SetNiagaraVariableInt(FString("User.Blood_SpawnCount"), blood_spawncount);
+			NewBloodFX->SetNiagaraVariableInt(FString("User.Blood_SpawnCount"), blood_spawncount);
 
-			BloodFXComponent->Activate();
+			BloodFXComponents.Add(NewBloodFX);
+
+			NewBloodFX->Activate();
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
 		}
@@ -55,13 +57,26 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 	}
 }
 
-
 void ABloodNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
-	if (BloodFXComponent)
-		BloodFXComponent->Deactivate();
+	for (UNiagaraComponent* BloodFX : BloodFXComponents)
+	{
+		if (BloodFX)
+		{
+			BloodFX->Deactivate();  // 비활성화
+			BloodFX->DestroyComponent();  // 컴포넌트 제거
+		}
+	}
+
+	// 배열 비우기
+	BloodFXComponents.Empty();
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX ended");
 
 	Destroy();
+}
+
+void ABloodNiagaEffect::SpawnBloodEffect()
+{
+
 }

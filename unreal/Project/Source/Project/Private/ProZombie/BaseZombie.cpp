@@ -46,7 +46,7 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 400.f;
 
 	BloodFX = CreateDefaultSubobject<ABloodNiagaEffect>(TEXT("BloodFX"));
-
+	 
 	BloodFX = nullptr;
 
 	ShoutingFX = CreateDefaultSubobject<AShoutingNiagaEffect>(TEXT("ShoutingFX"));

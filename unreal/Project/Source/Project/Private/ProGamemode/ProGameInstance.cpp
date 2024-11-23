@@ -52,7 +52,7 @@ void UProGameInstance::InitSocket()
 }
 
 void UProGameInstance::LoadLevelWithLoadingUI(FName LevelName)
-{
+{ 
     // 로딩 UI를 생성 및 화면에 표시
     if (!LoadingUI)
     {

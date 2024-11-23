@@ -90,7 +90,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 			if (WeaponName == "ButchersKnife" || WeaponName == "FireAxe" || WeaponName == "SashimiKnife") {
 
 				TArray<FVector> PlaneVertexs;
-
+				 
 				if (PlaneComponent) {
 
 					for (int32 LODIndex = 0; LODIndex < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources.Num(); ++LODIndex)

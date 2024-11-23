@@ -13,7 +13,7 @@ AShoutingNiagaEffect::AShoutingNiagaEffect()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
-
+ 
 	RootComponent = Mesh;
 
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NE(TEXT("/Script/Niagara.NiagaraSystem'/Game/ShoutingEffect.ShoutingEffect'"));
