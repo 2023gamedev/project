@@ -56,7 +56,7 @@ void UProGameInstance::LoadLevelWithLoadingUI(FName LevelName)
     // 로딩 UI를 생성 및 화면에 표시
     if (!LoadingUI)
     {
-        TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/PathTo/YourLoadingUI"));
+        TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/UI/BP_LoadingUI.BP_LoadingUI"));
         if (WidgetClass)
         {
             LoadingUI = Cast<ULoadingUI>(CreateWidget(GetWorld(), WidgetClass));

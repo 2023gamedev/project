@@ -155,6 +155,7 @@ void ALobbyPlayer::Tick(float DeltaTime)
         if (ALobbyGameMode* MyGameMode = Cast<ALobbyGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
         {
             MyGameMode->LobbyStageClear();
+			GameInstance->ClientSocketPtr->b_allready = false;
         }
     }
 
