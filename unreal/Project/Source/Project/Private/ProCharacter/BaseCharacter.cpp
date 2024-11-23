@@ -207,7 +207,7 @@ ABaseCharacter::ABaseCharacter()
 	SpringArm->bDoCollisionTest = true;
 	bUseControllerRotationYaw = false;
 
-
+	GetMesh()->SetCollisionProfileName("NoCollision");
 
 	// 스포트 라이트의 속성 설정 (위치, 회전 등)
 	FlashLight->SetRelativeLocationAndRotation(FVector(250.f, 0.f, 47.f), FRotator(0.f, 0.f, 0.f));
@@ -289,6 +289,7 @@ void ABaseCharacter::BeginPlay()
 		}
 
 		OtherPlayerUIWidget->Character = this;
+		OtherPlayerUIWidget->m_iOtherPlayerUIIndex = 1;
 		OtherPlayerUIWidget->Init();
 		OtherPlayerUIWidget->AddToViewport();
 		OtherPlayerUIWidget->SetVisibility(ESlateVisibility::Visible);
@@ -310,6 +311,7 @@ void ABaseCharacter::BeginPlay()
 		}
 
 		OtherPlayer2UIWidget->Character = this;
+		OtherPlayer2UIWidget->m_iOtherPlayerUIIndex = 2;
 		OtherPlayer2UIWidget->Init();
 		OtherPlayer2UIWidget->AddToViewport();
 		OtherPlayer2UIWidget->SetVisibility(ESlateVisibility::Visible);
@@ -331,6 +333,7 @@ void ABaseCharacter::BeginPlay()
 		}
 
 		OtherPlayer3UIWidget->Character = this;
+		OtherPlayer3UIWidget->m_iOtherPlayerUIIndex = 3;
 		OtherPlayer3UIWidget->Init();
 		OtherPlayer3UIWidget->AddToViewport();
 		OtherPlayer3UIWidget->SetVisibility(ESlateVisibility::Visible);
@@ -620,12 +623,19 @@ void ABaseCharacter::PlayDead()
 
 	FText KText = FText::FromString(TEXT("당신은 죽었습니다."));
 	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+	
+	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
 
+
+	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
 
 	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 	if (controller != nullptr) {
 		controller->DisabledControllerInput();
 	}
+
+	
 
 	ProStartGameDeadEnd();
 }
@@ -665,6 +675,28 @@ void ABaseCharacter::UpdateOtherPlayerUI(uint32 playerid, float hp , uint32 char
 	}
 	else if (OtherPlayer3UIWidget->m_iOtherPlayerUINumber == playerid) {
 		OtherPlayer3UIWidget->UpdateOtherPlayerUI(hp, charactertype);
+	}
+}
+
+void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
+{
+	// 옥상 키였을때는 5분 지났는지 timerwidget 확인 플레이어id 활용해서 해당 ui로 이동
+	
+	if (keyid == 0) {
+
+	}
+	else if (keyid == 1) {
+
+	}
+
+	if (OtherPlayerUIWidget->m_iOtherPlayerUINumber == playerid) {
+		// 해당 슬롯에 카운트부여 카운트가 1이면 이미지 생성해주기 
+	}
+	else if (OtherPlayer2UIWidget->m_iOtherPlayerUINumber == playerid) {
+
+	}
+	else if (OtherPlayer3UIWidget->m_iOtherPlayerUINumber == playerid) {
+
 	}
 }
 

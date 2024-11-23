@@ -437,6 +437,7 @@ public:
 
 	void OtherPlayerUIOffset(uint32 playerid);
 	void UpdateOtherPlayerUI(uint32 playerid, float hp, uint32 charactertype);
+	void UpdatePickUpKey(uint32 keyid, uint32 playerid);
 
 	FTimerHandle GameDeadEndHandle;
 	void ProStartGameDeadEnd();

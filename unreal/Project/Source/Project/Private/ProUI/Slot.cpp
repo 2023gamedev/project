@@ -11,6 +11,11 @@ void USlot::Init()
 	Refresh();
 }
 
+void USlot::InitOPU(int otherplayeruiindex)
+{
+	RefreshOPU(otherplayeruiindex);
+}
+
 
 void USlot::Update()
 {
@@ -93,25 +98,47 @@ void USlot::Refresh()
 		}
 		break;
 	}
-	case ESlotType::SLOT_OTHER_PLAYER:
-	{
-		FItemDataStructure& dataquick = Character->OtherPlayerInven[SlotIndex];
 
+	}
+}
+
+void USlot::RefreshOPU(int otherplayeruiindex)
+{
+	if (otherplayeruiindex == 1) {
+		FItemDataStructure& dataquick = Character->OtherPlayerInven[SlotIndex];
 		if (dataquick.Texture != nullptr) {
 			SetTexture(dataquick.Texture);
 		}
 
 		ItemCount = dataquick.Count;
 
-		if (ItemCount <= 1) {
-			Text->SetVisibility(ESlateVisibility::Hidden);
-		}
-		else {
-			Text->SetVisibility(ESlateVisibility::Visible);
-			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
-		}
-		break;
+
 	}
+	else if (otherplayeruiindex == 2) {
+		FItemDataStructure& dataquick = Character->OtherPlayer2Inven[SlotIndex];
+		if (dataquick.Texture != nullptr) {
+			SetTexture(dataquick.Texture);
+		}
+
+		ItemCount = dataquick.Count;
+
+	}
+	else if (otherplayeruiindex == 3) {
+		FItemDataStructure& dataquick = Character->OtherPlayer3Inven[SlotIndex];
+		if (dataquick.Texture != nullptr) {
+			SetTexture(dataquick.Texture);
+		}
+
+		ItemCount = dataquick.Count;
+
+	}
+
+	if (ItemCount <= 1) {
+		Text->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else {
+		Text->SetVisibility(ESlateVisibility::Visible);
+		Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
 	}
 }
 
