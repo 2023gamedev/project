@@ -77,7 +77,26 @@ void ABaseZombie::Tick(float DeltaTime)
 {
 	if (CutProceduralMesh_1) {
 		if (procMesh_AddImpulse_1 == false) {
-			CutProceduralMesh_1->AddImpulseAtLocation(FVector(0.f, 0.f, 10000.0f), CutProceduralMesh_1->K2_GetComponentLocation());
+			UE_LOG(LogTemp, Log, TEXT("(CutProcedural_1)"));
+
+			float weight = CutProceduralMesh_1->CalculateMass();
+			UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
+
+			float x_baseImpulse = 3500.0f; //FMath::RandRange(2000.0f, 5000.0f);
+			float x_impulse = SetImpulseByWeight(weight, x_baseImpulse);
+			UE_LOG(LogTemp, Log, TEXT("X Impulse: %f"), x_impulse);
+
+			float y_baseImpulse = 3500.0f; //FMath::RandRange(2000.0f, 5000.0f);
+			float y_impulse = SetImpulseByWeight(weight, y_baseImpulse);
+			UE_LOG(LogTemp, Log, TEXT("Y Impulse: %f"), y_impulse);
+
+			float z_baseImpulse = 12500.0f; //FMath::RandRange(7000.0f, 10000.0f);
+			float z_impulse = SetImpulseByWeight(weight, z_baseImpulse);
+			UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
+
+			UE_LOG(LogTemp, Log, TEXT("Weapon Foward Vector: %s"), *WeaponForward.ToString());
+
+			CutProceduralMesh_1->AddImpulseAtLocation(FVector(WeaponForward.X * x_impulse, WeaponForward.Y * y_impulse, WeaponForward.Z * z_impulse), CutProceduralMesh_1->K2_GetComponentLocation());
 			procMesh_AddImpulse_1 = true;
 		}
 
@@ -98,7 +117,26 @@ void ABaseZombie::Tick(float DeltaTime)
 
 	if (CutProceduralMesh_2) {
 		if (procMesh_AddImpulse_2 == false) {
-			CutProceduralMesh_2->AddImpulseAtLocation(FVector(10000.f, 10000.f, 0.f), CutProceduralMesh_2->K2_GetComponentLocation());
+			UE_LOG(LogTemp, Log, TEXT("(CutProcedural_2)"));
+
+			float weight = CutProceduralMesh_2->CalculateMass();
+			UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
+
+			float x_baseImpulse = 10000.0f; //FMath::RandRange(8000.0f, 12000.0f);
+			float x_impulse = SetImpulseByWeight(weight, x_baseImpulse);
+			UE_LOG(LogTemp, Log, TEXT("X Impulse: %f"), x_impulse);
+
+			float y_baseImpulse = 10000.0f; //FMath::RandRange(8000.0f, 12000.0f);
+			float y_impulse = SetImpulseByWeight(weight, y_baseImpulse);
+			UE_LOG(LogTemp, Log, TEXT("Y Impulse: %f"), y_impulse);
+
+			float z_baseImpulse = 3000.0f; //FMath::RandRange(2000.0f, 4000.0f);
+			float z_impulse = SetImpulseByWeight(weight, z_baseImpulse);
+			UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
+
+			UE_LOG(LogTemp, Log, TEXT("Weapon Backward Vector: %s"), *(- WeaponForward).ToString());
+
+			CutProceduralMesh_2->AddImpulseAtLocation(FVector(-WeaponForward.X * x_impulse, -WeaponForward.Y * y_impulse, z_impulse), CutProceduralMesh_2->K2_GetComponentLocation());
 			procMesh_AddImpulse_2 = true;
 		}
 
@@ -182,6 +220,16 @@ void ABaseZombie::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
+// 100kg 기준 baseImpulse 만큼의 Impulse 적용
+float ABaseZombie::SetImpulseByWeight(float targetWeight, float baseImpulse)
+{
+	float baseWeight = 100.0f;
+
+	float targetImpulse = baseImpulse * (targetWeight / baseWeight);
+
+	return targetImpulse;
+}
+
 // 좀비가 공격을 받았을 때
 float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
@@ -200,9 +248,11 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 
 	UE_LOG(LogTemp, Log, TEXT("Weapon Location: %s"), *Weapon->GetActorLocation().ToString());
 	UE_LOG(LogTemp, Log, TEXT("Weapon Rotation: %s"), *Weapon->GetActorRotation().ToString());
+	//UE_LOG(LogTemp, Log, TEXT("Weapon Rotation Vector: %s"), *Weapon->GetActorRotation().Vector().ToString());
 
-	
+	// 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
 	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation());
+
 	if (GetHP() <= 0) {	// 죽을때(절단 될 때)는 피가 더 많이 튀도록
 		BloodFX->blood_spawncount = FMath::RandRange(300, 400);
 	}
@@ -264,14 +314,14 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	TArray<FVector> Vertices_Convex;
 	int interval_Convex = 100;			// Convex 에서 사용할 vertices 개수 조절 (원래 vertices의 1/? 개)
 
-	UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
+	//UE_LOG(LogTemp, Log, TEXT("RenderSections.Num (int) %d"), DataArray.RenderSections.Num());
 
 	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
 	{
 		const int32 NumSourceVertices = DataArray.RenderSections[j].NumVertices;
 		const int32 BaseVertexIndex = DataArray.RenderSections[j].BaseVertexIndex;
 
-		UE_LOG(LogTemp, Log, TEXT("RenderSections[%d] - NumSourceVertices.Num (int) %d"), j, DataArray.RenderSections[j].NumVertices);
+		//UE_LOG(LogTemp, Log, TEXT("RenderSections[%d] - NumSourceVertices.Num (int) %d"), j, DataArray.RenderSections[j].NumVertices);
 
 		for (int32 i = 0; i < NumSourceVertices; i++)
 		{

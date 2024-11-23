@@ -67,7 +67,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
-
+		
 
 		// 좀비 hp 동기화
 		int ZombieId = Zombie->GetZombieId();
@@ -86,6 +86,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		// 좀비 사망시
 		if (Zombie->GetHP() <= 0) {
 			Zombie->SetDie(true);
+
 			if (WeaponName == "ButchersKnife" || WeaponName == "FireAxe" || WeaponName == "SashimiKnife") {
 
 				TArray<FVector> PlaneVertexs;
@@ -106,7 +107,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 							PlaneVertexs.Add((FVector)WorldPosition);
 
-							UE_LOG(LogClass, Log, TEXT("Plane - Index(%d) : (%s)"), Index, *WorldPosition.ToString());
+							//UE_LOG(LogClass, Log, TEXT("Plane - Index(%d) : (%s)"), Index, *WorldPosition.ToString());
 
 						}
 					}
@@ -181,7 +182,8 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							0,
 							1.0f
 						);
-
+						
+						Zombie->WeaponForward = GetActorRotation().Vector();
 						Zombie->CutZombie(planeposition_center, planenormal);
 					}
 				}

@@ -97,7 +97,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player12432543543535: PlayerId=%d"), recvPlayerData.PlayerId);
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%f"), recvPlayerData.hp);
-				UE_LOG(LogNet, Display, TEXT("Update Other Player        : hp=%f"), recvPlayerData.hp);
+				//UE_LOG(LogNet, Display, TEXT("Update Other Player        : hp=%f"), recvPlayerData.hp);
 
 				// 빙의된 Pawn이 ACharacter라면 캐스팅
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
@@ -184,6 +184,21 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				//처리 recvGetKey.itemid, recvGetKey.playerid
+
+				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID=%d"), recvGetkey.itemid);
+				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID"));
+				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID=%d"), recvGetkey.itemid);
+				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID=%d"), recvGetkey.itemid);
+				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: KEYID=%d"), recvGetkey.itemid);
+
+				APawn* ControlledPawn = GetPawn();
+				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
+				{
+					if (ControlledCharacter) {
+						ControlledCharacter->UpdatePickUpKey(recvGetkey.itemid, recvGetkey.playerid);
+					}
+				}
+
 			}
 		}
 		

@@ -15,7 +15,7 @@
 
 
 
-// ΩΩ∑‘ ≈¨∑°Ω∫
+// Ïä¨Î°Ø ÌÅ¥ÎûòÏä§
 UCLASS()
 class PROJECT_API USlot : public UBaseUI
 {
@@ -24,12 +24,14 @@ class PROJECT_API USlot : public UBaseUI
 
 public:
 	void Init() override;
+	
 	void Update() override;
 	void SetType(ESlotType type);
 	void SetTexture(UTexture2D* tex);
 
 	void Refresh();
-
+	void InitOPU(int otherplayeruiindex);
+	void RefreshOPU(int otherplayeruiindex);
 
 	void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
 	bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
