@@ -26,6 +26,8 @@ public:
 	void UpdateOtherPlayerUI(float hp, uint32 charactertype);
 	void UpdateHPBar(float hp);
 
+	void UpdateDeadUI();
+
 
 	void RefreshSlot(int slotindex);
 
@@ -47,8 +49,11 @@ public:
 	int m_iOtherPlayerUINumber;
 	int iMaxHealthFlag = 0;
 	bool m_bPlayerImg = false;
+	bool m_bPlayerDeadImg = false;
 	bool m_bPlayerid = false;
 	float m_fMaxHealth;
+	int m_iOtherPlayerUIIndex;
+	int m_iCharacterType;
 private:
 	TArray<USlot*> Slots;
 };
