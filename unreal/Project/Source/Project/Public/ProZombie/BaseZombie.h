@@ -187,6 +187,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	AShoutingNiagaEffect* ShoutingFX;
 
+	float SetImpulseByWeight(float targetWeight, float baseImpulse);
+
+	UPROPERTY(EditAnywhere)
+	FVector WeaponForward;
+
 private:
 
 	UPROPERTY(EditAnywhere)
