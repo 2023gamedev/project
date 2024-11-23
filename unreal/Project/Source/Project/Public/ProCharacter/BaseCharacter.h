@@ -208,6 +208,10 @@ public:
 	UFUNCTION()
 	void BleedHealingMontageEnded(UAnimMontage* Montage, bool interrup);
 
+	//Sound
+	void PlaySoundAtLocationForPlayer(USoundBase* Sound, FVector Location);
+	void PlaySoundForPlayer(USoundBase* Sound);
+
 	// input
 	void MoveForward(FVector RotateYaw, float NewAxisValue);
 	void MoveLeft(FVector RotateYaw, float NewAxisValue);

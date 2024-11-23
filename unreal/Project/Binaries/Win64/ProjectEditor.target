@@ -30,6 +30,45 @@
 			"Type": "SymbolFile"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidDeviceDetection.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidDeviceDetection.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidPlatformEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidPlatformEditor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidRuntimeSettings.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidRuntimeSettings.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidTargetPlatform.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidTargetPlatform.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+>>>>>>> 5b387fc8b98c65c148bcfb2a5ffacbe87f262792
 			"Path": "$(EngineDir)/Binaries/Win64/OpenColorIO_2_2.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -286,6 +325,21 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-BuildSettings.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CEF3Utils.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CEF3Utils.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+>>>>>>> 5b387fc8b98c65c148bcfb2a5ffacbe87f262792
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CSVtoSVG.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -778,6 +832,13 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-LandscapeEditorUtilities.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+>>>>>>> 5b387fc8b98c65c148bcfb2a5ffacbe87f262792
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-LauncherPlatform.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -838,6 +899,13 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MRMesh.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+>>>>>>> 5b387fc8b98c65c148bcfb2a5ffacbe87f262792
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MainFrame.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -942,6 +1010,13 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MessagingRpc.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+>>>>>>> 5b387fc8b98c65c148bcfb2a5ffacbe87f262792
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-MoviePlayer.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1454,6 +1529,7 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+<<<<<<< HEAD
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureEditor.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1464,6 +1540,50 @@
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.dll",
 			"Type": "DynamicLibrary"
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureCompressor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureEditor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormat.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormat.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatASTC.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatASTC.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatETC2.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatETC2.pdb",
+			"Type": "SymbolFile"
+>>>>>>> 5b387fc8b98c65c148bcfb2a5ffacbe87f262792
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatIntelISPCTexComp.dll",
@@ -1622,6 +1742,21 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+<<<<<<< HEAD
+=======
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-VulkanShaderFormat.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WebBrowser.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WebBrowser.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+>>>>>>> 5b387fc8b98c65c148bcfb2a5ffacbe87f262792
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WidgetCarousel.dll",
 			"Type": "DynamicLibrary"
 		},

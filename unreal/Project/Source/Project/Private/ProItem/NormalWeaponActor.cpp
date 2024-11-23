@@ -202,6 +202,9 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		--m_fWeaponDurability;
 		if (m_fWeaponDurability <= 0) {
 			OwnerCharacter->DestroyNormalWepaonItemSlot();
+			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/break.break")); // 에셋 경로
+
+			OwnerCharacter->PlaySoundForPlayer(Sound);
 		}
 
 	}
