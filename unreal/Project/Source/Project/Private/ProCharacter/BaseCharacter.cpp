@@ -924,14 +924,15 @@ void ABaseCharacter::GetItem()
 			PickUpUIWidget->Update();
 			OnPickUPUISlot();
 
-			ItemBoxId = itembox->GetItemBoxId();
-			PlayerSight->GetHitActor()->Destroy();
-
-			Send_Destroy(ItemBoxId);
 			if (itembox->ItemClassType == EItemClass::KEYITEM) {
 				// 아이템 id부분 수정 필요
 				Send_GetKey(1);
 			}
+
+			ItemBoxId = itembox->GetItemBoxId();
+			PlayerSight->GetHitActor()->Destroy();
+
+			Send_Destroy(ItemBoxId);
 		}
 	}
 
