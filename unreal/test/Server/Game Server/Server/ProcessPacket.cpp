@@ -104,7 +104,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                     float DeltaY = std::abs(player.second.y - Escape_Location.y);
 
                     // 범위를 벗어나는지 확인
-                    if (DeltaX >= 50.0f && DeltaY >= 50.0f && player.second.floor != Escape_Location.floor) {
+                    if (DeltaX >= 50.0f || DeltaY >= 50.0f || player.second.floor != Escape_Location.floor) {
                         bAllPlayersInRange = false; // 한 명이라도 범위를 벗어나면 false
                         break;
                     }
