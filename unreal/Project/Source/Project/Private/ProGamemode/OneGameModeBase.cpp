@@ -467,7 +467,7 @@ void AOneGameModeBase::SpawnInterActorStaticClasses()
 
 }
 
-void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, float hp)
+void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, std::string username, float hp)
 {
     UWorld* World = GetWorld();
 
@@ -528,7 +528,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         {
             // 새 캐릭터에 PlayerId 설정
             NewCharacter->SetPlayerId(PlayerID);
-            //NewCharacter->SetPlayerName();
+            NewCharacter->SetPlayerName(username);
             NewCharacter->SetHP(hp);  // 초기 HP 설정
         }
     }

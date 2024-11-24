@@ -15,6 +15,10 @@ public:
 
 	FLOOR floor;
 
+	std::string username;
+
+	int killcount;
+
 	//================================아래 변수들은 혹시 나중에 사용 할지 안할지 몰라서 회의해보고 수정하기
 	float health;		//체력
 

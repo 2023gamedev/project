@@ -117,6 +117,7 @@ public:
 	Destroy_Item recvDestroyItem;
 	Get_Key recvGetkey;
 	Escape_Root recvEscapeRoot;
+	GameClear recvGameClear;
 
 	uint32 PlayerId;
 	uint32 ZombieId;

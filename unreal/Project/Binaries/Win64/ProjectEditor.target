@@ -12,8 +12,8 @@
 	{
 		"MajorVersion": 5,
 		"MinorVersion": 3,
-		"PatchVersion": 2,
-		"Changelist": 29314046,
+		"PatchVersion": 1,
+		"Changelist": 28051148,
 		"CompatibleChangelist": 27405482,
 		"IsLicenseeVersion": 0,
 		"IsPromotedBuild": 0,
@@ -21,18 +21,6 @@
 		"BuildId": "27405482"
 	},
 	"BuildProducts": [
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.pdb",
-			"Type": "SymbolFile"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
-			"Type": "RequiredResource"
-		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/AgentInterface.dll",
 			"Type": "DynamicLibrary"
@@ -42,8 +30,6 @@
 			"Type": "SymbolFile"
 		},
 		{
-<<<<<<< HEAD
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidDeviceDetection.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -64,7 +50,6 @@
 			"Type": "RequiredResource"
 		},
 		{
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
 			"Path": "$(EngineDir)/Binaries/Win64/OpenColorIO_2_2.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -321,13 +306,10 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CEF3Utils.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CSVtoSVG.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -725,7 +707,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-IESFile.dll",
-<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -733,15 +714,6 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-=======
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-Icmp.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-ImageCore.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1511,15 +1483,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormat.dll",
-<<<<<<< HEAD
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-=======
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -1535,7 +1498,6 @@
 			"Type": "DynamicLibrary"
 		},
 		{
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatIntelISPCTexComp.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1692,13 +1654,10 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WebBrowser.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WidgetCarousel.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1892,6 +1851,26 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Animation/IKRig/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-Bridge.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-Bridge.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-MegascansPlugin.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-MegascansPlugin.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor.modules",
 			"Type": "RequiredResource"
 		},
 		{
@@ -3484,12 +3463,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/Binaries/Win64/UnrealEditor.modules",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
 			"Type": "RequiredResource"
 		},
 		{
@@ -3502,20 +3475,10 @@
 		},
 		{
 			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
-<<<<<<< HEAD
-=======
-=======
->>>>>>> C1124
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
->>>>>>> origin/main
 			"Type": "RequiredResource"
 		}
 	],
 	"RuntimeDependencies": [
-		{
-			"Path": "$(ProjectDir)/Project.uproject",
-			"Type": "UFS"
-		},
 		{
 			"Path": "$(EngineDir)/Binaries/ThirdParty/DbgHelp/dbghelp.dll",
 			"Type": "NonUFS"
@@ -21393,6 +21356,10 @@
 			"Type": "DebugNonUFS"
 		},
 		{
+			"Path": "$(EngineDir)/Binaries/Win64/EpicWebHelper.exe",
+			"Type": "NonUFS"
+		},
+		{
 			"Path": "$(EngineDir)/Binaries/Win64/OpenColorIO_2_2.dll",
 			"Type": "NonUFS"
 		},
@@ -24213,6 +24180,10 @@
 			"Type": "UFS"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Bridge/Bridge.uplugin",
+			"Type": "UFS"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Cameras/CameraShakePreviewer/CameraShakePreviewer.uplugin",
 			"Type": "UFS"
 		},
@@ -24790,6 +24761,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/XGEController.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Project.uproject",
 			"Type": "UFS"
 		}
 	],

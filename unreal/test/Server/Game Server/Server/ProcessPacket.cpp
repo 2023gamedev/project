@@ -54,6 +54,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
             //playerDB[Packet.playerid()] = pl; //-> 이렇게 사용하면 초기화 빼먹은 값 더미 값 씌워질 수 있음
+            playerDB[Packet.playerid()].username = Packet.username();
 
             playerDB[Packet.playerid()].x = Packet.x();
             playerDB[Packet.playerid()].y = Packet.y();
@@ -90,10 +91,15 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
 
         bool bAllPlayersInRange = true;
+        int alive_cnt = 0;
+        int dead_cnt = 0;
+        int bestkill_cnt = 0;
+        std::string bestkill_player;
+
         if (b_IsEscaping) {
             for (const auto& player : playerDB) {
                 if (player.second.health != 0) {
-
+                    alive_cnt++;
                     float DeltaX = std::abs(player.second.x - Escape_Location.x);
                     float DeltaY = std::abs(player.second.y - Escape_Location.y);
 
@@ -103,19 +109,35 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                         break;
                     }
                 }
+                else {
+                    dead_cnt++;
+                }
+
+                if (bestkill_cnt < player.second.killcount) {
+                    bestkill_cnt = player.second.killcount;
+                    bestkill_player = player.second.username;
+                }
             }
 
             if (bAllPlayersInRange) {
                 Protocol::game_clear clear_packet;
 
                 clear_packet.set_packet_type(20);
-                clear_packet.set_b_clear(true);
-
-                string serializedData;
-                clear_packet.SerializeToString(&serializedData);
+                clear_packet.set_root(Escape_Root);
+                clear_packet.set_alive_players(alive_cnt);
+                clear_packet.set_dead_players(dead_cnt);
+                clear_packet.set_open_player(Root_Open_Player);
+                
+                clear_packet.set_best_killcount(bestkill_cnt);
+                clear_packet.set_best_kill_player(bestkill_player);
 
                 for (const auto& player : g_players) {
                     if (player.second->isInGame) {
+
+                        clear_packet.set_my_killcount(playerDB[player.first].killcount);
+
+                        string serializedData;
+                        clear_packet.SerializeToString(&serializedData);
                         IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                     }
                 }
@@ -338,6 +360,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             if (z->ZombieData.zombieID == recvzombieid) {
                 z->zombieHP = max(0, z->zombieHP - Packet.damage());
 
+                if (z->zombieHP < 0) {
+                    playerDB[id].killcount++;
+                }
+
                 if (z->ZombieData.zombietype == 0 && z->zombieHP < z->NormalZombieStartHP) {
                     z->IsBeingAttacked = true;  // 좀비 피격중으로 변경
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
@@ -407,17 +433,25 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        // 문 연 위치 저장, 상태를 탈출 준비 상태로 변경
-        Escape_Location.x = playerDB[id].x;
-        Escape_Location.y = playerDB[id].y;
-        Escape_Location.floor = playerDB[id].floor;
+        if (Packet.root() == 2) {
+            roofkey_cnt++;
+        }
 
-        b_IsEscaping = true;
+        if (roofkey_cnt == 2 || Packet.root() == 1) {
+            // 문 연 위치 저장, 상태를 탈출 준비 상태로 변경
+            Escape_Location.x = playerDB[id].x;
+            Escape_Location.y = playerDB[id].y;
+            Escape_Location.floor = playerDB[id].floor;
+
+            b_IsEscaping = true;
+            Escape_Root = Packet.root();
+            Root_Open_Player = playerDB[Packet.playerid()].username;
+        }
 
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }

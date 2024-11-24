@@ -2494,6 +2494,16 @@ void ABaseCharacter::SetPlayerId(uint32 NewPlayerId)
 	PlayerId = NewPlayerId;
 }
 
+std::string ABaseCharacter::GetPlayerName() const
+{
+	return PlayerName;
+}
+
+void ABaseCharacter::SetPlayerName(std::string NewPlayerName)
+{
+	PlayerName = NewPlayerName;
+}
+
 void ABaseCharacter::UpdatePlayerData(FVector Location)
 {
 	NewLocation = Location;

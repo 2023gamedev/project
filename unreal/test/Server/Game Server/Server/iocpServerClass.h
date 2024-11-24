@@ -226,4 +226,8 @@ private:
 
 	Vector3D Escape_Location;
 	bool b_IsEscaping = false;
+	int Escape_Root;
+	string Root_Open_Player;
+
+	int roofkey_cnt = 0;
 };

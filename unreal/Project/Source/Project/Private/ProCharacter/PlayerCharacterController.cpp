@@ -90,7 +90,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			{
 				// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
 				MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
-					recvPlayerData.hp);
+					recvPlayerData.username, recvPlayerData.hp);
 
 				// 현재 컨트롤러가 빙의한 Pawn 가져오기
 				APawn* ControlledPawn = GetPawn();
@@ -205,10 +205,16 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
-		if (GameInstance->ClientSocketPtr->Q_gclear.try_pop(b_clear)) {
+		if (GameInstance->ClientSocketPtr->Q_gclear.try_pop(recvGameClear)) {
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
-				// 게임 클리어 함수 부르기
+				/*uint32 root;
+				uint32 alive_players;
+				uint32 dead_players;
+				std::string open_player;
+				uint32 my_kill_count;
+				uint32 best_kill_count;
+				std::string best_kill_player;*/
 			}
 		}
 

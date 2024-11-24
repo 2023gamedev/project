@@ -265,9 +265,10 @@ class Character final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayeridFieldNumber = 1,
-    kCharactertypeFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kUsernameFieldNumber = 14,
+    kPacketTypeFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
+    kCharactertypeFieldNumber = 3,
     kXFieldNumber = 4,
     kYFieldNumber = 5,
     kZFieldNumber = 6,
@@ -279,7 +280,30 @@ class Character final :
     kBJumpFieldNumber = 12,
     kIsingameFieldNumber = 13,
   };
-  // uint32 playerid = 1;
+  // string username = 14;
+  void clear_username();
+  const std::string& username() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_username(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* username);
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(const std::string& value);
+  std::string* _internal_mutable_username();
+  public:
+
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
@@ -288,22 +312,13 @@ class Character final :
   void _internal_set_playerid(uint32_t value);
   public:
 
-  // uint32 charactertype = 2;
+  // uint32 charactertype = 3;
   void clear_charactertype();
   uint32_t charactertype() const;
   void set_charactertype(uint32_t value);
   private:
   uint32_t _internal_charactertype() const;
   void _internal_set_charactertype(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // float x = 4;
@@ -404,9 +419,10 @@ class Character final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
+    uint32_t packet_type_;
     uint32_t playerid_;
     uint32_t charactertype_;
-    uint32_t packet_type_;
     float x_;
     float y_;
     float z_;
@@ -545,25 +561,25 @@ class jump final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayeridFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
   };
-  // uint32 playerid = 1;
-  void clear_playerid();
-  uint32_t playerid() const;
-  void set_playerid(uint32_t value);
-  private:
-  uint32_t _internal_playerid() const;
-  void _internal_set_playerid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.jump)
@@ -574,8 +590,8 @@ class jump final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    uint32_t playerid_;
     uint32_t packet_type_;
+    uint32_t playerid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -704,11 +720,20 @@ class Character_Attack final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayeridFieldNumber = 1,
-    kAttackFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
+    kAttackFieldNumber = 3,
   };
-  // uint32 playerid = 1;
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
@@ -717,22 +742,13 @@ class Character_Attack final :
   void _internal_set_playerid(uint32_t value);
   public:
 
-  // bool attack = 2;
+  // bool attack = 3;
   void clear_attack();
   bool attack() const;
   void set_attack(bool value);
   private:
   bool _internal_attack() const;
   void _internal_set_attack(bool value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.Character_Attack)
@@ -743,9 +759,9 @@ class Character_Attack final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t packet_type_;
     uint32_t playerid_;
     bool attack_;
-    uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -874,9 +890,9 @@ class Zombie final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kZombieidFieldNumber = 1,
-    kZombietypeFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kZombieidFieldNumber = 2,
+    kZombietypeFieldNumber = 3,
     kXFieldNumber = 4,
     kYFieldNumber = 5,
     kZFieldNumber = 6,
@@ -884,7 +900,16 @@ class Zombie final :
     kYawFieldNumber = 8,
     kRollFieldNumber = 9,
   };
-  // uint32 zombieid = 1;
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 zombieid = 2;
   void clear_zombieid();
   uint32_t zombieid() const;
   void set_zombieid(uint32_t value);
@@ -893,22 +918,13 @@ class Zombie final :
   void _internal_set_zombieid(uint32_t value);
   public:
 
-  // uint32 zombietype = 2;
+  // uint32 zombietype = 3;
   void clear_zombietype();
   uint32_t zombietype() const;
   void set_zombietype(uint32_t value);
   private:
   uint32_t _internal_zombietype() const;
   void _internal_set_zombietype(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // float x = 4;
@@ -973,9 +989,9 @@ class Zombie final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t packet_type_;
     uint32_t zombieid_;
     uint32_t zombietype_;
-    uint32_t packet_type_;
     float x_;
     float y_;
     float z_;
@@ -1110,11 +1126,20 @@ class Zombie_attack final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kZombieidFieldNumber = 1,
-    kPlayeridFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kZombieidFieldNumber = 2,
+    kPlayeridFieldNumber = 3,
   };
-  // uint32 zombieid = 1;
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 zombieid = 2;
   void clear_zombieid();
   uint32_t zombieid() const;
   void set_zombieid(uint32_t value);
@@ -1123,22 +1148,13 @@ class Zombie_attack final :
   void _internal_set_zombieid(uint32_t value);
   public:
 
-  // uint32 playerid = 2;
+  // uint32 playerid = 3;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
   private:
   uint32_t _internal_playerid() const;
   void _internal_set_playerid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.Zombie_attack)
@@ -1149,9 +1165,9 @@ class Zombie_attack final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t packet_type_;
     uint32_t zombieid_;
     uint32_t playerid_;
-    uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1280,11 +1296,20 @@ class Zombie_hp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kZombieidFieldNumber = 1,
-    kDamageFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kZombieidFieldNumber = 2,
+    kDamageFieldNumber = 3,
   };
-  // uint32 zombieid = 1;
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 zombieid = 2;
   void clear_zombieid();
   uint32_t zombieid() const;
   void set_zombieid(uint32_t value);
@@ -1293,22 +1318,13 @@ class Zombie_hp final :
   void _internal_set_zombieid(uint32_t value);
   public:
 
-  // float damage = 2;
+  // float damage = 3;
   void clear_damage();
   float damage() const;
   void set_damage(float value);
   private:
   float _internal_damage() const;
   void _internal_set_damage(float value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.Zombie_hp)
@@ -1319,9 +1335,9 @@ class Zombie_hp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t packet_type_;
     uint32_t zombieid_;
     float damage_;
-    uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1450,10 +1466,10 @@ class ZombieDataList final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kZombiesFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kZombiesFieldNumber = 2,
+    kPacketTypeFieldNumber = 1,
   };
-  // repeated .Protocol.Zombie zombies = 1;
+  // repeated .Protocol.Zombie zombies = 2;
   int zombies_size() const;
   private:
   int _internal_zombies_size() const;
@@ -1471,7 +1487,7 @@ class ZombieDataList final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::Zombie >&
       zombies() const;
 
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
@@ -1788,13 +1804,13 @@ class ZombiePath final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPath1FieldNumber = 2,
+    kPath1FieldNumber = 3,
     kPath2FieldNumber = 4,
     kLocationFieldNumber = 5,
-    kZombieidFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kZombieidFieldNumber = 2,
   };
-  // .Protocol.Vector3 path1 = 2;
+  // .Protocol.Vector3 path1 = 3;
   bool has_path1() const;
   private:
   bool _internal_has_path1() const;
@@ -1848,22 +1864,22 @@ class ZombiePath final :
       ::Protocol::Vector3* location);
   ::Protocol::Vector3* unsafe_arena_release_location();
 
-  // uint32 zombieid = 1;
-  void clear_zombieid();
-  uint32_t zombieid() const;
-  void set_zombieid(uint32_t value);
-  private:
-  uint32_t _internal_zombieid() const;
-  void _internal_set_zombieid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 zombieid = 2;
+  void clear_zombieid();
+  uint32_t zombieid() const;
+  void set_zombieid(uint32_t value);
+  private:
+  uint32_t _internal_zombieid() const;
+  void _internal_set_zombieid(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.ZombiePath)
@@ -1877,8 +1893,8 @@ class ZombiePath final :
     ::Protocol::Vector3* path1_;
     ::Protocol::Vector3* path2_;
     ::Protocol::Vector3* location_;
-    uint32_t zombieid_;
     uint32_t packet_type_;
+    uint32_t zombieid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2007,12 +2023,12 @@ class PatrolPath final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPathFieldNumber = 2,
+    kPathFieldNumber = 3,
     kLocationFieldNumber = 4,
-    kZombieidFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kZombieidFieldNumber = 2,
   };
-  // .Protocol.Vector3 path = 2;
+  // .Protocol.Vector3 path = 3;
   bool has_path() const;
   private:
   bool _internal_has_path() const;
@@ -2048,22 +2064,22 @@ class PatrolPath final :
       ::Protocol::Vector3* location);
   ::Protocol::Vector3* unsafe_arena_release_location();
 
-  // uint32 zombieid = 1;
-  void clear_zombieid();
-  uint32_t zombieid() const;
-  void set_zombieid(uint32_t value);
-  private:
-  uint32_t _internal_zombieid() const;
-  void _internal_set_zombieid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 zombieid = 2;
+  void clear_zombieid();
+  uint32_t zombieid() const;
+  void set_zombieid(uint32_t value);
+  private:
+  uint32_t _internal_zombieid() const;
+  void _internal_set_zombieid(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.PatrolPath)
@@ -2076,8 +2092,8 @@ class PatrolPath final :
   struct Impl_ {
     ::Protocol::Vector3* path_;
     ::Protocol::Vector3* location_;
-    uint32_t zombieid_;
     uint32_t packet_type_;
+    uint32_t zombieid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2206,12 +2222,21 @@ class Detected final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kZombieidFieldNumber = 1,
-    kPlayeridFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kZombieidFieldNumber = 2,
+    kPlayeridFieldNumber = 3,
     kPlayerInsightFieldNumber = 4,
   };
-  // uint32 zombieid = 1;
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 zombieid = 2;
   void clear_zombieid();
   uint32_t zombieid() const;
   void set_zombieid(uint32_t value);
@@ -2220,22 +2245,13 @@ class Detected final :
   void _internal_set_zombieid(uint32_t value);
   public:
 
-  // uint32 playerid = 2;
+  // uint32 playerid = 3;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
   private:
   uint32_t _internal_playerid() const;
   void _internal_set_playerid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // bool player_insight = 4;
@@ -2255,9 +2271,9 @@ class Detected final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t packet_type_;
     uint32_t zombieid_;
     uint32_t playerid_;
-    uint32_t packet_type_;
     bool player_insight_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -2387,25 +2403,25 @@ class Time final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTimerFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kTimerFieldNumber = 2,
   };
-  // float timer = 1;
-  void clear_timer();
-  float timer() const;
-  void set_timer(float value);
-  private:
-  float _internal_timer() const;
-  void _internal_set_timer(float value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // float timer = 2;
+  void clear_timer();
+  float timer() const;
+  void set_timer(float value);
+  private:
+  float _internal_timer() const;
+  void _internal_set_timer(float value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.Time)
@@ -2416,8 +2432,8 @@ class Time final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    float timer_;
     uint32_t packet_type_;
+    float timer_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2546,12 +2562,12 @@ class Equip_Item final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kItemnameFieldNumber = 2,
-    kPlayeridFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kItemnameFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
     kItemtypeFieldNumber = 4,
   };
-  // string itemname = 2;
+  // string itemname = 3;
   void clear_itemname();
   const std::string& itemname() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2565,22 +2581,22 @@ class Equip_Item final :
   std::string* _internal_mutable_itemname();
   public:
 
-  // uint32 playerid = 1;
-  void clear_playerid();
-  uint32_t playerid() const;
-  void set_playerid(uint32_t value);
-  private:
-  uint32_t _internal_playerid() const;
-  void _internal_set_playerid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
   public:
 
   // uint32 itemtype = 4;
@@ -2601,8 +2617,8 @@ class Equip_Item final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr itemname_;
-    uint32_t playerid_;
     uint32_t packet_type_;
+    uint32_t playerid_;
     uint32_t itemtype_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -2732,25 +2748,25 @@ class ping final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayeridFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
   };
-  // uint32 playerid = 1;
-  void clear_playerid();
-  uint32_t playerid() const;
-  void set_playerid(uint32_t value);
-  private:
-  uint32_t _internal_playerid() const;
-  void _internal_set_playerid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
+  void clear_playerid();
+  uint32_t playerid() const;
+  void set_playerid(uint32_t value);
+  private:
+  uint32_t _internal_playerid() const;
+  void _internal_set_playerid(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.ping)
@@ -2761,8 +2777,8 @@ class ping final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    uint32_t playerid_;
     uint32_t packet_type_;
+    uint32_t playerid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2891,25 +2907,25 @@ class patrol_hit final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kZombieidFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kZombieidFieldNumber = 2,
   };
-  // uint32 zombieid = 1;
-  void clear_zombieid();
-  uint32_t zombieid() const;
-  void set_zombieid(uint32_t value);
-  private:
-  uint32_t _internal_zombieid() const;
-  void _internal_set_zombieid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 zombieid = 2;
+  void clear_zombieid();
+  uint32_t zombieid() const;
+  void set_zombieid(uint32_t value);
+  private:
+  uint32_t _internal_zombieid() const;
+  void _internal_set_zombieid(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.patrol_hit)
@@ -2920,8 +2936,8 @@ class patrol_hit final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    uint32_t zombieid_;
     uint32_t packet_type_;
+    uint32_t zombieid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3050,10 +3066,10 @@ class set_item final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kItemnameFieldNumber = 2,
+    kItemnameFieldNumber = 3,
     kTexturePathFieldNumber = 5,
-    kItemidFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kItemidFieldNumber = 2,
     kItemclassFieldNumber = 4,
     kCountFieldNumber = 6,
     kFloorFieldNumber = 7,
@@ -3061,7 +3077,7 @@ class set_item final :
     kPosyFieldNumber = 9,
     kPoszFieldNumber = 10,
   };
-  // string itemname = 2;
+  // string itemname = 3;
   void clear_itemname();
   const std::string& itemname() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3089,22 +3105,22 @@ class set_item final :
   std::string* _internal_mutable_texture_path();
   public:
 
-  // uint32 itemid = 1;
-  void clear_itemid();
-  uint32_t itemid() const;
-  void set_itemid(uint32_t value);
-  private:
-  uint32_t _internal_itemid() const;
-  void _internal_set_itemid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 itemid = 2;
+  void clear_itemid();
+  uint32_t itemid() const;
+  void set_itemid(uint32_t value);
+  private:
+  uint32_t _internal_itemid() const;
+  void _internal_set_itemid(uint32_t value);
   public:
 
   // uint32 itemclass = 4;
@@ -3171,8 +3187,8 @@ class set_item final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr itemname_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr texture_path_;
-    uint32_t itemid_;
     uint32_t packet_type_;
+    uint32_t itemid_;
     uint32_t itemclass_;
     uint32_t count_;
     uint32_t floor_;
@@ -3307,10 +3323,10 @@ class ItemDataList final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kItemsFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kItemsFieldNumber = 2,
+    kPacketTypeFieldNumber = 1,
   };
-  // repeated .Protocol.set_item items = 1;
+  // repeated .Protocol.set_item items = 2;
   int items_size() const;
   private:
   int _internal_items_size() const;
@@ -3328,7 +3344,7 @@ class ItemDataList final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_item >&
       items() const;
 
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
@@ -3475,10 +3491,10 @@ class set_car final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kCarnameFieldNumber = 2,
+    kCarnameFieldNumber = 3,
     kCarkeynameFieldNumber = 10,
-    kCaridFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kCaridFieldNumber = 2,
     kPosxFieldNumber = 4,
     kPosyFieldNumber = 5,
     kPoszFieldNumber = 6,
@@ -3486,7 +3502,7 @@ class set_car final :
     kYawFieldNumber = 8,
     kRollFieldNumber = 9,
   };
-  // string carname = 2;
+  // string carname = 3;
   void clear_carname();
   const std::string& carname() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3514,22 +3530,22 @@ class set_car final :
   std::string* _internal_mutable_carkeyname();
   public:
 
-  // uint32 carid = 1;
-  void clear_carid();
-  uint32_t carid() const;
-  void set_carid(uint32_t value);
-  private:
-  uint32_t _internal_carid() const;
-  void _internal_set_carid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 carid = 2;
+  void clear_carid();
+  uint32_t carid() const;
+  void set_carid(uint32_t value);
+  private:
+  uint32_t _internal_carid() const;
+  void _internal_set_carid(uint32_t value);
   public:
 
   // float posx = 4;
@@ -3596,8 +3612,8 @@ class set_car final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr carname_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr carkeyname_;
-    uint32_t carid_;
     uint32_t packet_type_;
+    uint32_t carid_;
     float posx_;
     float posy_;
     float posz_;
@@ -3732,10 +3748,10 @@ class CarDataList final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kCarsFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kCarsFieldNumber = 2,
+    kPacketTypeFieldNumber = 1,
   };
-  // repeated .Protocol.set_car cars = 1;
+  // repeated .Protocol.set_car cars = 2;
   int cars_size() const;
   private:
   int _internal_cars_size() const;
@@ -3753,7 +3769,7 @@ class CarDataList final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::set_car >&
       cars() const;
 
-  // uint32 packet_type = 3;
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
@@ -3900,11 +3916,20 @@ class destroy_item final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kItemidFieldNumber = 1,
-    kPlayeridFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kItemidFieldNumber = 2,
+    kPlayeridFieldNumber = 3,
   };
-  // uint32 itemid = 1;
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 itemid = 2;
   void clear_itemid();
   uint32_t itemid() const;
   void set_itemid(uint32_t value);
@@ -3913,22 +3938,13 @@ class destroy_item final :
   void _internal_set_itemid(uint32_t value);
   public:
 
-  // uint32 playerid = 2;
+  // uint32 playerid = 3;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
   private:
   uint32_t _internal_playerid() const;
   void _internal_set_playerid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.destroy_item)
@@ -3939,9 +3955,9 @@ class destroy_item final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t packet_type_;
     uint32_t itemid_;
     uint32_t playerid_;
-    uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4070,11 +4086,20 @@ class get_key final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kItemidFieldNumber = 1,
-    kPlayeridFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kItemidFieldNumber = 2,
+    kPlayeridFieldNumber = 3,
   };
-  // uint32 itemid = 1;
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 itemid = 2;
   void clear_itemid();
   uint32_t itemid() const;
   void set_itemid(uint32_t value);
@@ -4083,22 +4108,13 @@ class get_key final :
   void _internal_set_itemid(uint32_t value);
   public:
 
-  // uint32 playerid = 2;
+  // uint32 playerid = 3;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
   private:
   uint32_t _internal_playerid() const;
   void _internal_set_playerid(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.get_key)
@@ -4109,9 +4125,9 @@ class get_key final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t packet_type_;
     uint32_t itemid_;
     uint32_t playerid_;
-    uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4240,11 +4256,20 @@ class escape final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayeridFieldNumber = 1,
-    kRootFieldNumber = 2,
-    kPacketTypeFieldNumber = 3,
+    kPacketTypeFieldNumber = 1,
+    kPlayeridFieldNumber = 2,
+    kRootFieldNumber = 3,
   };
-  // uint32 playerid = 1;
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 playerid = 2;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
@@ -4253,22 +4278,13 @@ class escape final :
   void _internal_set_playerid(uint32_t value);
   public:
 
-  // uint32 root = 2;
+  // uint32 root = 3;
   void clear_root();
   uint32_t root() const;
   void set_root(uint32_t value);
   private:
   uint32_t _internal_root() const;
   void _internal_set_root(uint32_t value);
-  public:
-
-  // uint32 packet_type = 3;
-  void clear_packet_type();
-  uint32_t packet_type() const;
-  void set_packet_type(uint32_t value);
-  private:
-  uint32_t _internal_packet_type() const;
-  void _internal_set_packet_type(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.escape)
@@ -4279,9 +4295,9 @@ class escape final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    uint32_t packet_type_;
     uint32_t playerid_;
     uint32_t root_;
-    uint32_t packet_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4410,25 +4426,95 @@ class game_clear final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBClearFieldNumber = 1,
-    kPacketTypeFieldNumber = 3,
+    kOpenPlayerFieldNumber = 5,
+    kBestKillPlayerFieldNumber = 7,
+    kPacketTypeFieldNumber = 1,
+    kRootFieldNumber = 2,
+    kAlivePlayersFieldNumber = 3,
+    kDeadPlayersFieldNumber = 4,
+    kMyKillcountFieldNumber = 6,
+    kBestKillcountFieldNumber = 8,
   };
-  // bool b_clear = 1;
-  void clear_b_clear();
-  bool b_clear() const;
-  void set_b_clear(bool value);
+  // string open_player = 5;
+  void clear_open_player();
+  const std::string& open_player() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_open_player(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_open_player();
+  PROTOBUF_NODISCARD std::string* release_open_player();
+  void set_allocated_open_player(std::string* open_player);
   private:
-  bool _internal_b_clear() const;
-  void _internal_set_b_clear(bool value);
+  const std::string& _internal_open_player() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_open_player(const std::string& value);
+  std::string* _internal_mutable_open_player();
   public:
 
-  // uint32 packet_type = 3;
+  // string best_kill_player = 7;
+  void clear_best_kill_player();
+  const std::string& best_kill_player() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_best_kill_player(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_best_kill_player();
+  PROTOBUF_NODISCARD std::string* release_best_kill_player();
+  void set_allocated_best_kill_player(std::string* best_kill_player);
+  private:
+  const std::string& _internal_best_kill_player() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_best_kill_player(const std::string& value);
+  std::string* _internal_mutable_best_kill_player();
+  public:
+
+  // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
   void set_packet_type(uint32_t value);
   private:
   uint32_t _internal_packet_type() const;
   void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 root = 2;
+  void clear_root();
+  uint32_t root() const;
+  void set_root(uint32_t value);
+  private:
+  uint32_t _internal_root() const;
+  void _internal_set_root(uint32_t value);
+  public:
+
+  // uint32 alive_players = 3;
+  void clear_alive_players();
+  uint32_t alive_players() const;
+  void set_alive_players(uint32_t value);
+  private:
+  uint32_t _internal_alive_players() const;
+  void _internal_set_alive_players(uint32_t value);
+  public:
+
+  // uint32 dead_players = 4;
+  void clear_dead_players();
+  uint32_t dead_players() const;
+  void set_dead_players(uint32_t value);
+  private:
+  uint32_t _internal_dead_players() const;
+  void _internal_set_dead_players(uint32_t value);
+  public:
+
+  // uint32 my_killcount = 6;
+  void clear_my_killcount();
+  uint32_t my_killcount() const;
+  void set_my_killcount(uint32_t value);
+  private:
+  uint32_t _internal_my_killcount() const;
+  void _internal_set_my_killcount(uint32_t value);
+  public:
+
+  // uint32 best_killcount = 8;
+  void clear_best_killcount();
+  uint32_t best_killcount() const;
+  void set_best_killcount(uint32_t value);
+  private:
+  uint32_t _internal_best_killcount() const;
+  void _internal_set_best_killcount(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.game_clear)
@@ -4439,8 +4525,14 @@ class game_clear final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    bool b_clear_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr open_player_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr best_kill_player_;
     uint32_t packet_type_;
+    uint32_t root_;
+    uint32_t alive_players_;
+    uint32_t dead_players_;
+    uint32_t my_killcount_;
+    uint32_t best_killcount_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4457,7 +4549,27 @@ class game_clear final :
 #endif  // __GNUC__
 // Character
 
-// uint32 playerid = 1;
+// uint32 packet_type = 1;
+inline void Character::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t Character::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t Character::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.packet_type)
+  return _internal_packet_type();
+}
+inline void Character::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void Character::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character.packet_type)
+}
+
+// uint32 playerid = 2;
 inline void Character::clear_playerid() {
   _impl_.playerid_ = 0u;
 }
@@ -4477,7 +4589,7 @@ inline void Character::set_playerid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.playerid)
 }
 
-// uint32 charactertype = 2;
+// uint32 charactertype = 3;
 inline void Character::clear_charactertype() {
   _impl_.charactertype_ = 0u;
 }
@@ -4495,26 +4607,6 @@ inline void Character::_internal_set_charactertype(uint32_t value) {
 inline void Character::set_charactertype(uint32_t value) {
   _internal_set_charactertype(value);
   // @@protoc_insertion_point(field_set:Protocol.Character.charactertype)
-}
-
-// uint32 packet_type = 3;
-inline void Character::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t Character::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t Character::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.Character.packet_type)
-  return _internal_packet_type();
-}
-inline void Character::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void Character::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.Character.packet_type)
 }
 
 // float x = 4;
@@ -4717,31 +4809,61 @@ inline void Character::set_isingame(bool value) {
   // @@protoc_insertion_point(field_set:Protocol.Character.isingame)
 }
 
+// string username = 14;
+inline void Character::clear_username() {
+  _impl_.username_.ClearToEmpty();
+}
+inline const std::string& Character::username() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character.username)
+  return _internal_username();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void Character::set_username(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.username_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.Character.username)
+}
+inline std::string* Character::mutable_username() {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:Protocol.Character.username)
+  return _s;
+}
+inline const std::string& Character::_internal_username() const {
+  return _impl_.username_.Get();
+}
+inline void Character::_internal_set_username(const std::string& value) {
+  
+  _impl_.username_.Set(value, GetArenaForAllocation());
+}
+inline std::string* Character::_internal_mutable_username() {
+  
+  return _impl_.username_.Mutable(GetArenaForAllocation());
+}
+inline std::string* Character::release_username() {
+  // @@protoc_insertion_point(field_release:Protocol.Character.username)
+  return _impl_.username_.Release();
+}
+inline void Character::set_allocated_username(std::string* username) {
+  if (username != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.username_.SetAllocated(username, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.username_.IsDefault()) {
+    _impl_.username_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Character.username)
+}
+
 // -------------------------------------------------------------------
 
 // jump
 
-// uint32 playerid = 1;
-inline void jump::clear_playerid() {
-  _impl_.playerid_ = 0u;
-}
-inline uint32_t jump::_internal_playerid() const {
-  return _impl_.playerid_;
-}
-inline uint32_t jump::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.jump.playerid)
-  return _internal_playerid();
-}
-inline void jump::_internal_set_playerid(uint32_t value) {
-  
-  _impl_.playerid_ = value;
-}
-inline void jump::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.jump.playerid)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void jump::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -4761,51 +4883,31 @@ inline void jump::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.jump.packet_type)
 }
 
+// uint32 playerid = 2;
+inline void jump::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t jump::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t jump::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.jump.playerid)
+  return _internal_playerid();
+}
+inline void jump::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void jump::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.jump.playerid)
+}
+
 // -------------------------------------------------------------------
 
 // Character_Attack
 
-// uint32 playerid = 1;
-inline void Character_Attack::clear_playerid() {
-  _impl_.playerid_ = 0u;
-}
-inline uint32_t Character_Attack::_internal_playerid() const {
-  return _impl_.playerid_;
-}
-inline uint32_t Character_Attack::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.Character_Attack.playerid)
-  return _internal_playerid();
-}
-inline void Character_Attack::_internal_set_playerid(uint32_t value) {
-  
-  _impl_.playerid_ = value;
-}
-inline void Character_Attack::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.Character_Attack.playerid)
-}
-
-// bool attack = 2;
-inline void Character_Attack::clear_attack() {
-  _impl_.attack_ = false;
-}
-inline bool Character_Attack::_internal_attack() const {
-  return _impl_.attack_;
-}
-inline bool Character_Attack::attack() const {
-  // @@protoc_insertion_point(field_get:Protocol.Character_Attack.attack)
-  return _internal_attack();
-}
-inline void Character_Attack::_internal_set_attack(bool value) {
-  
-  _impl_.attack_ = value;
-}
-inline void Character_Attack::set_attack(bool value) {
-  _internal_set_attack(value);
-  // @@protoc_insertion_point(field_set:Protocol.Character_Attack.attack)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void Character_Attack::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -4825,11 +4927,71 @@ inline void Character_Attack::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Character_Attack.packet_type)
 }
 
+// uint32 playerid = 2;
+inline void Character_Attack::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t Character_Attack::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t Character_Attack::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character_Attack.playerid)
+  return _internal_playerid();
+}
+inline void Character_Attack::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void Character_Attack::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character_Attack.playerid)
+}
+
+// bool attack = 3;
+inline void Character_Attack::clear_attack() {
+  _impl_.attack_ = false;
+}
+inline bool Character_Attack::_internal_attack() const {
+  return _impl_.attack_;
+}
+inline bool Character_Attack::attack() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character_Attack.attack)
+  return _internal_attack();
+}
+inline void Character_Attack::_internal_set_attack(bool value) {
+  
+  _impl_.attack_ = value;
+}
+inline void Character_Attack::set_attack(bool value) {
+  _internal_set_attack(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character_Attack.attack)
+}
+
 // -------------------------------------------------------------------
 
 // Zombie
 
-// uint32 zombieid = 1;
+// uint32 packet_type = 1;
+inline void Zombie::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t Zombie::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t Zombie::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie.packet_type)
+  return _internal_packet_type();
+}
+inline void Zombie::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void Zombie::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie.packet_type)
+}
+
+// uint32 zombieid = 2;
 inline void Zombie::clear_zombieid() {
   _impl_.zombieid_ = 0u;
 }
@@ -4849,7 +5011,7 @@ inline void Zombie::set_zombieid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie.zombieid)
 }
 
-// uint32 zombietype = 2;
+// uint32 zombietype = 3;
 inline void Zombie::clear_zombietype() {
   _impl_.zombietype_ = 0u;
 }
@@ -4867,26 +5029,6 @@ inline void Zombie::_internal_set_zombietype(uint32_t value) {
 inline void Zombie::set_zombietype(uint32_t value) {
   _internal_set_zombietype(value);
   // @@protoc_insertion_point(field_set:Protocol.Zombie.zombietype)
-}
-
-// uint32 packet_type = 3;
-inline void Zombie::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t Zombie::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t Zombie::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.Zombie.packet_type)
-  return _internal_packet_type();
-}
-inline void Zombie::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void Zombie::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.Zombie.packet_type)
 }
 
 // float x = 4;
@@ -5013,47 +5155,7 @@ inline void Zombie::set_roll(float value) {
 
 // Zombie_attack
 
-// uint32 zombieid = 1;
-inline void Zombie_attack::clear_zombieid() {
-  _impl_.zombieid_ = 0u;
-}
-inline uint32_t Zombie_attack::_internal_zombieid() const {
-  return _impl_.zombieid_;
-}
-inline uint32_t Zombie_attack::zombieid() const {
-  // @@protoc_insertion_point(field_get:Protocol.Zombie_attack.zombieid)
-  return _internal_zombieid();
-}
-inline void Zombie_attack::_internal_set_zombieid(uint32_t value) {
-  
-  _impl_.zombieid_ = value;
-}
-inline void Zombie_attack::set_zombieid(uint32_t value) {
-  _internal_set_zombieid(value);
-  // @@protoc_insertion_point(field_set:Protocol.Zombie_attack.zombieid)
-}
-
-// uint32 playerid = 2;
-inline void Zombie_attack::clear_playerid() {
-  _impl_.playerid_ = 0u;
-}
-inline uint32_t Zombie_attack::_internal_playerid() const {
-  return _impl_.playerid_;
-}
-inline uint32_t Zombie_attack::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.Zombie_attack.playerid)
-  return _internal_playerid();
-}
-inline void Zombie_attack::_internal_set_playerid(uint32_t value) {
-  
-  _impl_.playerid_ = value;
-}
-inline void Zombie_attack::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.Zombie_attack.playerid)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void Zombie_attack::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -5073,51 +5175,51 @@ inline void Zombie_attack::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie_attack.packet_type)
 }
 
+// uint32 zombieid = 2;
+inline void Zombie_attack::clear_zombieid() {
+  _impl_.zombieid_ = 0u;
+}
+inline uint32_t Zombie_attack::_internal_zombieid() const {
+  return _impl_.zombieid_;
+}
+inline uint32_t Zombie_attack::zombieid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie_attack.zombieid)
+  return _internal_zombieid();
+}
+inline void Zombie_attack::_internal_set_zombieid(uint32_t value) {
+  
+  _impl_.zombieid_ = value;
+}
+inline void Zombie_attack::set_zombieid(uint32_t value) {
+  _internal_set_zombieid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie_attack.zombieid)
+}
+
+// uint32 playerid = 3;
+inline void Zombie_attack::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t Zombie_attack::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t Zombie_attack::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie_attack.playerid)
+  return _internal_playerid();
+}
+inline void Zombie_attack::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void Zombie_attack::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie_attack.playerid)
+}
+
 // -------------------------------------------------------------------
 
 // Zombie_hp
 
-// uint32 zombieid = 1;
-inline void Zombie_hp::clear_zombieid() {
-  _impl_.zombieid_ = 0u;
-}
-inline uint32_t Zombie_hp::_internal_zombieid() const {
-  return _impl_.zombieid_;
-}
-inline uint32_t Zombie_hp::zombieid() const {
-  // @@protoc_insertion_point(field_get:Protocol.Zombie_hp.zombieid)
-  return _internal_zombieid();
-}
-inline void Zombie_hp::_internal_set_zombieid(uint32_t value) {
-  
-  _impl_.zombieid_ = value;
-}
-inline void Zombie_hp::set_zombieid(uint32_t value) {
-  _internal_set_zombieid(value);
-  // @@protoc_insertion_point(field_set:Protocol.Zombie_hp.zombieid)
-}
-
-// float damage = 2;
-inline void Zombie_hp::clear_damage() {
-  _impl_.damage_ = 0;
-}
-inline float Zombie_hp::_internal_damage() const {
-  return _impl_.damage_;
-}
-inline float Zombie_hp::damage() const {
-  // @@protoc_insertion_point(field_get:Protocol.Zombie_hp.damage)
-  return _internal_damage();
-}
-inline void Zombie_hp::_internal_set_damage(float value) {
-  
-  _impl_.damage_ = value;
-}
-inline void Zombie_hp::set_damage(float value) {
-  _internal_set_damage(value);
-  // @@protoc_insertion_point(field_set:Protocol.Zombie_hp.damage)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void Zombie_hp::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -5137,11 +5239,71 @@ inline void Zombie_hp::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Zombie_hp.packet_type)
 }
 
+// uint32 zombieid = 2;
+inline void Zombie_hp::clear_zombieid() {
+  _impl_.zombieid_ = 0u;
+}
+inline uint32_t Zombie_hp::_internal_zombieid() const {
+  return _impl_.zombieid_;
+}
+inline uint32_t Zombie_hp::zombieid() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie_hp.zombieid)
+  return _internal_zombieid();
+}
+inline void Zombie_hp::_internal_set_zombieid(uint32_t value) {
+  
+  _impl_.zombieid_ = value;
+}
+inline void Zombie_hp::set_zombieid(uint32_t value) {
+  _internal_set_zombieid(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie_hp.zombieid)
+}
+
+// float damage = 3;
+inline void Zombie_hp::clear_damage() {
+  _impl_.damage_ = 0;
+}
+inline float Zombie_hp::_internal_damage() const {
+  return _impl_.damage_;
+}
+inline float Zombie_hp::damage() const {
+  // @@protoc_insertion_point(field_get:Protocol.Zombie_hp.damage)
+  return _internal_damage();
+}
+inline void Zombie_hp::_internal_set_damage(float value) {
+  
+  _impl_.damage_ = value;
+}
+inline void Zombie_hp::set_damage(float value) {
+  _internal_set_damage(value);
+  // @@protoc_insertion_point(field_set:Protocol.Zombie_hp.damage)
+}
+
 // -------------------------------------------------------------------
 
 // ZombieDataList
 
-// repeated .Protocol.Zombie zombies = 1;
+// uint32 packet_type = 1;
+inline void ZombieDataList::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t ZombieDataList::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t ZombieDataList::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.ZombieDataList.packet_type)
+  return _internal_packet_type();
+}
+inline void ZombieDataList::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void ZombieDataList::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.ZombieDataList.packet_type)
+}
+
+// repeated .Protocol.Zombie zombies = 2;
 inline int ZombieDataList::_internal_zombies_size() const {
   return _impl_.zombies_.size();
 }
@@ -5179,26 +5341,6 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::Zombie >&
 ZombieDataList::zombies() const {
   // @@protoc_insertion_point(field_list:Protocol.ZombieDataList.zombies)
   return _impl_.zombies_;
-}
-
-// uint32 packet_type = 3;
-inline void ZombieDataList::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t ZombieDataList::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t ZombieDataList::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.ZombieDataList.packet_type)
-  return _internal_packet_type();
-}
-inline void ZombieDataList::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void ZombieDataList::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.ZombieDataList.packet_type)
 }
 
 // -------------------------------------------------------------------
@@ -5269,7 +5411,27 @@ inline void Vector3::set_z(float value) {
 
 // ZombiePath
 
-// uint32 zombieid = 1;
+// uint32 packet_type = 1;
+inline void ZombiePath::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t ZombiePath::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t ZombiePath::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.ZombiePath.packet_type)
+  return _internal_packet_type();
+}
+inline void ZombiePath::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void ZombiePath::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.ZombiePath.packet_type)
+}
+
+// uint32 zombieid = 2;
 inline void ZombiePath::clear_zombieid() {
   _impl_.zombieid_ = 0u;
 }
@@ -5289,7 +5451,7 @@ inline void ZombiePath::set_zombieid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.ZombiePath.zombieid)
 }
 
-// .Protocol.Vector3 path1 = 2;
+// .Protocol.Vector3 path1 = 3;
 inline bool ZombiePath::_internal_has_path1() const {
   return this != internal_default_instance() && _impl_.path1_ != nullptr;
 }
@@ -5377,26 +5539,6 @@ inline void ZombiePath::set_allocated_path1(::Protocol::Vector3* path1) {
   }
   _impl_.path1_ = path1;
   // @@protoc_insertion_point(field_set_allocated:Protocol.ZombiePath.path1)
-}
-
-// uint32 packet_type = 3;
-inline void ZombiePath::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t ZombiePath::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t ZombiePath::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.ZombiePath.packet_type)
-  return _internal_packet_type();
-}
-inline void ZombiePath::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void ZombiePath::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.ZombiePath.packet_type)
 }
 
 // .Protocol.Vector3 path2 = 4;
@@ -5583,7 +5725,27 @@ inline void ZombiePath::set_allocated_location(::Protocol::Vector3* location) {
 
 // PatrolPath
 
-// uint32 zombieid = 1;
+// uint32 packet_type = 1;
+inline void PatrolPath::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t PatrolPath::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t PatrolPath::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.PatrolPath.packet_type)
+  return _internal_packet_type();
+}
+inline void PatrolPath::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void PatrolPath::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.PatrolPath.packet_type)
+}
+
+// uint32 zombieid = 2;
 inline void PatrolPath::clear_zombieid() {
   _impl_.zombieid_ = 0u;
 }
@@ -5603,7 +5765,7 @@ inline void PatrolPath::set_zombieid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.PatrolPath.zombieid)
 }
 
-// .Protocol.Vector3 path = 2;
+// .Protocol.Vector3 path = 3;
 inline bool PatrolPath::_internal_has_path() const {
   return this != internal_default_instance() && _impl_.path_ != nullptr;
 }
@@ -5691,26 +5853,6 @@ inline void PatrolPath::set_allocated_path(::Protocol::Vector3* path) {
   }
   _impl_.path_ = path;
   // @@protoc_insertion_point(field_set_allocated:Protocol.PatrolPath.path)
-}
-
-// uint32 packet_type = 3;
-inline void PatrolPath::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t PatrolPath::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t PatrolPath::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.PatrolPath.packet_type)
-  return _internal_packet_type();
-}
-inline void PatrolPath::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void PatrolPath::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.PatrolPath.packet_type)
 }
 
 // .Protocol.Vector3 location = 4;
@@ -5807,7 +5949,27 @@ inline void PatrolPath::set_allocated_location(::Protocol::Vector3* location) {
 
 // Detected
 
-// uint32 zombieid = 1;
+// uint32 packet_type = 1;
+inline void Detected::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t Detected::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t Detected::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Detected.packet_type)
+  return _internal_packet_type();
+}
+inline void Detected::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void Detected::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Detected.packet_type)
+}
+
+// uint32 zombieid = 2;
 inline void Detected::clear_zombieid() {
   _impl_.zombieid_ = 0u;
 }
@@ -5827,7 +5989,7 @@ inline void Detected::set_zombieid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Detected.zombieid)
 }
 
-// uint32 playerid = 2;
+// uint32 playerid = 3;
 inline void Detected::clear_playerid() {
   _impl_.playerid_ = 0u;
 }
@@ -5845,26 +6007,6 @@ inline void Detected::_internal_set_playerid(uint32_t value) {
 inline void Detected::set_playerid(uint32_t value) {
   _internal_set_playerid(value);
   // @@protoc_insertion_point(field_set:Protocol.Detected.playerid)
-}
-
-// uint32 packet_type = 3;
-inline void Detected::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t Detected::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t Detected::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.Detected.packet_type)
-  return _internal_packet_type();
-}
-inline void Detected::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void Detected::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.Detected.packet_type)
 }
 
 // bool player_insight = 4;
@@ -5891,27 +6033,7 @@ inline void Detected::set_player_insight(bool value) {
 
 // Time
 
-// float timer = 1;
-inline void Time::clear_timer() {
-  _impl_.timer_ = 0;
-}
-inline float Time::_internal_timer() const {
-  return _impl_.timer_;
-}
-inline float Time::timer() const {
-  // @@protoc_insertion_point(field_get:Protocol.Time.timer)
-  return _internal_timer();
-}
-inline void Time::_internal_set_timer(float value) {
-  
-  _impl_.timer_ = value;
-}
-inline void Time::set_timer(float value) {
-  _internal_set_timer(value);
-  // @@protoc_insertion_point(field_set:Protocol.Time.timer)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void Time::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -5931,11 +6053,51 @@ inline void Time::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Time.packet_type)
 }
 
+// float timer = 2;
+inline void Time::clear_timer() {
+  _impl_.timer_ = 0;
+}
+inline float Time::_internal_timer() const {
+  return _impl_.timer_;
+}
+inline float Time::timer() const {
+  // @@protoc_insertion_point(field_get:Protocol.Time.timer)
+  return _internal_timer();
+}
+inline void Time::_internal_set_timer(float value) {
+  
+  _impl_.timer_ = value;
+}
+inline void Time::set_timer(float value) {
+  _internal_set_timer(value);
+  // @@protoc_insertion_point(field_set:Protocol.Time.timer)
+}
+
 // -------------------------------------------------------------------
 
 // Equip_Item
 
-// uint32 playerid = 1;
+// uint32 packet_type = 1;
+inline void Equip_Item::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t Equip_Item::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t Equip_Item::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.Equip_Item.packet_type)
+  return _internal_packet_type();
+}
+inline void Equip_Item::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void Equip_Item::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.Equip_Item.packet_type)
+}
+
+// uint32 playerid = 2;
 inline void Equip_Item::clear_playerid() {
   _impl_.playerid_ = 0u;
 }
@@ -5955,7 +6117,7 @@ inline void Equip_Item::set_playerid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.Equip_Item.playerid)
 }
 
-// string itemname = 2;
+// string itemname = 3;
 inline void Equip_Item::clear_itemname() {
   _impl_.itemname_.ClearToEmpty();
 }
@@ -6005,26 +6167,6 @@ inline void Equip_Item::set_allocated_itemname(std::string* itemname) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.Equip_Item.itemname)
 }
 
-// uint32 packet_type = 3;
-inline void Equip_Item::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t Equip_Item::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t Equip_Item::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.Equip_Item.packet_type)
-  return _internal_packet_type();
-}
-inline void Equip_Item::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void Equip_Item::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.Equip_Item.packet_type)
-}
-
 // uint32 itemtype = 4;
 inline void Equip_Item::clear_itemtype() {
   _impl_.itemtype_ = 0u;
@@ -6049,27 +6191,7 @@ inline void Equip_Item::set_itemtype(uint32_t value) {
 
 // ping
 
-// uint32 playerid = 1;
-inline void ping::clear_playerid() {
-  _impl_.playerid_ = 0u;
-}
-inline uint32_t ping::_internal_playerid() const {
-  return _impl_.playerid_;
-}
-inline uint32_t ping::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.ping.playerid)
-  return _internal_playerid();
-}
-inline void ping::_internal_set_playerid(uint32_t value) {
-  
-  _impl_.playerid_ = value;
-}
-inline void ping::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.ping.playerid)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void ping::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -6089,31 +6211,31 @@ inline void ping::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.ping.packet_type)
 }
 
+// uint32 playerid = 2;
+inline void ping::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t ping::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t ping::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.ping.playerid)
+  return _internal_playerid();
+}
+inline void ping::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void ping::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.ping.playerid)
+}
+
 // -------------------------------------------------------------------
 
 // patrol_hit
 
-// uint32 zombieid = 1;
-inline void patrol_hit::clear_zombieid() {
-  _impl_.zombieid_ = 0u;
-}
-inline uint32_t patrol_hit::_internal_zombieid() const {
-  return _impl_.zombieid_;
-}
-inline uint32_t patrol_hit::zombieid() const {
-  // @@protoc_insertion_point(field_get:Protocol.patrol_hit.zombieid)
-  return _internal_zombieid();
-}
-inline void patrol_hit::_internal_set_zombieid(uint32_t value) {
-  
-  _impl_.zombieid_ = value;
-}
-inline void patrol_hit::set_zombieid(uint32_t value) {
-  _internal_set_zombieid(value);
-  // @@protoc_insertion_point(field_set:Protocol.patrol_hit.zombieid)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void patrol_hit::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -6133,11 +6255,51 @@ inline void patrol_hit::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.patrol_hit.packet_type)
 }
 
+// uint32 zombieid = 2;
+inline void patrol_hit::clear_zombieid() {
+  _impl_.zombieid_ = 0u;
+}
+inline uint32_t patrol_hit::_internal_zombieid() const {
+  return _impl_.zombieid_;
+}
+inline uint32_t patrol_hit::zombieid() const {
+  // @@protoc_insertion_point(field_get:Protocol.patrol_hit.zombieid)
+  return _internal_zombieid();
+}
+inline void patrol_hit::_internal_set_zombieid(uint32_t value) {
+  
+  _impl_.zombieid_ = value;
+}
+inline void patrol_hit::set_zombieid(uint32_t value) {
+  _internal_set_zombieid(value);
+  // @@protoc_insertion_point(field_set:Protocol.patrol_hit.zombieid)
+}
+
 // -------------------------------------------------------------------
 
 // set_item
 
-// uint32 itemid = 1;
+// uint32 packet_type = 1;
+inline void set_item::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t set_item::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t set_item::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_item.packet_type)
+  return _internal_packet_type();
+}
+inline void set_item::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void set_item::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_item.packet_type)
+}
+
+// uint32 itemid = 2;
 inline void set_item::clear_itemid() {
   _impl_.itemid_ = 0u;
 }
@@ -6157,7 +6319,7 @@ inline void set_item::set_itemid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.set_item.itemid)
 }
 
-// string itemname = 2;
+// string itemname = 3;
 inline void set_item::clear_itemname() {
   _impl_.itemname_.ClearToEmpty();
 }
@@ -6205,26 +6367,6 @@ inline void set_item::set_allocated_itemname(std::string* itemname) {
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:Protocol.set_item.itemname)
-}
-
-// uint32 packet_type = 3;
-inline void set_item::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t set_item::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t set_item::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.set_item.packet_type)
-  return _internal_packet_type();
-}
-inline void set_item::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void set_item::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.set_item.packet_type)
 }
 
 // uint32 itemclass = 4;
@@ -6401,7 +6543,27 @@ inline void set_item::set_posz(float value) {
 
 // ItemDataList
 
-// repeated .Protocol.set_item items = 1;
+// uint32 packet_type = 1;
+inline void ItemDataList::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t ItemDataList::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t ItemDataList::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.ItemDataList.packet_type)
+  return _internal_packet_type();
+}
+inline void ItemDataList::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void ItemDataList::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.ItemDataList.packet_type)
+}
+
+// repeated .Protocol.set_item items = 2;
 inline int ItemDataList::_internal_items_size() const {
   return _impl_.items_.size();
 }
@@ -6441,31 +6603,31 @@ ItemDataList::items() const {
   return _impl_.items_;
 }
 
-// uint32 packet_type = 3;
-inline void ItemDataList::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t ItemDataList::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t ItemDataList::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.ItemDataList.packet_type)
-  return _internal_packet_type();
-}
-inline void ItemDataList::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void ItemDataList::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.ItemDataList.packet_type)
-}
-
 // -------------------------------------------------------------------
 
 // set_car
 
-// uint32 carid = 1;
+// uint32 packet_type = 1;
+inline void set_car::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t set_car::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t set_car::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.set_car.packet_type)
+  return _internal_packet_type();
+}
+inline void set_car::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void set_car::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.set_car.packet_type)
+}
+
+// uint32 carid = 2;
 inline void set_car::clear_carid() {
   _impl_.carid_ = 0u;
 }
@@ -6485,7 +6647,7 @@ inline void set_car::set_carid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.set_car.carid)
 }
 
-// string carname = 2;
+// string carname = 3;
 inline void set_car::clear_carname() {
   _impl_.carname_.ClearToEmpty();
 }
@@ -6533,26 +6695,6 @@ inline void set_car::set_allocated_carname(std::string* carname) {
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:Protocol.set_car.carname)
-}
-
-// uint32 packet_type = 3;
-inline void set_car::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t set_car::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t set_car::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.set_car.packet_type)
-  return _internal_packet_type();
-}
-inline void set_car::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void set_car::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.set_car.packet_type)
 }
 
 // float posx = 4;
@@ -6729,7 +6871,27 @@ inline void set_car::set_allocated_carkeyname(std::string* carkeyname) {
 
 // CarDataList
 
-// repeated .Protocol.set_car cars = 1;
+// uint32 packet_type = 1;
+inline void CarDataList::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t CarDataList::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t CarDataList::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.CarDataList.packet_type)
+  return _internal_packet_type();
+}
+inline void CarDataList::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void CarDataList::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.CarDataList.packet_type)
+}
+
+// repeated .Protocol.set_car cars = 2;
 inline int CarDataList::_internal_cars_size() const {
   return _impl_.cars_.size();
 }
@@ -6769,71 +6931,11 @@ CarDataList::cars() const {
   return _impl_.cars_;
 }
 
-// uint32 packet_type = 3;
-inline void CarDataList::clear_packet_type() {
-  _impl_.packet_type_ = 0u;
-}
-inline uint32_t CarDataList::_internal_packet_type() const {
-  return _impl_.packet_type_;
-}
-inline uint32_t CarDataList::packet_type() const {
-  // @@protoc_insertion_point(field_get:Protocol.CarDataList.packet_type)
-  return _internal_packet_type();
-}
-inline void CarDataList::_internal_set_packet_type(uint32_t value) {
-  
-  _impl_.packet_type_ = value;
-}
-inline void CarDataList::set_packet_type(uint32_t value) {
-  _internal_set_packet_type(value);
-  // @@protoc_insertion_point(field_set:Protocol.CarDataList.packet_type)
-}
-
 // -------------------------------------------------------------------
 
 // destroy_item
 
-// uint32 itemid = 1;
-inline void destroy_item::clear_itemid() {
-  _impl_.itemid_ = 0u;
-}
-inline uint32_t destroy_item::_internal_itemid() const {
-  return _impl_.itemid_;
-}
-inline uint32_t destroy_item::itemid() const {
-  // @@protoc_insertion_point(field_get:Protocol.destroy_item.itemid)
-  return _internal_itemid();
-}
-inline void destroy_item::_internal_set_itemid(uint32_t value) {
-  
-  _impl_.itemid_ = value;
-}
-inline void destroy_item::set_itemid(uint32_t value) {
-  _internal_set_itemid(value);
-  // @@protoc_insertion_point(field_set:Protocol.destroy_item.itemid)
-}
-
-// uint32 playerid = 2;
-inline void destroy_item::clear_playerid() {
-  _impl_.playerid_ = 0u;
-}
-inline uint32_t destroy_item::_internal_playerid() const {
-  return _impl_.playerid_;
-}
-inline uint32_t destroy_item::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.destroy_item.playerid)
-  return _internal_playerid();
-}
-inline void destroy_item::_internal_set_playerid(uint32_t value) {
-  
-  _impl_.playerid_ = value;
-}
-inline void destroy_item::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.destroy_item.playerid)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void destroy_item::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -6853,51 +6955,51 @@ inline void destroy_item::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.destroy_item.packet_type)
 }
 
+// uint32 itemid = 2;
+inline void destroy_item::clear_itemid() {
+  _impl_.itemid_ = 0u;
+}
+inline uint32_t destroy_item::_internal_itemid() const {
+  return _impl_.itemid_;
+}
+inline uint32_t destroy_item::itemid() const {
+  // @@protoc_insertion_point(field_get:Protocol.destroy_item.itemid)
+  return _internal_itemid();
+}
+inline void destroy_item::_internal_set_itemid(uint32_t value) {
+  
+  _impl_.itemid_ = value;
+}
+inline void destroy_item::set_itemid(uint32_t value) {
+  _internal_set_itemid(value);
+  // @@protoc_insertion_point(field_set:Protocol.destroy_item.itemid)
+}
+
+// uint32 playerid = 3;
+inline void destroy_item::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t destroy_item::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t destroy_item::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.destroy_item.playerid)
+  return _internal_playerid();
+}
+inline void destroy_item::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void destroy_item::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.destroy_item.playerid)
+}
+
 // -------------------------------------------------------------------
 
 // get_key
 
-// uint32 itemid = 1;
-inline void get_key::clear_itemid() {
-  _impl_.itemid_ = 0u;
-}
-inline uint32_t get_key::_internal_itemid() const {
-  return _impl_.itemid_;
-}
-inline uint32_t get_key::itemid() const {
-  // @@protoc_insertion_point(field_get:Protocol.get_key.itemid)
-  return _internal_itemid();
-}
-inline void get_key::_internal_set_itemid(uint32_t value) {
-  
-  _impl_.itemid_ = value;
-}
-inline void get_key::set_itemid(uint32_t value) {
-  _internal_set_itemid(value);
-  // @@protoc_insertion_point(field_set:Protocol.get_key.itemid)
-}
-
-// uint32 playerid = 2;
-inline void get_key::clear_playerid() {
-  _impl_.playerid_ = 0u;
-}
-inline uint32_t get_key::_internal_playerid() const {
-  return _impl_.playerid_;
-}
-inline uint32_t get_key::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.get_key.playerid)
-  return _internal_playerid();
-}
-inline void get_key::_internal_set_playerid(uint32_t value) {
-  
-  _impl_.playerid_ = value;
-}
-inline void get_key::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.get_key.playerid)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void get_key::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -6917,51 +7019,51 @@ inline void get_key::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.get_key.packet_type)
 }
 
+// uint32 itemid = 2;
+inline void get_key::clear_itemid() {
+  _impl_.itemid_ = 0u;
+}
+inline uint32_t get_key::_internal_itemid() const {
+  return _impl_.itemid_;
+}
+inline uint32_t get_key::itemid() const {
+  // @@protoc_insertion_point(field_get:Protocol.get_key.itemid)
+  return _internal_itemid();
+}
+inline void get_key::_internal_set_itemid(uint32_t value) {
+  
+  _impl_.itemid_ = value;
+}
+inline void get_key::set_itemid(uint32_t value) {
+  _internal_set_itemid(value);
+  // @@protoc_insertion_point(field_set:Protocol.get_key.itemid)
+}
+
+// uint32 playerid = 3;
+inline void get_key::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t get_key::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t get_key::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.get_key.playerid)
+  return _internal_playerid();
+}
+inline void get_key::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void get_key::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.get_key.playerid)
+}
+
 // -------------------------------------------------------------------
 
 // escape
 
-// uint32 playerid = 1;
-inline void escape::clear_playerid() {
-  _impl_.playerid_ = 0u;
-}
-inline uint32_t escape::_internal_playerid() const {
-  return _impl_.playerid_;
-}
-inline uint32_t escape::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.escape.playerid)
-  return _internal_playerid();
-}
-inline void escape::_internal_set_playerid(uint32_t value) {
-  
-  _impl_.playerid_ = value;
-}
-inline void escape::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.escape.playerid)
-}
-
-// uint32 root = 2;
-inline void escape::clear_root() {
-  _impl_.root_ = 0u;
-}
-inline uint32_t escape::_internal_root() const {
-  return _impl_.root_;
-}
-inline uint32_t escape::root() const {
-  // @@protoc_insertion_point(field_get:Protocol.escape.root)
-  return _internal_root();
-}
-inline void escape::_internal_set_root(uint32_t value) {
-  
-  _impl_.root_ = value;
-}
-inline void escape::set_root(uint32_t value) {
-  _internal_set_root(value);
-  // @@protoc_insertion_point(field_set:Protocol.escape.root)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void escape::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -6981,31 +7083,51 @@ inline void escape::set_packet_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.escape.packet_type)
 }
 
+// uint32 playerid = 2;
+inline void escape::clear_playerid() {
+  _impl_.playerid_ = 0u;
+}
+inline uint32_t escape::_internal_playerid() const {
+  return _impl_.playerid_;
+}
+inline uint32_t escape::playerid() const {
+  // @@protoc_insertion_point(field_get:Protocol.escape.playerid)
+  return _internal_playerid();
+}
+inline void escape::_internal_set_playerid(uint32_t value) {
+  
+  _impl_.playerid_ = value;
+}
+inline void escape::set_playerid(uint32_t value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Protocol.escape.playerid)
+}
+
+// uint32 root = 3;
+inline void escape::clear_root() {
+  _impl_.root_ = 0u;
+}
+inline uint32_t escape::_internal_root() const {
+  return _impl_.root_;
+}
+inline uint32_t escape::root() const {
+  // @@protoc_insertion_point(field_get:Protocol.escape.root)
+  return _internal_root();
+}
+inline void escape::_internal_set_root(uint32_t value) {
+  
+  _impl_.root_ = value;
+}
+inline void escape::set_root(uint32_t value) {
+  _internal_set_root(value);
+  // @@protoc_insertion_point(field_set:Protocol.escape.root)
+}
+
 // -------------------------------------------------------------------
 
 // game_clear
 
-// bool b_clear = 1;
-inline void game_clear::clear_b_clear() {
-  _impl_.b_clear_ = false;
-}
-inline bool game_clear::_internal_b_clear() const {
-  return _impl_.b_clear_;
-}
-inline bool game_clear::b_clear() const {
-  // @@protoc_insertion_point(field_get:Protocol.game_clear.b_clear)
-  return _internal_b_clear();
-}
-inline void game_clear::_internal_set_b_clear(bool value) {
-  
-  _impl_.b_clear_ = value;
-}
-inline void game_clear::set_b_clear(bool value) {
-  _internal_set_b_clear(value);
-  // @@protoc_insertion_point(field_set:Protocol.game_clear.b_clear)
-}
-
-// uint32 packet_type = 3;
+// uint32 packet_type = 1;
 inline void game_clear::clear_packet_type() {
   _impl_.packet_type_ = 0u;
 }
@@ -7023,6 +7145,206 @@ inline void game_clear::_internal_set_packet_type(uint32_t value) {
 inline void game_clear::set_packet_type(uint32_t value) {
   _internal_set_packet_type(value);
   // @@protoc_insertion_point(field_set:Protocol.game_clear.packet_type)
+}
+
+// uint32 root = 2;
+inline void game_clear::clear_root() {
+  _impl_.root_ = 0u;
+}
+inline uint32_t game_clear::_internal_root() const {
+  return _impl_.root_;
+}
+inline uint32_t game_clear::root() const {
+  // @@protoc_insertion_point(field_get:Protocol.game_clear.root)
+  return _internal_root();
+}
+inline void game_clear::_internal_set_root(uint32_t value) {
+  
+  _impl_.root_ = value;
+}
+inline void game_clear::set_root(uint32_t value) {
+  _internal_set_root(value);
+  // @@protoc_insertion_point(field_set:Protocol.game_clear.root)
+}
+
+// uint32 alive_players = 3;
+inline void game_clear::clear_alive_players() {
+  _impl_.alive_players_ = 0u;
+}
+inline uint32_t game_clear::_internal_alive_players() const {
+  return _impl_.alive_players_;
+}
+inline uint32_t game_clear::alive_players() const {
+  // @@protoc_insertion_point(field_get:Protocol.game_clear.alive_players)
+  return _internal_alive_players();
+}
+inline void game_clear::_internal_set_alive_players(uint32_t value) {
+  
+  _impl_.alive_players_ = value;
+}
+inline void game_clear::set_alive_players(uint32_t value) {
+  _internal_set_alive_players(value);
+  // @@protoc_insertion_point(field_set:Protocol.game_clear.alive_players)
+}
+
+// uint32 dead_players = 4;
+inline void game_clear::clear_dead_players() {
+  _impl_.dead_players_ = 0u;
+}
+inline uint32_t game_clear::_internal_dead_players() const {
+  return _impl_.dead_players_;
+}
+inline uint32_t game_clear::dead_players() const {
+  // @@protoc_insertion_point(field_get:Protocol.game_clear.dead_players)
+  return _internal_dead_players();
+}
+inline void game_clear::_internal_set_dead_players(uint32_t value) {
+  
+  _impl_.dead_players_ = value;
+}
+inline void game_clear::set_dead_players(uint32_t value) {
+  _internal_set_dead_players(value);
+  // @@protoc_insertion_point(field_set:Protocol.game_clear.dead_players)
+}
+
+// string open_player = 5;
+inline void game_clear::clear_open_player() {
+  _impl_.open_player_.ClearToEmpty();
+}
+inline const std::string& game_clear::open_player() const {
+  // @@protoc_insertion_point(field_get:Protocol.game_clear.open_player)
+  return _internal_open_player();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void game_clear::set_open_player(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.open_player_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.game_clear.open_player)
+}
+inline std::string* game_clear::mutable_open_player() {
+  std::string* _s = _internal_mutable_open_player();
+  // @@protoc_insertion_point(field_mutable:Protocol.game_clear.open_player)
+  return _s;
+}
+inline const std::string& game_clear::_internal_open_player() const {
+  return _impl_.open_player_.Get();
+}
+inline void game_clear::_internal_set_open_player(const std::string& value) {
+  
+  _impl_.open_player_.Set(value, GetArenaForAllocation());
+}
+inline std::string* game_clear::_internal_mutable_open_player() {
+  
+  return _impl_.open_player_.Mutable(GetArenaForAllocation());
+}
+inline std::string* game_clear::release_open_player() {
+  // @@protoc_insertion_point(field_release:Protocol.game_clear.open_player)
+  return _impl_.open_player_.Release();
+}
+inline void game_clear::set_allocated_open_player(std::string* open_player) {
+  if (open_player != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.open_player_.SetAllocated(open_player, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.open_player_.IsDefault()) {
+    _impl_.open_player_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.game_clear.open_player)
+}
+
+// uint32 my_killcount = 6;
+inline void game_clear::clear_my_killcount() {
+  _impl_.my_killcount_ = 0u;
+}
+inline uint32_t game_clear::_internal_my_killcount() const {
+  return _impl_.my_killcount_;
+}
+inline uint32_t game_clear::my_killcount() const {
+  // @@protoc_insertion_point(field_get:Protocol.game_clear.my_killcount)
+  return _internal_my_killcount();
+}
+inline void game_clear::_internal_set_my_killcount(uint32_t value) {
+  
+  _impl_.my_killcount_ = value;
+}
+inline void game_clear::set_my_killcount(uint32_t value) {
+  _internal_set_my_killcount(value);
+  // @@protoc_insertion_point(field_set:Protocol.game_clear.my_killcount)
+}
+
+// string best_kill_player = 7;
+inline void game_clear::clear_best_kill_player() {
+  _impl_.best_kill_player_.ClearToEmpty();
+}
+inline const std::string& game_clear::best_kill_player() const {
+  // @@protoc_insertion_point(field_get:Protocol.game_clear.best_kill_player)
+  return _internal_best_kill_player();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void game_clear::set_best_kill_player(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.best_kill_player_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.game_clear.best_kill_player)
+}
+inline std::string* game_clear::mutable_best_kill_player() {
+  std::string* _s = _internal_mutable_best_kill_player();
+  // @@protoc_insertion_point(field_mutable:Protocol.game_clear.best_kill_player)
+  return _s;
+}
+inline const std::string& game_clear::_internal_best_kill_player() const {
+  return _impl_.best_kill_player_.Get();
+}
+inline void game_clear::_internal_set_best_kill_player(const std::string& value) {
+  
+  _impl_.best_kill_player_.Set(value, GetArenaForAllocation());
+}
+inline std::string* game_clear::_internal_mutable_best_kill_player() {
+  
+  return _impl_.best_kill_player_.Mutable(GetArenaForAllocation());
+}
+inline std::string* game_clear::release_best_kill_player() {
+  // @@protoc_insertion_point(field_release:Protocol.game_clear.best_kill_player)
+  return _impl_.best_kill_player_.Release();
+}
+inline void game_clear::set_allocated_best_kill_player(std::string* best_kill_player) {
+  if (best_kill_player != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.best_kill_player_.SetAllocated(best_kill_player, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.best_kill_player_.IsDefault()) {
+    _impl_.best_kill_player_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.game_clear.best_kill_player)
+}
+
+// uint32 best_killcount = 8;
+inline void game_clear::clear_best_killcount() {
+  _impl_.best_killcount_ = 0u;
+}
+inline uint32_t game_clear::_internal_best_killcount() const {
+  return _impl_.best_killcount_;
+}
+inline uint32_t game_clear::best_killcount() const {
+  // @@protoc_insertion_point(field_get:Protocol.game_clear.best_killcount)
+  return _internal_best_killcount();
+}
+inline void game_clear::_internal_set_best_killcount(uint32_t value) {
+  
+  _impl_.best_killcount_ = value;
+}
+inline void game_clear::set_best_killcount(uint32_t value) {
+  _internal_set_best_killcount(value);
+  // @@protoc_insertion_point(field_set:Protocol.game_clear.best_killcount)
 }
 
 #ifdef __GNUC__

@@ -33,14 +33,15 @@ struct PlayerData
 	FVector Location;
 	FRotator Rotation;
 	uint32 charactertype;
+	std::string username;
 	float hp;
 
 	// 기본 생성자 명시적 정의
-	PlayerData() : PlayerId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), charactertype(0), hp(100) {}
+	PlayerData() : PlayerId(0), Location(FVector::ZeroVector), Rotation(FRotator::ZeroRotator), charactertype(0), username(""), hp(100) {}
 
 	// 매개변수가 있는 생성자
-	PlayerData(uint32 InPlayerId, FVector InLocation, FRotator InRotation, uint32 Incharactertype, float Inhp)
-		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation), charactertype(Incharactertype), hp(Inhp) {}
+	PlayerData(uint32 InPlayerId, FVector InLocation, FRotator InRotation, uint32 Incharactertype, std::string Inusername, float Inhp)
+		: PlayerId(InPlayerId), Location(InLocation), Rotation(InRotation), charactertype(Incharactertype), username(Inusername), hp(Inhp) {}
 };
 
 struct ZombieData
@@ -260,6 +261,28 @@ struct WaitingReady
 		: playerid(Inplayerid), ready(Inready) {}
 };
 
+struct GameClear
+{
+	uint32 root;
+	uint32 alive_players;
+	uint32 dead_players;
+	std::string open_player;
+	uint32 my_kill_count;
+	uint32 best_kill_count;
+	std::string best_kill_player;
+
+	GameClear()
+		: root(0), alive_players(0), dead_players(0), open_player(""),
+		my_kill_count(0), best_kill_count(0), best_kill_player("") {}
+
+	GameClear(uint32 Inroot, uint32 Inalive_players, uint32 Indead_players,
+		const std::string& Inopen_player, uint32 Inmy_kill_count,
+		uint32 Inbest_kill_count, const std::string& Inbest_kill_player)
+		: root(Inroot), alive_players(Inalive_players), dead_players(Indead_players),
+		open_player(Inopen_player), my_kill_count(Inmy_kill_count),
+		best_kill_count(Inbest_kill_count), best_kill_player(Inbest_kill_player) {}
+};
+
 
 class UProGameInstance;
 
@@ -274,6 +297,7 @@ public:
 	uint32 MyPlayerId = 0;
 	uint32 OtherPlayerId = 0;
 	uint32 ZombieId = 0;
+	std::string MyUserName;
 
 	Concurrency::concurrent_queue<PlayerData> Q_player;
 	Concurrency::concurrent_queue<PlayerAttack> Q_pattack;
@@ -296,7 +320,7 @@ public:
 	Concurrency::concurrent_queue<LeavePlayer> Q_lplayer;
 	Concurrency::concurrent_queue<WaitingReady> Q_wready;
 	Concurrency::concurrent_queue<bool> Q_wAllready;
-	Concurrency::concurrent_queue<bool> Q_gclear;
+	Concurrency::concurrent_queue<GameClear> Q_gclear;
 
 
 	virtual bool Init() override;

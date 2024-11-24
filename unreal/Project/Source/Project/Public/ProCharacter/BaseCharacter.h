@@ -464,6 +464,8 @@ public:
 
 	virtual uint32 GetPlayerId() const;
 	void SetPlayerId(uint32 NewPlayerId);
+	std::string GetPlayerName() const;
+	void SetPlayerName(std::string NewPlayerName);
 	void UpdatePlayerData(FVector Location);
 
 	void SetAttack(bool b_attack);
@@ -619,6 +621,7 @@ private:
 private:
 	UPROPERTY(VisibleAnywhere)
 	uint32 PlayerId = 99;
+	std::string PlayerName;
 
 	FVector NewLocation;
 
