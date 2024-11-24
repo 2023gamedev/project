@@ -45,7 +45,7 @@ public:
 	UPROPERTY(EditAnywhere, Category= NormalWeapon)
 	UStaticMeshComponent* NormalWeapon;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) 
 	UBoxComponent* BoxComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")

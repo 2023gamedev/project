@@ -13,7 +13,7 @@ AHealingNiagaEffect::AHealingNiagaEffect()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 
 	RootComponent = Mesh;
@@ -33,7 +33,7 @@ void AHealingNiagaEffect::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	HealingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HealingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
+	HealingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HealingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z) + spawn_offset);
 	if (HealingFXComponent)
 	{
 		HealingFXComponent->Activate();
@@ -47,7 +47,7 @@ void AHealingNiagaEffect::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	HealingFXComponent->SetWorldLocation(OwnerChar->GetActorLocation());
+	HealingFXComponent->SetWorldLocation(OwnerChar->GetActorLocation() + spawn_offset);
 
 }
 

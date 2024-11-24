@@ -90,7 +90,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 			if (WeaponName == "ButchersKnife" || WeaponName == "FireAxe" || WeaponName == "SashimiKnife") {
 
 				TArray<FVector> PlaneVertexs;
-
+				 
 				if (PlaneComponent) {
 
 					for (int32 LODIndex = 0; LODIndex < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources.Num(); ++LODIndex)
@@ -118,7 +118,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							GetWorld(),
 							PlaneVertexs[0],			// 시작 위치
 							PlaneVertexs[1],			// 히트 지점
-							FColor::Red,				// 선 색상
+							FColor::Green,				// 선 색상
 							false,						// 지속 여부
 							5.0f,						// 지속 시간
 							0,							// 깊이 우선 여부
@@ -129,7 +129,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							GetWorld(),
 							PlaneVertexs[0],
 							PlaneVertexs[2],
-							FColor::Red,
+							FColor::Green,
 							false,
 							5.0f,
 							0,
@@ -140,7 +140,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							GetWorld(),
 							PlaneVertexs[2],
 							PlaneVertexs[3],
-							FColor::Red,
+							FColor::Green,
 							false,
 							5.0f,
 							0,
@@ -151,7 +151,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							GetWorld(),
 							PlaneVertexs[1],
 							PlaneVertexs[3],
-							FColor::Red,
+							FColor::Green,
 							false,
 							5.0f,
 							0,
@@ -163,7 +163,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						DrawDebugPoint(
 							GetWorld(),
 							planeposition_center,
-							3.0f,
+							10.0f,
 							FColor::Yellow,
 							false,
 							5.0f,
@@ -175,7 +175,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						DrawDebugLine(
 							GetWorld(),
 							planeposition_center,
-							planeposition_center + planenormal * 10.0f,
+							planeposition_center + planenormal * 20.0f,
 							FColor::Yellow,
 							false,
 							5.0f,

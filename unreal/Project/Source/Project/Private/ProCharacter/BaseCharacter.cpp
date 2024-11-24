@@ -459,7 +459,7 @@ void ABaseCharacter::BeginPlay()
 
 
 	// Slice 용 Weapon - TEST
-	if (CurrentWeapon == nullptr) {
+	if (CurrentWeapon == nullptr) { 
 
 		CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		//CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
@@ -478,10 +478,6 @@ void ABaseCharacter::BeginPlay()
 		CurrentWeapon->m_fCharacterSTR = m_fSTR;
 		CurrentWeapon->m_fWeaponDurability = 50.f;
 		SetNWHandIn(true);
-
-
-
-	
 
 	}
 

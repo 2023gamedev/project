@@ -45,10 +45,6 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 400.f;
 
-	BloodFX = CreateDefaultSubobject<ABloodNiagaEffect>(TEXT("BloodFX"));
-
-	BloodFX = nullptr;
-
 	ShoutingFX = CreateDefaultSubobject<AShoutingNiagaEffect>(TEXT("ShoutingFX"));
 
 	ShoutingFX = nullptr;
@@ -77,24 +73,24 @@ void ABaseZombie::Tick(float DeltaTime)
 {
 	if (CutProceduralMesh_1) {
 		if (procMesh_AddImpulse_1 == false) {
-			UE_LOG(LogTemp, Log, TEXT("(CutProcedural_1)"));
+			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_1)"));
 
 			float weight = CutProceduralMesh_1->CalculateMass();
-			UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
+			//UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
 
 			float x_baseImpulse = 3500.0f; //FMath::RandRange(2000.0f, 5000.0f);
 			float x_impulse = SetImpulseByWeight(weight, x_baseImpulse);
-			UE_LOG(LogTemp, Log, TEXT("X Impulse: %f"), x_impulse);
+			//UE_LOG(LogTemp, Log, TEXT("X Impulse: %f"), x_impulse);
 
 			float y_baseImpulse = 3500.0f; //FMath::RandRange(2000.0f, 5000.0f);
 			float y_impulse = SetImpulseByWeight(weight, y_baseImpulse);
-			UE_LOG(LogTemp, Log, TEXT("Y Impulse: %f"), y_impulse);
+			//UE_LOG(LogTemp, Log, TEXT("Y Impulse: %f"), y_impulse);
 
 			float z_baseImpulse = 12500.0f; //FMath::RandRange(7000.0f, 10000.0f);
 			float z_impulse = SetImpulseByWeight(weight, z_baseImpulse);
-			UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
+			//UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
 
-			UE_LOG(LogTemp, Log, TEXT("Weapon Foward Vector: %s"), *WeaponForward.ToString());
+			//UE_LOG(LogTemp, Log, TEXT("Weapon Foward Vector: %s"), *WeaponForward.ToString());
 
 			CutProceduralMesh_1->AddImpulseAtLocation(FVector(WeaponForward.X * x_impulse, WeaponForward.Y * y_impulse, WeaponForward.Z * z_impulse), CutProceduralMesh_1->K2_GetComponentLocation());
 			procMesh_AddImpulse_1 = true;
@@ -117,24 +113,24 @@ void ABaseZombie::Tick(float DeltaTime)
 
 	if (CutProceduralMesh_2) {
 		if (procMesh_AddImpulse_2 == false) {
-			UE_LOG(LogTemp, Log, TEXT("(CutProcedural_2)"));
+			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_2)"));
 
 			float weight = CutProceduralMesh_2->CalculateMass();
-			UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
+			//UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
 
 			float x_baseImpulse = 10000.0f; //FMath::RandRange(8000.0f, 12000.0f);
 			float x_impulse = SetImpulseByWeight(weight, x_baseImpulse);
-			UE_LOG(LogTemp, Log, TEXT("X Impulse: %f"), x_impulse);
+			//UE_LOG(LogTemp, Log, TEXT("X Impulse: %f"), x_impulse);
 
 			float y_baseImpulse = 10000.0f; //FMath::RandRange(8000.0f, 12000.0f);
 			float y_impulse = SetImpulseByWeight(weight, y_baseImpulse);
-			UE_LOG(LogTemp, Log, TEXT("Y Impulse: %f"), y_impulse);
+			//UE_LOG(LogTemp, Log, TEXT("Y Impulse: %f"), y_impulse);
 
 			float z_baseImpulse = 3000.0f; //FMath::RandRange(2000.0f, 4000.0f);
 			float z_impulse = SetImpulseByWeight(weight, z_baseImpulse);
-			UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
+			//UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
 
-			UE_LOG(LogTemp, Log, TEXT("Weapon Backward Vector: %s"), *(- WeaponForward).ToString());
+			//UE_LOG(LogTemp, Log, TEXT("Weapon Backward Vector: %s"), *(- WeaponForward).ToString());
 
 			CutProceduralMesh_2->AddImpulseAtLocation(FVector(-WeaponForward.X * x_impulse, -WeaponForward.Y * y_impulse, z_impulse), CutProceduralMesh_2->K2_GetComponentLocation());
 			procMesh_AddImpulse_2 = true;
@@ -250,16 +246,37 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	UE_LOG(LogTemp, Log, TEXT("Weapon Rotation: %s"), *Weapon->GetActorRotation().ToString());
 	//UE_LOG(LogTemp, Log, TEXT("Weapon Rotation Vector: %s"), *Weapon->GetActorRotation().Vector().ToString());
 
-	// 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
-	BloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation());
+	BloodFX.Empty();
 
-	if (GetHP() <= 0) {	// 죽을때(절단 될 때)는 피가 더 많이 튀도록
-		BloodFX->blood_spawncount = FMath::RandRange(300, 400);
+	if (GetHP() <= 0) {	// 죽을때(절단 될 때)는 피가 더 많이 튀도록 & 절단 된 부분들에서 따로 피 생성되도록
+		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
+		
+		if (NewBloodFX_0) {
+			NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
+			//NewBloodFX_0->blood_spawnloop = true;
+
+			BloodFX.Add(NewBloodFX_0);
+		}
+
+		ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
+		
+		if (NewBloodFX_1) {
+			NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
+			//NewBloodFX_1->blood_spawnloop = true;
+
+			BloodFX.Add(NewBloodFX_1);
+		}
 	}
 	else {
-		BloodFX->blood_spawncount = FMath::RandRange(80, 100);
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
+		
+		if (NewBloodFX) {
+			NewBloodFX->blood_spawncount = FMath::RandRange(80, 100);
+			NewBloodFX->spawn_flag = true;
+
+			BloodFX.Add(NewBloodFX);
+		}
 	}
-	BloodFX->spawn_flag = true;
 
 	BeAttacked();
 
@@ -466,6 +483,21 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			CutProceduralMesh_2->SetCollisionProfileName(TEXT("Ragdoll"));
 			CutProceduralMesh_2->SetSimulatePhysics(true);
 
+
+			// Blood Effect rootcomponent(proc mesh) 설정 후 스폰
+			if (BloodFX.Num() >= 2) {
+				if (BloodFX[0] && BloodFX[1]) {
+					BloodFX[0]->ProcMesh = CutProceduralMesh_1;
+					BloodFX[1]->ProcMesh = CutProceduralMesh_2;
+					BloodFX[0]->spawn_flag = true;
+					BloodFX[1]->spawn_flag = true;
+				}
+			}
+			else {
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX.Num() < 2 => BloodFX spawn failed!!!")));
+				UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX.Num() < 2 => BloodFX spawn failed!!!"));
+			}
+
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
@@ -618,8 +650,8 @@ void ABaseZombie::Shouting()
 	m_bIsShouting = true;
 
 
-	UE_LOG(LogTemp, Log, TEXT("Character is Die :: %s"), IsShouted() ? TEXT("true") : TEXT("false"));
-	UE_LOG(LogTemp, Error, TEXT("PLAYSHOUTINHGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
+	UE_LOG(LogTemp, Log, TEXT("IsShouted: %s"), IsShouted() ? TEXT("true") : TEXT("false"));
+	UE_LOG(LogTemp, Log, TEXT("PLAYSHOUTINHGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
 }
 
 void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
@@ -657,9 +689,9 @@ void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 	m_bBeAttacked = false;
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 
-	if (BloodFX != NULL) {
-		BloodFX->EndPlay(EEndPlayReason::Destroyed);
-	}
+	//if (BloodFX != NULL) {
+	//	BloodFX->EndPlay(EEndPlayReason::Destroyed);
+	//}
 }
 
 void ABaseZombie::SetZombieId(uint32 NewZombieId)
