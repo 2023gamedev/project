@@ -224,6 +224,9 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				uint32 best_kill_count;
 				std::string best_kill_player;*/
 
+
+				UE_LOG(LogNet, Display, TEXT("recvGameClearrecvGameClearrecvGameClearrecvGameClearrecvGameClear"));
+
 				//처리 recvEscapeRoot.playerid, recvEscapeRoot.root
 				APawn* ControlledPawn = GetPawn();
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))

@@ -35,8 +35,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/AgentInterface.dll",
-<<<<<<< HEAD
-=======
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -49,7 +47,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidPlatformEditor.dll",
->>>>>>> 7d92f8e040296ce84b6621ed116a886773ef5304
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -3478,30 +3475,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/Binaries/Win64/UnrealEditor.modules",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 7d92f8e040296ce84b6621ed116a886773ef5304
-			"Type": "RequiredResource"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.pdb",
-			"Type": "SymbolFile"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
-<<<<<<< HEAD
-=======
-=======
->>>>>>> C1124-3
->>>>>>> 7d92f8e040296ce84b6621ed116a886773ef5304
-=======
->>>>>>> C1124-4
 			"Type": "RequiredResource"
 		}
 	],
