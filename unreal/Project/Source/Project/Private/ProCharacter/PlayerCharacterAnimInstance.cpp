@@ -108,10 +108,10 @@ void UPlayerCharacterAnimInstance::PlayJumpMontage()
 }
 
 
-void UPlayerCharacterAnimInstance::PlayKeyMontage()
+void UPlayerCharacterAnimInstance::PlayKeyMontage(float PlaySpeed)
 {
 	if (!Montage_IsPlaying(OpenKeyMontage)) {
-		if (Montage_Play(OpenKeyMontage, 1.f))
+		if (Montage_Play(OpenKeyMontage, PlaySpeed))
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OpenKeyMontage 재생 시작"));
 		}

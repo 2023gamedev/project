@@ -35,4 +35,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	ABaseCharacter* OwnerChar;
+
+	UPROPERTY(EditAnywhere)
+	FVector spawn_offset = FVector(0, 0, 20.f);
 };

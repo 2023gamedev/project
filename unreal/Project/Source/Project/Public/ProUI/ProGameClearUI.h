@@ -19,16 +19,32 @@ public:
     UProGameClearUI(const FObjectInitializer& ObjectInitializer);
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-    UTextBlock* Message;
+    UTextBlock* OneAnswer;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-    UTextBlock* SText;
+    UTextBlock* TwoAnswer;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* ThreeAnswer;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* ThreeAnswer2;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* FourAnswer;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* FiveAnswer;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* FiveAnswer2;
+
 
     UFUNCTION(BlueprintCallable)
-    void SetMessage(const FString& mes);
+    void SetMessage(int index, const FString& mes);
 
     UFUNCTION(BlueprintCallable)
-    void SetScore(int32 Score);
+    void SetScore(int index, int32 Score);
 
  
 

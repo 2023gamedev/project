@@ -7,7 +7,7 @@
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
 #include "BloodNiagaEffect.generated.h"
-
+ 
 class ABaseZombie;
 
 UCLASS()
@@ -17,7 +17,7 @@ class PROJECT_API ABloodNiagaEffect : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	ABloodNiagaEffect();
+	ABloodNiagaEffect(); 
 
 	virtual void BeginPlay() override;
 
@@ -25,14 +25,21 @@ public:
 
 	virtual void EndPlay(EEndPlayReason::Type type) override;
 
+	void SpawnBloodEffect();
+
+	void StopSpawnBloodEffect();
+
+	void EndBloodEffect();
+
+
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* Mesh;
+	UProceduralMeshComponent* ProcMesh;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "FX")
 	UNiagaraSystem* BloodFXSystem;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "FX")
-	UNiagaraComponent* BloodFXComponent;
+	TArray<UNiagaraComponent*> BloodFXComponents;
 
 	UPROPERTY(EditAnywhere)
 	int32 blood_spawncount;
@@ -40,4 +47,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool spawn_flag = false;
 
+	FTimerHandle SpawnTimerHandle;
+
+	FTimerHandle StopSpawnTimerHandle;
+
+	FTimerHandle EndTimerHandle;
+
+	UPROPERTY(EditAnywhere)
+	bool blood_spawnloop = false;
 };

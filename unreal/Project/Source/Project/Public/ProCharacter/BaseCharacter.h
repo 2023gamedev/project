@@ -33,6 +33,7 @@ class UCircularPB_UI;
 class AHealingNiagaEffect;
 class UTextMissionUI;
 class UOtherPlayerUI;
+class AInterActor;
 
 
 DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
@@ -199,6 +200,7 @@ public:
 
 
 
+
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
 
@@ -207,6 +209,9 @@ public:
 
 	UFUNCTION()
 	void BleedHealingMontageEnded(UAnimMontage* Montage, bool interrup);
+
+	UFUNCTION()
+	void KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 	//Sound
 	void PlaySoundAtLocationForPlayer(USoundBase* Sound, FVector Location);
@@ -420,6 +425,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	float m_fBleedPercent = 0.3f;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	AInterActor* CurrentInterActor;
+
+
 	// 스태미나 부분
 	FTimerHandle UseStaminaHandle;
 
@@ -597,6 +607,14 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int m_iBleedHealingMontageFlag;
+
+	UPROPERTY(EditAnywhere)
+	bool bIsKeyPlaying;
+
+	UPROPERTY(EditAnywhere)
+	int KeyMontageFlag;
+
+
 
 private:
 	UPROPERTY(VisibleAnywhere)

@@ -29,7 +29,7 @@ public:
 
 	void PlayAttackMontage();
 	void PlayPickUpMontage();
-	void PlayKeyMontage();
+	void PlayKeyMontage(float PlaySpeed);
 	void PlayHealingMontage(float PlaySpeed);
 	void PlayBleedHealingMontage(float PlaySpeed);
 	void PlayJumpMontage();
