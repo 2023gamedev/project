@@ -287,7 +287,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 				continue;
 			}
 			// 연결 끊긴 플레이어 무시
-			if (g_players.find(player.first) != g_players.end()) {
+			if (g_players.find(player.first) == g_players.end()) {
 				continue;
 			}
 
@@ -320,7 +320,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 				continue;
 			}
 			// 연결 끊긴 플레이어 무시
-			if (!g_players[player.first]) {
+			if (g_players.find(player.first) == g_players.end()) {
 				continue;
 			}
 
@@ -618,7 +618,7 @@ bool Zombie::FootSoundCheck()
 			continue;
 		}
 		// 연결 끊긴 플레이어 무시
-		if (!g_players[player.first]) {
+		if (g_players.find(player.first) == g_players.end()) {
 			continue;
 		}
 
