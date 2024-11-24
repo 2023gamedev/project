@@ -7,8 +7,8 @@
 ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
-	//CurrentServerType = ServerType::LOBBY_SERVER;
-	CurrentServerType = ServerType::GAME_SERVER;
+	CurrentServerType = ServerType::LOBBY_SERVER;
+	//CurrentServerType = ServerType::GAME_SERVER;
 
 	recvBuffer.buf = recvData;
 	recvBuffer.len = BUFSIZE;
@@ -233,6 +233,15 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::WaitingAllReady Ready_Packet;
 				if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 					Q_wAllready.push(true);
+				}
+				break;
+			}
+
+			case 15:
+			{
+				Protocol::SelectReady SR_Packet;
+				if (SR_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					Q_sready.push(SelectReady(SR_Packet.playerid(), SR_Packet.player_num(), SR_Packet.ready()));
 				}
 				break;
 			}

@@ -113,6 +113,7 @@ PROTOBUF_CONSTEXPR SelectReady::SelectReady(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.playerid_)*/0u
+  , /*decltype(_impl_.player_num_)*/0u
   , /*decltype(_impl_.ready_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SelectReadyDefaultTypeInternal {
@@ -172,6 +173,7 @@ PROTOBUF_CONSTEXPR SC_Join::SC_Join(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.b_join_)*/false
+  , /*decltype(_impl_.roomid_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SC_JoinDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SC_JoinDefaultTypeInternal()
@@ -187,6 +189,7 @@ PROTOBUF_CONSTEXPR SC_JoinPlayer::SC_JoinPlayer(
     /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.playerid_)*/0u
+  , /*decltype(_impl_.roomid_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SC_JoinPlayerDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SC_JoinPlayerDefaultTypeInternal()
@@ -323,6 +326,7 @@ const uint32_t TableStruct_Lstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::SelectReady, _impl_.type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SelectReady, _impl_.playerid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SelectReady, _impl_.player_num_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SelectReady, _impl_.ready_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::SelectAllReady, _internal_metadata_),
@@ -358,6 +362,7 @@ const uint32_t TableStruct_Lstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_Join, _impl_.type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_Join, _impl_.b_join_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SC_Join, _impl_.roomid_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_JoinPlayer, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -367,6 +372,7 @@ const uint32_t TableStruct_Lstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_JoinPlayer, _impl_.type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_JoinPlayer, _impl_.playerid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_JoinPlayer, _impl_.name_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SC_JoinPlayer, _impl_.roomid_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::CS_Leave, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -412,15 +418,15 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 35, -1, -1, sizeof(::Protocol::WaitingReady)},
   { 44, -1, -1, sizeof(::Protocol::WaitingAllReady)},
   { 52, -1, -1, sizeof(::Protocol::SelectReady)},
-  { 61, -1, -1, sizeof(::Protocol::SelectAllReady)},
-  { 69, -1, -1, sizeof(::Protocol::Select_Character)},
-  { 78, -1, -1, sizeof(::Protocol::CS_Join)},
-  { 87, -1, -1, sizeof(::Protocol::SC_Join)},
-  { 95, -1, -1, sizeof(::Protocol::SC_JoinPlayer)},
-  { 104, -1, -1, sizeof(::Protocol::CS_Leave)},
-  { 113, -1, -1, sizeof(::Protocol::SC_LeavePlayer)},
-  { 122, -1, -1, sizeof(::Protocol::CS_Chatting)},
-  { 131, -1, -1, sizeof(::Protocol::SC_Chatting)},
+  { 62, -1, -1, sizeof(::Protocol::SelectAllReady)},
+  { 70, -1, -1, sizeof(::Protocol::Select_Character)},
+  { 79, -1, -1, sizeof(::Protocol::CS_Join)},
+  { 88, -1, -1, sizeof(::Protocol::SC_Join)},
+  { 97, -1, -1, sizeof(::Protocol::SC_JoinPlayer)},
+  { 107, -1, -1, sizeof(::Protocol::CS_Leave)},
+  { 116, -1, -1, sizeof(::Protocol::SC_LeavePlayer)},
+  { 125, -1, -1, sizeof(::Protocol::CS_Chatting)},
+  { 134, -1, -1, sizeof(::Protocol::SC_Chatting)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -451,27 +457,28 @@ const char descriptor_table_protodef_Lstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "C_Register\022\014\n\004type\030\001 \001(\r\022\022\n\nb_register\030\002"
   " \001(\010\"=\n\014WaitingReady\022\014\n\004type\030\001 \001(\r\022\020\n\010pl"
   "ayerid\030\002 \001(\r\022\r\n\005ready\030\003 \001(\010\"1\n\017WaitingAl"
-  "lReady\022\014\n\004type\030\001 \001(\r\022\020\n\010allready\030\002 \001(\010\"<"
+  "lReady\022\014\n\004type\030\001 \001(\r\022\020\n\010allready\030\002 \001(\010\"P"
   "\n\013SelectReady\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030"
-  "\002 \001(\r\022\r\n\005ready\030\003 \001(\010\"-\n\016SelectAllReady\022\014"
-  "\n\004type\030\001 \001(\r\022\r\n\005ready\030\002 \001(\010\"J\n\020Select_Ch"
-  "aracter\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022"
-  "\026\n\016character_type\030\003 \001(\r\"9\n\007CS_Join\022\014\n\004ty"
-  "pe\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\016\n\006roomid\030\003 \001"
-  "(\r\"\'\n\007SC_Join\022\014\n\004type\030\001 \001(\r\022\016\n\006b_join\030\002 "
-  "\001(\010\"=\n\rSC_JoinPlayer\022\014\n\004type\030\001 \001(\r\022\020\n\010pl"
-  "ayerid\030\002 \001(\r\022\014\n\004name\030\003 \001(\t\":\n\010CS_Leave\022\014"
-  "\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\016\n\006roomid"
-  "\030\003 \001(\r\"B\n\016SC_LeavePlayer\022\014\n\004type\030\001 \001(\r\022\020"
-  "\n\010playerid\030\002 \001(\r\022\020\n\010username\030\003 \001(\t\";\n\013CS"
-  "_Chatting\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001("
-  "\r\022\014\n\004chat\030\003 \001(\t\";\n\013SC_Chatting\022\014\n\004type\030\001"
-  " \001(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004chat\030\003 \001(\tb\006pr"
-  "oto3"
+  "\002 \001(\r\022\022\n\nplayer_num\030\003 \001(\r\022\r\n\005ready\030\004 \001(\010"
+  "\"-\n\016SelectAllReady\022\014\n\004type\030\001 \001(\r\022\r\n\005read"
+  "y\030\002 \001(\010\"J\n\020Select_Character\022\014\n\004type\030\001 \001("
+  "\r\022\020\n\010playerid\030\002 \001(\r\022\026\n\016character_type\030\003 "
+  "\001(\r\"9\n\007CS_Join\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid"
+  "\030\002 \001(\r\022\016\n\006roomid\030\003 \001(\r\"7\n\007SC_Join\022\014\n\004typ"
+  "e\030\001 \001(\r\022\016\n\006b_join\030\002 \001(\010\022\016\n\006roomid\030\003 \001(\r\""
+  "M\n\rSC_JoinPlayer\022\014\n\004type\030\001 \001(\r\022\020\n\010player"
+  "id\030\002 \001(\r\022\014\n\004name\030\003 \001(\t\022\016\n\006roomid\030\004 \001(\r\":"
+  "\n\010CS_Leave\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001"
+  "(\r\022\016\n\006roomid\030\003 \001(\r\"B\n\016SC_LeavePlayer\022\014\n\004"
+  "type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\020\n\010username"
+  "\030\003 \001(\t\";\n\013CS_Chatting\022\014\n\004type\030\001 \001(\r\022\020\n\010p"
+  "layerid\030\002 \001(\r\022\014\n\004chat\030\003 \001(\t\";\n\013SC_Chatti"
+  "ng\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004ch"
+  "at\030\003 \001(\tb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Lstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Lstruct_2eproto = {
-    false, false, 964, descriptor_table_protodef_Lstruct_2eproto,
+    false, false, 1016, descriptor_table_protodef_Lstruct_2eproto,
     "Lstruct.proto",
     &descriptor_table_Lstruct_2eproto_once, nullptr, 0, 16,
     schemas, file_default_instances, TableStruct_Lstruct_2eproto::offsets,
@@ -1984,6 +1991,7 @@ SelectReady::SelectReady(const SelectReady& from)
   new (&_impl_) Impl_{
       decltype(_impl_.type_){}
     , decltype(_impl_.playerid_){}
+    , decltype(_impl_.player_num_){}
     , decltype(_impl_.ready_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -2001,6 +2009,7 @@ inline void SelectReady::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.type_){0u}
     , decltype(_impl_.playerid_){0u}
+    , decltype(_impl_.player_num_){0u}
     , decltype(_impl_.ready_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -2057,9 +2066,17 @@ const char* SelectReady::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
         } else
           goto handle_unusual;
         continue;
-      // bool ready = 3;
+      // uint32 player_num = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.player_num_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool ready = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           _impl_.ready_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
@@ -2106,10 +2123,16 @@ uint8_t* SelectReady::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_playerid(), target);
   }
 
-  // bool ready = 3;
+  // uint32 player_num = 3;
+  if (this->_internal_player_num() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_player_num(), target);
+  }
+
+  // bool ready = 4;
   if (this->_internal_ready() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_ready(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_ready(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2138,7 +2161,12 @@ size_t SelectReady::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_playerid());
   }
 
-  // bool ready = 3;
+  // uint32 player_num = 3;
+  if (this->_internal_player_num() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_player_num());
+  }
+
+  // bool ready = 4;
   if (this->_internal_ready() != 0) {
     total_size += 1 + 1;
   }
@@ -2166,6 +2194,9 @@ void SelectReady::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
   }
   if (from._internal_playerid() != 0) {
     _this->_internal_set_playerid(from._internal_playerid());
+  }
+  if (from._internal_player_num() != 0) {
+    _this->_internal_set_player_num(from._internal_player_num());
   }
   if (from._internal_ready() != 0) {
     _this->_internal_set_ready(from._internal_ready());
@@ -2900,12 +2931,13 @@ SC_Join::SC_Join(const SC_Join& from)
   new (&_impl_) Impl_{
       decltype(_impl_.type_){}
     , decltype(_impl_.b_join_){}
+    , decltype(_impl_.roomid_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.type_, &from._impl_.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.b_join_) -
-    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.b_join_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.roomid_) -
+    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.roomid_));
   // @@protoc_insertion_point(copy_constructor:Protocol.SC_Join)
 }
 
@@ -2916,6 +2948,7 @@ inline void SC_Join::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.type_){0u}
     , decltype(_impl_.b_join_){false}
+    , decltype(_impl_.roomid_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -2944,8 +2977,8 @@ void SC_Join::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.b_join_) -
-      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.b_join_));
+      reinterpret_cast<char*>(&_impl_.roomid_) -
+      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.roomid_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2967,6 +3000,14 @@ const char* SC_Join::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.b_join_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 roomid = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.roomid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3012,6 +3053,12 @@ uint8_t* SC_Join::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteBoolToArray(2, this->_internal_b_join(), target);
   }
 
+  // uint32 roomid = 3;
+  if (this->_internal_roomid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_roomid(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3038,6 +3085,11 @@ size_t SC_Join::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
+  // uint32 roomid = 3;
+  if (this->_internal_roomid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_roomid());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -3062,6 +3114,9 @@ void SC_Join::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
   if (from._internal_b_join() != 0) {
     _this->_internal_set_b_join(from._internal_b_join());
   }
+  if (from._internal_roomid() != 0) {
+    _this->_internal_set_roomid(from._internal_roomid());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -3080,8 +3135,8 @@ void SC_Join::InternalSwap(SC_Join* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SC_Join, _impl_.b_join_)
-      + sizeof(SC_Join::_impl_.b_join_)
+      PROTOBUF_FIELD_OFFSET(SC_Join, _impl_.roomid_)
+      + sizeof(SC_Join::_impl_.roomid_)
       - PROTOBUF_FIELD_OFFSET(SC_Join, _impl_.type_)>(
           reinterpret_cast<char*>(&_impl_.type_),
           reinterpret_cast<char*>(&other->_impl_.type_));
@@ -3112,6 +3167,7 @@ SC_JoinPlayer::SC_JoinPlayer(const SC_JoinPlayer& from)
       decltype(_impl_.name_){}
     , decltype(_impl_.type_){}
     , decltype(_impl_.playerid_){}
+    , decltype(_impl_.roomid_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -3124,8 +3180,8 @@ SC_JoinPlayer::SC_JoinPlayer(const SC_JoinPlayer& from)
       _this->GetArenaForAllocation());
   }
   ::memcpy(&_impl_.type_, &from._impl_.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.playerid_) -
-    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.playerid_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.roomid_) -
+    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.roomid_));
   // @@protoc_insertion_point(copy_constructor:Protocol.SC_JoinPlayer)
 }
 
@@ -3137,6 +3193,7 @@ inline void SC_JoinPlayer::SharedCtor(
       decltype(_impl_.name_){}
     , decltype(_impl_.type_){0u}
     , decltype(_impl_.playerid_){0u}
+    , decltype(_impl_.roomid_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.name_.InitDefault();
@@ -3171,8 +3228,8 @@ void SC_JoinPlayer::Clear() {
 
   _impl_.name_.ClearToEmpty();
   ::memset(&_impl_.type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.playerid_) -
-      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.playerid_));
+      reinterpret_cast<char*>(&_impl_.roomid_) -
+      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.roomid_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3205,6 +3262,14 @@ const char* SC_JoinPlayer::_InternalParse(const char* ptr, ::_pbi::ParseContext*
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "Protocol.SC_JoinPlayer.name"));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 roomid = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.roomid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -3259,6 +3324,12 @@ uint8_t* SC_JoinPlayer::_InternalSerialize(
         3, this->_internal_name(), target);
   }
 
+  // uint32 roomid = 4;
+  if (this->_internal_roomid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_roomid(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3292,6 +3363,11 @@ size_t SC_JoinPlayer::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_playerid());
   }
 
+  // uint32 roomid = 4;
+  if (this->_internal_roomid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_roomid());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -3319,6 +3395,9 @@ void SC_JoinPlayer::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::
   if (from._internal_playerid() != 0) {
     _this->_internal_set_playerid(from._internal_playerid());
   }
+  if (from._internal_roomid() != 0) {
+    _this->_internal_set_roomid(from._internal_roomid());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -3343,8 +3422,8 @@ void SC_JoinPlayer::InternalSwap(SC_JoinPlayer* other) {
       &other->_impl_.name_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SC_JoinPlayer, _impl_.playerid_)
-      + sizeof(SC_JoinPlayer::_impl_.playerid_)
+      PROTOBUF_FIELD_OFFSET(SC_JoinPlayer, _impl_.roomid_)
+      + sizeof(SC_JoinPlayer::_impl_.roomid_)
       - PROTOBUF_FIELD_OFFSET(SC_JoinPlayer, _impl_.type_)>(
           reinterpret_cast<char*>(&_impl_.type_),
           reinterpret_cast<char*>(&other->_impl_.type_));

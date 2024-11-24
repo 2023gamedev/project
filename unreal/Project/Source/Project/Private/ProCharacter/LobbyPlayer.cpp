@@ -171,6 +171,7 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		{
 			FString FStringname = FString(UTF8_TO_TCHAR(recvJplayer.username.c_str()));
 			WaitingRoomUIWidget->AddPlayerToList(FStringname);
+			LobbyPlayers.Add(recvJplayer.playerid, FStringname);
 			WaitingRoomUIWidget->Waiting_LobbyPlayers.FindOrAdd(recvJplayer.playerid, FStringname);
 		}
 	}
@@ -194,6 +195,13 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		if (WaitingRoomUIWidget)
 		{
 			WaitingRoomUIWidget->UpdatePlayerReadyState(recvWready.playerid, recvWready.ready);
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_sready.try_pop(recvSready)) {
+		if (WaitingRoomUIWidget)
+		{
+			ChoiceCharacterUIWidget->UpdatePlayerReadyState(recvSready.player_num, recvSready.ready);
 		}
 	}
 

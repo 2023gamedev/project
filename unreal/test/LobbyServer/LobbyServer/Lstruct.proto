@@ -38,7 +38,8 @@ message WaitingAllReady{
 message SelectReady{
     uint32 type = 1;
     uint32 playerid = 2;
-    bool ready = 3;
+    uint32 player_num = 3;
+    bool ready = 4;
 }
 
 message SelectAllReady{
@@ -61,12 +62,14 @@ message CS_Join{
 message SC_Join{
     uint32 type = 1;
     bool b_join = 2;
+    uint32 roomid = 3;
 }
 
 message SC_JoinPlayer{
     uint32 type = 1;
     uint32 playerid = 2;
     string name = 3;
+    uint32 roomid = 4;
 }
 
 message CS_Leave{

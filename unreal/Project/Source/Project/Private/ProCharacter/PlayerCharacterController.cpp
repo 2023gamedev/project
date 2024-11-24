@@ -327,6 +327,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp || sendRun || sendjump) {
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
+		std::string MyPlayerName = GameInstance->ClientSocketPtr->MyUserName;
 
 		// Protobuf를 사용하여 TestPacket 생성
 		Protocol::Character packet;
@@ -341,6 +342,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_roll(CurrentRotation.Roll);
 		packet.set_hp(hp);
 		packet.set_b_run(IsRlyRun + 1);
+		packet.set_username(MyPlayerName);
 		//packet.set_b_jump(sendjump + 1);
 		packet.set_isingame(true);
 

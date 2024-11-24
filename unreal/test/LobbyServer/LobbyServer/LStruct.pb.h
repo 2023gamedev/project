@@ -1263,7 +1263,8 @@ class SelectReady final :
   enum : int {
     kTypeFieldNumber = 1,
     kPlayeridFieldNumber = 2,
-    kReadyFieldNumber = 3,
+    kPlayerNumFieldNumber = 3,
+    kReadyFieldNumber = 4,
   };
   // uint32 type = 1;
   void clear_type();
@@ -1283,7 +1284,16 @@ class SelectReady final :
   void _internal_set_playerid(uint32_t value);
   public:
 
-  // bool ready = 3;
+  // uint32 player_num = 3;
+  void clear_player_num();
+  uint32_t player_num() const;
+  void set_player_num(uint32_t value);
+  private:
+  uint32_t _internal_player_num() const;
+  void _internal_set_player_num(uint32_t value);
+  public:
+
+  // bool ready = 4;
   void clear_ready();
   bool ready() const;
   void set_ready(bool value);
@@ -1302,6 +1312,7 @@ class SelectReady final :
   struct Impl_ {
     uint32_t type_;
     uint32_t playerid_;
+    uint32_t player_num_;
     bool ready_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -1932,6 +1943,7 @@ class SC_Join final :
   enum : int {
     kTypeFieldNumber = 1,
     kBJoinFieldNumber = 2,
+    kRoomidFieldNumber = 3,
   };
   // uint32 type = 1;
   void clear_type();
@@ -1951,6 +1963,15 @@ class SC_Join final :
   void _internal_set_b_join(bool value);
   public:
 
+  // uint32 roomid = 3;
+  void clear_roomid();
+  uint32_t roomid() const;
+  void set_roomid(uint32_t value);
+  private:
+  uint32_t _internal_roomid() const;
+  void _internal_set_roomid(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.SC_Join)
  private:
   class _Internal;
@@ -1961,6 +1982,7 @@ class SC_Join final :
   struct Impl_ {
     uint32_t type_;
     bool b_join_;
+    uint32_t roomid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2092,6 +2114,7 @@ class SC_JoinPlayer final :
     kNameFieldNumber = 3,
     kTypeFieldNumber = 1,
     kPlayeridFieldNumber = 2,
+    kRoomidFieldNumber = 4,
   };
   // string name = 3;
   void clear_name();
@@ -2125,6 +2148,15 @@ class SC_JoinPlayer final :
   void _internal_set_playerid(uint32_t value);
   public:
 
+  // uint32 roomid = 4;
+  void clear_roomid();
+  uint32_t roomid() const;
+  void set_roomid(uint32_t value);
+  private:
+  uint32_t _internal_roomid() const;
+  void _internal_set_roomid(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.SC_JoinPlayer)
  private:
   class _Internal;
@@ -2136,6 +2168,7 @@ class SC_JoinPlayer final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
     uint32_t type_;
     uint32_t playerid_;
+    uint32_t roomid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3381,7 +3414,27 @@ inline void SelectReady::set_playerid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.SelectReady.playerid)
 }
 
-// bool ready = 3;
+// uint32 player_num = 3;
+inline void SelectReady::clear_player_num() {
+  _impl_.player_num_ = 0u;
+}
+inline uint32_t SelectReady::_internal_player_num() const {
+  return _impl_.player_num_;
+}
+inline uint32_t SelectReady::player_num() const {
+  // @@protoc_insertion_point(field_get:Protocol.SelectReady.player_num)
+  return _internal_player_num();
+}
+inline void SelectReady::_internal_set_player_num(uint32_t value) {
+  
+  _impl_.player_num_ = value;
+}
+inline void SelectReady::set_player_num(uint32_t value) {
+  _internal_set_player_num(value);
+  // @@protoc_insertion_point(field_set:Protocol.SelectReady.player_num)
+}
+
+// bool ready = 4;
 inline void SelectReady::clear_ready() {
   _impl_.ready_ = false;
 }
@@ -3617,6 +3670,26 @@ inline void SC_Join::set_b_join(bool value) {
   // @@protoc_insertion_point(field_set:Protocol.SC_Join.b_join)
 }
 
+// uint32 roomid = 3;
+inline void SC_Join::clear_roomid() {
+  _impl_.roomid_ = 0u;
+}
+inline uint32_t SC_Join::_internal_roomid() const {
+  return _impl_.roomid_;
+}
+inline uint32_t SC_Join::roomid() const {
+  // @@protoc_insertion_point(field_get:Protocol.SC_Join.roomid)
+  return _internal_roomid();
+}
+inline void SC_Join::_internal_set_roomid(uint32_t value) {
+  
+  _impl_.roomid_ = value;
+}
+inline void SC_Join::set_roomid(uint32_t value) {
+  _internal_set_roomid(value);
+  // @@protoc_insertion_point(field_set:Protocol.SC_Join.roomid)
+}
+
 // -------------------------------------------------------------------
 
 // SC_JoinPlayer
@@ -3709,6 +3782,26 @@ inline void SC_JoinPlayer::set_allocated_name(std::string* name) {
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:Protocol.SC_JoinPlayer.name)
+}
+
+// uint32 roomid = 4;
+inline void SC_JoinPlayer::clear_roomid() {
+  _impl_.roomid_ = 0u;
+}
+inline uint32_t SC_JoinPlayer::_internal_roomid() const {
+  return _impl_.roomid_;
+}
+inline uint32_t SC_JoinPlayer::roomid() const {
+  // @@protoc_insertion_point(field_get:Protocol.SC_JoinPlayer.roomid)
+  return _internal_roomid();
+}
+inline void SC_JoinPlayer::_internal_set_roomid(uint32_t value) {
+  
+  _impl_.roomid_ = value;
+}
+inline void SC_JoinPlayer::set_roomid(uint32_t value) {
+  _internal_set_roomid(value);
+  // @@protoc_insertion_point(field_set:Protocol.SC_JoinPlayer.roomid)
 }
 
 // -------------------------------------------------------------------

@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "ProGamemode/LobbyGameMode.h"
 #include "Components/CanvasPanelSlot.h"
+#include "ProCharacter/LobbyPlayer.h"
 
 void UChoiceCharacterUI::OnClickedGirlButton()
 {
@@ -52,6 +53,12 @@ void UChoiceCharacterUI::OnClickedReadyButton()
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
     b_ready = !b_ready;
+
+    if (GirlButton) GirlButton->SetIsEnabled(false);
+    if (EmployeeButton) EmployeeButton->SetIsEnabled(false);
+    if (IdolButton) IdolButton->SetIsEnabled(false);
+    if (FireFighterButton) FireFighterButton->SetIsEnabled(false);
+    if (ReadyButton) ReadyButton->SetIsEnabled(false);
 
 }
 
@@ -109,11 +116,56 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
     }
 }
 
+void UChoiceCharacterUI::UpdatePlayerReadyState(uint32 player_num, bool Ready)
+{
+    if (player_num == 1)
+    {
+        First_Ready->SetText(FText::FromString("READY"));
+        First_Ready->Font.Size = 50;
+        First_Ready->SetJustification(ETextJustify::Center);
+        First_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+    }
+    else if (player_num == 2)
+    {
+        Second_Ready->SetText(FText::FromString("READY"));
+        Second_Ready->Font.Size = 50;
+        Second_Ready->SetJustification(ETextJustify::Center);
+        Second_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+    }
+    else if (player_num == 3)
+    {
+        Third_Ready->SetText(FText::FromString("READY"));
+        Third_Ready->Font.Size = 50;
+        Third_Ready->SetJustification(ETextJustify::Center);
+        Third_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+    }
+    else if (player_num == 4)
+    {
+        Fourth_Ready->SetText(FText::FromString("READY"));
+        Fourth_Ready->Font.Size = 50;
+        Fourth_Ready->SetJustification(ETextJustify::Center);
+        Fourth_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+    }
+}
 
 void UChoiceCharacterUI::Init()
 {
 
     GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+    APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+    if (!PlayerPawn)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "PlayerPawn not found!");
+        return;
+    }
+
+    ALobbyPlayer* LobbyPlayer = Cast<ALobbyPlayer>(PlayerPawn);
+    if (!LobbyPlayer)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "LobbyPlayer not found!");
+        return;
+    }
 
 
     if (GirlButton)
@@ -169,6 +221,29 @@ void UChoiceCharacterUI::Init()
         ReadyButton->SetIsEnabled(true);
 
         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ReadyButton Init End");
+    }
+
+    const TMap<uint32, FString>& LobbyPlayers = LobbyPlayer->GetLobbyPlayers();
+
+    TArray<FString> PlayerNames;
+    LobbyPlayers.GenerateValueArray(PlayerNames);
+
+    // PlayerNames 배열의 순서대로 텍스트 위젯에 설정
+    if (PlayerNames.IsValidIndex(0) && First_Player)
+    {
+        First_Player->SetText(FText::FromString(PlayerNames[0]));
+    }
+    if (PlayerNames.IsValidIndex(1) && Second_Player)
+    {
+        Second_Player->SetText(FText::FromString(PlayerNames[1]));
+    }
+    if (PlayerNames.IsValidIndex(2) && Third_Player)
+    {
+        Third_Player->SetText(FText::FromString(PlayerNames[2]));
+    }
+    if (PlayerNames.IsValidIndex(3) && Fourth_Player)
+    {
+        Fourth_Player->SetText(FText::FromString(PlayerNames[3]));
     }
 }
 
