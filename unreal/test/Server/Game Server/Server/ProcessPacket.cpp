@@ -372,6 +372,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         printf("\n[ No. %3u ] get key item !!\n", id);
         Protocol::get_key Packet;
         Packet.ParseFromArray(buffer, bufferSize);
+
+        printf("%d item\n", Packet.itemid());
+
         string serializedData;
         Packet.SerializeToString(&serializedData);
 

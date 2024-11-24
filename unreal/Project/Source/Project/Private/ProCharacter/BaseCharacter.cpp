@@ -1065,8 +1065,12 @@ void ABaseCharacter::GetItem()
 			OnPickUPUISlot();
 
 			if (itembox->ItemClassType == EItemClass::KEYITEM) {
-				// 아이템 id부분 수정 필요
-				Send_GetKey(1);
+				if (itembox->ItemName.ToString().Contains("Car")) {
+					Send_GetKey(1);
+				}
+				else if (itembox->ItemName.ToString().Contains("Roof")) {
+					Send_GetKey(2);
+				}
 			}
 
 			ItemBoxId = itembox->GetItemBoxId();
@@ -2770,6 +2774,7 @@ void ABaseCharacter::Send_GetKey(uint32 itemid)
 {
 	Protocol::get_key Packet;
 	Packet.set_itemid(itemid);
+	Packet.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
 	Packet.set_packet_type(18);
 
 	std::string serializedData;
