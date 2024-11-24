@@ -37,7 +37,7 @@ void UProGameInstance::InitSocket()
     if (ClientSocketPtr != nullptr) return;
 
     ClientSocketPtr = new ClientSocket(this);
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Success!")));
+    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Success!")));
   
     if (ClientSocketPtr->Init())
     {
@@ -213,7 +213,7 @@ TSubclassOf<AGameStateBase> UProGameInstance::GetGameState()
 
 void UProGameInstance::ChangeOneGameMode()
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UProGameInstance::ChangeOneGameMode()");
+    //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UProGameInstance::ChangeOneGameMode()");
     
 
     // 현재 월드 가져오기

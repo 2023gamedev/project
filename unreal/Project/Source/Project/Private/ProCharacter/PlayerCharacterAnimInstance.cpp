@@ -98,11 +98,11 @@ void UPlayerCharacterAnimInstance::PlayJumpMontage()
 	if (!Montage_IsPlaying(JumpMontage)) {
 		if (Montage_Play(JumpMontage, 1.f))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("JumpMontage 재생 시작"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("JumpMontage 재생 시작"));
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("JumpMontage 재생 실패"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("JumpMontage 재생 실패"));
 		}
 	}
 }
@@ -113,36 +113,36 @@ void UPlayerCharacterAnimInstance::PlayKeyMontage(float PlaySpeed)
 	if (!Montage_IsPlaying(OpenKeyMontage)) {
 		if (Montage_Play(OpenKeyMontage, PlaySpeed))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OpenKeyMontage 재생 시작"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OpenKeyMontage 재생 시작"));
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("OpenKeyMontage 재생 실패"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("OpenKeyMontage 재생 실패"));
 		}
 	}
 }
 
 void UPlayerCharacterAnimInstance::AnimNotify_AttackStart()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackStart"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackStart"));
 	OnAttackStartCheck.Broadcast();
 }
 
 void UPlayerCharacterAnimInstance::AnimNotify_AttackEnd()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackEnd"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_AttackEnd"));
 	OnAttackEndCheck.Broadcast();
 }
 
 void UPlayerCharacterAnimInstance::AnimNotify_FootSound1()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_FootSound1"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_FootSound1"));
 	OnFootSoundCheck.Broadcast();
 }
 
 void UPlayerCharacterAnimInstance::AnimNotify_FootSound2()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_FootSound2"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_FootSound2"));
 	OnFootSoundCheck.Broadcast();
 }
 

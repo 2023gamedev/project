@@ -98,7 +98,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 		memcpy(&MyPlayerId, buffer.data(), sizeof(MyPlayerId));
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MyPlayerId: %d"), MyPlayerId));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MyPlayerId: %d"), MyPlayerId));
 		UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId);
 
 		return;
@@ -521,16 +521,16 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 
 	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Trying to connect.")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Trying to connect.")));
 
 	if (retval == SOCKET_ERROR)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fail")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fail")));
 		return false;
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Success!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Success!")));
 
 		UE_LOG(LogNet, Display, TEXT("Socket Initialized"));
 

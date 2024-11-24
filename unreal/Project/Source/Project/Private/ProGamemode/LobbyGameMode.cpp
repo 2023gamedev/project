@@ -63,7 +63,7 @@ void ALobbyGameMode::CheckServerType()
 
 void ALobbyGameMode::ChoiceGirl()
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceGirl!");
+    //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceGirl!");
 
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
 
@@ -73,7 +73,7 @@ void ALobbyGameMode::ChoiceGirl()
 
 void ALobbyGameMode::ChoiceEmployee()
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceEmployee!");
+    //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceEmployee!");
 
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(2);
@@ -82,7 +82,7 @@ void ALobbyGameMode::ChoiceEmployee()
 
 void ALobbyGameMode::ChoiceIdol()
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceIdol!");
+    //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceIdol!");
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(3);
     SendChoice(3);
@@ -90,7 +90,7 @@ void ALobbyGameMode::ChoiceIdol()
 
 void ALobbyGameMode::ChoiceFireFighter()
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceFireFighter!");
+    //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ALobbyGameMode::ChoiceFireFighter!");
 
     UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
     GameInstance->SetChoicedCharacterNumber(4);
