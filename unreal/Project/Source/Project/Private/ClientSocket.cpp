@@ -519,19 +519,19 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 		ServerAddr.sin_port = htons(8777);
 	}
 
-	FString ConfigPath = FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("config.txt"));
+	FString SourcePath = FPaths::Combine(FPaths::ProjectContentDir(), TEXT("config.txt"));
 
-	if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*ConfigPath))
+	if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*SourcePath))
 	{
-		UE_LOG(LogNet, Error, TEXT("Config file not found at: %s"), *ConfigPath);
+		UE_LOG(LogNet, Error, TEXT("Config file not found at: %s"), *SourcePath);
 		return false;
 	}
 
 
-	std::ifstream configFile(TCHAR_TO_UTF8(*ConfigPath));
+	std::ifstream configFile(TCHAR_TO_UTF8(*SourcePath));
 	if (!configFile.is_open())
 	{
-		UE_LOG(LogNet, Error, TEXT("Failed to open config file at: %s"), *ConfigPath);
+		UE_LOG(LogNet, Error, TEXT("Failed to open config file at: %s"), *SourcePath);
 		return false;
 	}
 
