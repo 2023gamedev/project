@@ -114,53 +114,53 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 					if (PlaneVertexs.Num() >= 4) {
 						// 히트 지점에 평면의 선 그리기
-						DrawDebugLine(
-							GetWorld(),
-							PlaneVertexs[0],			// 시작 위치
-							PlaneVertexs[1],			// 히트 지점
-							FColor::Green,				// 선 색상
-							false,						// 지속 여부
-							5.0f,						// 지속 시간
-							0,							// 깊이 우선 여부
-							1.0f						// 선 두께
-						);
+						//DrawDebugLine(
+						//	GetWorld(),
+						//	PlaneVertexs[0],			// 시작 위치
+						//	PlaneVertexs[1],			// 히트 지점
+						//	FColor::Green,				// 선 색상
+						//	false,						// 지속 여부
+						//	5.0f,						// 지속 시간
+						//	0,							// 깊이 우선 여부
+						//	1.0f						// 선 두께
+						//);
 
-						DrawDebugLine(
-							GetWorld(),
-							PlaneVertexs[0],
-							PlaneVertexs[2],
-							FColor::Green,
-							false,
-							5.0f,
-							0,
-							1.0f
-						);
+						//DrawDebugLine(
+						//	GetWorld(),
+						//	PlaneVertexs[0],
+						//	PlaneVertexs[2],
+						//	FColor::Green,
+						//	false,
+						//	5.0f,
+						//	0,
+						//	1.0f
+						//);
 
-						DrawDebugLine(
-							GetWorld(),
-							PlaneVertexs[2],
-							PlaneVertexs[3],
-							FColor::Green,
-							false,
-							5.0f,
-							0,
-							1.0f
-						);
+						//DrawDebugLine(
+						//	GetWorld(),
+						//	PlaneVertexs[2],
+						//	PlaneVertexs[3],
+						//	FColor::Green,
+						//	false,
+						//	5.0f,
+						//	0,
+						//	1.0f
+						//);
 
-						DrawDebugLine(
-							GetWorld(),
-							PlaneVertexs[1],
-							PlaneVertexs[3],
-							FColor::Green,
-							false,
-							5.0f,
-							0,
-							1.0f
-						);
+						//DrawDebugLine(
+						//	GetWorld(),
+						//	PlaneVertexs[1],
+						//	PlaneVertexs[3],
+						//	FColor::Green,
+						//	false,
+						//	5.0f,
+						//	0,
+						//	1.0f
+						//);
 
 						FVector planeposition_center = (PlaneVertexs[0] + PlaneVertexs[1] + PlaneVertexs[2] + PlaneVertexs[3]) / 4.0f;
 
-						DrawDebugPoint(
+						/*DrawDebugPoint(
 							GetWorld(),
 							planeposition_center,
 							10.0f,
@@ -168,11 +168,11 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							false,
 							5.0f,
 							0
-						);
+						);*/
 
 						FVector planenormal = FVector::CrossProduct(PlaneVertexs[0] - PlaneVertexs[3], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
 
-						DrawDebugLine(
+						/*DrawDebugLine(
 							GetWorld(),
 							planeposition_center,
 							planeposition_center + planenormal * 20.0f,
@@ -181,7 +181,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							5.0f,
 							0,
 							1.0f
-						);
+						);*/
 						
 						Zombie->WeaponForward = GetActorRotation().Vector();
 						Zombie->CutZombie(planeposition_center, planenormal);
