@@ -34,8 +34,9 @@ ANormalZombie::ANormalZombie()
 
 	SetHP(20);
 	SetStartHP(20);
-	SetSpeed(2);
-	GetCharacterMovement()->MaxWalkSpeed = 200.f;
+	float speed = 2.f;
+	SetSpeed(speed);
+	GetCharacterMovement()->MaxWalkSpeed = speed * 100.f;
 	SetSTR(FMath::RandRange(4, 8));
 	SetSpecialAbility(false);
 	SetZombieName("NormalZombie");
