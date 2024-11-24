@@ -1489,6 +1489,25 @@ void ABaseCharacter::PlayKeyAnim()
 	}
 }
 
+void ABaseCharacter::UpdateOpenKey(uint32 keyindex)
+{
+	if (keyindex == 1) {
+		FText KText = FText::FromString(TEXT("풀렸다.지하로 탈출하라"));
+		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+	}
+	else if (keyindex == 2) {
+		++m_iOpenRoofKey;
+		if (m_iOpenRoofKey == 1) {
+			FText KText = FText::FromString(TEXT("옥상문 잠금이 하나 풀렸다."));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+		}
+		else if (m_iOpenRoofKey == 2) {
+			FText KText = FText::FromString(TEXT("옥상이 풀렸다. 탈출하라"));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+		}
+	}
+}
+
 void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden); // 위젯 숨기기
