@@ -53,7 +53,8 @@ void AHealingNiagaEffect::Tick(float DeltaTime)
 
 void AHealingNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
-	HealingFXComponent->Deactivate();
+	if(HealingFXComponent)
+		HealingFXComponent->Deactivate();
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX ended");
 

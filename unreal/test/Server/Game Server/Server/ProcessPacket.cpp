@@ -364,7 +364,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                     playerDB[id].killcount++;
                 }
 
-                if (z->ZombieData.zombietype == 0 && z->zombieHP < z->NormalZombieStartHP) {
+                if (z->zombieHP < z->NormalZombieStartHP) {
                     z->IsBeingAttacked = true;  // 좀비 피격중으로 변경
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
                     z->animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
