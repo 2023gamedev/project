@@ -253,7 +253,7 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		
 		if (NewBloodFX_0) {
 			NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
-			NewBloodFX_0->blood_spawnloop = true;
+			//NewBloodFX_0->blood_spawnloop = true;
 
 			BloodFX.Add(NewBloodFX_0);
 		}
@@ -262,7 +262,7 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		
 		if (NewBloodFX_1) {
 			NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
-			NewBloodFX_1->blood_spawnloop = true;
+			//NewBloodFX_1->blood_spawnloop = true;
 
 			BloodFX.Add(NewBloodFX_1);
 		}

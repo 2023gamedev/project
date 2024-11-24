@@ -479,10 +479,6 @@ void ABaseCharacter::BeginPlay()
 		CurrentWeapon->m_fWeaponDurability = 50.f;
 		SetNWHandIn(true);
 
-
-
-	
-
 	}
 
 
