@@ -296,6 +296,7 @@ public:
 	Concurrency::concurrent_queue<LeavePlayer> Q_lplayer;
 	Concurrency::concurrent_queue<WaitingReady> Q_wready;
 	Concurrency::concurrent_queue<bool> Q_wAllready;
+	Concurrency::concurrent_queue<bool> Q_gclear;
 
 
 	virtual bool Init() override;

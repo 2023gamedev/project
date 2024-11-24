@@ -138,6 +138,7 @@ public:
 	bool b_move_left = false;
 	bool sendRun = false;
 	bool sendjump = false;
+	bool b_clear = false;
 	
 
 };

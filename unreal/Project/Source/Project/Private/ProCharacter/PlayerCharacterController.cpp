@@ -205,6 +205,13 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_gclear.try_pop(b_clear)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				// 게임 클리어 함수 부르기
+			}
+		}
+
 		//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);
 		if (GameInstance->ClientSocketPtr->Q_zombie.try_pop(recvZombieData))
 		{
