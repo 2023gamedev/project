@@ -57,7 +57,7 @@ void ARoofTopDoorActor::StartDisableUnlock()
 void ARoofTopDoorActor::DisableUnlock()
 {
 	bIsDisableUnlock = true;
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("ARoofTopDoorActor::DisableUnlock()")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("ARoofTopDoorActor::DisableUnlock()")));
 	//TArray<ABaseCharacter*> Players;
 
 

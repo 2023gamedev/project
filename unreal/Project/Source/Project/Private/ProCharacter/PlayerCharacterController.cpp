@@ -187,7 +187,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			{
 				//처리 recvGetKey.itemid, recvGetKey.playerid
 
-				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: itemid= %d"), recvGetkey.itemid);
+				//UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: itemid= %d"), recvGetkey.itemid);
 				APawn* ControlledPawn = GetPawn();
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
 				{
@@ -259,7 +259,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.ZombieType, recvZombieData.Location, recvZombieData.Rotation);
-				UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);	// 좀비가 움직이거나 스폰되면 보내는데 이제는 움직임은 따로 통신하지 않아서 스폰될때 불림
+				//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);	// 좀비가 움직이거나 스폰되면 보내는데 이제는 움직임은 따로 통신하지 않아서 스폰될때 불림
 			}
 		}
 
@@ -269,7 +269,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				MyGameMode->UpdateZombieAttack(recvZombieAttack.ZombieId, recvZombieAttack.PlayerId);
-				UE_LOG(LogNet, Display, TEXT("Update Zombie Attack: Zombieid=%d, Playerid=%d"), recvZombieAttack.ZombieId, recvZombieAttack.PlayerId);
+				//(LogNet, Display, TEXT("Update Zombie Attack: Zombieid=%d, Playerid=%d"), recvZombieAttack.ZombieId, recvZombieAttack.PlayerId);
 			}
 		}
 
@@ -409,7 +409,7 @@ void APlayerCharacterController::Send_Attack()
 
 		b_attack = false;
 
-		UE_LOG(LogNet, Display, TEXT("Send Attack: PlayerId=%d"), recvPlayerData.PlayerId);
+		//UE_LOG(LogNet, Display, TEXT("Send Attack: PlayerId=%d"), recvPlayerData.PlayerId);
 	}
 }
 
@@ -732,28 +732,28 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 
 
 		if (basecharacter->IsNWHandIn() && !(basecharacter->IsAttack())) { // 아예 함수에 접근을 못하게 조건을 추가
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
 			Attack();
 		}
 		else if (basecharacter->IsBHHandIn() && !(basecharacter->IsBHealing())) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
 			BleedHealing();
 
 		}
 		else if (basecharacter->IsHealHandIn() && !(basecharacter->IsHealing())) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
 
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
 			Healing();
 
 		}
 		else if (basecharacter->IsKeyHandIn()) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
 			PlayKey();
 
 		}
 		else if (basecharacter->IsThrowWHandIn()) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
 			Throw();
 		}
 

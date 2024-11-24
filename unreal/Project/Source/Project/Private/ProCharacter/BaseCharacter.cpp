@@ -81,6 +81,7 @@
 #define default_circularPB_widget_anim_playtime 5.f
 #define default_healing_anim_playtime 4.57f
 #define default_bleedhealing_anim_playtime 9.f
+#define default_playkey_anim_playtime 5.23f
 #define playtime_8_sec 8.f			// 키 사용시간
 #define playtime_4_sec 4.f			// 참치캔, 소독약, 연고 사용시간
 #define playtime_3_5_sec 3.5f		// 과자 사용시간
@@ -585,8 +586,8 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	if (GetHP() > 0) {
 
 		SetHP(GetHP() - Damage);
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 	}
 	else if (GetHP() <= 0 && !IsDeadPlay()) {
 		SetDeadPlay(true);
@@ -613,7 +614,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 void ABaseCharacter::PlayDead()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("DEAD")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("DEAD")));
 	SetDead(true);
 	auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {
@@ -1073,7 +1074,7 @@ void ABaseCharacter::GetItem()
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
 					if (i >= GetInvenSize()) {
-						GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
+						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
 						return;
 					}
 					else {
@@ -1357,7 +1358,7 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 		}
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->AnimInstance NULL");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->AnimInstance NULL");
 		return;
 	}
 
@@ -1379,7 +1380,7 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 		Smoking();
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	UpdateHealingSlot();
 }
 
@@ -1426,7 +1427,7 @@ void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interr
 		}
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->AnimInstance NULL");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->AnimInstance NULL");
 		return;
 	}
 
@@ -1460,7 +1461,7 @@ void ABaseCharacter::PlayKey()
 
 			CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
-			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_8_sec;
+			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime /default_playkey_anim_playtime;
 			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
 			PlayKeyAnim(); // 애니메이션 시작
@@ -1476,7 +1477,7 @@ void ABaseCharacter::PlayKeyAnim()
 		return;
 	}
 
-	float AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
+	float AnimPlaySpeed = 1.f;
 	AnimInstance->PlayKeyMontage(AnimPlaySpeed);
 
 	// 첫 연결만 이벤트 바인딩
@@ -1523,14 +1524,16 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 		ACarActor* CarActor = Cast<ACarActor>(CurrentInterActor);
 		if (CarActor && CurrentKeyItem->KeyName == CarActor->CarKeyName) {
 			CarActor->UnLock();
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
 			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
 			PlaySoundForPlayer(Sound);
 			UpdateKeySlot();
 			Send_OpenRoot(1);
 		}
 		else {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
+			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/unlockfailed.unlockfailed")); // 에셋 경로
+			PlaySoundForPlayer(Sound);
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
 		}
 	}
 	else if (CurrentInterActor->InterActorName == "RoofTopDoorActor") {
@@ -1538,7 +1541,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 		if (RoofTopDoorActor) {
 			if (CurrentKeyItem->KeyName == "RoofKey1") {
 				RoofTopDoorActor->UnlockKey1();
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
 				USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
 				PlaySoundForPlayer(Sound);
 				UpdateKeySlot();
@@ -1546,7 +1549,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 			}
 			else if (CurrentKeyItem->KeyName == "RoofKey2") {
 				RoofTopDoorActor->UnlockKey2();
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
 				USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
 				PlaySoundForPlayer(Sound);
 				UpdateKeySlot();
@@ -1565,7 +1568,7 @@ void ABaseCharacter::Throw() // throwweapon 생성 시 작성 필요
 
 void ABaseCharacter::UpdateHealingSlot()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UpdateHealingSlot");
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UpdateHealingSlot");
 	if (QuickSlot[1].Count > 0) {
 		QuickSlot[1].Count = QuickSlot[1].Count - 1;
 		int slotindex = QuickSlot[1].SlotReference;
@@ -1574,7 +1577,7 @@ void ABaseCharacter::UpdateHealingSlot()
 
 
 	if (QuickSlot[1].Count == 0) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UpdateHealing Count == 0!!!!!!");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UpdateHealing Count == 0!!!!!!");
 		DestroyHealingItemSlot();
 	}
 	else {
@@ -1652,7 +1655,7 @@ void ABaseCharacter::QuickNWeapon()
 	}
 
 	if (IsBringCurrentWeapon() && CurrentWeapon) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
 		FName WeaponSocket = TEXT("RightHandSocket");
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
 		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
@@ -1686,7 +1689,7 @@ void ABaseCharacter::QuickBHItem()
 	}
 
 	if (IsBringCurrentBleedingHealingItem() && CurrentBleedingHealingItem) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentBleedingHealingItem"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentBleedingHealingItem"));
 		FName Socket = TEXT("RightHandSocket");
 		CurrentBleedingHealingItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
 		CurrentBleedingHealingItem->SetActorRelativeRotation(CurrentBleedingHealingItem->ItemHandRot);
@@ -1719,7 +1722,7 @@ void ABaseCharacter::QuickHItem()
 	}
 
 	if (IsBringCurrentHealingItem() && CurrentHealingItem) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentHealingItem"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentHealingItem"));
 		FName Socket = TEXT("RightHandSocket");
 		CurrentHealingItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
 		CurrentHealingItem->SetActorRelativeRotation(CurrentHealingItem->ItemHandRot);
@@ -1955,7 +1958,7 @@ void ABaseCharacter::SpawnNormalWeapon()
 	}
 
 	SetBringCurrentWeapon(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnNormalWeapon"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnNormalWeapon"));
 }
 
 
@@ -2012,7 +2015,7 @@ void ABaseCharacter::SpawnHealingItem()
 	}
 
 	SetBringCurrentHealingItem(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnHealingItem"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnHealingItem"));
 }
 
 void ABaseCharacter::SpawnBleedingHealingItem()
@@ -2048,7 +2051,7 @@ void ABaseCharacter::SpawnBleedingHealingItem()
 	}
 
 	SetBringCurrentBleedingHealingItem(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnBleedingHealingItem"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnBleedingHealingItem"));
 }
 
 void ABaseCharacter::SpawnKeyItem()
@@ -2090,7 +2093,7 @@ void ABaseCharacter::SpawnKeyItem()
 	}
 
 	SetBringCurrentKeyItem(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnKeyItem"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnKeyItem"));
 }
 
 void ABaseCharacter::DestroyNormalWeapon()
@@ -2115,7 +2118,7 @@ void ABaseCharacter::DestroyThrowWeapon()
 
 void ABaseCharacter::DestroyHealingItem()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "DestroyHealingItem!!!!!!");
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "DestroyHealingItem!!!!!!");
 	if (CurrentHealingItem != nullptr) {
 		CurrentHealingItem->Destroy();
 	}
@@ -2190,7 +2193,7 @@ void ABaseCharacter::DestroyThrowWeaponItemSlot()
 
 void ABaseCharacter::DestroyHealingItemSlot()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "DestroyHealingItemSlot!!!!!!");
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "DestroyHealingItemSlot!!!!!!");
 	DestroyHealingItem();
 
 	QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
@@ -2666,7 +2669,7 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 
 		CurrentWeapon->OwnerCharacter = this;
 		CurrentWeapon->m_fCharacterSTR = m_fSTR;
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OtherSpawnNormalWeapon"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OtherSpawnNormalWeapon"));
 
 		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 		CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("RightHandSocket"));
@@ -2732,7 +2735,7 @@ void ABaseCharacter::OtherSpawnHealingItem(const FString& ItemName)
 	}
 
 	SetBringCurrentHealingItem(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnHealingItem"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnHealingItem"));
 }
 
 void ABaseCharacter::OtherSpawnBleedingHealingItem(const FString& ItemName)
@@ -2777,7 +2780,7 @@ void ABaseCharacter::OtherSpawnBleedingHealingItem(const FString& ItemName)
 	}
 
 	SetBringCurrentBleedingHealingItem(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnBleedingHealingItem"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnBleedingHealingItem"));
 }
 
 
@@ -2833,7 +2836,7 @@ void ABaseCharacter::OtherSpawnKeyItem(const FString& ItemName)
 	}
 
 	SetBringCurrentKeyItem(true);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnKeyItem"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("SpawnKeyItem"));
 }
 
 void ABaseCharacter::Send_Destroy(uint32 itemboxid)
