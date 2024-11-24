@@ -74,10 +74,10 @@ public:
     const float NormalZombieSpeed = 200.0f;         // 200.0f
 
     const float RunningZombieStartHP = 20.0f;        // 20.0f
-    const float RunningZombieSpeed = 400.0f;         // 400.0f
+    const float RunningZombieSpeed = 300.0f;         // 300.0f
 
     const float ShoutingZombieStartHP = 30.0f;        // 30.0f
-    const float ShoutingZombieSpeed = 300.0f;         // 300.0f
+    const float ShoutingZombieSpeed = 230.0f;         // 230.0f
 
     float ZombieSpeed;
 

@@ -282,6 +282,15 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 	if (searchMap.size() != 0) {
 
 		for (auto player : playerDB_BT) {
+			// 죽은 플레이어 무시
+			if (player.second.health <= 0) {
+				continue;
+			}
+			// 연결 끊긴 플레이어 무시
+			if (!g_players[player.first]) {
+				continue;
+			}
+
 			if (searchMap.find(player.first) != searchMap.end()) {
 				if (min > searchMap.at(player.first) && searchMap.at(player.first) > 0) {
 					min = searchMap.at(player.first);
@@ -306,6 +315,15 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 
 		// 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
 		for (auto player : playerDB_BT) {
+			// 죽은 플레이어 무시
+			if (player.second.health <= 0) {
+				continue;
+			}
+			// 연결 끊긴 플레이어 무시
+			if (!g_players[player.first]) {
+				continue;
+			}
+
 			if (searchMap.find(player.first) != searchMap.end()) {
 				if (min == searchMap.at(player.first)) {
 					closest_players.emplace_back(player.first);
@@ -595,6 +613,15 @@ bool Zombie::FootSoundCheck()
 
 	// 뛰고 있는 플레이어들 DistanceTo_FootSound 맵에 저장
 	for (auto player : playerDB_BT) {
+		// 죽은 플레이어 무시
+		if (player.second.health <= 0) {
+			continue;
+		}
+		// 연결 끊긴 플레이어 무시
+		if (!g_players[player.first]) {
+			continue;
+		}
+
 		if (player.second.IsRunning) {
 			SetDistance(player.first, 2, 1);
 			result = true;

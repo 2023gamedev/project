@@ -30,8 +30,9 @@ ARunningZombie::ARunningZombie()
 
 	SetHP(20);
 	SetStartHP(20);
-	SetSpeed(4);
-	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	float speed = 3.f;
+	SetSpeed(speed);
+	GetCharacterMovement()->MaxWalkSpeed = speed * 100.f;
 	SetSTR(FMath::RandRange(4, 8)); 
 	SetSpecialAbility(true);
 	SetZombieName("RunningZombie");

@@ -30,8 +30,9 @@ AShoutingZombie::AShoutingZombie()
 
 	SetHP(30);
 	SetStartHP(30);
-	SetSpeed(3);
-	GetCharacterMovement()->MaxWalkSpeed = 300.f;
+	float speed = 2.3f;
+	SetSpeed(speed);
+	GetCharacterMovement()->MaxWalkSpeed = speed * 100.f;
 	SetSTR(FMath::RandRange(4, 8)); // 수정 필요 4 ~ 8
 	SetSpecialAbility(true);
 	SetZombieName("ShoutingZombie");
