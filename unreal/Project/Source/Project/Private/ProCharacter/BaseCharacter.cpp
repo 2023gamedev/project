@@ -2715,6 +2715,10 @@ void ABaseCharacter::OtherSpawnHealingItem(const FString& ItemName)
 			CurrentHealingItem = GetWorld()->SpawnActor<AHWater>(AHWater::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 		}
 
+		else {
+			return;
+		}
+
 		CurrentHealingItem->ItemHandPos = FVector(-1.616189f, -3.900112f, 1.626949f);
 		CurrentHealingItem->ItemHandRot = FRotator(-0.005714f, -70.00028f, 90.03065f);
 

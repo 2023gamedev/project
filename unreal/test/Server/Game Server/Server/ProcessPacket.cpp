@@ -104,7 +104,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                     float DeltaY = std::abs(player.second.y - Escape_Location.y);
 
                     // 범위를 벗어나는지 확인
-                    if (DeltaX >= 50.0f || DeltaY >= 50.0f || player.second.floor != Escape_Location.floor) {
+                    if (DeltaX >= 100.0f || DeltaY >= 100.0f || player.second.floor != Escape_Location.floor) {
                         bAllPlayersInRange = false; // 한 명이라도 범위를 벗어나면 false
                         break;
                     }
@@ -148,7 +148,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second != nullptr) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
@@ -445,7 +445,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
             b_IsEscaping = true;
             Escape_Root = Packet.root();
-            Root_Open_Player = playerDB[Packet.playerid()].username;
+            Root_Open_Player = playerDB[id].username;
         }
 
 
