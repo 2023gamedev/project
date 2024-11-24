@@ -458,28 +458,28 @@ void ABaseCharacter::BeginPlay()
 		});
 
 
-	// Slice 용 Weapon - TEST
-	if (CurrentWeapon == nullptr) { 
+	//// Slice 용 Weapon - TEST
+	//if (CurrentWeapon == nullptr) { 
 
-		CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-		//CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
-		//CurrentWeapon->ItemHandRot = FRotator(4.949407f, -31.214014f, -172.213653f);
+	//	CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+	//	//CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
+	//	//CurrentWeapon->ItemHandRot = FRotator(4.949407f, -31.214014f, -172.213653f);
 
-		CurrentWeapon->ItemHandPos = FVector(-0.757521f, 1.883819f, 1.937180f);
-		CurrentWeapon->ItemHandRot = FRotator(-12.172822f, -34.649834f, -158.006864f);
+	//	CurrentWeapon->ItemHandPos = FVector(-0.757521f, 1.883819f, 1.937180f);
+	//	CurrentWeapon->ItemHandRot = FRotator(-12.172822f, -34.649834f, -158.006864f);
 
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
-		FName WeaponSocket = TEXT("RightHandSocket");
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
-		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
-		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
-		CurrentWeapon->OwnerCharacter = this;
-		CurrentWeapon->m_fCharacterSTR = m_fSTR;
-		CurrentWeapon->m_fWeaponDurability = 50.f;
-		SetNWHandIn(true);
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
+	//	FName WeaponSocket = TEXT("RightHandSocket");
+	//	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+	//	CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
+	//	CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
+	//	CurrentWeapon->OwnerCharacter = this;
+	//	CurrentWeapon->m_fCharacterSTR = m_fSTR;
+	//	CurrentWeapon->m_fWeaponDurability = 50.f;
+	//	SetNWHandIn(true);
 
-	}
+	//}
 
 
 }
@@ -507,6 +507,10 @@ void ABaseCharacter::Tick(float DeltaTime)
 			floor = FLOOR::F3;
 		}
 	}
+
+	
+
+
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -661,16 +665,16 @@ void ABaseCharacter::OtherPlayerUIOffset(uint32 playerid)
 
 }
 
-void ABaseCharacter::UpdateOtherPlayerUI(uint32 playerid, float hp , uint32 charactertype) // playername 추가 필요
+void ABaseCharacter::UpdateOtherPlayerUI(uint32 playerid, float hp , uint32 charactertype, std::string Playername) // playername 추가 필요
 {
 	if (OtherPlayerUIWidget->m_iOtherPlayerUINumber == playerid) {
-		OtherPlayerUIWidget->UpdateOtherPlayerUI(hp, charactertype);
+		OtherPlayerUIWidget->UpdateOtherPlayerUI(hp, charactertype,Playername);
 	}
 	else if (OtherPlayer2UIWidget->m_iOtherPlayerUINumber == playerid) {
-		OtherPlayer2UIWidget->UpdateOtherPlayerUI(hp, charactertype);
+		OtherPlayer2UIWidget->UpdateOtherPlayerUI(hp, charactertype,Playername);
 	}
 	else if (OtherPlayer3UIWidget->m_iOtherPlayerUINumber == playerid) {
-		OtherPlayer3UIWidget->UpdateOtherPlayerUI(hp, charactertype);
+		OtherPlayer3UIWidget->UpdateOtherPlayerUI(hp, charactertype, Playername);
 	}
 }
 
@@ -774,6 +778,53 @@ void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 		PlaySoundForPlayer(Sound);
 		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 		Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT11();
+	}
+
+}
+
+void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead_players, const FString& open_player, uint32 my_kill_count, uint32 best_kill_count, const FString& best_kill_player)
+{
+	if (ProGameClearUIClass != nullptr) {
+
+		APlayerCharacterController* PlayerController = Cast<APlayerCharacterController>(this->GetController());
+		if (PlayerController)
+		{
+			ProGameClearUIWidget = CreateWidget<UProGameClearUI>(PlayerController, ProGameClearUIClass);
+			if (ProGameClearUIWidget)
+			{
+				ProGameClearUIWidget->AddToViewport();
+
+				// EndingUI
+				if (root == 1) {
+					FString HowToEscape = " Escape::Car ";
+					ProGameClearUIWidget->SetMessage(1, HowToEscape);
+				}
+				else if (root == 2) {
+					FString HowToEscape = " Escape::Roof ";
+					ProGameClearUIWidget->SetMessage(1, HowToEscape);
+				}
+
+				FString TimerString = FString::Printf(TEXT("%d:%02d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
+				ProGameClearUIWidget->SetMessage(2, TimerString);
+
+				FString AlivePlayersString = FString::Printf(TEXT(" %d "), alive_players);
+				ProGameClearUIWidget->SetMessage(3, AlivePlayersString);
+
+				FString DeadPlayersString = FString::Printf(TEXT(" %d "), dead_players);
+				ProGameClearUIWidget->SetMessage(32, DeadPlayersString);
+
+				ProGameClearUIWidget->SetMessage(4, open_player);
+
+				FString MyKillCountString = FString::Printf(TEXT(" %d "), my_kill_count);
+				ProGameClearUIWidget->SetMessage(5, MyKillCountString);
+
+				// 합친 문자열 생성
+				FString BestKillString = FString::Printf(TEXT("%d kills by %s"), best_kill_count, *best_kill_player);
+				ProGameClearUIWidget->SetMessage(52, BestKillString);
+
+				ProStartGameEnd();
+			}
+		}
 	}
 
 }
@@ -2286,21 +2337,7 @@ void ABaseCharacter::AddScore(int32 score)
 	// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Score added: %d"), m_iClearScore));
 
 
-	if (ProGameClearUIClass != nullptr) {
 
-		//APlayerCharacterController* PlayerController = Cast<APlayerCharacterController>(this->GetController());
-		//if (PlayerController)
-		//{
-		//	ProGameClearUIWidget = CreateWidget<UProGameClearUI>(PlayerController, ProGameClearUIClass);
-		//	if (ProGameClearUIWidget)
-		//	{
-		//		ProGameClearUIWidget->SetMessage("GAME CLEAR!");
-		//		ProGameClearUIWidget->SetScore(m_iClearScore);
-
-		//		ProGameClearUIWidget->AddToViewport();
-		//	}
-		//}
-	}
 
 	// ProStartGameEnd();
 

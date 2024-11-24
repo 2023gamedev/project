@@ -429,6 +429,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	AInterActor* CurrentInterActor;
 
+	UPROPERTY(EditAnywhere)
+	int m_iSetPlayerID = 0;
+
+
 
 	// 스태미나 부분
 	FTimerHandle UseStaminaHandle;
@@ -451,8 +455,12 @@ public:
 	void PlayDead();
 
 	void OtherPlayerUIOffset(uint32 playerid);
-	void UpdateOtherPlayerUI(uint32 playerid, float hp, uint32 charactertype);
+	void UpdateOtherPlayerUI(uint32 playerid, float hp, uint32 charactertype, std::string Playername);
 	void UpdatePickUpKey(uint32 keyid, uint32 playerid);
+
+	void ProGameClear(uint32 root, uint32 alive_players, uint32 dead_players,
+		const FString& open_player, uint32 my_kill_count,
+		uint32 best_kill_count, const FString& best_kill_player);
 
 	FTimerHandle GameDeadEndHandle;
 	void ProStartGameDeadEnd();
