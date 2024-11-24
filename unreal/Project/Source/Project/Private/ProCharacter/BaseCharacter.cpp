@@ -769,7 +769,7 @@ void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 		Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT1();
 	}
 	else if (keyid == 2 && TextMissionUIWidget->m_iFindRoofKey == 2) {
-		FText KText = FText::FromString(TEXT("옥상 키를 찾았습니다."));
+		FText KText = FText::FromString(TEXT("옥상 키를 모두 찾았습니다."));
 		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
 		PlaySoundForPlayer(Sound);
 		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
@@ -1393,60 +1393,7 @@ void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interr
 		UpdateBHealingSlot();
 		});
 }
-//
-//void ABaseCharacter::PlayKey()
-//{
-//	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
-//
-//	float WidgetPlaySpeed = 1.f;
-//
-//	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_8_sec;
-//	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
-//
-//	if (PlayerSight->GetIsHit()) {
-//
-//		AInterActor* InterActor = Cast<AInterActor>(PlayerSight->GetHitActor());
-//		if (InterActor) {
-//			PlayKeyAnim();
-//			if (InterActor->InterActorName == "CarActor") {
-//				ACarActor* CarActor = Cast<ACarActor>(InterActor);
-//
-//				if (CurrentKeyItem->KeyName == CarActor->CarKeyName) {
-//					CarActor->UnLock();
-//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
-//					UpdateKeySlot();
-//					Send_OpenRoot(1);
-//				}
-//				else {
-//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
-//				}
-//			}
-//			else if (InterActor->InterActorName == "RoofTopDoorActor") {
-//
-//				ARoofTopDoorActor* RoofTopDoorActor = Cast<ARoofTopDoorActor>(InterActor);
-//
-//				if (CurrentKeyItem->KeyName == "RoofKey1") {
-//					RoofTopDoorActor->UnlockKey1();
-//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
-//					UpdateKeySlot();
-//					Send_OpenRoot(2);
-//				}
-//				else if (CurrentKeyItem->KeyName == "RoofKey2") {
-//					RoofTopDoorActor->UnlockKey2();
-//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
-//					UpdateKeySlot();
-//					Send_OpenRoot(2);
-//				}
-//
-//			}
-//
-//
-//		}
-//	}
-//
-//
-//
-//}
+
 
 void ABaseCharacter::PlayKey()
 {
@@ -1488,6 +1435,25 @@ void ABaseCharacter::PlayKeyAnim()
 	}
 }
 
+void ABaseCharacter::UpdateOpenKey(uint32 keyindex)
+{
+	if (keyindex == 1) {
+		FText KText = FText::FromString(TEXT("풀렸다.지하로 탈출하라"));
+		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+	}
+	else if (keyindex == 2) {
+		++m_iOpenRoofKey;
+		if (m_iOpenRoofKey == 1) {
+			FText KText = FText::FromString(TEXT("옥상문 잠금이 하나 풀렸다."));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+		}
+		else if (m_iOpenRoofKey == 2) {
+			FText KText = FText::FromString(TEXT("옥상이 풀렸다. 탈출하라"));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+		}
+	}
+}
+
 void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden); // 위젯 숨기기
@@ -1507,6 +1473,8 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 		if (CarActor && CurrentKeyItem->KeyName == CarActor->CarKeyName) {
 			CarActor->UnLock();
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
+			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
+			PlaySoundForPlayer(Sound);
 			UpdateKeySlot();
 			Send_OpenRoot(1);
 		}
@@ -1520,12 +1488,16 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 			if (CurrentKeyItem->KeyName == "RoofKey1") {
 				RoofTopDoorActor->UnlockKey1();
 				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
+				USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
+				PlaySoundForPlayer(Sound);
 				UpdateKeySlot();
 				Send_OpenRoot(2);
 			}
 			else if (CurrentKeyItem->KeyName == "RoofKey2") {
 				RoofTopDoorActor->UnlockKey2();
 				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
+				USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
+				PlaySoundForPlayer(Sound);
 				UpdateKeySlot();
 				Send_OpenRoot(2);
 			}
@@ -2330,7 +2302,7 @@ void ABaseCharacter::AddScore(int32 score)
 		//}
 	}
 
-	ProStartGameEnd();
+	// ProStartGameEnd();
 
 }
 
@@ -2433,24 +2405,6 @@ void ABaseCharacter::HealingStaminaTimerElapsed()
 		SetStamina(100);
 	}
 }
-//
-//void ABaseCharacter::PlayKeyAnim() // 애니메이션 실행 후 로딩 원 없애도록 수정 필요
-//{
-//
-//	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
-//
-//	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-//
-//	float WidgetPlaySpeed = 1.f;
-//	float AnimPlaySpeed = 1.f;
-//
-//	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
-//	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
-//
-//	AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
-//	AnimInstance->PlayKeyMontage();
-//
-//}
 
 
 
@@ -2492,6 +2446,16 @@ uint32 ABaseCharacter::GetPlayerId() const
 void ABaseCharacter::SetPlayerId(uint32 NewPlayerId)
 {
 	PlayerId = NewPlayerId;
+}
+
+std::string ABaseCharacter::GetPlayerName() const
+{
+	return PlayerName;
+}
+
+void ABaseCharacter::SetPlayerName(std::string NewPlayerName)
+{
+	PlayerName = NewPlayerName;
 }
 
 void ABaseCharacter::UpdatePlayerData(FVector Location)

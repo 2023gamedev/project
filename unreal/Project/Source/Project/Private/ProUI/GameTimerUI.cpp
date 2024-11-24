@@ -46,6 +46,10 @@ void UGameTimerUI::UpdateTimer()
 			FText KMissionText1 = FText::FromString(TEXT("실패"));
 			FText KMissionText2 = FText::FromString(TEXT(""));
 			Character->ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+
+			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/Leavehelicopter.Leavehelicopter")); // 에셋 경로
+			Character->PlaySoundForPlayer(Sound);
+
 			// 5분 지날 시 옥상문 잠기는 Text
 			Character->ShowMissionText(KMissionText1, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 1);
 			Character->ShowMissionText(KMissionText2, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 2);

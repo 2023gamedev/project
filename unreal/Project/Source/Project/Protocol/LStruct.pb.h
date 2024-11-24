@@ -597,9 +597,24 @@ class SC_Login final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kIdFieldNumber = 3,
     kTypeFieldNumber = 1,
     kBLoginFieldNumber = 2,
   };
+  // string id = 3;
+  void clear_id();
+  const std::string& id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_id();
+  PROTOBUF_NODISCARD std::string* release_id();
+  void set_allocated_id(std::string* id);
+  private:
+  const std::string& _internal_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_id(const std::string& value);
+  std::string* _internal_mutable_id();
+  public:
+
   // uint32 type = 1;
   void clear_type();
   uint32_t type() const;
@@ -626,6 +641,7 @@ class SC_Login final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
     uint32_t type_;
     bool b_login_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -3116,6 +3132,56 @@ inline void SC_Login::_internal_set_b_login(bool value) {
 inline void SC_Login::set_b_login(bool value) {
   _internal_set_b_login(value);
   // @@protoc_insertion_point(field_set:Protocol.SC_Login.b_login)
+}
+
+// string id = 3;
+inline void SC_Login::clear_id() {
+  _impl_.id_.ClearToEmpty();
+}
+inline const std::string& SC_Login::id() const {
+  // @@protoc_insertion_point(field_get:Protocol.SC_Login.id)
+  return _internal_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SC_Login::set_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.SC_Login.id)
+}
+inline std::string* SC_Login::mutable_id() {
+  std::string* _s = _internal_mutable_id();
+  // @@protoc_insertion_point(field_mutable:Protocol.SC_Login.id)
+  return _s;
+}
+inline const std::string& SC_Login::_internal_id() const {
+  return _impl_.id_.Get();
+}
+inline void SC_Login::_internal_set_id(const std::string& value) {
+  
+  _impl_.id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SC_Login::_internal_mutable_id() {
+  
+  return _impl_.id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SC_Login::release_id() {
+  // @@protoc_insertion_point(field_release:Protocol.SC_Login.id)
+  return _impl_.id_.Release();
+}
+inline void SC_Login::set_allocated_id(std::string* id) {
+  if (id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.id_.SetAllocated(id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.id_.IsDefault()) {
+    _impl_.id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.SC_Login.id)
 }
 
 // -------------------------------------------------------------------

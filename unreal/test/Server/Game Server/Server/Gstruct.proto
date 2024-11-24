@@ -2,9 +2,9 @@ syntax = "proto3";
 package Protocol;
 
 message Character {
-    uint32 playerid = 1;
-    uint32 charactertype = 2;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    uint32 playerid = 2;
+    uint32 charactertype = 3;
     float x = 4;
     float y = 5;
     float z = 6;
@@ -15,46 +15,47 @@ message Character {
     uint32 b_run = 11;
     uint32 b_jump = 12;
     bool isingame = 13;
+    string username = 14;
 };
 
-message jump{
-    uint32 playerid = 1;
-    uint32 packet_type = 3;
+message jump {
+    uint32 packet_type = 1;
+    uint32 playerid = 2;
 }
 
 message Character_Attack {
-    uint32 playerid = 1;
-    bool attack = 2;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    uint32 playerid = 2;
+    bool attack = 3;
 }
 
 message Zombie {
-    uint32 zombieid = 1;
-    uint32 zombietype = 2;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
+    uint32 zombietype = 3;
     float x = 4;
     float y = 5;
     float z = 6;
     float pitch = 7;
     float yaw = 8;
     float roll = 9;
-};
-
-message Zombie_attack{
-    uint32 zombieid = 1;
-    uint32 playerid = 2;
-    uint32 packet_type = 3;
 }
 
-message Zombie_hp{
-    uint32 zombieid = 1;
-    float damage = 2;
-    uint32 packet_type = 3;
+message Zombie_attack {
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
+    uint32 playerid = 3;
+}
+
+message Zombie_hp {
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
+    float damage = 3;
 }
 
 message ZombieDataList {
-    repeated Zombie zombies = 1;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    repeated Zombie zombies = 2;
 }
 
 message Vector3 {
@@ -64,53 +65,53 @@ message Vector3 {
 }
 
 message ZombiePath {
-    uint32 zombieid = 1;
-    Vector3 path1 = 2;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
+    Vector3 path1 = 3;
     Vector3 path2 = 4;
     Vector3 location = 5;
 }
 
 message PatrolPath {
-    uint32 zombieid = 1;
-    Vector3 path = 2;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
+    Vector3 path = 3;
     Vector3 location = 4;
 }
 
 message Detected {
-    uint32 zombieid = 1;
-    uint32 playerid = 2;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
+    uint32 playerid = 3;
     bool player_insight = 4;
 }
 
 message Time {
-    float timer = 1;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    float timer = 2;
 }
 
-message Equip_Item{
-    uint32 playerid = 1;
-    string itemname = 2;
-    uint32 packet_type = 3;
+message Equip_Item {
+    uint32 packet_type = 1;
+    uint32 playerid = 2;
+    string itemname = 3;
     uint32 itemtype = 4;
 }
 
-message ping{
-    uint32 playerid = 1;
-    uint32 packet_type=3;
+message ping {
+    uint32 packet_type = 1;
+    uint32 playerid = 2;
 }
 
-message patrol_hit{
-    uint32 zombieid = 1;
-    uint32 packet_type=3;
+message patrol_hit {
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
 }
 
-message set_item{
-    uint32 itemid = 1;
-    string itemname = 2;
-    uint32 packet_type = 3;
+message set_item {
+    uint32 packet_type = 1;
+    uint32 itemid = 2;
+    string itemname = 3;
     uint32 itemclass = 4;
     string texture_path = 5;
     uint32 count = 6;
@@ -121,14 +122,14 @@ message set_item{
 }
 
 message ItemDataList {
-    repeated set_item items = 1;
-    uint32 packet_type = 3;
+    uint32 packet_type = 1;
+    repeated set_item items = 2;
 }
 
-message set_car{
-    uint32 carid = 1;
-    string carname = 2;
-    uint32 packet_type = 3;
+message set_car {
+    uint32 packet_type = 1;
+    uint32 carid = 2;
+    string carname = 3;
     float posx = 4;
     float posy = 5;
     float posz = 6;
@@ -138,30 +139,36 @@ message set_car{
     string carkeyname = 10;
 }
 
-message CarDataList{
-    repeated set_car cars = 1;
-    uint32 packet_type = 3;
+message CarDataList {
+    uint32 packet_type = 1;
+    repeated set_car cars = 2;
 }
 
-message destroy_item{
-    uint32 itemid = 1;
+message destroy_item {
+    uint32 packet_type = 1;
+    uint32 itemid = 2;
+    uint32 playerid = 3;
+}
+
+message get_key {
+    uint32 packet_type = 1;
+    uint32 itemid = 2;
+    uint32 playerid = 3;
+}
+
+message escape {
+    uint32 packet_type = 1;
     uint32 playerid = 2;
-    uint32 packet_type = 3;
+    uint32 root = 3;
 }
 
-message get_key{
-    uint32 itemid = 1;
-    uint32 playerid = 2;
-    uint32 packet_type = 3;
-}
-
-message escape{
-    uint32 playerid = 1;
+message game_clear {
+    uint32 packet_type = 1;
     uint32 root = 2;
-    uint32 packet_type = 3;
-}
-
-message game_clear{
-    bool b_clear = 1;
-    uint32 packet_type = 3;
+    uint32 alive_players = 3;
+    uint32 dead_players = 4;
+    string open_player = 5;
+    uint32 my_killcount = 6;
+    string best_kill_player = 7;
+    uint32 best_killcount = 8;
 }

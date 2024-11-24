@@ -188,7 +188,7 @@ public:
     void SpawnInterActorStaticClasses();
 
 
-    void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, float hp);
+    void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, std::string username, float hp);
 
     void UpdatePlayerAttack(uint32 PlayerID, bool battack);
 

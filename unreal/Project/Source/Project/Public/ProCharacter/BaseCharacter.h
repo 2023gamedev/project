@@ -443,6 +443,7 @@ public:
 
 	void PlayKeyAnim();
 
+	void UpdateOpenKey(uint32 keyindex);
 
 	UPROPERTY(EditAnywhere)
 	bool m_bZeroStamina = false;
@@ -464,6 +465,8 @@ public:
 
 	virtual uint32 GetPlayerId() const;
 	void SetPlayerId(uint32 NewPlayerId);
+	std::string GetPlayerName() const;
+	void SetPlayerName(std::string NewPlayerName);
 	void UpdatePlayerData(FVector Location);
 
 	void SetAttack(bool b_attack);
@@ -614,11 +617,14 @@ private:
 	UPROPERTY(EditAnywhere)
 	int KeyMontageFlag;
 
+	UPROPERTY(EditAnywhere)
+	int m_iOpenRoofKey;
 
 
 private:
 	UPROPERTY(VisibleAnywhere)
 	uint32 PlayerId = 99;
+	std::string PlayerName;
 
 	FVector NewLocation;
 

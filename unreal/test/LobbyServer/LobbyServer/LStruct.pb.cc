@@ -53,7 +53,8 @@ struct CS_RegisterDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CS_RegisterDefaultTypeInternal _CS_Register_default_instance_;
 PROTOBUF_CONSTEXPR SC_Login::SC_Login(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.type_)*/0u
+    /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.b_login_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SC_LoginDefaultTypeInternal {
@@ -288,6 +289,7 @@ const uint32_t TableStruct_Lstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_Login, _impl_.type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_Login, _impl_.b_login_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SC_Login, _impl_.id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::SC_Register, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -406,19 +408,19 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 0, -1, -1, sizeof(::Protocol::CS_Login)},
   { 9, -1, -1, sizeof(::Protocol::CS_Register)},
   { 18, -1, -1, sizeof(::Protocol::SC_Login)},
-  { 26, -1, -1, sizeof(::Protocol::SC_Register)},
-  { 34, -1, -1, sizeof(::Protocol::WaitingReady)},
-  { 43, -1, -1, sizeof(::Protocol::WaitingAllReady)},
-  { 51, -1, -1, sizeof(::Protocol::SelectReady)},
-  { 60, -1, -1, sizeof(::Protocol::SelectAllReady)},
-  { 68, -1, -1, sizeof(::Protocol::Select_Character)},
-  { 77, -1, -1, sizeof(::Protocol::CS_Join)},
-  { 86, -1, -1, sizeof(::Protocol::SC_Join)},
-  { 94, -1, -1, sizeof(::Protocol::SC_JoinPlayer)},
-  { 103, -1, -1, sizeof(::Protocol::CS_Leave)},
-  { 112, -1, -1, sizeof(::Protocol::SC_LeavePlayer)},
-  { 121, -1, -1, sizeof(::Protocol::CS_Chatting)},
-  { 130, -1, -1, sizeof(::Protocol::SC_Chatting)},
+  { 27, -1, -1, sizeof(::Protocol::SC_Register)},
+  { 35, -1, -1, sizeof(::Protocol::WaitingReady)},
+  { 44, -1, -1, sizeof(::Protocol::WaitingAllReady)},
+  { 52, -1, -1, sizeof(::Protocol::SelectReady)},
+  { 61, -1, -1, sizeof(::Protocol::SelectAllReady)},
+  { 69, -1, -1, sizeof(::Protocol::Select_Character)},
+  { 78, -1, -1, sizeof(::Protocol::CS_Join)},
+  { 87, -1, -1, sizeof(::Protocol::SC_Join)},
+  { 95, -1, -1, sizeof(::Protocol::SC_JoinPlayer)},
+  { 104, -1, -1, sizeof(::Protocol::CS_Leave)},
+  { 113, -1, -1, sizeof(::Protocol::SC_LeavePlayer)},
+  { 122, -1, -1, sizeof(::Protocol::CS_Chatting)},
+  { 131, -1, -1, sizeof(::Protocol::SC_Chatting)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -444,31 +446,32 @@ const char descriptor_table_protodef_Lstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "\n\rLstruct.proto\022\010Protocol\"6\n\010CS_Login\022\014\n"
   "\004type\030\001 \001(\r\022\n\n\002id\030\002 \001(\t\022\020\n\010password\030\003 \001("
   "\t\"9\n\013CS_Register\022\014\n\004type\030\001 \001(\r\022\n\n\002id\030\002 \001"
-  "(\t\022\020\n\010password\030\003 \001(\t\")\n\010SC_Login\022\014\n\004type"
-  "\030\001 \001(\r\022\017\n\007b_login\030\002 \001(\010\"/\n\013SC_Register\022\014"
-  "\n\004type\030\001 \001(\r\022\022\n\nb_register\030\002 \001(\010\"=\n\014Wait"
-  "ingReady\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r"
-  "\022\r\n\005ready\030\003 \001(\010\"1\n\017WaitingAllReady\022\014\n\004ty"
-  "pe\030\001 \001(\r\022\020\n\010allready\030\002 \001(\010\"<\n\013SelectRead"
-  "y\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\r\n\005rea"
-  "dy\030\003 \001(\010\"-\n\016SelectAllReady\022\014\n\004type\030\001 \001(\r"
-  "\022\r\n\005ready\030\002 \001(\010\"J\n\020Select_Character\022\014\n\004t"
-  "ype\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\026\n\016character"
-  "_type\030\003 \001(\r\"9\n\007CS_Join\022\014\n\004type\030\001 \001(\r\022\020\n\010"
-  "playerid\030\002 \001(\r\022\016\n\006roomid\030\003 \001(\r\"\'\n\007SC_Joi"
-  "n\022\014\n\004type\030\001 \001(\r\022\016\n\006b_join\030\002 \001(\010\"=\n\rSC_Jo"
-  "inPlayer\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r"
-  "\022\014\n\004name\030\003 \001(\t\":\n\010CS_Leave\022\014\n\004type\030\001 \001(\r"
-  "\022\020\n\010playerid\030\002 \001(\r\022\016\n\006roomid\030\003 \001(\r\"B\n\016SC"
-  "_LeavePlayer\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002"
-  " \001(\r\022\020\n\010username\030\003 \001(\t\";\n\013CS_Chatting\022\014\n"
-  "\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004chat\030\003 "
-  "\001(\t\";\n\013SC_Chatting\022\014\n\004type\030\001 \001(\r\022\020\n\010play"
-  "erid\030\002 \001(\r\022\014\n\004chat\030\003 \001(\tb\006proto3"
+  "(\t\022\020\n\010password\030\003 \001(\t\"5\n\010SC_Login\022\014\n\004type"
+  "\030\001 \001(\r\022\017\n\007b_login\030\002 \001(\010\022\n\n\002id\030\003 \001(\t\"/\n\013S"
+  "C_Register\022\014\n\004type\030\001 \001(\r\022\022\n\nb_register\030\002"
+  " \001(\010\"=\n\014WaitingReady\022\014\n\004type\030\001 \001(\r\022\020\n\010pl"
+  "ayerid\030\002 \001(\r\022\r\n\005ready\030\003 \001(\010\"1\n\017WaitingAl"
+  "lReady\022\014\n\004type\030\001 \001(\r\022\020\n\010allready\030\002 \001(\010\"<"
+  "\n\013SelectReady\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030"
+  "\002 \001(\r\022\r\n\005ready\030\003 \001(\010\"-\n\016SelectAllReady\022\014"
+  "\n\004type\030\001 \001(\r\022\r\n\005ready\030\002 \001(\010\"J\n\020Select_Ch"
+  "aracter\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022"
+  "\026\n\016character_type\030\003 \001(\r\"9\n\007CS_Join\022\014\n\004ty"
+  "pe\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\016\n\006roomid\030\003 \001"
+  "(\r\"\'\n\007SC_Join\022\014\n\004type\030\001 \001(\r\022\016\n\006b_join\030\002 "
+  "\001(\010\"=\n\rSC_JoinPlayer\022\014\n\004type\030\001 \001(\r\022\020\n\010pl"
+  "ayerid\030\002 \001(\r\022\014\n\004name\030\003 \001(\t\":\n\010CS_Leave\022\014"
+  "\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\016\n\006roomid"
+  "\030\003 \001(\r\"B\n\016SC_LeavePlayer\022\014\n\004type\030\001 \001(\r\022\020"
+  "\n\010playerid\030\002 \001(\r\022\020\n\010username\030\003 \001(\t\";\n\013CS"
+  "_Chatting\022\014\n\004type\030\001 \001(\r\022\020\n\010playerid\030\002 \001("
+  "\r\022\014\n\004chat\030\003 \001(\t\";\n\013SC_Chatting\022\014\n\004type\030\001"
+  " \001(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004chat\030\003 \001(\tb\006pr"
+  "oto3"
   ;
 static ::_pbi::once_flag descriptor_table_Lstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Lstruct_2eproto = {
-    false, false, 952, descriptor_table_protodef_Lstruct_2eproto,
+    false, false, 964, descriptor_table_protodef_Lstruct_2eproto,
     "Lstruct.proto",
     &descriptor_table_Lstruct_2eproto_once, nullptr, 0, 16,
     schemas, file_default_instances, TableStruct_Lstruct_2eproto::offsets,
@@ -1059,11 +1062,20 @@ SC_Login::SC_Login(const SC_Login& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   SC_Login* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.type_){}
+      decltype(_impl_.id_){}
+    , decltype(_impl_.type_){}
     , decltype(_impl_.b_login_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_id().empty()) {
+    _this->_impl_.id_.Set(from._internal_id(), 
+      _this->GetArenaForAllocation());
+  }
   ::memcpy(&_impl_.type_, &from._impl_.type_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.b_login_) -
     reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.b_login_));
@@ -1075,10 +1087,15 @@ inline void SC_Login::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.type_){0u}
+      decltype(_impl_.id_){}
+    , decltype(_impl_.type_){0u}
     , decltype(_impl_.b_login_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
+  _impl_.id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 SC_Login::~SC_Login() {
@@ -1092,6 +1109,7 @@ SC_Login::~SC_Login() {
 
 inline void SC_Login::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.id_.Destroy();
 }
 
 void SC_Login::SetCachedSize(int size) const {
@@ -1104,6 +1122,7 @@ void SC_Login::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.id_.ClearToEmpty();
   ::memset(&_impl_.type_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.b_login_) -
       reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.b_login_));
@@ -1129,6 +1148,16 @@ const char* SC_Login::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.b_login_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "Protocol.SC_Login.id"));
         } else
           goto handle_unusual;
         continue;
@@ -1173,6 +1202,16 @@ uint8_t* SC_Login::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteBoolToArray(2, this->_internal_b_login(), target);
   }
 
+  // string id = 3;
+  if (!this->_internal_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_id().data(), static_cast<int>(this->_internal_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.SC_Login.id");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_id(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1188,6 +1227,13 @@ size_t SC_Login::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // string id = 3;
+  if (!this->_internal_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_id());
+  }
 
   // uint32 type = 1;
   if (this->_internal_type() != 0) {
@@ -1217,6 +1263,9 @@ void SC_Login::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_id().empty()) {
+    _this->_internal_set_id(from._internal_id());
+  }
   if (from._internal_type() != 0) {
     _this->_internal_set_type(from._internal_type());
   }
@@ -1239,7 +1288,13 @@ bool SC_Login::IsInitialized() const {
 
 void SC_Login::InternalSwap(SC_Login* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.id_, lhs_arena,
+      &other->_impl_.id_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(SC_Login, _impl_.b_login_)
       + sizeof(SC_Login::_impl_.b_login_)

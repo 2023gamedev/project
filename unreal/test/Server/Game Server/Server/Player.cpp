@@ -9,6 +9,7 @@ Player::Player()
 
 	IsRunning = false;
     floor = FLOOR::FLOOR_B2;
+	killcount = 0;
 }
 
 Player::Player(float x, float y, float z)

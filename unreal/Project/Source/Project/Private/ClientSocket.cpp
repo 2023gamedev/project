@@ -116,6 +116,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				if (Login_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 					b_login = Login_Packet.b_login();
 					recv_login = true;
+					MyUserName = Login_Packet.id();
 				}
 				break;
 			}
@@ -258,7 +259,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 					FRotator NewRotation(CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
 					if (OtherPlayerId != MyPlayerId) {
-						Q_player.push(PlayerData(OtherPlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.hp()));
+						Q_player.push(PlayerData(OtherPlayerId, NewLocation, NewRotation, CharacterPacket.charactertype(), CharacterPacket.username(), CharacterPacket.hp()));
 						Q_run.push(PlayerRun(CharacterPacket.playerid(), CharacterPacket.b_run()));
 					}
 				}
@@ -453,7 +454,8 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::game_clear clearpacket;
 				if (clearpacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					Q_gclear.push(clearpacket.b_clear());
+					Q_gclear.push(GameClear(clearpacket.root(), clearpacket.alive_players(), clearpacket.dead_players(), clearpacket.open_player(),
+						clearpacket.my_killcount(), clearpacket.best_killcount(), clearpacket.best_kill_player()));
 					UE_LOG(LogNet, Display, TEXT("Game Clear"));
 				}
 				break;

@@ -16,6 +16,7 @@ message CS_Register {
 message SC_Login {
     uint32 type = 1;
     bool b_login = 2;
+    string id = 3;
 };
 
 message SC_Register {
