@@ -81,6 +81,7 @@
 #define default_circularPB_widget_anim_playtime 5.f
 #define default_healing_anim_playtime 4.57f
 #define default_bleedhealing_anim_playtime 9.f
+#define default_playkey_anim_playtime 5.23f
 #define playtime_8_sec 8.f			// 키 사용시간
 #define playtime_4_sec 4.f			// 참치캔, 소독약, 연고 사용시간
 #define playtime_3_5_sec 3.5f		// 과자 사용시간
@@ -1460,7 +1461,7 @@ void ABaseCharacter::PlayKey()
 
 			CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
-			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_8_sec;
+			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime /default_playkey_anim_playtime;
 			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
 			PlayKeyAnim(); // 애니메이션 시작
@@ -1476,7 +1477,7 @@ void ABaseCharacter::PlayKeyAnim()
 		return;
 	}
 
-	float AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
+	float AnimPlaySpeed = 1.f;
 	AnimInstance->PlayKeyMontage(AnimPlaySpeed);
 
 	// 첫 연결만 이벤트 바인딩
@@ -1530,6 +1531,8 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 			Send_OpenRoot(1);
 		}
 		else {
+			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/unlockfailed.unlockfailed")); // 에셋 경로
+			PlaySoundForPlayer(Sound);
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
 		}
 	}
