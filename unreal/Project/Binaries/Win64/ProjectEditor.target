@@ -42,8 +42,6 @@
 			"Type": "SymbolFile"
 		},
 		{
-<<<<<<< HEAD
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidDeviceDetection.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -64,7 +62,6 @@
 			"Type": "RequiredResource"
 		},
 		{
->>>>>>> C1124-2
 			"Path": "$(EngineDir)/Binaries/Win64/OpenColorIO_2_2.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -321,13 +318,10 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CEF3Utils.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
->>>>>>> C1124-2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CSVtoSVG.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1504,24 +1498,18 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatASTC.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
->>>>>>> C1124-2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatETC2.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
->>>>>>> C1124-2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatIntelISPCTexComp.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1678,13 +1666,10 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-<<<<<<< HEAD
-=======
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WebBrowser.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
->>>>>>> C1124-2
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WidgetCarousel.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -3490,39 +3475,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/Binaries/Win64/UnrealEditor.modules",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
->>>>>>> 8aabb720b29b07149c94e2a7cf063f88cefe7a3a
-			"Type": "RequiredResource"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.pdb",
-			"Type": "SymbolFile"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> C1124
->>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
->>>>>>> origin/main
->>>>>>> 8aabb720b29b07149c94e2a7cf063f88cefe7a3a
-=======
->>>>>>> C1124-2
 			"Type": "RequiredResource"
 		}
 	],
