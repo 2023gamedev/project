@@ -92,26 +92,26 @@ void ABloodNiagaEffect::SpawnBloodEffect()
 	UE_LOG(LogTemp, Log, TEXT("BloodSpawn Location: %s"), *GetActorLocation().ToString());
 	UE_LOG(LogTemp, Log, TEXT("BloodSpawn Rotation: %s"), *GetActorRotation().ToString());
 
-	DrawDebugPoint(
-		GetWorld(),
-		GetActorLocation(),
-		10.0f,
-		FColor::Purple,
-		false,
-		20.0f,
-		0
-	);
+	//DrawDebugPoint(
+	//	GetWorld(),
+	//	GetActorLocation(),
+	//	10.0f,
+	//	FColor::Purple,
+	//	false,
+	//	20.0f,
+	//	0
+	//);
 
-	DrawDebugLine(
-		GetWorld(),
-		GetActorLocation(),
-		GetActorLocation() + GetActorRotation().Vector() * 50.0f,
-		FColor::Red,
-		false,
-		20.0f,
-		0,
-		1.0f
-	);
+	//DrawDebugLine(
+	//	GetWorld(),
+	//	GetActorLocation(),
+	//	GetActorLocation() + GetActorRotation().Vector() * 50.0f,
+	//	FColor::Red,
+	//	false,
+	//	20.0f,
+	//	0,
+	//	1.0f
+	//);
 
 	UNiagaraComponent* NewBloodFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
 		FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z),
