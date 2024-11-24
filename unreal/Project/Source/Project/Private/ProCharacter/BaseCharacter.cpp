@@ -681,79 +681,73 @@ void ABaseCharacter::UpdateOtherPlayerUI(uint32 playerid, float hp , uint32 char
 void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 {
 	// 옥상 키였을때는 5분 지났는지 timerwidget 확인 플레이어id 활용해서 해당 ui로 이동
-	if (keyid == 0) {
+	if (keyid == 1) {
 		++(TextMissionUIWidget->m_iFindCarKey);
 	}
-	else if (keyid == 1) {
+	else if (keyid == 2) {
 		++(TextMissionUIWidget->m_iFindRoofKey);
 	}
-	//key = 1만 id=0만 받음
-	UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: playerid= %d"), playerid);
-	UE_LOG(LogNet, Display, TEXT("OtherPlayerUIWidget->m_iOtherPlayerUINumber= %d"), OtherPlayerUIWidget->m_iOtherPlayerUINumber);
-	UE_LOG(LogNet, Display, TEXT("OtherPlayerUIWidget->m_iOtherPlayerUINumber= %d"), OtherPlayer2UIWidget->m_iOtherPlayerUINumber);
-	UE_LOG(LogNet, Display, TEXT("OtherPlayerUIWidget->m_iOtherPlayerUINumber= %d"), OtherPlayer3UIWidget->m_iOtherPlayerUINumber);
-	UE_LOG(LogNet, Display, TEXT("OtherPlayerInven[keyid].Count = %d"), OtherPlayerInven[keyid].Count);
 
-	if (0 == playerid) {
-		if (keyid == 0) {
-			if (OtherPlayerInven[keyid].Count == 0) {
-				OtherPlayerInven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
-				OtherPlayerInven[keyid].Count = 1;
+	if (OtherPlayerUIWidget->m_iOtherPlayerUINumber == playerid) {
+		if (keyid == 1) {
+			if (OtherPlayerInven[0].Count == 0) {
+				OtherPlayerInven[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
+				OtherPlayerInven[0].Count = 1;
 			}
 			else {
-				++(OtherPlayerInven[keyid].Count);
+				++(OtherPlayerInven[0].Count);
 			}
 		}
-		else if (keyid == 1) {
-			if (OtherPlayerInven[keyid].Count == 0) {
-				OtherPlayerInven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
-				OtherPlayerInven[keyid].Count = 1;
+		else if (keyid == 2) {
+			if (OtherPlayerInven[1].Count == 0) {
+				OtherPlayerInven[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
+				OtherPlayerInven[1].Count = 1;
 			}
 			else {
-				++(OtherPlayerInven[keyid].Count);
+				++(OtherPlayerInven[1].Count);
 			}
 		}
 		OtherPlayerUIWidget->Update();
 	}
 	else if (OtherPlayer2UIWidget->m_iOtherPlayerUINumber == playerid) {
-		if (keyid == 0) {
-			if (OtherPlayer2Inven[keyid].Count == 0) {
-				OtherPlayer2Inven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
-				OtherPlayer2Inven[keyid].Count = 1;
+		if (keyid == 1) {
+			if (OtherPlayer2Inven[0].Count == 0) {
+				OtherPlayer2Inven[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
+				OtherPlayer2Inven[0].Count = 1;
 			}
 			else {
-				++(OtherPlayer2Inven[keyid].Count);
+				++(OtherPlayer2Inven[0].Count);
 			}
 
 
 		}
-		else if (keyid == 1) {
-			if (OtherPlayer2Inven[keyid].Count == 0) {
-				OtherPlayer2Inven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
-				OtherPlayer2Inven[keyid].Count = 1;
+		else if (keyid == 2) {
+			if (OtherPlayer2Inven[1].Count == 0) {
+				OtherPlayer2Inven[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
+				OtherPlayer2Inven[1].Count = 1;
 			}
 			else {
-				++(OtherPlayer2Inven[keyid].Count);
+				++(OtherPlayer2Inven[1].Count);
 			}
 		}
 		OtherPlayer2UIWidget->Update();
 	}
 	else if (OtherPlayer3UIWidget->m_iOtherPlayerUINumber == playerid) {
-		if (keyid == 0) {
-			if (OtherPlayer3Inven[keyid].Count == 0) {
-				OtherPlayer3Inven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
-				OtherPlayer3Inven[keyid].Count = 1;
+		if (keyid == 1) {
+			if (OtherPlayer3Inven[0].Count == 0) {
+				OtherPlayer3Inven[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenCarKey1.InvenCarKey1"));
+				OtherPlayer3Inven[0].Count = 1;
 			}
 			else {
-				++(OtherPlayer3Inven[keyid].Count);
+				++(OtherPlayer3Inven[0].Count);
 			}
 
 
 		}
-		else if (keyid == 1) {
-			if (OtherPlayer3Inven[keyid].Count == 0) {
-				OtherPlayer3Inven[keyid].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
-				OtherPlayer3Inven[keyid].Count = 1;
+		else if (keyid == 2) {
+			if (OtherPlayer3Inven[1].Count == 0) {
+				OtherPlayer3Inven[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenRoofKey1.InvenRoofKey1"));
+				OtherPlayer3Inven[1].Count = 1;
 			}
 			else {
 				++(OtherPlayer3Inven[keyid].Count);
@@ -762,7 +756,7 @@ void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 		OtherPlayer3UIWidget->Update();
 	}
 
-	if (keyid == 0 && TextMissionUIWidget->m_iFindCarKey == 1) {
+	if (keyid == 1 && TextMissionUIWidget->m_iFindCarKey == 1) {
 		if (!(GameTimerUIWidget->RoofTopClose)) {
 			FText KText = FText::FromString(TEXT("차 키를 찾았습니다."));
 			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
@@ -772,14 +766,14 @@ void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 		}
 
 	}
-	else if (keyid == 1 && TextMissionUIWidget->m_iFindRoofKey == 1) {
+	else if (keyid == 2 && TextMissionUIWidget->m_iFindRoofKey == 1) {
 		FText KText = FText::FromString(TEXT("옥상 키를 찾았습니다."));
 		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
 		PlaySoundForPlayer(Sound);
 		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 		Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT1();
 	}
-	else if (keyid == 1 && TextMissionUIWidget->m_iFindRoofKey == 2) {
+	else if (keyid == 2 && TextMissionUIWidget->m_iFindRoofKey == 2) {
 		FText KText = FText::FromString(TEXT("옥상 키를 찾았습니다."));
 		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
 		PlaySoundForPlayer(Sound);
@@ -1404,59 +1398,144 @@ void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interr
 		UpdateBHealingSlot();
 		});
 }
+//
+//void ABaseCharacter::PlayKey()
+//{
+//	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
+//
+//	float WidgetPlaySpeed = 1.f;
+//
+//	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_8_sec;
+//	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+//
+//	if (PlayerSight->GetIsHit()) {
+//
+//		AInterActor* InterActor = Cast<AInterActor>(PlayerSight->GetHitActor());
+//		if (InterActor) {
+//			PlayKeyAnim();
+//			if (InterActor->InterActorName == "CarActor") {
+//				ACarActor* CarActor = Cast<ACarActor>(InterActor);
+//
+//				if (CurrentKeyItem->KeyName == CarActor->CarKeyName) {
+//					CarActor->UnLock();
+//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
+//					UpdateKeySlot();
+//					Send_OpenRoot(1);
+//				}
+//				else {
+//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
+//				}
+//			}
+//			else if (InterActor->InterActorName == "RoofTopDoorActor") {
+//
+//				ARoofTopDoorActor* RoofTopDoorActor = Cast<ARoofTopDoorActor>(InterActor);
+//
+//				if (CurrentKeyItem->KeyName == "RoofKey1") {
+//					RoofTopDoorActor->UnlockKey1();
+//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
+//					UpdateKeySlot();
+//					Send_OpenRoot(2);
+//				}
+//				else if (CurrentKeyItem->KeyName == "RoofKey2") {
+//					RoofTopDoorActor->UnlockKey2();
+//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
+//					UpdateKeySlot();
+//					Send_OpenRoot(2);
+//				}
+//
+//			}
+//
+//
+//		}
+//	}
+//
+//
+//
+//}
 
 void ABaseCharacter::PlayKey()
 {
-	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
-
-	float WidgetPlaySpeed = 1.f;
-
-	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_8_sec;
-	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
-
-	if (PlayerSight->GetIsHit()) {
-
-		AInterActor* InterActor = Cast<AInterActor>(PlayerSight->GetHitActor());
-		if (InterActor) {
-			PlayKeyAnim();
-			if (InterActor->InterActorName == "CarActor") {
-				ACarActor* CarActor = Cast<ACarActor>(InterActor);
-
-				if (CurrentKeyItem->KeyName == CarActor->CarKeyName) {
-					CarActor->UnLock();
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
-					UpdateKeySlot();
-					Send_OpenRoot(1);
-				}
-				else {
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
-				}
-			}
-			else if (InterActor->InterActorName == "RoofTopDoorActor") {
-
-				ARoofTopDoorActor* RoofTopDoorActor = Cast<ARoofTopDoorActor>(InterActor);
-
-				if (CurrentKeyItem->KeyName == "RoofKey1") {
-					RoofTopDoorActor->UnlockKey1();
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
-					UpdateKeySlot();
-					Send_OpenRoot(2);
-				}
-				else if (CurrentKeyItem->KeyName == "RoofKey2") {
-					RoofTopDoorActor->UnlockKey2();
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
-					UpdateKeySlot();
-					Send_OpenRoot(2);
-				}
-
-			}
-
-
-		}
+	if (bIsKeyPlaying) { // 이미 키 애니메이션이 진행 중이면 실행 방지
+		return;
 	}
 
+	if (PlayerSight->GetIsHit()) {
+		AInterActor* InterActor = Cast<AInterActor>(PlayerSight->GetHitActor());
+		if (InterActor) {
+			bIsKeyPlaying = true; // 애니메이션 상태 플래그 설정
+			CurrentInterActor = InterActor; // 상호작용 대상 저장
 
+			CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
+			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_8_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			PlayKeyAnim(); // 애니메이션 시작
+		}
+	}
+}
+
+void ABaseCharacter::PlayKeyAnim()
+{
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (!AnimInstance) {
+		bIsKeyPlaying = false; // 애니메이션 실패 시 상태 초기화
+		return;
+	}
+
+	float AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
+	AnimInstance->PlayKeyMontage(AnimPlaySpeed);
+
+	// 첫 연결만 이벤트 바인딩
+	if (KeyMontageFlag == 0) {
+		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::KeyMontageEnded);
+		++KeyMontageFlag;
+	}
+}
+
+void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden); // 위젯 숨기기
+
+	bIsKeyPlaying = false; // 애니메이션 상태 초기화
+
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (!AnimInstance || Montage != AnimInstance->GetOpenKeyMontage()) {
+		return; 
+	}
+
+	if (!CurrentInterActor)
+		return;
+
+	if (CurrentInterActor->InterActorName == "CarActor") {
+		ACarActor* CarActor = Cast<ACarActor>(CurrentInterActor);
+		if (CarActor && CurrentKeyItem->KeyName == CarActor->CarKeyName) {
+			CarActor->UnLock();
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
+			UpdateKeySlot();
+			Send_OpenRoot(1);
+		}
+		else {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
+		}
+	}
+	else if (CurrentInterActor->InterActorName == "RoofTopDoorActor") {
+		ARoofTopDoorActor* RoofTopDoorActor = Cast<ARoofTopDoorActor>(CurrentInterActor);
+		if (RoofTopDoorActor) {
+			if (CurrentKeyItem->KeyName == "RoofKey1") {
+				RoofTopDoorActor->UnlockKey1();
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
+				UpdateKeySlot();
+				Send_OpenRoot(2);
+			}
+			else if (CurrentKeyItem->KeyName == "RoofKey2") {
+				RoofTopDoorActor->UnlockKey2();
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
+				UpdateKeySlot();
+				Send_OpenRoot(2);
+			}
+		}
+	}
 }
 
 void ABaseCharacter::Throw() // throwweapon 생성 시 작성 필요
@@ -2359,24 +2438,24 @@ void ABaseCharacter::HealingStaminaTimerElapsed()
 		SetStamina(100);
 	}
 }
-
-void ABaseCharacter::PlayKeyAnim() // 애니메이션 실행 후 로딩 원 없애도록 수정 필요
-{
-
-	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
-
-	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-
-	float WidgetPlaySpeed = 1.f;
-	float AnimPlaySpeed = 1.f;
-
-	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
-	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
-
-	AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
-	AnimInstance->PlayKeyMontage();
-
-}
+//
+//void ABaseCharacter::PlayKeyAnim() // 애니메이션 실행 후 로딩 원 없애도록 수정 필요
+//{
+//
+//	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
+//
+//	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+//
+//	float WidgetPlaySpeed = 1.f;
+//	float AnimPlaySpeed = 1.f;
+//
+//	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
+//	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+//
+//	AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
+//	AnimInstance->PlayKeyMontage();
+//
+//}
 
 
 
