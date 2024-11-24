@@ -182,7 +182,7 @@ public:
 	UMaterialInterface* Material_Blood;
 
 	UPROPERTY(EditAnywhere)
-	ABloodNiagaEffect* BloodFX;
+	TArray<ABloodNiagaEffect*> BloodFX;
 
 	UPROPERTY(EditAnywhere)
 	AShoutingNiagaEffect* ShoutingFX;

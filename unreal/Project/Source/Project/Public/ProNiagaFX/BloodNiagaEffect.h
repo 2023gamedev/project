@@ -27,6 +27,10 @@ public:
 
 	void SpawnBloodEffect();
 
+	void StopSpawnBloodEffect();
+
+	void EndBloodEffect();
+
 
 	UPROPERTY(EditAnywhere)
 	UProceduralMeshComponent* ProcMesh;
@@ -43,7 +47,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool spawn_flag = false;
 
-	UPROPERTY(EditAnywhere)
-	AActor* Body;
+	FTimerHandle SpawnTimerHandle;
 
+	FTimerHandle StopSpawnTimerHandle;
+
+	FTimerHandle EndTimerHandle;
+
+	UPROPERTY(EditAnywhere)
+	bool blood_spawnloop = false;
 };

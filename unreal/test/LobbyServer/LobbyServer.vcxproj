@@ -83,8 +83,8 @@
     <LibraryPath>$(SolutionDir)Libraries\Libs\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\project\unreal\test\LobbyServer\Libraries\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\project\unreal\test\LobbyServer\Libraries\Libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Libraries\Include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libraries\Libs\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnabled>false</VcpkgEnabled>

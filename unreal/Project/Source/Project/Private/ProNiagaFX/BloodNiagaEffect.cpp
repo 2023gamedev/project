@@ -37,21 +37,30 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (spawn_flag) {
-		UNiagaraComponent* NewBloodFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
-			FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z),
-			FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
 
-		if (NewBloodFX)
+	for (UNiagaraComponent* BloodFX : BloodFXComponents)
+	{
+		if (BloodFX)
 		{
-			NewBloodFX->SetNiagaraVariableInt(FString("User.Blood_SpawnCount"), blood_spawncount);
-
-			BloodFXComponents.Add(NewBloodFX);
-
-			NewBloodFX->Activate();
-
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
+			//BloodFX->SetWorldLocation(GetActorLocation());
+			if (ProcMesh) {
+				SetActorLocation(ProcMesh->GetComponentLocation());
+			}
 		}
+	}
+	
+
+	if (spawn_flag) {
+		const float spawn_inteval = 0.5f;
+		const float spawn_duration = 3.0f;
+		const float destory_time = 5.0f;
+
+		// spawn_inteval 간격으로 스폰
+		GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ABloodNiagaEffect::SpawnBloodEffect, spawn_inteval, blood_spawnloop, 0.0f);
+		// spawn_duration 동안 스폰
+		GetWorld()->GetTimerManager().SetTimer(StopSpawnTimerHandle, this, &ABloodNiagaEffect::StopSpawnBloodEffect, 1.0f, false, spawn_duration);
+		// destory_time 후에 액터 삭제
+		GetWorld()->GetTimerManager().SetTimer(EndTimerHandle, this, &ABloodNiagaEffect::EndBloodEffect, 1.0f, false, destory_time);
 
 		spawn_flag = false;
 	}
@@ -78,5 +87,62 @@ void ABloodNiagaEffect::EndPlay(EEndPlayReason::Type type)
 
 void ABloodNiagaEffect::SpawnBloodEffect()
 {
+	//RootComponent = ProcMesh;
 
+	UE_LOG(LogTemp, Log, TEXT("BloodSpawn Location: %s"), *GetActorLocation().ToString());
+	UE_LOG(LogTemp, Log, TEXT("BloodSpawn Rotation: %s"), *GetActorRotation().ToString());
+
+	DrawDebugPoint(
+		GetWorld(),
+		GetActorLocation(),
+		10.0f,
+		FColor::Purple,
+		false,
+		20.0f,
+		0
+	);
+
+	DrawDebugLine(
+		GetWorld(),
+		GetActorLocation(),
+		GetActorLocation() + GetActorRotation().Vector() * 50.0f,
+		FColor::Red,
+		false,
+		20.0f,
+		0,
+		1.0f
+	);
+
+	UNiagaraComponent* NewBloodFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
+		FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z),
+		FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
+
+	if (NewBloodFX)
+	{
+		NewBloodFX->SetNiagaraVariableInt(FString("User.Blood_SpawnCount"), blood_spawncount);
+
+		BloodFXComponents.Add(NewBloodFX);
+
+		NewBloodFX->Activate();
+
+		const int decrease_count = 20;
+
+		blood_spawncount -= decrease_count;	// 시간이 지날 수록 생성되는 피 파티클 수 줄임
+
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
+	}
+}
+
+void ABloodNiagaEffect::StopSpawnBloodEffect()
+{
+	GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
+
+	GetWorld()->GetTimerManager().ClearTimer(StopSpawnTimerHandle);
+}
+
+void ABloodNiagaEffect::EndBloodEffect()
+{
+	GetWorld()->GetTimerManager().ClearTimer(EndTimerHandle);
+
+	EndPlay(EEndPlayReason::Destroyed);
 }
