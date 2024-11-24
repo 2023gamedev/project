@@ -41,7 +41,7 @@ void UGameTimerUI::UpdateTimer()
 	if (!RoofTopClose && 10 - m_iMinites > 5) {
 		RoofTopClose = true;
 		if (Character) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("!RoofTopClose && m_iMinites >= 5")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("!RoofTopClose && m_iMinites >= 5")));
 			FText KText = FText::FromString(TEXT("헬기가 떠났습니다."));
 			FText KMissionText1 = FText::FromString(TEXT("실패"));
 			FText KMissionText2 = FText::FromString(TEXT(""));

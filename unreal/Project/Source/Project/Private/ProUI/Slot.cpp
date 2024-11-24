@@ -148,7 +148,7 @@ void USlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEven
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
 
 	if (OutOperation == nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Start"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Start"));
 
 		UDragOnSlot* oper = NewObject<UDragOnSlot>();
 		OutOperation = oper;
@@ -165,7 +165,7 @@ void USlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEven
 		}
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Again"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Again"));
 	}
 }
 
@@ -174,7 +174,7 @@ bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDr
 	Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 	UDragOnSlot* oper = Cast<UDragOnSlot>(InOperation);
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag End"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag End"));
 
 	if (oper != nullptr) {
 		// DragSwap을 사용하지 않기에 그냥 주석처리 --- 안하면 검은칸이 회색칸으로 바뀔수가 있음
@@ -186,7 +186,7 @@ bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDr
 	else {
 		// fall 드랍하자
 		SpawnOnGround(SlotIndex);
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Fail"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Fail"));
 		return false;
 	}
 
@@ -217,7 +217,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 	}
 
 	if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton) == true) { // 퀵슬롯에 넣어주거나 해제하는 역할 할 예정
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Right Button Down"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Right Button Down"));
 
 		// 빈칸에 마우스 우클릭 시 팅기는 부분 방지
 		if (Character->Inventory[SlotIndex].Type == EItemType::ITEM_NONE) {
@@ -254,11 +254,11 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					Character->DestroyBleedingHealingItem();
 					Character->SetBHHandIn(false);
 					Character->SetBringCurrentBleedingHealingItem(false);
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: BLEEDINGHEALINGITEM"));
+					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: BLEEDINGHEALINGITEM"));
 				}
 			}
 			Character->GameUIUpdate();
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("BLEEDINGHEALINGITEM!"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("BLEEDINGHEALINGITEM!"));
 			break;
 		case EItemClass::HEALINGITEM:
 			if (Character->QuickSlot[1].Type == EItemType::ITEM_QUICK_NONE) {
@@ -288,12 +288,12 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					Character->DestroyHealingItem();
 					Character->SetHealHandIn(false);
 					Character->SetBringCurrentHealingItem(false);
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: HEALINGITEM"));
+					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: HEALINGITEM"));
 				}
 			}
 
 			Character->GameUIUpdate();
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEALINGITEM!"));
+			////GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEALINGITEM!"));
 			break;
 		case EItemClass::THROWINGWEAPON:
 			if (Character->QuickSlot[2].Type == EItemType::ITEM_QUICK_NONE) {
@@ -324,11 +324,11 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					Character->DestroyThrowWeapon();
 					Character->SetThrowWHandIn(false);
 					Character->SetBringCurrentThrowWeapon(false);
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: THROWINGWEAPON"));
+					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: THROWINGWEAPON"));
 				}
 			}
 			Character->GameUIUpdate();
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("THROWINGWEAPON!"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("THROWINGWEAPON!"));
 			break;
 		case EItemClass::KEYITEM:
 			if (Character->QuickSlot[3].Type == EItemType::ITEM_QUICK_NONE) {
@@ -358,12 +358,12 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					Character->DestroyKeyItem();
 					Character->SetKeyHandIn(false);
 					Character->SetBringCurrentKeyItem(false);
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: KEYITEM"));
+					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: KEYITEM"));
 				}
 			}
 
 			Character->GameUIUpdate();
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("KEYITEM!"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("KEYITEM!"));
 			break;
 		case EItemClass::NORMALWEAPON:
 			if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_NONE) {
@@ -393,7 +393,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					Character->DestroyNormalWeapon();
 					Character->SetNWHandIn(false);
 					Character->SetBringCurrentWeapon(false);
-					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: NORMALWEAPON"));
+					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: NORMALWEAPON"));
 				}
 			}
 		case EItemClass::BAGITEM:
@@ -456,7 +456,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			}
 
 			Character->GameUIUpdate();
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Normal Weapon!"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Normal Weapon!"));
 			break;
 
 		}
@@ -465,7 +465,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 	}
 	else if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton) == true) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Left Button Down"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Left Button Down"));
 
 		switch (Type) {
 		case ESlotType::SLOT_NONE: case ESlotType::SLOT_QUICK: break;

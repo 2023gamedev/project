@@ -7,8 +7,8 @@
 ClientSocket::ClientSocket(UProGameInstance* Inst)
 {
 	gameInst = Inst;
-	//CurrentServerType = ServerType::LOBBY_SERVER;
-	CurrentServerType = ServerType::GAME_SERVER;
+	CurrentServerType = ServerType::LOBBY_SERVER;
+	//CurrentServerType = ServerType::GAME_SERVER;
 
 	recvBuffer.buf = recvData;
 	recvBuffer.len = BUFSIZE;
@@ -98,7 +98,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 		memcpy(&MyPlayerId, buffer.data(), sizeof(MyPlayerId));
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MyPlayerId: %d"), MyPlayerId));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MyPlayerId: %d"), MyPlayerId));
 		UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId);
 
 		return;
@@ -233,6 +233,15 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::WaitingAllReady Ready_Packet;
 				if (Ready_Packet.ParseFromArray(buffer.data(), buffer.size())) {
 					Q_wAllready.push(true);
+				}
+				break;
+			}
+
+			case 15:
+			{
+				Protocol::SelectReady SR_Packet;
+				if (SR_Packet.ParseFromArray(buffer.data(), buffer.size())) {
+					Q_sready.push(SelectReady(SR_Packet.playerid(), SR_Packet.player_num(), SR_Packet.ready()));
 				}
 				break;
 			}
@@ -512,16 +521,16 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 
 	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Trying to connect.")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Trying to connect.")));
 
 	if (retval == SOCKET_ERROR)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fail")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fail")));
 		return false;
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Success!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Success!")));
 
 		UE_LOG(LogNet, Display, TEXT("Socket Initialized"));
 

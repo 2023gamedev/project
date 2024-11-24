@@ -71,10 +71,19 @@ void UOtherPlayerUI::Update()
 }
 
 
-void UOtherPlayerUI::UpdateOtherPlayerUI(float hp, uint32 charactertype)
+void UOtherPlayerUI::UpdateOtherPlayerUI(float hp, uint32 charactertype, std::string playername)
 {
 	if (!m_bPlayerImg) {
 		m_bPlayerImg = true;
+
+
+		FString PlayerName = playername.c_str();
+		if (PlayerName.IsEmpty()) {
+			UE_LOG(LogTemp, Warning, TEXT("PlayerName is empty or null"));
+		}
+		else {
+			UE_LOG(LogTemp, Display, TEXT("PlayerN: %s"), *PlayerName);
+		}
 
 		if (charactertype == 1) {
 			UTexture2D* LoadedTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Girl/girl.girl"));
@@ -121,7 +130,22 @@ void UOtherPlayerUI::UpdateOtherPlayerUI(float hp, uint32 charactertype)
 			}
 		}
 		m_iCharacterType = charactertype;
+
+		FString PlayerN = FString(playername.c_str());
+		OtherPlayerID->SetText(FText::FromString(PlayerN));
+
 	}
+
+
+	//FString PlayerName = playername.c_str();
+	//if (PlayerName.IsEmpty()) {
+	//	UE_LOG(LogTemp, Warning, TEXT("PlayerName is empty or null"));
+	//}
+	//else {
+	//	UE_LOG(LogTemp, Display, TEXT("PlayerN: %s"), *PlayerName);
+	//}
+	//FString PlayerN = FString(playername.c_str());
+	//OtherPlayerID->SetText(FText::FromString(PlayerN));
 
 	UpdateHPBar(hp);
 }

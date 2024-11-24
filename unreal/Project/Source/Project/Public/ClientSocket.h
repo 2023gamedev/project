@@ -261,6 +261,18 @@ struct WaitingReady
 		: playerid(Inplayerid), ready(Inready) {}
 };
 
+struct SelectReady
+{
+	uint32 playerid;
+	uint32 player_num;
+	bool ready;
+
+	SelectReady() : playerid(0), ready(false) {}
+
+	SelectReady(uint32 Inplayerid, uint32 Inplayer_num, bool Inready)
+		: playerid(Inplayerid), player_num(Inplayer_num), ready(Inready) {}
+};
+
 struct GameClear
 {
 	uint32 root;
@@ -319,6 +331,7 @@ public:
 	Concurrency::concurrent_queue<JoinPlayer> Q_jplayer;
 	Concurrency::concurrent_queue<LeavePlayer> Q_lplayer;
 	Concurrency::concurrent_queue<WaitingReady> Q_wready;
+	Concurrency::concurrent_queue<SelectReady> Q_sready;
 	Concurrency::concurrent_queue<bool> Q_wAllready;
 	Concurrency::concurrent_queue<GameClear> Q_gclear;
 

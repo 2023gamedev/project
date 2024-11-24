@@ -21,6 +21,7 @@ DECLARE_DELEGATE(FChoicedEmployeeCharcaterD);
 DECLARE_DELEGATE(FChoicedIdolCharcaterD);
 DECLARE_DELEGATE(FChoicedFireFighterCharcaterD);
 
+
 // Lobby에서 UI를 고르는 Player 클래스
 UCLASS()
 class PROJECT_API ALobbyPlayer : public APawn
@@ -32,6 +33,8 @@ public:
 	ALobbyPlayer();
 
 	TMap <uint32, FString> LobbyPlayers;
+
+	const TMap<uint32, FString>& GetLobbyPlayers() const { return LobbyPlayers; }
 
 protected:
 	// Called when the game starts or when spawned
@@ -64,6 +67,7 @@ public:
 	JoinPlayer recvJplayer;
 	LeavePlayer recvLplayer;
 	WaitingReady recvWready;
+	SelectReady recvSready;
 
 	bool waitingready = false;
 

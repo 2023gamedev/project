@@ -108,20 +108,20 @@ void ALobbyPlayer::BeginPlay()
 
 	//	StartGameUIWidget->MoveChoiceCharacterUI.BindUObject(this, &ALobbyPlayer::MoveChoiceCharacterUI);
 	//}
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "LoginUI 123");
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "LoginUI 123");
 
 	// LoginUI를 먼저 생성할 때
 	if (LoginUI != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "LoginUI != nullptr");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "LoginUI != nullptr");
 		ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
 		if (controller == nullptr) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
 			return;
 		}
 		LoginUIWidget = CreateWidget<ULoginUI>(controller, LoginUI);
 
 		if (!LoginUIWidget) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!LoginUIWidget");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!LoginUIWidget");
 			return;
 		}
 
@@ -148,7 +148,7 @@ void ALobbyPlayer::Tick(float DeltaTime)
 	}
 
     if (GameInstance->ClientSocketPtr->b_allready){
-        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All players are ready!");
+        //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "All players are ready!");
 
 		ChoiceCharacterUIWidget->RemoveFromParent();
 
@@ -171,6 +171,7 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		{
 			FString FStringname = FString(UTF8_TO_TCHAR(recvJplayer.username.c_str()));
 			WaitingRoomUIWidget->AddPlayerToList(FStringname);
+			LobbyPlayers.Add(recvJplayer.playerid, FStringname);
 			WaitingRoomUIWidget->Waiting_LobbyPlayers.FindOrAdd(recvJplayer.playerid, FStringname);
 		}
 	}
@@ -194,6 +195,13 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		if (WaitingRoomUIWidget)
 		{
 			WaitingRoomUIWidget->UpdatePlayerReadyState(recvWready.playerid, recvWready.ready);
+		}
+	}
+
+	if (GameInstance->ClientSocketPtr->Q_sready.try_pop(recvSready)) {
+		if (WaitingRoomUIWidget)
+		{
+			ChoiceCharacterUIWidget->UpdatePlayerReadyState(recvSready.player_num, recvSready.ready);
 		}
 	}
 
@@ -222,16 +230,16 @@ void ALobbyPlayer::ChoicedFireFighterCharacter()
 void ALobbyPlayer::MoveChoiceCharacterUI()
 {
 	if (ChoiceCharacterUI != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ChoiceCharacterUI != nullptr");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ChoiceCharacterUI != nullptr");
 		ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
 		if (controller == nullptr) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
 			return;
 		}
 		ChoiceCharacterUIWidget = CreateWidget<UChoiceCharacterUI>(controller, ChoiceCharacterUI);
 
 		if (!ChoiceCharacterUIWidget) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!ChoiceCharacterUIWidget");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!ChoiceCharacterUIWidget");
 			return;
 		}
 
@@ -254,10 +262,10 @@ void ALobbyPlayer::MoveChoiceCharacterUI()
 void ALobbyPlayer::MoveStartGameUI()
 {
 	if (StartGameUI != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartGameUI != nullptr");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "StartGameUI != nullptr");
 		ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
 		if (controller == nullptr) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
 			return;
 		}
 
@@ -269,7 +277,7 @@ void ALobbyPlayer::MoveStartGameUI()
 		StartGameUIWidget = CreateWidget<USelect_RoomUI>(controller, StartGameUI);
 
 		if (!StartGameUIWidget) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!StartGameUIWidget");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!StartGameUIWidget");
 			return;
 		}
 
@@ -289,16 +297,16 @@ void ALobbyPlayer::MoveStartGameUI()
 void ALobbyPlayer::MoveWaitingRoomUI()
 {
 	if (WaitingRoomUI != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "WaitingRoomUI != nullptr");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "WaitingRoomUI != nullptr");
 		ALobbyPlayerController* controller = Cast<ALobbyPlayerController>(this->GetController());
 		if (controller == nullptr) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "controller == nullptr");
 			return;
 		}
 		WaitingRoomUIWidget = CreateWidget<UWaitingRoomUI>(controller, WaitingRoomUI);
 
 		if (!WaitingRoomUIWidget) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!WaitingRoomUIWidget");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "!WaitingRoomUIWidget");
 			return;
 		}
 
@@ -314,9 +322,9 @@ void ALobbyPlayer::MoveWaitingRoomUI()
 
 void ALobbyPlayer::OnMouseLeftClick()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Left Mouse Button Clicked");
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Left Mouse Button Clicked");
 	if (StartGameUIWidget) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Left Mouse Button Clicked");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Left Mouse Button Clicked");
 
 		//StartGameUIWidget->StartButton->OnClicked.Broadcast();
 		

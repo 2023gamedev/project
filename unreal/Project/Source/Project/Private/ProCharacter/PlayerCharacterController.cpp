@@ -95,6 +95,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				// 현재 컨트롤러가 빙의한 Pawn 가져오기
 				APawn* ControlledPawn = GetPawn();
 
+
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player12432543543535: PlayerId=%d"), recvPlayerData.PlayerId);
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%f"), recvPlayerData.hp);
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player        : hp=%f"), recvPlayerData.hp);
@@ -103,7 +104,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
 				{
 					if (ControlledCharacter) {
-						ControlledCharacter->UpdateOtherPlayerUI(recvPlayerData.PlayerId, recvPlayerData.hp, recvPlayerData.charactertype);
+
+						ControlledCharacter->UpdateOtherPlayerUI(recvPlayerData.PlayerId, recvPlayerData.hp, recvPlayerData.charactertype, recvPlayerData.username);
 					}
 				}
 			}
@@ -185,7 +187,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			{
 				//처리 recvGetKey.itemid, recvGetKey.playerid
 
-				UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: itemid= %d"), recvGetkey.itemid);
+				//UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: itemid= %d"), recvGetkey.itemid);
 				APawn* ControlledPawn = GetPawn();
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
 				{
@@ -221,6 +223,32 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				uint32 my_kill_count;
 				uint32 best_kill_count;
 				std::string best_kill_player;*/
+
+
+				UE_LOG(LogNet, Display, TEXT("recvGameClearrecvGameClearrecvGameClearrecvGameClearrecvGameClear"));
+
+				//처리 recvEscapeRoot.playerid, recvEscapeRoot.root
+				APawn* ControlledPawn = GetPawn();
+				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
+				{
+					if (ControlledCharacter) {
+						std::string bestkillStr = recvGameClear.best_kill_player;
+						FString bestkillplayerFStr = FString(bestkillStr.c_str());  // std::string을 FString으로 변환
+
+						std::string OpenStr = recvGameClear.open_player;
+						FString OpenPlayerFStr = FString(OpenStr.c_str());  // std::string을 FString으로 변환
+
+						ControlledCharacter->ProGameClear(recvGameClear.root
+							,recvGameClear.alive_players
+							, recvGameClear.dead_players
+						, OpenPlayerFStr
+						, recvGameClear.my_kill_count
+						, recvGameClear.best_kill_count
+						, bestkillplayerFStr);
+					}
+
+
+				}
 			}
 		}
 
@@ -231,7 +259,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.ZombieType, recvZombieData.Location, recvZombieData.Rotation);
-				UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);	// 좀비가 움직이거나 스폰되면 보내는데 이제는 움직임은 따로 통신하지 않아서 스폰될때 불림
+				//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);	// 좀비가 움직이거나 스폰되면 보내는데 이제는 움직임은 따로 통신하지 않아서 스폰될때 불림
 			}
 		}
 
@@ -241,7 +269,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				MyGameMode->UpdateZombieAttack(recvZombieAttack.ZombieId, recvZombieAttack.PlayerId);
-				UE_LOG(LogNet, Display, TEXT("Update Zombie Attack: Zombieid=%d, Playerid=%d"), recvZombieAttack.ZombieId, recvZombieAttack.PlayerId);
+				//(LogNet, Display, TEXT("Update Zombie Attack: Zombieid=%d, Playerid=%d"), recvZombieAttack.ZombieId, recvZombieAttack.PlayerId);
 			}
 		}
 
@@ -327,6 +355,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 	if (PreviousLocation != CurrentLocation || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp || sendRun || sendjump) {
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();
+		std::string MyPlayerName = GameInstance->ClientSocketPtr->MyUserName;
 
 		// Protobuf를 사용하여 TestPacket 생성
 		Protocol::Character packet;
@@ -341,6 +370,7 @@ void APlayerCharacterController::CheckAndSendMovement()
 		packet.set_roll(CurrentRotation.Roll);
 		packet.set_hp(hp);
 		packet.set_b_run(IsRlyRun + 1);
+		packet.set_username(MyPlayerName);
 		//packet.set_b_jump(sendjump + 1);
 		packet.set_isingame(true);
 
@@ -379,7 +409,7 @@ void APlayerCharacterController::Send_Attack()
 
 		b_attack = false;
 
-		UE_LOG(LogNet, Display, TEXT("Send Attack: PlayerId=%d"), recvPlayerData.PlayerId);
+		//UE_LOG(LogNet, Display, TEXT("Send Attack: PlayerId=%d"), recvPlayerData.PlayerId);
 	}
 }
 
@@ -702,28 +732,28 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 
 
 		if (basecharacter->IsNWHandIn() && !(basecharacter->IsAttack())) { // 아예 함수에 접근을 못하게 조건을 추가
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
 			Attack();
 		}
 		else if (basecharacter->IsBHHandIn() && !(basecharacter->IsBHealing())) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
 			BleedHealing();
 
 		}
 		else if (basecharacter->IsHealHandIn() && !(basecharacter->IsHealing())) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
 
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
 			Healing();
 
 		}
 		else if (basecharacter->IsKeyHandIn()) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
 			PlayKey();
 
 		}
 		else if (basecharacter->IsThrowWHandIn()) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController TH")));
 			Throw();
 		}
 

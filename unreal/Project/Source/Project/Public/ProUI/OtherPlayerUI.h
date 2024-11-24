@@ -23,7 +23,7 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void UpdateOtherPlayerUI(float hp, uint32 charactertype);
+	void UpdateOtherPlayerUI(float hp, uint32 charactertype, std::string playername);
 	void UpdateHPBar(float hp);
 
 	void UpdateDeadUI();

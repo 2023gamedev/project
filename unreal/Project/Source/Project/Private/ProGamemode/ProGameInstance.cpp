@@ -37,7 +37,7 @@ void UProGameInstance::InitSocket()
     if (ClientSocketPtr != nullptr) return;
 
     ClientSocketPtr = new ClientSocket(this);
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Success!")));
+    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Success!")));
   
     if (ClientSocketPtr->Init())
     {
@@ -213,7 +213,7 @@ TSubclassOf<AGameStateBase> UProGameInstance::GetGameState()
 
 void UProGameInstance::ChangeOneGameMode()
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UProGameInstance::ChangeOneGameMode()");
+    //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UProGameInstance::ChangeOneGameMode()");
     
 
     // 현재 월드 가져오기
@@ -223,10 +223,10 @@ void UProGameInstance::ChangeOneGameMode()
         // 새로운 게임 모드 클래스를 로드할 레벨 이름
         FString LevelName = "/Game/ThirdPerson/Maps/ThirdPersonMap";
 
-        LoadLevelWithLoadingUI(FName(*LevelName));
+        //LoadLevelWithLoadingUI(FName(*LevelName));
 
         // 새로운 레벨 로드
-        //UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=ProGamemode/OneGameModeBase");
+        UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=ProGamemode/OneGameModeBase");
     }
 }
 

@@ -35,6 +35,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         SC_Packet.set_type(3);
         SC_Packet.set_b_login(b_login);
+        SC_Packet.set_id(CS_Packet.id());
 
         if (b_login) {
             g_players[id]->username = CS_Packet.id();
@@ -173,6 +174,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             Protocol::SC_JoinPlayer SC_Packet;
             SC_Packet.set_name(g_players[id]->username); // 새로 들어온 플레이어 정보
             SC_Packet.set_playerid(id);
+            SC_Packet.set_roomid(room_id);
             SC_Packet.set_type(10);
             string serializedData;
             SC_Packet.SerializeToString(&serializedData);
@@ -262,6 +264,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         CS_Packet.ParseFromArray(buffer, bufferSize);
 
         g_players[CS_Packet.playerid()]->ready = CS_Packet.ready();
+
+        CS_Packet.set_player_num(g_players[CS_Packet.playerid()]->player_num);
 
         std::string serializedData;
         CS_Packet.SerializeToString(&serializedData);
