@@ -95,6 +95,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				// 현재 컨트롤러가 빙의한 Pawn 가져오기
 				APawn* ControlledPawn = GetPawn();
 
+
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player12432543543535: PlayerId=%d"), recvPlayerData.PlayerId);
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%f"), recvPlayerData.hp);
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player        : hp=%f"), recvPlayerData.hp);
@@ -103,7 +104,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
 				{
 					if (ControlledCharacter) {
-						ControlledCharacter->UpdateOtherPlayerUI(recvPlayerData.PlayerId, recvPlayerData.hp, recvPlayerData.charactertype);
+
+						ControlledCharacter->UpdateOtherPlayerUI(recvPlayerData.PlayerId, recvPlayerData.hp, recvPlayerData.charactertype, recvPlayerData.username);
 					}
 				}
 			}
@@ -221,6 +223,29 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				uint32 my_kill_count;
 				uint32 best_kill_count;
 				std::string best_kill_player;*/
+
+				//처리 recvEscapeRoot.playerid, recvEscapeRoot.root
+				APawn* ControlledPawn = GetPawn();
+				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
+				{
+					if (ControlledCharacter) {
+						std::string bestkillStr = recvGameClear.best_kill_player;
+						FString bestkillplayerFStr = FString(bestkillStr.c_str());  // std::string을 FString으로 변환
+
+						std::string OpenStr = recvGameClear.open_player;
+						FString OpenPlayerFStr = FString(OpenStr.c_str());  // std::string을 FString으로 변환
+
+						ControlledCharacter->ProGameClear(recvGameClear.root
+							,recvGameClear.alive_players
+							, recvGameClear.dead_players
+						, OpenPlayerFStr
+						, recvGameClear.my_kill_count
+						, recvGameClear.best_kill_count
+						, bestkillplayerFStr);
+					}
+
+
+				}
 			}
 		}
 

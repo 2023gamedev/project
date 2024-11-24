@@ -223,10 +223,10 @@ void UProGameInstance::ChangeOneGameMode()
         // 새로운 게임 모드 클래스를 로드할 레벨 이름
         FString LevelName = "/Game/ThirdPerson/Maps/ThirdPersonMap";
 
-        LoadLevelWithLoadingUI(FName(*LevelName));
+        //LoadLevelWithLoadingUI(FName(*LevelName));
 
         // 새로운 레벨 로드
-        //UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=ProGamemode/OneGameModeBase");
+        UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=ProGamemode/OneGameModeBase");
     }
 }
 

@@ -12,8 +12,8 @@
 	{
 		"MajorVersion": 5,
 		"MinorVersion": 3,
-		"PatchVersion": 1,
-		"Changelist": 28051148,
+		"PatchVersion": 2,
+		"Changelist": 29314046,
 		"CompatibleChangelist": 27405482,
 		"IsLicenseeVersion": 0,
 		"IsPromotedBuild": 0,
@@ -21,6 +21,18 @@
 		"BuildId": "27405482"
 	},
 	"BuildProducts": [
+		{
+			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/AgentInterface.dll",
 			"Type": "DynamicLibrary"
@@ -3463,25 +3475,14 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/Binaries/Win64/UnrealEditor.modules",
-<<<<<<< HEAD
-			"Type": "RequiredResource"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-Project.pdb",
-			"Type": "SymbolFile"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
-=======
->>>>>>> C1124-3
 			"Type": "RequiredResource"
 		}
 	],
 	"RuntimeDependencies": [
+		{
+			"Path": "$(ProjectDir)/Project.uproject",
+			"Type": "UFS"
+		},
 		{
 			"Path": "$(EngineDir)/Binaries/ThirdParty/DbgHelp/dbghelp.dll",
 			"Type": "NonUFS"
@@ -24764,10 +24765,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/XGEController.uplugin",
-			"Type": "UFS"
-		},
-		{
-			"Path": "$(ProjectDir)/Project.uproject",
 			"Type": "UFS"
 		}
 	],
