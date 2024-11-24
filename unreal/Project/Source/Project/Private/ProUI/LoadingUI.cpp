@@ -20,6 +20,8 @@ void ULoadingUI::UpdateLoadingBar(float currentloading, float maxloading)
 	if (maxloading <= 0.f) {
 		return;
 	}
+	// 최대 로딩 값 업데이트
+	m_fMaxLoading = maxloading;
 
 	m_fCurrentLoading = currentloading;
 	m_fCurrentLoadingRatio = FMath::Clamp(m_fCurrentLoading / m_fMaxLoading, 0.0f, 1.0f);

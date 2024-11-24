@@ -6,9 +6,7 @@
 #include "ProGamemode/OneGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "ProUI/LoadingUI.h"
-#include "Engine/StreamableManager.h"
 #include "Engine/AssetManager.h"
-#include "Kismet/GameplayStatics.h"
 
 
 
@@ -50,54 +48,131 @@ void UProGameInstance::InitSocket()
         UE_LOG(LogTemp, Warning, TEXT("Failed to initialize network connection."));
     }
 }
+//
+//void UProGameInstance::LoadLevelWithLoadingUI(FName LevelName)
+//{ 
+//    // 로딩 UI를 생성 및 화면에 표시
+//    if (!LoadingUI)
+//    {
+//        TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/UI/BP_LoadingUI.BP_LoadingUI"));
+//        if (WidgetClass)
+//        {
+//            LoadingUI = Cast<ULoadingUI>(CreateWidget(GetWorld(), WidgetClass));
+//            if (LoadingUI)
+//            {
+//                LoadingUI->AddToViewport();
+//            }
+//        }
+//    }
+//
+//    // 비동기 로딩 시작
+//    FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
+//    FSoftObjectPath LevelPath = FSoftObjectPath(LevelName.ToString());
+//    Streamable.RequestAsyncLoad(
+//        LevelPath,
+//        FStreamableDelegate::CreateUObject(this, &UProGameInstance::OnLevelLoadComplete, LevelName),
+//        FStreamableManager::AsyncLoadHighPriority
+//    );
+//
+//    // 로딩 UI에 초기값 설정
+//    if (LoadingUI)
+//    {
+//        LoadingUI->UpdateLoadingBar(0.0f, 100.0f);
+//    }
+//
+//    // 진행 상태 추적 (Tick이나 Timer로 업데이트)
+//    GetWorld()->GetTimerManager().SetTimer(
+//        LoadingProgressHandle,
+//        this,
+//        &UProGameInstance::UpdateLoadingProgress,
+//        0.1f,
+//        true
+//    );
+//}
+//
+//void UProGameInstance::UpdateLoadingProgress()
+//{
+//    float Progress = FMath::RandRange(0.0f, 1.0f); // 비동기 진행률 추정 (API로 대체 가능)
+//    if (LoadingUI)
+//    {
+//        LoadingUI->UpdateLoadingBar(Progress * 100.0f, 100.0f);
+//    }
+//}
+
 
 void UProGameInstance::LoadLevelWithLoadingUI(FName LevelName)
-{ 
+{
     // 로딩 UI를 생성 및 화면에 표시
     if (!LoadingUI)
     {
-        TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/UI/BP_LoadingUI.BP_LoadingUI"));
+        TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/UI/BP_LoadingUI.BP_LoadingUI_C"));
         if (WidgetClass)
         {
             LoadingUI = Cast<ULoadingUI>(CreateWidget(GetWorld(), WidgetClass));
             if (LoadingUI)
             {
                 LoadingUI->AddToViewport();
+                UE_LOG(LogTemp, Log, TEXT("Loading UI displayed."));
             }
+        }
+        else
+        {
+            UE_LOG(LogTemp, Error, TEXT("Failed to load BP_LoadingUI class."));
+            return;
         }
     }
 
     // 비동기 로딩 시작
     FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
     FSoftObjectPath LevelPath = FSoftObjectPath(LevelName.ToString());
-    Streamable.RequestAsyncLoad(
+    StreamableHandle = Streamable.RequestAsyncLoad(
         LevelPath,
         FStreamableDelegate::CreateUObject(this, &UProGameInstance::OnLevelLoadComplete, LevelName),
         FStreamableManager::AsyncLoadHighPriority
     );
 
-    // 로딩 UI에 초기값 설정
-    if (LoadingUI)
+    if (!StreamableHandle.IsValid())
     {
-        LoadingUI->UpdateLoadingBar(0.0f, 100.0f);
+        UE_LOG(LogTemp, Error, TEXT("Failed to initiate async load for level: %s"), *LevelName.ToString());
+        return;
     }
 
-    // 진행 상태 추적 (Tick이나 Timer로 업데이트)
+    // 진행 상태 추적 (Tick 또는 Timer로 업데이트)
+    LevelNameToLoad = LevelName; // 로드 중인 레벨 이름 저장
     GetWorld()->GetTimerManager().SetTimer(
         LoadingProgressHandle,
         this,
         &UProGameInstance::UpdateLoadingProgress,
-        0.1f,
+        0.5f, // 업데이트 주기
         true
     );
+
+    // 로딩 UI 초기화
+    if (LoadingUI)
+    {
+        LoadingUI->UpdateLoadingBar(0.0f, 100.0f); // 초기값 설정
+    }
 }
 
 void UProGameInstance::UpdateLoadingProgress()
 {
-    float Progress = FMath::RandRange(0.0f, 1.0f); // 비동기 진행률 추정 (API로 대체 가능)
-    if (LoadingUI)
+    if (StreamableHandle.IsValid())
     {
-        LoadingUI->UpdateLoadingBar(Progress * 100.0f, 100.0f);
+        float Progress = StreamableHandle->GetProgress(); // 0.0f ~ 1.0f 사이 값 반환
+        if (LoadingUI)
+        {
+            LoadingUI->UpdateLoadingBar(Progress * 100.0f, 100.0f); // UI에 진행률 업데이트
+        }
+
+        // 로딩 완료 시 타이머 해제
+        if (Progress >= 1.0f)
+        {
+            GetWorld()->GetTimerManager().ClearTimer(LoadingProgressHandle);
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("StreamableHandle is invalid during progress update."));
     }
 }
 
@@ -114,12 +189,15 @@ void UProGameInstance::OnLevelLoadComplete(FName LevelName)
     UWorld* World = GetWorld();
     if (World)
     {
-
         // 레벨 전환
-        UGameplayStatics::OpenLevel(World, LevelName, true, "GameMode=ProGamemode/OneGameModeBase");
+        UGameplayStatics::OpenLevel(World, LevelName);
+        UE_LOG(LogTemp, Log, TEXT("Level %s loaded successfully."), *LevelName.ToString());
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("Failed to get the current world during level load."));
     }
 }
-
 
 void UProGameInstance::SetGameState(TSubclassOf<AGameStateBase> gamestate)
 {
