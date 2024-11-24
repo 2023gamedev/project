@@ -26,7 +26,7 @@ public:
                 continue;
             }
             // 연결 끊긴 플레이어 무시
-            if (g_players.find(player.first) != g_players.end()) {
+            if (g_players.find(player.first) == g_players.end()) {
                 continue;
             }
 
