@@ -51,29 +51,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        /*Player pl;
-        pl.x = Packet.x();
-        pl.y = Packet.y();
-        pl.z = Packet.z();
-
-        pl.health = Packet.hp();
-
-        if (pl.z < 800.f) {
-            pl.floor = FLOOR::FLOOR_B2;
-        }
-        else if (pl.z < 1800.f) {
-            pl.floor = FLOOR::FLOOR_B1;
-        }
-        else if (pl.z < 2500.f) {
-            pl.floor = FLOOR::FLOOR_F1;
-        }
-        else if (pl.z < 3600.f) {
-            pl.floor = FLOOR::FLOOR_F2;
-        }
-        else {
-            pl.floor = FLOOR::FLOOR_F3;
-        }*/
-
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
             //playerDB[Packet.playerid()] = pl; //-> 이렇게 사용하면 초기화 빼먹은 값 더미 값 씌워질 수 있음
@@ -109,6 +86,41 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             }
             else {
                 playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F3;
+            }
+        }
+
+        bool bAllPlayersInRange = true;
+        if (b_IsEscaping) {
+            for (const auto& player : playerDB) {
+                if (player.second.health != 0) {
+
+                    float DeltaX = std::abs(player.second.x - Escape_Location.x);
+                    float DeltaY = std::abs(player.second.y - Escape_Location.y);
+
+                    // 범위를 벗어나는지 확인
+                    if (DeltaX >= 50.0f && DeltaY >= 50.0f && player.second.floor == Escape_Location.floor) {
+                        bAllPlayersInRange = false; // 한 명이라도 범위를 벗어나면 false
+                        break;
+                    }
+                }
+            }
+
+            if (bAllPlayersInRange) {
+                Protocol::game_clear clear_packet;
+
+                clear_packet.set_packet_type(20);
+                clear_packet.set_b_clear(true);
+
+                string serializedData;
+                clear_packet.SerializeToString(&serializedData);
+
+                for (const auto& player : g_players) {
+                    if (player.second->isInGame) {
+                        IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                    }
+                }
+
+                return true;
             }
         }
 
@@ -394,6 +406,14 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
         Packet.SerializeToString(&serializedData);
+
+        // 문 연 위치 저장, 상태를 탈출 준비 상태로 변경
+        Escape_Location.x = playerDB[id].x;
+        Escape_Location.y = playerDB[id].y;
+        Escape_Location.floor = playerDB[id].floor;
+
+        b_IsEscaping = true;
+
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {

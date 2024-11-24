@@ -448,6 +448,16 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				}
 				break;
 			}
+			case 20:
+			{
+				Protocol::game_clear clearpacket;
+				if (clearpacket.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					Q_gclear.push(clearpacket.b_clear());
+					UE_LOG(LogNet, Display, TEXT("Game Clear"));
+				}
+				break;
+			}
 			}
 
 		}

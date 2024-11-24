@@ -770,7 +770,6 @@ void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 			Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT2();
 		}
-
 	}
 	else if (keyid == 1 && TextMissionUIWidget->m_iFindRoofKey == 1) {
 		FText KText = FText::FromString(TEXT("옥상 키를 찾았습니다."));

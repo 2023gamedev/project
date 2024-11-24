@@ -60,6 +60,11 @@ using PLAYER_INFO = struct Client_INFO {
 	atomic<bool> isSending = false;  // 현재 전송 중인지 여부를 나타내는 플래그
 };
 
+struct Vector3D {
+	float x, y;
+	FLOOR floor;
+};
+
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 extern std::unordered_map<int, Player> playerDB;
 
@@ -218,4 +223,7 @@ private:
 	float GameTime = 0.f;
 
 	bool b_Timer = false;
+
+	Vector3D Escape_Location;
+	bool b_IsEscaping = false;
 };
