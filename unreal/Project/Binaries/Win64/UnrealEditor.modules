@@ -3,6 +3,7 @@
 	"Modules": 
 	{
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"Project": "UnrealEditor-Project-7367.dll"
 =======
 <<<<<<< HEAD
@@ -19,5 +20,8 @@
 >>>>>>> 7389275e7f9cb56eb0c2d0423416824b43d8bb0f
 >>>>>>> origin/main
 >>>>>>> 8aabb720b29b07149c94e2a7cf063f88cefe7a3a
+=======
+		"Project": "UnrealEditor-Project-7823.dll"
+>>>>>>> C1124-2
 	}
 }

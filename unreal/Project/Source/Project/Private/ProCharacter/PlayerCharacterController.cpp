@@ -201,7 +201,13 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				//처리 recvEscapeRoot.playerid, recvEscapeRoot.root
-
+				APawn* ControlledPawn = GetPawn();
+				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
+				{
+					if (ControlledCharacter) {
+						ControlledCharacter->UpdateOpenKey(recvEscapeRoot.root);
+					}
+				}
 			}
 		}
 

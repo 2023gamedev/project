@@ -443,6 +443,7 @@ public:
 
 	void PlayKeyAnim();
 
+	void UpdateOpenKey(uint32 keyindex);
 
 	UPROPERTY(EditAnywhere)
 	bool m_bZeroStamina = false;
@@ -614,6 +615,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	int KeyMontageFlag;
 
+	UPROPERTY(EditAnywhere)
+	int m_iOpenRoofKey;
 
 
 private:
