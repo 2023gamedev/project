@@ -2238,18 +2238,18 @@ void ABaseCharacter::AddScore(int32 score)
 
 	if (ProGameClearUIClass != nullptr) {
 
-		APlayerCharacterController* PlayerController = Cast<APlayerCharacterController>(this->GetController());
-		if (PlayerController)
-		{
-			ProGameClearUIWidget = CreateWidget<UProGameClearUI>(PlayerController, ProGameClearUIClass);
-			if (ProGameClearUIWidget)
-			{
-				ProGameClearUIWidget->SetMessage("GAME CLEAR!");
-				ProGameClearUIWidget->SetScore(m_iClearScore);
+		//APlayerCharacterController* PlayerController = Cast<APlayerCharacterController>(this->GetController());
+		//if (PlayerController)
+		//{
+		//	ProGameClearUIWidget = CreateWidget<UProGameClearUI>(PlayerController, ProGameClearUIClass);
+		//	if (ProGameClearUIWidget)
+		//	{
+		//		ProGameClearUIWidget->SetMessage("GAME CLEAR!");
+		//		ProGameClearUIWidget->SetScore(m_iClearScore);
 
-				ProGameClearUIWidget->AddToViewport();
-			}
-		}
+		//		ProGameClearUIWidget->AddToViewport();
+		//	}
+		//}
 	}
 
 	ProStartGameEnd();
