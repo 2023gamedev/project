@@ -1393,60 +1393,7 @@ void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interr
 		UpdateBHealingSlot();
 		});
 }
-//
-//void ABaseCharacter::PlayKey()
-//{
-//	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
-//
-//	float WidgetPlaySpeed = 1.f;
-//
-//	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_8_sec;
-//	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
-//
-//	if (PlayerSight->GetIsHit()) {
-//
-//		AInterActor* InterActor = Cast<AInterActor>(PlayerSight->GetHitActor());
-//		if (InterActor) {
-//			PlayKeyAnim();
-//			if (InterActor->InterActorName == "CarActor") {
-//				ACarActor* CarActor = Cast<ACarActor>(InterActor);
-//
-//				if (CurrentKeyItem->KeyName == CarActor->CarKeyName) {
-//					CarActor->UnLock();
-//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key UNLOCK!!!");
-//					UpdateKeySlot();
-//					Send_OpenRoot(1);
-//				}
-//				else {
-//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
-//				}
-//			}
-//			else if (InterActor->InterActorName == "RoofTopDoorActor") {
-//
-//				ARoofTopDoorActor* RoofTopDoorActor = Cast<ARoofTopDoorActor>(InterActor);
-//
-//				if (CurrentKeyItem->KeyName == "RoofKey1") {
-//					RoofTopDoorActor->UnlockKey1();
-//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
-//					UpdateKeySlot();
-//					Send_OpenRoot(2);
-//				}
-//				else if (CurrentKeyItem->KeyName == "RoofKey2") {
-//					RoofTopDoorActor->UnlockKey2();
-//					GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
-//					UpdateKeySlot();
-//					Send_OpenRoot(2);
-//				}
-//
-//			}
-//
-//
-//		}
-//	}
-//
-//
-//
-//}
+
 
 void ABaseCharacter::PlayKey()
 {
@@ -2355,7 +2302,7 @@ void ABaseCharacter::AddScore(int32 score)
 		//}
 	}
 
-	ProStartGameEnd();
+	// ProStartGameEnd();
 
 }
 
@@ -2458,24 +2405,6 @@ void ABaseCharacter::HealingStaminaTimerElapsed()
 		SetStamina(100);
 	}
 }
-//
-//void ABaseCharacter::PlayKeyAnim() // 애니메이션 실행 후 로딩 원 없애도록 수정 필요
-//{
-//
-//	CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
-//
-//	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-//
-//	float WidgetPlaySpeed = 1.f;
-//	float AnimPlaySpeed = 1.f;
-//
-//	WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
-//	CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
-//
-//	AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
-//	AnimInstance->PlayKeyMontage();
-//
-//}
 
 
 

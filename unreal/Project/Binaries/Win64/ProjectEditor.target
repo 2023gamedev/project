@@ -3463,6 +3463,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/Binaries/Win64/UnrealEditor.modules",
+<<<<<<< HEAD
 			"Type": "RequiredResource"
 		},
 		{
@@ -3475,6 +3476,8 @@
 		},
 		{
 			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
+=======
+>>>>>>> C1124-3
 			"Type": "RequiredResource"
 		}
 	],

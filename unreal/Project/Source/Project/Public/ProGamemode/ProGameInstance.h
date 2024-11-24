@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "ClientSocket.h"
 #include "TimerManager.h"
+#include "Engine/StreamableManager.h"
 #include "ProGameInstance.generated.h"
 
 /**
@@ -74,5 +75,9 @@ public:
     bool ConnectNetwork;
 
     FString MyUserName;
+
+    FName LevelNameToLoad;
+
+    TSharedPtr<FStreamableHandle> StreamableHandle;
 
 };
