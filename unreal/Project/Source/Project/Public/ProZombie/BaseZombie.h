@@ -192,6 +192,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	FVector WeaponForward;
 
+
+	float m_fHP_Prev = 0.f;
+
 private:
 
 	UPROPERTY(EditAnywhere)

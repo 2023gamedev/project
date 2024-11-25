@@ -29,6 +29,7 @@ AShoutingZombie::AShoutingZombie()
 
 
 	SetHP(30);
+	m_fHP_Prev = 30;
 	SetStartHP(30);
 	float speed = 2.3f;
 	SetSpeed(speed);

@@ -29,6 +29,7 @@ ARunningZombie::ARunningZombie()
 
 
 	SetHP(20);
+	m_fHP_Prev = 20;
 	SetStartHP(20);
 	float speed = 3.f;
 	SetSpeed(speed);

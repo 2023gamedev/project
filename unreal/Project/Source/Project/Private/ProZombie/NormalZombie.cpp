@@ -33,6 +33,7 @@ ANormalZombie::ANormalZombie()
 
 
 	SetHP(20);
+	m_fHP_Prev = 20;
 	SetStartHP(20);
 	float speed = 2.f;
 	SetSpeed(speed);

@@ -173,6 +173,72 @@ void ABaseZombie::Tick(float DeltaTime)
 		//SetActorTickEnabled(true);	// tick 연산 다시 시작
 	}
 
+
+
+
+	// 좀비 사망처리 클라 동기화 - 애니메이션 재생, 피 이펙트 생성 (데모 발표용 급 가라 코드 - 수정 필요)
+	if (GetHP() <= 0 && m_bIsNormalDead == false) {
+		m_bIsNormalDead = true;
+		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+		if (nullptr != CharacterAnimInstance) {
+			CharacterAnimInstance->SetIsNormalDead(m_bIsNormalDead);
+		}
+		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+
+
+		BloodFX.Empty();
+
+		FRotator RandRotate;
+
+		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
+
+		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate); 
+
+		if (NewBloodFX_0) {
+			NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
+			//NewBloodFX_0->blood_spawnloop = true;
+			NewBloodFX_0->spawn_flag = true;
+
+			BloodFX.Add(NewBloodFX_0);
+		}
+
+		ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
+
+		if (NewBloodFX_1) {
+			NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
+			//NewBloodFX_1->blood_spawnloop = true;
+			NewBloodFX_1->spawn_flag = true;
+
+			BloodFX.Add(NewBloodFX_1);
+		}
+
+	}
+
+	// 좀비 피격시 클라 동기화
+	if (m_fHP_Prev != m_fHP && GetHP() > 0 && m_bBeAttacked == false) {
+		BeAttacked();
+		m_fHP_Prev = m_fHP;
+
+		BloodFX.Empty();
+
+		FRotator RandRotate;
+
+		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
+
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
+
+		if (NewBloodFX) {
+			NewBloodFX->blood_spawncount = FMath::RandRange(80, 100);
+			NewBloodFX->spawn_flag = true;
+
+			BloodFX.Add(NewBloodFX);
+		}
+	}
+
 	Super::Tick(DeltaTime);
 
 }
