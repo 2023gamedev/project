@@ -16,6 +16,21 @@ UProGameInstance::UProGameInstance()
 {
     ClientSocketPtr = nullptr;
     ConnectNetwork = true;
+
+    //// 로딩 UI를 생성 및 화면에 표시
+    //if (!LoadingUI)
+    //{
+    //    TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/UI/BP_LoadingUI.BP_LoadingUI_C"));
+    //    if (WidgetClass)
+    //    {
+    //        LoadingUI = Cast<ULoadingUI>(CreateWidget(GetWorld(), WidgetClass));
+    //    }
+    //    else
+    //    {
+    //        UE_LOG(LogTemp, Error, TEXT("Failed to load BP_LoadingUI class."));
+    //        return;
+    //    }
+    //}
 }
 
 UProGameInstance::~UProGameInstance()
@@ -122,6 +137,12 @@ void UProGameInstance::LoadLevelWithLoadingUI(FName LevelName)
         }
     }
 
+    if (LoadingUI)
+    {
+        LoadingUI->AddToViewport();
+        UE_LOG(LogTemp, Log, TEXT("Loading UI displayed."));
+    }
+
     // 비동기 로딩 시작
     FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
     FSoftObjectPath LevelPath = FSoftObjectPath(LevelName.ToString());
@@ -213,9 +234,9 @@ TSubclassOf<AGameStateBase> UProGameInstance::GetGameState()
 
 void UProGameInstance::ChangeOneGameMode()
 {
+    //ShowLoadingScreen();
     //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UProGameInstance::ChangeOneGameMode()");
-    
-
+   
     // 현재 월드 가져오기
     UWorld* World = GetWorld();
     if (World)
@@ -225,8 +246,89 @@ void UProGameInstance::ChangeOneGameMode()
 
         //LoadLevelWithLoadingUI(FName(*LevelName));
 
+
+        LoadLevelWithLoadingScreen(FName(*LevelName));
+
         // 새로운 레벨 로드
-        UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=ProGamemode/OneGameModeBase");
+        // UGameplayStatics::OpenLevel(World, FName(*LevelName), true, "GameMode=ProGamemode/OneGameModeBase");
     }
+}
+
+void UProGameInstance::ShowLoadingScreen()
+{
+    // 로딩 UI를 생성 및 화면에 표시
+    if (!LoadingUI)
+    {
+        LoadingScreenClass = LoadClass<ULoadingUI>(nullptr, TEXT("/Game/UI/BP_LoadingUI.BP_LoadingUI_C"));
+        if (LoadingScreenClass)
+        {
+            LoadingUI = Cast<ULoadingUI>(CreateWidget(GetWorld(), LoadingScreenClass));
+            if (LoadingUI)
+            {
+                LoadingUI->AddToViewport();
+                UE_LOG(LogTemp, Log, TEXT("Loading UI displayed."));
+            }
+        }
+        else
+        {
+            UE_LOG(LogTemp, Error, TEXT("Failed to load BP_LoadingUI class."));
+            return;
+        }
+    }
+
+    //// 렌더링 강제 업데이트
+    //FSlateApplication::Get().Tick();
+    //FSlateApplication::Get().GetRenderer()->FlushCommands();
+    //FPlatformProcess::Sleep(0.1f); // 아주 짧은 대기 시간을 추가
+}
+
+void UProGameInstance::HideLoadingScreen()
+{
+    if (LoadingScreenWidget)
+    {
+        LoadingScreenWidget->RemoveFromViewport();
+        LoadingScreenWidget = nullptr;
+    }
+}
+
+void UProGameInstance::LoadLevelWithLoadingScreen(FName LevelName)
+{
+    ShowLoadingScreen();
+
+    // GameMode URL 추가
+    //FString LevelWithGameMode = FString::Printf(TEXT("%s?game=%s"), *LevelName.ToString(), TEXT("ProGamemode/OneGameModeBase"));
+
+    //UE_LOG(LogTemp, Log, TEXT("Attempting to open level: %s"), *LevelWithGameMode);
+
+    //// 맵 전환
+    //UGameplayStatics::OpenLevel(this, FName(*LevelWithGameMode));
+
+
+    // 현재 월드 가져오기
+    UWorld* World = GetWorld();
+    if (World)
+    {
+
+        UGameplayStatics::OpenLevel(World, LevelName, true, "GameMode=ProGamemode/OneGameModeBase");
+    }
+
+
+
+    //// GameMode URL 추가
+    //FString LevelWithGameMode = FString::Printf(TEXT("%s?game=%s"), *LevelName.ToString(), TEXT("ProGamemode/OneGameModeBase"));
+
+    //FLatentActionInfo LatentInfo;
+    //LatentInfo.CallbackTarget = this;
+    //LatentInfo.ExecutionFunction = "OnLevelLoaded";
+    //LatentInfo.Linkage = 0;
+    //LatentInfo.UUID = __LINE__;
+
+    //// 맵 로드
+    //UGameplayStatics::LoadStreamLevel(this, FName(*LevelWithGameMode), true, false, LatentInfo);
+}
+
+void UProGameInstance::OnLevelLoaded()
+{
+    HideLoadingScreen();
 }
 

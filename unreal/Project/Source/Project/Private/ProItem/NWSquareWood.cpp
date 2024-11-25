@@ -14,7 +14,7 @@ ANWSquareWood::ANWSquareWood()
 	RootComponent = NormalWeapon;
 	BoxComponent->SetupAttachment(NormalWeapon);
 
-	BoxComponent->SetRelativeLocation(FVector(0.f, 0.f, 120.f));
+	BoxComponent->SetRelativeLocation(FVector(0.f, 0.f, 45.f));
 	BoxComponent->SetRelativeScale3D(FVector(0.25f, 0.25f, 1.0f));
 
 
@@ -25,7 +25,7 @@ ANWSquareWood::ANWSquareWood()
 	}
 
 	
-	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision")); // Ãæµ¹ ÇÁ¸®¼ÂÀº º¯°æµÉ ¼öµµ ÀÖ´Ù.
+	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision")); // ì¶©ëŒ í”„ë¦¬ì…‹ì€ ë³€ê²½ë  ìˆ˜ë„ ìžˆë‹¤.
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR		= 2.f;
