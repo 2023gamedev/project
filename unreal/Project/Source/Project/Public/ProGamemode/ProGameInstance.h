@@ -80,4 +80,22 @@ public:
 
     TSharedPtr<FStreamableHandle> StreamableHandle;
 
+
+public:
+    UFUNCTION(BlueprintCallable)
+    void ShowLoadingScreen();
+
+    UFUNCTION(BlueprintCallable)
+    void HideLoadingScreen();
+
+    UFUNCTION(BlueprintCallable)
+    void LoadLevelWithLoadingScreen(FName LevelName);
+
+    UPROPERTY()
+    ULoadingUI* LoadingScreenWidget;
+
+    UPROPERTY(EditAnywhere, Category = "UI")
+    TSubclassOf<ULoadingUI> LoadingScreenClass;
+
+    void OnLevelLoaded();
 };
