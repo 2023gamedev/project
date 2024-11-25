@@ -313,7 +313,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
     //}
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
     //ItemBoxClasses[itemboxindex] = AItemBoxActor::StaticClass();
-    UE_LOG(LogTemp, Log, TEXT("ItemBoxClasses size: %d"), ItemBoxClasses.Num());
+    //UE_LOG(LogTemp, Log, TEXT("ItemBoxClasses size: %d"), ItemBoxClasses.Num());
 
     TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
 
@@ -873,6 +873,9 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
             //좀비의 체력상태 업데이트
             float NewHP = BaseZombie->GetHP() - Damage;
             BaseZombie->SetHP(NewHP);
+            if (NewHP < 0) {
+                BaseZombie->SetNormalDeadWithAnim();
+            }
             UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %d"), ZombieId, NewHP);
         }
     }
