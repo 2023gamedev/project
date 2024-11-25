@@ -519,7 +519,7 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 		ServerAddr.sin_port = htons(8777);
 	}
 
-	FString SourcePath = FPaths::Combine(FPaths::ProjectContentDir(), TEXT("config.txt"));
+	FString SourcePath = FPaths::LaunchDir() + TEXT("config.txt");
 
 	if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*SourcePath))
 	{
