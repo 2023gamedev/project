@@ -638,7 +638,7 @@ void ABaseCharacter::PlayDead()
 
 	
 
-	ProStartGameDeadEnd();
+	//ProStartGameDeadEnd();
 }
 
 void ABaseCharacter::OtherPlayerUIOffset(uint32 playerid)
