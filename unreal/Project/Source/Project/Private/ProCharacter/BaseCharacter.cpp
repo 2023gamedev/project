@@ -823,7 +823,7 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 				FString BestKillString = FString::Printf(TEXT("%d kills by %s"), best_kill_count, *best_kill_player);
 				ProGameClearUIWidget->SetMessage(52, BestKillString);
 
-				ProStartGameEnd();
+				//ProStartGameEnd(); // 게임 5초후 클리어
 			}
 		}
 	}
