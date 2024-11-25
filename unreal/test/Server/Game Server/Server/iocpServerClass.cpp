@@ -459,7 +459,7 @@ void IOCP_CORE::Timer_Thread()
 			// 5초마다 Ping 메시지 전송
 			std::chrono::duration<float> pingInterval = currentTime - lastPingTime;
 			if (pingInterval.count() >= 5.0f) {
-				SendPingToClients();
+				//SendPingToClients();
 				lastPingTime = currentTime;
 			}
 		}
