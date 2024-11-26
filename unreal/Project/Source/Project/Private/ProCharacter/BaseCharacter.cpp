@@ -105,7 +105,7 @@ ABaseCharacter::ABaseCharacter()
 	CurrentWeapon = CreateDefaultSubobject<ANormalWeaponActor>(TEXT("NORMALWEAPON"));
 	FlashLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("FLASHLIGHT"));
 
-	HealingFX = CreateDefaultSubobject<AHealingNiagaEffect>(TEXT("HealingFX"));
+	//HealingFX = CreateDefaultSubobject<AHealingNiagaEffect>(TEXT("HealingFX"));
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 

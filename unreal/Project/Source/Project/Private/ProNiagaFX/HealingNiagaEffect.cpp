@@ -47,7 +47,9 @@ void AHealingNiagaEffect::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	HealingFXComponent->SetWorldLocation(OwnerChar->GetActorLocation() + spawn_offset);
+	if (OwnerChar) {
+		HealingFXComponent->SetWorldLocation(OwnerChar->GetActorLocation() + spawn_offset);
+	}
 
 }
 
