@@ -66,9 +66,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
             if (Packet.b_run() == 1) {
                 playerDB[Packet.playerid()].IsRunning = false;
+                //printf("\n[ No. %3u ] Walk Packet Received !!\n", id);
             }
             else if (Packet.b_run() == 2) {
                 playerDB[Packet.playerid()].IsRunning = true;
+                //printf("\n[ No. %3u ] Run Packet Received !!\n", id);
             }
 
             //cout << "player IsRunning: " << Packet.b_run() << endl;

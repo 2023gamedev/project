@@ -214,36 +214,18 @@ void Zombie::SetTargetLocation(TARGET t)
 		//cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 		break;
 	case TARGET::SHOUTING:
-		//==================================샤우팅 좀비로 부터 위치를 받아와야 하므로 -> 따로 작업 필요
 		TargetLocation = ShoutingLocation;
 		UpdatePath();
 		break;
 	case TARGET::FOOTSOUND:
-		//TargetLocation = pl;			// => 이런식으로 하면 플레이어 최신 위치를 계속 갱신받게됨!
-
-		//if (HeardFootSound == false) {	// => 플레이어의 발소리를 들었을 당시 그 순간에 플레이어 위치를 받기
-		//	SearchClosestPlayer(closest_player_pos, 2);
-		//	HeardFootSound = true;
-		//}
-		//if (TargetLocation != closest_player_pos) {	// 타겟위치가 재설정되지 않았다면, -> 반복 UpdatePath 하지 않도록
-		//	TargetLocation = closest_player_pos;
-		//	UpdatePath();
-		//}
-
-
-
 		SearchClosestPlayer(closest_player_pos, 2);
 		if (closest_player_pos.size() != 0) {
 			TargetLocation = closest_player_pos;
 		}
 		HeardFootSound = true;
 		UpdatePath();
-
 		break;
 	case TARGET::INVESTIGATED:
-		//TargetLocation = TargetLocation;		// 걍 명시적 표기 ========> [x]
-												// 플레이어를 따라가던 도중 놓이면 따로 작업 할 꺼 없긴하지만 아니라면 (샤우팅/발소리->플레이어 이전위치) 이 상황에서는 갱신해줘야함
-												// 근데 위에 처럼 하면 발소리 듣고 발소리 쪽으로 갔다가 (경로 끝까지 가고) 다시 플레이어를 마지막으로 본위치로 가는게 약간 이상한 거 같음;; (회의 필요)
 		if (TargetLocation != PrevTargetLocation && PrevTargetLocation.size() != 0) {	// 타겟위치가 재설정되지 않았다면, -> 반복 UpdatePath 하지 않도록
 			TargetLocation = PrevTargetLocation;
 			UpdatePath();
@@ -548,7 +530,7 @@ void Zombie::ReachFinalDestination()
 			break;
 		case TARGET::PATROL:
 			//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
-			RandPatrolSet = false;
+			//RandPatrolSet = false;
 			break;
 		}
 

@@ -70,7 +70,7 @@
       <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
     <ClCompile Include="ShoutingZombie.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Zombie_BTClass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +153,7 @@
       <Filter>헤더 파일\ServerHeader</Filter>
     </ClInclude>
     <ClInclude Include="ShoutingZombie.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
