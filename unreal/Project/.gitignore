@@ -5,3 +5,12 @@
 /Plugins
 *.sln
 *_BuiltData.uasset
+
+/Binaries
+
+# Windows 패키징 결과물
+*.exe
+*.pdb
+*.dll
+
+/Windows
