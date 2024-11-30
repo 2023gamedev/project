@@ -93,24 +93,40 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 				 
 				if (PlaneComponent) {
 
-					for (int32 LODIndex = 0; LODIndex < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources.Num(); ++LODIndex)
-					{
-						for (uint32 Index = 0; Index < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources[LODIndex].
-							VertexBuffers.PositionVertexBuffer.GetNumVertices(); ++Index)
-						{
-							// 로컬 좌표로 점 위치 얻기
-							FVector3f EachVector = PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources[LODIndex].
-								VertexBuffers.PositionVertexBuffer.VertexPosition(Index);
+					//for (int32 LODIndex = 0; LODIndex < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources.Num(); ++LODIndex)
+					//{
+					//	for (uint32 Index = 0; Index < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources[LODIndex].
+					//		VertexBuffers.PositionVertexBuffer.GetNumVertices(); ++Index)
+					//	{
+					//		// 로컬 좌표로 점 위치 얻기
+					//		FVector3f EachVector = PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources[LODIndex].
+					//			VertexBuffers.PositionVertexBuffer.VertexPosition(Index);
 
-							// 로컬 좌표를 월드 좌표로 변환
-							FVector WorldPosition = PlaneComponent->GetComponentTransform().TransformPosition((FVector)EachVector);
+					//		// 로컬 좌표를 월드 좌표로 변환
+					//		FVector WorldPosition = PlaneComponent->GetComponentTransform().TransformPosition((FVector)EachVector);
 
-							PlaneVertexs.Add((FVector)WorldPosition);
+					//		PlaneVertexs.Add((FVector)WorldPosition);
 
-							//UE_LOG(LogClass, Log, TEXT("Plane - Index(%d) : (%s)"), Index, *WorldPosition.ToString());
+					//		//UE_LOG(LogClass, Log, TEXT("Plane - Index(%d) : (%s)"), Index, *WorldPosition.ToString());
 
-						}
-					}
+					//	}
+					//}
+
+					FVector Center = PlaneComponent->GetComponentLocation();
+					FVector Right = PlaneComponent->GetRightVector();  // 평면의 오른쪽 방향
+					FVector Forward = PlaneComponent->GetForwardVector();  // 평면의 앞쪽 방향
+					FVector Scale = PlaneComponent->GetComponentScale();  // 평면의 스케일
+					float HalfWidth = 100.0f * Scale.X;  // 평면의 폭
+					float HalfHeight = 100.0f * Scale.Y; // 평면의 높이
+
+					// 꼭짓점 계산
+					FVector TopLeft = Center - Right * HalfWidth + Forward * HalfHeight;
+					FVector TopRight = Center + Right * HalfWidth + Forward * HalfHeight;
+					FVector BottomLeft = Center - Right * HalfWidth - Forward * HalfHeight;
+					FVector BottomRight = Center + Right * HalfWidth - Forward * HalfHeight;
+
+					// 꼭짓점을 리스트에 추가
+					PlaneVertexs = { TopLeft, TopRight, BottomLeft, BottomRight };
 
 					if (PlaneVertexs.Num() >= 4) {
 						// 히트 지점에 평면의 선 그리기
@@ -175,7 +191,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						/*DrawDebugLine(
 							GetWorld(),
 							planeposition_center,
-							planeposition_center + planenormal * 20.0f,
+							planeposition_center + planenormal * 20.0f,		
 							FColor::Yellow,
 							false,
 							5.0f,
