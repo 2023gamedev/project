@@ -438,49 +438,49 @@ void ABaseCharacter::BeginPlay()
 
 
 
-	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
-	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
+AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
 
-	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
-		if (CurrentWeapon != nullptr) {
-			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
-		}
-		});
+AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
+	if (CurrentWeapon != nullptr) {
+		CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
+	}
+	});
 
-	AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
-		if (CurrentWeapon != nullptr) {
-			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
-		}
-		});
+AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
+	if (CurrentWeapon != nullptr) {
+		CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
+	}
+	});
 
-	AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
-		FootSound();
-		});
-
-
-	//// Slice 용 Weapon - TEST
-	//if (CurrentWeapon == nullptr) { 
-
-	//	CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-	//	//CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
-	//	//CurrentWeapon->ItemHandRot = FRotator(4.949407f, -31.214014f, -172.213653f);
-
-	//	CurrentWeapon->ItemHandPos = FVector(-0.757521f, 1.883819f, 1.937180f);
-	//	CurrentWeapon->ItemHandRot = FRotator(-12.172822f, -34.649834f, -158.006864f);
+AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
+	FootSound();
+	});
 
 
-	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
-	//	FName WeaponSocket = TEXT("RightHandSocket");
-	//	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
-	//	CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
-	//	CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
-	//	CurrentWeapon->OwnerCharacter = this;
-	//	CurrentWeapon->m_fCharacterSTR = m_fSTR;
-	//	CurrentWeapon->m_fWeaponDurability = 50.f;
-	//	SetNWHandIn(true);
+//// Slice 용 Weapon - TEST
+//if (CurrentWeapon == nullptr) { 
 
-	//}
+//	CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+//	//CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
+//	//CurrentWeapon->ItemHandRot = FRotator(4.949407f, -31.214014f, -172.213653f);
+
+//	CurrentWeapon->ItemHandPos = FVector(-0.757521f, 1.883819f, 1.937180f);
+//	CurrentWeapon->ItemHandRot = FRotator(-12.172822f, -34.649834f, -158.006864f);
+
+
+//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
+//	FName WeaponSocket = TEXT("RightHandSocket");
+//	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+//	CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->ItemHandRot);
+//	CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->ItemHandPos);
+//	CurrentWeapon->OwnerCharacter = this;
+//	CurrentWeapon->m_fCharacterSTR = m_fSTR;
+//	CurrentWeapon->m_fWeaponDurability = 50.f;
+//	SetNWHandIn(true);
+
+//}
 
 
 }
@@ -509,7 +509,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 		}
 	}
 
-	
+
 
 
 
@@ -520,10 +520,23 @@ void ABaseCharacter::Tick(float DeltaTime)
 			float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
 			Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
 		}
-		
+
 		// 애니메이션 인스턴스에 속도 파라미터 설정
-		if ((Speed != 0 && PreviousSpeed == 0) || (Speed == 0 && PreviousSpeed != 0))
+		if ((Speed == 0 && PreviousSpeed != 0) || (Speed == 0 && PreviousSpeed == 0))	// 정지 애니메이션 전환 => 얘만 0.3초 쿨다운 적용 
 		{
+			// 애니메이션 전환 쿨타임 적용 (0.3초)
+			float currentTime = GetWorld()->GetTimeSeconds();
+
+			if (currentTime - LastAnimTime > 0.3f) {
+				if (AnimInstance) {
+					AnimInstance->SetCurrentPawnSpeed(Speed);
+
+					LastAnimTime = currentTime;
+				}
+			}
+		}
+		else if (Speed != 0 && PreviousSpeed == 0) {	// 걷는 애니메이션 전환
+
 			if (AnimInstance) {
 				AnimInstance->SetCurrentPawnSpeed(Speed);
 			}

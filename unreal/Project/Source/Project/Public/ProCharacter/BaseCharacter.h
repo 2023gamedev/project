@@ -628,6 +628,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	int m_iOpenRoofKey;
 
+	float LastAnimTime = 0.f;
 
 private:
 	UPROPERTY(VisibleAnywhere)
