@@ -68,7 +68,6 @@ struct Vector3D {
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 extern std::unordered_map<int, Player> playerDB;
 
-//extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players_BT;
 extern std::unordered_map<int, Player> playerDB_BT;
 
 struct TupleHash {

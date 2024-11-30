@@ -1,4 +1,4 @@
-#include <iomanip>
+ï»¿#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -15,7 +15,6 @@
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
 
-//std::unordered_map<unsigned int, PLAYER_INFO*> g_players_BT;
 std::unordered_map<int, Player> playerDB_BT;
 
 
@@ -30,11 +29,11 @@ std::vector<tuple<float, float, float>> g_valispositionsF1;
 std::vector<tuple<float, float, float>> g_valispositionsF2;
 
 
-float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT ÀÛµ¿ ÀÎÅÍ¹ú ¼³Á¤
+float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT ì‘ë™ ì¸í„°ë²Œ ì„¤ì •
 
-std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// MoveTo¿¡¼­ °è»ê¿ëÀ¸·Î »ç¿ë
+std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// MoveToì—ì„œ ê³„ì‚°ìš©ìœ¼ë¡œ ì‚¬ìš©
 
-bool UPDATEMAP = false;		// ¸Ê txt ¾÷µ¥ÀÌÆ® À¯¹«
+bool UPDATEMAP = false;		// ë§µ txt ì—…ë°ì´íŠ¸ ìœ ë¬´
 
 IOCP_CORE::IOCP_CORE()
 {	
@@ -63,14 +62,14 @@ IOCP_CORE::IOCP_CORE()
 	
 	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 	
-	//==========Zombie_BT ÃÊ±âÈ­
+	//==========Zombie_BT ì´ˆê¸°í™”
 	Zombie_BT_Initialize();
-	//==========Zombie_BT ¾²·¹µå ½ÃÀÛ (Zombie BT ½ÇÇà ½ÃÀÛ)
+	//==========Zombie_BT ì“°ë ˆë“œ ì‹œì‘ (Zombie BT ì‹¤í–‰ ì‹œì‘)
 	zombie_thread = thread(&IOCP_CORE::Zombie_BT_Thread, this);
 
 	//Nodes = nodeclass->LoadNodesFromFile();
 
-	//======Á»ºñ ½ºÆù & ÃÊ±âÈ­======
+	//======ì¢€ë¹„ ìŠ¤í° & ì´ˆê¸°í™”======
 	zombieclass = new ZombieController(*this);
 
 	itemclass = new ItemController(*this);
@@ -169,12 +168,12 @@ void IOCP_CORE::IOCP_WorkerThread() {
 
 		auto client_it = g_players.find(key);
 		if (client_it == g_players.end()) {
-			// À¯È¿ÇÏÁö ¾ÊÀº Å¬¶óÀÌ¾ğÆ® Å°¿¡ ´ëÇÑ Ã³¸®, ¿¹: ·Î±× Ãâ·Â, °è¼ÓÇÏ±â
+			// ìœ íš¨í•˜ì§€ ì•Šì€ í´ë¼ì´ì–¸íŠ¸ í‚¤ì— ëŒ€í•œ ì²˜ë¦¬, ì˜ˆ: ë¡œê·¸ ì¶œë ¥, ê³„ì†í•˜ê¸°
 			continue;
 		}
 		PLAYER_INFO* user = client_it->second;
 
-		// Å¬¶óÀÌ¾ğÆ®°¡ Á¢¼ÓÀ» ²÷¾úÀ» °æ¿ì
+		// í´ë¼ì´ì–¸íŠ¸ê°€ ì ‘ì†ì„ ëŠì—ˆì„ ê²½ìš°
 		if (FALSE == result || 0 == iosize) {
 			if (FALSE == result) {
 				int err_no = WSAGetLastError();
@@ -191,13 +190,13 @@ void IOCP_CORE::IOCP_WorkerThread() {
 			continue;
 		}
 		else if (OP_SERVER_RECV == my_overlap->operation) {
-			// Å¬¶óÀÌ¾ğÆ®·ÎºÎÅÍ µ¥ÀÌÅÍ¸¦ ¹Ş¾ÒÀ» °æ¿ì
+			// í´ë¼ì´ì–¸íŠ¸ë¡œë¶€í„° ë°ì´í„°ë¥¼ ë°›ì•˜ì„ ê²½ìš°
 			char* buf_ptr = reinterpret_cast<char*>(user->recv_overlap.iocp_buffer);
 			int remained = iosize;
 
-			// ³²Àº µ¥ÀÌÅÍ¸¦ Ã³¸®ÇÏ´Â ·ÎÁ÷
+			// ë‚¨ì€ ë°ì´í„°ë¥¼ ì²˜ë¦¬í•˜ëŠ” ë¡œì§
 			while (0 < remained) {
-				// ¹öÆÛ¿¡ µ¥ÀÌÅÍ¸¦ Ãß°¡
+				// ë²„í¼ì— ë°ì´í„°ë¥¼ ì¶”ê°€
 				int copySize = min(remained, MAX_PACKET_SIZE - user->previous_size);
 				memcpy(user->packet_buff + user->previous_size, buf_ptr, copySize);
 				user->previous_size += copySize;
@@ -205,12 +204,12 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				remained -= copySize;
 
 				if (IOCP_CORE::IOCP_ProcessPacket(key, user->packet_buff, user->previous_size)) {
-					// ÆÄ½Ì ¹× Ã³¸®°¡ ¼º°øÀûÀ¸·Î ¿Ï·áµÇ¸é ¹öÆÛ ÃÊ±âÈ­
+					// íŒŒì‹± ë° ì²˜ë¦¬ê°€ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ë©´ ë²„í¼ ì´ˆê¸°í™”
 					user->previous_size = 0;
 				}
 			}
 
-			// ´ÙÀ½ µ¥ÀÌÅÍ¸¦ ¹Ş±â À§ÇÑ WSARecv È£Ãâ
+			// ë‹¤ìŒ ë°ì´í„°ë¥¼ ë°›ê¸° ìœ„í•œ WSARecv í˜¸ì¶œ
 			DWORD flags = 0;
 			int retval = WSARecv(user->s, &user->recv_overlap.wsabuf, 1, NULL, &flags, &user->recv_overlap.original_overlap, NULL);
 			if (SOCKET_ERROR == retval) {
@@ -222,7 +221,7 @@ void IOCP_CORE::IOCP_WorkerThread() {
 			}
 		}
 		else if (OP_SERVER_SEND == my_overlap->operation) {
-			// ¼­¹ö¿¡¼­ ¸Ş¼¼Áö¸¦ º¸³ÂÀ¸¸é, ¸Ş¸ğ¸®¸¦ ÇØÁ¦ÇØ ÁØ´Ù.
+			// ì„œë²„ì—ì„œ ë©”ì„¸ì§€ë¥¼ ë³´ëƒˆìœ¼ë©´, ë©”ëª¨ë¦¬ë¥¼ í•´ì œí•´ ì¤€ë‹¤.
 			delete my_overlap;
 
 			IOCP_SendNextPacket(user);
@@ -310,9 +309,9 @@ void IOCP_CORE::IOCP_AcceptThread()
 
 		g_players[user->id] = user;
 
-		/* ÁÖº¯ Å¬¶óÀÌ¾ğÆ®¿¡ ´ëÇØ »Ñ¸± Á¤º¸ »Ñ¸®°í, ½Ã¾ß ¸®½ºÆ®³ª Ã³¸®ÇØ¾ß ÇÒ Á¤º¸µéµµ ÇÔ²² ³Ö´Â´Ù. */
+		/* ì£¼ë³€ í´ë¼ì´ì–¸íŠ¸ì— ëŒ€í•´ ë¿Œë¦´ ì •ë³´ ë¿Œë¦¬ê³ , ì‹œì•¼ ë¦¬ìŠ¤íŠ¸ë‚˜ ì²˜ë¦¬í•´ì•¼ í•  ì •ë³´ë“¤ë„ í•¨ê»˜ ë„£ëŠ”ë‹¤. */
 
-		// Å¬¶óÀÌ¾ğÆ®¿¡¼­ ÀÀ´ä¿À±æ ±â´Ù¸®±â
+		// í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì‘ë‹µì˜¤ê¸¸ ê¸°ë‹¤ë¦¬ê¸°
 		DWORD flags{ 0 };
 		retval = WSARecv(client_sock, &user->recv_overlap.wsabuf, 1, NULL, &flags, &user->recv_overlap.original_overlap, NULL);
 		if (SOCKET_ERROR == retval) {
@@ -343,13 +342,13 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const char* serializedData, siz
 
 	PLAYER_INFO* user = it->second;
 
-	// Lock-free queue¿¡ µ¥ÀÌÅÍ »ğÀÔ
+	// Lock-free queueì— ë°ì´í„° ì‚½ì…
 	user->sendQueue.push(std::string(serializedData, dataSize));
 
-	// ÇöÀç Àü¼Û ÁßÀÌ ¾Æ´Ñ °æ¿ì¿¡¸¸ Àü¼Û ½ÃÀÛ
+	// í˜„ì¬ ì „ì†¡ ì¤‘ì´ ì•„ë‹Œ ê²½ìš°ì—ë§Œ ì „ì†¡ ì‹œì‘
 	bool expected = false;
 	if (user->isSending.compare_exchange_strong(expected, true)) {
-		// Àü¼Û ½ÃÀÛ ÇÃ·¡±×¸¦ true·Î ¼³Á¤ ÈÄ Àü¼Û ÀÛ¾÷ ½ÃÀÛ
+		// ì „ì†¡ ì‹œì‘ í”Œë˜ê·¸ë¥¼ trueë¡œ ì„¤ì • í›„ ì „ì†¡ ì‘ì—… ì‹œì‘
 		IOCP_SendNextPacket(user);
 	}
 }
@@ -386,7 +385,7 @@ void IOCP_CORE::IOCP_ErrorDisplay(const char *msg, int err_no, int line)
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err_no,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
 	printf("[ %s - %d ]", msg, line);
-	wprintf(L"¿¡·¯ %s\n", lpMsgBuf);
+	wprintf(L"ì—ëŸ¬ %s\n", lpMsgBuf);
 	LocalFree(lpMsgBuf);
 }
 
@@ -411,25 +410,25 @@ void IOCP_CORE::Timer_Thread()
 	{
 		if (b_Timer) 
 		{
-			// ÇöÀç ½Ã°£ ÃøÁ¤
+			// í˜„ì¬ ì‹œê°„ ì¸¡ì •
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<float> deltaTime = currentTime - lastTime;
 			lastTime = currentTime;
 
-			// deltaTimeÀ» ´©ÀûÇÏ¿© GameTime¿¡ ´õÇÔ
-			GameTime += deltaTime.count();  // ÃÊ ´ÜÀ§
+			// deltaTimeì„ ëˆ„ì í•˜ì—¬ GameTimeì— ë”í•¨
+			GameTime += deltaTime.count();  // ì´ˆ ë‹¨ìœ„
 			
 			//for (auto& zom : zombieDB) {
 			//	if (!(zom->path.empty())) {
 					//if (zom->ZombiePathIndex >= zom->path.size()) {
 					//	 // cout << "Zombie has reached the final destination." << endl;
-					//	continue; // °æ·Î ³¡¿¡ µµ´Ş
+					//	continue; // ê²½ë¡œ ëì— ë„ë‹¬
 					//}
 					//zom->MoveTo(deltaTime.count());
 			//	}
 			//}
 
-			// GameTimeÀ» ¹®ÀÚ¿­·Î º¯È¯
+			// GameTimeì„ ë¬¸ìì—´ë¡œ ë³€í™˜
 			//std::string gameTimeStr = std::to_string(GameTime);
 
 
@@ -456,7 +455,7 @@ void IOCP_CORE::Timer_Thread()
 				lastSendTime = currentTime;
 			}
 
-			// 5ÃÊ¸¶´Ù Ping ¸Ş½ÃÁö Àü¼Û
+			// 5ì´ˆë§ˆë‹¤ Ping ë©”ì‹œì§€ ì „ì†¡
 			std::chrono::duration<float> pingInterval = currentTime - lastPingTime;
 			if (pingInterval.count() >= 5.0f) {
 				//SendPingToClients();
@@ -468,12 +467,12 @@ void IOCP_CORE::Timer_Thread()
 
 void IOCP_CORE::Zombie_BT_Initialize()
 {
-	//======[Á»ºñ BT »ı¼º]======
-	//======¸Ş¸ğ¸® ÇÒ´ç -> ÀÛ¾÷ ÇÒ´ç======
+	//======[ì¢€ë¹„ BT ìƒì„±]======
+	//======ë©”ëª¨ë¦¬ í• ë‹¹ -> ì‘ì—… í• ë‹¹======
 
-	//======[Task] ¸Ş¸ğ¸® ÇÒ´ç======
+	//======[Task] ë©”ëª¨ë¦¬ í• ë‹¹======
 
-	//<Selector Detact> °¡ °¡Áö´Â Taskµé
+	//<Selector Detact> ê°€ ê°€ì§€ëŠ” Taskë“¤
 
 	//[CanSeePlayer-Task]
 	t_canseeplayer = new TCanSeePlayer;
@@ -486,57 +485,57 @@ void IOCP_CORE::Zombie_BT_Initialize()
 	//[NotHasLastKnownPlayerLocation-Task]
 	t_nothaslastknownplayerlocation = new TNotHasLastKnownPlayerLocation;
 
-	//<Selector CanSeePlayer> °¡ °¡Áö´Â Taskµé
+	//<Selector CanSeePlayer> ê°€ ê°€ì§€ëŠ” Taskë“¤
 
 	//[CanNotAttack-Task]
 	t_cannotattack = new TCanNotAttack;
 	//[CanAttack-Task]
 	t_canattack = new TCanAttack;
 
-	//{Sequence} °¡ °¡Áö´Â Taskµé
+	//{Sequence} ê°€ ê°€ì§€ëŠ” Taskë“¤
 
 	//[MoveTo-Task]
 	t_moveto = new TMoveTo;
 	//[Attack-Task]
 	t_attack = new TAttack;
 
-	//========ÀÛ¾÷ ÇÒ´ç========
+	//========ì‘ì—… í• ë‹¹========
 
-	//<Selector-Detect> ÇÒ´ç
-	//<Selector-Detect>¿¡ ÇØ´ç Taskµé '¼ø¼­´ë·Î' »ğÀÔ
+	//<Selector-Detect> í• ë‹¹
+	//<Selector-Detect>ì— í•´ë‹¹ Taskë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	sel_detect.AddChild(t_canseeplayer);
 	sel_detect.AddChild(t_hasshouting);
 	sel_detect.AddChild(t_hasfootsound);
 	sel_detect.AddChild(t_hasinvestigated);
 	sel_detect.AddChild(t_nothaslastknownplayerlocation);
 
-	//<Selector-CanSeePlayer> ÇÒ´ç
-	//<Selector-CanSeePlayer>¿¡ ÇØ´ç Taskµé '¼ø¼­´ë·Î' »ğÀÔ
+	//<Selector-CanSeePlayer> í• ë‹¹
+	//<Selector-CanSeePlayer>ì— í•´ë‹¹ Taskë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	sel_canseeplayer.AddChild(t_canattack);
 	sel_canseeplayer.AddChild(t_cannotattack);
 
-	//{Sequence-CanAttack} ÇÒ´ç
-	//{Sequence-CanAttack}¿¡ ÇØ´ç Taskµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-CanAttack} í• ë‹¹
+	//{Sequence-CanAttack}ì— í•´ë‹¹ Taskë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_canattack.AddChild(t_attack);
 
-	//{Sequence-CanNotAttack} ÇÒ´ç
-	//{Sequence-CanNotAttack}¿¡ ÇØ´ç Taskµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-CanNotAttack} í• ë‹¹
+	//{Sequence-CanNotAttack}ì— í•´ë‹¹ Taskë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_cannotattack.AddChild(t_moveto);
 
-	//{Sequence-HasShouting} ÇÒ´ç
-	//{Sequence-HasShouting}¿¡ ÇØ´ç Taskµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-HasShouting} í• ë‹¹
+	//{Sequence-HasShouting}ì— í•´ë‹¹ Taskë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_hasshouting.AddChild(t_moveto);
 
-	//{Sequence-HasFootSound} ÇÒ´ç
-	//{Sequence-HasFootSound}¿¡ ÇØ´ç Taskµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-HasFootSound} í• ë‹¹
+	//{Sequence-HasFootSound}ì— í•´ë‹¹ Taskë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_hasfootsound.AddChild(t_moveto);
 
-	//{Sequence-HasInvestigated} ÇÒ´ç
-	//{Sequence-HasInvestigated}¿¡ ÇØ´ç Taskµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-HasInvestigated} í• ë‹¹
+	//{Sequence-HasInvestigated}ì— í•´ë‹¹ Taskë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_hasinvestigated.AddChild(t_moveto);
 
-	//{Sequence-NotHasLastKnownPlayerLocation} ÇÒ´ç
-	//{Sequence-NotHasLastKnownPlayerLocation}¿¡ ÇØ´ç Taskµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-NotHasLastKnownPlayerLocation} í• ë‹¹
+	//{Sequence-NotHasLastKnownPlayerLocation}ì— í•´ë‹¹ Taskë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_nothaslastknownplayerlocation.AddChild(t_moveto);
 
 	//==========================
@@ -546,14 +545,15 @@ void IOCP_CORE::ServerOn()
 {
 	cout << endl;
 
-	cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// Ãâ·Â Ä­ ¸ÂÃß±â (¼Ò¼öÁ¡ 2ÀÚ¸®±îÁö)
+	cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// ì¶œë ¥ ì¹¸ ë§ì¶”ê¸° (ì†Œìˆ˜ì  2ìë¦¬ê¹Œì§€)
 
 	for (const auto player : playerDB) {
 		float p_x = player.second.x;
 		float p_y = player.second.y;
 		float p_z = player.second.z;
 
-		cout << "ÇÃ·¹ÀÌ¾î \'#" << player.first << "\' ÀÇ ½ÃÀÛ À§Ä¡: ( "
+		//ì´ê±° í”Œë ˆì´ì–´ëŠ” ì„œë²„ ì´ˆê¸°í™” í›„ì— ì¶”ê°€ë˜ì„œ í•˜ë‚˜ë„ ì•ˆ ì°í˜ (ë”°ë¡œ ì°ê³  ì‹¶ìœ¼ë©´ í”Œë ˆê·¸ ê°’ ì„¤ì •í•´ì„œ ë‚˜ì¤‘ì— í”Œë ˆì´ì–´ ë‹¤ ë°›ìœ¼ë©´ ì°ì–´ì•¼ í•  ë“¯)
+		cout << "í”Œë ˆì´ì–´ \'#" << player.first << "\' ì˜ ì‹œì‘ ìœ„ì¹˜: ( "
 			<< std::setw(8) << p_x << ", " << std::setw(8) << p_y << ", " << std::setw(8) << p_z << " )" << endl;
 	}
 
@@ -564,7 +564,7 @@ void IOCP_CORE::ServerOn()
 		float z_y = zom->ZombieData.y;
 		float z_z = zom->ZombieData.z;
 
-		cout << "Á»ºñ \'#" << zom->ZombieData.zombieID << "\' ÀÇ ½ÃÀÛ À§Ä¡: ( "
+		cout << "ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' ì˜ ì‹œì‘ ìœ„ì¹˜: ( "
 			<< std::setw(8) << z_x << ", " << std::setw(8) << z_y << ", " << std::setw(8) << z_z << " ) , HP: " << zom->GetHP() << endl;
 	}
 
@@ -573,9 +573,22 @@ void IOCP_CORE::ServerOn()
 	bServerOn = true;
 }
 
+// ostream ì—°ì‚°ì ì˜¤ë²„ë¡œë”© - FLOOR cout ì¶œë ¥ìš©
+std::ostream& operator<<(std::ostream& os, FLOOR floor) {
+	switch (floor) {
+	case FLOOR::FLOOR_B2:       os << "B2"; break;
+	case FLOOR::FLOOR_B1:       os << "B1"; break;
+	case FLOOR::FLOOR_F1:       os << "F1"; break;
+	case FLOOR::FLOOR_F2:       os << "F2"; break;
+	case FLOOR::FLOOR_F3:       os << "F3"; break;
+	default:                    os << "Unknown FLOOR"; break;
+	}
+	return os;
+}
+
 void IOCP_CORE::Zombie_BT_Thread()
 {
-	//========ÀÛ¾÷ ½ÇÇà==========
+	//========ì‘ì—… ì‹¤í–‰==========
 
 	string result = "Initial";
 
@@ -583,7 +596,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 	
 	while (true) {
 
-		//¼­¹ö°¡ ¸ÕÀú ÄÑÁö°í Á»ºñ BT°¡ ½ÇÇàµÇµµ·Ï
+		//ì„œë²„ê°€ ë¨¼ì € ì¼œì§€ê³  ì¢€ë¹„ BTê°€ ì‹¤í–‰ë˜ë„ë¡
 		if (bServerOn == false)
 			continue;
 		
@@ -594,20 +607,18 @@ void IOCP_CORE::Zombie_BT_Thread()
 			continue;							
 		}
 
-		//cout << endl;
-
 		lastBTTime = currentTime;
 
 
 		if (playerDB.size() == 0) {
-			//cout << "¿¬°áµÈ ÇÃ·¹ÀÌ¾î°¡ ¾ø½À´Ï´Ù..." << endl;
+			//cout << "ì—°ê²°ëœ í”Œë ˆì´ì–´ê°€ ì—†ìŠµë‹ˆë‹¤..." << endl;
 			//cout << endl;
 			result = "NO PLAYER";
 		}
 		else {
 			//for (auto player : playerDB) {
 			//	float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
-			//	cout << "ÇÃ·¹ÀÌ¾î \'#" << player.first << "\' ÀÇ ÇöÀç À§Ä¡: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+			//	cout << "í”Œë ˆì´ì–´ \'#" << player.first << "\' ì˜ í˜„ì¬ ìœ„ì¹˜: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 			//	//cout << endl;
 			//}
 			//cout << endl;
@@ -616,60 +627,81 @@ void IOCP_CORE::Zombie_BT_Thread()
 		}
 		
 
-		// BT-¼Û¼ö½Å ¾²·¹µå°£ÀÇ µ¥ÀÌÅÍ ·¹ÀÌ½º ¹æÁö¸¦ À§ÇØ
+		// BT-ì†¡ìˆ˜ì‹  ì“°ë ˆë“œê°„ì˜ ë°ì´í„° ë ˆì´ìŠ¤ ë°©ì§€ë¥¼ ìœ„í•´
 		zombieDB_BT = zombieDB;
 		playerDB_BT = playerDB;
-		//g_players_BT = g_players;
 
-		// Á»ºñ°¡ ÀÖÀ»¶§ BT ½ÇÇà
+		// ì¢€ë¹„ê°€ ìˆì„ë•Œ BT ì‹¤í–‰
 		for (auto& zom : zombieDB_BT) {
 
-			// ÇÃ·¹ÀÌ¾î°¡ ÀÖÀ»¶§ BT ½ÇÇà
+			// í”Œë ˆì´ì–´ê°€ ìˆì„ë•Œ BT ì‹¤í–‰
 			if (result == "NO PLAYER")
 				break;
 
-			// Á»ºñ°¡ »ç¸Á½Ã BT ÁßÁö
+
+			cout << endl;
+			cout << "========ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' BT ì‹¤í–‰==========" << endl;
+			cout << endl;
+
+
+			// ì¢€ë¹„ê°€ ì‚¬ë§ì‹œ BT ì¤‘ì§€
 			if (zom->zombieHP <= 0.f) {
+				cout << "ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' ì‚¬ë§í•¨." << endl << endl;
+				cout << "========ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' BT ì¢…ë£Œ==========" << endl;
+				cout << endl;
 				continue;
 			}
 
-			// Á»ºñ°¡ ´ë±â»óÅÂ¶ó¸é ÇØ´ç Á»ºñ BT Àá½Ã ´ë±â
+			// ì¢€ë¹„ê°€ ëŒ€ê¸°ìƒíƒœë¼ë©´ í•´ë‹¹ ì¢€ë¹„ BT ì ì‹œ ëŒ€ê¸°
 			if (zom->HaveToWait == true) {
 				zom->Wait();
+				cout << "========ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' BT ì¢…ë£Œ==========" << endl;
+				cout << endl;
 				continue;
 			}
 
-			//½ÃÀÛÇÏÀÚ ¸»ÀÚ ÇÃ·¹ÀÌ¾î À§Ä¡·Î ¿òÁ÷ÀÌ°Ô ¼³Á¤ (A* °üÂû¿ë)
-			//zom->PlayerInSight = true;
+			// ì¢€ë¹„ê°€ í”Œë ˆì´ì–´ë“¤ì´ ì—†ëŠ” ì¸µì— ìˆë‹¤ë©´ ì¢€ë¹„ BT ì‹¤í–‰ ë©ˆì¶”ê³  ìˆê¸°
+			bool same_floor = false;
+			cout << "ì¢€ë¹„ #" << zom->ZombieData.zombieID << " ì˜ floor: " << zom->pathfinder.floor << endl;
+			for (auto player : playerDB_BT) {
+				cout << "í”Œë ˆì´ì–´ #" << player.first << " ì˜ floor: " << player.second.floor << endl;
+				if (zom->pathfinder.floor == player.second.floor) {	
+					same_floor = true;
+					break;
+				}
+			}
+			if (same_floor == false) {
+				cout << "ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' í”Œë ˆì´ì–´ë“¤ì´ ì—†ëŠ” ì¸µì— ì¡´ì¬. -> BT ì‹¤í–‰ ì ì‹œ ì¤‘ì§€" << endl << endl;
+				cout << "========ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' BT ì¢…ë£Œ==========" << endl;
+				cout << endl;
+				continue;
+			}
 
-			//cout << endl;
-			//cout << "========Á»ºñ \'#" << zom->ZombieData.zombieID << "\' BT ½ÇÇà==========" << endl;
-			//cout << endl;
-			//
+
 			//float z_x = zom->ZombieData.x;					float z_y = zom->ZombieData.y;					float z_z = zom->ZombieData.z;
-			//cout << "Á»ºñ \'#" << zom->ZombieData.zombieID << "\' ÀÇ ÇöÀç À§Ä¡: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+			//cout << "ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' ì˜ í˜„ì¬ ìœ„ì¹˜: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 			//cout << endl;
 
 
-			//<Selector-Detect> ½ÇÇà
+			//<Selector-Detect> ì‹¤í–‰
 			result = sel_detect.Sel_Detect(*zom);
 
-			//<Selector-Detect> °á°ú °ª¿¡ µû¶ó ´ÙÀ½ Taskµé ½ÇÇà
+			//<Selector-Detect> ê²°ê³¼ ê°’ì— ë”°ë¼ ë‹¤ìŒ Taskë“¤ ì‹¤í–‰
 			if (result == "CanSeePlayer-Succeed") {
 
-				//<Selector-CanSeePlayer> ½ÇÇà
+				//<Selector-CanSeePlayer> ì‹¤í–‰
 				result = sel_canseeplayer.Sel_CanSeePlayer(*zom);
 
-				//<Selector-CanSeePlayer> °á°ú °ª¿¡ µû¶ó ´ÙÀ½ Taskµé ½ÇÇà
+				//<Selector-CanSeePlayer> ê²°ê³¼ ê°’ì— ë”°ë¼ ë‹¤ìŒ Taskë“¤ ì‹¤í–‰
 				if (result == "CanAttack-Succeed") {
 
-					//{Sequence-CanAttack} ½ÇÇà
+					//{Sequence-CanAttack} ì‹¤í–‰
 					result = seq_canattack.Seq_CanAttack(*zom);
 
 				}
 				else if (result == "CanNotAttack-Succeed") {
 
-					//{Sequence-CanNotAttack} ½ÇÇà
+					//{Sequence-CanNotAttack} ì‹¤í–‰
 					result = seq_cannotattack.Seq_CanNotAttack(*zom);
 
 				}
@@ -680,25 +712,25 @@ void IOCP_CORE::Zombie_BT_Thread()
 			}
 			else if (result == "HasShouting-Succeed") {
 
-				//{Sequence-HasShouting} ½ÇÇà
+				//{Sequence-HasShouting} ì‹¤í–‰
 				result = seq_hasshouting.Seq_HasShouting(*zom);
 
 			}
 			else if (result == "HasFootSound-Succeed") {
 
-				//{Sequence-HasFootSound} ½ÇÇà
+				//{Sequence-HasFootSound} ì‹¤í–‰
 				result = seq_hasfootsound.Seq_HasFootSound(*zom);
 
 			}
 			else if (result == "HasInvestigated-Succeed") {
 
-				//{Sequence-HasInvestigated} ½ÇÇà
+				//{Sequence-HasInvestigated} ì‹¤í–‰
 				result = seq_hasinvestigated.Seq_HasInvestigated(*zom);
 
 			}
 			else if (result == "NotHasLastKnownPlayerLocation-Succeed") {
 
-				//{Sequence-NotHasLastKnownPlayerLocation} ½ÇÇà
+				//{Sequence-NotHasLastKnownPlayerLocation} ì‹¤í–‰
 				result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
 
 			}
@@ -708,24 +740,24 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 			
 			//z_x = zom->ZombieData.x;					z_y = zom->ZombieData.y;					z_z = zom->ZombieData.z;
-			//cout << "Á»ºñ \'#" << zom->ZombieData.zombieID << "\' ÀÇ »õ·Î¿î À§Ä¡: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
+			//cout << "ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' ì˜ ìƒˆë¡œìš´ ìœ„ì¹˜: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 			//cout << endl;
 
 
-		//cout << "========Á»ºñ \'#" << zom->ZombieData.zombieID << "\' BT Á¾·á==========" << endl;
-		//cout << endl;
+		cout << "========ì¢€ë¹„ \'#" << zom->ZombieData.zombieID << "\' BT ì¢…ë£Œ==========" << endl;
+		cout << endl;
 		}
 
 
-		//ÄÜ¼ÖÃ¢¿¡¼­ ÇÑ ½ÎÀÌÅ¬¾¿ µ¹¾Æ°¡°Ô
-		//cout << "(°è¼Ó ÁøÇà)¾Æ¹«°Å³ª ÀÔ·Â ÈÄ ¿£ÅÍ: ";
+		//ì½˜ì†”ì°½ì—ì„œ í•œ ì‹¸ì´í´ì”© ëŒì•„ê°€ê²Œ
+		//cout << "(ê³„ì† ì§„í–‰)ì•„ë¬´ê±°ë‚˜ ì…ë ¥ í›„ ì—”í„°: ";
 		//char one_cycle;
 		//cin >> one_cycle;
 		//if (cin.fail()) {
 		//	cin.clear();
 		//	cin.ignore(1000, '\n');
 		//}
-		//cin.clear();			//ÇÑ¹ø´õ ½á¼­ ³²Àº °³Çà ¹®ÀÚ±îÁö ½Ï Áö¿öÁÜ
+		//cin.clear();			//í•œë²ˆë” ì¨ì„œ ë‚¨ì€ ê°œí–‰ ë¬¸ìê¹Œì§€ ì‹¹ ì§€ì›Œì¤Œ
 		//cin.ignore(1000, '\n');
 		//cout << endl;
 
@@ -734,7 +766,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 	//==========================
 
 
-	//========ÇÒ´çÇÑ ¸Ş¸ğ¸® ÇØÁ¦========
+	//========í• ë‹¹í•œ ë©”ëª¨ë¦¬ í•´ì œ========
 
 	delete(t_canseeplayer);
 	delete(t_cannotattack);
@@ -783,41 +815,41 @@ bool IOCP_CORE::LoadEdgesMap(const string& filePath, vector<tuple<float, float, 
     while (getline(file, line)) {
         stringstream ss(line);
 
-        // "Node:" ÁÙ Ã³¸®
+        // "Node:" ì¤„ ì²˜ë¦¬
         if (line.find("Node:") != string::npos) {
-            // Node Á¤º¸ ÆÄ½Ì
+            // Node ì •ë³´ íŒŒì‹±
             float x, y, z;
             char comma;
-            ss.ignore(5); // "Node: " ¹«½Ã
+            ss.ignore(5); // "Node: " ë¬´ì‹œ
             if (ss >> x >> comma >> y >> comma >> z) {
                 currentNode = make_tuple(x, y, z);
-                EdgesMap[currentNode] = {};  // »õ·Î¿î ³ëµå Ãß°¡
+                EdgesMap[currentNode] = {};  // ìƒˆë¡œìš´ ë…¸ë“œ ì¶”ê°€
 
-                // validPositions¿¡ currentNode Ãß°¡
+                // validPositionsì— currentNode ì¶”ê°€
                 positions.push_back(currentNode);
             }
         }
-        // "Neighbor:" ÁÙ Ã³¸®
+        // "Neighbor:" ì¤„ ì²˜ë¦¬
         else if (line.find("Neighbor:") != string::npos) {
-            // Neighbor Á¤º¸ ÆÄ½Ì
+            // Neighbor ì •ë³´ íŒŒì‹±
             float nx, ny, nz;
             char comma;
-            ss.ignore(9); // "Neighbor: " ¹«½Ã
+            ss.ignore(9); // "Neighbor: " ë¬´ì‹œ
 
-            // x, y, z ÁÂÇ¥ ÆÄ½Ì
+            // x, y, z ì¢Œí‘œ íŒŒì‹±
             if (ss >> nx >> comma >> ny >> comma >> nz) {
                 neighborNode = make_tuple(nx, ny, nz);
             }
 
-            // ´ÙÀ½ ÁÙ¿¡¼­ "Weight:" Á¤º¸¸¦ °¡Á®¿À±â
+            // ë‹¤ìŒ ì¤„ì—ì„œ "Weight:" ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ê¸°
             if (getline(file, line)) {
                 stringstream weightStream(line);
                 string temp;
                 float weight;
 
-                // "Weight: " ¹«½ÃÇÏ°í °¡ÁßÄ¡ °ª ÃßÃâ
+                // "Weight: " ë¬´ì‹œí•˜ê³  ê°€ì¤‘ì¹˜ ê°’ ì¶”ì¶œ
                 if (weightStream >> temp >> weight && temp == "Weight:") {
-                    // ÀÌ¿ô ³ëµå¿Í °¡ÁßÄ¡ Ãß°¡
+                    // ì´ì›ƒ ë…¸ë“œì™€ ê°€ì¤‘ì¹˜ ì¶”ê°€
                     EdgesMap[currentNode].emplace_back(neighborNode, weight);
                 }
             }
@@ -850,15 +882,15 @@ void IOCP_CORE::SendPingToClients()
 			{
 				printf("Client #%u did not respond\n", player->id);
 
-				// Å¬¶óÀÌ¾ğÆ® ¿¬°á ÇØÁ¦
+				// í´ë¼ì´ì–¸íŠ¸ ì—°ê²° í•´ì œ
 				player->connected = false;
 
-				// Å¬¶óÀÌ¾ğÆ® »èÁ¦ ÈÄ, ´ÙÀ½ ¹İº¹ÀÚ¸¦ ¾òÀ½
-				it = g_players.erase(it);  // erase()´Â »èÁ¦µÈ ¿ä¼ÒÀÇ ´ÙÀ½ ¹İº¹ÀÚ¸¦ ¹İÈ¯
+				// í´ë¼ì´ì–¸íŠ¸ ì‚­ì œ í›„, ë‹¤ìŒ ë°˜ë³µìë¥¼ ì–»ìŒ
+				it = g_players.erase(it);  // erase()ëŠ” ì‚­ì œëœ ìš”ì†Œì˜ ë‹¤ìŒ ë°˜ë³µìë¥¼ ë°˜í™˜
 				DisconnectClient(player->id);
-				continue;  // »èÁ¦ÇÑ ÈÄ, ´ÙÀ½ Å¬¶óÀÌ¾ğÆ®·Î ÀÌµ¿
+				continue;  // ì‚­ì œí•œ í›„, ë‹¤ìŒ í´ë¼ì´ì–¸íŠ¸ë¡œ ì´ë™
 			}
 		}
-		++it;  // »èÁ¦µÇÁö ¾ÊÀº °æ¿ì¿¡¸¸ ¹İº¹ÀÚ¸¦ Áõ°¡½ÃÅ´
+		++it;  // ì‚­ì œë˜ì§€ ì•Šì€ ê²½ìš°ì—ë§Œ ë°˜ë³µìë¥¼ ì¦ê°€ì‹œí‚´
 	}
 }

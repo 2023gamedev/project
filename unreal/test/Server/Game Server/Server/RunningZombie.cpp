@@ -39,6 +39,8 @@ RunningZombie::RunningZombie()
 
 	IsBeingAttacked = false;
 
+	IsShouting = false;
+
 	HaveToWait = false;
 
 	//speed = 0.f;
@@ -80,6 +82,8 @@ RunningZombie::RunningZombie(Zombie_Data z_d)
 	IsAttacking = false;
 
 	IsBeingAttacked = false;
+
+	IsShouting = false;
 
 	HaveToWait = false;
 

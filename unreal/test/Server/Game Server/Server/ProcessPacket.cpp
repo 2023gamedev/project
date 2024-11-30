@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Common.h"
 #include "iocpServerClass.h"
 #include "algorithm"
@@ -10,10 +10,10 @@
 #include <algorithm>
 
 bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
-    // g_players¿¡¼­ Å¬¶óÀÌ¾ğÆ® Á¤º¸ °Ë»ö
+    // g_playersì—ì„œ í´ë¼ì´ì–¸íŠ¸ ì •ë³´ ê²€ìƒ‰
     auto it = g_players.find(id);
     if (it == g_players.end()) {
-        // À¯È¿ÇÏÁö ¾ÊÀº Å¬¶óÀÌ¾ğÆ® ID¿¡ ´ëÇÑ Ã³¸®
+        // ìœ íš¨í•˜ì§€ ì•Šì€ í´ë¼ì´ì–¸íŠ¸ IDì— ëŒ€í•œ ì²˜ë¦¬
         return false;
     }
 
@@ -36,7 +36,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         //printf("SendDatas!! Playerid=#%d\n", id);
     }
 
-    // ÆĞÅ¶ÀÇ Å¸ÀÔÀ» È®ÀÎÇÏ¿© Ã³¸®
+    // íŒ¨í‚·ì˜ íƒ€ì…ì„ í™•ì¸í•˜ì—¬ ì²˜ë¦¬
     switch (tempPacket.packet_type()) {
     case 1: {
         //printf("\n[ No. %3u ] character Packet Received !!\n", id);
@@ -45,15 +45,15 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.x(), CharacterPacket.y(), CharacterPacket.z());
         //printf("Received packet x = %f, y = %f, z = %f\n\n", CharacterPacket.pitch(), CharacterPacket.yaw(), CharacterPacket.roll());
 
-        // ¼­¹ö·Î ¹ŞÀº ÆĞÅ¶À» ±×´ë·Î µ¹·ÁÁÜ
+        // ì„œë²„ë¡œ ë°›ì€ íŒ¨í‚·ì„ ê·¸ëŒ€ë¡œ ëŒë ¤ì¤Œ
         Protocol::Character Packet;
         Packet.ParseFromArray(buffer, bufferSize);
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        // Áö±İÀº ¼öÁ¤ µÆÁö¸¸ È¤½ÃÇØ¼­ ³²±è -> Å¬¶ó ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­ id ¼³Á¤°ªÀÌ 99ÀÎµ¥ ÀÌ°É Àü¼Û ¹Ş´Â °æ¿ì°¡ »ı°å¾ú´Ù
+        // ì§€ê¸ˆì€ ìˆ˜ì • ëì§€ë§Œ í˜¹ì‹œí•´ì„œ ë‚¨ê¹€ -> í´ë¼ í”Œë ˆì´ì–´ ì´ˆê¸°í™” id ì„¤ì •ê°’ì´ 99ì¸ë° ì´ê±¸ ì „ì†¡ ë°›ëŠ” ê²½ìš°ê°€ ìƒê²¼ì—ˆë‹¤
         if (Packet.playerid() != 99) {
-            //playerDB[Packet.playerid()] = pl; //-> ÀÌ·¸°Ô »ç¿ëÇÏ¸é ÃÊ±âÈ­ »©¸ÔÀº °ª ´õ¹Ì °ª ¾º¿öÁú ¼ö ÀÖÀ½
+            //playerDB[Packet.playerid()] = pl; //-> ì´ë ‡ê²Œ ì‚¬ìš©í•˜ë©´ ì´ˆê¸°í™” ë¹¼ë¨¹ì€ ê°’ ë”ë¯¸ ê°’ ì”Œì›Œì§ˆ ìˆ˜ ìˆìŒ
             playerDB[Packet.playerid()].username = Packet.username();
 
             playerDB[Packet.playerid()].x = Packet.x();
@@ -105,9 +105,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                     float DeltaX = std::abs(player.second.x - Escape_Location.x);
                     float DeltaY = std::abs(player.second.y - Escape_Location.y);
 
-                    // ¹üÀ§¸¦ ¹ş¾î³ª´ÂÁö È®ÀÎ
+                    // ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ëŠ”ì§€ í™•ì¸
                     if (DeltaX >= 100.0f || DeltaY >= 100.0f || player.second.floor != Escape_Location.floor) {
-                        bAllPlayersInRange = false; // ÇÑ ¸íÀÌ¶óµµ ¹üÀ§¸¦ ¹ş¾î³ª¸é false
+                        bAllPlayersInRange = false; // í•œ ëª…ì´ë¼ë„ ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ë©´ false
                         break;
                     }
                 }
@@ -148,7 +148,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             }
         }
 
-        // ¸ğµç ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶ Àü¼Û (ºê·ÎµåÄ³½ºÆÃ)
+        // ëª¨ë“  ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚· ì „ì†¡ (ë¸Œë¡œë“œìºìŠ¤íŒ…)
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame && player.second != nullptr) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
@@ -158,7 +158,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     } break;
 
     case 2: {
-        // ¿¹Àü¿¡ Å¬¶ó¿¡¼­ Á»ºñ ¿òÁ÷ÀÌ¸é ÇØ´ç ÆĞÅ¶À» ¼­¹ö·Î º¸³ÂÀ½ -> ÀÌÁ¦´Â ¿òÁ÷ÀÓÀ» ¼­¹ö¿¡¼­ ´ã´çÇÏ´Ï »ç½Ç»ó »ç¿ë ¾È ÇÔ
+        // ì˜ˆì „ì— í´ë¼ì—ì„œ ì¢€ë¹„ ì›€ì§ì´ë©´ í•´ë‹¹ íŒ¨í‚·ì„ ì„œë²„ë¡œ ë³´ëƒˆìŒ -> ì´ì œëŠ” ì›€ì§ì„ì„ ì„œë²„ì—ì„œ ë‹´ë‹¹í•˜ë‹ˆ ì‚¬ì‹¤ìƒ ì‚¬ìš© ì•ˆ í•¨
 
         printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
         Protocol::Zombie Packet;
@@ -205,7 +205,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        // ¸ğµç ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶ Àü¼Û (ºê·ÎµåÄ³½ºÆÃ)
+        // ëª¨ë“  ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚· ì „ì†¡ (ë¸Œë¡œë“œìºìŠ¤íŒ…)
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
@@ -222,7 +222,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        // ¸ğµç ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶ Àü¼Û (ºê·ÎµåÄ³½ºÆÃ)
+        // ëª¨ë“  ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚· ì „ì†¡ (ë¸Œë¡œë“œìºìŠ¤íŒ…)
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
@@ -240,14 +240,14 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     //    Packet.SerializeToString(&serializedData);
 
     //    
-    //    // ÇØ´ç ÇÃ·¹ÀÌ¾î run-bool°ª º¯°æ
+    //    // í•´ë‹¹ í”Œë ˆì´ì–´ run-boolê°’ ë³€ê²½
     //    for (auto& player : playerDB) {
     //        if (player.first == Packet.playerid()) {
     //            player.second.IsRunning = Packet.b_run();
     //        }
     //    }
 
-    //    // ¸ğµç ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶ Àü¼Û (ºê·ÎµåÄ³½ºÆÃ)
+    //    // ëª¨ë“  ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚· ì „ì†¡ (ë¸Œë¡œë“œìºìŠ¤íŒ…)
     //    for (const auto& player : g_players) {
     //        if (player.first != id && player.second->isInGame) {
     //            IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
@@ -264,7 +264,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        // ¸ğµç ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶ Àü¼Û (ºê·ÎµåÄ³½ºÆÃ)
+        // ëª¨ë“  ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚· ì „ì†¡ (ë¸Œë¡œë“œìºìŠ¤íŒ…)
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
@@ -289,14 +289,14 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
                     z->PlayerInSight = true;
                     z->KnewPlayerLocation = true;
-                    z->SetDistance(Packet.playerid(), 1, 1);   //DistanceTo_PlayerInsight ¸Ê ¿¡ ÇØ´ç ÇÃ·¹ÀÌ¾î¿Í °Å¸® Ãß°¡ÇÏ±â
+                    z->SetDistance(Packet.playerid(), 1, 1);   //DistanceTo_PlayerInsight ë§µ ì— í•´ë‹¹ í”Œë ˆì´ì–´ì™€ ê±°ë¦¬ ì¶”ê°€í•˜ê¸°
 
-                    //cout << "Á»ºñ \'#" << z->ZombieData.zombieID << "\' ÀÇ ½Ã¾ß¿¡ - ÇÃ·¹ÀÌ¾î \'#" << id << "\' Æ÷Âø!!!: " << endl;
+                    //cout << "ì¢€ë¹„ \'#" << z->ZombieData.zombieID << "\' ì˜ ì‹œì•¼ì— - í”Œë ˆì´ì–´ \'#" << id << "\' í¬ì°©!!!: " << endl;
 
 
-                    // »ş¿ìÆÃ Á»ºñÀÏ °æ¿ì¿¡
+                    // ìƒ¤ìš°íŒ… ì¢€ë¹„ì¼ ê²½ìš°ì—
                     if (z->ZombieData.zombietype == 1) {
-                        ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);
+                        ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);  // ë‹¤ìš´ ìºìŠ¤íŒ… ì‚¬ìš©!
                         sz->Shout(zombieDB);
                     }
 
@@ -312,9 +312,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                         break;
 
                     z->PlayerInSight = false;
-                    z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     //±×³É ÀÌ·¸°Ô ¸¶ÀÌ³Ê½º°ª ³Ö¾î ³õ°í ÀÌ°Ç ¾ø´Â µ¥ÀÌÅÍ·Î Ä¡ÀÚ (¸¶ÀÌ³Ê½º°ªÀº Àı´ë ¼³Á¤µÉ ¼ö ¾øÀ¸´Ï)
+                    z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     //ê·¸ëƒ¥ ì´ë ‡ê²Œ ë§ˆì´ë„ˆìŠ¤ê°’ ë„£ì–´ ë†“ê³  ì´ê±´ ì—†ëŠ” ë°ì´í„°ë¡œ ì¹˜ì (ë§ˆì´ë„ˆìŠ¤ê°’ì€ ì ˆëŒ€ ì„¤ì •ë  ìˆ˜ ì—†ìœ¼ë‹ˆ)
 
-                    //cout << "Á»ºñ \'#" << z->ZombieData.zombieID << "\' ÀÇ ½Ã¾ß¿¡¼­ - ÇÃ·¹ÀÌ¾î \'#" << id << "\' ³õÄ§!!!: " << endl;
+                    //cout << "ì¢€ë¹„ \'#" << z->ZombieData.zombieID << "\' ì˜ ì‹œì•¼ì—ì„œ - í”Œë ˆì´ì–´ \'#" << id << "\' ë†“ì¹¨!!!: " << endl;
 
                     break;
                 }
@@ -334,7 +334,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         if (it != g_players.end())
         {
             PLAYER_INFO* player = it->second;
-            player->pingcnt = 0; // Å¬¶óÀÌ¾ğÆ®°¡ ÀÀ´äÇßÀ¸¹Ç·Î pingcnt ÃÊ±âÈ­
+            player->pingcnt = 0; // í´ë¼ì´ì–¸íŠ¸ê°€ ì‘ë‹µí–ˆìœ¼ë¯€ë¡œ pingcnt ì´ˆê¸°í™”
         }
 
         return true;
@@ -355,25 +355,29 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             }
         }
 
-        // Á»ºñ HP ¾÷µ¥ÀÌÆ®
+        // ì¢€ë¹„ HP ì—…ë°ì´íŠ¸
         int recvzombieid = Packet.zombieid();
 
         for (auto& z : zombieDB) {
             if (z->ZombieData.zombieID == recvzombieid) {
                 z->zombieHP = max(0, z->zombieHP - Packet.damage());
 
-                if (z->zombieHP < 0) {
-                    playerDB[id].killcount++;
+                if (z->zombieHP < z->NormalZombieStartHP) {
+                    z->IsBeingAttacked = true;  // ì¢€ë¹„ í”¼ê²©ì¤‘ìœ¼ë¡œ ë³€ê²½
+                    z->HaveToWait = true;	// ì¢€ë¹„ BT ëŒ€ê¸°ìƒíƒœë¡œ ë³€ê²½
+                    z->animStartTime = std::chrono::high_resolution_clock::now();		// ì¢€ë¹„ í”¼ê²© ì‹œì‘ ì‹œê°„
+
+                    //cout << "================================================================================================================================================================================" << endl;
+                    cout << "ì¢€ë¹„ \'#" << z->ZombieData.zombieID << "\' í”¼ê²©!! ë‚¨ì€ HP: " << z->GetHP() << endl;
+                    cout << endl;
+                    //cout << "================================================================================================================================================================================" << endl;
                 }
 
-                if (z->zombieHP < z->NormalZombieStartHP) {
-                    z->IsBeingAttacked = true;  // Á»ºñ ÇÇ°İÁßÀ¸·Î º¯°æ
-                    z->HaveToWait = true;	// Á»ºñ BT ´ë±â»óÅÂ·Î º¯°æ
-                    z->animStartTime = std::chrono::high_resolution_clock::now();		// Á»ºñ ÇÇ°İ ½ÃÀÛ ½Ã°£
+                if (z->zombieHP <= 0) {
+                    playerDB[id].killcount++;
 
-                    //cout << "================================================================================================================================================================================" << endl;
-                    //cout << "Á»ºñ \'#" << z->ZombieData.zombieID << "\' ÇÇ°İ!! ³²Àº HP: " << z->GetHP() << endl;
-                    //cout << "================================================================================================================================================================================" << endl;
+                    cout << "ì¢€ë¹„ \'#" << z->ZombieData.zombieID << "\' ì‚¬ë§!!!" << endl;
+                    cout << endl;
                 }
             }
         }
@@ -398,7 +402,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        // ¸ğµç ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶ Àü¼Û (ºê·ÎµåÄ³½ºÆÃ)
+        // ëª¨ë“  ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚· ì „ì†¡ (ë¸Œë¡œë“œìºìŠ¤íŒ…)
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
@@ -418,7 +422,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        // ¸ğµç ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶ Àü¼Û (ºê·ÎµåÄ³½ºÆÃ)
+        // ëª¨ë“  ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚· ì „ì†¡ (ë¸Œë¡œë“œìºìŠ¤íŒ…)
         for (const auto& player : g_players) {
             if (player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
@@ -440,7 +444,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
 
         if (roofkey_cnt == 2 || Packet.root() == 1) {
-            // ¹® ¿¬ À§Ä¡ ÀúÀå, »óÅÂ¸¦ Å»Ãâ ÁØºñ »óÅÂ·Î º¯°æ
+            // ë¬¸ ì—° ìœ„ì¹˜ ì €ì¥, ìƒíƒœë¥¼ íƒˆì¶œ ì¤€ë¹„ ìƒíƒœë¡œ ë³€ê²½
             Escape_Location.x = playerDB[id].x;
             Escape_Location.y = playerDB[id].y;
             Escape_Location.floor = playerDB[id].floor;
@@ -451,7 +455,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
 
 
-        // ¸ğµç ¿¬°áµÈ Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶ Àü¼Û (ºê·ÎµåÄ³½ºÆÃ)
+        // ëª¨ë“  ì—°ê²°ëœ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚· ì „ì†¡ (ë¸Œë¡œë“œìºìŠ¤íŒ…)
         for (const auto& player : g_players) {
             if (player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
@@ -462,7 +466,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     default: {
         printf("\nERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
-        // Å¬¶óÀÌ¾ğÆ®³ª ¼­¹ö Á¾·á, ·Î±ë µîÀÇ Ã³¸® °¡´É
+        // í´ë¼ì´ì–¸íŠ¸ë‚˜ ì„œë²„ ì¢…ë£Œ, ë¡œê¹… ë“±ì˜ ì²˜ë¦¬ ê°€ëŠ¥
         return true;
     } break;
     }

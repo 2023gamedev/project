@@ -1,4 +1,4 @@
-#include "ShoutingZombie.h"
+ï»¿#include "ShoutingZombie.h"
 
 #include "ZombiePathfinder.h"
 #include "iocpServerClass.h"
@@ -29,20 +29,21 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies)
 	if (bShouted == false) {
 		bShouted = true;
 
-		cout << "»ş¿ìÆÃ Á»ºñ #" << ZombieData.zombieID << " »ş¿ìÆÃ!!!" << endl;
+		cout << "ìƒ¤ìš°íŒ… ì¢€ë¹„ #" << ZombieData.zombieID << " ìƒ¤ìš°íŒ…!!!" << endl;
+		cout << endl;
 
-		// ´Ù¸¥ Á»ºñµé »ş¿ìÆÃ ¼Ò¸® Æ÷Âø Ã¼Å©
+		// ë‹¤ë¥¸ ì¢€ë¹„ë“¤ ìƒ¤ìš°íŒ… ì†Œë¦¬ í¬ì°© ì²´í¬
 		for (auto& zom : zombies) {
-			if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// »ş¿ìÆÃ Á»ºñ¿Í °°Àº Ãş Á»ºñ¸¸ °Ë»ç
+			if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// ìƒ¤ìš°íŒ… ì¢€ë¹„ì™€ ê°™ì€ ì¸µ ì¢€ë¹„ë§Œ ê²€ì‚¬
 				continue;
 
-			if (zom->ZombieData.zombieID == ZombieData.zombieID)	// ³ª ÀÚ½ÅÀº ³Ñ¾î°¡±â
+			if (zom->ZombieData.zombieID == ZombieData.zombieID)	// ë‚˜ ìì‹ ì€ ë„˜ì–´ê°€ê¸°
 				continue;
 
 			vector<vector<vector<float>>> szl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 			vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{zom->ZombieData.x, zom->ZombieData.y, zom->ZombieData.z}} };
 
-			float dist = sqrt(powf(szl[0][0][0] - zl[0][0][0], 2) + powf(szl[0][0][1] - zl[0][0][1], 2)/* + powf(szl[0][0][2] - zl[0][0][2], 2)*/);	// x, y ÁÂÇ¥ °Å¸®¸¸ °Ë»ç
+			float dist = sqrt(powf(szl[0][0][0] - zl[0][0][0], 2) + powf(szl[0][0][1] - zl[0][0][1], 2)/* + powf(szl[0][0][2] - zl[0][0][2], 2)*/);	// x, y ì¢Œí‘œ ê±°ë¦¬ë§Œ ê²€ì‚¬
 
 			if (dist <= CanHearShoutDistance) {
 				zom->HeardShouting = true;
@@ -52,8 +53,10 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies)
 
 		}
 
-		HaveToWait = true;	// Á»ºñ BT ´ë±â»óÅÂ·Î º¯°æ
+		IsShouting = true;	// ì¢€ë¹„ ìƒ¤ìš°íŒ…ì¤‘ìœ¼ë¡œ ë³€ê²½
 
-		animStartTime = std::chrono::high_resolution_clock::now();		// Á»ºñ »ş¿ìÆÃ ½ÃÀÛ ½Ã°£
+		HaveToWait = true;	// ì¢€ë¹„ BT ëŒ€ê¸°ìƒíƒœë¡œ ë³€ê²½
+
+		animStartTime = std::chrono::high_resolution_clock::now();		// ì¢€ë¹„ ìƒ¤ìš°íŒ… ì‹œì‘ ì‹œê°„
 	}
 }

@@ -8,7 +8,7 @@ Player::Player()
 
 
 	IsRunning = false;
-    floor = FLOOR::FLOOR_B2;
+    floor = FLOOR::FLOOR_B1;	// 스폰 층이 고정이라
 	killcount = 0;
 }
 

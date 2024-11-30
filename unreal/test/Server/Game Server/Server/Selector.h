@@ -22,10 +22,10 @@ public:
         //cout << "Selector <Detect> 호출" << endl;
         //cout << endl;
         for (const auto& child : sel_children) {
-            string result = child->Detect(zom);
+            string result = child->Detect(zom); // 다형성 이용 (함수 오버라이딩)
             if ("Fail" != result) {
-                //cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
-                //cout << endl;
+                cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
                 return result;
             }
         }
@@ -40,8 +40,8 @@ public:
         for (const auto& child : sel_children) {
             string result = child->CanSeePlayer(zom);
             if ("Fail" != result) {
-                //cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
-                //cout << endl;
+                cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
+                cout << endl;
                 return result;
             }
         }

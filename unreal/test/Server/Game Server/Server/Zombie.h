@@ -111,6 +111,9 @@ public:
 
     bool IsBeingAttacked;   // 해당 좀비 지금 피격 당하는 중인가? (애니메이션 재생 중인 가?)
 
+    bool IsShouting;        // 해당 '샤우팅' 좀비 지금 샤우팅 중인가? (애니메이션 재생 중인 가?) 
+                            //-> 샤우팅 좀비만을 위한 변수지만, shouting zombie(하위-자식 클래스)에 만들면 zombie(상위-부모 클래스)에서 shouting zombie의 멤버 변수에 접근 못해서 그냥 여기에;;
+
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
 
     std::chrono::steady_clock::time_point animStartTime;      // 좀비 애니메이션 시작 시간
