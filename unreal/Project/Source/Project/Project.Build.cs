@@ -22,5 +22,12 @@ public class Project : ModuleRules
         {
             "Project/Protocol/"
         });
+
+        // Windows 플랫폼에 대해서만 예외 처리기 활성화
+        if (Target.Platform == UnrealTargetPlatform.Win64)
+        {
+            // 예외 처리 활성화 (C++ 예외 처리기 활성화)
+            PublicDefinitions.Add("UE_BUILD_EXCEPTIONS=1");
+        }
     }
 }
