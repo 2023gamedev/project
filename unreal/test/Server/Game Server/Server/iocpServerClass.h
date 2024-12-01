@@ -53,6 +53,8 @@ using PLAYER_INFO = struct Client_INFO {
 	Packet packet_buff[MAX_BUF_SIZE];
 	bool isInGame;
 	int pingcnt = 0;
+	bool send_zombie = false;
+	bool send_item = false;
 	
 	// 전송 대기열 추가
 	Concurrency::concurrent_queue<std::string> sendQueue;  // 전송할 데이터를 담는 대기열

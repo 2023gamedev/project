@@ -172,3 +172,8 @@ message game_clear {
     string best_kill_player = 7;
     uint32 best_killcount = 8;
 }
+
+message send_complete{
+    uint32 packet_type = 1;
+    uint32 complete_type = 2;
+}

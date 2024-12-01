@@ -108,6 +108,9 @@ extern patrol_hitDefaultTypeInternal _patrol_hit_default_instance_;
 class ping;
 struct pingDefaultTypeInternal;
 extern pingDefaultTypeInternal _ping_default_instance_;
+class send_complete;
+struct send_completeDefaultTypeInternal;
+extern send_completeDefaultTypeInternal _send_complete_default_instance_;
 class set_car;
 struct set_carDefaultTypeInternal;
 extern set_carDefaultTypeInternal _set_car_default_instance_;
@@ -137,6 +140,7 @@ template<> ::Protocol::get_key* Arena::CreateMaybeMessage<::Protocol::get_key>(A
 template<> ::Protocol::jump* Arena::CreateMaybeMessage<::Protocol::jump>(Arena*);
 template<> ::Protocol::patrol_hit* Arena::CreateMaybeMessage<::Protocol::patrol_hit>(Arena*);
 template<> ::Protocol::ping* Arena::CreateMaybeMessage<::Protocol::ping>(Arena*);
+template<> ::Protocol::send_complete* Arena::CreateMaybeMessage<::Protocol::send_complete>(Arena*);
 template<> ::Protocol::set_car* Arena::CreateMaybeMessage<::Protocol::set_car>(Arena*);
 template<> ::Protocol::set_item* Arena::CreateMaybeMessage<::Protocol::set_item>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -4538,6 +4542,165 @@ class game_clear final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Gstruct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class send_complete final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.send_complete) */ {
+ public:
+  inline send_complete() : send_complete(nullptr) {}
+  ~send_complete() override;
+  explicit PROTOBUF_CONSTEXPR send_complete(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  send_complete(const send_complete& from);
+  send_complete(send_complete&& from) noexcept
+    : send_complete() {
+    *this = ::std::move(from);
+  }
+
+  inline send_complete& operator=(const send_complete& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline send_complete& operator=(send_complete&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const send_complete& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const send_complete* internal_default_instance() {
+    return reinterpret_cast<const send_complete*>(
+               &_send_complete_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    23;
+
+  friend void swap(send_complete& a, send_complete& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(send_complete* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(send_complete* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  send_complete* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<send_complete>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const send_complete& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const send_complete& from) {
+    send_complete::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(send_complete* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.send_complete";
+  }
+  protected:
+  explicit send_complete(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPacketTypeFieldNumber = 1,
+    kCompleteTypeFieldNumber = 2,
+  };
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // uint32 complete_type = 2;
+  void clear_complete_type();
+  uint32_t complete_type() const;
+  void set_complete_type(uint32_t value);
+  private:
+  uint32_t _internal_complete_type() const;
+  void _internal_set_complete_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.send_complete)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t packet_type_;
+    uint32_t complete_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
 // ===================================================================
 
 
@@ -7347,9 +7510,55 @@ inline void game_clear::set_best_killcount(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.game_clear.best_killcount)
 }
 
+// -------------------------------------------------------------------
+
+// send_complete
+
+// uint32 packet_type = 1;
+inline void send_complete::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t send_complete::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t send_complete::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.send_complete.packet_type)
+  return _internal_packet_type();
+}
+inline void send_complete::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void send_complete::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.send_complete.packet_type)
+}
+
+// uint32 complete_type = 2;
+inline void send_complete::clear_complete_type() {
+  _impl_.complete_type_ = 0u;
+}
+inline uint32_t send_complete::_internal_complete_type() const {
+  return _impl_.complete_type_;
+}
+inline uint32_t send_complete::complete_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.send_complete.complete_type)
+  return _internal_complete_type();
+}
+inline void send_complete::_internal_set_complete_type(uint32_t value) {
+  
+  _impl_.complete_type_ = value;
+}
+inline void send_complete::set_complete_type(uint32_t value) {
+  _internal_set_complete_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.send_complete.complete_type)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

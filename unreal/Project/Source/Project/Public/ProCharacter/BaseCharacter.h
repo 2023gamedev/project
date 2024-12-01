@@ -183,8 +183,18 @@ public:
 	// 텍스트를 화면에 표시하는 함수
 	void ShowActionText(FText Text, const FSlateColor& Color, float DisplayTime = 5); // fadeout이 5초
 
+	// 텍스트를 화면에 표시하는 함수(DEATH)
+	void ShowDeathActionText(FText Text, const FSlateColor& Color, float DisplayTime = 5);
+
 	void ShowMissionText(FText Text, const FSlateColor& Color, int TextNumber);
 
+
+
+	FTimerHandle CarKeyFindHandle;
+	void CarKeyFindUpdateUI();
+
+	FTimerHandle RoofKeyFindHandle;
+	void RoofKeyFindUpdateUI();
 
 	void OnPickUPUISlot();
 
@@ -197,9 +207,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UCircularPB_UI* CircularPB_Widget;
-
-
-
 
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
