@@ -183,6 +183,9 @@ public:
 	// 텍스트를 화면에 표시하는 함수
 	void ShowActionText(FText Text, const FSlateColor& Color, float DisplayTime = 5); // fadeout이 5초
 
+	// 텍스트를 화면에 표시하는 함수(DEATH)
+	void ShowDeathActionText(FText Text, const FSlateColor& Color, float DisplayTime = 5);
+
 	void ShowMissionText(FText Text, const FSlateColor& Color, int TextNumber);
 
 

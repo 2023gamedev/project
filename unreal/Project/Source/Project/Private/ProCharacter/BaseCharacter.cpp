@@ -617,6 +617,9 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		m_bBleeding = RandomBleeding();
 
 		if (m_bBleeding) {
+			FText KText = FText::FromString(TEXT("출혈!"));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+			ConditionUIWidget->BloodImageVisible(ESlateVisibility::Visible);
 			StartBleedingTimer();
 		}
 	}
@@ -636,7 +639,7 @@ void ABaseCharacter::PlayDead()
 	}
 
 	FText KText = FText::FromString(TEXT("당신은 죽었습니다."));
-	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+	ShowDeathActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 	
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
@@ -1191,20 +1194,29 @@ void ABaseCharacter::ShowActionText(FText Text, const FSlateColor& Color, float 
 			// 텍스트 보이기
 			TextMissionUIWidget->SetVisibility(ESlateVisibility::Visible);
 
-
 			Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutAnimation();
 
-			//// 일정 시간이 지나면 숨기기 위한 타이머 설정
-			//FTimerHandle TimerHandle;
-			//GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]() {
-			//	if (TextMissionUIWidget)
-			//	{
-			//		TextMissionUIWidget->SetVisibility(ESlateVisibility::Collapsed);
-			//	}
-			//	}, DisplayTime, false);
 		}
 	}
+}
 
+void ABaseCharacter::ShowDeathActionText(FText Text, const FSlateColor& Color, float DisplayTime)
+{
+	if (TextMissionUIWidget)
+	{
+		// 텍스트 위젯을 찾고 설정 (이름이 ActionText인 TextBlock 위젯을 찾음)
+		UTextBlock* ActionTextBlock = Cast<UTextBlock>(TextMissionUIWidget->GetWidgetFromName("ActionText"));
+		if (ActionTextBlock)
+		{
+			// 텍스트 설정
+			ActionTextBlock->SetText(Text);
+			ActionTextBlock->SetColorAndOpacity(Color);
+			ActionTextBlock->SetRenderOpacity(1.f);
+
+			// 텍스트 보이기
+			TextMissionUIWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
 }
 
 void ABaseCharacter::ShowMissionText(FText Text, const FSlateColor& Color, int TextNumber)
@@ -1489,15 +1501,43 @@ void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interr
 		return;
 	}
 
-	m_DBleedingHealingEnd.AddLambda([this]() -> void {
-		m_bIsBleedHealing = false;
+	//m_DBleedingHealingEnd.AddLambda([this]() -> void {
+	//	m_bIsBleedHealing = false;
 
-		if (CurrentBleedingHealingItem != nullptr) {
-			m_bBleeding = RandomBleedHealing(CurrentBleedingHealingItem->m_fHealingSuccessProbability);
+	//	if (CurrentBleedingHealingItem != nullptr) {
+	//		m_bBleeding = RandomBleedHealing(CurrentBleedingHealingItem->m_fHealingSuccessProbability);
+
+	//		if (m_bBleeding) {
+	//			FText KText = FText::FromString(TEXT("지혈에 실패했습니다."));
+	//			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+	//		}
+	//		else {
+	//			FText KText = FText::FromString(TEXT("지혈에 성공하였습니다."));
+	//			ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 5.f);
+	//			ConditionUIWidget->BloodImageVisible(ESlateVisibility::Hidden);
+	//		}
+	//	}
+
+	//	UpdateBHealingSlot();
+	//	});
+
+	m_bIsBleedHealing = false;
+
+	if (CurrentBleedingHealingItem != nullptr) {
+		m_bBleeding = RandomBleedHealing(CurrentBleedingHealingItem->m_fHealingSuccessProbability);
+
+		if (m_bBleeding) {
+			FText KText = FText::FromString(TEXT("지혈에 실패했습니다."));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 		}
+		else {
+			FText KText = FText::FromString(TEXT("지혈에 성공하였습니다."));
+			ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 5.f);
+			ConditionUIWidget->BloodImageVisible(ESlateVisibility::Hidden);
+		}
+	}
 
-		UpdateBHealingSlot();
-		});
+	UpdateBHealingSlot();
 }
 
 

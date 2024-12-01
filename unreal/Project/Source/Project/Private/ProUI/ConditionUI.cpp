@@ -4,6 +4,7 @@
 #include "ProUI/ConditionUI.h"
 #include "ProUI/HPBar.h"
 #include "ProUI/StaminaBar.h"
+#include "Components/Image.h"
 #include "ProUI/HealingPB.h"
 
 UConditionUI::UConditionUI(const FObjectInitializer& ObjectInitializer)
@@ -18,8 +19,21 @@ void UConditionUI::UpdateBar()
 	HealingPB->UpdateHealingPB(Character->GetHealing());
 }
 
+void UConditionUI::BloodImageVisible(ESlateVisibility visibillity)
+{
+	BloodImg->SetVisibility(visibillity);
+}
+
 void UConditionUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	UTexture2D* LoadedTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/bloodicon.bloodicon"));
+	if (LoadedTexture) {
+
+		FSlateBrush Brush;
+		Brush.SetResourceObject(LoadedTexture);   
+		BloodImg->SetBrush(Brush);     
+		BloodImg->SetVisibility(ESlateVisibility::Hidden);
+	}
 }

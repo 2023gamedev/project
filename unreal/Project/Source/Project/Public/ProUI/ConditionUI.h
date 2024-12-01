@@ -13,6 +13,7 @@
 class UHPBar;
 class UStaminaBar;
 class UHealingPB;
+class UImage;
 
 // Player 캐릭터의 컨디션을 나타내는 Class
 
@@ -33,6 +34,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UStaminaBar* StaminaBar;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UImage* BloodImg;
+
     void UpdateBar();
+    void BloodImageVisible(ESlateVisibility visibillity);
     virtual void NativeConstruct() override;
 };
