@@ -360,6 +360,9 @@ public:
 
 	bool b_allready = false;
 
+	bool recv_zombiepacket = false;
+	bool recv_itempacket = false;
+
 
 
 private:

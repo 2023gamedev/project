@@ -334,12 +334,26 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::ZombieDataList zombieDataList;
 				if (zombieDataList.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					for (const auto& zombie : zombieDataList.zombies())
-					{
-						FVector NewLocation(zombie.x(), zombie.y(), zombie.z());
-						FRotator NewRotation(zombie.pitch(), zombie.yaw(), zombie.roll());
-						Q_zombie.push(ZombieData(zombie.zombieid(), NewLocation, NewRotation, zombie.zombietype()));
-						UE_LOG(LogNet, Display, TEXT("ZombieSpawnData recv: %d, playerid = %d"), zombie.zombieid(), MyPlayerId);
+					if (!recv_zombiepacket) {
+
+						recv_zombiepacket = true;
+
+						for (const auto& zombie : zombieDataList.zombies())
+						{
+							FVector NewLocation(zombie.x(), zombie.y(), zombie.z());
+							FRotator NewRotation(zombie.pitch(), zombie.yaw(), zombie.roll());
+							Q_zombie.push(ZombieData(zombie.zombieid(), NewLocation, NewRotation, zombie.zombietype()));
+							UE_LOG(LogNet, Display, TEXT("ZombieSpawnData recv: %d, playerid = %d"), zombie.zombieid(), MyPlayerId);
+						}
+
+						Protocol::send_complete completepacket;
+						completepacket.set_packet_type(21);
+						completepacket.set_complete_type(1);
+
+						std::string serializedData;
+						completepacket.SerializeToString(&serializedData);
+						Send(serializedData.size(), (void*)serializedData.data());
+
 					}
 				}
 				break;
@@ -407,10 +421,23 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::ItemDataList itemdatalist;
 				if (itemdatalist.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					for (const auto& item : itemdatalist.items()) {
-						Q_setitem.push(Set_Item(item.itemid(), item.itemname(), item.itemclass(), item.texture_path(),
-							item.count(), item.floor(), FVector(item.posx(), item.posy(), item.posz())));
-						//UE_LOG(LogNet, Display, TEXT("Set Itempacket"));
+					if (!recv_itempacket) {
+						recv_itempacket = true;
+
+						for (const auto& item : itemdatalist.items()) {
+							Q_setitem.push(Set_Item(item.itemid(), item.itemname(), item.itemclass(), item.texture_path(),
+								item.count(), item.floor(), FVector(item.posx(), item.posy(), item.posz())));
+							//UE_LOG(LogNet, Display, TEXT("Set Itempacket"));
+						}
+
+					
+						Protocol::send_complete completepacket;
+						completepacket.set_packet_type(21);
+						completepacket.set_complete_type(2);
+
+						std::string serializedData;
+						completepacket.SerializeToString(&serializedData);
+						Send(serializedData.size(), (void*)serializedData.data());
 					}
 				}
 				break;

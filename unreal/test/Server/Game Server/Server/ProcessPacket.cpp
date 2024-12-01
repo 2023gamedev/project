@@ -30,10 +30,16 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     if ((tempPacket.playerid() == id || tempPacket.isingame()) && !clientInfo->isInGame) {
         clientInfo->isInGame = true;
         b_Timer = true;
-        zombieclass->SendZombieData(id);
-        itemclass->SendItemData(id);
         itemclass->SendCarData(id);
         //printf("SendDatas!! Playerid=#%d\n", id);
+    }
+
+    if (!clientInfo->send_zombie) {
+        zombieclass->SendZombieData(id);
+    }
+
+    if (!clientInfo->send_item) {
+        itemclass->SendItemData(id);
     }
 
     // 패킷의 타입을 확인하여 처리
@@ -461,6 +467,22 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
+        return true;
+    }
+
+    case 21:
+    {
+        printf("\n[ No. %3u ] recv send complet packet !!\n", id);
+        Protocol::send_complete Packet;
+        Packet.ParseFromArray(buffer, bufferSize);
+
+        if (Packet.complete_type() == 1) {
+            clientInfo->send_zombie = true;
+        }
+        else if (Packet.complete_type() == 2) {
+            clientInfo->send_item = true;
+        }
+
         return true;
     }
 
