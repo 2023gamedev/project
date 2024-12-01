@@ -510,9 +510,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 	}
 
 
-
-
-
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
 	if (!GetVelocity().Size()) {

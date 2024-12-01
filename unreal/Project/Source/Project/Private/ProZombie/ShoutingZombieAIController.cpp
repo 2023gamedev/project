@@ -41,6 +41,10 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	if (OwnerZombie) {
 		zomlocation = OwnerZombie->GetActorLocation();
 	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), ZombieId);	// 이미 앞에서 검사해서 의미 없긴하지만
+		return;
+	}
 
 	std::tuple<float, float, float> target = OwnerZombie->NextPath[indx];
 
@@ -157,6 +161,19 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 		zombieDest.Y = Char->GetActorLocation().Y;
 		zombieDest.Z = Char->GetActorLocation().Z;
 	}
+	// 좀비가 샤우팅 중일때 => 플레이어 쪽으로 시선 돌리기
+	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->ShoutingMontage) == true) {
+		// 해당 플레이어 쪽으로 회전시키기
+		if (LastSeenPlayer) {
+			zombieDest.X = LastSeenPlayer->GetActorLocation().X;
+			zombieDest.Y = LastSeenPlayer->GetActorLocation().Y;
+			zombieDest.Z = LastSeenPlayer->GetActorLocation().Z;
+		}
+		else {
+			UE_LOG(LogTemp, Error, TEXT("Zombie #%d's LastSeenPlayer is nullptr!"), ZombieId);	
+			return;
+		}
+	}
 	// 아니면 이동 중이므로
 	else {
 		// 다음 행선지 쪽으로 회전시키기
@@ -212,7 +229,11 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->BeAttackedMontage) == true) { return; }
 
 	// 좀비가 샤우팅 중일때 => 잠시 멈춤
-	else if (OwnerZombie->m_bIsShouting) { return; }
+	else if (OwnerZombie->m_bIsShouting) { 
+		int dummy = 0;
+		ZombieTurn(DeltaTime, dummy);
+		return; 
+	}
 
 	int indx = 0;
 	ZombieMoveTo(DeltaTime, indx);
