@@ -66,11 +66,17 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
-		if (deltasecond > 0.3) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
+		idleDuration += deltasecond;
+
+		if (idleDuration >= 0.3f) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
 			OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	//애니메이션 정지
 		}
 		return;
 	}
+	else {
+		idleDuration = 0;	// 다시 초기화
+	}
+
 
 	// 타겟 방향 계산
 	float dx = PathX - zomlocation.X;

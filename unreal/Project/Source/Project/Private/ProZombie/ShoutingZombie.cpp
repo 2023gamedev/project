@@ -49,10 +49,10 @@ void AShoutingZombie::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto CharactorAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr != CharactorAnimInstance) {
-		CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-	}
+	//auto CharactorAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	//if (nullptr != CharactorAnimInstance) {
+	//	CharactorAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
+	//}
 }
 
 

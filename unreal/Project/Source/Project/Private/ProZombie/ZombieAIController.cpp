@@ -42,6 +42,10 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	if (OwnerZombie) {
 		zomlocation = OwnerZombie->GetActorLocation();
 	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), ZombieId);	// 이미 앞에서 검사해서 의미 없긴하지만
+		return;
+	}
 	
 	std::tuple<float,float,float> target = OwnerZombie->NextPath[indx];
 	
@@ -63,11 +67,17 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
-		if (deltasecond > 0.3) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
+		idleDuration += deltasecond;
+
+		if (idleDuration >= 0.3f) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
 			OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	//애니메이션 정지
 		}
 		return;
 	}
+	else {
+		idleDuration = 0;	// 다시 초기화
+	}
+
 	
 	// 타겟 방향 계산
 	float dx = PathX - zomlocation.X;

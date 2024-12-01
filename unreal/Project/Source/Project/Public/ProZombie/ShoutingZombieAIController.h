@@ -91,4 +91,6 @@ public:
 	int attackPlayerID;
 
 	float PreviousHp = 0.f;
+
+	float idleDuration = 0.f;
 };
