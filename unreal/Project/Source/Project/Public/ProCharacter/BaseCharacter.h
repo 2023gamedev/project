@@ -186,6 +186,13 @@ public:
 	void ShowMissionText(FText Text, const FSlateColor& Color, int TextNumber);
 
 
+
+	FTimerHandle CarKeyFindHandle;
+	void CarKeyFindUpdateUI();
+
+	FTimerHandle RoofKeyFindHandle;
+	void RoofKeyFindUpdateUI();
+
 	void OnPickUPUISlot();
 
 	FTimerHandle PickUpUIHandle;
@@ -197,9 +204,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UCircularPB_UI* CircularPB_Widget;
-
-
-
 
 	UFUNCTION()
 	void AttackMontageEnded(UAnimMontage* Montage, bool interrup);
