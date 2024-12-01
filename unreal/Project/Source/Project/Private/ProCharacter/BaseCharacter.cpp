@@ -259,7 +259,7 @@ void ABaseCharacter::BeginPlay()
 
 
 		// 시작시 오른쪽 MissionText
-		FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하라"));
+		FText KMissionText1 = FText::FromString(TEXT("옥상열쇠 구하기"));
 		ShowMissionText(KMissionText1, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 1);
 
 		FText KMissionText2 = FText::FromString(TEXT("- 옥상열쇠1을 구하라"));
@@ -268,7 +268,7 @@ void ABaseCharacter::BeginPlay()
 		FText KMissionText3 = FText::FromString(TEXT("- 옥상열쇠2를 구하라"));
 		ShowMissionText(KMissionText3, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 3);
 
-		FText KMissionText4 = FText::FromString(TEXT("지하로 탈출하라"));
+		FText KMissionText4 = FText::FromString(TEXT("차키 구하기"));
 		ShowMissionText(KMissionText4, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 4);
 
 		FText KMissionText5 = FText::FromString(TEXT("- 차 키를 구하라"));
@@ -776,7 +776,12 @@ void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
 			PlaySoundForPlayer(Sound);
 			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+
+			FText KMissionText5 = FText::FromString(TEXT("- 차 키를 구하라(완료)"));
+			ShowMissionText(KMissionText5, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5);
 			Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT2();
+
+			GetWorld()->GetTimerManager().SetTimer(CarKeyFindHandle, this, &ABaseCharacter::CarKeyFindUpdateUI, 5.f, false);
 		}
 	}
 	else if (keyid == 2 && TextMissionUIWidget->m_iFindRoofKey == 1) {
@@ -784,6 +789,10 @@ void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
 		PlaySoundForPlayer(Sound);
 		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+
+		FText KMissionText2 = FText::FromString(TEXT("- 옥상열쇠1을 구하라(완료)"));
+		ShowMissionText(KMissionText2, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 2);
+
 		Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT1();
 	}
 	else if (keyid == 2 && TextMissionUIWidget->m_iFindRoofKey == 2) {
@@ -791,9 +800,38 @@ void ABaseCharacter::UpdatePickUpKey(uint32 keyid, uint32 playerid)
 		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
 		PlaySoundForPlayer(Sound);
 		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+
+		FText KMissionText3 = FText::FromString(TEXT("- 옥상열쇠2를 구하라(완료)"));
+		ShowMissionText(KMissionText3, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 3);
 		Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutMT11();
+
+		GetWorld()->GetTimerManager().SetTimer(RoofKeyFindHandle, this, &ABaseCharacter::RoofKeyFindUpdateUI, 5.f, false);
 	}
 
+}
+
+void ABaseCharacter::CarKeyFindUpdateUI()
+{
+	FText KText = FText::FromString(TEXT("지하로 탈출하라."));
+	USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
+	PlaySoundForPlayer(Sound);
+	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+
+	FText KMissionText4 = FText::FromString(TEXT("지하로 탈출하기"));
+	ShowMissionText(KMissionText4, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 4);
+}
+
+void ABaseCharacter::RoofKeyFindUpdateUI()
+{
+	FText KText = FText::FromString(TEXT("옥상으로 탈출하라."));
+	USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
+	PlaySoundForPlayer(Sound);
+	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+
+
+	// 시작시 오른쪽 MissionText
+	FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하기"));
+	ShowMissionText(KMissionText1, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 1);
 }
 
 void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead_players, const FString& open_player, uint32 my_kill_count, uint32 best_kill_count, const FString& best_kill_player)
@@ -1201,6 +1239,8 @@ void ABaseCharacter::ShowMissionText(FText Text, const FSlateColor& Color, int T
 		}
 	}
 }
+
+
 
 void ABaseCharacter::OnPickUPUISlot()
 {
