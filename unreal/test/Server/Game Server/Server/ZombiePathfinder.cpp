@@ -7,7 +7,7 @@
 void ZombiePathfinder::Run(vector<tuple<float, float, float>>& t, int patroltype)
 {
     SetPatrolType(patroltype);
-    //DetermineFloor();
+    DetermineFloor();
 
 
     FindPath(t);

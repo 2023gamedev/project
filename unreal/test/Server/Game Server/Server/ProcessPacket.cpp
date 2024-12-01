@@ -331,7 +331,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         auto it = g_players.find(Packet.playerid());
 
-        if (it != g_players.end())
+        if (it != g_players.end() && it->second != nullptr)
         {
             PLAYER_INFO* player = it->second;
             player->pingcnt = 0; // 클라이언트가 응답했으므로 pingcnt 초기화

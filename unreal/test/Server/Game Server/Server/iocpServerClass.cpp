@@ -541,6 +541,19 @@ void IOCP_CORE::Zombie_BT_Initialize()
 	//==========================
 }
 
+// ostream 연산자 오버로딩 - FLOOR cout 출력용
+std::ostream& operator<<(std::ostream& os, FLOOR floor) {
+	switch (floor) {
+	case FLOOR::FLOOR_B2:       os << "B2"; break;
+	case FLOOR::FLOOR_B1:       os << "B1"; break;
+	case FLOOR::FLOOR_F1:       os << "F1"; break;
+	case FLOOR::FLOOR_F2:       os << "F2"; break;
+	case FLOOR::FLOOR_F3:       os << "F3"; break;
+	default:                    os << "Unknown FLOOR"; break;
+	}
+	return os;
+}
+
 void IOCP_CORE::ServerOn()
 {
 	cout << endl;
@@ -565,7 +578,7 @@ void IOCP_CORE::ServerOn()
 		float z_z = zom->ZombieData.z;
 
 		cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 시작 위치: ( "
-			<< std::setw(8) << z_x << ", " << std::setw(8) << z_y << ", " << std::setw(8) << z_z << " ) , HP: " << zom->GetHP() << endl;
+			<< std::setw(8) << z_x << ", " << std::setw(8) << z_y << ", " << std::setw(8) << z_z << " ) , HP: " << zom->GetHP() << " , floor: "  << zom->z_floor << endl;
 	}
 
 	cout << endl;
@@ -573,18 +586,6 @@ void IOCP_CORE::ServerOn()
 	bServerOn = true;
 }
 
-// ostream 연산자 오버로딩 - FLOOR cout 출력용
-std::ostream& operator<<(std::ostream& os, FLOOR floor) {
-	switch (floor) {
-	case FLOOR::FLOOR_B2:       os << "B2"; break;
-	case FLOOR::FLOOR_B1:       os << "B1"; break;
-	case FLOOR::FLOOR_F1:       os << "F1"; break;
-	case FLOOR::FLOOR_F2:       os << "F2"; break;
-	case FLOOR::FLOOR_F3:       os << "F3"; break;
-	default:                    os << "Unknown FLOOR"; break;
-	}
-	return os;
-}
 
 void IOCP_CORE::Zombie_BT_Thread()
 {
@@ -610,13 +611,18 @@ void IOCP_CORE::Zombie_BT_Thread()
 		lastBTTime = currentTime;
 
 
-		if (playerDB.size() == 0) {
-			//cout << "연결된 플레이어가 없습니다..." << endl;
+		// BT-송수신 쓰레드간의 데이터 레이스 방지를 위해
+		zombieDB_BT = zombieDB;
+		playerDB_BT = playerDB;
+
+
+		if (playerDB_BT.size() == 0) {
+			//cout << "연결된 플레이어가 없습니다... => (playerDB_BT.size() == 0)" << endl;
 			//cout << endl;
 			result = "NO PLAYER";
 		}
 		else {
-			//for (auto player : playerDB) {
+			//for (auto player : playerDB_BT) {
 			//	float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
 			//	cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 			//	//cout << endl;
@@ -624,12 +630,20 @@ void IOCP_CORE::Zombie_BT_Thread()
 			//cout << endl;
 
 			result = "HAS PLAYER";
-		}
-		
 
-		// BT-송수신 쓰레드간의 데이터 레이스 방지를 위해
-		zombieDB_BT = zombieDB;
-		playerDB_BT = playerDB;
+
+			// 접속이 끊긴 것도 한 번 더 검사
+			if (g_players.size() == 0) {
+				cout << "연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
+				cout << endl;
+				break;			// 완전히 BT 쓰레드 종료시킴
+				result = "NO PLAYER";
+			}
+			else {
+				result = "HAS PLAYER";
+			}
+		}
+
 
 		// 좀비가 있을때 BT 실행
 		for (auto& zom : zombieDB_BT) {
@@ -640,14 +654,14 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 
 			cout << endl;
-			cout << "========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
+			cout << "//========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
 			cout << endl;
 
 
 			// 좀비가 사망시 BT 중지
 			if (zom->zombieHP <= 0.f) {
 				cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 사망함." << endl << endl;
-				cout << "========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료==========" << endl;
+				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
 				cout << endl;
 				continue;
 			}
@@ -655,24 +669,26 @@ void IOCP_CORE::Zombie_BT_Thread()
 			// 좀비가 대기상태라면 해당 좀비 BT 잠시 대기
 			if (zom->HaveToWait == true) {
 				zom->Wait();
-				cout << "========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료==========" << endl;
+				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
 				cout << endl;
 				continue;
 			}
 
 			// 좀비가 플레이어들이 없는 층에 있다면 좀비 BT 실행 멈추고 있기
 			bool same_floor = false;
-			cout << "좀비 #" << zom->ZombieData.zombieID << " 의 floor: " << zom->pathfinder.floor << endl;
+			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 floor: " << zom->z_floor << endl;
 			for (auto player : playerDB_BT) {
-				cout << "플레이어 #" << player.first << " 의 floor: " << player.second.floor << endl;
-				if (zom->pathfinder.floor == player.second.floor) {	
+				//cout << "플레이어 #" << player.first << " 의 floor: " << player.second.floor << endl;
+				if (zom->z_floor == player.second.floor) {	
 					same_floor = true;
+					//cout << endl;
 					break;
 				}
 			}
 			if (same_floor == false) {
+				//cout << endl;
 				cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 플레이어들이 없는 층에 존재. -> BT 실행 잠시 중지" << endl << endl;
-				cout << "========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료==========" << endl;
+				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
 				cout << endl;
 				continue;
 			}
@@ -744,7 +760,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 			//cout << endl;
 
 
-		cout << "========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료==========" << endl;
+		cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
 		cout << endl;
 		}
 
@@ -869,8 +885,12 @@ void IOCP_CORE::SendPingToClients()
 	std::string serializedData;
 	pingpacket.SerializeToString(&serializedData);
 
-	for (auto it = g_players.begin(); it != g_players.end(); )
+	for (auto it = g_players.begin(); it != g_players.end();)
 	{
+		// 유효성 검사
+		if (it->second == nullptr)
+			continue;
+
 		PLAYER_INFO* player = it->second;
 
 		if (player->connected)

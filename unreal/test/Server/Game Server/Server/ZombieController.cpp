@@ -87,7 +87,7 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     new_zombie_data.patrolrange = patrolRange;
 
     //좀비 초기 위치
-    vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
+    //vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
 
     //좀비 인스턴스 생성
     Zombie* new_zombie;

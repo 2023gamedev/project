@@ -51,6 +51,8 @@ Zombie::Zombie()
 
 	HaveToWait = false;
 
+	DetermineFloor(ZombieData.z);
+
 	//speed = 0.f;
 
 	targetType = Zombie::TARGET::NULL_TARGET;
@@ -66,6 +68,8 @@ Zombie::Zombie(Zombie_Data z_d)
 	SetSpeed(0);
 
 	path = vector<tuple<float, float, float>>{};
+
+	beforepath = vector<tuple<float, float, float>>{};
 
 	ZombieData = z_d;
 
@@ -95,6 +99,8 @@ Zombie::Zombie(Zombie_Data z_d)
 
 	HaveToWait = false;
 
+	DetermineFloor(ZombieData.z);
+
 	//speed = 0.f;
 
 	targetType = Zombie::TARGET::PATROL;
@@ -108,6 +114,32 @@ Zombie::~Zombie()
 	// -> 그래서 여기서 만약 new 할당된 메모리 delete 하려하면 할당된 메모리도 없는데 지울려 해서 에러 (지금은 다 없애서 없긴하지만... 미리 소멸자가 여러번 불리는 건 마찬가지)
 	// -> 이유는 모르겠음 그냥
 	// + 혹시 전방 선언해서?? / 복사 생성되서?? / 암시적 삭제??
+}
+
+void Zombie::DetermineFloor(float startZ)
+{
+	//cout << "좀비 시작 위치 - z 좌표: " << startZ << endl;
+
+	if (startZ < 800.f) {
+		z_floor = FLOOR::FLOOR_B2;
+		//cout << "floor 할당: B2" << endl;
+	}
+	else if (startZ < 1800.f) {
+		z_floor = FLOOR::FLOOR_B1;
+		//cout << "floor 할당: B1" << endl;
+	}
+	else if (startZ < 2500.f) {
+		z_floor = FLOOR::FLOOR_F1;
+		//cout << "floor 할당: F1" << endl;
+	}
+	else if (startZ < 3600.f) {
+		z_floor = FLOOR::FLOOR_F2;
+		//cout << "floor 할당: F2" << endl;
+	}
+	else {
+		z_floor = FLOOR::FLOOR_F3;
+		//cout << "floor 할당: F3" << endl;
+	}
 }
 
 // distanceType = 1: Detect , 2: FootSound / setTpye = 1: Insert(or Update) , 2: Update(no Insert)
@@ -155,7 +187,7 @@ bool Zombie::RandomPatrol()
 	std::random_device rd;
 	std::mt19937 mt(rd());
 
-	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 1500 +-
+	std::uniform_int_distribution<int> dist(-500, 500);		//현 위치에서 반경 1500 +-
 
 	px = ZombieData.x + dist(mt);
 	py = ZombieData.y + dist(mt);
@@ -210,21 +242,20 @@ void Zombie::SetTargetLocation(TARGET t)
 
 	switch (targetType) {
 	case TARGET::PLAYER:
-		cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '플레이어'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '플레이어'" << endl;
 		SearchClosestPlayer(closest_player_pos, 1);
 		if (closest_player_pos.size() != 0) {
 			TargetLocation = closest_player_pos;
 			PrevTargetLocation = TargetLocation;
 		}
-		//cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 		break;
 	case TARGET::SHOUTING:
-		cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '샤우팅'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '샤우팅'" << endl;
 		TargetLocation = ShoutingLocation;
 		UpdatePath();
 		break;
 	case TARGET::FOOTSOUND:
-		cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '발소리'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '발소리'" << endl;
 		SearchClosestPlayer(closest_player_pos, 2);
 		if (closest_player_pos.size() != 0) {
 			TargetLocation = closest_player_pos;
@@ -233,14 +264,14 @@ void Zombie::SetTargetLocation(TARGET t)
 		UpdatePath();
 		break;
 	case TARGET::INVESTIGATED:
-		cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '이전 발견 위치'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '이전 발견 위치'" << endl;
 		if (TargetLocation != PrevTargetLocation && PrevTargetLocation.size() != 0) {	// 타겟위치가 재설정되지 않았다면, -> 반복 UpdatePath 하지 않도록
 			TargetLocation = PrevTargetLocation;
 			UpdatePath();
 		}
 		break;
 	case TARGET::PATROL:
-		cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '랜덤 패트롤'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '랜덤 패트롤'" << endl;
 		int try_cnt = 0;
 		if (RandPatrolSet == false) {
 			while (RandomPatrol() == false) {
@@ -254,6 +285,8 @@ void Zombie::SetTargetLocation(TARGET t)
 		}
 		break;
 	}
+
+	cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 
 	cout << endl;
 }
@@ -528,24 +561,24 @@ void Zombie::ReachFinalDestination()
 		case TARGET::PLAYER:
 			// 사실상 실행될 일 없음
 			// 딱히 뭐 할 것도 없고;;
-			cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '플레이어'" << endl;
+			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '플레이어'" << endl;
 			break;
 		case TARGET::SHOUTING:
 			HeardShouting = false;
-			cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '샤우팅'" << endl;
+			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '샤우팅'" << endl;
 			break;
 		case TARGET::FOOTSOUND:
 			HeardFootSound = false;
-			cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '발소리'" << endl;
+			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '발소리'" << endl;
 			break;
 		case TARGET::INVESTIGATED:
 			KnewPlayerLocation = false;
-			cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '이전 발견 위치'" << endl;
+			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '이전 발견 위치'" << endl;
 			break;
 		case TARGET::PATROL:
 			//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
 			//RandPatrolSet = false;
-			cout << "좀비 #" << ZombieData.zombieID << " 의 타겟: '랜덤 패트롤'" << endl;
+			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '랜덤 패트롤'" << endl;
 			break;
 		}
 
@@ -592,7 +625,7 @@ void Zombie::SendPath()
 
 				//cout << "플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
 			}
-		}
+		}	//=> 이건 왜 정상 작동하고 있던거지?
 
 		// 이렇게 하는게 더 깔끔하지 않나?
 		//for (const auto& player : playerDB_BT) {

@@ -7,9 +7,9 @@
 ShoutingZombie::ShoutingZombie()
 	: Zombie()
 {
-	SetHP(0);
+	//SetHP(0);
 
-	SetSpeed(0);
+	//SetSpeed(0);
 
 	bShouted = false;
 }

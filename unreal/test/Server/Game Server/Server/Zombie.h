@@ -116,6 +116,8 @@ public:
 
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
 
+    FLOOR z_floor;          // 좀비가 스폰 된 층
+
     std::chrono::steady_clock::time_point animStartTime;      // 좀비 애니메이션 시작 시간
 
     TARGET targetType;
@@ -131,6 +133,8 @@ public:
 
     virtual ~Zombie();
 
+
+    void DetermineFloor(float startZ);
 
     void SetDistance(int playerid, int distanceType, int setType);    // distanceType = 1: Detect / 2: FootSound, setTpye = 1: Insert / 2: Update
 

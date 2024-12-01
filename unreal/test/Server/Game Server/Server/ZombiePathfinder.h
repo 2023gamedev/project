@@ -28,10 +28,7 @@ public:
     ZombiePathfinder() = default;
 
     ZombiePathfinder(float startX, float startY, float startZ, float goalX, float goalY, float goalZ)
-        : startX(startX), startY(startY), startZ(startZ), goalX(goalX), goalY(goalY), goalZ(goalZ) 
-    {
-        DetermineFloor();
-    }
+        : startX(startX), startY(startY), startZ(startZ), goalX(goalX), goalY(goalY), goalZ(goalZ) { }
 
     void Run(vector<tuple<float, float, float>>& t, int patroltype);
 
