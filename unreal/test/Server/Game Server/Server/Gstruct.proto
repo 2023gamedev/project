@@ -150,6 +150,12 @@ message destroy_item {
     uint32 playerid = 3;
 }
 
+message drop_item{
+    uint32 packet_type = 1;
+    uint32 itemid = 2;
+    uint32 playerid = 3;
+}
+
 message get_key {
     uint32 packet_type = 1;
     uint32 itemid = 2;

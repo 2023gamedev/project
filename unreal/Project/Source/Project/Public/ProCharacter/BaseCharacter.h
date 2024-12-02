@@ -440,6 +440,8 @@ public:
 	int m_iSetPlayerID = 0;
 
 
+	void LimitSmokingIcon();
+	void SmokingIcon();
 
 	// 스태미나 부분
 	FTimerHandle UseStaminaHandle;

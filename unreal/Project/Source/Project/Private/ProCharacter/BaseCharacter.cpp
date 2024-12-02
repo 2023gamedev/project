@@ -1165,6 +1165,9 @@ void ABaseCharacter::GetItem()
 			PickUpUIWidget->Update();
 			OnPickUPUISlot();
 
+			ItemBoxId = itembox->GetItemBoxId();
+			Send_Destroy(ItemBoxId);
+
 			if (itembox->ItemClassType == EItemClass::KEYITEM) {
 				if (itembox->ItemName.ToString().Contains("Car")) {
 					Send_GetKey(1);
@@ -1173,11 +1176,8 @@ void ABaseCharacter::GetItem()
 					Send_GetKey(2);
 				}
 			}
-
-			ItemBoxId = itembox->GetItemBoxId();
 			PlayerSight->GetHitActor()->Destroy();
 
-			Send_Destroy(ItemBoxId);
 		}
 	}
 
@@ -2500,6 +2500,30 @@ bool ABaseCharacter::RandomBleedHealing(float bhpercent)
 {
 	float RandomValue = FMath::FRand();
 	return RandomValue > bhpercent;
+}
+
+void ABaseCharacter::LimitSmokingIcon()
+{
+	if (PlayerId == 99) {
+		if (ConditionUIWidget) {
+			FText KText = FText::FromString(TEXT("담배가 필요하다.."));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+			ConditionUIWidget->SmokingImageVisible(ESlateVisibility::Visible);
+		}
+	}
+
+}
+
+void ABaseCharacter::SmokingIcon()
+{
+	if (PlayerId == 99) {
+		if (ConditionUIWidget) {
+			FText KText = FText::FromString(TEXT("후.. 살겠군"));
+			ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 5.f);
+			ConditionUIWidget->SmokingImageVisible(ESlateVisibility::Hidden);
+		}
+	}
+
 }
 
 void ABaseCharacter::UseStamina()
