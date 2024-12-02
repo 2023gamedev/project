@@ -174,10 +174,37 @@ void ABaseZombie::Tick(float DeltaTime)
 	}
 
 
+	// 좀비 피격시 클라 동기화
+	if (m_fHP_Prev != m_fHP && GetHP() > 0 && m_bBeAttacked == false && doAction_takeDamage_onTick == true) {
 
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 피격 클라 동기화 작업실행!")));	// 직접 때리는 클라에서는 해당 메세지 보이면 안 됨1
+
+		BeAttacked();
+		m_fHP_Prev = m_fHP;
+
+		BloodFX.Empty();
+
+		FRotator RandRotate;
+
+		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
+
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, 40.f), RandRotate);
+
+		if (NewBloodFX) {
+			NewBloodFX->blood_spawncount = FMath::RandRange(80, 100);
+			NewBloodFX->spawn_flag = true;
+
+			BloodFX.Add(NewBloodFX);
+		}
+	}
 
 	// 좀비 사망처리 클라 동기화 - 애니메이션 재생, 피 이펙트 생성 (데모 발표용 급 가라 코드 - 수정 필요)
 	if (GetHP() <= 0 && m_bIsNormalDead == false) {
+
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 클라 동기화 작업실행!")));
+
 		m_bIsNormalDead = true;
 		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 		if (nullptr != CharacterAnimInstance) {
@@ -194,50 +221,18 @@ void ABaseZombie::Tick(float DeltaTime)
 		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
-		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate); 
-
-		if (NewBloodFX_0) {
-			NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
-			//NewBloodFX_0->blood_spawnloop = true;
-			NewBloodFX_0->spawn_flag = true;
-
-			BloodFX.Add(NewBloodFX_0);
-		}
-
-		ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
-
-		if (NewBloodFX_1) {
-			NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
-			//NewBloodFX_1->blood_spawnloop = true;
-			NewBloodFX_1->spawn_flag = true;
-
-			BloodFX.Add(NewBloodFX_1);
-		}
-
-	}
-
-	// 좀비 피격시 클라 동기화
-	if (m_fHP_Prev != m_fHP && GetHP() > 0 && m_bBeAttacked == false) {
-		BeAttacked();
-		m_fHP_Prev = m_fHP;
-
-		BloodFX.Empty();
-
-		FRotator RandRotate;
-
-		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
-		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
-		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
-
-		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, 40.f), RandRotate);
 
 		if (NewBloodFX) {
-			NewBloodFX->blood_spawncount = FMath::RandRange(80, 100);
+			NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
+			//NewBloodFX->blood_spawnloop = true;
 			NewBloodFX->spawn_flag = true;
 
 			BloodFX.Add(NewBloodFX);
 		}
+
 	}
+
 
 	Super::Tick(DeltaTime);
 
@@ -298,13 +293,18 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 
+	doAction_takeDamage_onTick = false;
+
 	SetHP(GetHP() - Damage);
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+
+	m_fHP_Prev = m_fHP;
 
 	ANormalWeaponActor* Weapon = Cast<ANormalWeaponActor>(DamageCauser);
 
 	if (Weapon == nullptr) {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] TakeDamage - Weapon is nullptr!!! No Damage!")));
+		UE_LOG(LogTemp, Error, TEXT("TakeDamage - Weapon is nullptr!!! No Damage!"));
 		return 0;
 	}
 
@@ -315,22 +315,35 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	BloodFX.Empty();
 
 	if (GetHP() <= 0) {	// 죽을때(절단 될 때)는 피가 더 많이 튀도록 & 절단 된 부분들에서 따로 피 생성되도록
-		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
-		
-		if (NewBloodFX_0) {
-			NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
-			//NewBloodFX_0->blood_spawnloop = true;
+		if (Weapon->WeaponName == "ButchersKnife" || Weapon->WeaponName == "FireAxe" || Weapon->WeaponName == "SashimiKnife") {	// 날붙이 무기
+			ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
 
-			BloodFX.Add(NewBloodFX_0);
+			if (NewBloodFX_0) {
+				NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
+				//NewBloodFX_0->blood_spawnloop = true;
+
+				BloodFX.Add(NewBloodFX_0);
+			}
+
+			ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
+
+			if (NewBloodFX_1) {
+				NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
+				//NewBloodFX_1->blood_spawnloop = true;
+
+				BloodFX.Add(NewBloodFX_1);
+			}
 		}
+		else {	// 그 외 타격무기
+			ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
 
-		ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
-		
-		if (NewBloodFX_1) {
-			NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
-			//NewBloodFX_1->blood_spawnloop = true;
+			if (NewBloodFX) {
+				NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
+				//NewBloodFX->blood_spawnloop = true;
+				NewBloodFX->spawn_flag = true;
 
-			BloodFX.Add(NewBloodFX_1);
+				BloodFX.Add(NewBloodFX);
+			}
 		}
 	}
 	else {
@@ -754,6 +767,8 @@ void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bBeAttacked = false;
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
+
+	doAction_takeDamage_onTick = true;
 
 	//if (BloodFX != NULL) {
 	//	BloodFX->EndPlay(EEndPlayReason::Destroyed);

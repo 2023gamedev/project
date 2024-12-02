@@ -195,6 +195,8 @@ public:
 
 	float m_fHP_Prev = 0.f;
 
+	bool doAction_takeDamage_onTick = true;		// 좀비 피격시 클라 동기화용 (다른 클라가 좀비를 때렸을때)
+
 private:
 
 	UPROPERTY(EditAnywhere)
