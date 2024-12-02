@@ -160,13 +160,15 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 
 		if (result == false) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] ZombieTurn(ToPlayer) - Couldn't find Player ID #%d"), attackPlayerID));
+			UE_LOG(LogTemp, Error, TEXT("[ERROR] ZombieTurn(ToPlayer) #%d - Couldn't find Player ID #%d"), ZombieId, attackPlayerID);
 			return;
 		}
-
-		// 해당 플레이어 쪽으로 회전시키기
-		zombieDest.X = Char->GetActorLocation().X;
-		zombieDest.Y = Char->GetActorLocation().Y;
-		zombieDest.Z = Char->GetActorLocation().Z;
+		else {
+			// 해당 플레이어 쪽으로 회전시키기
+			zombieDest.X = Char->GetActorLocation().X;
+			zombieDest.Y = Char->GetActorLocation().Y;
+			zombieDest.Z = Char->GetActorLocation().Z;
+		}
 	}
 	// 아니면 이동 중이므로
 	else {
