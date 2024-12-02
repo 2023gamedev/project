@@ -1160,6 +1160,9 @@ void ABaseCharacter::GetItem()
 			PickUpUIWidget->Update();
 			OnPickUPUISlot();
 
+			ItemBoxId = itembox->GetItemBoxId();
+			Send_Destroy(ItemBoxId);
+
 			if (itembox->ItemClassType == EItemClass::KEYITEM) {
 				if (itembox->ItemName.ToString().Contains("Car")) {
 					Send_GetKey(1);
@@ -1168,11 +1171,8 @@ void ABaseCharacter::GetItem()
 					Send_GetKey(2);
 				}
 			}
-
-			ItemBoxId = itembox->GetItemBoxId();
 			PlayerSight->GetHitActor()->Destroy();
 
-			Send_Destroy(ItemBoxId);
 		}
 	}
 
