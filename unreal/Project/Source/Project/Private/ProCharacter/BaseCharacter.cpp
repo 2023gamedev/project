@@ -2502,6 +2502,30 @@ bool ABaseCharacter::RandomBleedHealing(float bhpercent)
 	return RandomValue > bhpercent;
 }
 
+void ABaseCharacter::LimitSmokingIcon()
+{
+	if (PlayerId == 99) {
+		if (ConditionUIWidget) {
+			FText KText = FText::FromString(TEXT("담배가 필요하다.."));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+			ConditionUIWidget->SmokingImageVisible(ESlateVisibility::Visible);
+		}
+	}
+
+}
+
+void ABaseCharacter::SmokingIcon()
+{
+	if (PlayerId == 99) {
+		if (ConditionUIWidget) {
+			FText KText = FText::FromString(TEXT("후.. 살겠군"));
+			ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 5.f);
+			ConditionUIWidget->SmokingImageVisible(ESlateVisibility::Hidden);
+		}
+	}
+
+}
+
 void ABaseCharacter::UseStamina()
 {
 	GetWorld()->GetTimerManager().SetTimer(UseStaminaHandle, this, &ABaseCharacter::UseStaminaTimerElapsed, 1.0f, true, 1.0f);

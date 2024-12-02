@@ -24,6 +24,11 @@ void UConditionUI::BloodImageVisible(ESlateVisibility visibillity)
 	BloodImg->SetVisibility(visibillity);
 }
 
+void UConditionUI::SmokingImageVisible(ESlateVisibility visibillity)
+{
+	SmokingImg->SetVisibility(visibillity);
+}
+
 void UConditionUI::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -35,5 +40,14 @@ void UConditionUI::NativeConstruct()
 		Brush.SetResourceObject(LoadedTexture);   
 		BloodImg->SetBrush(Brush);     
 		BloodImg->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	UTexture2D* LoadedSmokingTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/smokingicon.smokingicon"));
+	if (LoadedSmokingTexture) {
+
+		FSlateBrush BrushS;
+		BrushS.SetResourceObject(LoadedSmokingTexture);
+		SmokingImg->SetBrush(BrushS);
+		SmokingImg->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
