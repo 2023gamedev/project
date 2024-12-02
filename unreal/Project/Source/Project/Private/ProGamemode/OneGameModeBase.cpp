@@ -352,7 +352,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
     // 선택된 아이템 박스 클래스로 아이템 박스 생성
     AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itempos, FRotator::ZeroRotator);
 
-    UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
+    //UE_LOG(LogTemp, Error, TEXT("ITEM___111"));
     if (SpawnedItemBox) {
         SpawnedItemBox->ItemName = itemname;
         SpawnedItemBox->ItemClassType = iclass;
@@ -622,7 +622,7 @@ void AOneGameModeBase::UpdatePlayerRun(uint32 PlayerID, bool b_run)
         if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
         {
             BasePlayer->Other_Run(b_run);
-            UE_LOG(LogTemp, Warning, TEXT("real update run: %d, %d"), PlayerID, b_run);
+            //UE_LOG(LogTemp, Warning, TEXT("real update run: %d, %d"), PlayerID, b_run);
 
             return;
         }

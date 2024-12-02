@@ -510,9 +510,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 	}
 
 
-
-
-
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
 	if (!GetVelocity().Size()) {
@@ -593,6 +590,10 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 // 플레이어가 피격 (공격 받았을때)
 float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	if (PlayerId != 99) {
+		return 0;
+	}
+
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 
@@ -612,17 +613,21 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	}
 
 
-
+	
 	if (!m_bBleeding) {
 		m_bBleeding = RandomBleeding();
 
 		if (m_bBleeding) {
-			FText KText = FText::FromString(TEXT("출혈!"));
-			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
-			ConditionUIWidget->BloodImageVisible(ESlateVisibility::Visible);
-			StartBleedingTimer();
+			if (ConditionUIWidget) {
+				FText KText = FText::FromString(TEXT("출혈!"));
+				ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+				ConditionUIWidget->BloodImageVisible(ESlateVisibility::Visible);
+				StartBleedingTimer();
+			}
+
 		}
 	}
+
 
 
 	return Damage;
@@ -2495,6 +2500,30 @@ bool ABaseCharacter::RandomBleedHealing(float bhpercent)
 {
 	float RandomValue = FMath::FRand();
 	return RandomValue > bhpercent;
+}
+
+void ABaseCharacter::LimitSmokingIcon()
+{
+	if (PlayerId == 99) {
+		if (ConditionUIWidget) {
+			FText KText = FText::FromString(TEXT("담배가 필요하다.."));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+			ConditionUIWidget->SmokingImageVisible(ESlateVisibility::Visible);
+		}
+	}
+
+}
+
+void ABaseCharacter::SmokingIcon()
+{
+	if (PlayerId == 99) {
+		if (ConditionUIWidget) {
+			FText KText = FText::FromString(TEXT("후.. 살겠군"));
+			ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 5.f);
+			ConditionUIWidget->SmokingImageVisible(ESlateVisibility::Hidden);
+		}
+	}
+
 }
 
 void ABaseCharacter::UseStamina()

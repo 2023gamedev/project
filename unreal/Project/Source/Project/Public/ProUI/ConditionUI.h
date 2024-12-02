@@ -37,7 +37,11 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UImage* BloodImg;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UImage* SmokingImg;
+
     void UpdateBar();
     void BloodImageVisible(ESlateVisibility visibillity);
+    void SmokingImageVisible(ESlateVisibility visibillity);
     virtual void NativeConstruct() override;
 };

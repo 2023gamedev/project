@@ -43,6 +43,7 @@ void AFireFighterCharacter::SmokeTimer()
 
 void AFireFighterCharacter::LimitSmoking()
 {
+	LimitSmokingIcon();
 	SetSTR(GetSTR() - 2);
 	SetBasicSpeed(GetBasicSpeed() - 1);
 	GetWorld()->GetTimerManager().SetTimer(DyingHandle, this, &AFireFighterCharacter::NoSmokeIsDying, 2.0f, true, 1.0f);
@@ -61,13 +62,14 @@ void AFireFighterCharacter::NoSmokeIsDying()
 		}
 		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 		if (controller != nullptr) {
-			DisableInput(controller); // ÀÌ·¡µµ ¿òÁ÷ÀÓ Á»ºñ Á×¾úÀ»¶§ È¸ÀüÀÌ¶û Ä³¸¯ÅÍ ¿òÁ÷ÀÌ´Â °Å ¼öÁ¤ÇØ¾ß ÇÒµí
+			DisableInput(controller); // ì´ëž˜ë„ ì›€ì§ìž„ ì¢€ë¹„ ì£½ì—ˆì„ë•Œ íšŒì „ì´ëž‘ ìºë¦­í„° ì›€ì§ì´ëŠ” ê±° ìˆ˜ì •í•´ì•¼ í• ë“¯
 		}
 	}
 }
 
 void AFireFighterCharacter::Smoking()
 {
+	SmokingIcon();
 	GetWorld()->GetTimerManager().ClearTimer(SmokeHandle);
 	GetWorld()->GetTimerManager().ClearTimer(DyingHandle);
 	if (GetSTR() < 7) {
