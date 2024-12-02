@@ -65,6 +65,16 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		//	}
 		//}
 
+
+		// 나 자신 플레이어만 검사
+		if (OwnerCharacter) {
+			if (OwnerCharacter->GetPlayerId() != 99) {
+				UE_LOG(LogTemp, Log, TEXT("Not a local player hit the zombie. PlayerId = %d"), OwnerCharacter->GetPlayerId());
+				return;
+			}
+		}
+
+
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
 		
