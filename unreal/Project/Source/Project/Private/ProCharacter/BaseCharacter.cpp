@@ -931,7 +931,10 @@ bool ABaseCharacter::SwapInven(int from, int to)
 
 void ABaseCharacter::SpawnOnGround(int slotindex)
 {
-
+	if (slotindex < 0 || slotindex >= Inventory.Num()) {
+		UE_LOG(LogTemp, Error, TEXT("SpawnOnGround: slotindex(%d) is out of bounds!"), slotindex);
+		return;
+	}
 	auto CurrentInvenSlot = this->Inventory[slotindex];
 	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {
 		if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
