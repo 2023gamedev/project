@@ -369,6 +369,7 @@ PROTOBUF_CONSTEXPR get_key::get_key(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.packet_type_)*/0u
   , /*decltype(_impl_.itemid_)*/0u
+  , /*decltype(_impl_.itemboxid_)*/0u
   , /*decltype(_impl_.playerid_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct get_keyDefaultTypeInternal {
@@ -661,6 +662,7 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::get_key, _impl_.packet_type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::get_key, _impl_.itemid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::get_key, _impl_.itemboxid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::get_key, _impl_.playerid_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::escape, _internal_metadata_),
@@ -717,9 +719,9 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 200, -1, -1, sizeof(::Protocol::destroy_item)},
   { 209, -1, -1, sizeof(::Protocol::drop_item)},
   { 218, -1, -1, sizeof(::Protocol::get_key)},
-  { 227, -1, -1, sizeof(::Protocol::escape)},
-  { 236, -1, -1, sizeof(::Protocol::game_clear)},
-  { 250, -1, -1, sizeof(::Protocol::send_complete)},
+  { 228, -1, -1, sizeof(::Protocol::escape)},
+  { 237, -1, -1, sizeof(::Protocol::game_clear)},
+  { 251, -1, -1, sizeof(::Protocol::send_complete)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -801,21 +803,21 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "r\"E\n\014destroy_item\022\023\n\013packet_type\030\001 \001(\r\022\016"
   "\n\006itemid\030\002 \001(\r\022\020\n\010playerid\030\003 \001(\r\"B\n\tdrop"
   "_item\022\023\n\013packet_type\030\001 \001(\r\022\016\n\006itemid\030\002 \001"
-  "(\r\022\020\n\010playerid\030\003 \001(\r\"@\n\007get_key\022\023\n\013packe"
-  "t_type\030\001 \001(\r\022\016\n\006itemid\030\002 \001(\r\022\020\n\010playerid"
-  "\030\003 \001(\r\"=\n\006escape\022\023\n\013packet_type\030\001 \001(\r\022\020\n"
-  "\010playerid\030\002 \001(\r\022\014\n\004root\030\003 \001(\r\"\271\001\n\ngame_c"
-  "lear\022\023\n\013packet_type\030\001 \001(\r\022\014\n\004root\030\002 \001(\r\022"
-  "\025\n\ralive_players\030\003 \001(\r\022\024\n\014dead_players\030\004"
-  " \001(\r\022\023\n\013open_player\030\005 \001(\t\022\024\n\014my_killcoun"
-  "t\030\006 \001(\r\022\030\n\020best_kill_player\030\007 \001(\t\022\026\n\016bes"
-  "t_killcount\030\010 \001(\r\";\n\rsend_complete\022\023\n\013pa"
-  "cket_type\030\001 \001(\r\022\025\n\rcomplete_type\030\002 \001(\rb\006"
-  "proto3"
+  "(\r\022\020\n\010playerid\030\003 \001(\r\"S\n\007get_key\022\023\n\013packe"
+  "t_type\030\001 \001(\r\022\016\n\006itemid\030\002 \001(\r\022\021\n\titemboxi"
+  "d\030\003 \001(\r\022\020\n\010playerid\030\004 \001(\r\"=\n\006escape\022\023\n\013p"
+  "acket_type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004ro"
+  "ot\030\003 \001(\r\"\271\001\n\ngame_clear\022\023\n\013packet_type\030\001"
+  " \001(\r\022\014\n\004root\030\002 \001(\r\022\025\n\ralive_players\030\003 \001("
+  "\r\022\024\n\014dead_players\030\004 \001(\r\022\023\n\013open_player\030\005"
+  " \001(\t\022\024\n\014my_killcount\030\006 \001(\r\022\030\n\020best_kill_"
+  "player\030\007 \001(\t\022\026\n\016best_killcount\030\010 \001(\r\";\n\r"
+  "send_complete\022\023\n\013packet_type\030\001 \001(\r\022\025\n\rco"
+  "mplete_type\030\002 \001(\rb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 2406, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 2425, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 25,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -7055,6 +7057,7 @@ get_key::get_key(const get_key& from)
   new (&_impl_) Impl_{
       decltype(_impl_.packet_type_){}
     , decltype(_impl_.itemid_){}
+    , decltype(_impl_.itemboxid_){}
     , decltype(_impl_.playerid_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -7072,6 +7075,7 @@ inline void get_key::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.packet_type_){0u}
     , decltype(_impl_.itemid_){0u}
+    , decltype(_impl_.itemboxid_){0u}
     , decltype(_impl_.playerid_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -7128,9 +7132,17 @@ const char* get_key::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
         } else
           goto handle_unusual;
         continue;
-      // uint32 playerid = 3;
+      // uint32 itemboxid = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.itemboxid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 playerid = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           _impl_.playerid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
@@ -7177,10 +7189,16 @@ uint8_t* get_key::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_itemid(), target);
   }
 
-  // uint32 playerid = 3;
+  // uint32 itemboxid = 3;
+  if (this->_internal_itemboxid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_itemboxid(), target);
+  }
+
+  // uint32 playerid = 4;
   if (this->_internal_playerid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_playerid(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_playerid(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -7209,7 +7227,12 @@ size_t get_key::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_itemid());
   }
 
-  // uint32 playerid = 3;
+  // uint32 itemboxid = 3;
+  if (this->_internal_itemboxid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_itemboxid());
+  }
+
+  // uint32 playerid = 4;
   if (this->_internal_playerid() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_playerid());
   }
@@ -7237,6 +7260,9 @@ void get_key::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
   }
   if (from._internal_itemid() != 0) {
     _this->_internal_set_itemid(from._internal_itemid());
+  }
+  if (from._internal_itemboxid() != 0) {
+    _this->_internal_set_itemboxid(from._internal_itemboxid());
   }
   if (from._internal_playerid() != 0) {
     _this->_internal_set_playerid(from._internal_playerid());

@@ -1169,15 +1169,18 @@ void ABaseCharacter::GetItem()
 			OnPickUPUISlot();
 
 			ItemBoxId = itembox->GetItemBoxId();
-			Send_Destroy(ItemBoxId);
 
 			if (itembox->ItemClassType == EItemClass::KEYITEM) {
 				if (itembox->ItemName.ToString().Contains("Car")) {
-					Send_GetKey(1);
+					Send_GetKey(1, ItemBoxId);
 				}
 				else if (itembox->ItemName.ToString().Contains("Roof")) {
-					Send_GetKey(2);
+					Send_GetKey(2, ItemBoxId);
 				}
+			}
+
+			else {
+				Send_Destroy(ItemBoxId);
 			}
 			PlayerSight->GetHitActor()->Destroy();
 
@@ -2978,10 +2981,11 @@ void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
-void ABaseCharacter::Send_GetKey(uint32 itemid)
+void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
 {
 	Protocol::get_key Packet;
 	Packet.set_itemid(itemid);
+	Packet.set_itemboxid(itemboxid);
 	Packet.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
 	Packet.set_packet_type(18);
 

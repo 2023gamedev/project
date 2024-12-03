@@ -4267,7 +4267,8 @@ class get_key final :
   enum : int {
     kPacketTypeFieldNumber = 1,
     kItemidFieldNumber = 2,
-    kPlayeridFieldNumber = 3,
+    kItemboxidFieldNumber = 3,
+    kPlayeridFieldNumber = 4,
   };
   // uint32 packet_type = 1;
   void clear_packet_type();
@@ -4287,7 +4288,16 @@ class get_key final :
   void _internal_set_itemid(uint32_t value);
   public:
 
-  // uint32 playerid = 3;
+  // uint32 itemboxid = 3;
+  void clear_itemboxid();
+  uint32_t itemboxid() const;
+  void set_itemboxid(uint32_t value);
+  private:
+  uint32_t _internal_itemboxid() const;
+  void _internal_set_itemboxid(uint32_t value);
+  public:
+
+  // uint32 playerid = 4;
   void clear_playerid();
   uint32_t playerid() const;
   void set_playerid(uint32_t value);
@@ -4306,6 +4316,7 @@ class get_key final :
   struct Impl_ {
     uint32_t packet_type_;
     uint32_t itemid_;
+    uint32_t itemboxid_;
     uint32_t playerid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -7441,7 +7452,27 @@ inline void get_key::set_itemid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.get_key.itemid)
 }
 
-// uint32 playerid = 3;
+// uint32 itemboxid = 3;
+inline void get_key::clear_itemboxid() {
+  _impl_.itemboxid_ = 0u;
+}
+inline uint32_t get_key::_internal_itemboxid() const {
+  return _impl_.itemboxid_;
+}
+inline uint32_t get_key::itemboxid() const {
+  // @@protoc_insertion_point(field_get:Protocol.get_key.itemboxid)
+  return _internal_itemboxid();
+}
+inline void get_key::_internal_set_itemboxid(uint32_t value) {
+  
+  _impl_.itemboxid_ = value;
+}
+inline void get_key::set_itemboxid(uint32_t value) {
+  _internal_set_itemboxid(value);
+  // @@protoc_insertion_point(field_set:Protocol.get_key.itemboxid)
+}
+
+// uint32 playerid = 4;
 inline void get_key::clear_playerid() {
   _impl_.playerid_ = 0u;
 }
