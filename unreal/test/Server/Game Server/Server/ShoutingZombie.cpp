@@ -29,8 +29,10 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies)
 	if (bShouted == false) {
 		bShouted = true;
 
-		cout << "샤우팅 좀비 #" << ZombieData.zombieID << " 샤우팅!!!" << endl;
+#ifdef	ENABLE_BT_LOG
+		cout << "샤우팅 좀비 '#" << ZombieData.zombieID << "' 샤우팅!!!" << endl;
 		cout << endl;
+#endif
 
 		// 다른 좀비들 샤우팅 소리 포착 체크
 		for (auto& zom : zombies) {

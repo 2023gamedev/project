@@ -24,8 +24,10 @@ public:
         for (const auto& child : sel_children) {
             string result = child->Detect(zom); // 다형성 이용 (함수 오버라이딩)
             if ("Fail" != result) {
+#ifdef	ENABLE_BT_LOG
                 cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
                 cout << endl;
+#endif
                 return result;
             }
         }
@@ -40,8 +42,10 @@ public:
         for (const auto& child : sel_children) {
             string result = child->CanSeePlayer(zom);
             if ("Fail" != result) {
+#ifdef	ENABLE_BT_LOG
                 cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
                 cout << endl;
+#endif
                 return result;
             }
         }

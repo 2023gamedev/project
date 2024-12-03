@@ -242,7 +242,9 @@ void Zombie::SetTargetLocation(TARGET t)
 
 	switch (targetType) {
 	case TARGET::PLAYER:
+#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '플레이어'" << endl;
+#endif
 		SearchClosestPlayer(closest_player_pos, 1);
 		if (closest_player_pos.size() != 0) {
 			TargetLocation = closest_player_pos;
@@ -250,12 +252,16 @@ void Zombie::SetTargetLocation(TARGET t)
 		}
 		break;
 	case TARGET::SHOUTING:
+#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '샤우팅'" << endl;
+#endif
 		TargetLocation = ShoutingLocation;
 		UpdatePath();
 		break;
 	case TARGET::FOOTSOUND:
+#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '발소리'" << endl;
+#endif
 		SearchClosestPlayer(closest_player_pos, 2);
 		if (closest_player_pos.size() != 0) {
 			TargetLocation = closest_player_pos;
@@ -264,14 +270,18 @@ void Zombie::SetTargetLocation(TARGET t)
 		UpdatePath();
 		break;
 	case TARGET::INVESTIGATED:
+#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '이전 발견 위치'" << endl;
+#endif
 		if (TargetLocation != PrevTargetLocation && PrevTargetLocation.size() != 0) {	// 타겟위치가 재설정되지 않았다면, -> 반복 UpdatePath 하지 않도록
 			TargetLocation = PrevTargetLocation;
 			UpdatePath();
 		}
 		break;
 	case TARGET::PATROL:
+#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '랜덤 패트롤'" << endl;
+#endif
 		int try_cnt = 0;
 		if (RandPatrolSet == false) {
 			while (RandomPatrol() == false) {
@@ -279,16 +289,20 @@ void Zombie::SetTargetLocation(TARGET t)
 				//cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 찾기 시도 - #" << try_cnt << endl;
 
 				if (try_cnt >= 5) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
+#ifdef	ENABLE_BT_LOG
 					cout << "좀비 #" << ZombieData.zombieID << "랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...)" << endl;
+#endif
 				}
 			}
 		}
 		break;
 	}
 
+#ifdef	ENABLE_BT_LOG
 	cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
 
 	cout << endl;
+#endif
 }
 
 // distanceType = 1: Detect / 2: FootSound
@@ -361,9 +375,9 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 
 		if (closest_players.size() == 0) {
 			if(distanceType == 1)
-				cout << "DistanceTo_PlayerInSight is empty" << endl;
+				cout << "[Alert] DistanceTo_PlayerInSight is empty -> 가장 가까운 플레이어(좀비시야) 찾을 수 없음" << endl;
 			else if(distanceType == 2)
-				cout << "DistanceTo_FootSound is empty" << endl;
+				cout << "[Alert] DistanceTo_FootSound is empty -> 가장 가까운 플레이어(발소리) 찾을 수 없음" << endl;
 			return;
 		}
 
@@ -375,10 +389,14 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 		ClosestPlayerID = closest_players[dist(mt)];		// 가장 가까운 플레이어 인덱스 저장
 		
 		if (distanceType == 1) {
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 을 따라감!!!" << endl;
+#endif
 		}
 		else if (distanceType == 2) {
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << ClosestPlayerID << " 의 발소리 따라감!!!" << endl;
+#endif
 		}
 
 		// {주의} map 사용 할 때 주의할 점 (playerDB_BT) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 데이터는 없이" 데이터가 새로 추가가 됨!
@@ -387,18 +405,20 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 	else {	// (searchMap.size() == 0)
 		if (distanceType == 1) {
 			// BT에서 타겟을 플레이어로 했는데, DistanceTo_PlayerInsight 맵이 비어 있다면 절대 안됨
-			cout << "DistanceTo_PlayerInsight Map ERROR!!! -> Target is set to Player but DistanceTo_PlayerInsight Map is empty" << endl;
+			cout << "DistanceTo_PlayerInsight Map \"ERROR\"!!! -> Target is set to Player but DistanceTo_PlayerInsight Map is empty" << endl;
 		}
 		else if (distanceType == 2) {
-			cout << "DistanceTo_FootSound Map ERROR!!! -> Target is set to FootSound but DistanceTo_FootSound Map is empty" << endl;
+			cout << "DistanceTo_FootSound Map \"ERROR\"!!! -> Target is set to FootSound but DistanceTo_FootSound Map is empty" << endl;
 		}
 	}
 }
 
 void Zombie::Attack()
 {
+#ifdef	ENABLE_BT_LOG
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << ClosestPlayerID << "\' 을 공격하였습니다!" << endl;
 	cout << endl;
+#endif
 
 	// 어택 통신 패킷 보내기
 
@@ -468,7 +488,9 @@ void Zombie::MoveTo(float deltasecond)
 
 		// 경로의 끝에 도착 = 최종 목표지점에 도착
 		if (ZombiePathIndex >= path.size()) {
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 경로 끝 도착." << endl;
+#endif
 			ReachFinalDestination();
 			ZombiePathIndex = 1;
 		}
@@ -554,35 +576,49 @@ void Zombie::ReachFinalDestination()
 	
 	// 혹시 몰라서 한번 더 체크
 	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
+#ifdef	ENABLE_BT_LOG
 		cout << "좀비 '#" << ZombieData.zombieID << "' 타겟 좌표[최종 목표 지점] ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
-		
+#endif
+
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
 		switch (targetType) {
 		case TARGET::PLAYER:
 			// 사실상 실행될 일 없음
 			// 딱히 뭐 할 것도 없고;;
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '플레이어'" << endl;
+#endif
 			break;
 		case TARGET::SHOUTING:
 			HeardShouting = false;
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '샤우팅'" << endl;
+#endif
 			break;
 		case TARGET::FOOTSOUND:
 			HeardFootSound = false;
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '발소리'" << endl;
+#endif
 			break;
 		case TARGET::INVESTIGATED:
 			KnewPlayerLocation = false;
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '이전 발견 위치'" << endl;
+#endif
 			break;
 		case TARGET::PATROL:
 			//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
 			//RandPatrolSet = false;
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '랜덤 패트롤'" << endl;
+#endif
 			break;
 		}
 
+#ifdef	ENABLE_BT_LOG
 		cout << endl;
+#endif
 	}
 }
 
@@ -703,7 +739,9 @@ void Zombie::Wait()
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
 
+#ifdef ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 가 피격 당하였습니다!" << endl;
+#endif
 
 		if (deltaTime.count() >= ZombieBeAttackedAnimDuration) {
 			IsBeingAttacked = false;
@@ -719,7 +757,9 @@ void Zombie::Wait()
 			SendPath();		
 		}
 		else {
+#ifdef ENABLE_BT_LOG
 			cout << "피격 애니메이션 남은 시간: " << ZombieBeAttackedAnimDuration - deltaTime.count() << "s" << endl;
+#endif
 		}
 	}
 	else if (IsAttacking) {
@@ -727,8 +767,10 @@ void Zombie::Wait()
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
 
+#ifdef ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID  << " 가 공격 중입니다!" << endl;
-		
+#endif
+
 		if (deltaTime.count() >= ZombieAttackAnimDuration) {
 			IsAttacking = false;
 
@@ -742,7 +784,9 @@ void Zombie::Wait()
 			SendPath();
 		}
 		else {
+#ifdef ENABLE_BT_LOG
 			cout << "공격 애니메이션 남은 시간: " << ZombieAttackAnimDuration - deltaTime.count() << "s" << endl;
+#endif
 		}
 	}
 	else if (IsShouting) {	// - 샤우팅 좀비 샤우팅 애니메이션
@@ -750,7 +794,9 @@ void Zombie::Wait()
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
 
+#ifdef ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID  << " 가 샤우팅 중입니다!" << endl;
+#endif
 
 		if (deltaTime.count() >= ZombieShoutingAnimDuration) {
 			IsShouting = false;
@@ -762,9 +808,13 @@ void Zombie::Wait()
 			SendPath();
 		}
 		else {
+#ifdef ENABLE_BT_LOG
 			cout << "샤우팅 애니메이션 남은 시간: " << ZombieShoutingAnimDuration - deltaTime.count() << "s" << endl;
+#endif
 		}
 	}
 
+#ifdef ENABLE_BT_LOG
 	cout << endl;
+#endif
 }
