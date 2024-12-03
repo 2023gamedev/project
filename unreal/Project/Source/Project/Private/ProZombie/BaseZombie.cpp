@@ -203,8 +203,8 @@ void ABaseZombie::Tick(float DeltaTime)
 	// 좀비 사망처리 클라 동기화 - 애니메이션 재생, 피 이펙트 생성 (데모 발표용 급 가라 코드 - 수정 필요)
 	if (GetHP() <= 0 && m_bIsNormalDead == false) {
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 클라 동기화 작업실행!")));
-		UE_LOG(LogTemp, Log, TEXT("좀비 사망 클라 동기화 작업실행!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 클라 동기화 작업실행!")));
+		//UE_LOG(LogTemp, Log, TEXT("좀비 사망 클라 동기화 작업실행!"));
 
 		m_bIsNormalDead = true;
 		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
@@ -364,8 +364,8 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 
 void ABaseZombie::SetNormalDeadWithAnim()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 직접 실행! - normal dead")));
-	UE_LOG(LogTemp, Log, TEXT("좀비 사망 직접 실행! - normal dead"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 직접 실행! - normal dead")));
+	//UE_LOG(LogTemp, Log, TEXT("좀비 사망 직접 실행! - normal dead"));
 
 	m_bIsNormalDead = true;
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
@@ -588,8 +588,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 void ABaseZombie::SetCuttingDeadWithAnim()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 직접 실행! - cut dead")));
-	UE_LOG(LogTemp, Log, TEXT("좀비 사망 클라 직접 실행! - cut dead"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 직접 실행! - cut dead")));
+	//UE_LOG(LogTemp, Log, TEXT("좀비 사망 클라 직접 실행! - cut dead"));
 
 	m_bIsCuttingDead = true;
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
