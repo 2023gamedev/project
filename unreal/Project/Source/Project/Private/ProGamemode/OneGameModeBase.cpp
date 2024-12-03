@@ -373,7 +373,9 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
             DefaultPawn = *ActorItr;
             if (DefaultPawn) {
-                break;
+                if (DefaultPawn->GetPlayerId() == 99) {
+                    break;
+                }
             }
         }
     }
