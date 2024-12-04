@@ -62,21 +62,24 @@ uint32 ClientSocket::Run()
 	while (true)
 	{
 		BOOL result = GetQueuedCompletionStatus(hIocp, &bytesTransferred, &completionKey, &overlapped, INFINITE);
-		if (result == 0 || bytesTransferred == 0)
-		{
+		if (result == 0 || bytesTransferred == 0){
 			UE_LOG(LogNet, Warning, TEXT("Connection closed or error occurred"));
 			return 0;
 		}
 
 		// 수신 완료된 데이터를 처리
-		if (overlapped == &recvOverlap)
-		{
+		if (overlapped == &recvOverlap){
 			// lock-free 큐에 데이터 추가
 			recvQueue.push(std::vector<char>(recvData, recvData + bytesTransferred));
 			StartRecv();
 
 			// 수신 큐 처리
 			ProcessRecvQueue();
+		}
+		else{
+			delete overlapped;
+
+			StartSend();
 		}
 	}
 }
@@ -613,27 +616,49 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 
 bool ClientSocket::Send(const int SendSize, void* SendData)
 {
-	WSABUF wsaBuf;
-	wsaBuf.buf = reinterpret_cast<char*>(SendData);
-	wsaBuf.len = SendSize;
+	// 송신 데이터를 큐에 추가
+	sendQueue.push(std::vector<char>((char*)SendData, (char*)SendData + SendSize));
 
-	WSAOVERLAPPED sendOverlap = {};
-	ZeroMemory(&sendOverlap, sizeof(sendOverlap));
-
-	DWORD bytesSent = 0;
-	int result = WSASend(Socket, &wsaBuf, 1, &bytesSent, 0, &sendOverlap, NULL);
-	if (result == SOCKET_ERROR)
-	{
-		int err = WSAGetLastError();
-		if (err != WSA_IO_PENDING)
-		{
-			UE_LOG(LogNet, Error, TEXT("WSASend failed: %d"), err);
-			return false;
-		}
+	bool expected = false;
+	if (isSending.compare_exchange_strong(expected, true)) {
+		StartSend(); // 송신 작업 시작
 	}
-
 	return true;
 }
+
+void ClientSocket::StartSend()
+{
+	while (true) {
+		std::vector<char> data;
+
+		if (!sendQueue.try_pop(data)) {
+			// 송신할 데이터가 없으면 플래그 해제 후 종료
+			isSending.store(false);
+			return;
+		}
+
+		WSABUF wsaBuf;
+		wsaBuf.buf = const_cast<char*>(data.data());
+		wsaBuf.len = data.size();
+
+		OVERLAPPED* sendOverlap = new OVERLAPPED;
+		ZeroMemory(sendOverlap, sizeof(OVERLAPPED));
+
+		DWORD bytesSent = 0;
+		int result = WSASend(Socket, &wsaBuf, 1, &bytesSent, 0, sendOverlap, NULL);
+
+		if (result == SOCKET_ERROR) {
+			int err = WSAGetLastError();
+			if (err != WSA_IO_PENDING) {
+				UE_LOG(LogNet, Error, TEXT("WSASend failed: %d"), err);
+				isSending.store(false); // 송신 작업 중단
+				return;
+			}
+		}
+	}
+}
+
+
 
 uint32 ClientSocket::GetMyPlayerId() const
 {
