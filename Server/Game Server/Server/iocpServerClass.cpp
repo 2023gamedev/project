@@ -42,7 +42,7 @@ IOCP_CORE::IOCP_CORE()
 	bServerOn = false;
 
 	string filePath;
-	string unrealFilePath = "../../../../Project/";
+	string unrealFilePath = "../../../unreal/Project/";
 
 	filePath = "EdgesB2.txt";
 	UpdateEdgesMap(unrealFilePath + filePath, filePath);
