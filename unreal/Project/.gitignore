@@ -14,3 +14,6 @@
 *.dll
 
 /Windows
+
+# 연결 서버 ip 설정용
+ipconfig.txt
