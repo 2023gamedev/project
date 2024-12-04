@@ -187,7 +187,7 @@ bool Zombie::RandomPatrol()
 	std::random_device rd;
 	std::mt19937 mt(rd());
 
-	std::uniform_int_distribution<int> dist(-500, 500);		//현 위치에서 반경 1500 +-
+	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 1500 +-
 
 	px = ZombieData.x + dist(mt);
 	py = ZombieData.y + dist(mt);
@@ -445,8 +445,8 @@ void Zombie::Attack()
 void Zombie::MoveTo(float deltasecond)
 {
 #ifdef	ENABLE_BT_LOG
-	cout << "ZombiePathIndex: " << ZombiePathIndex << " , path.size(): " << path.size() << endl;
-	cout << endl;
+	//cout << "ZombiePathIndex: " << ZombiePathIndex << " , path.size(): " << path.size() << endl;
+	//cout << endl;
 #endif
 
 
@@ -524,8 +524,8 @@ bool Zombie::IsPathUpdated()
 
 		if (beforepath != path) {
 #ifdef	ENABLE_BT_LOG
-			cout << "IsPathUpdated(): (!path.empty() && !beforepath.empty()) && (beforepath != path) => return true" << endl;
-			cout << endl;
+			//cout << "IsPathUpdated(): (!path.empty() && !beforepath.empty()) && (beforepath != path) => return true" << endl;
+			//cout << endl;
 #endif
 			beforepath = path;
 
@@ -536,8 +536,8 @@ bool Zombie::IsPathUpdated()
 
 	if (!path.empty() && beforepath.empty()) {
 #ifdef	ENABLE_BT_LOG
-		cout << "IsPathUpdated(): (!path.empty() && beforepath.empty()) => return true" << endl;
-		cout << endl;
+		//cout << "IsPathUpdated(): (!path.empty() && beforepath.empty()) => return true" << endl;
+		//cout << endl;
 #endif
 		beforepath = path;
 
@@ -545,8 +545,8 @@ bool Zombie::IsPathUpdated()
 	}
 
 #ifdef	ENABLE_BT_LOG
-	cout << "IsPathUpdated() => return false" << endl;
-	cout << endl;
+	//cout << "IsPathUpdated() => return false" << endl;
+	//cout << endl;
 #endif
 
 	return false;
@@ -606,7 +606,7 @@ void Zombie::ReachFinalDestination()
 		HeardShouting = false;
 		HeardFootSound = false;
 		KnewPlayerLocation = false;
-		//RandPatrolSet = false;
+		RandPatrolSet = false;
 
 
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
