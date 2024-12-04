@@ -1,4 +1,4 @@
-#include <iomanip>
+ï»¿#include <iomanip>
 
 #include "ZombiePathfinder.h"
 
@@ -97,7 +97,7 @@ void ZombiePathfinder::UpdateStartGoal(float startx, float starty, float startz,
     goalZ= goalz;
 }
 
-// ÇÔ¼ö: ÁÖ¾îÁø ÁÂÇ¥µé ³»¿¡¼­ ¸ñÇ¥ ÁÂÇ¥¿Í °¡Àå °¡±î¿î ÁÂÇ¥ Ã£±â
+// í•¨ìˆ˜: ì£¼ì–´ì§„ ì¢Œí‘œë“¤ ë‚´ì—ì„œ ëª©í‘œ ì¢Œí‘œì™€ ê°€ì¥ ê°€ê¹Œìš´ ì¢Œí‘œ ì°¾ê¸°
 tuple<float, float, float> ZombiePathfinder::FindClosestValidPosition(float goalX, float goalY, float goalZ) {
 
     tuple<float, float, float> closestPosition;
@@ -192,14 +192,14 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
 {
 
     //cout << "NewAStarSTART!!" << endl;
-    // ½ÃÀÛ ÁöÁ¡°ú ¸ñÇ¥ ÁöÁ¡ÀÌ °°À¸¸é ¹Ù·Î ¹İÈ¯
+    // ì‹œì‘ ì§€ì ê³¼ ëª©í‘œ ì§€ì ì´ ê°™ìœ¼ë©´ ë°”ë¡œ ë°˜í™˜
     if (startX == goalX && startY == goalY && startZ == goalZ) {
         //cout << "EQUAL PATH" << endl;
         return { Node(startX, startY, startZ, 0, 0) };
     }
 
     
-    // ¸ñÇ¥ ÁöÁ¡°ú °¡Àå °¡±î¿î À¯È¿ÇÑ ÁöÁ¡ Ã£±â
+    // ëª©í‘œ ì§€ì ê³¼ ê°€ì¥ ê°€ê¹Œìš´ ìœ íš¨í•œ ì§€ì  ì°¾ê¸°
 
     float SimilarStartX, SimilarStartY, SimilarStartZ;
     tie(SimilarStartX, SimilarStartY, SimilarStartZ) = FindClosestValidPosition(startX, startY, startZ);
@@ -209,12 +209,12 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
     tie(SimilargoalX, SimilargoalY, SimilargoalZ) = FindClosestValidPosition(goalX, goalY, goalZ);
     SimilargoalZ = goalZ;
 
-    // A* ¾Ë°í¸®ÁòÀ» À§ÇÑ µ¥ÀÌÅÍ ±¸Á¶
+    // A* ì•Œê³ ë¦¬ì¦˜ì„ ìœ„í•œ ë°ì´í„° êµ¬ì¡°
     priority_queue<Node> openSet;
     unordered_map<Node, Node, Node::Hash> cameFrom;
     unordered_map<Node, double, Node::Hash> gScore;
 
-    // ½ÃÀÛ ³ëµå ÃÊ±âÈ­
+    // ì‹œì‘ ë…¸ë“œ ì´ˆê¸°í™”
     Node Realstart(startX, startY, startZ, 0, NewMaxeuristic(startX, startY, SimilargoalX, SimilargoalY, sqrt(2)));
 
     Node start(SimilarStartX, SimilarStartY, SimilarStartZ, 0, NewMaxeuristic(SimilarStartX, SimilarStartY, SimilargoalX, SimilargoalY, sqrt(2)));
@@ -232,8 +232,8 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
 
     
 
-    // A* Å½»ö ½ÃÀÛ
-    int i = 0; // µğ¹ö±ë¿ë(¾ó¸¶³ª °É¸®³ª)
+    // A* íƒìƒ‰ ì‹œì‘
+    int i = 0; // ë””ë²„ê¹…ìš©(ì–¼ë§ˆë‚˜ ê±¸ë¦¬ë‚˜)
     while (!openSet.empty()) {
         if (i == 0) {
             i++;
@@ -241,7 +241,7 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
         Node current = openSet.top();
         openSet.pop();
 
-        // ¸ñÇ¥ ÁöÁ¡¿¡ µµÂøÇÏ¸é °æ·Î ¹İÈ¯
+        // ëª©í‘œ ì§€ì ì— ë„ì°©í•˜ë©´ ê²½ë¡œ ë°˜í™˜
         if (current.x == SimilargoalX && current.y == SimilargoalY) {
             vector<Node> path;
             while (cameFrom.find(current) != cameFrom.end()) {
@@ -258,7 +258,7 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
 
             reverse(path.begin(), path.end());
 
-            // ÃÖÁ¾ ¸ñÇ¥ ÁöÁ¡ È®ÀÎ ¹× Ãß°¡
+            // ìµœì¢… ëª©í‘œ ì§€ì  í™•ì¸ ë° ì¶”ê°€
             if (path.back().x != goalX || path.back().y != goalY) {
                 path.push_back(Node(goalX, goalY, goalZ, 0, 0));
             }
@@ -274,22 +274,22 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
         tuple<float, float, float> currentPos = make_tuple(current.x, current.y, FloorZPos());
 
         if (floor == FLOOR::FLOOR_B2) {
-            // EdgesMapÀÌ ÇöÀç ³ëµåÀÇ ÀÌ¿ôÀ» °¡Áö°í ÀÖ´ÂÁö È®ÀÎ
+            // EdgesMapì´ í˜„ì¬ ë…¸ë“œì˜ ì´ì›ƒì„ ê°€ì§€ê³  ìˆëŠ”ì§€ í™•ì¸
             if (g_EdgesMapB2.find(currentPos) != g_EdgesMapB2.end()) {
                 const vector<pair<tuple<float, float, float>, float>>& neighbors = g_EdgesMapB2[currentPos];
 
-                // ÀÌ¿ô ³ëµåµé¿¡ ´ëÇØ ¹İº¹
+                // ì´ì›ƒ ë…¸ë“œë“¤ì— ëŒ€í•´ ë°˜ë³µ
                 for (const auto& neighborData : neighbors) {
                     tuple<float, float, float> neighborPos = neighborData.first;
-                    float edgeWeight = neighborData.second;  // Edge °¡ÁßÄ¡
+                    float edgeWeight = neighborData.second;  // Edge ê°€ì¤‘ì¹˜
 
                     Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
 
 
-                    // gScore °è»ê (¿§ÁöÀÇ °¡ÁßÄ¡¸¦ »ç¿ë)
+                    // gScore ê³„ì‚° (ì—£ì§€ì˜ ê°€ì¤‘ì¹˜ë¥¼ ì‚¬ìš©)
                     double tentativeGScore = gScore[current] + edgeWeight;
 
-                    // ´õ ³ªÀº °æ·Î¸¦ ¹ß°ßÇÏ¸é ¾÷µ¥ÀÌÆ®
+                    // ë” ë‚˜ì€ ê²½ë¡œë¥¼ ë°œê²¬í•˜ë©´ ì—…ë°ì´íŠ¸
                     if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
@@ -301,22 +301,22 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
             }
         }
         else if (floor == FLOOR::FLOOR_B1) {
-            // EdgesMapÀÌ ÇöÀç ³ëµåÀÇ ÀÌ¿ôÀ» °¡Áö°í ÀÖ´ÂÁö È®ÀÎ
+            // EdgesMapì´ í˜„ì¬ ë…¸ë“œì˜ ì´ì›ƒì„ ê°€ì§€ê³  ìˆëŠ”ì§€ í™•ì¸
             if (g_EdgesMapB1.find(currentPos) != g_EdgesMapB1.end()) {
                 const vector<pair<tuple<float, float, float>, float>>& neighbors = g_EdgesMapB1[currentPos];
 
-                // ÀÌ¿ô ³ëµåµé¿¡ ´ëÇØ ¹İº¹
+                // ì´ì›ƒ ë…¸ë“œë“¤ì— ëŒ€í•´ ë°˜ë³µ
                 for (const auto& neighborData : neighbors) {
                     tuple<float, float, float> neighborPos = neighborData.first;
-                    float edgeWeight = neighborData.second;  // Edge °¡ÁßÄ¡
+                    float edgeWeight = neighborData.second;  // Edge ê°€ì¤‘ì¹˜
 
                     Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
 
 
-                    // gScore °è»ê (¿§ÁöÀÇ °¡ÁßÄ¡¸¦ »ç¿ë)
+                    // gScore ê³„ì‚° (ì—£ì§€ì˜ ê°€ì¤‘ì¹˜ë¥¼ ì‚¬ìš©)
                     double tentativeGScore = gScore[current] + edgeWeight;
 
-                    // ´õ ³ªÀº °æ·Î¸¦ ¹ß°ßÇÏ¸é ¾÷µ¥ÀÌÆ®
+                    // ë” ë‚˜ì€ ê²½ë¡œë¥¼ ë°œê²¬í•˜ë©´ ì—…ë°ì´íŠ¸
                     if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
@@ -328,22 +328,22 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
             }
         }
         else if (floor == FLOOR::FLOOR_F1) {
-            // EdgesMapÀÌ ÇöÀç ³ëµåÀÇ ÀÌ¿ôÀ» °¡Áö°í ÀÖ´ÂÁö È®ÀÎ
+            // EdgesMapì´ í˜„ì¬ ë…¸ë“œì˜ ì´ì›ƒì„ ê°€ì§€ê³  ìˆëŠ”ì§€ í™•ì¸
             if (g_EdgesMapF1.find(currentPos) != g_EdgesMapF1.end()) {
                 const vector<pair<tuple<float, float, float>, float>>& neighbors = g_EdgesMapF1[currentPos];
 
-                // ÀÌ¿ô ³ëµåµé¿¡ ´ëÇØ ¹İº¹
+                // ì´ì›ƒ ë…¸ë“œë“¤ì— ëŒ€í•´ ë°˜ë³µ
                 for (const auto& neighborData : neighbors) {
                     tuple<float, float, float> neighborPos = neighborData.first;
-                    float edgeWeight = neighborData.second;  // Edge °¡ÁßÄ¡
+                    float edgeWeight = neighborData.second;  // Edge ê°€ì¤‘ì¹˜
 
                     Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
 
 
-                    // gScore °è»ê (¿§ÁöÀÇ °¡ÁßÄ¡¸¦ »ç¿ë)
+                    // gScore ê³„ì‚° (ì—£ì§€ì˜ ê°€ì¤‘ì¹˜ë¥¼ ì‚¬ìš©)
                     double tentativeGScore = gScore[current] + edgeWeight;
 
-                    // ´õ ³ªÀº °æ·Î¸¦ ¹ß°ßÇÏ¸é ¾÷µ¥ÀÌÆ®
+                    // ë” ë‚˜ì€ ê²½ë¡œë¥¼ ë°œê²¬í•˜ë©´ ì—…ë°ì´íŠ¸
                     if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
@@ -355,22 +355,22 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
             }
         }
         else if (floor == FLOOR::FLOOR_F2) {
-            // EdgesMapÀÌ ÇöÀç ³ëµåÀÇ ÀÌ¿ôÀ» °¡Áö°í ÀÖ´ÂÁö È®ÀÎ
+            // EdgesMapì´ í˜„ì¬ ë…¸ë“œì˜ ì´ì›ƒì„ ê°€ì§€ê³  ìˆëŠ”ì§€ í™•ì¸
             if (g_EdgesMapF2.find(currentPos) != g_EdgesMapF2.end()) {
                 const vector<pair<tuple<float, float, float>, float>>& neighbors = g_EdgesMapF2[currentPos];
 
-                // ÀÌ¿ô ³ëµåµé¿¡ ´ëÇØ ¹İº¹
+                // ì´ì›ƒ ë…¸ë“œë“¤ì— ëŒ€í•´ ë°˜ë³µ
                 for (const auto& neighborData : neighbors) {
                     tuple<float, float, float> neighborPos = neighborData.first;
-                    float edgeWeight = neighborData.second;  // Edge °¡ÁßÄ¡
+                    float edgeWeight = neighborData.second;  // Edge ê°€ì¤‘ì¹˜
 
                     Node neighbor(get<0>(neighborPos), get<1>(neighborPos), get<2>(neighborPos), 0, 0);
 
 
-                    // gScore °è»ê (¿§ÁöÀÇ °¡ÁßÄ¡¸¦ »ç¿ë)
+                    // gScore ê³„ì‚° (ì—£ì§€ì˜ ê°€ì¤‘ì¹˜ë¥¼ ì‚¬ìš©)
                     double tentativeGScore = gScore[current] + edgeWeight;
 
-                    // ´õ ³ªÀº °æ·Î¸¦ ¹ß°ßÇÏ¸é ¾÷µ¥ÀÌÆ®
+                    // ë” ë‚˜ì€ ê²½ë¡œë¥¼ ë°œê²¬í•˜ë©´ ì—…ë°ì´íŠ¸
                     if (gScore.find(neighbor) == gScore.end() || tentativeGScore < gScore[neighbor]) {
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
@@ -386,7 +386,7 @@ vector<Node> ZombiePathfinder::NewAStar(float startX, float startY, float startZ
 
     }
 
-    // °æ·Î¸¦ Ã£Áö ¸øÇÏ¸é ºó °æ·Î ¹İÈ¯
+    // ê²½ë¡œë¥¼ ì°¾ì§€ ëª»í•˜ë©´ ë¹ˆ ê²½ë¡œ ë°˜í™˜
     return {};
 }
 
@@ -397,20 +397,20 @@ bool ZombiePathfinder::IsPathBlockedByObstacle(const Node& startNode, const Node
     float dz = endNode.z - startNode.z;
 
     float length = sqrt(dx * dx + dy * dy);
-    int numSteps = static_cast<int>(length / OBSTACLE_CHECK_INTERVAL); // Àå¾Ö¹° Ã¼Å© °£°İ¿¡ µû¶ó Á¶Á¤
+    int numSteps = static_cast<int>(length / OBSTACLE_CHECK_INTERVAL); // ì¥ì• ë¬¼ ì²´í¬ ê°„ê²©ì— ë”°ë¼ ì¡°ì •
 
     for (int i = 0; i <= numSteps; ++i) {
         float t = static_cast<float>(i) / numSteps;
         float x = startNode.x + t * dx;
         float y = startNode.y + t * dy;
-        float z = startNode.z + t * dz; // »ç½Ç z°ªÀº ÇÊ¿äÇÏÁö´Â ¾ÊÀ½
+        float z = startNode.z + t * dz; // ì‚¬ì‹¤ zê°’ì€ í•„ìš”í•˜ì§€ëŠ” ì•ŠìŒ
 
         if (IsInObstacleRange(x, y, z)) {
-            return true; // °æ·Î »ó¿¡ Àå¾Ö¹°ÀÌ ÀÖÀ½
+            return true; // ê²½ë¡œ ìƒì— ì¥ì• ë¬¼ì´ ìˆìŒ
         }
     }
 
-    return false; // °æ·Î »ó¿¡ Àå¾Ö¹°ÀÌ ¾øÀ½
+    return false; // ê²½ë¡œ ìƒì— ì¥ì• ë¬¼ì´ ì—†ìŒ
 }
 bool ZombiePathfinder::IsInObstacleRange(float x, float y, float z)
 {

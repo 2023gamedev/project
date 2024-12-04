@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Common.h"
 
@@ -27,15 +27,15 @@
 //#include "MoveTo.h"
 
 
-#define ENABLE_BT_LOG	// ÀüÃ³¸®±â µğ·ºÆ¼ºê È°¼ºÈ­ (Á»ºñ BT °ü·Ã ·Î±× cout Âï±â ÇÃ·¡±×)
-//#undef ENABLE_BT_LOG	// ºñÈ°¼ºÈ­
+#define ENABLE_BT_LOG	// ì „ì²˜ë¦¬ê¸° ë””ë ‰í‹°ë¸Œ í™œì„±í™” (ì¢€ë¹„ BT ê´€ë ¨ ë¡œê·¸ cout ì°ê¸° í”Œë˜ê·¸)
+#undef ENABLE_BT_LOG	// ë¹„í™œì„±í™”
 
 class ZombieController;
 class Zombie;
 class ZombiePathFinder;
 class ItemController;
 
-class TMoveTo;	// Àü¹æ ¼±¾ğ -> static º¯¼ö BT_INTERVAL À» MoveTo Å¬·¡½º¿¡¼­ »ç¿ëÇÏ±â À§ÇØ (¼øÈ¯ Æ÷ÇÔ ¹®Á¦¸¦ ÇÇÇÏ±â À§ÇØ)
+class TMoveTo;	// ì „ë°© ì„ ì–¸ -> static ë³€ìˆ˜ BT_INTERVAL ì„ MoveTo í´ë˜ìŠ¤ì—ì„œ ì‚¬ìš©í•˜ê¸° ìœ„í•´ (ìˆœí™˜ í¬í•¨ ë¬¸ì œë¥¼ í”¼í•˜ê¸° ìœ„í•´)
 class TCanAttack;
 class TCanNotAttack;
 
@@ -59,10 +59,10 @@ using PLAYER_INFO = struct Client_INFO {
 	bool send_zombie = false;
 	bool send_item = false;
 	
-	// Àü¼Û ´ë±â¿­ Ãß°¡
-	Concurrency::concurrent_queue<std::string> sendQueue;  // Àü¼ÛÇÒ µ¥ÀÌÅÍ¸¦ ´ã´Â ´ë±â¿­
-	std::mutex sendMutex;  // Å¥ Á¢±Ù Á¦¾î¿ë ¶ô
-	atomic<bool> isSending = false;  // ÇöÀç Àü¼Û ÁßÀÎÁö ¿©ºÎ¸¦ ³ªÅ¸³»´Â ÇÃ·¡±×
+	// ì „ì†¡ ëŒ€ê¸°ì—´ ì¶”ê°€
+	Concurrency::concurrent_queue<std::string> sendQueue;  // ì „ì†¡í•  ë°ì´í„°ë¥¼ ë‹´ëŠ” ëŒ€ê¸°ì—´
+	std::mutex sendMutex;  // í ì ‘ê·¼ ì œì–´ìš© ë½
+	atomic<bool> isSending = false;  // í˜„ì¬ ì „ì†¡ ì¤‘ì¸ì§€ ì—¬ë¶€ë¥¼ ë‚˜íƒ€ë‚´ëŠ” í”Œë˜ê·¸
 };
 
 struct Vector3D {
@@ -140,23 +140,23 @@ public:
 	void Zombie_BT_Initialize();
 	void ServerOn();
 
-	//¼­¹ö°¡ ¸ÕÀú ÄÑÁö°í Á»ºñ BT°¡ ½ÇÇàµÇµµ·Ï ÇÏ±âÀ§ÇØ »ç¿ë 
+	//ì„œë²„ê°€ ë¨¼ì € ì¼œì§€ê³  ì¢€ë¹„ BTê°€ ì‹¤í–‰ë˜ë„ë¡ í•˜ê¸°ìœ„í•´ ì‚¬ìš© 
 	bool bServerOn;
 
-	//Á»ºñ º¤ÅÍ
+	//ì¢€ë¹„ ë²¡í„°
 	vector<Zombie*> zombieDB;
 	vector<Zombie*> zombieDB_BT;
 
-	//======Zombie_BT ¼±¾ğ======
+	//======Zombie_BT ì„ ì–¸======
 
-	//<Selector> ¼±¾ğ 
+	//<Selector> ì„ ì–¸ 
 
-	//<Selector-Detect> (»ç½Ç»ó ÃÖ»óÀ§ ³ëµå)
+	//<Selector-Detect> (ì‚¬ì‹¤ìƒ ìµœìƒìœ„ ë…¸ë“œ)
 	Selector sel_detect;
 	//<Selector-CanSeePlayer>  
 	Selector sel_canseeplayer;
 
-	//{Sequence} ¼±¾ğ
+	//{Sequence} ì„ ì–¸
 
 	//{Sequence-CanNotAttack}
 	Sequence seq_cannotattack;
@@ -171,9 +171,9 @@ public:
 	//{Sequence-NotHasLastKnownPlayerLocation}
 	Sequence seq_nothaslastknownplayerlocation;
 
-	//[Task] ¼±¾ğ
+	//[Task] ì„ ì–¸
 
-	//<Selector Detact> °¡ °¡Áö´Â Taskµé
+	//<Selector Detact> ê°€ ê°€ì§€ëŠ” Taskë“¤
 
 	//[CanSeePlayer-Task]
 	TCanSeePlayer* t_canseeplayer;
@@ -186,21 +186,21 @@ public:
 	//[NotHasLastKnownPlayerLocation-Task]
 	TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
 
-	//<Selector CanSeePlayer> °¡ °¡Áö´Â Taskµé
+	//<Selector CanSeePlayer> ê°€ ê°€ì§€ëŠ” Taskë“¤
 
 	//[CanNotAttack-Task]
 	TCanNotAttack* t_cannotattack;
 	//[CanAttack-Task]
 	TCanAttack* t_canattack;
 
-	//{Sequence} °¡ °¡Áö´Â Taskµé
+	//{Sequence} ê°€ ê°€ì§€ëŠ” Taskë“¤
 
 	//[MoveTo-Task]
 	TMoveTo* t_moveto;
 	//[Attack-Task]
 	TAttack* t_attack;
 	
-	static float BT_INTERVAL;		// BT ÀÛµ¿ ÀÎÅÍ¹ú ¼³Á¤
+	static float BT_INTERVAL;		// BT ì‘ë™ ì¸í„°ë²Œ ì„¤ì •
 
 	static std::chrono::duration<float> BT_deltaTime;
 

@@ -1,4 +1,4 @@
-#include "ItemController.h"
+ï»¿#include "ItemController.h"
 
 random_device rd;
 uniform_int_distribution Cuid(0, 6);
@@ -28,7 +28,7 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     SpawnItemBoxes(13, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_B1);
     SpawnItemBoxes(14, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_B1);
     SpawnItemBoxes(15, "Drink", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDrink.InvenDrink", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_B1); // ¼öÁ¤ ÇÊ¿ä
+    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_B1); // ìˆ˜ì • í•„ìš”
     SpawnItemBoxes(17, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_B1);
 
     SpawnItemBoxes(18, "CarKey1", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey1.InvenCarKey1", 1, FLOOR::FLOOR_B1);
@@ -100,7 +100,7 @@ ItemController::~ItemController()
 
 void ItemController::ItemRandomLocationSetting()
 {
-    // 0~19Àº B1 20~39´Â F1 40~59´Â F2
+    // 0~19ì€ B1 20~39ëŠ” F1 40~59ëŠ” F2
     // B1
     ItemRandomLocationStruct[0].sLocation = FVector(2330.f, 3200.f, 975.0626f);
     ItemRandomLocationStruct[1].sLocation = FVector(1880.f, 3870.f, 975.0626f);
@@ -239,8 +239,8 @@ void ItemController::SpawnItemBoxes(int itemID, std::string itemName, EItemClass
     newItemData.count = count;
     newItemData.itemFloor = static_cast<int>(itemFloor);
 
-    // ¾ÆÀÌÅÛ ÃÊ±â À§Ä¡ ¼³Á¤ (¿¹: ÀÓÀÇÀÇ À§Ä¡ ¼³Á¤)
-    FVector position = RandomItemLocation(itemFloor); // ±âº» À§Ä¡
+    // ì•„ì´í…œ ì´ˆê¸° ìœ„ì¹˜ ì„¤ì • (ì˜ˆ: ì„ì˜ì˜ ìœ„ì¹˜ ì„¤ì •)
+    FVector position = RandomItemLocation(itemFloor); // ê¸°ë³¸ ìœ„ì¹˜
     newItemData.x = position.x;
     newItemData.y = position.y;
     newItemData.z = position.z;
@@ -371,7 +371,7 @@ void ItemController::SpawnInterItem(int carid, const std::string carname)
     }
 
     else {
-        // ¾ÆÀÌÅÛ ÃÊ±â À§Ä¡ ¼³Á¤ (¿¹: ÀÓÀÇÀÇ À§Ä¡ ¼³Á¤)
+        // ì•„ì´í…œ ì´ˆê¸° ìœ„ì¹˜ ì„¤ì • (ì˜ˆ: ì„ì˜ì˜ ìœ„ì¹˜ ì„¤ì •)
         int RandomValue = RandomCarActorLocation();
         int Randomkey = RandomCarKey();
         FVector Location = CarActorRandomLocationStruct[RandomValue].sLocation;
