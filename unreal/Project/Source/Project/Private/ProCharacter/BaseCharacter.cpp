@@ -931,7 +931,7 @@ bool ABaseCharacter::SwapInven(int from, int to)
 
 void ABaseCharacter::SpawnOnGround(int slotindex)
 {
-	if (slotindex < 0 || slotindex >= Inventory.Num()) {
+	if (slotindex < 0 || slotindex > Inventory.Num()) {
 		UE_LOG(LogTemp, Error, TEXT("SpawnOnGround: slotindex(%d) is out of bounds!"), slotindex);
 		return;
 	}
@@ -2472,13 +2472,13 @@ void ABaseCharacter::StartBleedingTimer()
 {
 	SetSTR(GetSTR() - 2);
 	SetBasicSpeed(GetBasicSpeed() - 1);
-	GetWorld()->GetTimerManager().SetTimer(HealingHandle, this, &ABaseCharacter::BleedingTimerElapsed, 2.0f, true, 1.0f);
+	GetWorld()->GetTimerManager().SetTimer(BleedingHandle, this, &ABaseCharacter::BleedingTimerElapsed, 2.0f, true, 1.0f);
 }
 
 void ABaseCharacter::BleedingTimerElapsed()
 {
 	if (!m_bBleeding) {
-		GetWorld()->GetTimerManager().ClearTimer(HealingHandle);
+		GetWorld()->GetTimerManager().ClearTimer(BleedingHandle);
 		SetSTR(GetSTR() + 2);
 		SetBasicSpeed(GetBasicSpeed() + 1);
 		return;

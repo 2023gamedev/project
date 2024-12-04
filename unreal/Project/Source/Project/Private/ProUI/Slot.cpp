@@ -185,7 +185,11 @@ bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDr
 	}
 	else {
 		// fall 드랍하자
-		SpawnOnGround(SlotIndex);
+		if (Character) {
+			if (Character->GetPlayerId() == 99) {
+				Character->SpawnOnGround(SlotIndex);
+			}
+		}
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Fail"));
 		return false;
 	}
@@ -195,13 +199,20 @@ bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDr
 void USlot::NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
 	Super::NativeOnDragLeave(InDragDropEvent, InOperation);
-
-	SpawnOnGround(SlotIndex);
+	if (Character) {
+		if (Character->GetPlayerId() == 99) {
+			Character->SpawnOnGround(SlotIndex);
+		}
+	}
 }
 
 void USlot::SpawnOnGround(int slotindex)
 {
-	Character->SpawnOnGround(slotindex);
+	if (Character) {
+		if (Character->GetPlayerId() == 99) {
+			Character->SpawnOnGround(slotindex);
+		}
+	}
 }
 
 

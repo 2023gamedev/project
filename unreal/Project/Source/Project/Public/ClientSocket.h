@@ -343,7 +343,9 @@ public:
 	void ProcessPacket(const std::vector<char>& buffer);
 	virtual void Exit() override;
 	bool ConnectServer(ServerType serverType);
+
 	bool Send(const int SendSize, void* SendData);
+	void StartSend();
 
 	uint32 GetMyPlayerId() const;
 
@@ -371,13 +373,17 @@ private:
 	//std::mutex recvMutex;  // 수신 큐를 보호하기 위한 뮤텍스
 	//std::mutex playerQueueMutex;
 	Concurrency::concurrent_queue<std::vector<char>> recvQueue;
+	Concurrency::concurrent_queue<std::vector<char>> sendQueue;
 
 	WSAOVERLAPPED recvOverlap = {};  // 수신 작업에 사용할 OVERLAPPED 구조체
 	WSABUF recvBuffer;               // 수신 버퍼 설정
 	char recvData[BUFSIZE];          // 수신 데이터를 저장할 버퍼
 
+
 	UProGameInstance* gameInst;
 
 	FRunnableThread* Thread;
 	bool ReceivedPlayerId = false;
+
+	std::atomic<bool> isSending = false;
 };
