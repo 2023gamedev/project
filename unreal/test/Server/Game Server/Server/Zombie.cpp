@@ -444,8 +444,18 @@ void Zombie::Attack()
 
 void Zombie::MoveTo(float deltasecond)
 {
+#ifdef	ENABLE_BT_LOG
+	cout << "ZombiePathIndex: " << ZombiePathIndex << " , path.size(): " << path.size() << endl;
+	cout << endl;
+#endif
+
+
 	if (IsPathUpdated()) {
 		ZombiePathIndex = 1;
+	}
+
+	if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
+		return;
 	}
 
 	if (ZombiePathIndex >= path.size()) {
@@ -513,7 +523,10 @@ bool Zombie::IsPathUpdated()
 	if (!path.empty() && !beforepath.empty()) {
 
 		if (beforepath != path) {
-
+#ifdef	ENABLE_BT_LOG
+			cout << "IsPathUpdated(): (!path.empty() && !beforepath.empty()) && (beforepath != path) => return true" << endl;
+			cout << endl;
+#endif
 			beforepath = path;
 
 			return true;
@@ -522,11 +535,19 @@ bool Zombie::IsPathUpdated()
 	}
 
 	if (!path.empty() && beforepath.empty()) {
-
+#ifdef	ENABLE_BT_LOG
+		cout << "IsPathUpdated(): (!path.empty() && beforepath.empty()) => return true" << endl;
+		cout << endl;
+#endif
 		beforepath = path;
 
 		return true;
 	}
+
+#ifdef	ENABLE_BT_LOG
+	cout << "IsPathUpdated() => return false" << endl;
+	cout << endl;
+#endif
 
 	return false;
 }
@@ -580,6 +601,14 @@ void Zombie::ReachFinalDestination()
 		cout << "좀비 '#" << ZombieData.zombieID << "' 타겟 좌표[최종 목표 지점] ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
 #endif
 
+
+		// BT 플래그 값 전체 초기화
+		HeardShouting = false;
+		HeardFootSound = false;
+		KnewPlayerLocation = false;
+		//RandPatrolSet = false;
+
+
 		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
 		switch (targetType) {
 		case TARGET::PLAYER:
@@ -590,19 +619,19 @@ void Zombie::ReachFinalDestination()
 #endif
 			break;
 		case TARGET::SHOUTING:
-			HeardShouting = false;
+			//HeardShouting = false;
 #ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '샤우팅'" << endl;
 #endif
 			break;
 		case TARGET::FOOTSOUND:
-			HeardFootSound = false;
+			//HeardFootSound = false;
 #ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '발소리'" << endl;
 #endif
 			break;
 		case TARGET::INVESTIGATED:
-			KnewPlayerLocation = false;
+			//KnewPlayerLocation = false;
 #ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '이전 발견 위치'" << endl;
 #endif
@@ -625,7 +654,7 @@ void Zombie::ReachFinalDestination()
 void Zombie::SendPath()
 {
 
-	if (path.empty() || ZombiePathIndex >= path.size()) {
+	if (path.empty() || ZombiePathIndex >= path.size() || ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
 		return;
 	}
 	else {

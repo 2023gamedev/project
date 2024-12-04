@@ -62,11 +62,15 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		FVector End = Pos - FVector(0, 0, 100);
 		FCollisionQueryParams Params;
 
-		//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
 	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("zomlocation.X: %f , zomlocation.Y: %f"), zomlocation.X, zomlocation.Y));
 
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("PathX: %f , PathY: %f"), PathX, PathY));
+
 		idleDuration += deltasecond;
 
 		if (idleDuration >= 0.3f) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에

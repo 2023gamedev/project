@@ -560,6 +560,10 @@ void IOCP_CORE::ServerOn()
 
 	cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// 출력 칸 맞추기 (소수점 2자리까지)
 
+#ifdef	ENABLE_BT_LOG
+	cout << "<< 좀비 BT 관련 로그 출력 ON >>" << endl;
+#endif
+
 	for (const auto player : playerDB) {
 		float p_x = player.second.x;
 		float p_y = player.second.y;
