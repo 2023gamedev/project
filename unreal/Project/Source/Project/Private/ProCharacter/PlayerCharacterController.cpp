@@ -16,7 +16,9 @@
 #include "ProCharacter/GirlCharacter.h"
 #include "ProCharacter/IdolCharacter.h"
 #include "ProCharacter/FireFighterCharacter.h"
+#include "ProCharacter/PlayerCharacterAnimInstance.h"
 
+// Zombie
 #include "ProZombie/BaseZombie.h"
 
 //Network
@@ -73,12 +75,46 @@ void APlayerCharacterController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	// 키를 여는 (애니메이션) 도중이면 플레이어의 모든 입력 막음
+	ABaseCharacter* B_LocalPlayer = Cast<ABaseCharacter>(GetPawn());
+	bool allowInput = true;
+
+	if (B_LocalPlayer) {
+		auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(B_LocalPlayer->GetMesh()->GetAnimInstance());
+
+		if (AnimInstance) {
+			if (AnimInstance->Montage_IsPlaying(AnimInstance->GetOpenKeyMontage()) == true) {
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Using Key - Allow no Inputs")));
+				allowInput = false;
+			}
+		}
+		else {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Failed to get PlayerCharacterAnimInstance")));
+			UE_LOG(LogTemp, Error, TEXT("Failed to get PlayerCharacterAnimInstance"));
+		}
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Failed to get BaseCharacter")));
+		UE_LOG(LogTemp, Error, TEXT("Failed to get BaseCharacter"));
+	}
+
+	if (allowInput == false) {
+		SetIgnoreMoveInput(true);	// 이동 입력 차단
+	}
+	else {
+		SetIgnoreMoveInput(false);	// 입력 다시 활성화
+	}
+
+
+	// 캐릭터 움직임 통신 작업
 	Check_run();
 	CheckAndSendMovement();
 	Send_Attack();
 	Send_Equipment();
 	//Send_run();
 	Send_jump();
+
 
 	if (GameInstance && GameInstance->ClientSocketPtr)
 	{

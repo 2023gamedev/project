@@ -201,7 +201,7 @@ void ABaseZombie::Tick(float DeltaTime)
 	}
 
 	// 좀비 사망처리 클라 동기화 - 애니메이션 재생, 피 이펙트 생성 (데모 발표용 급 가라 코드 - 수정 필요)
-	if (GetHP() <= 0 && m_bIsNormalDead == false) {
+	if (GetHP() <= 0 && m_bIsNormalDead == false && doAction_setIsNormalDead_onTick == true) {
 
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 클라 동기화 작업실행!")));
 		//UE_LOG(LogTemp, Log, TEXT("좀비 사망 클라 동기화 작업실행!"));
@@ -294,6 +294,7 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 
 	doAction_takeDamage_onTick = false;
+	doAction_setIsNormalDead_onTick = false;
 
 	SetHP(GetHP() - Damage);
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
@@ -800,10 +801,10 @@ void ABaseZombie::StartResurrectionTimer()
 {
 
 	if (m_bIsNormalDead) {
-		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 30.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 30.0f, false);		// 30초 후 다시 일어나기 시작
 	}
 	else if (m_bIsCuttingDead) {
-		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 60.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 60.0f, false);		// 60초 후 다시 일어나기 시작
 	}
 
 }
@@ -833,9 +834,10 @@ void ABaseZombie::ResurrectionTimerElapsed()
 
 void ABaseZombie::StartWatiingTimer()
 {
-	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);
+	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);	// 5초 이후 완전히 다시 살아남
 }
 
+//
 void ABaseZombie::WaittingTimerElapsed()
 {
 	m_bIsStanding = false;
@@ -849,7 +851,11 @@ void ABaseZombie::WaittingTimerElapsed()
 	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
 	SetHP(GetStartHP());
 
-	SetDie(true);
+	SetDie(true);	//??? 이거 반대여야 하는거 아닌가? (근데 m_bDie 변수가 어디에 쓰이는 거지 정확히??)
+
+	doAction_takeDamage_onTick = true;
+	doAction_setIsNormalDead_onTick = true;		// 이거 지금 ResurrectionTimerElapsed를 모두 주석해놔서 불릴 일이 없긴함 (즉, 해당 클라가 좀비 직접 죽이면 doAction_setIsNormalDead_onTick 값 영원히 false임)
+	// 그래도 부활하는 걸 고려하면 여기에 설정하는 게 맞음
 }
 
 
