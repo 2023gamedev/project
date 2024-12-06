@@ -348,16 +348,15 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 							Q_zombie.push(ZombieData(zombie.zombieid(), NewLocation, NewRotation, zombie.zombietype()));
 							UE_LOG(LogNet, Display, TEXT("ZombieSpawnData recv: %d, playerid = %d"), zombie.zombieid(), MyPlayerId);
 						}
-
-						Protocol::send_complete completepacket;
-						completepacket.set_packet_type(21);
-						completepacket.set_complete_type(1);
-
-						std::string serializedData;
-						completepacket.SerializeToString(&serializedData);
-						Send(serializedData.size(), (void*)serializedData.data());
-
 					}
+
+					Protocol::send_complete completepacket;
+					completepacket.set_packet_type(21);
+					completepacket.set_complete_type(1);
+
+					std::string serializedData;
+					completepacket.SerializeToString(&serializedData);
+					Send(serializedData.size(), (void*)serializedData.data());
 				}
 				break;
 			}
@@ -432,16 +431,15 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 								item.count(), item.floor(), FVector(item.posx(), item.posy(), item.posz())));
 							//UE_LOG(LogNet, Display, TEXT("Set Itempacket"));
 						}
-
-					
-						Protocol::send_complete completepacket;
-						completepacket.set_packet_type(21);
-						completepacket.set_complete_type(2);
-
-						std::string serializedData;
-						completepacket.SerializeToString(&serializedData);
-						Send(serializedData.size(), (void*)serializedData.data());
 					}
+
+					Protocol::send_complete completepacket;
+					completepacket.set_packet_type(21);
+					completepacket.set_complete_type(2);
+
+					std::string serializedData;
+					completepacket.SerializeToString(&serializedData);
+					Send(serializedData.size(), (void*)serializedData.data());
 				}
 				break;
 			}
@@ -451,11 +449,24 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::CarDataList cardatalist;
 				if (cardatalist.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					for (const auto& car : cardatalist.cars()) {
-						Q_setcar.push(Set_Car(car.carid(), car.carname(), FVector(car.posx(), car.posy(), car.posz()), FRotator(car.pitch(), car.yaw(), car.roll()),
-							car.carkeyname()));
-						//UE_LOG(LogNet, Display, TEXT("Set carpacket"));
+					if (!recv_carpacket) {
+						recv_carpacket = true;
+
+						for (const auto& car : cardatalist.cars()) {
+							Q_setcar.push(Set_Car(car.carid(), car.carname(), FVector(car.posx(), car.posy(), car.posz()), FRotator(car.pitch(), car.yaw(), car.roll()),
+								car.carkeyname()));
+							//UE_LOG(LogNet, Display, TEXT("Set carpacket"));
+						}
+
 					}
+
+					Protocol::send_complete completepacket;
+					completepacket.set_packet_type(21);
+					completepacket.set_complete_type(3);
+
+					std::string serializedData;
+					completepacket.SerializeToString(&serializedData);
+					Send(serializedData.size(), (void*)serializedData.data());
 				}
 				break;
 			}

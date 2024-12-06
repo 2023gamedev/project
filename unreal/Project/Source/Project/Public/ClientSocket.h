@@ -364,6 +364,7 @@ public:
 
 	bool recv_zombiepacket = false;
 	bool recv_itempacket = false;
+	bool recv_carpacket = false;
 
 
 

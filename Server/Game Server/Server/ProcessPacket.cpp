@@ -30,7 +30,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     if ((tempPacket.playerid() == id || tempPacket.isingame()) && !clientInfo->isInGame) {
         clientInfo->isInGame = true;
         b_Timer = true;
-        itemclass->SendCarData(id);
         //printf("SendDatas!! Playerid=#%d\n", id);
     }
 
@@ -40,6 +39,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
     if (!clientInfo->send_item) {
         itemclass->SendItemData(id);
+    }
+
+    if (!clientInfo->send_car) {
+        itemclass->SendCarData(id);
     }
 
     // 패킷의 타입을 확인하여 처리
@@ -504,6 +507,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         }
         else if (Packet.complete_type() == 2) {
             clientInfo->send_item = true;
+        }
+        else if (Packet.complete_type() == 3) {
+            clientInfo->send_car = true;
         }
 
         return true;
