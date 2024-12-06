@@ -76,42 +76,6 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-	// 키를 여는 (애니메이션) 도중이면 플레이어의 모든 입력 막음
-	ABaseCharacter* B_LocalPlayer = Cast<ABaseCharacter>(GetPawn());
-	bool allowInput = true;
-
-	if (B_LocalPlayer) {
-		/*auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(B_LocalPlayer->GetMesh()->GetAnimInstance());
-
-		if (AnimInstance) {
-			if (AnimInstance->Montage_IsPlaying(AnimInstance->GetOpenKeyMontage()) == true) {
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Using Key - Allow no Inputs")));
-				allowInput = false;
-			}
-		}
-		else {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Failed to get PlayerCharacterAnimInstance")));
-			UE_LOG(LogTemp, Error, TEXT("Failed to get PlayerCharacterAnimInstance"));
-		}*/
-
-		if (B_LocalPlayer->IsUsingKey() == true) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Using Key - Allow no Inputs")));
-			allowInput = false;
-		}
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Failed to get BaseCharacter")));
-		UE_LOG(LogTemp, Error, TEXT("Failed to get BaseCharacter"));
-	}
-
-	if (allowInput == false) {
-		SetIgnoreMoveInput(true);	// 이동 입력 차단
-	}
-	else {
-		SetIgnoreMoveInput(false);	// 입력 다시 활성화
-	}
-
-
 	// 캐릭터 움직임 통신 작업
 	Check_run();
 	CheckAndSendMovement();
@@ -649,6 +613,12 @@ void APlayerCharacterController::MoveForward(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
+	// 키를 여는 (애니메이션) 도중이면 플레이어의 해당 입력 막음
+	if (basecharacter->IsUsingKey() == true) {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Using Key - Allow no Inputs(Move_WS)")));
+		return;
+	}
+
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -673,6 +643,12 @@ void APlayerCharacterController::MoveForwardStop()
 void APlayerCharacterController::MoveLeft(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	// 키를 여는 (애니메이션) 도중이면 플레이어의 해당 입력 막음
+	if (basecharacter->IsUsingKey() == true) {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Using Key - Allow no Inputs(Move_AD)")));
+		return;
+	}
 
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -726,7 +702,13 @@ void APlayerCharacterController::Run(const FInputActionValue& Value)
 void APlayerCharacterController::Jump(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	
+
+	// 키를 여는 (애니메이션) 도중이면 플레이어의 해당 입력 막음
+	if (basecharacter->IsUsingKey() == true) {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Using Key - Allow no Inputs(Jump)")));
+		return;
+	}
+
 	if (basecharacter->GetStamina() >= 20) {
 		if (!basecharacter->GetMovementComponent()->IsFalling()) {
 			basecharacter->Jump();

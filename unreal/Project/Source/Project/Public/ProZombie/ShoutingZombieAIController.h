@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "ClientSocket.h"
+#include "ProZombie/BaseZombie.h"
+#include "ProCharacter/BaseCharacter.h"
 #include "ShoutingZombieAIController.generated.h"
 
 // AI 추가되면 수정될 것 같은 것!!
@@ -17,6 +19,7 @@ UCLASS()
 class PROJECT_API AShoutingZombieAIController : public AAIController
 {
 	GENERATED_BODY()
+
 public:
 	AShoutingZombieAIController();
 

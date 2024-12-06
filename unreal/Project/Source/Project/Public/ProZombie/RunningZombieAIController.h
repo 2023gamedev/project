@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "ClientSocket.h"
 #include "BaseZombie.h"
+#include "ProCharacter/BaseCharacter.h"
 #include "RunningZombieAIController.generated.h"
 
 
@@ -18,6 +19,7 @@ UCLASS()
 class PROJECT_API ARunningZombieAIController : public AAIController
 {
 	GENERATED_BODY()
+
 public:
 	ARunningZombieAIController();
 

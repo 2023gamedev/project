@@ -3,7 +3,7 @@
 
 #include "ProZombie/ZombieAIController.h"
 #include "Kismet/GameplayStatics.h"
-#include "ProCharacter/BaseCharacter.h"
+//#include "ProCharacter/BaseCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"

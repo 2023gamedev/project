@@ -510,7 +510,8 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	//UE_LOG(LogTemp, Log, TEXT("IsSimulatingPhysics: %s"), CutProceduralMesh_1->IsSimulatingPhysics() ? TEXT("true") : TEXT("false"));
 
 
-	GetMesh()->SetCollisionProfileName("NoCollision");
+	GetMesh()->SetCollisionProfileName("NoCollision");		// 생각해보니 이거 궂이 필요한...가? (+ 초기값은 "Zombie")
+															// 어차피 플레이어는 콜리전 프리셋 설정이 메시는 NoCollision, 캡슐은 Pawn 이라서 좀비 메시랑은 항상 충돌 무시되어 왔음 (초기값 Zombie가 Pawn을 무시함)
 	GetMesh()->SetGenerateOverlapEvents(false);
 	// 기존 SkeletalMesh 안 보이게 설정
 	GetMesh()->SetVisibility(false);
