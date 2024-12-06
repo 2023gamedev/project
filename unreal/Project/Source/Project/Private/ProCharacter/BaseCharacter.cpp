@@ -9,6 +9,7 @@
 #include "Components/TextBlock.h"
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
+#include "ProGamemode/OneGameModeBase.h"
 
 #include "ProZombie/BaseZombie.h"
 
@@ -437,26 +438,42 @@ void ABaseCharacter::BeginPlay()
 	}
 
 
+	// GameMode 찾기
+	if (PlayerId == 99) {
+		AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			ThrowOnGround.BindUObject(GameMode, &AOneGameModeBase::SpawnOnGroundItem);
+		}
 
-auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-
-AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
-
-AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
-	if (CurrentWeapon != nullptr) {
-		CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
+		
 	}
-	});
 
-AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
-	if (CurrentWeapon != nullptr) {
-		CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
-	}
-	});
 
-AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
-	FootSound();
-	});
+
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
+
+	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
+		if (CurrentWeapon != nullptr) {
+			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
+		}
+		});
+
+	AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
+		if (CurrentWeapon != nullptr) {
+			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
+		}
+		});
+
+	AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
+		FootSound();
+		});
+
+	
+
+
 
 
 //// Slice 용 Weapon - TEST
@@ -931,6 +948,7 @@ bool ABaseCharacter::SwapInven(int from, int to)
 
 void ABaseCharacter::SpawnOnGround(int slotindex)
 {
+	UE_LOG(LogTemp, Warning, TEXT("SpawnOnGround!!!!!!!!!!"));
 	if (slotindex < 0 || slotindex > Inventory.Num()) {
 		UE_LOG(LogTemp, Error, TEXT("SpawnOnGround: slotindex(%d) is out of bounds!"), slotindex);
 		return;
@@ -996,7 +1014,10 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 		Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 		Inventory[slotindex].Count = 0;
 
+
+
 		GameUIUpdate();
+		UE_LOG(LogTemp, Warning, TEXT("ThrowOnGround.ExecuteIfBound!!!!!!!!!!!!!"));
 		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
 	}
 	else if (CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
@@ -1007,6 +1028,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 		Inventory[slotindex].Count = 0;
 
 		GameUIUpdate();
+		UE_LOG(LogTemp, Warning, TEXT("ThrowOnGround.ExecuteIfBound!!!!!!!!!!!!!"));
 		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
 	}
 
@@ -2970,6 +2992,7 @@ void ABaseCharacter::OtherSpawnKeyItem(const FString& ItemName)
 
 void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Sending Destroy Packet: ItemBox ID = %d"), itemboxid);
 	Protocol::destroy_item Packet;
 	Packet.set_itemid(itemboxid);
 	Packet.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
@@ -2983,6 +3006,7 @@ void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 
 void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Sending GetKey Packet: ItemBox ID = %d"), itemboxid);
 	Protocol::get_key Packet;
 	Packet.set_itemid(itemid);
 	Packet.set_itemboxid(itemboxid);

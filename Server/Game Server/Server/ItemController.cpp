@@ -79,8 +79,8 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     SpawnItemBoxes(56, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(57, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F2);
 
-    SpawnItemBoxes(58, "CarKey3", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 10, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(59, "CarKey4", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 20, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(58, "CarKey3", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(59, "CarKey4", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
 
     SpawnInterItem(0, "CarActor");
     SpawnInterItem(1, "CarActor");
