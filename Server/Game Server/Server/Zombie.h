@@ -60,6 +60,8 @@ public:
 
     const float CanAttackDistance = 150.f;          // 공격 사정거리 150.f
 
+    // const float  CanSeePlayerDistance = 1000.0f; // 최대 시야거리 1000.0f
+
     const float CanHearDistance = 500.f;            // 발소리 포착 가능거리 500.f
 
     const float CanHearShoutDistance = 2000.f;      // 샤우팅 소리 포착 가능 거리 2000.f

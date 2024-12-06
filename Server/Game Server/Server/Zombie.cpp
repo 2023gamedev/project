@@ -334,16 +334,20 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			if (searchMap.find(player.first) != searchMap.end()) {
 				if (min > searchMap.at(player.first) && searchMap.at(player.first) > 0) {
 					min = searchMap.at(player.first);
-					//if(distanceType == 1)
-					//	cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에 존재함! --- 거리: " << searchMap.at(player.first) << endl;
-					//else if (distanceType == 2)
-					//	cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 에게 발소리 들킴! --- 거리: " << searchMap.at(player.first) << endl;
+#ifdef	ENABLE_BT_LOG
+					if(distanceType == 1)
+						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에 존재함! --- 거리: " << searchMap.at(player.first) << endl;
+					else if (distanceType == 2)
+						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 에게 발소리 들킴! --- 거리: " << searchMap.at(player.first) << endl;
+#endif
 				}
 				else if (min > searchMap.at(player.first) && searchMap.at(player.first) <= 0) {
-					//if (distanceType == 1)
-					//	cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
-					//else if (distanceType == 2)
-					//	cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 발소리 범위에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
+#ifdef	ENABLE_BT_LOG
+					if (distanceType == 1)
+						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
+					else if (distanceType == 2)
+						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 발소리 범위에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
+#endif
 				}
 			}
 		}
@@ -353,7 +357,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			return;
 		}
 
-		// 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
+		// 혹시 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
 		for (auto player : playerDB_BT) {
 			// 죽은 플레이어 무시
 			if (player.second.health <= 0) {
@@ -367,17 +371,29 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			if (searchMap.find(player.first) != searchMap.end()) {
 				if (min == searchMap.at(player.first)) {
 					closest_players.emplace_back(player.first);
-					//cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 와 가장 가까움! --- 거리: " << searchMap.at(player.first) << endl;
-					//cout << "플레이어 #" << player.first << " 의 위치: ( " << player.second.x << " , " << player.second.y << " , " << player.second.z << " )" << endl;
+#ifdef	ENABLE_BT_LOG
+					cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 와 가장 가까움! --- 거리: " << searchMap.at(player.first) << endl;
+					cout << "플레이어 #" << player.first << " 의 위치: ( " << player.second.x << " , " << player.second.y << " , " << player.second.z << " )" << endl;
+#endif
 				}
 			}
 		}
 
 		if (closest_players.size() == 0) {
-			if(distanceType == 1)
-				cout << "[Alert] DistanceTo_PlayerInSight is empty -> 가장 가까운 플레이어(좀비시야) 찾을 수 없음" << endl;
+			/*if(distanceType == 1)
+				cout << "DistanceTo_PlayerInSight is empty -> 가장 가까운 플레이어(좀비시야) 찾을 수 없음" << endl;
 			else if(distanceType == 2)
-				cout << "[Alert] DistanceTo_FootSound is empty -> 가장 가까운 플레이어(발소리) 찾을 수 없음" << endl;
+				cout << "DistanceTo_FootSound is empty -> 가장 가까운 플레이어(발소리) 찾을 수 없음" << endl;*/
+
+			// DataRace 발생 가능 -> ProcessPacket 쓰레드에서 좀비 PlayerInSight 하고 distTo_... 을 조작하고 있어서, 
+			// BT 처음 검사할 때는 플레이어가 시야범위에 있었지만 CanSeePlayer task를 작업하는 도중에 플레이어가 시야에 사라져 송수신 쓰레드에서 다시 distTo_에 접근해
+			// 해당 플레이어의 거리 값을 -1.0f로 초기화하면, 해당 로그가 찍힘...
+
+			// [XXXXXXXXXXXXXXXXXXX] =========> 잉 생각해보니 zombieDB도 데이터 레이스 방지하려고 zombieDB_BT 따로 만들어서 해당 데이터로 BT 검사하였던건데...?
+			// 문제가 뭐지...
+
+			// 그래도 크게 문제는 안 일으키니 주석 처리...
+
 			return;
 		}
 
