@@ -2985,6 +2985,7 @@ void ABaseCharacter::OtherSpawnKeyItem(const FString& ItemName)
 
 void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Sending Destroy Packet: ItemBox ID = %d"), ItemBoxId);
 	Protocol::destroy_item Packet;
 	Packet.set_itemid(itemboxid);
 	Packet.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
@@ -2998,6 +2999,7 @@ void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 
 void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Sending GetKey Packet: ItemBox ID = %d"), ItemBoxId);
 	Protocol::get_key Packet;
 	Packet.set_itemid(itemid);
 	Packet.set_itemboxid(itemboxid);

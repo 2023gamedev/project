@@ -43,7 +43,7 @@ using OVLP_EX = struct Overlap_ex {
 	OVERLAPPED original_overlap;
 	int operation;
 	WSABUF wsabuf;
-	Packet iocp_buffer[MAX_BUF_SIZE];
+	char iocp_buffer[MAX_BUF_SIZE];
 };
 
 using PLAYER_INFO = struct Client_INFO {
@@ -53,7 +53,7 @@ using PLAYER_INFO = struct Client_INFO {
 	OVLP_EX recv_overlap;
 	int packet_size;
 	int previous_size;
-	Packet packet_buff[MAX_BUF_SIZE];
+	char packet_buff[MAX_BUF_SIZE];
 	bool isInGame;
 	int pingcnt = 0;
 	bool send_zombie = false;
@@ -62,6 +62,7 @@ using PLAYER_INFO = struct Client_INFO {
 	
 	// 전송 대기열 추가
 	Concurrency::concurrent_queue<std::string> sendQueue;  // 전송할 데이터를 담는 대기열
+	Concurrency::concurrent_queue<std::string> recvQueue;  // 수신한 데이터를 담는 대기열
 	std::mutex sendMutex;  // 큐 접근 제어용 락
 	atomic<bool> isSending = false;  // 현재 전송 중인지 여부를 나타내는 플래그
 };
@@ -120,7 +121,7 @@ public:
 
 	void DisconnectClient(unsigned int clientId);
 
-	bool IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize);
+	bool IOCP_ProcessPacket(int id, const std::string& packet);
 	void IOCP_SendNextPacket(PLAYER_INFO* user);
 	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);
 

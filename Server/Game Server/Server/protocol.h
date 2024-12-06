@@ -19,4 +19,4 @@ enum PacketProtocolType {
 	TEST = 1
 };
 
-using Packet = unsigned char;
+//using Packet = unsigned char;
