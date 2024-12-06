@@ -653,7 +653,7 @@ public:
 	std::atomic<bool> b_attack{ false };
 	bool b_run = false;
 
-	uint32 ItemBoxId = 9;
+	uint32 ItemBoxId = 0;
 
 
 	enum FLOOR {
