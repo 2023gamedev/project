@@ -445,7 +445,7 @@ void APlayerCharacterController::Send_Attack()
 
 		b_attack = false;
 
-		//UE_LOG(LogNet, Display, TEXT("Send Attack: PlayerId=%d"), recvPlayerData.PlayerId);
+		//UE_LOG(LogNet, Display, TEXT("Send Attack: PlayerId=%d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 	}
 }
 
@@ -495,7 +495,7 @@ void APlayerCharacterController::Send_Equipment()
 		packet.SerializeToString(&serializedData);
 
 		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-		UE_LOG(LogNet, Display, TEXT("Send Equip: PlayerId=%d"), recvPlayerData.PlayerId);
+		//UE_LOG(LogNet, Display, TEXT("Send Equip: PlayerId=%d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 		e_NWeapon = false;
 		e_TWeapon = false;
 		e_BHItem = false; 

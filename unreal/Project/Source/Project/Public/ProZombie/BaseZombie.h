@@ -212,8 +212,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float m_fSpeed = 0.f;
 
+	// 근데 m_bDie 변수 사용 안하고 있긴 함
 	UPROPERTY(EditAnywhere)
-	bool m_bDie = false;
+	bool m_bDie = false;	
 
 	UPROPERTY(EditAnywhere)
 	bool m_bFind = false;

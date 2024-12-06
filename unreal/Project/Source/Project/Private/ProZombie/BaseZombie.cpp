@@ -797,6 +797,7 @@ void ABaseZombie::UpdateZombieData(FVector Location)
 	NewLocation = Location;
 }
 
+// 사망 후 되살아나기 타이머
 void ABaseZombie::StartResurrectionTimer()
 {
 
@@ -832,12 +833,12 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	StartWatiingTimer();
 }
 
+// 되살아나기 애니메이션 워이팅 타이머
 void ABaseZombie::StartWatiingTimer()
 {
 	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);	// 5초 이후 완전히 다시 살아남
 }
 
-//
 void ABaseZombie::WaittingTimerElapsed()
 {
 	m_bIsStanding = false;
@@ -851,7 +852,7 @@ void ABaseZombie::WaittingTimerElapsed()
 	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
 	SetHP(GetStartHP());
 
-	SetDie(true);	//??? 이거 반대여야 하는거 아닌가? (근데 m_bDie 변수가 어디에 쓰이는 거지 정확히??)
+	SetDie(false);
 
 	doAction_takeDamage_onTick = true;
 	doAction_setIsNormalDead_onTick = true;		// 이거 지금 ResurrectionTimerElapsed를 모두 주석해놔서 불릴 일이 없긴함 (즉, 해당 클라가 좀비 직접 죽이면 doAction_setIsNormalDead_onTick 값 영원히 false임)
