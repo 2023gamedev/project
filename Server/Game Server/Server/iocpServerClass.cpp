@@ -684,18 +684,19 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 			// 좀비가 플레이어들이 없는 층에 있다면 좀비 BT 실행 멈추고 있기
 			bool same_floor = false;
-			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 floor: " << zom->z_floor << endl;
+			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 z_floor: " << zom->z_floor << endl;
+			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 pathfinder.floor: " << zom->pathfinder.floor << endl;
 			for (auto player : playerDB_BT) {
 				//cout << "플레이어 #" << player.first << " 의 floor: " << player.second.floor << endl;
-				if (zom->z_floor == player.second.floor) {	
+				if (zom->z_floor == player.second.floor) {
 					same_floor = true;
 					//cout << endl;
 					break;
 				}
 			}
 			if (same_floor == false) {
-#ifdef	ENABLE_BT_LOG
 				//cout << endl;
+#ifdef	ENABLE_BT_LOG
 				cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 플레이어들이 없는 층에 존재. -> BT 실행 잠시 중지" << endl << endl;
 				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
 				cout << endl;

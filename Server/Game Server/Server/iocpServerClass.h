@@ -101,6 +101,8 @@ extern std::vector<tuple<float, float, float>> g_valispositionsB1;
 extern std::vector<tuple<float, float, float>> g_valispositionsF1;
 extern std::vector<tuple<float, float, float>> g_valispositionsF2;
 
+// ostream 연산자 오버로딩 선언
+std::ostream& operator<<(std::ostream& os, FLOOR floor);
 
 
 class IOCP_CORE

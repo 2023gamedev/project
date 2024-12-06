@@ -700,22 +700,33 @@ void Zombie::SendPath()
 		string serializedData;
 		zPath.SerializeToString(&serializedData);
 
-		for (const auto& player : g_players) {
-			if (pathfinder.floor == playerDB_BT[player.first].floor) {	// 클라 자기 층에 있는 좀비 정보만 받기 - 최적화 
-				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 
-				//cout << "플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
-			}
-		}	//=> 이건 왜 정상 작동하고 있던거지?
-
-		// 이렇게 하는게 더 깔끔하지 않나?
-		//for (const auto& player : playerDB_BT) {
-		//	if (pathfinder.floor == player.second.floor) {	// 클라 자기 층에 있는 좀비 정보만 받기 - 최적화 
+		// 이전 코드 (문제는 없는데 그냥 BT 사용 변수들 통일화 하려고 밑에꺼 씀)
+		//cout << "좀비 #" << ZombieData.zombieID << " 의 pathfinder.floor: " << pathfinder.floor << endl;
+		//
+		//for (const auto& player : g_players) {
+		//	cout << "g_players index: " << player.first << " 의 playerDB_BT["<< player.first << "].floor: " << playerDB_BT[player.first].floor << endl;
+		//
+		//	if (pathfinder.floor == playerDB_BT[player.first].floor) {	// 클라 자기 층에 있는 좀비 정보만 받기 - 최적화 
 		//		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-
-		//		//cout << "플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
+		//
+		//		cout << "(g_players index:)플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
 		//	}
-		//}
+		//}	
+
+	
+
+		//cout << "좀비 #" << ZombieData.zombieID << " 의 z_floor: " << z_floor << endl;
+		
+		for (const auto& player : playerDB_BT) {
+			//cout << "playerDB_BT key: " << player.first << " 의 floor: " << player.second.floor << endl;
+		
+			if (z_floor == player.second.floor) {	// 클라 자기 층에 있는 좀비 정보만 받기 - 최적화 
+				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+		
+				//cout << "(playerDB_BT key:)플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
+			}
+		}
 
 	}
 
