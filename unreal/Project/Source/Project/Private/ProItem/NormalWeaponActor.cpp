@@ -126,8 +126,14 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 					FVector Right = PlaneComponent->GetRightVector();  // 평면의 오른쪽 방향
 					FVector Forward = PlaneComponent->GetForwardVector();  // 평면의 앞쪽 방향
 					FVector Scale = PlaneComponent->GetComponentScale();  // 평면의 스케일
-					float HalfWidth = 100.0f * Scale.X;  // 평면의 폭
-					float HalfHeight = 100.0f * Scale.Y; // 평면의 높이
+
+					float Weapon_Scale = 0.f;	// 무기별 스케일 조정
+					if (WeaponName == "ButchersKnife") { Weapon_Scale = 45.f; }
+					else if(WeaponName == "FireAxe") { Weapon_Scale = 50.f; }
+					else if (WeaponName == "SashimiKnife") { Weapon_Scale = 40.f; }
+
+					float HalfWidth = Weapon_Scale * Scale.X;  // 평면의 폭
+					float HalfHeight = Weapon_Scale * Scale.Y; // 평면의 높이
 
 					// 꼭짓점 계산
 					FVector TopLeft = Center - Right * HalfWidth + Forward * HalfHeight;
@@ -139,6 +145,8 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 					PlaneVertexs = { TopLeft, TopRight, BottomLeft, BottomRight };
 
 					if (PlaneVertexs.Num() >= 4) {
+						float displaceTime = 30.f;
+
 						// 히트 지점에 평면의 선 그리기
 						DrawDebugLine(
 							GetWorld(),
@@ -146,7 +154,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							PlaneVertexs[1],			// 히트 지점
 							FColor::Green,				// 선 색상
 							false,						// 지속 여부
-							5.0f,						// 지속 시간
+							displaceTime,				// 지속 시간
 							0,							// 깊이 우선 여부
 							1.0f						// 선 두께
 						);
@@ -157,7 +165,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							PlaneVertexs[2],
 							FColor::Green,
 							false,
-							5.0f,
+							displaceTime,
 							0,
 							1.0f
 						);
@@ -168,7 +176,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							PlaneVertexs[3],
 							FColor::Green,
 							false,
-							5.0f,
+							displaceTime,
 							0,
 							1.0f
 						);
@@ -179,12 +187,12 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							PlaneVertexs[3],
 							FColor::Green,
 							false,
-							5.0f,
+							displaceTime,
 							0,
 							1.0f
 						);
 
-						FVector planeposition_center = (PlaneVertexs[0] + PlaneVertexs[1] + PlaneVertexs[2] + PlaneVertexs[3]) / 4.0f;
+						FVector planeposition_center = Center;	//(PlaneVertexs[0] + PlaneVertexs[1] + PlaneVertexs[2] + PlaneVertexs[3]) / 4.0f;
 
 						DrawDebugPoint(
 							GetWorld(),
@@ -192,11 +200,11 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							10.0f,
 							FColor::Yellow,
 							false,
-							5.0f,
+							displaceTime,
 							0
 						);
 
-						FVector planenormal = FVector::CrossProduct(PlaneVertexs[0] - PlaneVertexs[3], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
+						FVector planenormal = FVector::CrossProduct(PlaneVertexs[3] - PlaneVertexs[0], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
 
 						DrawDebugLine(
 							GetWorld(),
@@ -204,12 +212,12 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 							planeposition_center + planenormal * 20.0f,		
 							FColor::Yellow,
 							false,
-							5.0f,
+							displaceTime,
 							0,
 							1.0f
 						);
 						
-						Zombie->WeaponForward = GetActorRotation().Vector();
+						Zombie->WeaponForward = GetActorRotation().Vector();		// 잉 이건 뭐에 필요한 거지..?
 						Zombie->CutZombie(planeposition_center, planenormal);
 					}
 				}

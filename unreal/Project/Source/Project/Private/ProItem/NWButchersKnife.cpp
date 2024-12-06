@@ -17,7 +17,7 @@ ANWButchersKnife::ANWButchersKnife()
 	PlaneComponent->SetupAttachment(BoxComponent);
 	
 	BoxComponent->SetRelativeLocation(FVector(30.4f, -10.19f, 1.f));
-	BoxComponent->SetRelativeRotation(FRotator(-90.f, 180.0f, -150.f));
+	BoxComponent->SetRelativeRotation(FRotator(-90.f, 180.0f, 150.f));
 	BoxComponent->SetRelativeScale3D(FVector(0.03f, 0.25f, 0.5f));
 	
 	PlaneComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
