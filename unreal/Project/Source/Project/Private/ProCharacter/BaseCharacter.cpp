@@ -83,7 +83,7 @@
 #define default_healing_anim_playtime 4.57f
 #define default_bleedhealing_anim_playtime 9.f
 #define default_playkey_anim_playtime 5.23f
-#define playtime_8_sec 8.f			// 키 사용시간
+//#define playtime_8_sec 8.f			// 키 사용시간 (너무 긴거 같아서 걍 default_playkey_anim_playtime 5.23초 하기로 함)
 #define playtime_4_sec 4.f			// 참치캔, 소독약, 연고 사용시간
 #define playtime_3_5_sec 3.5f		// 과자 사용시간
 #define playtime_3_sec 3.f			// 음료수, 담배, 물 사용시 & 출혈 회복용 아이템 사용시간
@@ -541,11 +541,11 @@ void ABaseCharacter::Tick(float DeltaTime)
 			// 애니메이션 전환 쿨타임 적용 (0.3초)
 			float currentTime = GetWorld()->GetTimeSeconds();
 
-			if (currentTime - LastAnimTime > 0.3f) {
+			if (currentTime - LastStopAnimTime > 0.3f) {
 				if (AnimInstance) {
 					AnimInstance->SetCurrentPawnSpeed(Speed);
 
-					LastAnimTime = currentTime;
+					LastStopAnimTime = currentTime;
 				}
 			}
 		}
@@ -1408,6 +1408,8 @@ void ABaseCharacter::Healing()
 	}
 
 	if (CurrentHealingItem != nullptr) {
+		m_bIsHealing = true;
+
 		m_bIsHealingTime = true;
 
 		CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
@@ -1440,7 +1442,7 @@ void ABaseCharacter::Healing()
 		}
 
 		if (m_iHealingMontageFlag == 0) {
-			++m_iHealingMontageFlag;
+			++m_iHealingMontageFlag;			
 			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::HealingMontageEnded);
 		}
 	}
@@ -1466,6 +1468,8 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd->   QuickSlot[1].Count <= 0!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		return;
 	}
+
+	m_bIsHealing = false;
 
 	CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
 	
@@ -1506,8 +1510,8 @@ void ABaseCharacter::BleedHealing()
 		AnimInstance->PlayBleedHealingMontage(AnimPlaySpeed);
 
 		if (m_iBleedHealingMontageFlag == 0) {
-			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::BleedHealingMontageEnded);
 			++m_iBleedHealingMontageFlag;
+			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::BleedHealingMontageEnded);
 		}
 
 	}
@@ -1588,7 +1592,7 @@ void ABaseCharacter::PlayKey()
 
 			CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
-			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime /default_playkey_anim_playtime;
+			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime / default_playkey_anim_playtime;
 			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
 			PlayKeyAnim(); // 애니메이션 시작
@@ -1609,8 +1613,8 @@ void ABaseCharacter::PlayKeyAnim()
 
 	// 첫 연결만 이벤트 바인딩
 	if (KeyMontageFlag == 0) {
-		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::KeyMontageEnded);
 		++KeyMontageFlag;
+		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::KeyMontageEnded);
 	}
 }
 

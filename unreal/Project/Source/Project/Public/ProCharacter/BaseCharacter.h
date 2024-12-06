@@ -283,6 +283,8 @@ public:
 	float GetBasicSpeed() { return m_fBasicSpeed; }
 	void SetBasicSpeed(float speed) { m_fBasicSpeed = speed; }
 
+	bool IsUsingKey() { return bIsKeyPlaying; }
+
 
 	float GetStamina() { return m_fStamina; }
 	void SetStamina(float stamina) { m_fStamina = stamina; }
@@ -392,6 +394,10 @@ public:
 	void HealingTimerElapsed();
 
 	FTimerHandle HealingHandle;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsHealing = false;
+
 	UPROPERTY(EditAnywhere)
 	bool m_bIsHealingTime = false;
 
@@ -536,13 +542,13 @@ private:
 	float m_fStamina = 0.f;
 
 	UPROPERTY(EditAnywhere)
-	float m_fHealing = 0.f;
+	float m_fHealing = 0.f;		// 얘 딱히 쓰는데 없음...
 
 	UPROPERTY(EditAnywhere)
 	bool m_bBleeding = false;
 
 	UPROPERTY(EditAnywhere)
-	bool m_bSitDown = false;
+	bool m_bSitDown = false;		// 얘 딱히 쓰는데 없음...
 
 	UPROPERTY(EditAnywhere)
 	bool m_bRun = false;
@@ -633,11 +639,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	int m_iOpenRoofKey;
 
-	float LastAnimTime = 0.f;
+	float LastStopAnimTime = 0.f;
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	uint32 PlayerId = 99;
+	uint32 PlayerId = 99;		// 나 자신은 99번(초기값) 고정이고 ,다른 클라는 실제 서버에서 관리하는 플레이어 DB에 인덱스를 따름 (+ 그래서 나 자신의 실제 서버 DB의 인덱스 알고 싶으면 ClientSocket->MyPlayerId 사용)
 	std::string PlayerName;
 
 	FVector NewLocation;

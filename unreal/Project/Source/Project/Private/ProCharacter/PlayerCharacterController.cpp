@@ -81,7 +81,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	bool allowInput = true;
 
 	if (B_LocalPlayer) {
-		auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(B_LocalPlayer->GetMesh()->GetAnimInstance());
+		/*auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(B_LocalPlayer->GetMesh()->GetAnimInstance());
 
 		if (AnimInstance) {
 			if (AnimInstance->Montage_IsPlaying(AnimInstance->GetOpenKeyMontage()) == true) {
@@ -92,6 +92,11 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		else {
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Failed to get PlayerCharacterAnimInstance")));
 			UE_LOG(LogTemp, Error, TEXT("Failed to get PlayerCharacterAnimInstance"));
+		}*/
+
+		if (B_LocalPlayer->IsUsingKey() == true) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Using Key - Allow no Inputs")));
+			allowInput = false;
 		}
 	}
 	else {
@@ -116,6 +121,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	Send_jump();
 
 
+	// ClientSocketPtr 큐에 쌓인 명령들 실행(pop)
 	if (GameInstance && GameInstance->ClientSocketPtr)
 	{
 		if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
@@ -739,6 +745,12 @@ void APlayerCharacterController::Jump(const FInputActionValue& Value)
 void APlayerCharacterController::GetItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	// 지혈 아이템/회복 아이템 사용 애니메이션 플레이 도중에는 아이템 먹기 입력 막기 -> 아이템 먹기로 해당 애니메이션 캔슬이 가능해서 (이렇게되면 아이템 효과가 바로 시전됨)
+	if (basecharacter->m_bIsBleedHealing == true || basecharacter->m_bIsHealing == true) {
+		return;
+	}
+
 	basecharacter->GetItem();
 	b_GetItem = true;
 }
