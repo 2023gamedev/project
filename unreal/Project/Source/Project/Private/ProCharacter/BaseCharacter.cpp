@@ -445,6 +445,8 @@ void ABaseCharacter::BeginPlay()
 		{
 			ThrowOnGround.BindUObject(GameMode, &AOneGameModeBase::SpawnOnGroundItem);
 		}
+
+		
 	}
 
 
@@ -946,6 +948,7 @@ bool ABaseCharacter::SwapInven(int from, int to)
 
 void ABaseCharacter::SpawnOnGround(int slotindex)
 {
+	UE_LOG(LogTemp, Warning, TEXT("SpawnOnGround!!!!!!!!!!"));
 	if (slotindex < 0 || slotindex > Inventory.Num()) {
 		UE_LOG(LogTemp, Error, TEXT("SpawnOnGround: slotindex(%d) is out of bounds!"), slotindex);
 		return;
@@ -1011,7 +1014,10 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 		Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 		Inventory[slotindex].Count = 0;
 
+
+
 		GameUIUpdate();
+		UE_LOG(LogTemp, Warning, TEXT("ThrowOnGround.ExecuteIfBound!!!!!!!!!!!!!"));
 		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
 	}
 	else if (CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
@@ -1022,6 +1028,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 		Inventory[slotindex].Count = 0;
 
 		GameUIUpdate();
+		UE_LOG(LogTemp, Warning, TEXT("ThrowOnGround.ExecuteIfBound!!!!!!!!!!!!!"));
 		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
 	}
 

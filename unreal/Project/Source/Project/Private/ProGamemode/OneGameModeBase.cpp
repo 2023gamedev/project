@@ -267,6 +267,45 @@ void AOneGameModeBase::ChoiceCharacter()
 
 }
 
+AActor* AOneGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
+{
+    // 선택된 캐릭터 타입에 따라 태그 설정
+    FName DesiredTag;
+
+    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
+    uint32 playerid = GameInstance->ClientSocketPtr->GetMyPlayerId();
+
+    UE_LOG(LogTemp, Warning, TEXT("ChoosePlayerStart_Implementation -> playerid: %d"), playerid);
+    if (playerid == 1)
+    {
+        DesiredTag = FName("Start1");
+    }
+    else if (playerid == 2)
+    {
+        DesiredTag = FName("Start4");
+    }
+    else if (playerid == 3)
+    {
+        DesiredTag = FName("Start2");
+    }
+    else if (playerid == 4)
+    {
+        DesiredTag = FName("Start3");
+    }
+
+    // 월드의 모든 PlayerStart 검색
+    for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It)
+    {
+        APlayerStart* PlayerStart = *It;
+        if (PlayerStart->Tags.Contains(DesiredTag))
+        {
+            return PlayerStart; // 적합한 PlayerStart 반환
+        }
+    }
+
+    // 태그에 맞는 PlayerStart를 찾지 못한 경우 기본 로직 사용
+    return Super::ChoosePlayerStart_Implementation(Player);
+}
 
 
 int32 AOneGameModeBase::RandomCarActorLocation()
@@ -309,6 +348,7 @@ int32 AOneGameModeBase::RandomCarKey()
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos)
 {
     if (ItemBoxClasses.Num() <= itemboxindex) {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: %d"), itemboxindex);
         ItemBoxClasses.SetNum(itemboxindex + 1);
     }
 
@@ -361,6 +401,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
         SpawnedItemBox->ItemBoxId = itemboxindex;
     }
     m_iItemBoxNumber++;
+    UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> m_iItemBoxNumber: %d"), m_iItemBoxNumber);
 }
 
 void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count)
@@ -373,20 +414,27 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
             DefaultPawn = *ActorItr;
             if (DefaultPawn) {
+                UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem -> GetPlayerId: %d"), DefaultPawn->GetPlayerId());
                 if (DefaultPawn->GetPlayerId() == 99) {
+                    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem : 99!!!!!!"));
                     break;
                 }
             }
         }
     }
 
-
+    UE_LOG(LogTemp, Warning, TEXT("DropPosBefore!!!!!!"));
     FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
-
+    UE_LOG(LogTemp, Warning, TEXT("ItemBoxClassesBefore!!!!!!"));
     ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    UE_LOG(LogTemp, Warning, TEXT("SelectedItemBoxClassBefore!!!!!!"));
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem -> ItemBoxClasses.Num(): %d"), ItemBoxClasses.Num());
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem ->  GetItemBoxNumber(): %d"), GetItemBoxNumber());
+
     TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[GetItemBoxNumber()];
     FVector itemboxpos = DefaultPawn->GetActorLocation() + FVector(DropPos.X, DropPos.Y, -60.149886f);
 
+    UE_LOG(LogTemp, Warning, TEXT("SpawnedItemBoxBefore!!!!!!"));
     AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
 
     if (SpawnedItemBox) {
@@ -397,6 +445,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     }
 
     m_iItemBoxNumber++;
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 }
 
 void AOneGameModeBase::CarActorRandomLocationSetting()
