@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
+bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     // g_players에서 클라이언트 정보 검색
     auto it = g_players.find(id);
     if (it == g_players.end()) {
@@ -25,7 +25,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     PLAYER_INFO* clientInfo = it->second;
 
     Protocol::Character tempPacket;
-    tempPacket.ParseFromArray(buffer, bufferSize);
+    tempPacket.ParseFromArray(packet.data(), packet.size());
 
     if ((tempPacket.playerid() == id || tempPacket.isingame()) && !clientInfo->isInGame) {
         clientInfo->isInGame = true;
@@ -56,7 +56,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         // 서버로 받은 패킷을 그대로 돌려줌
         Protocol::Character Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
@@ -171,7 +171,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
         printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
         Protocol::Zombie Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
@@ -210,7 +210,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] character Packet Received !!\n", id);
         Protocol::Character_Attack Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
@@ -227,7 +227,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] Equip Packet Received !!\n", id);
         Protocol::Equip_Item Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
@@ -244,7 +244,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     //{
     //    printf("\n[ No. %3u ] Run Packet Received !!\n", id);
     //    Protocol::run Packet;
-    //    Packet.ParseFromArray(buffer, bufferSize);
+    //    Packet.ParseFromArray(packet.data(), packet.size());
     //    string serializedData;
     //    Packet.SerializeToString(&serializedData);
 
@@ -269,7 +269,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] Jump Packet Received !!\n", id);
         Protocol::jump Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
@@ -286,7 +286,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] Detected Packet Received !!\n", id);
         Protocol::Detected Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
 
         int recvzombieid = Packet.zombieid();
 
@@ -339,7 +339,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     case 11:
     {
         Protocol::ping Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
 
         auto it = g_players.find(Packet.playerid());
 
@@ -355,7 +355,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     case 12:
     {
         Protocol::Zombie_hp Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         cout << "recv zombie #" << Packet.zombieid() << " HP Packet" << endl;
 
         string serializedData;
@@ -400,7 +400,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     case 14:
     {
         Protocol::patrol_hit Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         //cout << "recv patrol zombie hit #" << Packet.zombieid() << endl;
 
         return true;
@@ -410,7 +410,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] Destroy Item Packet Received !!\n", id);
         Protocol::destroy_item Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
@@ -427,7 +427,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] get key item !!\n", id);
         Protocol::get_key Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
 
         int itemboxid = Packet.itemboxid();
         int playerid = Packet.playerid();
@@ -467,7 +467,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] escape root open !!\n", id);
         Protocol::escape Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
@@ -500,7 +500,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
     {
         printf("\n[ No. %3u ] recv send complet packet !!\n", id);
         Protocol::send_complete Packet;
-        Packet.ParseFromArray(buffer, bufferSize);
+        Packet.ParseFromArray(packet.data(), packet.size());
 
         if (Packet.complete_type() == 1) {
             clientInfo->send_zombie = true;

@@ -202,10 +202,13 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				user->previous_size += copySize;
 				buf_ptr += copySize;
 				remained -= copySize;
+				
+				std::string packetData(user->packet_buff, user->previous_size);
+				user->recvQueue.push(packetData);
+				user->previous_size = 0;
 
-				if (IOCP_CORE::IOCP_ProcessPacket(key, user->packet_buff, user->previous_size)) {
-					// 파싱 및 처리가 성공적으로 완료되면 버퍼 초기화
-					user->previous_size = 0;
+				if (user->recvQueue.try_pop(packetData)) {
+					IOCP_ProcessPacket(key, packetData);
 				}
 			}
 
