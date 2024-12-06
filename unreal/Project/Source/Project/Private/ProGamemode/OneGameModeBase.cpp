@@ -66,21 +66,21 @@ void AOneGameModeBase::BeginPlay()
 
     ZombieMap.Empty(); // ZombieMap 초기화
 
-    ABaseCharacter* DefaultPawn = nullptr;
+    //ABaseCharacter* DefaultPawn = nullptr;
 
-    UWorld* World = GetWorld();
-    if (World) {
+    //UWorld* World = GetWorld();
+    //if (World) {
 
-        for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
-            UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
-            DefaultPawn = *ActorItr;
-            if (DefaultPawn) {
-                break;
-            }
-        }
+    //    for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
+    //        UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
+    //        DefaultPawn = *ActorItr;
+    //        if (DefaultPawn) {
+    //            break;
+    //        }
+    //    }
 
-        DefaultPawn->ThrowOnGround.BindUObject(this, &AOneGameModeBase::SpawnOnGroundItem);
-    }
+    //    DefaultPawn->ThrowOnGround.BindUObject(this, &AOneGameModeBase::SpawnOnGroundItem);
+    //}
 
  
     // commit debug용 

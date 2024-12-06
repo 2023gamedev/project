@@ -9,6 +9,7 @@
 #include "Components/TextBlock.h"
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
+#include "ProGamemode/OneGameModeBase.h"
 
 #include "ProZombie/BaseZombie.h"
 
@@ -437,26 +438,40 @@ void ABaseCharacter::BeginPlay()
 	}
 
 
-
-auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-
-AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
-
-AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
-	if (CurrentWeapon != nullptr) {
-		CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
+	// GameMode 찾기
+	if (PlayerId == 99) {
+		AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			ThrowOnGround.BindUObject(GameMode, &AOneGameModeBase::SpawnOnGroundItem);
+		}
 	}
-	});
 
-AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
-	if (CurrentWeapon != nullptr) {
-		CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
-	}
-	});
 
-AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
-	FootSound();
-	});
+
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
+
+	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
+		if (CurrentWeapon != nullptr) {
+			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
+		}
+		});
+
+	AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
+		if (CurrentWeapon != nullptr) {
+			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
+		}
+		});
+
+	AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
+		FootSound();
+		});
+
+	
+
+
 
 
 //// Slice 용 Weapon - TEST
