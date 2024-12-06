@@ -71,6 +71,7 @@ void ABaseZombie::BeginPlay()
 // Called every frame
 void ABaseZombie::Tick(float DeltaTime)
 {
+	// CutProceduralMesh Impulse 적용
 	if (CutProceduralMesh_1) {
 		if (procMesh_AddImpulse_1 == false) {
 			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_1)"));
@@ -150,6 +151,8 @@ void ABaseZombie::Tick(float DeltaTime)
 		}*/
 	}
 
+
+	// 클라 - 보이지 않는 좀비 최적화 작업
 	if (MyChar == nullptr)
 		return;
 
@@ -175,6 +178,8 @@ void ABaseZombie::Tick(float DeltaTime)
 
 
 	// 좀비 피격시 클라 동기화
+	float bloodspawn_z_offset = 80.f;
+
 	if (m_fHP_Prev != m_fHP && GetHP() > 0 && m_bBeAttacked == false && doAction_takeDamage_onTick == true) {
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 피격 클라 동기화 작업실행!")));	// 직접 때리는 클라에서는 해당 메세지 보이면 안 됨1
@@ -190,7 +195,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
-		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, 50.f), RandRotate);
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
 
 		if (NewBloodFX) {
 			NewBloodFX->blood_spawncount = FMath::RandRange(80, 100);
@@ -222,7 +227,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
-		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, 50.f), RandRotate);
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
 
 		if (NewBloodFX) {
 			NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
