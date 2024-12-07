@@ -12,7 +12,7 @@
 class UInventoryUI;
 class UQuickSlotUI;
 
-// Ä³¸¯ÅÍ(ÇÃ·¹ÀÌ¾î)°¡ ¾²´Â ÀÎº¥Åä¸® UI¸¸ µé¾îÀÖ´Ù.
+// ìºë¦­í„°(í”Œë ˆì´ì–´)ê°€ ì“°ëŠ” ì¸ë²¤í† ë¦¬ UIë§Œ ë“¤ì–´ìˆë‹¤.
 UCLASS()
 class PROJECT_API UGamePlayerUI : public UBaseUI
 {
@@ -29,7 +29,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (BindWidget))
 	UInventoryUI* Inventory;  
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (BindWidget)) // ¾÷µ¥ÀÌÆ® ÇÊ¿ä
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (BindWidget)) // ì—…ë°ì´íŠ¸ í•„ìš”
 	UQuickSlotUI* QuickSlot;
 
 

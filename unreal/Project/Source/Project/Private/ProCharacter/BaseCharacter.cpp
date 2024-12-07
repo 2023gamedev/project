@@ -1154,10 +1154,12 @@ void ABaseCharacter::GetItem()
 
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
 		if (itembox) {
+			int32 ItemCountInInventory = 20; // 인벤이 꽉찼을때 못먹게 하기
 
 			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
+					
 					if (i >= GetInvenSize()) {
 						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
 						return;
@@ -1166,6 +1168,14 @@ void ABaseCharacter::GetItem()
 						break;
 					}
 				}
+				else {
+					--ItemCountInInventory;
+				}
+			}
+
+			if (ItemCountInInventory == 0) { 
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenMAX!!!");
+				return;
 			}
 
 			PickUp();

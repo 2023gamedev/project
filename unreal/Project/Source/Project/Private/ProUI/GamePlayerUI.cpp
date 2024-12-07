@@ -34,9 +34,9 @@ void UGamePlayerUI::Update()
 
 void UGamePlayerUI::RefreshInventory(int slotindex)
 {
-	Inventory->RefreshSlot(slotindex); // ÀÎº¥Åä¸® ÂÊ¿¡¼­ º¯È­°¡ »ý°åÀ» ¶§ Äü½½·ÔÀ» ¼öÁ¤ÇÏµµ·Ï ÇØ¾ß°ÚÁö
+	Inventory->RefreshSlot(slotindex); // ì¸ë²¤í† ë¦¬ ìª½ì—ì„œ ë³€í™”ê°€ ìƒê²¼ì„ ë•Œ í€µìŠ¬ë¡¯ì„ ìˆ˜ì •í•˜ë„ë¡ í•´ì•¼ê² ì§€
 
-	// ÀÓ½Ã
+	// ìž„ì‹œ
 	if (slotindex < 5) {
 		QuickSlot->RefreshSlot(slotindex);
 	}

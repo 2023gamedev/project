@@ -149,7 +149,7 @@ void USlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEven
 
 	if (OutOperation == nullptr) {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Start"));
-
+		//bIsDragging = true;
 		UDragOnSlot* oper = NewObject<UDragOnSlot>();
 		OutOperation = oper;
 		oper->SlotIndex = this->SlotIndex;
@@ -168,6 +168,24 @@ void USlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEven
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: Drag Again"));
 	}
 }
+//
+//FReply USlot::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+//{
+//	if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton) {
+//		// 드래그 상태 확인
+//		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: NativeOnMouseButtonUp"));
+//		if (bIsDragging) {
+//			if (Character) {
+//				if (Character->GetPlayerId() == 99) {
+//					Character->SpawnOnGround(SlotIndex);
+//				}
+//			}
+//			bIsDragging = false; // 드래그 상태 종료
+//			return FReply::Handled();
+//		}
+//	}
+//	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
+//}
 
 bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
@@ -199,7 +217,10 @@ bool USlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDr
 void USlot::NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
 	Super::NativeOnDragLeave(InDragDropEvent, InOperation);
-	if (Character) {
+
+	
+	// 드래그 중인지 확인하고 처리
+	if (Character && this->Type != ESlotType::SLOT_QUICK) { // InOperation이 nullptr인 경우에만 처리
 		if (Character->GetPlayerId() == 99) {
 			Character->SpawnOnGround(SlotIndex);
 		}
@@ -407,6 +428,9 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Drag: NORMALWEAPON"));
 				}
 			}
+
+			Character->GameUIUpdate();
+			break;
 		case EItemClass::BAGITEM:
 			if (Character->GetCarryBagName() == "BigBagActor") {
 
@@ -481,7 +505,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 		switch (Type) {
 		case ESlotType::SLOT_NONE: case ESlotType::SLOT_QUICK: break;
 
-		case ESlotType::SLOT_ITEM: case ESlotType::SLOT_QUICK_ITEM:
+		case ESlotType::SLOT_ITEM:
 
 			if (Character->Inventory[SlotIndex].Type != EItemType::ITEM_NONE) {
 				eventreply = UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton);
