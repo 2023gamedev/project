@@ -72,17 +72,6 @@ void AFireFighterCharacter::NoSmokeIsDying()
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("NoSmokeIsDying -> PlayDead!")));
 			//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDying -> PlayDead!"));
 
-			/*SetDead(true);
-			auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-			if (nullptr != CharacterAnimInstance) {
-				CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-				CharacterAnimInstance->SetIsDead(IsDead());
-			}
-			APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
-			if (controller != nullptr) {
-				controller->DisabledControllerInput();
-			}*/
-
 			PlayDead();
 		}
 	}

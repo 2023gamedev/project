@@ -36,6 +36,7 @@ public:
 	void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
 	bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 	FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	//FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	void NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation);
 	
 
@@ -53,6 +54,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int ItemCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsDragging;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ESlotType Type;

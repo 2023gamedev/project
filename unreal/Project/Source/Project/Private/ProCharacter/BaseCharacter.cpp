@@ -441,10 +441,30 @@ void ABaseCharacter::BeginPlay()
 	// GameMode 찾기
 	if (PlayerId == 99) {
 		AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
+		
 		if (GameMode)
 		{
 			ThrowOnGround.BindUObject(GameMode, &AOneGameModeBase::SpawnOnGroundItem);
 		}
+
+		if (GameInstance) {
+			uint32 playerlocationid = GameInstance->ClientSocketPtr->GetMyPlayerId();
+			if (playerlocationid == 1) {
+				SetActorLocation(FVector(1380.f, -530.f, 1037.000054f));
+			}
+			else if (playerlocationid == 2) {
+				SetActorLocation(FVector(1550.f,-790.f, 1037.000131f));
+			}
+			else if (playerlocationid == 3) {
+				SetActorLocation(FVector(500.f, -790.f, 1037.000268f));
+
+			}
+			else if (playerlocationid == 4) {
+				SetActorLocation(FVector(690.f, -660.f, 1037.0001f));
+			}
+
+		}
+
 
 		
 	}
@@ -1167,10 +1187,12 @@ void ABaseCharacter::GetItem()
 
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
 		if (itembox) {
+			int32 ItemCountInInventory = 20; // 인벤이 꽉찼을때 못먹게 하기
 
 			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
+					
 					if (i >= GetInvenSize()) {
 						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
 						return;
@@ -1179,6 +1201,14 @@ void ABaseCharacter::GetItem()
 						break;
 					}
 				}
+				else {
+					--ItemCountInInventory;
+				}
+			}
+
+			if (ItemCountInInventory == 0) { 
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenMAX!!!");
+				return;
 			}
 
 			PickUp();
