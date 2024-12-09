@@ -3057,6 +3057,9 @@ void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 	Packet.SerializeToString(&serializedData);
 
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+	if (!bIsSent) {
+		UE_LOG(LogTemp, Error, TEXT("Failed to send Destroy packet for ItemBox ID: %d"), itemboxid);
+	}
 }
 
 void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
@@ -3072,6 +3075,9 @@ void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
 	Packet.SerializeToString(&serializedData);
 
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+	if (!bIsSent) {
+		UE_LOG(LogTemp, Error, TEXT("Failed to send GetKey packet for ItemBox ID: %d"), itemboxid);
+	}
 }
 
 void ABaseCharacter::Send_OpenRoot(uint32 itemid)

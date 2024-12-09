@@ -281,6 +281,13 @@ void IOCP_CORE::IOCP_AcceptThread()
 		playerIndex += 1;
 		printf("\n[ No. %3u ] Client IP = %s, Port = %d is Connected\n", playerIndex, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
+		BOOL bNoDelay = TRUE;
+		retval = setsockopt(client_sock, IPPROTO_TCP, TCP_NODELAY, (char*)&bNoDelay, sizeof(bNoDelay));
+		if (retval == SOCKET_ERROR) {
+			int err_no = WSAGetLastError();
+			IOCP_ErrorDisplay("setsockopt::TCP_NODELAY", err_no, __LINE__);
+		}
+
 		WSABUF wsabuf;
 		wsabuf.buf = reinterpret_cast<char*>(&playerIndex);
 		wsabuf.len = sizeof(playerIndex);
