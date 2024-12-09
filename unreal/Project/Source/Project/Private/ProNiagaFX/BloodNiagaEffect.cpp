@@ -89,8 +89,8 @@ void ABloodNiagaEffect::SpawnBloodEffect()
 {
 	//RootComponent = ProcMesh;
 
-	UE_LOG(LogTemp, Log, TEXT("BloodSpawn Location: %s"), *GetActorLocation().ToString());
-	UE_LOG(LogTemp, Log, TEXT("BloodSpawn Rotation: %s"), *GetActorRotation().ToString());
+	//UE_LOG(LogTemp, Log, TEXT("BloodSpawn Location: %s"), *GetActorLocation().ToString());
+	//UE_LOG(LogTemp, Log, TEXT("BloodSpawn Rotation: %s"), *GetActorRotation().ToString());
 
 	//DrawDebugPoint(
 	//	GetWorld(),

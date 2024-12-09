@@ -28,7 +28,7 @@
 
 
 #define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그)
-//#undef ENABLE_BT_LOG	// 비활성화
+#undef ENABLE_BT_LOG	// 비활성화
 
 class ZombieController;
 class Zombie;

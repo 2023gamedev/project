@@ -697,7 +697,7 @@ void AOneGameModeBase::UpdatePlayerJump(uint32 PlayerID)
         if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
         {
             BasePlayer->SetPlayerJump();
-            UE_LOG(LogTemp, Warning, TEXT("real update jump: %d"), PlayerID);
+            UE_LOG(LogTemp, Display, TEXT("real update jump: %d"), PlayerID);
 
             return;
         }

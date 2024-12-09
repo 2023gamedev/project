@@ -796,7 +796,7 @@ void APlayerCharacterController::Attack()
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 	basecharacter->SetAttack(true);
 	b_attack = true;
-	UE_LOG(LogTemp, Warning, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
+	UE_LOG(LogTemp, Log, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }
 
 void APlayerCharacterController::Healing()
