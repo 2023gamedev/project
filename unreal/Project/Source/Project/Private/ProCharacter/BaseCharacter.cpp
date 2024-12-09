@@ -294,7 +294,7 @@ void ABaseCharacter::BeginPlay()
 		OtherPlayerUIWidget->m_iOtherPlayerUIIndex = 1;
 		OtherPlayerUIWidget->Init();
 		OtherPlayerUIWidget->AddToViewport();
-		OtherPlayerUIWidget->SetVisibility(ESlateVisibility::Visible);
+		OtherPlayerUIWidget->SetVisibility(ESlateVisibility::Hidden);
 
 		FVector2D Offset(0, 300); 
 		OtherPlayerUIWidget->SetRenderTranslation(Offset);
@@ -316,7 +316,7 @@ void ABaseCharacter::BeginPlay()
 		OtherPlayer2UIWidget->m_iOtherPlayerUIIndex = 2;
 		OtherPlayer2UIWidget->Init();
 		OtherPlayer2UIWidget->AddToViewport();
-		OtherPlayer2UIWidget->SetVisibility(ESlateVisibility::Visible);
+		OtherPlayer2UIWidget->SetVisibility(ESlateVisibility::Hidden);
 
 		FVector2D Offset(0, 500); 
 		OtherPlayer2UIWidget->SetRenderTranslation(Offset);
@@ -338,7 +338,7 @@ void ABaseCharacter::BeginPlay()
 		OtherPlayer3UIWidget->m_iOtherPlayerUIIndex = 3;
 		OtherPlayer3UIWidget->Init();
 		OtherPlayer3UIWidget->AddToViewport();
-		OtherPlayer3UIWidget->SetVisibility(ESlateVisibility::Visible);
+		OtherPlayer3UIWidget->SetVisibility(ESlateVisibility::Hidden);
 
 		FVector2D Offset(0, 700); 
 		OtherPlayer3UIWidget->SetRenderTranslation(Offset);
@@ -441,10 +441,15 @@ void ABaseCharacter::BeginPlay()
 	// GameMode 찾기
 	if (PlayerId == 99) {
 		AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
-		
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("BaseCharacter - BeginPlay - PlayerId == 99 : %d"), BPlayerCount));
+		//UE_LOG(LogTemp, Log, TEXT("BaseCharacter - BeginPlay - PlayerId == 99 : %d"), BPlayerCount);
+		//++BPlayerCount;
 		if (GameMode)
 		{
 			ThrowOnGround.BindUObject(GameMode, &AOneGameModeBase::SpawnOnGroundItem);
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("BaseCharacter - BeginPlay - ThrowOnGround : %d"), BPlayerThrowCount));
+			//UE_LOG(LogTemp, Log, TEXT("BaseCharacter - BeginPlay - ThrowOnGround : %d"), BPlayerThrowCount);
+			//++BPlayerThrowCount;
 		}
 
 		if (GameInstance) {

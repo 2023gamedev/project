@@ -33,7 +33,9 @@ AFireFighterCharacter::AFireFighterCharacter()
 void AFireFighterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	SmokeTimer();
+	if (GetPlayerId() == 99) {
+		SmokeTimer();
+	}
 }
 
 void AFireFighterCharacter::SmokeTimer()
@@ -53,16 +55,11 @@ void AFireFighterCharacter::LimitSmoking()
 void AFireFighterCharacter::NoSmokeIsDying()
 {
 	SetHP(GetHP() - 1);
-	if (GetHP() <= 0) {
-		SetDead(true);
-		auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-		if (nullptr != CharacterAnimInstance) {
-			CharacterAnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
-			CharacterAnimInstance->SetIsDead(IsDead());
-		}
-		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
-		if (controller != nullptr) {
-			DisableInput(controller); // 이래도 움직임 좀비 죽었을때 회전이랑 캐릭터 움직이는 거 수정해야 할듯
+	if (GetHP() <= 0 && !IsDeadPlay()) {
+		SetDeadPlay(true);
+
+		if (IsDeadPlay() && !IsDead()) {
+			PlayDead();
 		}
 	}
 }
