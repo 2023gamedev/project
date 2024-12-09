@@ -33,8 +33,14 @@ AFireFighterCharacter::AFireFighterCharacter()
 void AFireFighterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+<<<<<<< HEAD
 
 	SmokeTimer();
+=======
+	if (GetPlayerId() == 99) {
+		SmokeTimer();
+	}
+>>>>>>> 789e68b506dd6df26509e94b9716c109328cdd78
 }
 
 void AFireFighterCharacter::SmokeTimer()
@@ -68,18 +74,21 @@ void AFireFighterCharacter::NoSmokeIsDying()
 		//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDyingTimer ON -> My Client is a FireFighter (PlayerId: 99)"));
 
 		SetHP(GetHP() - 1);
-		if (GetHP() <= 0) {
+		if (GetHP() <= 0 && !IsDeadPlay()) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("NoSmokeIsDying -> PlayDead!")));
 			//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDying -> PlayDead!"));
+			SetDeadPlay(true);
 
-			PlayDead();
+			if (IsDeadPlay() && !IsDead()) {
+				PlayDead();
+			}
 		}
-	}
-	else {
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("NoSmokeIsDyingTimer OFF -> Other Client is the FireFighter")));
-		//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDyingTimer OFF -> Other Client is the FireFighter"));
+		else {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("NoSmokeIsDyingTimer OFF -> Other Client is the FireFighter")));
+			//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDyingTimer OFF -> Other Client is the FireFighter"));
 
-		GetWorld()->GetTimerManager().ClearTimer(DyingHandle);
+			GetWorld()->GetTimerManager().ClearTimer(DyingHandle);
+		}
 	}
 }
 

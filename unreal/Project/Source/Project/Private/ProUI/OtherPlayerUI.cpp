@@ -76,7 +76,6 @@ void UOtherPlayerUI::UpdateOtherPlayerUI(float hp, uint32 charactertype, std::st
 	if (!m_bPlayerImg) {
 		m_bPlayerImg = true;
 
-
 		FString PlayerName = playername.c_str();
 		if (PlayerName.IsEmpty()) {
 			UE_LOG(LogTemp, Warning, TEXT("PlayerName is empty or null"));
@@ -84,6 +83,8 @@ void UOtherPlayerUI::UpdateOtherPlayerUI(float hp, uint32 charactertype, std::st
 		else {
 			UE_LOG(LogTemp, Display, TEXT("PlayerN: %s"), *PlayerName);
 		}
+
+		SetVisibility(ESlateVisibility::Visible);
 
 		if (charactertype == 1) {
 			UTexture2D* LoadedTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Girl/girl.girl"));

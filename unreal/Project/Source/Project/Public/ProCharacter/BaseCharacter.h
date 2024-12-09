@@ -662,6 +662,10 @@ public:
 	uint32 ItemBoxId = 0;
 
 
+	uint32 BPlayerCount = 0;
+	uint32 BPlayerThrowCount = 0;
+
+
 	enum FLOOR {
 		Zero, B2, B1, F1, F2, F3
 	};

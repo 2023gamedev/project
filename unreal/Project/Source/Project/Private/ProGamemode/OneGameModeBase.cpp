@@ -266,46 +266,46 @@ void AOneGameModeBase::ChoiceCharacter()
     PlayerControllerClass = PlayerCharacterControllerClasses[0];
 
 }
-
-AActor* AOneGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
-{
-    // 선택된 캐릭터 타입에 따라 태그 설정
-    FName DesiredTag;
-
-    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
-    uint32 playerid = GameInstance->ClientSocketPtr->GetMyPlayerId();
-
-    UE_LOG(LogTemp, Warning, TEXT("ChoosePlayerStart_Implementation -> playerid: %d"), playerid);
-    if (playerid == 1)
-    {
-        DesiredTag = FName("Start1");
-    }
-    else if (playerid == 2)
-    {
-        DesiredTag = FName("Start4");
-    }
-    else if (playerid == 3)
-    {
-        DesiredTag = FName("Start2");
-    }
-    else if (playerid == 4)
-    {
-        DesiredTag = FName("Start3");
-    }
-
-    // 월드의 모든 PlayerStart 검색
-    for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It)
-    {
-        APlayerStart* PlayerStart = *It;
-        if (PlayerStart->Tags.Contains(DesiredTag))
-        {
-            return PlayerStart; // 적합한 PlayerStart 반환
-        }
-    }
-
-    // 태그에 맞는 PlayerStart를 찾지 못한 경우 기본 로직 사용
-    return Super::ChoosePlayerStart_Implementation(Player);
-}
+//
+//AActor* AOneGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
+//{
+//    // 선택된 캐릭터 타입에 따라 태그 설정
+//    FName DesiredTag;
+//
+//    UProGameInstance* GameInstance = Cast<UProGameInstance>(GetGameInstance());
+//    uint32 playerid = GameInstance->ClientSocketPtr->GetMyPlayerId();
+//
+//    UE_LOG(LogTemp, Warning, TEXT("ChoosePlayerStart_Implementation -> playerid: %d"), playerid);
+//    if (playerid == 1)
+//    {
+//        DesiredTag = FName("Start1");
+//    }
+//    else if (playerid == 2)
+//    {
+//        DesiredTag = FName("Start4");
+//    }
+//    else if (playerid == 3)
+//    {
+//        DesiredTag = FName("Start2");
+//    }
+//    else if (playerid == 4)
+//    {
+//        DesiredTag = FName("Start3");
+//    }
+//
+//    // 월드의 모든 PlayerStart 검색
+//    for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It)
+//    {
+//        APlayerStart* PlayerStart = *It;
+//        if (PlayerStart->Tags.Contains(DesiredTag))
+//        {
+//            return PlayerStart; // 적합한 PlayerStart 반환
+//        }
+//    }
+//
+//    // 태그에 맞는 PlayerStart를 찾지 못한 경우 기본 로직 사용
+//    return Super::ChoosePlayerStart_Implementation(Player);
+//}
 
 
 int32 AOneGameModeBase::RandomCarActorLocation()

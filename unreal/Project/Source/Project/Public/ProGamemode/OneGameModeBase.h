@@ -76,7 +76,7 @@ public:
 
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
-    virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+    //virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
     // 아이템 박스
     UPROPERTY(EditDefaultsOnly, Category = "ItemBox")
