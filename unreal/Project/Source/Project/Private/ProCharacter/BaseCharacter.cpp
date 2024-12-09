@@ -441,10 +441,30 @@ void ABaseCharacter::BeginPlay()
 	// GameMode 찾기
 	if (PlayerId == 99) {
 		AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
+		
 		if (GameMode)
 		{
 			ThrowOnGround.BindUObject(GameMode, &AOneGameModeBase::SpawnOnGroundItem);
 		}
+
+		if (GameInstance) {
+			uint32 playerlocationid = GameInstance->ClientSocketPtr->GetMyPlayerId();
+			if (playerlocationid == 1) {
+				SetActorLocation(FVector(1380.f, -530.f, 1037.000054f));
+			}
+			else if (playerlocationid == 2) {
+				SetActorLocation(FVector(1550.f,-790.f, 1037.000131f));
+			}
+			else if (playerlocationid == 3) {
+				SetActorLocation(FVector(500.f, -790.f, 1037.000268f));
+
+			}
+			else if (playerlocationid == 4) {
+				SetActorLocation(FVector(690.f, -660.f, 1037.0001f));
+			}
+
+		}
+
 
 		
 	}
