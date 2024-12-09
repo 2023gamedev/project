@@ -552,6 +552,11 @@ void ABaseCharacter::Tick(float DeltaTime)
 	}
 
 
+	if (GetHP() <= 0 && PlayerId != 99) {	// 다른 클라 플레이어 죽음 (동기화) 애니메이션 재생용
+		PlayDead();
+	}
+
+
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
 	if (!GetVelocity().Size()) {
@@ -651,6 +656,9 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 
 	if (IsDeadPlay() && !IsDead()) {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("TakeDamage -> PlayDead!")));
+		//UE_LOG(LogTemp, Log, TEXT("TakeDamage -> PlayDead!"));
+
 		PlayDead();
 	}
 
@@ -677,7 +685,12 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 void ABaseCharacter::PlayDead()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("DEAD")));
+	if (IsDead() == true)
+		return;
+
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("PlayDead!")));
+	//UE_LOG(LogTemp, Log, TEXT("PlayDead!"));
+
 	SetDead(true);
 	auto CharacterAnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {
@@ -973,7 +986,7 @@ bool ABaseCharacter::SwapInven(int from, int to)
 
 void ABaseCharacter::SpawnOnGround(int slotindex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("SpawnOnGround!!!!!!!!!!"));
+	UE_LOG(LogTemp, Log, TEXT("SpawnOnGround!!!!!!!!!!"));
 	if (slotindex < 0 || slotindex > Inventory.Num()) {
 		UE_LOG(LogTemp, Error, TEXT("SpawnOnGround: slotindex(%d) is out of bounds!"), slotindex);
 		return;
@@ -1244,7 +1257,7 @@ void ABaseCharacter::GetItem()
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("GetItem"));
+	UE_LOG(LogTemp, Display, TEXT("GetItem"));
 }
 
 void ABaseCharacter::ShowActionText(FText Text, const FSlateColor& Color, float DisplayTime)
@@ -1343,7 +1356,7 @@ void ABaseCharacter::OtherGetItem()
 		PlayerSight->GetHitActor()->Destroy();
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("OtherGetItem"));
+	UE_LOG(LogTemp, Display, TEXT("OtherGetItem"));
 }
 
 void ABaseCharacter::LightOnOff()
@@ -1361,7 +1374,7 @@ void ABaseCharacter::LightOnOff()
 void ABaseCharacter::InventoryOnOff()
 {
 	// 작성 필요
-	UE_LOG(LogTemp, Warning, TEXT("InvenOpen"));
+	UE_LOG(LogTemp, Display, TEXT("InvenOpen"));
 	if (GameUIWidget != nullptr) {
 		if (IsInventory()) {
 			SetInventory(false);
@@ -1419,7 +1432,7 @@ void ABaseCharacter::InventoryOnOff()
 
 void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
-	UE_LOG(LogTemp, Warning, TEXT("GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
+	UE_LOG(LogTemp, Log, TEXT("GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 	
 	if (m_bIsAttacking) {
 		return;
@@ -1431,7 +1444,7 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 
 	m_DAttackEnd.AddLambda([this]() -> void {
 		m_bIsAttacking = false;
-		UE_LOG(LogTemp, Warning, TEXT("AttackEnd: %d"), PlayerId);
+		//UE_LOG(LogTemp, Display, TEXT("AttackEnd: %d"), PlayerId);
 		});
 	m_bIsAttacking = false;
 }
@@ -2553,6 +2566,9 @@ void ABaseCharacter::BleedingTimerElapsed()
 
 
 	if (IsDeadPlay() && !IsDead()) {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("BleedingTimerElapsed -> PlayDead!")));
+		//UE_LOG(LogTemp, Log, TEXT("BleedingTimerElapsed -> PlayDead!"));
+
 		PlayDead();
 	}
 }
@@ -2713,7 +2729,7 @@ void ABaseCharacter::SetPlayerJump()
 {
 	m_bJump = true;
 
-	UE_LOG(LogTemp, Warning, TEXT("SetPlayerJump"));
+	UE_LOG(LogTemp, Display, TEXT("SetPlayerJump"));
 }
 
 bool ABaseCharacter::GetAttack()

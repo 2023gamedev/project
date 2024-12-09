@@ -13,7 +13,7 @@ ANWFryingPan::ANWFryingPan()
 	RootComponent = NormalWeapon;
 	BoxComponent->SetupAttachment(NormalWeapon);
 
-	BoxComponent->SetRelativeLocation(FVector(0.f, 50.f, 120.f));
+	BoxComponent->SetRelativeLocation(FVector(0.f, 50.f, 0.f));
 	BoxComponent->SetRelativeRotation(FRotator(0.f, 0.f, 90.f));
 	BoxComponent->SetRelativeScale3D(FVector(0.75f, 0.25f, 0.75f));
 

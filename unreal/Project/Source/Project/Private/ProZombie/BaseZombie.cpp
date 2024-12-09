@@ -246,7 +246,7 @@ void ABaseZombie::Tick(float DeltaTime)
 void ABaseZombie::OnZombieHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor != nullptr && OtherActor != this) {
-		UE_LOG(LogTemp, Warning, TEXT("Zombie collided with %s"), *OtherActor->GetName());
+		//UE_LOG(LogTemp, Display, TEXT("Zombie collided with %s"), *OtherActor->GetName());
 	}
 
 	Protocol::patrol_hit Packet;
@@ -314,8 +314,8 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		return 0;
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("Weapon Location: %s"), *Weapon->GetActorLocation().ToString());
-	UE_LOG(LogTemp, Log, TEXT("Weapon Rotation: %s"), *Weapon->GetActorRotation().ToString());
+	//UE_LOG(LogTemp, Log, TEXT("Weapon Location: %s"), *Weapon->GetActorLocation().ToString());
+	//UE_LOG(LogTemp, Log, TEXT("Weapon Rotation: %s"), *Weapon->GetActorRotation().ToString());
 	//UE_LOG(LogTemp, Log, TEXT("Weapon Rotation Vector: %s"), *Weapon->GetActorRotation().Vector().ToString());
 
 	BloodFX.Empty();
@@ -748,9 +748,12 @@ void ABaseZombie::Shouting()
 
 void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
+	if(m_bIsShouting)
+		UE_LOG(LogTemp, Error, TEXT("bIsShouted true"));
+	
 	m_bIsShouting = false;
 	SetShouted(true);
-	UE_LOG(LogTemp, Error, TEXT("bIsShouted true"));
+	
 	m_DShoutingEnd.Broadcast();
 
 	if (ShoutingFX != NULL) {

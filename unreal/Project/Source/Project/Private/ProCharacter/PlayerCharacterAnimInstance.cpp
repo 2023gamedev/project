@@ -93,16 +93,19 @@ void UPlayerCharacterAnimInstance::PlayBleedHealingMontage(float PlaySpeed)
 		Montage_Play(BleedHealingMontage, PlaySpeed);
 	}
 }
+
 void UPlayerCharacterAnimInstance::PlayJumpMontage()
 {
 	if (!Montage_IsPlaying(JumpMontage)) {
 		if (Montage_Play(JumpMontage, 1.f))
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("JumpMontage 재생 시작"));
+			UE_LOG(LogTemp, Display, TEXT("PlayJumpMontage()"));
 		}
 		else
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("JumpMontage 재생 실패"));
+			UE_LOG(LogTemp, Warning, TEXT("PlayJumpMontage() 재생 실패: JumpMontage 이미 재생중"));
 		}
 	}
 }
