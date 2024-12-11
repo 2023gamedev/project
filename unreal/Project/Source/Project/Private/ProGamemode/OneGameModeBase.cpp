@@ -347,28 +347,29 @@ int32 AOneGameModeBase::RandomCarKey()
 
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos)
 {
-    if (itemboxindex >= 60 || m_iItemBoxNumber >= 60) {
-        UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: 60 over!!!!"));
+    int32 itembindex = itemboxindex - 1;
+    if (itembindex >= 60 || m_iItemBoxNumber >= 60) {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: 60 over!!!! itemboxindex : %d, m_iItemBoxNumber : %d"), itemboxindex, m_iItemBoxNumber);
         return;
     }
 
-    if (ItemBoxClasses.Num() <= itemboxindex) {
-        //UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: %d"), itemboxindex);
-        ItemBoxClasses.SetNum(itemboxindex + 1);
+    if (ItemBoxClasses.Num() <= itembindex) {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: %d"), itembindex);
+        ItemBoxClasses.SetNum(itembindex + 1);
     }
 
-    if (ItemBoxClasses.IsValidIndex(itemboxindex)) {
-        if (!ItemBoxClasses[itemboxindex]) {
-            ItemBoxClasses[itemboxindex] = AItemBoxActor::StaticClass();
+    if (ItemBoxClasses.IsValidIndex(itembindex)) {
+        if (!ItemBoxClasses[itembindex]) {
+            ItemBoxClasses[itembindex] = AItemBoxActor::StaticClass();
         }
     }
     else {
-        UE_LOG(LogTemp, Error, TEXT("Invalid index: %d for ItemBoxClasses array"), itemboxindex);
+        UE_LOG(LogTemp, Error, TEXT("Invalid index: %d for ItemBoxClasses array"), itembindex);
         return;
     }
 
 
-    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
+    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itembindex];
 
     EItemClass iclass;
 
@@ -403,10 +404,10 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
         SpawnedItemBox->ItemClassType = iclass;
         SpawnedItemBox->Texture = texture;
         SpawnedItemBox->Count = count;
-        SpawnedItemBox->ItemBoxId = itemboxindex;
+        SpawnedItemBox->ItemBoxId = itembindex;
     }
-    m_iItemBoxNumber++;
-    //UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> m_iItemBoxNumber: %d"), m_iItemBoxNumber);
+    ++m_iItemBoxNumber;
+    UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> m_iItemBoxNumber: %d"), m_iItemBoxNumber);
 }
 
 void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count)
@@ -449,8 +450,8 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         SpawnedItemBox->Count = count;
     }
 
-    m_iItemBoxNumber++;
-   // UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
+    ++m_iItemBoxNumber;
+   UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 }
 
 void AOneGameModeBase::CarActorRandomLocationSetting()
@@ -494,8 +495,12 @@ void AOneGameModeBase::CarKeyRandomSetting()
 
 void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FVector carpos, FRotator carrotator, FName carkeyname)
 {
-
-    TSubclassOf<AInterActor> SelectedInterActorClass = InterActorClasses[InterActorindex];
+    int32 interAindex = InterActorindex - 1;
+    UE_LOG(LogTemp, Warning, TEXT("SpawnInterItem -> InterActorindex: %d"), interAindex);
+    if (interAindex >= 8) {
+        return;
+    }
+    TSubclassOf<AInterActor> SelectedInterActorClass = InterActorClasses[interAindex];
 
 
     FVector Location;
