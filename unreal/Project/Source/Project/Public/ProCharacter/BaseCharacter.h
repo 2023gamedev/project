@@ -220,6 +220,9 @@ public:
 	UFUNCTION()
 	void KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
+	UFUNCTION()
+	void PickUpMontageEnded(UAnimMontage* Montage, bool interrup);
+
 	//Sound
 	void PlaySoundAtLocationForPlayer(USoundBase* Sound, FVector Location);
 	void PlaySoundForPlayer(USoundBase* Sound);
@@ -635,6 +638,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int KeyMontageFlag;
+
+	UPROPERTY(EditAnywhere)
+	int m_iPickUpMontageFlag;
 
 	UPROPERTY(EditAnywhere)
 	int m_iOpenRoofKey;
