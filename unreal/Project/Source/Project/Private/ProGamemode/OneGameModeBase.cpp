@@ -494,6 +494,16 @@ void AOneGameModeBase::CarKeyRandomSetting()
 
 void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FVector carpos, FRotator carrotator, FName carkeyname)
 {
+    if (InterActorClasses.Num() <= InterActorindex) {
+        //UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: %d"), itemboxindex);
+        InterActorClasses.SetNum(InterActorindex + 1);
+    }
+
+    if (InterActorClasses.IsValidIndex(InterActorindex)) {
+        if (!InterActorClasses[InterActorindex]) {
+            InterActorClasses[InterActorindex] = AInterActor::StaticClass();
+        }
+    }
 
     TSubclassOf<AInterActor> SelectedInterActorClass = InterActorClasses[InterActorindex];
 
@@ -975,7 +985,7 @@ void AOneGameModeBase::DestroyItem(uint32 Itemid, uint32 Playerid)
     for (TActorIterator<AItemBoxActor> It(GetWorld()); It; ++It)
     {
         AItemBoxActor* ItemBox = *It;
-        if (ItemBox && ItemBox->ItemBoxId == Itemid)
+        if (ItemBox && ItemBox->ItemBoxId == (Itemid - 1))
         {
             ItemBox->Destroy();
             break;

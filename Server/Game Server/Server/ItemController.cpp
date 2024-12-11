@@ -11,85 +11,85 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     CarActorRandomLocationSetting();
     CarKeyRandomSetting();
 
-    SpawnItemBoxes(0, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_B1);
     SpawnItemBoxes(1, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(2, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(2, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_B1);
     SpawnItemBoxes(3, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(4, "SashimiKnife", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSasimiKnife.InvenSasimiKnife", 1, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(5, "ButchersKnife", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenButherKnife.InvenButherKnife", 1, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(6, "Bottle", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenBottle.InvenBottle", 1, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(7, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth", 3, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(8, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(9, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(4, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(5, "SashimiKnife", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSasimiKnife.InvenSasimiKnife", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(6, "ButchersKnife", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenButherKnife.InvenButherKnife", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(7, "Bottle", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenBottle.InvenBottle", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(8, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth", 3, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(9, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(10, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_B1);
 
-    SpawnItemBoxes(10, "Drink", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDrink.InvenDrink", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(11, "Snack", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSnack.InvenSnack", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(12, "CannedTuna", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenCannedTuna.InvenCannedTuna", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(13, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(14, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(15, "Drink", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDrink.InvenDrink", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(16, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_B1); // 수정 필요
-    SpawnItemBoxes(17, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(11, "Drink", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDrink.InvenDrink", 2, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(12, "Snack", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSnack.InvenSnack", 2, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(13, "CannedTuna", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenCannedTuna.InvenCannedTuna", 2, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(14, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(15, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(16, "Drink", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDrink.InvenDrink", 2, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(17, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_B1); // 수정 필요
+    SpawnItemBoxes(18, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_B1);
 
-    SpawnItemBoxes(18, "CarKey1", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey1.InvenCarKey1", 1, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(19, "RoofKey1", EItemClass::KEYITEM, "/Game/InvenPng/InvenRoofKey1.InvenRoofKey1", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(19, "CarKey1", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey1.InvenCarKey1", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(20, "RoofKey1", EItemClass::KEYITEM, "/Game/InvenPng/InvenRoofKey1.InvenRoofKey1", 1, FLOOR::FLOOR_B1);
 
     // F1
-    SpawnItemBoxes(20, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(21, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(22, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(23, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(23, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(24, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(25, "Book", EItemClass::NORMALWEAPON, "/Game/InvenPng/Invenbook.Invenbook", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(25, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(26, "Book", EItemClass::NORMALWEAPON, "/Game/InvenPng/Invenbook.Invenbook", 1, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(27, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(28, "MagicStick", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenMagicStick.InvenMagicStick", 1, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(29, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth", 3, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(27, "Book", EItemClass::NORMALWEAPON, "/Game/InvenPng/Invenbook.Invenbook", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(28, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(29, "MagicStick", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenMagicStick.InvenMagicStick", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(30, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth", 3, FLOOR::FLOOR_F1);
 
-    SpawnItemBoxes(30, "Bandage", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenBandage.InvenBandage", 3, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(31, "Clothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenCloth.InvenCloth", 3, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(32, "Gauze", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenGauze.InvenGauze", 3, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(33, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(34, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(35, "Disinfectant", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDisinfectant.InvenDisinfectant", 2, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(36, "Ointment", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenOintment.InvenOintment", 2, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(37, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(31, "Bandage", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenBandage.InvenBandage", 3, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(32, "Clothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenCloth.InvenCloth", 3, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(33, "Gauze", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenGauze.InvenGauze", 3, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(34, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(35, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(36, "Disinfectant", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDisinfectant.InvenDisinfectant", 2, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(37, "Ointment", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenOintment.InvenOintment", 2, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(38, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F1);
 
-    SpawnItemBoxes(38, "CarKey2", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey1.InvenCarKey1", 1, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(39, "RoofKey2", EItemClass::KEYITEM, "/Game/InvenPng/InvenRoofKey2.InvenRoofKey2", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(39, "CarKey2", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey1.InvenCarKey1", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(40, "RoofKey2", EItemClass::KEYITEM, "/Game/InvenPng/InvenRoofKey2.InvenRoofKey2", 1, FLOOR::FLOOR_F1);
 
     // F2
-    SpawnItemBoxes(40, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(41, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(42, "WoodenBat", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenWoodenBat.InvenWoodenBat", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(43, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(44, "Plunger", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenPlunger.InvenPlunger", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(45, "FryingPan", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFryingPan.InvenFryingPan", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(46, "Shovels", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenShovel.InvenShovel", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(42, "SquareWood", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenSquareWood.InvenSquareWood", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(43, "WoodenBat", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenWoodenBat.InvenWoodenBat", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(44, "FireAxe", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFireAxe.InvenFireAxe", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(45, "Plunger", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenPlunger.InvenPlunger", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(46, "FryingPan", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenFryingPan.InvenFryingPan", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(47, "Shovels", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenShovel.InvenShovel", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(48, "GolfClub", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenGolfClub.InvenGolfClub", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(49, "WoodenBat", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenWoodenBat.InvenWoodenBat", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(48, "Shovels", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenShovel.InvenShovel", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(49, "GolfClub", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenGolfClub.InvenGolfClub", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(50, "WoodenBat", EItemClass::NORMALWEAPON, "/Game/InvenPng/InvenWoodenBat.InvenWoodenBat", 1, FLOOR::FLOOR_F2);
 
-    SpawnItemBoxes(50, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth", 3, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(51, "Clothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenCloth.InvenCloth", 3, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(52, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(53, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(54, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(55, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(56, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(57, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(51, "DirtyClothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenDirtyCloth.InvenDirtyCloth", 3, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(52, "Clothes", EItemClass::BLEEDINGHEALINGITEM, "/Game/InvenPng/InvenCloth.InvenCloth", 3, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(53, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(54, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(55, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(56, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(57, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(58, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F2);
 
-    SpawnItemBoxes(58, "CarKey3", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(59, "CarKey4", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(59, "CarKey3", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(60, "CarKey4", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
 
-    SpawnInterItem(0, "CarActor");
     SpawnInterItem(1, "CarActor");
     SpawnInterItem(2, "CarActor");
     SpawnInterItem(3, "CarActor");
     SpawnInterItem(4, "CarActor");
     SpawnInterItem(5, "CarActor");
     SpawnInterItem(6, "CarActor");
-    SpawnInterItem(7, "RoofTopDoorActor");
+    SpawnInterItem(7, "CarActor");
+    SpawnInterItem(8, "RoofTopDoorActor");
 
     
 }

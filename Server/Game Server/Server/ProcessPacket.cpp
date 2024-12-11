@@ -37,11 +37,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         zombieclass->SendZombieData(id);
     }
 
-    if (!clientInfo->send_item) {
+    if (clientInfo->send_zombie && !clientInfo->send_item) {
         itemclass->SendItemData(id);
     }
 
-    if (!clientInfo->send_car) {
+    if (clientInfo->send_zombie && clientInfo->send_item && !clientInfo->send_car) {
         itemclass->SendCarData(id);
     }
 
@@ -418,6 +418,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                printf("%d 한테 키 보냈음\n", player.first);
             }
         }
         return true;
@@ -440,6 +441,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         for (const auto& player : g_players) {
             if (player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                printf("%d 한테 키 보냈음\n", player.first);
             }
         }
 
@@ -457,6 +459,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, DserializedData.data(), DserializedData.size());
+                printf("%d 한테 키 보냈음\n", player.first);
             }
         }
 
