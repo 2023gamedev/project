@@ -77,9 +77,9 @@ uint32 ClientSocket::Run()
 			ProcessRecvQueue();
 		}
 		else{
-			delete overlapped;
-
 			StartSend();
+
+			delete overlapped;
 		}
 	}
 }
