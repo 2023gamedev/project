@@ -547,6 +547,9 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 		return false;
 	}
 
+	BOOL bNoDelay = true;
+	retval = setsockopt(Socket, IPPROTO_TCP, TCP_NODELAY, (char*)&bNoDelay, sizeof(bNoDelay));
+
 	SOCKADDR_IN ServerAddr;
 
 	ServerAddr.sin_family = AF_INET;
