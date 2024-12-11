@@ -33,14 +33,8 @@ AFireFighterCharacter::AFireFighterCharacter()
 void AFireFighterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-<<<<<<< HEAD
 
 	SmokeTimer();
-=======
-	if (GetPlayerId() == 99) {
-		SmokeTimer();
-	}
->>>>>>> 789e68b506dd6df26509e94b9716c109328cdd78
 }
 
 void AFireFighterCharacter::SmokeTimer()
