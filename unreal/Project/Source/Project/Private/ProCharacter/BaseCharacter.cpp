@@ -1738,6 +1738,16 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 	}
 }
 
+void ABaseCharacter::PickUpMontageEnded(UAnimMontage* Montage, bool interrup)
+{
+	m_bIsPickUping = false;
+
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (!AnimInstance || Montage != AnimInstance->GetOpenKeyMontage()) {
+		return;
+	}
+}
+
 void ABaseCharacter::Throw() // throwweapon 생성 시 작성 필요
 {
 
@@ -1804,9 +1814,15 @@ void ABaseCharacter::PickUp()
 	AnimInstance->PlayPickUpMontage();
 	m_bIsPickUping = true;
 
-	m_DPickUpEnd.AddLambda([this]() -> void {
-		m_bIsPickUping = false;
-		});
+
+	// 첫 연결만 이벤트 바인딩
+	if (m_iPickUpMontageFlag == 0) {
+		++m_iPickUpMontageFlag;
+		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::PickUpMontageEnded);
+	}
+
+
+
 }
 
 void ABaseCharacter::QuickNWeapon()
