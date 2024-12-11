@@ -1814,6 +1814,9 @@ void ABaseCharacter::PickUp()
 	AnimInstance->PlayPickUpMontage();
 	m_bIsPickUping = true;
 
+	/*m_DPickUpEnd.AddLambda([this]() -> void {
+		m_bIsPickUping = false;
+		});*/
 
 	// 첫 연결만 이벤트 바인딩
 	if (m_iPickUpMontageFlag == 0) {
