@@ -2723,6 +2723,7 @@ void ABaseCharacter::SetAttack(bool bAttack)
 void ABaseCharacter::SetPickUp()
 {
 	PickUp();
+	m_bIsPickUping = false;
 }
 
 void ABaseCharacter::SetPlayerJump()
@@ -3049,7 +3050,7 @@ void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Sending Destroy Packet: ItemBox ID = %d"), itemboxid);
 	Protocol::destroy_item Packet;
-	Packet.set_itemid(itemboxid);
+	Packet.set_itemid(itemboxid+1);
 	Packet.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
 	Packet.set_packet_type(17);
 
@@ -3067,7 +3068,7 @@ void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
 	UE_LOG(LogTemp, Warning, TEXT("Sending GetKey Packet: ItemBox ID = %d"), itemboxid);
 	Protocol::get_key Packet;
 	Packet.set_itemid(itemid);
-	Packet.set_itemboxid(itemboxid);
+	Packet.set_itemboxid(itemboxid+1);
 	Packet.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
 	Packet.set_packet_type(18);
 

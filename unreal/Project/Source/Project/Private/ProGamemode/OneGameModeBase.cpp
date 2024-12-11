@@ -945,7 +945,7 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
             /*if (NewHP <= 0) {
                 BaseZombie->SetNormalDeadWithAnim();
             }*/
-            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %d"), ZombieId, NewHP);
+            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %f"), ZombieId, NewHP);
         }
     }
     else
@@ -960,33 +960,39 @@ void AOneGameModeBase::DestroyItem(uint32 Itemid, uint32 Playerid)
 
     if (!World)
     {
-        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        UE_LOG(LogTemp, Warning, TEXT("DestroyItem: GetWorld() returned nullptr"));
         return;
     }
 
-    // 캐릭터 검색
+    // 캐릭터 검색 및 업데이트
     for (TActorIterator<ABaseCharacter> It(World); It; ++It)
     {
-        ABaseCharacter* BasePlayer = *It;
-        if (BasePlayer && BasePlayer->GetPlayerId() == Playerid)
+        if (ABaseCharacter* BasePlayer = *It)
         {
-            BasePlayer->SetPickUp();
-            UE_LOG(LogTemp, Warning, TEXT("real update pickup: %d"), Playerid);
-
-            break;
+            if (BasePlayer->GetPlayerId() == Playerid)
+            {
+                BasePlayer->SetPickUp();
+                UE_LOG(LogTemp, Display, TEXT("Pickup updated for PlayerId: %d"), Playerid);
+                break;
+            }
         }
     }
 
-    for (TActorIterator<AItemBoxActor> It(GetWorld()); It; ++It)
+    // 아이템 상자 제거
+    for (TActorIterator<AItemBoxActor> It(World); It; ++It)
     {
-        AItemBoxActor* ItemBox = *It;
-        if (ItemBox && ItemBox->ItemBoxId == (Itemid - 1))
+        if (AItemBoxActor* ItemBox = *It)
         {
-            ItemBox->Destroy();
-            break;
+            if (ItemBox->ItemBoxId == (Itemid - 1))
+            {
+                ItemBox->Destroy();
+                UE_LOG(LogTemp, Display, TEXT("Item destroyed: ItemId=%d"), Itemid);
+                break;
+            }
         }
     }
 }
+
 
 void AOneGameModeBase::BeginDestroy()
 {
