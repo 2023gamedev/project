@@ -347,6 +347,11 @@ int32 AOneGameModeBase::RandomCarKey()
 
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos)
 {
+    if (itemboxindex >= 60 || m_iItemBoxNumber >= 60) {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: 60 over!!!!"));
+        return;
+    }
+
     if (ItemBoxClasses.Num() <= itemboxindex) {
         //UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: %d"), itemboxindex);
         ItemBoxClasses.SetNum(itemboxindex + 1);
