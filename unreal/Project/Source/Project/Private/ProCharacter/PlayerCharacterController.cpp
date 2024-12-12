@@ -184,6 +184,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (GameInstance->ClientSocketPtr->Q_ditem.try_pop(recvDestroyItem)) {
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
+				UE_LOG(LogNet, Display, TEXT("queue try pop destroy item: itemid= %d"), recvDestroyItem.itemid);
 				MyGameMode->DestroyItem(recvDestroyItem.itemid, recvDestroyItem.playerid);
 			}
 		}
@@ -193,7 +194,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			{
 				//처리 recvGetKey.itemid, recvGetKey.playerid
 
-				//UE_LOG(LogNet, Display, TEXT("UpdatePickUpKey: itemid= %d"), recvGetkey.itemid);
+				UE_LOG(LogNet, Display, TEXT("queue try pop get_key: itemid= %d"), recvGetkey.itemid);
 				APawn* ControlledPawn = GetPawn();
 				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
 				{
