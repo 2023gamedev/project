@@ -945,7 +945,7 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
             /*if (NewHP <= 0) {
                 BaseZombie->SetNormalDeadWithAnim();
             }*/
-            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %d"), ZombieId, NewHP);
+            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %f"), ZombieId, NewHP);
         }
     }
     else

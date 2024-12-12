@@ -1,6 +1,7 @@
 {
 	"BuildId": "27405482",
-	"Modules"
-		"Project": "UnrealEditor-Project-1203.dll"
+	"Modules": 
+	{
+		"Project": "UnrealEditor-Project-7473.dll"
 	}
 }
