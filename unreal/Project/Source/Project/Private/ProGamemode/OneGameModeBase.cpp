@@ -432,7 +432,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     UE_LOG(LogTemp, Warning, TEXT("DropPosBefore!!!!!!"));
     FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
     UE_LOG(LogTemp, Warning, TEXT("ItemBoxClassesBefore!!!!!!"));
-    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+    ItemBoxClasses.Add(AItemBoxActor::StaticClass()); // spawn시 .add하지 말고 비어있는 인덱스에다가 아이템 다시 넣어주기
     UE_LOG(LogTemp, Warning, TEXT("SelectedItemBoxClassBefore!!!!!!"));
     //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem -> ItemBoxClasses.Num(): %d"), ItemBoxClasses.Num());
    // UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem ->  GetItemBoxNumber(): %d"), GetItemBoxNumber());
@@ -450,7 +450,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         SpawnedItemBox->Count = count;
     }
 
-    ++m_iItemBoxNumber;
+    ++m_iItemBoxNumber; 
    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 }
 
@@ -942,9 +942,9 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
             //좀비의 체력상태 업데이트
             float NewHP = BaseZombie->GetHP() - Damage;
             BaseZombie->SetHP(NewHP);
-            /*if (NewHP <= 0) {
-                BaseZombie->SetNormalDeadWithAnim();
-            }*/
+            if (NewHP <= 0) {
+                BaseZombie->doAction_setIsNormalDead_onTick = true;
+            }
             UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %f"), ZombieId, NewHP);
         }
     }

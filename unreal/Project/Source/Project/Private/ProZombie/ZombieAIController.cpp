@@ -241,7 +241,6 @@ void AZombieAIController::Tick(float DeltaTime)
 	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(120.0f / 2.0f));
 
 	APawn* NearestPawn = nullptr;
-	float NearestDist = FLT_MAX;
 
 	uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 
@@ -262,17 +261,12 @@ void AZombieAIController::Tick(float DeltaTime)
 
 	if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
 	{
-		float Dist = FVector::Dist(GetPawn()->GetActorLocation(), PlayerPawn->GetActorLocation());
-		if (Dist < NearestDist)
-		{
-			NearestDist = Dist;
-			NearestPawn = PlayerPawn;
+		NearestPawn = PlayerPawn;
 
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
-			//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
-		}
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), GameInstance->ClientSocketPtr->MyPlayerId));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
+		UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
 	}
 
 	// NearestPawn에 따라 상태 변경

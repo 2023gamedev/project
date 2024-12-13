@@ -919,7 +919,7 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 					ProGameClearUIWidget->SetMessage(1, HowToEscape);
 				}
 
-				FString TimerString = FString::Printf(TEXT("%d:%02d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
+				FString TimerString = FString::Printf(TEXT("%d:%d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
 				ProGameClearUIWidget->SetMessage(2, TimerString);
 
 				FString AlivePlayersString = FString::Printf(TEXT(" %d "), alive_players);
