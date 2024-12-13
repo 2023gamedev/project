@@ -700,6 +700,8 @@ void Zombie::SendPath()
 		string serializedData;
 		zPath.SerializeToString(&serializedData);
 
+		
+
 
 		// 이전 코드 (문제는 없는데 그냥 BT 사용 변수들 통일화 하려고 밑에꺼 씀)
 		//cout << "좀비 #" << ZombieData.zombieID << " 의 pathfinder.floor: " << pathfinder.floor << endl;
@@ -727,7 +729,6 @@ void Zombie::SendPath()
 				//cout << "(playerDB_BT key:)플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
 			}
 		}
-
 	}
 
 	//if (targetType == TARGET::PLAYER) {
