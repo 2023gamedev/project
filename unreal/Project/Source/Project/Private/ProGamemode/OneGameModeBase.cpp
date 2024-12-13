@@ -942,9 +942,9 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
             //좀비의 체력상태 업데이트
             float NewHP = BaseZombie->GetHP() - Damage;
             BaseZombie->SetHP(NewHP);
-            /*if (NewHP <= 0) {
-                BaseZombie->SetNormalDeadWithAnim();
-            }*/
+            if (NewHP <= 0) {
+                BaseZombie->doAction_setIsNormalDead_onTick = true;
+            }
             UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %f"), ZombieId, NewHP);
         }
     }
