@@ -266,7 +266,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				MyGameMode->UpdateZombie(recvZombieData.ZombieId, recvZombieData.ZombieType, recvZombieData.Location, recvZombieData.Rotation);
-				//UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);	// 좀비가 움직이거나 스폰되면 보내는데 이제는 움직임은 따로 통신하지 않아서 스폰될때 불림
+				UE_LOG(LogNet, Display, TEXT("Update call Zombie: Playerid=%d"), GameInstance->ClientSocketPtr->MyPlayerId);	// 좀비가 움직이거나 스폰되면 보내는데 이제는 움직임은 따로 통신하지 않아서 스폰될때 불림
 			}
 		}
 
@@ -328,7 +328,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			continue;  // 좀비를 찾을 수 없으면 다음으로 넘어감
 		}
 
-		//UE_LOG(LogNet, Display, TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId);
+		UE_LOG(LogNet, Display, TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId);
 
 		// 좀비 위치 서버에서 받은 위치로 갱신
 		if(tmp_path.Location.IsZero() == false)
