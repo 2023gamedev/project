@@ -412,7 +412,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
 
 void AOneGameModeBase::NullPtrItemBoxesIndex(int32 itemboxindex)
 {
-    if (!ItemBoxClasses[itemboxindex]) {
+    if (ItemBoxClasses[itemboxindex] != nullptr) {
         ItemBoxClasses[itemboxindex] = nullptr;
     }
 }
