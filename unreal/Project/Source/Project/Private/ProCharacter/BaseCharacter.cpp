@@ -1252,7 +1252,15 @@ void ABaseCharacter::GetItem()
 			else {
 				Send_Destroy(ItemBoxId);
 			}
-			PlayerSight->GetHitActor()->Destroy();
+			itembox->Destroy();
+			
+			AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
+
+			if (GameMode)
+			{
+				GameMode->NullPtrItemBoxesIndex(ItemBoxId);
+			}
+			//PlayerSight->GetHitActor()->Destroy();
 
 		}
 	}
