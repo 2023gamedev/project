@@ -485,7 +485,15 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         SpawnedItemBox->ItemBoxId = newindex;
     }
 
-    // 여기서 send 해주는게 좋을듯? 아이템 정보들 담아서
+    // 여기서 send 해주는게 좋을듯? 아이템 정보들과 아이템 위치를 담아서
+    // 그 send한것은 ItemBoxClasses[ItemBoxId]에 SpawnedItemBox 생성해서 넣어주는 새로운 함수가 있으면 될것같다.
+    // (물론 ItemBoxClasses[ItemBoxId]가 혹시 인덱스 오류 우려되면 for문으로 비어있는 자리 넣어줘도 될듯)
+    // 
+    // SpawnedItemBox->ItemName = itemname;
+    // SpawnedItemBox->ItemClassType = itemclass;
+    // SpawnedItemBox->Texture = texture;
+    // SpawnedItemBox->Count = count;
+    // SpawnedItemBox->ItemBoxId = newindex; 이 5가지랑 itemboxpos 묶어 보내면 될듯?
 
    //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 }
