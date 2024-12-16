@@ -702,6 +702,7 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
                 }
                 else if (itemtype == 4) {
                     BasePlayer->OtherSpawnNormalWeapon(Itemname);
+                    BasePlayer->SetNWHandIn(true);
                 }
                 UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
             }
