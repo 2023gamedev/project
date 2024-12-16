@@ -78,8 +78,6 @@ uint32 ClientSocket::Run()
 		}
 		else{
 			StartSend();
-
-			delete overlapped;
 		}
 	}
 }
@@ -646,29 +644,47 @@ void ClientSocket::StartSend()
 		std::vector<char> data;
 
 		if (!sendQueue.try_pop(data)) {
-			// 송신할 데이터가 없으면 플래그 해제 후 종료
-			isSending.store(false);
-			return;
+			bool expected = true;
+			if (isSending.compare_exchange_strong(expected, false)) {
+				return;
+			}
+			continue;
 		}
 
 		WSABUF wsaBuf;
 		wsaBuf.buf = const_cast<char*>(data.data());
 		wsaBuf.len = data.size();
 
-		OVERLAPPED* sendOverlap = new OVERLAPPED;
-		ZeroMemory(sendOverlap, sizeof(OVERLAPPED));
+		auto sendOverlap = std::make_unique<OVERLAPPED>();
+		ZeroMemory(sendOverlap.get(), sizeof(OVERLAPPED));
 
 		DWORD bytesSent = 0;
-		int result = WSASend(Socket, &wsaBuf, 1, &bytesSent, 0, sendOverlap, NULL);
+		int result = WSASend(Socket, &wsaBuf, 1, &bytesSent, 0, sendOverlap.get(), NULL);
 
 		if (result == SOCKET_ERROR) {
 			int err = WSAGetLastError();
 			if (err != WSA_IO_PENDING) {
 				UE_LOG(LogNet, Error, TEXT("WSASend failed: %d"), err);
-				isSending.store(false); // 송신 작업 중단
+
+				// 재시도 로직 추가
+				constexpr int MaxRetries = 3;
+				for (int retry = 1; retry <= MaxRetries; ++retry) {
+					UE_LOG(LogNet, Warning, TEXT("Retrying WSASend... Attempt %d"), retry);
+					result = WSASend(Socket, &wsaBuf, 1, &bytesSent, 0, sendOverlap.get(), NULL);
+					if (result != SOCKET_ERROR || WSAGetLastError() == WSA_IO_PENDING) {
+						sendOverlap.release();
+						return;
+					}
+				}
+
+				UE_LOG(LogNet, Error, TEXT("WSASend failed after retries"));
+				bool expected = true;
+				isSending.compare_exchange_strong(expected, false); // 송신 작업 중단
 				return;
 			}
 		}
+
+		sendOverlap.release(); // 성공적인 경우 메모리 관리 시스템에 전달
 	}
 }
 
