@@ -4095,10 +4095,45 @@ class drop_item final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kItemnameFieldNumber = 3,
+    kTexturePathFieldNumber = 5,
     kPacketTypeFieldNumber = 1,
     kItemidFieldNumber = 2,
-    kPlayeridFieldNumber = 3,
+    kItemclassFieldNumber = 4,
+    kCountFieldNumber = 6,
+    kFloorFieldNumber = 7,
+    kPosxFieldNumber = 8,
+    kPosyFieldNumber = 9,
+    kPoszFieldNumber = 10,
   };
+  // string itemname = 3;
+  void clear_itemname();
+  const std::string& itemname() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_itemname(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_itemname();
+  PROTOBUF_NODISCARD std::string* release_itemname();
+  void set_allocated_itemname(std::string* itemname);
+  private:
+  const std::string& _internal_itemname() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_itemname(const std::string& value);
+  std::string* _internal_mutable_itemname();
+  public:
+
+  // string texture_path = 5;
+  void clear_texture_path();
+  const std::string& texture_path() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_texture_path(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_texture_path();
+  PROTOBUF_NODISCARD std::string* release_texture_path();
+  void set_allocated_texture_path(std::string* texture_path);
+  private:
+  const std::string& _internal_texture_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_texture_path(const std::string& value);
+  std::string* _internal_mutable_texture_path();
+  public:
+
   // uint32 packet_type = 1;
   void clear_packet_type();
   uint32_t packet_type() const;
@@ -4117,13 +4152,58 @@ class drop_item final :
   void _internal_set_itemid(uint32_t value);
   public:
 
-  // uint32 playerid = 3;
-  void clear_playerid();
-  uint32_t playerid() const;
-  void set_playerid(uint32_t value);
+  // uint32 itemclass = 4;
+  void clear_itemclass();
+  uint32_t itemclass() const;
+  void set_itemclass(uint32_t value);
   private:
-  uint32_t _internal_playerid() const;
-  void _internal_set_playerid(uint32_t value);
+  uint32_t _internal_itemclass() const;
+  void _internal_set_itemclass(uint32_t value);
+  public:
+
+  // uint32 count = 6;
+  void clear_count();
+  uint32_t count() const;
+  void set_count(uint32_t value);
+  private:
+  uint32_t _internal_count() const;
+  void _internal_set_count(uint32_t value);
+  public:
+
+  // uint32 floor = 7;
+  void clear_floor();
+  uint32_t floor() const;
+  void set_floor(uint32_t value);
+  private:
+  uint32_t _internal_floor() const;
+  void _internal_set_floor(uint32_t value);
+  public:
+
+  // float posx = 8;
+  void clear_posx();
+  float posx() const;
+  void set_posx(float value);
+  private:
+  float _internal_posx() const;
+  void _internal_set_posx(float value);
+  public:
+
+  // float posy = 9;
+  void clear_posy();
+  float posy() const;
+  void set_posy(float value);
+  private:
+  float _internal_posy() const;
+  void _internal_set_posy(float value);
+  public:
+
+  // float posz = 10;
+  void clear_posz();
+  float posz() const;
+  void set_posz(float value);
+  private:
+  float _internal_posz() const;
+  void _internal_set_posz(float value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.drop_item)
@@ -4134,9 +4214,16 @@ class drop_item final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr itemname_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr texture_path_;
     uint32_t packet_type_;
     uint32_t itemid_;
-    uint32_t playerid_;
+    uint32_t itemclass_;
+    uint32_t count_;
+    uint32_t floor_;
+    float posx_;
+    float posy_;
+    float posz_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -7388,24 +7475,224 @@ inline void drop_item::set_itemid(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.drop_item.itemid)
 }
 
-// uint32 playerid = 3;
-inline void drop_item::clear_playerid() {
-  _impl_.playerid_ = 0u;
+// string itemname = 3;
+inline void drop_item::clear_itemname() {
+  _impl_.itemname_.ClearToEmpty();
 }
-inline uint32_t drop_item::_internal_playerid() const {
-  return _impl_.playerid_;
+inline const std::string& drop_item::itemname() const {
+  // @@protoc_insertion_point(field_get:Protocol.drop_item.itemname)
+  return _internal_itemname();
 }
-inline uint32_t drop_item::playerid() const {
-  // @@protoc_insertion_point(field_get:Protocol.drop_item.playerid)
-  return _internal_playerid();
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void drop_item::set_itemname(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.itemname_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.drop_item.itemname)
 }
-inline void drop_item::_internal_set_playerid(uint32_t value) {
+inline std::string* drop_item::mutable_itemname() {
+  std::string* _s = _internal_mutable_itemname();
+  // @@protoc_insertion_point(field_mutable:Protocol.drop_item.itemname)
+  return _s;
+}
+inline const std::string& drop_item::_internal_itemname() const {
+  return _impl_.itemname_.Get();
+}
+inline void drop_item::_internal_set_itemname(const std::string& value) {
   
-  _impl_.playerid_ = value;
+  _impl_.itemname_.Set(value, GetArenaForAllocation());
 }
-inline void drop_item::set_playerid(uint32_t value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Protocol.drop_item.playerid)
+inline std::string* drop_item::_internal_mutable_itemname() {
+  
+  return _impl_.itemname_.Mutable(GetArenaForAllocation());
+}
+inline std::string* drop_item::release_itemname() {
+  // @@protoc_insertion_point(field_release:Protocol.drop_item.itemname)
+  return _impl_.itemname_.Release();
+}
+inline void drop_item::set_allocated_itemname(std::string* itemname) {
+  if (itemname != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.itemname_.SetAllocated(itemname, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.itemname_.IsDefault()) {
+    _impl_.itemname_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.drop_item.itemname)
+}
+
+// uint32 itemclass = 4;
+inline void drop_item::clear_itemclass() {
+  _impl_.itemclass_ = 0u;
+}
+inline uint32_t drop_item::_internal_itemclass() const {
+  return _impl_.itemclass_;
+}
+inline uint32_t drop_item::itemclass() const {
+  // @@protoc_insertion_point(field_get:Protocol.drop_item.itemclass)
+  return _internal_itemclass();
+}
+inline void drop_item::_internal_set_itemclass(uint32_t value) {
+  
+  _impl_.itemclass_ = value;
+}
+inline void drop_item::set_itemclass(uint32_t value) {
+  _internal_set_itemclass(value);
+  // @@protoc_insertion_point(field_set:Protocol.drop_item.itemclass)
+}
+
+// string texture_path = 5;
+inline void drop_item::clear_texture_path() {
+  _impl_.texture_path_.ClearToEmpty();
+}
+inline const std::string& drop_item::texture_path() const {
+  // @@protoc_insertion_point(field_get:Protocol.drop_item.texture_path)
+  return _internal_texture_path();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void drop_item::set_texture_path(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.texture_path_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.drop_item.texture_path)
+}
+inline std::string* drop_item::mutable_texture_path() {
+  std::string* _s = _internal_mutable_texture_path();
+  // @@protoc_insertion_point(field_mutable:Protocol.drop_item.texture_path)
+  return _s;
+}
+inline const std::string& drop_item::_internal_texture_path() const {
+  return _impl_.texture_path_.Get();
+}
+inline void drop_item::_internal_set_texture_path(const std::string& value) {
+  
+  _impl_.texture_path_.Set(value, GetArenaForAllocation());
+}
+inline std::string* drop_item::_internal_mutable_texture_path() {
+  
+  return _impl_.texture_path_.Mutable(GetArenaForAllocation());
+}
+inline std::string* drop_item::release_texture_path() {
+  // @@protoc_insertion_point(field_release:Protocol.drop_item.texture_path)
+  return _impl_.texture_path_.Release();
+}
+inline void drop_item::set_allocated_texture_path(std::string* texture_path) {
+  if (texture_path != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.texture_path_.SetAllocated(texture_path, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.texture_path_.IsDefault()) {
+    _impl_.texture_path_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.drop_item.texture_path)
+}
+
+// uint32 count = 6;
+inline void drop_item::clear_count() {
+  _impl_.count_ = 0u;
+}
+inline uint32_t drop_item::_internal_count() const {
+  return _impl_.count_;
+}
+inline uint32_t drop_item::count() const {
+  // @@protoc_insertion_point(field_get:Protocol.drop_item.count)
+  return _internal_count();
+}
+inline void drop_item::_internal_set_count(uint32_t value) {
+  
+  _impl_.count_ = value;
+}
+inline void drop_item::set_count(uint32_t value) {
+  _internal_set_count(value);
+  // @@protoc_insertion_point(field_set:Protocol.drop_item.count)
+}
+
+// uint32 floor = 7;
+inline void drop_item::clear_floor() {
+  _impl_.floor_ = 0u;
+}
+inline uint32_t drop_item::_internal_floor() const {
+  return _impl_.floor_;
+}
+inline uint32_t drop_item::floor() const {
+  // @@protoc_insertion_point(field_get:Protocol.drop_item.floor)
+  return _internal_floor();
+}
+inline void drop_item::_internal_set_floor(uint32_t value) {
+  
+  _impl_.floor_ = value;
+}
+inline void drop_item::set_floor(uint32_t value) {
+  _internal_set_floor(value);
+  // @@protoc_insertion_point(field_set:Protocol.drop_item.floor)
+}
+
+// float posx = 8;
+inline void drop_item::clear_posx() {
+  _impl_.posx_ = 0;
+}
+inline float drop_item::_internal_posx() const {
+  return _impl_.posx_;
+}
+inline float drop_item::posx() const {
+  // @@protoc_insertion_point(field_get:Protocol.drop_item.posx)
+  return _internal_posx();
+}
+inline void drop_item::_internal_set_posx(float value) {
+  
+  _impl_.posx_ = value;
+}
+inline void drop_item::set_posx(float value) {
+  _internal_set_posx(value);
+  // @@protoc_insertion_point(field_set:Protocol.drop_item.posx)
+}
+
+// float posy = 9;
+inline void drop_item::clear_posy() {
+  _impl_.posy_ = 0;
+}
+inline float drop_item::_internal_posy() const {
+  return _impl_.posy_;
+}
+inline float drop_item::posy() const {
+  // @@protoc_insertion_point(field_get:Protocol.drop_item.posy)
+  return _internal_posy();
+}
+inline void drop_item::_internal_set_posy(float value) {
+  
+  _impl_.posy_ = value;
+}
+inline void drop_item::set_posy(float value) {
+  _internal_set_posy(value);
+  // @@protoc_insertion_point(field_set:Protocol.drop_item.posy)
+}
+
+// float posz = 10;
+inline void drop_item::clear_posz() {
+  _impl_.posz_ = 0;
+}
+inline float drop_item::_internal_posz() const {
+  return _impl_.posz_;
+}
+inline float drop_item::posz() const {
+  // @@protoc_insertion_point(field_get:Protocol.drop_item.posz)
+  return _internal_posz();
+}
+inline void drop_item::_internal_set_posz(float value) {
+  
+  _impl_.posz_ = value;
+}
+inline void drop_item::set_posz(float value) {
+  _internal_set_posz(value);
+  // @@protoc_insertion_point(field_set:Protocol.drop_item.posz)
 }
 
 // -------------------------------------------------------------------

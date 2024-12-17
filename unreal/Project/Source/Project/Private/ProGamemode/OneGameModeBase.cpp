@@ -63,6 +63,7 @@ void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
+    GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
     ZombieMap.Empty(); // ZombieMap 초기화
 
@@ -452,6 +453,38 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
 
     ++m_iItemBoxNumber;
    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
+
+   uint32 iclass{};
+
+   if (itemclass == EItemClass::NORMALWEAPON) {
+       iclass = 0;
+   }
+   else if (itemclass == EItemClass::THROWINGWEAPON) {
+       iclass = 1;
+   }
+   else if (itemclass == EItemClass::HEALINGITEM) {
+       iclass = 2;
+   }
+   else if (itemclass == EItemClass::BLEEDINGHEALINGITEM) {
+       iclass = 3;
+   }
+   else if (itemclass == EItemClass::KEYITEM) {
+       iclass = 4;
+   }
+   else if (itemclass == EItemClass::BAGITEM) {
+       iclass = 5;
+   }
+   else if (itemclass == EItemClass::NONE) {
+       iclass = 6;
+   }
+
+
+   Protocol::drop_item droppacket;
+
+   droppacket.set_packet_type(22);
+   droppacket.set_itemname(itemname);
+   droppacket.set_itemclass(iclass);
+   // 추가 수정 필요
 }
 
 void AOneGameModeBase::CarActorRandomLocationSetting()

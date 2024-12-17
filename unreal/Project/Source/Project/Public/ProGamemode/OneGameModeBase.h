@@ -202,4 +202,6 @@ public:
 public:
 
     uint32 my_class_num;
+
+    UProGameInstance* GameInstance;
 };
