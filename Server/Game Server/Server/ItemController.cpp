@@ -247,7 +247,7 @@ void ItemController::SpawnItemBoxes(int itemID, std::string itemName, EItemClass
 
     items.push_back(newItemData);
 
-    //printf("Spawned Item ID: %d, itemName: %s\n", itemID, itemName.c_str());
+    printf("Spawned Item ID: %d, itemName: %s\n", itemID, itemName.c_str());
 }
 
 void ItemController::SendItemData(int id)
@@ -273,7 +273,7 @@ void ItemController::SendItemData(int id)
 
     std::string serializedData;
     itemDataList.SerializeToString(&serializedData);
-    cout << "Serialized data size: " << serializedData.size() << endl;
+    cout << "SendItemData Player #" << id << " - Serialized data size: " << serializedData.size() << endl;
 
     iocpServer->IOCP_SendPacket(id, serializedData.data(), serializedData.size());
 }
@@ -390,6 +390,8 @@ void ItemController::SpawnInterItem(int carid, const std::string carname)
     }
 
     cars.push_back(newCarData);
+
+    printf("Spawned InterItem ID: %d, itemName: %s\n", carid, carname.c_str());
 }
 
 void ItemController::SendCarData(int id)
@@ -413,7 +415,7 @@ void ItemController::SendCarData(int id)
 
     std::string serializedData;
     carDataList.SerializeToString(&serializedData);
-    cout << "Serialized data size: " << serializedData.size() << endl;
+    cout << "SendInterItemData Player #" << id << " - Serialized data size: " << serializedData.size() << endl;
 
     iocpServer->IOCP_SendPacket(id, serializedData.data(), serializedData.size());
 }

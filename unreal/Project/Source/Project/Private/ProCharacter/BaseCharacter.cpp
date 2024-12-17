@@ -919,7 +919,7 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 					ProGameClearUIWidget->SetMessage(1, HowToEscape);
 				}
 
-				FString TimerString = FString::Printf(TEXT("%d:%02d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
+				FString TimerString = FString::Printf(TEXT("%d:%d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
 				ProGameClearUIWidget->SetMessage(2, TimerString);
 
 				FString AlivePlayersString = FString::Printf(TEXT(" %d "), alive_players);
@@ -1252,7 +1252,15 @@ void ABaseCharacter::GetItem()
 			else {
 				Send_Destroy(ItemBoxId);
 			}
-			PlayerSight->GetHitActor()->Destroy();
+			itembox->Destroy();
+			
+			AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
+
+			if (GameMode)
+			{
+				GameMode->NullPtrItemBoxesIndex(ItemBoxId);
+			}
+			//PlayerSight->GetHitActor()->Destroy();
 
 		}
 	}
@@ -1814,6 +1822,9 @@ void ABaseCharacter::PickUp()
 	AnimInstance->PlayPickUpMontage();
 	m_bIsPickUping = true;
 
+	/*m_DPickUpEnd.AddLambda([this]() -> void {
+		m_bIsPickUping = false;
+		});*/
 
 	// 첫 연결만 이벤트 바인딩
 	if (m_iPickUpMontageFlag == 0) {

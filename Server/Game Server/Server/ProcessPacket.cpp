@@ -459,7 +459,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, DserializedData.data(), DserializedData.size());
-                printf("%d 한테 키 보냈음\n", player.first);
+                printf("%d 한테 키 삭제 보냈음\n", player.first);
             }
         }
 

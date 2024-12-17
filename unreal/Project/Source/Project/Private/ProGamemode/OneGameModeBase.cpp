@@ -411,6 +411,13 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
     UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> m_iItemBoxNumber: %d"), m_iItemBoxNumber);
 }
 
+void AOneGameModeBase::NullPtrItemBoxesIndex(int32 itemboxindex)
+{
+    if (ItemBoxClasses[itemboxindex] != nullptr) {
+        ItemBoxClasses[itemboxindex] = nullptr;
+    }
+}
+
 void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count)
 {
     ABaseCharacter* DefaultPawn = nullptr;
@@ -421,7 +428,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
             DefaultPawn = *ActorItr;
             if (DefaultPawn) {
-                UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem -> GetPlayerId: %d"), DefaultPawn->GetPlayerId());
+                //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem -> GetPlayerId: %d"), DefaultPawn->GetPlayerId());
                 if (DefaultPawn->GetPlayerId() == 99) {
                     UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem : 99!!!!!!"));
                     break;
@@ -430,18 +437,45 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         }
     }
 
-    UE_LOG(LogTemp, Warning, TEXT("DropPosBefore!!!!!!"));
+   // UE_LOG(LogTemp, Warning, TEXT("DropPosBefore!!!!!!"));
     FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
-    UE_LOG(LogTemp, Warning, TEXT("ItemBoxClassesBefore!!!!!!"));
-    ItemBoxClasses.Add(AItemBoxActor::StaticClass());
-    UE_LOG(LogTemp, Warning, TEXT("SelectedItemBoxClassBefore!!!!!!"));
+   // UE_LOG(LogTemp, Warning, TEXT("ItemBoxClassesBefore!!!!!!"));
+    //ItemBoxClasses.Add(AItemBoxActor::StaticClass()); // spawn시 .add하지 말고 비어있는 인덱스에다가 아이템 다시 넣어주기
+    
+    int32 newindex = INDEX_NONE;
+    bool bAdded = false;
+    for (int32 i = 0; i < ItemBoxClasses.Num(); ++i)
+    {
+        if (ItemBoxClasses[i] == nullptr) 
+        {
+            ItemBoxClasses[i] = AItemBoxActor::StaticClass(); 
+            newindex = i;
+            bAdded = true;
+            break;
+        }
+    }
+    
+    if (!bAdded)
+    {
+        // 빈 자리가 없으면 새로 추가
+        ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+        newindex = m_iItemBoxNumber;
+        ++m_iItemBoxNumber;
+    }
+    
+    //UE_LOG(LogTemp, Warning, TEXT("SelectedItemBoxClassBefore!!!!!!"));
     //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem -> ItemBoxClasses.Num(): %d"), ItemBoxClasses.Num());
    // UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem ->  GetItemBoxNumber(): %d"), GetItemBoxNumber());
 
-    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[GetItemBoxNumber()];
+    if (newindex == INDEX_NONE)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem IndexERROR"));
+        return;
+    }
+    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[newindex];
     FVector itemboxpos = DefaultPawn->GetActorLocation() + FVector(DropPos.X, DropPos.Y, -60.149886f);
 
-    UE_LOG(LogTemp, Warning, TEXT("SpawnedItemBoxBefore!!!!!!"));
+    //UE_LOG(LogTemp, Warning, TEXT("SpawnedItemBoxBefore!!!!!!"));
     AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
 
     if (SpawnedItemBox) {
@@ -449,6 +483,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         SpawnedItemBox->ItemClassType = itemclass;
         SpawnedItemBox->Texture = texture;
         SpawnedItemBox->Count = count;
+        SpawnedItemBox->ItemBoxId = newindex;
     }
 
     ++m_iItemBoxNumber;
@@ -485,6 +520,17 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
    droppacket.set_itemname(itemname);
    droppacket.set_itemclass(iclass);
    // 추가 수정 필요
+    // 여기서 send 해주는게 좋을듯? 아이템 정보들과 아이템 위치를 담아서
+    // 그 send한것은 ItemBoxClasses[ItemBoxId]에 SpawnedItemBox 생성해서 넣어주는 새로운 함수가 있으면 될것같다.
+    // (물론 ItemBoxClasses[ItemBoxId]가 혹시 인덱스 오류 우려되면 for문으로 비어있는 자리 넣어줘도 될듯)
+    // 
+    // SpawnedItemBox->ItemName = itemname;
+    // SpawnedItemBox->ItemClassType = itemclass;
+    // SpawnedItemBox->Texture = texture;
+    // SpawnedItemBox->Count = count;
+    // SpawnedItemBox->ItemBoxId = newindex; 이 5가지랑 itemboxpos 묶어 보내면 될듯?
+
+   //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 }
 
 void AOneGameModeBase::CarActorRandomLocationSetting()
@@ -691,6 +737,7 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
                 }
                 else if (itemtype == 4) {
                     BasePlayer->OtherSpawnNormalWeapon(Itemname);
+                    BasePlayer->SetNWHandIn(true);
                 }
                 UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
             }
@@ -975,9 +1022,9 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
             //좀비의 체력상태 업데이트
             float NewHP = BaseZombie->GetHP() - Damage;
             BaseZombie->SetHP(NewHP);
-            /*if (NewHP <= 0) {
-                BaseZombie->SetNormalDeadWithAnim();
-            }*/
+            if (NewHP <= 0) {
+                BaseZombie->doAction_setIsNormalDead_onTick = true;
+            }
             UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %f"), ZombieId, NewHP);
         }
     }
@@ -1019,6 +1066,7 @@ void AOneGameModeBase::DestroyItem(uint32 Itemid, uint32 Playerid)
             if (ItemBox->ItemBoxId == (Itemid - 1))
             {
                 ItemBox->Destroy();
+                NullPtrItemBoxesIndex(ItemBox->ItemBoxId);
                 UE_LOG(LogTemp, Display, TEXT("Item destroyed: ItemId=%d"), Itemid);
                 break;
             }

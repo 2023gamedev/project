@@ -60,7 +60,7 @@ IOCP_CORE::IOCP_CORE()
 	UpdateEdgesMap(unrealFilePath + filePath, filePath);
 	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
 	
-	timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
+	//timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 	
 	//==========Zombie_BT 초기화
 	Zombie_BT_Initialize();
@@ -127,7 +127,7 @@ void IOCP_CORE::CheckThisCPUcoreCount()
 	SYSTEM_INFO si;
 	GetSystemInfo(&si);
 	cpuCore = static_cast<int>(si.dwNumberOfProcessors);
-	printf("CPU Core Count = %d, threads = %d\n", cpuCore, cpuCore*2);
+	printf("CPU Core Count = %d, threads = %d\n", cpuCore, cpuCore);
 
 
 }
@@ -136,7 +136,7 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 {
 	worker_threads.reserve(cpuCore);
 
-	for (int i = 0; i < cpuCore*2; ++i)
+	for (int i = 0; i < cpuCore; ++i)
 	{
 		worker_threads.push_back(new thread{ &IOCP_CORE::IOCP_WorkerThread, this });
 	}
@@ -155,7 +155,7 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 
 	zombie_thread.join();
 
-	timer_thread.join();
+	//timer_thread.join();
 }
 
 void IOCP_CORE::IOCP_WorkerThread() {
@@ -225,9 +225,10 @@ void IOCP_CORE::IOCP_WorkerThread() {
 		}
 		else if (OP_SERVER_SEND == my_overlap->operation) {
 			// 서버에서 메세지를 보냈으면, 메모리를 해제해 준다.
-			delete my_overlap;
 
 			IOCP_SendNextPacket(user);
+
+			delete my_overlap;
 		}
 		else {
 			cout << "Unknown IOCP event !!\n";
@@ -381,6 +382,7 @@ void IOCP_CORE::IOCP_SendNextPacket(PLAYER_INFO* user)
 
 	DWORD flags{ 0 };
 	int retval = WSASend(user->s, &over->wsabuf, 1, NULL, flags, &over->original_overlap, NULL);
+
 	if (SOCKET_ERROR == retval) {
 		int err_no = WSAGetLastError();
 		if (ERROR_IO_PENDING != err_no) {

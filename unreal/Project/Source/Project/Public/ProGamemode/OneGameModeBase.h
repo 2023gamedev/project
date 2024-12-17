@@ -167,6 +167,8 @@ public:
     void ItemRandomLocationSetting();
     void SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos);
 
+    void NullPtrItemBoxesIndex(int32 itemboxindex);
+
     // 좀비 생성 함수
     void UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation);
 

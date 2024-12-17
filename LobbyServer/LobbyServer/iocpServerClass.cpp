@@ -67,14 +67,14 @@ void IOCP_CORE::CheckThisCPUcoreCount()
 	SYSTEM_INFO si;
 	GetSystemInfo(&si);
 	cpuCore = static_cast<int>(si.dwNumberOfProcessors);
-	printf("CPU Core Count = %d, threads = %d\n", cpuCore, cpuCore*2);
+	printf("CPU Core Count = %d, threads = %d\n", cpuCore, cpuCore);
 }
 
 void IOCP_CORE::IOCP_MakeWorkerThreads()
 {
 	worker_threads.reserve(cpuCore);
 
-	for (int i = 0; i < cpuCore*2; ++i)
+	for (int i = 0; i < cpuCore; ++i)
 	{
 		worker_threads.push_back(new thread{ &IOCP_CORE::IOCP_WorkerThread, this });
 	}

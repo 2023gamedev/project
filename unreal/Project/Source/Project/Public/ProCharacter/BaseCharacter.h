@@ -306,8 +306,9 @@ public:
 
 
 	bool IsNWHandIn() { return m_bNWHandIn; }
-	void SetNWHandIn(bool handin) { m_bNWHandIn = handin; }
-
+	void SetNWHandIn(bool handin) { m_bNWHandIn = handin; } 
+	// 이 함수를 이렇게 한줄로 하지 말고  m_bNWHandIn = handin; 이후에 m_bNWHandin값을 send해주고 
+	// 그 값을 받아 다른 클라에 해당 캐릭터에 m_bNWHandIn만 수정해주는 함수를 만들면 될듯?
 	bool IsBHHandIn() { return m_bBHHandIn; }
 	void SetBHHandIn(bool handin) { m_bBHHandIn = handin; }
 

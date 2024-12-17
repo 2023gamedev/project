@@ -29,7 +29,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void OnChracterOvelapNew(ABaseCharacter* character);  // ÀÌ¸§ ¼öÁ¤ ÇÊ¿ä
+	void OnChracterOvelapNew(ABaseCharacter* character);  // ì´ë¦„ ìˆ˜ì • í•„ìš”
 
 	void SetItemBoxId(uint32 index);
 
@@ -45,7 +45,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = Box)
 	UStaticMeshComponent* Box;
 
-	//// ¼öÁ¤ ÇÊ¿ä	
+	//// ìˆ˜ì • í•„ìš”	
 	//UPROPERTY(EditAnywhere, Category = Box)
 	//TSubclassOf<ANormalWeaponActor> NormalWeaponItemClass;
 
@@ -53,19 +53,19 @@ public:
 	//UPROPERTY(EditAnywhere, Category = Item)
 	//FString m_sItemID;
 
-	// ¾ÆÀÌÅÛ ÀÌ¸§
+	// ì•„ì´í…œ ì´ë¦„
 	UPROPERTY(EditAnywhere, Category = item)
 	FName ItemName;
 
-	// ¾ÆÀÌÅÛ Á¾·ù(Å¬·¡½º°¡ ¹ºÁö)
+	// ì•„ì´í…œ ì¢…ë¥˜(í´ë˜ìŠ¤ê°€ ë­”ì§€)
 	UPROPERTY(EditAnywhere, Category = item)
 	EItemClass ItemClassType;
 
-	// ÅØ½ºÃÄ
+	// í…ìŠ¤ì³
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* Texture;
 
-	// µé°íÀÖ´Â °¹¼ö
+	// ë“¤ê³ ìˆëŠ” ê°¯ìˆ˜
 	UPROPERTY(EditAnywhere, Category = item)
 	int Count;
 

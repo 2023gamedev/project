@@ -40,4 +40,6 @@ public:
 	void Teleport(float tx, float ty, float tz); //디버깅용
 
 	~Player();
+
+	int send_cnt = 0;
 };
