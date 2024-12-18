@@ -451,6 +451,11 @@ public:
 	void OtherSpawnItemBefore();
 	void OtherUnEquipItem(uint32 itemtype);
 
+
+	
+	UPROPERTY(EditAnywhere)
+	int32 GameClearFlag = 0;
+
 	void LimitSmokingIcon();
 	void SmokingIcon();
 

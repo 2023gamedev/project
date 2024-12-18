@@ -899,46 +899,51 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 {
 	if (ProGameClearUIClass != nullptr) {
 
-		APlayerCharacterController* PlayerController = Cast<APlayerCharacterController>(this->GetController());
-		if (PlayerController)
-		{
-			ProGameClearUIWidget = CreateWidget<UProGameClearUI>(PlayerController, ProGameClearUIClass);
-			if (ProGameClearUIWidget)
+		if (GameClearFlag == 0) {
+			APlayerCharacterController* PlayerController = Cast<APlayerCharacterController>(this->GetController());
+			if (PlayerController)
 			{
-				ProGameClearUIWidget->AddToViewport();
+				ProGameClearUIWidget = CreateWidget<UProGameClearUI>(PlayerController, ProGameClearUIClass);
+				if (ProGameClearUIWidget)
+				{
+					ProGameClearUIWidget->AddToViewport();
 
-				// EndingUI
-				if (root == 1) {
-					FString HowToEscape = " Escape::Car ";
-					ProGameClearUIWidget->SetMessage(1, HowToEscape);
+					// EndingUI
+					if (root == 1) {
+						FString HowToEscape = " Escape::Car ";
+						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+					}
+					else if (root == 2) {
+						FString HowToEscape = " Escape::Roof ";
+						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+					}
+
+					FString TimerString = FString::Printf(TEXT("%d:%d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
+					ProGameClearUIWidget->SetMessage(2, TimerString);
+
+					FString AlivePlayersString = FString::Printf(TEXT(" %d "), alive_players);
+					ProGameClearUIWidget->SetMessage(3, AlivePlayersString);
+
+					FString DeadPlayersString = FString::Printf(TEXT(" %d "), dead_players);
+					ProGameClearUIWidget->SetMessage(32, DeadPlayersString);
+
+					ProGameClearUIWidget->SetMessage(4, open_player);
+
+					FString MyKillCountString = FString::Printf(TEXT(" %d "), my_kill_count);
+					ProGameClearUIWidget->SetMessage(5, MyKillCountString);
+
+					// 합친 문자열 생성
+					FString BestKillString = FString::Printf(TEXT("%d kills by %s"), best_kill_count, *best_kill_player);
+					ProGameClearUIWidget->SetMessage(52, BestKillString);
+
+					++GameClearFlag;
+					//ProStartGameEnd(); // 게임 5초후 클리어
 				}
-				else if (root == 2) {
-					FString HowToEscape = " Escape::Roof ";
-					ProGameClearUIWidget->SetMessage(1, HowToEscape);
-				}
-
-				FString TimerString = FString::Printf(TEXT("%d:%d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
-				ProGameClearUIWidget->SetMessage(2, TimerString);
-
-				FString AlivePlayersString = FString::Printf(TEXT(" %d "), alive_players);
-				ProGameClearUIWidget->SetMessage(3, AlivePlayersString);
-
-				FString DeadPlayersString = FString::Printf(TEXT(" %d "), dead_players);
-				ProGameClearUIWidget->SetMessage(32, DeadPlayersString);
-
-				ProGameClearUIWidget->SetMessage(4, open_player);
-
-				FString MyKillCountString = FString::Printf(TEXT(" %d "), my_kill_count);
-				ProGameClearUIWidget->SetMessage(5, MyKillCountString);
-
-				// 합친 문자열 생성
-				FString BestKillString = FString::Printf(TEXT("%d kills by %s"), best_kill_count, *best_kill_player);
-				ProGameClearUIWidget->SetMessage(52, BestKillString);
-
-
-				//ProStartGameEnd(); // 게임 5초후 클리어
+				
 			}
 		}
+
+		
 	}
 
 }
