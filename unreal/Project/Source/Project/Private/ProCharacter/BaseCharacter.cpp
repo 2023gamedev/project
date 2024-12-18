@@ -2308,6 +2308,10 @@ void ABaseCharacter::DestroyNormalWeapon()
 
 	SetNWHandIn(false);
 	CurrentWeapon = nullptr;
+
+	if (GetPlayerId() == 99) {
+		// Send()
+	}
 }
 
 void ABaseCharacter::DestroyThrowWeapon()
@@ -2318,6 +2322,10 @@ void ABaseCharacter::DestroyThrowWeapon()
 
 	SetThrowWHandIn(false);
 	CurrentThrowWeapon = nullptr;
+
+	if (GetPlayerId() == 99) {
+		// Send()
+	}
 }
 
 void ABaseCharacter::DestroyHealingItem()
@@ -2329,6 +2337,10 @@ void ABaseCharacter::DestroyHealingItem()
 
 	SetHealHandIn(false);
 	CurrentHealingItem = nullptr;
+
+	if (GetPlayerId() == 99) {
+		// Send()
+	}
 }
 
 void ABaseCharacter::DestroyBleedingHealingItem()
@@ -2338,6 +2350,11 @@ void ABaseCharacter::DestroyBleedingHealingItem()
 	}
 	SetBHHandIn(false);
 	CurrentBleedingHealingItem = nullptr;
+
+
+	if (GetPlayerId() == 99) {
+		// Send()
+	}
 }
 
 void ABaseCharacter::DestroyKeyItem()
@@ -2347,6 +2364,10 @@ void ABaseCharacter::DestroyKeyItem()
 	}
 	SetKeyHandIn(false);
 	CurrentKeyItem = nullptr;
+
+	if (GetPlayerId() == 99) {
+		// Send()
+	}
 }
 
 void ABaseCharacter::DestroyNormalWepaonItemSlot()
@@ -2669,6 +2690,25 @@ void ABaseCharacter::HealingStamina()
 	GetWorld()->GetTimerManager().SetTimer(HealingStaminaHandle, this, &ABaseCharacter::HealingStaminaTimerElapsed, 1.0f, true, 1.0f);
 }
 
+void ABaseCharacter::OtherUnEquipItem(uint32 itemtype)
+{
+	if (itemtype == 0) {
+		DestroyBleedingHealingItem();
+	}
+	else if (itemtype == 1) {
+		DestroyHealingItem();
+	}
+	else if (itemtype == 2) {
+		DestroyThrowWeapon();
+	}
+	else if (itemtype == 3) {
+		DestroyKeyItem();
+	}
+	else if (itemtype == 4) {
+		DestroyNormalWeapon();
+	}
+}
+
 void ABaseCharacter::HealingStaminaTimerElapsed()
 {
 	SetStamina(GetStamina() + 5);
@@ -2762,12 +2802,29 @@ bool ABaseCharacter::GetAttack()
 {
 	return b_attack;
 }
-
-void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
+void ABaseCharacter::OtherSpawnItemBefore()
 {
 	if (CurrentWeapon != nullptr) {
 		DestroyNormalWeapon();
 	}
+	if (CurrentHealingItem != nullptr) {
+		DestroyHealingItem();
+	}
+	if (CurrentBleedingHealingItem != nullptr) {
+		DestroyBleedingHealingItem();
+	}
+	if (CurrentThrowWeapon != nullptr) {
+		DestroyThrowWeapon();
+	}
+	if (CurrentKeyItem != nullptr) {
+		DestroyKeyItem();
+	}
+
+}
+void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
+{
+	OtherSpawnItemBefore();
+
 	if (CurrentWeapon == nullptr) {
 		if (WeaponName == "Book") { //*
 			CurrentWeapon = GetWorld()->SpawnActor<ANWBook>(ANWBook::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
@@ -2916,9 +2973,7 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 
 void ABaseCharacter::OtherSpawnHealingItem(const FString& ItemName)
 {
-	if (CurrentHealingItem != nullptr) {
-		DestroyHealingItem();
-	}
+	OtherSpawnItemBefore();
 	if (CurrentHealingItem == nullptr) {
 
 		if (ItemName == "CannedTuna") {
@@ -2972,9 +3027,7 @@ void ABaseCharacter::OtherSpawnHealingItem(const FString& ItemName)
 
 void ABaseCharacter::OtherSpawnBleedingHealingItem(const FString& ItemName)
 {
-	if (CurrentBleedingHealingItem != nullptr) {
-		DestroyBleedingHealingItem();
-	}
+	OtherSpawnItemBefore();
 	if (CurrentBleedingHealingItem == nullptr) {
 
 
@@ -3019,14 +3072,12 @@ void ABaseCharacter::OtherSpawnBleedingHealingItem(const FString& ItemName)
 
 void ABaseCharacter::OtherSpawnThrowWeapon(const FString& ItemName)
 {
-
+	OtherSpawnItemBefore();
 }
 
 void ABaseCharacter::OtherSpawnKeyItem(const FString& ItemName)
 {
-	if (CurrentKeyItem != nullptr) {
-		DestroyKeyItem();
-	}
+	OtherSpawnItemBefore();
 	if (CurrentKeyItem == nullptr) {
 
 		if (ItemName == "CarKey1") {

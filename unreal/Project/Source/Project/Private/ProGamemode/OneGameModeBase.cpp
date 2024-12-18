@@ -64,8 +64,9 @@ void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
-    GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-
+    if (GameInstance == nullptr) {
+        GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+    }
     ZombieMap.Empty(); // ZombieMap 초기화
 
     //ABaseCharacter* DefaultPawn = nullptr;
@@ -216,6 +217,10 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 void AOneGameModeBase::ChoiceCharacterBefore()
 {
+    if (GameInstance == nullptr) {
+        GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+    }
+
     if (GameInstance) {
         int CharacterNumber = GameInstance->GetChoicedCharacterNumber();
         if (CharacterNumber == 1) {
@@ -754,6 +759,29 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
                 }
                 UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
             }
+            return;
+        }
+    }
+}
+
+void AOneGameModeBase::UpdateUnEquipItem(uint32 PlayerID, uint32 itemtype)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // 캐릭터 검색
+    for (TActorIterator<ABaseCharacter> It(World); It; ++It)
+    {
+        ABaseCharacter* BasePlayer = *It;
+        if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
+        {
+            BasePlayer->OtherUnEquipItem(itemtype);
+            UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
             return;
         }
     }

@@ -198,6 +198,8 @@ public:
 
     void UpdateEquipItem(uint32 PlayerID, const FString& Itemname, uint32 itemtype);
 
+    void UpdateUnEquipItem(uint32 PlayerID, uint32 itemtype);
+
     void UpdatePlayerRun(uint32 PlayerID, bool b_run);
 
     void UpdatePlayerJump(uint32 PlayerID);
