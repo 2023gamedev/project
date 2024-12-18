@@ -215,25 +215,19 @@ void AOneGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 void AOneGameModeBase::ChoiceCharacterBefore()
 {
-    // 현재 월드의 게임 인스턴스 가져오기
-    UGameInstance* CurrentGameInstance = GetGameInstance();
-
-    if (CurrentGameInstance) {
-        UProGameInstance* GameInstance = Cast<UProGameInstance>(CurrentGameInstance);
-        if (GameInstance) {
-            int CharacterNumber = GameInstance->GetChoicedCharacterNumber();
-            if (CharacterNumber == 1) {
-                CharacterIconIndex = EPlayerCharacter::GIRL;
-            }
-            else if (CharacterNumber == 2) {
-                CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
-            }
-            else if (CharacterNumber == 3) {
-                CharacterIconIndex = EPlayerCharacter::IDOL;
-            }
-            else if (CharacterNumber == 4) {
-                CharacterIconIndex = EPlayerCharacter::FIREFIGHTER;
-            }
+    if (GameInstance) {
+        int CharacterNumber = GameInstance->GetChoicedCharacterNumber();
+        if (CharacterNumber == 1) {
+            CharacterIconIndex = EPlayerCharacter::GIRL;
+        }
+        else if (CharacterNumber == 2) {
+            CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
+        }
+        else if (CharacterNumber == 3) {
+            CharacterIconIndex = EPlayerCharacter::IDOL;
+        }
+        else if (CharacterNumber == 4) {
+            CharacterIconIndex = EPlayerCharacter::FIREFIGHTER;
         }
         else {
             // 게임 인스턴스가 유효하지 않은 경우에 대한 처리
