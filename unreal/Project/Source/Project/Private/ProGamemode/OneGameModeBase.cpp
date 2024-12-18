@@ -63,6 +63,7 @@ void AOneGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
+    GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
     ZombieMap.Empty(); // ZombieMap 초기화
 
@@ -485,6 +486,40 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         SpawnedItemBox->ItemBoxId = newindex;
     }
 
+    ++m_iItemBoxNumber;
+   UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
+
+   uint32 iclass{};
+
+   if (itemclass == EItemClass::NORMALWEAPON) {
+       iclass = 0;
+   }
+   else if (itemclass == EItemClass::THROWINGWEAPON) {
+       iclass = 1;
+   }
+   else if (itemclass == EItemClass::HEALINGITEM) {
+       iclass = 2;
+   }
+   else if (itemclass == EItemClass::BLEEDINGHEALINGITEM) {
+       iclass = 3;
+   }
+   else if (itemclass == EItemClass::KEYITEM) {
+       iclass = 4;
+   }
+   else if (itemclass == EItemClass::BAGITEM) {
+       iclass = 5;
+   }
+   else if (itemclass == EItemClass::NONE) {
+       iclass = 6;
+   }
+
+
+   Protocol::drop_item droppacket;
+
+   droppacket.set_packet_type(22);
+   droppacket.set_itemname(itemname);
+   droppacket.set_itemclass(iclass);
+   // 추가 수정 필요
     // 여기서 send 해주는게 좋을듯? 아이템 정보들과 아이템 위치를 담아서
     // 그 send한것은 ItemBoxClasses[ItemBoxId]에 SpawnedItemBox 생성해서 넣어주는 새로운 함수가 있으면 될것같다.
     // (물론 ItemBoxClasses[ItemBoxId]가 혹시 인덱스 오류 우려되면 for문으로 비어있는 자리 넣어줘도 될듯)
@@ -702,6 +737,7 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
                 }
                 else if (itemtype == 4) {
                     BasePlayer->OtherSpawnNormalWeapon(Itemname);
+                    BasePlayer->SetNWHandIn(true);
                 }
                 UE_LOG(LogTemp, Warning, TEXT("real update equip: %d"), PlayerID);
             }

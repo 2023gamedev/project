@@ -153,7 +153,14 @@ message destroy_item {
 message drop_item{
     uint32 packet_type = 1;
     uint32 itemid = 2;
-    uint32 playerid = 3;
+    string itemname = 3;
+    uint32 itemclass = 4;
+    string texture_path = 5;
+    uint32 count = 6;
+    uint32 floor = 7;
+    float posx = 8;
+    float posy = 9;
+    float posz = 10;
 }
 
 message get_key {

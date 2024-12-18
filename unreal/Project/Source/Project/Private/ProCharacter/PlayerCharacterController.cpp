@@ -135,6 +135,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvEquipItem.PlayerId);
 			}
 		}
+		// MyGameMode->UpdateUnEquipItem(recvUnEquipItem.PlayerId, recvUnEquipItem.Itemtype); Send부분 필요(아이템 장착해제시 동기화를 위해 필요)
+		// recvUnEquipItem.PlayerId, recvUnEquipItem.ItemType 와 이걸 보내줄수있는 Send()부분 있으면 남은 부분 제작 예정
 
 		if (GameInstance->ClientSocketPtr->Q_run.try_pop(recvRun))
 		{
