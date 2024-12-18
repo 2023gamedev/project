@@ -508,11 +508,12 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
    }
 
 
-   Protocol::drop_item droppacket;
+  /* Protocol::drop_item droppacket;
 
    droppacket.set_packet_type(22);
    droppacket.set_itemname(itemname);
-   droppacket.set_itemclass(iclass);
+   droppacket.set_itemclass(iclass);*/
+
    // 추가 수정 필요
     // 여기서 send 해주는게 좋을듯? 아이템 정보들과 아이템 위치를 담아서
     // 그 send한것은 ItemBoxClasses[ItemBoxId]에 SpawnedItemBox 생성해서 넣어주는 새로운 함수가 있으면 될것같다.

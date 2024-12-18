@@ -62,8 +62,6 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			m_bIsHandInWeapon = character->IsNWHandIn();
 		}
 	}
-
-
 }
 
 void UPlayerCharacterAnimInstance::PlayAttackMontage()
