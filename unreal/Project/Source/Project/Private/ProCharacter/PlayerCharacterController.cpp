@@ -173,6 +173,20 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_dropitem.try_pop(recvDropItem)) {
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				FName Fitemname = FName(recvDropItem.itemname.c_str());
+
+				FString Ftexture_path = FString(recvDropItem.texture_path.c_str());
+
+				UTexture2D* LoadedTexture = LoadObject<UTexture2D>(NULL, *Ftexture_path, NULL, LOAD_None, NULL);
+
+				//추가 수정 필요
+				//MyGameMode->SpawnItemBoxes(recvDropItem.itemid, Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos);
+			}
+		}
+
 		if (GameInstance->ClientSocketPtr->Q_setcar.try_pop(recvSetCar)) {
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{

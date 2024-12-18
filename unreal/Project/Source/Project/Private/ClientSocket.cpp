@@ -512,6 +512,17 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				}
 				break;
 			}
+			case 22:
+			{
+				Protocol::drop_item droppacket;
+				if (droppacket.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					Q_dropitem.push(Drop_Item(droppacket.itemid(), droppacket.itemname(), droppacket.itemclass(), droppacket.texture_path(),
+						droppacket.count(), FVector(droppacket.posx(), droppacket.posy(), droppacket.posz())));
+
+					UE_LOG(LogNet, Display, TEXT("recv drop itempacket"));
+				}
+			}
 			}
 
 		}

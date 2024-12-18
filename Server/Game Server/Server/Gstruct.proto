@@ -157,10 +157,9 @@ message drop_item{
     uint32 itemclass = 4;
     string texture_path = 5;
     uint32 count = 6;
-    uint32 floor = 7;
-    float posx = 8;
-    float posy = 9;
-    float posz = 10;
+    float posx = 7;
+    float posy = 8;
+    float posz = 9;
 }
 
 message get_key {

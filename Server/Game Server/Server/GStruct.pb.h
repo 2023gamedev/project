@@ -4101,10 +4101,9 @@ class drop_item final :
     kItemidFieldNumber = 2,
     kItemclassFieldNumber = 4,
     kCountFieldNumber = 6,
-    kFloorFieldNumber = 7,
-    kPosxFieldNumber = 8,
-    kPosyFieldNumber = 9,
-    kPoszFieldNumber = 10,
+    kPosxFieldNumber = 7,
+    kPosyFieldNumber = 8,
+    kPoszFieldNumber = 9,
   };
   // string itemname = 3;
   void clear_itemname();
@@ -4170,16 +4169,7 @@ class drop_item final :
   void _internal_set_count(uint32_t value);
   public:
 
-  // uint32 floor = 7;
-  void clear_floor();
-  uint32_t floor() const;
-  void set_floor(uint32_t value);
-  private:
-  uint32_t _internal_floor() const;
-  void _internal_set_floor(uint32_t value);
-  public:
-
-  // float posx = 8;
+  // float posx = 7;
   void clear_posx();
   float posx() const;
   void set_posx(float value);
@@ -4188,7 +4178,7 @@ class drop_item final :
   void _internal_set_posx(float value);
   public:
 
-  // float posy = 9;
+  // float posy = 8;
   void clear_posy();
   float posy() const;
   void set_posy(float value);
@@ -4197,7 +4187,7 @@ class drop_item final :
   void _internal_set_posy(float value);
   public:
 
-  // float posz = 10;
+  // float posz = 9;
   void clear_posz();
   float posz() const;
   void set_posz(float value);
@@ -4220,7 +4210,6 @@ class drop_item final :
     uint32_t itemid_;
     uint32_t itemclass_;
     uint32_t count_;
-    uint32_t floor_;
     float posx_;
     float posy_;
     float posz_;
@@ -7615,27 +7604,7 @@ inline void drop_item::set_count(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.drop_item.count)
 }
 
-// uint32 floor = 7;
-inline void drop_item::clear_floor() {
-  _impl_.floor_ = 0u;
-}
-inline uint32_t drop_item::_internal_floor() const {
-  return _impl_.floor_;
-}
-inline uint32_t drop_item::floor() const {
-  // @@protoc_insertion_point(field_get:Protocol.drop_item.floor)
-  return _internal_floor();
-}
-inline void drop_item::_internal_set_floor(uint32_t value) {
-  
-  _impl_.floor_ = value;
-}
-inline void drop_item::set_floor(uint32_t value) {
-  _internal_set_floor(value);
-  // @@protoc_insertion_point(field_set:Protocol.drop_item.floor)
-}
-
-// float posx = 8;
+// float posx = 7;
 inline void drop_item::clear_posx() {
   _impl_.posx_ = 0;
 }
@@ -7655,7 +7624,7 @@ inline void drop_item::set_posx(float value) {
   // @@protoc_insertion_point(field_set:Protocol.drop_item.posx)
 }
 
-// float posy = 9;
+// float posy = 8;
 inline void drop_item::clear_posy() {
   _impl_.posy_ = 0;
 }
@@ -7675,7 +7644,7 @@ inline void drop_item::set_posy(float value) {
   // @@protoc_insertion_point(field_set:Protocol.drop_item.posy)
 }
 
-// float posz = 10;
+// float posz = 9;
 inline void drop_item::clear_posz() {
   _impl_.posz_ = 0;
 }

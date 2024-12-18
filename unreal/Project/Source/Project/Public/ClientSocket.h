@@ -181,6 +181,21 @@ struct Set_Car
 		: carid(id), carname(name), carpos(pos), carrotator(rot), carkeyname(keyname) {}
 };
 
+struct Drop_Item
+{
+	uint32 itemid;
+	std::string itemname;
+	uint32 itemclass;
+	std::string texture_path;
+	uint32 count;
+	FVector itempos;
+
+	Drop_Item() : itemid(0), itemname(""), itemclass(0), texture_path(""), count(0), itempos(FVector::ZeroVector) {}
+
+	Drop_Item(uint32 Initemid, std::string Initemname, uint32 Initemclass, std::string Intexture_path, uint32 Incount, FVector Initempos)
+		: itemid(Initemid), itemname(Initemname), itemclass(Initemclass), texture_path(Intexture_path), count(Incount), itempos(Initempos) {}
+};
+
 struct Destroy_Item
 {
 	uint32 itemid;
@@ -295,7 +310,6 @@ struct GameClear
 		best_kill_count(Inbest_kill_count), best_kill_player(Inbest_kill_player) {}
 };
 
-
 class UProGameInstance;
 
 class PROJECT_API ClientSocket : public FRunnable
@@ -334,6 +348,7 @@ public:
 	Concurrency::concurrent_queue<SelectReady> Q_sready;
 	Concurrency::concurrent_queue<bool> Q_wAllready;
 	Concurrency::concurrent_queue<GameClear> Q_gclear;
+	Concurrency::concurrent_queue<Drop_Item> Q_dropitem;
 
 
 	virtual bool Init() override;

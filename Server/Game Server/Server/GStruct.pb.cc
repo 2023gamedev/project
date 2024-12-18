@@ -358,7 +358,6 @@ PROTOBUF_CONSTEXPR drop_item::drop_item(
   , /*decltype(_impl_.itemid_)*/0u
   , /*decltype(_impl_.itemclass_)*/0u
   , /*decltype(_impl_.count_)*/0u
-  , /*decltype(_impl_.floor_)*/0u
   , /*decltype(_impl_.posx_)*/0
   , /*decltype(_impl_.posy_)*/0
   , /*decltype(_impl_.posz_)*/0
@@ -664,7 +663,6 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.itemclass_),
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.texture_path_),
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.count_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.floor_),
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.posx_),
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.posy_),
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.posz_),
@@ -732,10 +730,10 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 192, -1, -1, sizeof(::Protocol::CarDataList)},
   { 200, -1, -1, sizeof(::Protocol::destroy_item)},
   { 209, -1, -1, sizeof(::Protocol::drop_item)},
-  { 225, -1, -1, sizeof(::Protocol::get_key)},
-  { 235, -1, -1, sizeof(::Protocol::escape)},
-  { 244, -1, -1, sizeof(::Protocol::game_clear)},
-  { 258, -1, -1, sizeof(::Protocol::send_complete)},
+  { 224, -1, -1, sizeof(::Protocol::get_key)},
+  { 234, -1, -1, sizeof(::Protocol::escape)},
+  { 243, -1, -1, sizeof(::Protocol::game_clear)},
+  { 257, -1, -1, sizeof(::Protocol::send_complete)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -815,26 +813,26 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "eyname\030\n \001(\t\"C\n\013CarDataList\022\023\n\013packet_ty"
   "pe\030\001 \001(\r\022\037\n\004cars\030\002 \003(\0132\021.Protocol.set_ca"
   "r\"E\n\014destroy_item\022\023\n\013packet_type\030\001 \001(\r\022\016"
-  "\n\006itemid\030\002 \001(\r\022\020\n\010playerid\030\003 \001(\r\"\263\001\n\tdro"
+  "\n\006itemid\030\002 \001(\r\022\020\n\010playerid\030\003 \001(\r\"\244\001\n\tdro"
   "p_item\022\023\n\013packet_type\030\001 \001(\r\022\016\n\006itemid\030\002 "
   "\001(\r\022\020\n\010itemname\030\003 \001(\t\022\021\n\titemclass\030\004 \001(\r"
-  "\022\024\n\014texture_path\030\005 \001(\t\022\r\n\005count\030\006 \001(\r\022\r\n"
-  "\005floor\030\007 \001(\r\022\014\n\004posx\030\010 \001(\002\022\014\n\004posy\030\t \001(\002"
-  "\022\014\n\004posz\030\n \001(\002\"S\n\007get_key\022\023\n\013packet_type"
-  "\030\001 \001(\r\022\016\n\006itemid\030\002 \001(\r\022\021\n\titemboxid\030\003 \001("
-  "\r\022\020\n\010playerid\030\004 \001(\r\"=\n\006escape\022\023\n\013packet_"
-  "type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004root\030\003 \001"
-  "(\r\"\271\001\n\ngame_clear\022\023\n\013packet_type\030\001 \001(\r\022\014"
-  "\n\004root\030\002 \001(\r\022\025\n\ralive_players\030\003 \001(\r\022\024\n\014d"
-  "ead_players\030\004 \001(\r\022\023\n\013open_player\030\005 \001(\t\022\024"
-  "\n\014my_killcount\030\006 \001(\r\022\030\n\020best_kill_player"
-  "\030\007 \001(\t\022\026\n\016best_killcount\030\010 \001(\r\";\n\rsend_c"
-  "omplete\022\023\n\013packet_type\030\001 \001(\r\022\025\n\rcomplete"
-  "_type\030\002 \001(\rb\006proto3"
+  "\022\024\n\014texture_path\030\005 \001(\t\022\r\n\005count\030\006 \001(\r\022\014\n"
+  "\004posx\030\007 \001(\002\022\014\n\004posy\030\010 \001(\002\022\014\n\004posz\030\t \001(\002\""
+  "S\n\007get_key\022\023\n\013packet_type\030\001 \001(\r\022\016\n\006itemi"
+  "d\030\002 \001(\r\022\021\n\titemboxid\030\003 \001(\r\022\020\n\010playerid\030\004"
+  " \001(\r\"=\n\006escape\022\023\n\013packet_type\030\001 \001(\r\022\020\n\010p"
+  "layerid\030\002 \001(\r\022\014\n\004root\030\003 \001(\r\"\271\001\n\ngame_cle"
+  "ar\022\023\n\013packet_type\030\001 \001(\r\022\014\n\004root\030\002 \001(\r\022\025\n"
+  "\ralive_players\030\003 \001(\r\022\024\n\014dead_players\030\004 \001"
+  "(\r\022\023\n\013open_player\030\005 \001(\t\022\024\n\014my_killcount\030"
+  "\006 \001(\r\022\030\n\020best_kill_player\030\007 \001(\t\022\026\n\016best_"
+  "killcount\030\010 \001(\r\";\n\rsend_complete\022\023\n\013pack"
+  "et_type\030\001 \001(\r\022\025\n\rcomplete_type\030\002 \001(\rb\006pr"
+  "oto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 2539, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 2524, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 25,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -6843,7 +6841,6 @@ drop_item::drop_item(const drop_item& from)
     , decltype(_impl_.itemid_){}
     , decltype(_impl_.itemclass_){}
     , decltype(_impl_.count_){}
-    , decltype(_impl_.floor_){}
     , decltype(_impl_.posx_){}
     , decltype(_impl_.posy_){}
     , decltype(_impl_.posz_){}
@@ -6883,7 +6880,6 @@ inline void drop_item::SharedCtor(
     , decltype(_impl_.itemid_){0u}
     , decltype(_impl_.itemclass_){0u}
     , decltype(_impl_.count_){0u}
-    , decltype(_impl_.floor_){0u}
     , decltype(_impl_.posx_){0}
     , decltype(_impl_.posy_){0}
     , decltype(_impl_.posz_){0}
@@ -6990,33 +6986,25 @@ const char* drop_item::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         } else
           goto handle_unusual;
         continue;
-      // uint32 floor = 7;
+      // float posx = 7;
       case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
-          _impl_.floor_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // float posx = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
           _impl_.posx_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float posy = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
+      // float posy = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
           _impl_.posy_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float posz = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 85)) {
+      // float posz = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
           _impl_.posz_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
@@ -7095,40 +7083,34 @@ uint8_t* drop_item::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(6, this->_internal_count(), target);
   }
 
-  // uint32 floor = 7;
-  if (this->_internal_floor() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(7, this->_internal_floor(), target);
-  }
-
-  // float posx = 8;
+  // float posx = 7;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_posx = this->_internal_posx();
   uint32_t raw_posx;
   memcpy(&raw_posx, &tmp_posx, sizeof(tmp_posx));
   if (raw_posx != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_posx(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_posx(), target);
   }
 
-  // float posy = 9;
+  // float posy = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_posy = this->_internal_posy();
   uint32_t raw_posy;
   memcpy(&raw_posy, &tmp_posy, sizeof(tmp_posy));
   if (raw_posy != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_posy(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_posy(), target);
   }
 
-  // float posz = 10;
+  // float posz = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_posz = this->_internal_posz();
   uint32_t raw_posz;
   memcpy(&raw_posz, &tmp_posz, sizeof(tmp_posz));
   if (raw_posz != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(10, this->_internal_posz(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_posz(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -7181,12 +7163,7 @@ size_t drop_item::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_count());
   }
 
-  // uint32 floor = 7;
-  if (this->_internal_floor() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_floor());
-  }
-
-  // float posx = 8;
+  // float posx = 7;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_posx = this->_internal_posx();
   uint32_t raw_posx;
@@ -7195,7 +7172,7 @@ size_t drop_item::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float posy = 9;
+  // float posy = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_posy = this->_internal_posy();
   uint32_t raw_posy;
@@ -7204,7 +7181,7 @@ size_t drop_item::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float posz = 10;
+  // float posz = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_posz = this->_internal_posz();
   uint32_t raw_posz;
@@ -7248,9 +7225,6 @@ void drop_item::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   }
   if (from._internal_count() != 0) {
     _this->_internal_set_count(from._internal_count());
-  }
-  if (from._internal_floor() != 0) {
-    _this->_internal_set_floor(from._internal_floor());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_posx = from._internal_posx();

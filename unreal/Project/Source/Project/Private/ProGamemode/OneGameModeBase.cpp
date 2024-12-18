@@ -29,6 +29,7 @@
 #include "ProGamemode/ProGameInstance.h"
 #include "Math/UnrealMathUtility.h"
 #include "NavigationSystem.h"
+#include "GStruct.pb.h"
 
 #include "NavMesh/RecastNavMesh.h"
 
@@ -366,7 +367,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
 
     TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itembindex];
 
-    EItemClass iclass;
+    EItemClass iclass{};
 
     if (itemclass == 0) {
         iclass = EItemClass::NORMALWEAPON;
@@ -508,11 +509,28 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
    }
 
 
-  /* Protocol::drop_item droppacket;
+   Protocol::drop_item droppacket;
 
    droppacket.set_packet_type(22);
-   droppacket.set_itemname(itemname);
-   droppacket.set_itemclass(iclass);*/
+   std::string ItemNameStr(TCHAR_TO_UTF8(*itemname.ToString()));
+   droppacket.set_itemname(ItemNameStr);
+   droppacket.set_itemclass(iclass);
+   droppacket.set_count(count);
+   if (texture) {
+       FString TexturePath = texture->GetPathName();
+       std::string TexturePathStr(TCHAR_TO_UTF8(*TexturePath));
+       droppacket.set_texture_path(TexturePathStr);
+   }
+   droppacket.set_itemid(newindex);
+   droppacket.set_posx(itemboxpos.X);
+   droppacket.set_posy(itemboxpos.Y);
+   droppacket.set_posz(itemboxpos.Z);
+
+   std::string serializedData;
+   droppacket.SerializeToString(&serializedData);
+
+   // 직렬화된 데이터를 서버로 전송
+   bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
    // 추가 수정 필요
     // 여기서 send 해주는게 좋을듯? 아이템 정보들과 아이템 위치를 담아서
