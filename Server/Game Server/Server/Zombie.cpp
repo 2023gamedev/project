@@ -700,23 +700,6 @@ void Zombie::SendPath()
 		string serializedData;
 		zPath.SerializeToString(&serializedData);
 
-		
-
-
-		// 이전 코드 (문제는 없는데 그냥 BT 사용 변수들 통일화 하려고 밑에꺼 씀)
-		//cout << "좀비 #" << ZombieData.zombieID << " 의 pathfinder.floor: " << pathfinder.floor << endl;
-		//
-		//for (const auto& player : g_players) {
-		//	cout << "g_players index: " << player.first << " 의 playerDB_BT["<< player.first << "].floor: " << playerDB_BT[player.first].floor << endl;
-		//
-		//	if (pathfinder.floor == playerDB_BT[player.first].floor) {	// 클라 자기 층에 있는 좀비 정보만 받기 - 최적화 
-		//		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-		//
-		//		cout << "(g_players index:)플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
-		//	}
-		//}	
-
-	
 
 		//cout << "좀비 #" << ZombieData.zombieID << " 의 z_floor: " << z_floor << endl;
 		

@@ -779,18 +779,17 @@ void IOCP_CORE::Zombie_BT_Thread()
 				cout << "<Selector-Detect> EEEERRRROOOOOORRRR - ZombieID #" << zom->ZombieData.zombieID << endl;
 			}
 
-			
+
 			//z_x = zom->ZombieData.x;					z_y = zom->ZombieData.y;					z_z = zom->ZombieData.z;
 			//cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 새로운 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 			//cout << endl;
 
 
 #ifdef	ENABLE_BT_LOG
-		cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
-		cout << endl;
+			cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
+			cout << endl;
 #endif
 		}
-
 
 		//콘솔창에서 한 싸이클씩 돌아가게
 		//cout << "(계속 진행)아무거나 입력 후 엔터: ";
