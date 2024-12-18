@@ -78,6 +78,8 @@ uint32 ClientSocket::Run()
 		}
 		else{
 			StartSend();
+
+			//delete overlapped;
 		}
 	}
 }
@@ -644,11 +646,9 @@ void ClientSocket::StartSend()
 		std::vector<char> data;
 
 		if (!sendQueue.try_pop(data)) {
-			bool expected = true;
-			if (isSending.compare_exchange_strong(expected, false)) {
-				return;
-			}
-			continue;
+			// 송신할 데이터가 없으면 플래그 해제 후 종료
+			isSending.store(false);
+			return;
 		}
 
 		WSABUF wsaBuf;
@@ -665,7 +665,6 @@ void ClientSocket::StartSend()
 			int err = WSAGetLastError();
 			if (err != WSA_IO_PENDING) {
 				UE_LOG(LogNet, Error, TEXT("WSASend failed: %d"), err);
-
 				// 재시도 로직 추가
 				constexpr int MaxRetries = 3;
 				for (int retry = 1; retry <= MaxRetries; ++retry) {
@@ -683,8 +682,7 @@ void ClientSocket::StartSend()
 				return;
 			}
 		}
-
-		sendOverlap.release(); // 성공적인 경우 메모리 관리 시스템에 전달
+		sendOverlap.release();
 	}
 }
 
