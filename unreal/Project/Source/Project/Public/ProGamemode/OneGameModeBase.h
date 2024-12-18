@@ -59,6 +59,7 @@ class AShoutingZombieAIController;
 class ARunningZombieAIController;
 class AItemBoxActor;
 class AInterActor;
+class UProGameInstance;
 
 extern TMap<uint32, ABaseZombie*> ZombieMap;
 

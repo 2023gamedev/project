@@ -620,8 +620,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 		}
 		GameTimerUIWidget->UpdateTimer();
 	}
-
-
 }
 
 void ABaseCharacter::PostInitializeComponents()
