@@ -342,7 +342,6 @@ public:
 	bool IsBringCurrentKeyItem() { return m_bIsBringCurrentKeyItem; }
 	void SetBringCurrentKeyItem(bool bringcurrentkeyitem) { m_bIsBringCurrentKeyItem = bringcurrentkeyitem; }
 
-
 	bool IsSpecialEffect() { return m_bSpecialEffect; }
 	void SetSpecialEffect(bool specialeffect) { m_bSpecialEffect = specialeffect; }
 
@@ -449,6 +448,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	int m_iSetPlayerID = 0;
 
+	void OtherSpawnItemBefore();
+	void OtherUnEquipItem(uint32 itemtype);
 
 	void LimitSmokingIcon();
 	void SmokingIcon();
