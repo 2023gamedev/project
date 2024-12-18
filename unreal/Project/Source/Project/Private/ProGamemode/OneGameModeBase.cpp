@@ -411,6 +411,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
     UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> m_iItemBoxNumber: %d"), m_iItemBoxNumber);
 }
 
+
 void AOneGameModeBase::NullPtrItemBoxesIndex(int32 itemboxindex)
 {
     if (ItemBoxClasses[itemboxindex] != nullptr) {
@@ -487,7 +488,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     }
 
     ++m_iItemBoxNumber;
-   UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 
    uint32 iclass{};
 
@@ -550,6 +551,74 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
 
    //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 }
+
+void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, FVector itempos)
+{
+    // 두 if문에 들어가는경우 문제가 있는것 
+    if (itemboxindex >= m_iItemBoxNumber) {
+        // 빈 자리가 없으면 새로 추가
+        ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+        ++m_iItemBoxNumber;
+        UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes -> itemboxindex >= m_iItemBoxNumber !!!!!"));
+    }
+
+    if (ItemBoxClasses[itemboxindex] != nullptr) {
+        ItemBoxClasses[itemboxindex] = nullptr;
+        UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes -> ItemBoxClasses[itemboxindex] != nullptr !!!!!"));
+    }
+
+    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[itemboxindex];
+    if (SelectedItemBoxClass == nullptr) {
+        SelectedItemBoxClass = AItemBoxActor::StaticClass();
+    }
+
+    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itempos, FRotator::ZeroRotator);
+
+
+    EItemClass itemcl = EItemClass::NORMALWEAPON;
+
+    if (itemclass == 0) {
+
+        itemcl = EItemClass::NORMALWEAPON;
+    }
+    else if (itemclass == 1) {
+        itemcl = EItemClass::THROWINGWEAPON;
+    }
+    else if (itemclass == 2) {
+        itemcl = EItemClass::HEALINGITEM;
+    }
+    else if (itemclass == 3) {
+        itemcl = EItemClass::BLEEDINGHEALINGITEM;
+    }
+    else if (itemclass == 4) {
+        itemcl = EItemClass::KEYITEM;
+    }
+    else if (itemclass == 5) {
+        itemcl = EItemClass::BAGITEM;
+    }
+    else if (itemclass == 6) {
+        itemcl = EItemClass::NONE;
+    }
+
+    if (SpawnedItemBox) {
+        SpawnedItemBox->ItemName = itemname;
+        SpawnedItemBox->ItemClassType = itemcl;
+        SpawnedItemBox->Texture = texture;
+        SpawnedItemBox->Count = count;
+        SpawnedItemBox->ItemBoxId = itemboxindex;
+    }
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes    Item Details:"));
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  ItemBoxIndex: %d"), itemboxindex);
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  ItemName: %s"), *itemname.ToString());
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  ItemClass: %d"), itemclass);
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  Count: %d"), count);
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  ItemPos: X=%.2f, Y=%.2f, Z=%.2f"), itempos.X, itempos.Y, itempos.Z);
+
+
+
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes END !!!!!"));
+}
+
 
 void AOneGameModeBase::CarActorRandomLocationSetting()
 {

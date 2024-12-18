@@ -167,6 +167,7 @@ public:
     // 아이템 생성 함수
     void ItemRandomLocationSetting();
     void SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos);
+    void SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, FVector itempos);
 
     void NullPtrItemBoxesIndex(int32 itemboxindex);
 

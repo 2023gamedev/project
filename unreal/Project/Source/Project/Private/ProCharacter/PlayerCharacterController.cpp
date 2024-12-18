@@ -182,8 +182,9 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 				UTexture2D* LoadedTexture = LoadObject<UTexture2D>(NULL, *Ftexture_path, NULL, LOAD_None, NULL);
 
-				//추가 수정 필요
-				//MyGameMode->SpawnItemBoxes(recvDropItem.itemid, Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos);
+				UE_LOG(LogNet, Display, TEXT("queue try pop Q_dropitem"));
+
+				MyGameMode->SpawnOtherCharGroundItemBoxes(recvDropItem.itemid, Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos);
 			}
 		}
 
