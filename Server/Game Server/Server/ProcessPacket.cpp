@@ -539,6 +539,46 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     }
 
+    case 23:
+    {
+        printf("\n[ No. %3u ] recv item detach packet !!\n", id);
+
+        Protocol::detach_item Packet;
+        Packet.ParseFromArray(packet.data(), packet.size());
+
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                printf("%d 에게 아이템 장착 해제 전송\n", player.first);
+            }
+        }
+       
+        return true;
+    }
+
+    case 24:
+    {
+        printf("\n[ No. %3u ] slice vector packet !!\n", id);
+
+        Protocol::slice_vector Packet;
+        Packet.ParseFromArray(packet.data(), packet.size());
+
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                printf("%d 에게 슬라이싱 해제 전송\n", player.first);
+            }
+        }
+
+        return true;
+    }
+
     default: {
         printf("\nERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
         // 클라이언트나 서버 종료, 로깅 등의 처리 가능

@@ -279,7 +279,7 @@ void AZombieAIController::Tick(float DeltaTime)
 				Send_Detected(); // 플레이어 감지 메시지 전송
 				LastSeenPlayer = BaseCharacter;
 
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Zombie #%d Detected Player ID #%d"), OwnerZombie->GetZombieId(), myPlayerId));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Zombie #%d Detected Player ID #%d"), OwnerZombie->GetZombieId(), myPlayerId));
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 			}
 		}
@@ -288,7 +288,7 @@ void AZombieAIController::Tick(float DeltaTime)
 				m_bPlayerInSight = false;
 				Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
 
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Zombie #%d Lost Player ID #%d"), OwnerZombie->GetZombieId(), myPlayerId));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Zombie #%d Lost Player ID #%d"), OwnerZombie->GetZombieId(), myPlayerId));
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Lost Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 			}
 		}

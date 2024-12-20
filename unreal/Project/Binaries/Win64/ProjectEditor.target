@@ -34,6 +34,26 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidDeviceDetection.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidPlatformEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidRuntimeSettings.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor-AndroidTargetPlatform.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/Android/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
 			"Path": "$(EngineDir)/Binaries/Win64/OpenColorIO_2_2.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -675,6 +695,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HierarchicalLODUtilities.dll",
+<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -682,6 +703,15 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+=======
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-Horde.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> 3570dbb3268a5314431f0aba052e4103d796ec5e
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-HotReload.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -707,6 +737,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-ImageWriteQueue.dll",
+<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -714,6 +745,15 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+=======
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-InputBindingEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> 3570dbb3268a5314431f0aba052e4103d796ec5e
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-InputCore.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1451,6 +1491,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureBuild.dll",
+<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -1474,6 +1515,39 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+=======
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureBuildUtilities.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureCompressor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormat.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatASTC.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatDXT.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatETC2.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> 3570dbb3268a5314431f0aba052e4103d796ec5e
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-TextureFormatIntelISPCTexComp.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -2507,6 +2581,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Experimental/MeshModelingToolsetExp/Binaries/Win64/UnrealEditor-MeshModelingToolsEditorOnlyExp.dll",
+<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -2514,6 +2589,15 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+=======
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/MeshModelingToolsetExp/Binaries/Win64/UnrealEditor-MeshModelingToolsExp.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+>>>>>>> 3570dbb3268a5314431f0aba052e4103d796ec5e
 			"Path": "$(EngineDir)/Plugins/Experimental/MeshModelingToolsetExp/Binaries/Win64/UnrealEditor-ModelingEditorUI.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -2643,6 +2727,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/FX/Niagara/Binaries/Win64/UnrealEditor-NiagaraShader.dll",
+<<<<<<< HEAD
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -2663,6 +2748,16 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Fab/Binaries/Win64/UnrealEditor.modules",
+=======
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/FX/Niagara/Binaries/Win64/UnrealEditor-NiagaraVertexFactories.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/FX/Niagara/Binaries/Win64/UnrealEditor.modules",
+>>>>>>> 3570dbb3268a5314431f0aba052e4103d796ec5e
 			"Type": "RequiredResource"
 		},
 		{
@@ -2934,6 +3029,7 @@
 			"Type": "RequiredResource"
 		},
 		{
+<<<<<<< HEAD
 			"Path": "$(EngineDir)/Plugins/Online/EOSShared/Binaries/Win64/UnrealEditor-EOSShared.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -2942,6 +3038,8 @@
 			"Type": "RequiredResource"
 		},
 		{
+=======
+>>>>>>> 3570dbb3268a5314431f0aba052e4103d796ec5e
 			"Path": "$(EngineDir)/Plugins/Online/OnlineBase/Binaries/Win64/UnrealEditor-OnlineBase.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -3459,6 +3557,7 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/Binaries/Win64/UnrealEditor.modules",
+<<<<<<< HEAD
 			"Type": "RequiredResource"
 		},
 		{
@@ -3471,6 +3570,8 @@
 		},
 		{
 			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
+=======
+>>>>>>> 3570dbb3268a5314431f0aba052e4103d796ec5e
 			"Type": "RequiredResource"
 		}
 	],

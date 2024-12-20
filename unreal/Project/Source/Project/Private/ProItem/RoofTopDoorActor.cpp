@@ -39,7 +39,7 @@ ARoofTopDoorActor::ARoofTopDoorActor()
 void ARoofTopDoorActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	StartDisableUnlock();
 }
 
 // Called every frame
@@ -108,7 +108,7 @@ void ARoofTopDoorActor::UnlockKey2()
 
 void ARoofTopDoorActor::UnlockDoor()
 {
-	GetWorldTimerManager().SetTimer(ClearTimer, this, &ARoofTopDoorActor::ClearAddScore, 10.0f, false);
+	//GetWorldTimerManager().SetTimer(ClearTimer, this, &ARoofTopDoorActor::ClearAddScore, 10.0f, false);
 }
 
 void ARoofTopDoorActor::ClearAddScore()

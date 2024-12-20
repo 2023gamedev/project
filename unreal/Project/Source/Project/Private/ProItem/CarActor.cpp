@@ -36,18 +36,18 @@ void ACarActor::UnLock()
 {
 	bIsUnlock = true;
 
-	GetWorldTimerManager().SetTimer(ClearTimer, this, &ACarActor::ClearAddScore, 10.0f, false);
+	//GetWorldTimerManager().SetTimer(ClearTimer, this, &ACarActor::ClearAddScore, 10.0f, false);
 }
 
 void ACarActor::ClearAddScore()
 {
-    // ÀÏÁ¤ ¹üÀ§ ³»¿¡ ÀÖ´Â ÇÃ·¹ÀÌ¾î¸¦ °Ë»öÇÕ´Ï´Ù.
+    // ì¼ì • ë²”ìœ„ ë‚´ì— ìˆëŠ” í”Œë ˆì´ì–´ë¥¼ ê²€ìƒ‰í•©ë‹ˆë‹¤.
     FVector CarLocation = GetActorLocation();
-    const float ScoreRadius = 500.0f; // Á¡¼ö¸¦ ÁÖ°í ½ÍÀº ¹üÀ§ÀÇ ¹İ°æ
+    const float ScoreRadius = 500.0f; // ì ìˆ˜ë¥¼ ì£¼ê³  ì‹¶ì€ ë²”ìœ„ì˜ ë°˜ê²½
 	int32 Score = 0;
 	TArray<ABaseCharacter*> PlayersInRange;
 
-    const int32 ScorePerPlayer = 600; // °¢ ÇÃ·¹ÀÌ¾î´ç ºÎ¿©ÇÒ Á¡¼ö
+    const int32 ScorePerPlayer = 600; // ê° í”Œë ˆì´ì–´ë‹¹ ë¶€ì—¬í•  ì ìˆ˜
     for (TActorIterator<ABaseCharacter> It(GetWorld()); It; ++It)
     {
         ABaseCharacter* PlayerCharacter = *It;

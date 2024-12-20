@@ -522,7 +522,39 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 					UE_LOG(LogNet, Display, TEXT("recv drop itempacket"));
 				}
+				break;
 			}
+			case 23:
+			{
+				Protocol::detach_item detachpacket;
+				if (detachpacket.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					Q_detachitem.push(DetachItem(detachpacket.playerid(), detachpacket.itemtype()));
+
+					UE_LOG(LogNet, Display, TEXT("recv detach itempacket"));
+				}
+				break;
+			}
+			case 24:
+			{
+				Protocol::slice_vector slicepacket;
+				if (slicepacket.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					SliceVector slicevector;
+
+					slicevector.zombieid = slicepacket.zombieid();
+
+					slicevector.location = FVector(slicepacket.location().x(), slicepacket.location().y(), slicepacket.location().z());
+					slicevector.position = FVector(slicepacket.position().x(), slicepacket.position().y(), slicepacket.position().z());
+					slicevector.location = FVector(slicepacket.normal().x(), slicepacket.normal().y(), slicepacket.normal().z());
+					slicevector.location = FVector(slicepacket.impulse().x(), slicepacket.impulse().y(), slicepacket.impulse().z());
+
+					Q_slicevector.push(slicevector);
+
+					UE_LOG(LogNet, Display, TEXT("recv slicevector"));
+				}
+			}
+
 			}
 
 		}
