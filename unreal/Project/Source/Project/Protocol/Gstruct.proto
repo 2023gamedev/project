@@ -162,6 +162,13 @@ message drop_item{
     float posz = 9;
 }
 
+message detach_item{
+    uint32 packet_type = 1;
+    uint32 playerid = 2;
+    uint32 itemtype = 3;
+
+}
+
 message get_key {
     uint32 packet_type = 1;
     uint32 itemid = 2;
@@ -189,4 +196,13 @@ message game_clear {
 message send_complete{
     uint32 packet_type = 1;
     uint32 complete_type = 2;
+}
+
+message slice_vector{
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
+    Vector3 location = 3;
+    Vector3 position = 4;
+    Vector3 normal = 5;
+    Vector3 impulse = 6;
 }

@@ -138,6 +138,22 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		// MyGameMode->UpdateUnEquipItem(recvUnEquipItem.PlayerId, recvUnEquipItem.Itemtype); Send부분 필요(아이템 장착해제시 동기화를 위해 필요)
 		// recvUnEquipItem.PlayerId, recvUnEquipItem.ItemType 와 이걸 보내줄수있는 Send()부분 있으면 남은 부분 제작 예정
 
+		if (GameInstance->ClientSocketPtr->Q_detachitem.try_pop(recvDetachItem))
+		{
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				MyGameMode->UpdateUnEquipItem(recvDetachItem.PlayerId, recvDetachItem.Itemtype);
+			}
+		}
+
+		if (GameInstance->ClientSocketPtr->Q_slicevector.try_pop(recvSliceVector))
+		{
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				//MyGameMode->UpdateUnEquipItem(recvDetachItem.PlayerId, recvDetachItem.Itemtype);
+			}
+		}
+
 		if (GameInstance->ClientSocketPtr->Q_run.try_pop(recvRun))
 		{
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
@@ -184,7 +200,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 				UE_LOG(LogNet, Display, TEXT("queue try pop Q_dropitem"));
 
-				MyGameMode->SpawnOtherCharGroundItemBoxes(recvDropItem.itemid, Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos);
+				MyGameMode->SpawnOtherCharGroundItemBoxes((recvDropItem.itemid-1), Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos);
 			}
 		}
 
@@ -444,32 +460,32 @@ void APlayerCharacterController::Send_Equipment()
 		APawn* MyPawn = GetPawn();
 		ABaseCharacter* MyBaseCharacter = Cast<ABaseCharacter>(MyPawn);
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-		uint32 ItemType; // 0 = BHItem, 1 = HItem, 2 = TWeapon, 3 = KeyItem, 4 = NWeapon
+		uint32 ItemType; // 1 = BHItem, 2 = HItem, 3 = TWeapon, 4 = KeyItem, 5 = NWeapon
 
 		if (e_BHItem)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[0].Name.ToString()));
-			ItemType = 0;
+			ItemType = 1;
 		}
 		if (e_HItem)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[1].Name.ToString()));
-			ItemType = 1;
+			ItemType = 2;
 		}
 		if (e_TWeapon)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[2].Name.ToString()));
-			ItemType = 2;
+			ItemType = 3;
 		}
 		if (e_KeyItem)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[3].Name.ToString()));
-			ItemType = 3;
+			ItemType = 4;
 		}
 		if (e_NWeapon)
 		{
 			ItemName = TCHAR_TO_UTF8(*(MyBaseCharacter->QuickSlot[4].Name.ToString()));
-			ItemType = 4;
+			ItemType = 5;
 		}
 
 		Protocol::Equip_Item packet;

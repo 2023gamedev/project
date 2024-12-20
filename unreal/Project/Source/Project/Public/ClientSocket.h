@@ -82,6 +82,17 @@ struct EquipItem
 		: PlayerId(InPlayerId), Itemname(InItemname), Itemtype(InItemtype) {}
 };
 
+struct DetachItem
+{
+	uint32 PlayerId;
+	uint32 Itemtype;
+
+	DetachItem() : PlayerId(0), Itemtype(0) {}
+
+	DetachItem(uint32 InPlayerId, uint32 InItemtype)
+		: PlayerId(InPlayerId), Itemtype(InItemtype) {}
+};
+
 struct PlayerRun
 {
 	uint32 PlayerId;
@@ -310,6 +321,24 @@ struct GameClear
 		best_kill_count(Inbest_kill_count), best_kill_player(Inbest_kill_player) {}
 };
 
+struct SliceVector
+{
+	uint32 zombieid;
+	FVector location;
+	FVector position;
+	FVector normal;
+	FVector impulse;
+
+	SliceVector()
+		: zombieid(0), location(FVector()), position(FVector()),
+		normal(FVector()), impulse(FVector()) {}
+
+	SliceVector(uint32 InZombieId, const FVector& InLocation, const FVector& InPosition,
+		const FVector& InNormal, const FVector& InImpulse)
+		: zombieid(InZombieId), location(InLocation), position(InPosition),
+		normal(InNormal), impulse(InImpulse) {}
+};
+
 class UProGameInstance;
 
 class PROJECT_API ClientSocket : public FRunnable
@@ -329,6 +358,7 @@ public:
 	Concurrency::concurrent_queue<PlayerAttack> Q_pattack;
 	Concurrency::concurrent_queue<ZombieData> Q_zombie;
 	Concurrency::concurrent_queue<EquipItem> Q_eitem;
+	Concurrency::concurrent_queue<DetachItem> Q_detachitem;
 	Concurrency::concurrent_queue<PlayerRun> Q_run;
 	Concurrency::concurrent_queue<PlayerJump> Q_jump;
 	Concurrency::concurrent_queue<CharacterSelect> Q_select;
@@ -349,6 +379,7 @@ public:
 	Concurrency::concurrent_queue<bool> Q_wAllready;
 	Concurrency::concurrent_queue<GameClear> Q_gclear;
 	Concurrency::concurrent_queue<Drop_Item> Q_dropitem;
+	Concurrency::concurrent_queue<SliceVector> Q_slicevector;
 
 
 	virtual bool Init() override;
