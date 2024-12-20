@@ -108,7 +108,7 @@ void ARoofTopDoorActor::UnlockKey2()
 
 void ARoofTopDoorActor::UnlockDoor()
 {
-	GetWorldTimerManager().SetTimer(ClearTimer, this, &ARoofTopDoorActor::ClearAddScore, 10.0f, false);
+	//GetWorldTimerManager().SetTimer(ClearTimer, this, &ARoofTopDoorActor::ClearAddScore, 10.0f, false);
 }
 
 void ARoofTopDoorActor::ClearAddScore()
