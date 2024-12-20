@@ -39,7 +39,7 @@ ARoofTopDoorActor::ARoofTopDoorActor()
 void ARoofTopDoorActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	StartDisableUnlock();
 }
 
 // Called every frame

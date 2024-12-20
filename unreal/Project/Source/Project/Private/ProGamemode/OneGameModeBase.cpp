@@ -557,12 +557,17 @@ void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName i
     // 두 if문에 들어가는경우 문제가 있는것 
     if (itemboxindex >= m_iItemBoxNumber) {
         // 빈 자리가 없으면 새로 추가
-        ItemBoxClasses.Add(AItemBoxActor::StaticClass());
-        ++m_iItemBoxNumber;
+        ItemBoxClasses.SetNum(itemboxindex + 1);
+        m_iItemBoxNumber = itemboxindex + 1;
+
+        if (ItemBoxClasses.IsValidIndex(itemboxindex)) {
+            if (!ItemBoxClasses[itemboxindex]) {
+                ItemBoxClasses[itemboxindex] = AItemBoxActor::StaticClass();
+            }
+        }
         UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes -> itemboxindex >= m_iItemBoxNumber !!!!!"));
     }
-
-    if (ItemBoxClasses[itemboxindex] != nullptr) {
+    else if (ItemBoxClasses[itemboxindex] != nullptr) {
         ItemBoxClasses[itemboxindex] = nullptr;
         UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes -> ItemBoxClasses[itemboxindex] != nullptr !!!!!"));
     }
