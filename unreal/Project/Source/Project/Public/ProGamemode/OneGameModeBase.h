@@ -174,6 +174,8 @@ public:
     // 좀비 생성 함수
     void UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector NewLocation, FRotator NewRotation);
 
+    void UpdateCuttingZombie(uint32 ZombieId, FVector zombieLocation, FVector planePosition, FVector planeNormal, FVector impulseDirection);
+
     void UpdateZombieAttack(uint32 ZombieId, uint32 PlayerId);
 
     void UpdateZombieHP(uint32 ZombieId, float Damage);

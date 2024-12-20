@@ -77,20 +77,6 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
-		
-
-		// 좀비 hp 동기화
-		int ZombieId = Zombie->GetZombieId();
-
-		Protocol::Zombie_hp packet;
-		packet.set_zombieid(ZombieId);
-		packet.set_damage(m_fCharacterSTR * m_fWeaponSTR);
-		packet.set_packet_type(12);
-
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
-
-		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
 
 		// 좀비 사망시
@@ -229,6 +215,21 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 			}
 
 		}
+
+
+		// 좀비 hp 동기화
+		int ZombieId = Zombie->GetZombieId();
+
+		Protocol::Zombie_hp packet;
+		packet.set_zombieid(ZombieId);
+		packet.set_damage(m_fCharacterSTR* m_fWeaponSTR);
+		packet.set_packet_type(12);
+
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
+
+		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
 
 		BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 

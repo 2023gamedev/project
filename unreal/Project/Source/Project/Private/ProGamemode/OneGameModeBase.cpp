@@ -1144,6 +1144,32 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
     }
 }
 
+void AOneGameModeBase::UpdateCuttingZombie(uint32 ZombieId, FVector zombieLocation, FVector planePosition, FVector planeNormal, FVector impulseDirection)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateCuttingZombie: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // ZombieMap에서 ZombieID로 좀비를 찾음
+    ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieId);
+    if (ZombiePtr && *ZombiePtr)
+    {
+        ABaseZombie* BaseZombie = *ZombiePtr;
+        if (BaseZombie)
+        {
+            BaseZombie->doAction_setIsCuttingDead_onTick = true;
+            BaseZombie->SetHP(0);
+            BaseZombie->SetActorLocation(zombieLocation);
+            BaseZombie->sync_cutPlane = planePosition;
+            BaseZombie->sync_cutNormal = planeNormal;
+            BaseZombie->sync_cutImpulse = impulseDirection;
+        }
+    }
+}
 void AOneGameModeBase::DestroyItem(uint32 Itemid, uint32 Playerid)
 {
     UWorld* World = GetWorld();

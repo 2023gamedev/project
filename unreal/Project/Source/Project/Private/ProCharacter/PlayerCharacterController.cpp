@@ -71,6 +71,11 @@ void APlayerCharacterController::BeginPlay()
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
+// [좀비 절단 동기화 패킷] 좀비 절단시에 필요한 값들
+// - 좀비 아이디, 좀비 죽은 위치, 절단 평면 위 한 점, 절단 평면의 법선 벡터, 좀비 시체에 가할 impulse 방향벡터 (무기가 바라보는 방향)
+// - uint32	  ,	FVector(0.f,0.f,0.f),  FVector(0.f,0.f,0.f), FVector(0.f,0.f,0.f), FVector(0.f,0.f,0.f)
+
+
 void APlayerCharacterController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -303,6 +308,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				MyGameMode->UpdateZombieHP(recvZombieHP.ZombieId, recvZombieHP.Damage);
 			}
 		}
+
+		//UpdateCuttingZombie(uint32 ZombieId, FVector zombieLocation, FVector planePosition, FVector planeNormal, FVector impulseDirection)
 
 		bool recvping = false;
 		if (GameInstance->ClientSocketPtr->Q_ping.try_pop(recvping))

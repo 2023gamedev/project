@@ -197,6 +197,11 @@ public:
 
 	bool doAction_takeDamage_onTick = true;		// 좀비 피격시 클라 동기화용 (다른 클라가 좀비를 때렸을때)
 	bool doAction_setIsNormalDead_onTick = true;	// 좀비 사망시 클라 동기화용 (다른 클라가 좀비를 죽였을때)
+	bool doAction_setIsCuttingDead_onTick = true;	// 좀비 절단 사망시 클라 동기화용 (다른 클라가 좀비를 절단하여 죽였을때)
+
+	FVector sync_cutPlane;
+	FVector sync_cutNormal;
+	FVector sync_cutImpulse;
 
 private:
 
