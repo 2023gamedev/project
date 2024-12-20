@@ -2315,7 +2315,7 @@ void ABaseCharacter::DestroyNormalWeapon()
 	CurrentWeapon = nullptr;
 
 	if (GetPlayerId() == 99) {
-		// Send()
+		Send_DetachItem(5);
 	}
 }
 
@@ -2329,7 +2329,7 @@ void ABaseCharacter::DestroyThrowWeapon()
 	CurrentThrowWeapon = nullptr;
 
 	if (GetPlayerId() == 99) {
-		// Send()
+		Send_DetachItem(3);
 	}
 }
 
@@ -2344,7 +2344,7 @@ void ABaseCharacter::DestroyHealingItem()
 	CurrentHealingItem = nullptr;
 
 	if (GetPlayerId() == 99) {
-		// Send()
+		Send_DetachItem(2);
 	}
 }
 
@@ -2358,7 +2358,7 @@ void ABaseCharacter::DestroyBleedingHealingItem()
 
 
 	if (GetPlayerId() == 99) {
-		// Send()
+		Send_DetachItem(1);
 	}
 }
 
@@ -2371,7 +2371,7 @@ void ABaseCharacter::DestroyKeyItem()
 	CurrentKeyItem = nullptr;
 
 	if (GetPlayerId() == 99) {
-		// Send()
+		Send_DetachItem(4);
 	}
 }
 
@@ -2697,19 +2697,19 @@ void ABaseCharacter::HealingStamina()
 
 void ABaseCharacter::OtherUnEquipItem(uint32 itemtype)
 {
-	if (itemtype == 0) {
+	if (itemtype == 1) {
 		DestroyBleedingHealingItem();
 	}
-	else if (itemtype == 1) {
+	else if (itemtype == 2) {
 		DestroyHealingItem();
 	}
-	else if (itemtype == 2) {
+	else if (itemtype == 3) {
 		DestroyThrowWeapon();
 	}
-	else if (itemtype == 3) {
+	else if (itemtype == 4) {
 		DestroyKeyItem();
 	}
-	else if (itemtype == 4) {
+	else if (itemtype == 5) {
 		DestroyNormalWeapon();
 	}
 }
@@ -3147,14 +3147,14 @@ void ABaseCharacter::Send_Destroy(uint32 itemboxid)
 void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Sending GetKey Packet: ItemBox ID = %d"), itemboxid);
-	Protocol::get_key Packet;
-	Packet.set_itemid(itemid);
-	Packet.set_itemboxid(itemboxid+1);
-	Packet.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
-	Packet.set_packet_type(18);
+	Protocol::get_key keyPacket;
+	keyPacket.set_itemid(itemid);
+	keyPacket.set_itemboxid(itemboxid+1);
+	keyPacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
+	keyPacket.set_packet_type(18);
 
 	std::string serializedData;
-	Packet.SerializeToString(&serializedData);
+	keyPacket.SerializeToString(&serializedData);
 
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 	if (!bIsSent) {
@@ -3164,13 +3164,27 @@ void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
 
 void ABaseCharacter::Send_OpenRoot(uint32 itemid)
 {
-	Protocol::escape Packet;
+	Protocol::escape rootPacket;
 	// itemid 1 = car, 2 = rooftopdoor
-	Packet.set_root(itemid);
-	Packet.set_packet_type(19);
+	rootPacket.set_root(itemid);
+	rootPacket.set_packet_type(19);
 
 	std::string serializedData;
-	Packet.SerializeToString(&serializedData);
+	rootPacket.SerializeToString(&serializedData);
+
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+}
+
+void ABaseCharacter::Send_DetachItem(uint32 itemtype)
+{
+	Protocol::detach_item detachPacket;
+
+	detachPacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
+	detachPacket.set_itemtype(itemtype);
+	detachPacket.set_packet_type(23);
+
+	std::string serializedData;
+	detachPacket.SerializeToString(&serializedData);
 
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }

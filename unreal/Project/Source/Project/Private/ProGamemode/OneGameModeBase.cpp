@@ -493,25 +493,25 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
    uint32 iclass{};
 
    if (itemclass == EItemClass::NORMALWEAPON) {
-       iclass = 0;
-   }
-   else if (itemclass == EItemClass::THROWINGWEAPON) {
        iclass = 1;
    }
-   else if (itemclass == EItemClass::HEALINGITEM) {
+   else if (itemclass == EItemClass::THROWINGWEAPON) {
        iclass = 2;
    }
-   else if (itemclass == EItemClass::BLEEDINGHEALINGITEM) {
+   else if (itemclass == EItemClass::HEALINGITEM) {
        iclass = 3;
    }
-   else if (itemclass == EItemClass::KEYITEM) {
+   else if (itemclass == EItemClass::BLEEDINGHEALINGITEM) {
        iclass = 4;
    }
-   else if (itemclass == EItemClass::BAGITEM) {
+   else if (itemclass == EItemClass::KEYITEM) {
        iclass = 5;
    }
-   else if (itemclass == EItemClass::NONE) {
+   else if (itemclass == EItemClass::BAGITEM) {
        iclass = 6;
+   }
+   else if (itemclass == EItemClass::NONE) {
+       iclass = 7;
    }
 
 
@@ -527,7 +527,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
        std::string TexturePathStr(TCHAR_TO_UTF8(*TexturePath));
        droppacket.set_texture_path(TexturePathStr);
    }
-   droppacket.set_itemid(newindex);
+   droppacket.set_itemid(newindex+1);
    droppacket.set_posx(itemboxpos.X);
    droppacket.set_posy(itemboxpos.Y);
    droppacket.set_posz(itemboxpos.Z);
@@ -577,26 +577,26 @@ void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName i
 
     EItemClass itemcl = EItemClass::NORMALWEAPON;
 
-    if (itemclass == 0) {
+    if (itemclass == 1) {
 
         itemcl = EItemClass::NORMALWEAPON;
     }
-    else if (itemclass == 1) {
+    else if (itemclass == 2) {
         itemcl = EItemClass::THROWINGWEAPON;
     }
-    else if (itemclass == 2) {
+    else if (itemclass == 3) {
         itemcl = EItemClass::HEALINGITEM;
     }
-    else if (itemclass == 3) {
+    else if (itemclass == 4) {
         itemcl = EItemClass::BLEEDINGHEALINGITEM;
     }
-    else if (itemclass == 4) {
+    else if (itemclass == 5) {
         itemcl = EItemClass::KEYITEM;
     }
-    else if (itemclass == 5) {
+    else if (itemclass == 6) {
         itemcl = EItemClass::BAGITEM;
     }
-    else if (itemclass == 6) {
+    else if (itemclass == 7) {
         itemcl = EItemClass::NONE;
     }
 
@@ -810,19 +810,19 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
         if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
         {
             if (Itemname != "") {
-                if (itemtype == 0) {
+                if (itemtype == 1) {
                     BasePlayer->OtherSpawnBleedingHealingItem(Itemname);
                 }
-                else if (itemtype == 1) {
+                else if (itemtype == 2) {
                     BasePlayer->OtherSpawnHealingItem(Itemname);
                 }
-                else if (itemtype == 2) {
+                else if (itemtype == 3) {
                     BasePlayer->OtherSpawnThrowWeapon(Itemname);
                 }
-                else if (itemtype == 3) {
+                else if (itemtype == 4) {
                     BasePlayer->OtherSpawnKeyItem(Itemname);
                 }
-                else if (itemtype == 4) {
+                else if (itemtype == 5) {
                     BasePlayer->OtherSpawnNormalWeapon(Itemname);
                     BasePlayer->SetNWHandIn(true);
                 }

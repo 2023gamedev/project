@@ -526,6 +526,8 @@ public:
 
 	void Send_OpenRoot(uint32 itemid);
 
+	void Send_DetachItem(uint32 itemtype);
+
 
 private:
 
