@@ -143,10 +143,12 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						slicepacket.mutable_normal()->set_y(planenormal.Y);
 						slicepacket.mutable_normal()->set_z(planenormal.Z);
 
+						FVector WeaponForward = GetActorRotation().Vector();
+
 						// Impulse 설정
-						slicepacket.mutable_impulse()->set_x(Zombie->WeaponForward.X);
-						slicepacket.mutable_impulse()->set_y(Zombie->WeaponForward.Y);
-						slicepacket.mutable_impulse()->set_z(Zombie->WeaponForward.Z);
+						slicepacket.mutable_impulse()->set_x(WeaponForward.X);
+						slicepacket.mutable_impulse()->set_y(WeaponForward.Y);
+						slicepacket.mutable_impulse()->set_z(WeaponForward.Z);
 
 						std::string serializedData;
 						slicepacket.SerializeToString(&serializedData);

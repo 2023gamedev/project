@@ -148,7 +148,7 @@ void ABaseZombie::Tick(float DeltaTime)
 			//UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
 
 			if (doAction_setIsCuttingDead_onTick == false) {
-				UE_LOG(LogTemp, Log, TEXT("Weapon Backward Vector: %s"), *(- WeaponForward).ToString());
+				UE_LOG(LogTemp, Log, TEXT("Weapon Backward Vector: %s"), *(-WeaponForward).ToString());
 
 				CutProceduralMesh_2->AddImpulseAtLocation(FVector(-WeaponForward.X * x_impulse, -WeaponForward.Y * y_impulse, z_impulse), CutProceduralMesh_2->K2_GetComponentLocation());
 				procMesh_AddImpulse_2 = true;
@@ -230,72 +230,73 @@ void ABaseZombie::Tick(float DeltaTime)
 	}
 
 	// 좀비 사망처리 클라 동기화 - 애니메이션 재생, 피 이펙트 생성
+
+	// normal dead 동기화
 	if (GetHP() <= 0 && m_bIsNormalDead == false && doAction_setIsNormalDead_onTick == true) {
 
-		// normal dead 동기화
-		if (doAction_setIsCuttingDead_onTick == false) {
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 클라 동기화 작업실행!")));
-			//UE_LOG(LogTemp, Log, TEXT("좀비 사망 클라 동기화 작업실행!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 사망 클라 동기화 작업실행!")));
+		//UE_LOG(LogTemp, Log, TEXT("좀비 사망 클라 동기화 작업실행!"));
 
-			m_bIsNormalDead = true;
-			auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
-			if (nullptr != CharacterAnimInstance) {
-				CharacterAnimInstance->SetIsNormalDead(m_bIsNormalDead);
-			}
-			GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
-
-
-			BloodFX.Empty();
-
-			FRotator RandRotate;
-
-			RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
-			RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
-			RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
-
-			ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
-
-			if (NewBloodFX) {
-				NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
-				//NewBloodFX->blood_spawnloop = true;
-				NewBloodFX->spawn_flag = true;
-
-				BloodFX.Add(NewBloodFX);
-			}
+		m_bIsNormalDead = true;
+		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+		if (nullptr != CharacterAnimInstance) {
+			CharacterAnimInstance->SetIsNormalDead(m_bIsNormalDead);
 		}
-		// cut dead 동기회
-		else if (doAction_setIsCuttingDead_onTick == true) {
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 사망 클라 동기화 작업실행!")));
-			//UE_LOG(LogTemp, Log, TEXT("좀비 절단 사망 클라 동기화 작업실행!"));
-
-			m_bIsCuttingDead = true;
-			auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
-			if (nullptr != CharacterAnimInstance) {
-				CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
-			}
-			GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
 
-			CutZombie(sync_cutPlane, sync_cutNormal);
+		BloodFX.Empty();
+
+		FRotator RandRotate;
+
+		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
+
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
+
+		if (NewBloodFX) {
+			NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
+			//NewBloodFX->blood_spawnloop = true;
+			NewBloodFX->spawn_flag = true;
+
+			BloodFX.Add(NewBloodFX);
+		}
+	}
+
+	// cut dead 동기화
+	if (GetHP() <= 0 && m_bIsCuttingDead == false && doAction_setIsCuttingDead_onTick == true) {
+
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 사망 클라 동기화 작업실행!")));
+		//UE_LOG(LogTemp, Log, TEXT("좀비 절단 사망 클라 동기화 작업실행!"));
+
+		m_bIsCuttingDead = true;
+		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+		if (nullptr != CharacterAnimInstance) {
+			CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
+		}
+		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
 
-			BloodFX.Empty();
+		CutZombie(sync_cutPlane, sync_cutNormal);
 
-			FRotator RandRotate;
 
-			RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
-			RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
-			RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
+		BloodFX.Empty();
 
-			ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
+		FRotator RandRotate;
 
-			if (NewBloodFX) {
-				NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
-				//NewBloodFX->blood_spawnloop = true;
-				NewBloodFX->spawn_flag = true;
+		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
-				BloodFX.Add(NewBloodFX);
-			}
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
+
+		if (NewBloodFX) {
+			NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
+			//NewBloodFX->blood_spawnloop = true;
+			NewBloodFX->spawn_flag = true;
+
+			BloodFX.Add(NewBloodFX);
 		}
 	}
 
@@ -361,6 +362,7 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 
 	doAction_takeDamage_onTick = false;
 	doAction_setIsNormalDead_onTick = false;
+	doAction_setIsCuttingDead_onTick = false;
 
 	SetHP(GetHP() - Damage);
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
@@ -447,6 +449,7 @@ void ABaseZombie::SetNormalDeadWithAnim()
 
 void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal)
 {
+	// 절단 디버깅 용 - 화면 출력
 	//========================================
 	FVector Center = PlayerWeapon->PlaneComponent->GetComponentLocation();
 	FVector Right = PlayerWeapon->PlaneComponent->GetRightVector();  // 평면의 오른쪽 방향
@@ -1023,6 +1026,7 @@ void ABaseZombie::WaittingTimerElapsed()
 
 	doAction_takeDamage_onTick = true;
 	doAction_setIsNormalDead_onTick = true;		// 이거 지금 ResurrectionTimerElapsed를 모두 주석해놔서 불릴 일이 없긴함 (즉, 해당 클라가 좀비 직접 죽이면 doAction_setIsNormalDead_onTick 값 영원히 false임)
+	doAction_setIsCuttingDead_onTick = true;
 	// 그래도 부활하는 걸 고려하면 여기에 설정하는 게 맞음
 }
 
