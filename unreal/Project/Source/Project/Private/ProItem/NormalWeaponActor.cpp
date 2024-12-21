@@ -91,25 +91,6 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 				if (PlaneComponent) {
 
-					//for (int32 LODIndex = 0; LODIndex < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources.Num(); ++LODIndex)
-					//{
-					//	for (uint32 Index = 0; Index < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources[LODIndex].
-					//		VertexBuffers.PositionVertexBuffer.GetNumVertices(); ++Index)
-					//	{
-					//		// 로컬 좌표로 점 위치 얻기
-					//		FVector3f EachVector = PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources[LODIndex].
-					//			VertexBuffers.PositionVertexBuffer.VertexPosition(Index);
-
-					//		// 로컬 좌표를 월드 좌표로 변환
-					//		FVector WorldPosition = PlaneComponent->GetComponentTransform().TransformPosition((FVector)EachVector);
-
-					//		PlaneVertexs.Add((FVector)WorldPosition);
-
-					//		//UE_LOG(LogClass, Log, TEXT("Plane - Index(%d) : (%s)"), Index, *WorldPosition.ToString());
-
-					//	}
-					//}
-
 					FVector Center = PlaneComponent->GetComponentLocation();
 					FVector Right = PlaneComponent->GetRightVector();  // 평면의 오른쪽 방향
 					FVector Forward = PlaneComponent->GetForwardVector();  // 평면의 앞쪽 방향
@@ -133,79 +114,11 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 					PlaneVertexs = { TopLeft, TopRight, BottomLeft, BottomRight };
 
 					if (PlaneVertexs.Num() >= 4) {
-						float displaceTime = 30.f;
-
-						// 히트 지점에 평면의 선 그리기
-						DrawDebugLine(
-							GetWorld(),
-							PlaneVertexs[0],			// 시작 위치
-							PlaneVertexs[1],			// 히트 지점
-							FColor::Green,				// 선 색상
-							false,						// 지속 여부
-							displaceTime,				// 지속 시간
-							0,							// 깊이 우선 여부
-							1.0f						// 선 두께
-						);
-
-						DrawDebugLine(
-							GetWorld(),
-							PlaneVertexs[0],
-							PlaneVertexs[2],
-							FColor::Green,
-							false,
-							displaceTime,
-							0,
-							1.0f
-						);
-
-						DrawDebugLine(
-							GetWorld(),
-							PlaneVertexs[2],
-							PlaneVertexs[3],
-							FColor::Green,
-							false,
-							displaceTime,
-							0,
-							1.0f
-						);
-
-						DrawDebugLine(
-							GetWorld(),
-							PlaneVertexs[1],
-							PlaneVertexs[3],
-							FColor::Green,
-							false,
-							displaceTime,
-							0,
-							1.0f
-						);
-
 						FVector planeposition_center = Center;	//(PlaneVertexs[0] + PlaneVertexs[1] + PlaneVertexs[2] + PlaneVertexs[3]) / 4.0f;
-
-						DrawDebugPoint(
-							GetWorld(),
-							planeposition_center,
-							10.0f,
-							FColor::Yellow,
-							false,
-							displaceTime,
-							0
-						);
-
+			
 						FVector planenormal = FVector::CrossProduct(PlaneVertexs[3] - PlaneVertexs[0], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
 
-						DrawDebugLine(
-							GetWorld(),
-							planeposition_center,
-							planeposition_center + planenormal * 20.0f,
-							FColor::Yellow,
-							false,
-							displaceTime,
-							0,
-							1.0f
-						);
-
-						Zombie->WeaponForward = GetActorRotation().Vector();		// 잉 이건 뭐에 필요한 거지..?
+						Zombie->PlayerWeapon = this;
 						Zombie->CutZombie(planeposition_center, planenormal);
 
 						// 여기에서 클라 좀비 절단 패킷 send

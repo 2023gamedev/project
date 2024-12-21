@@ -12,6 +12,7 @@
 #include "ProZombie/ZombieAnimInstance.h"
 #include "ProGamemode/ProGameInstance.h"
 #include "ProCharacter/BaseCharacter.h"
+#include "ProItem/NormalWeaponActor.h"
 
 #include "BaseZombie.generated.h"
 
@@ -190,7 +191,7 @@ public:
 	float SetImpulseByWeight(float targetWeight, float baseImpulse);
 
 	UPROPERTY(EditAnywhere)
-	FVector WeaponForward;
+	ANormalWeaponActor* PlayerWeapon;
 
 
 	float m_fHP_Prev = 0.f;
