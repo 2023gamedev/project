@@ -78,15 +78,17 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
 
+		bool hp_packet_send = true;
 
 		// 좀비 사망시
 		if (Zombie->GetHP() <= 0) {
 			Zombie->SetDie(true);
 
 			if (WeaponName == "ButchersKnife" || WeaponName == "FireAxe" || WeaponName == "SashimiKnife") {
+				hp_packet_send = false;
 
 				TArray<FVector> PlaneVertexs;
-				 
+
 				if (PlaneComponent) {
 
 					//for (int32 LODIndex = 0; LODIndex < PlaneComponent->GetStaticMesh()->GetRenderData()->LODResources.Num(); ++LODIndex)
@@ -115,7 +117,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 					float Weapon_Scale = 0.f;	// 무기별 스케일 조정
 					if (WeaponName == "ButchersKnife") { Weapon_Scale = 45.f; }
-					else if(WeaponName == "FireAxe") { Weapon_Scale = 50.f; }
+					else if (WeaponName == "FireAxe") { Weapon_Scale = 50.f; }
 					else if (WeaponName == "SashimiKnife") { Weapon_Scale = 40.f; }
 
 					float HalfWidth = Weapon_Scale * Scale.X;  // 평면의 폭
@@ -195,16 +197,19 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						DrawDebugLine(
 							GetWorld(),
 							planeposition_center,
-							planeposition_center + planenormal * 20.0f,		
+							planeposition_center + planenormal * 20.0f,
 							FColor::Yellow,
 							false,
 							displaceTime,
 							0,
 							1.0f
 						);
-						
+
 						Zombie->WeaponForward = GetActorRotation().Vector();		// 잉 이건 뭐에 필요한 거지..?
 						Zombie->CutZombie(planeposition_center, planenormal);
+
+						// 여기에서 클라 좀비 절단 패킷 send
+						//
 					}
 				}
 
@@ -216,20 +221,20 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 		}
 
+		if (hp_packet_send == true) {
+			// 좀비 hp 동기화
+			int ZombieId = Zombie->GetZombieId();
 
-		// 좀비 hp 동기화
-		int ZombieId = Zombie->GetZombieId();
+			Protocol::Zombie_hp packet;
+			packet.set_zombieid(ZombieId);
+			packet.set_damage(m_fCharacterSTR * m_fWeaponSTR);
+			packet.set_packet_type(12);
 
-		Protocol::Zombie_hp packet;
-		packet.set_zombieid(ZombieId);
-		packet.set_damage(m_fCharacterSTR* m_fWeaponSTR);
-		packet.set_packet_type(12);
+			std::string serializedData;
+			packet.SerializeToString(&serializedData);
 
-		std::string serializedData;
-		packet.SerializeToString(&serializedData);
-
-		bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
-
+			bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+		}
 
 		BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 

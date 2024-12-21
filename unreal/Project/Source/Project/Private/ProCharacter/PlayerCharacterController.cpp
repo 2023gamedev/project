@@ -155,7 +155,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		{
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
-				//MyGameMode->UpdateUnEquipItem(recvDetachItem.PlayerId, recvDetachItem.Itemtype);
+				MyGameMode->UpdateCuttingZombie(recvSliceVector.zombieid, recvSliceVector.location, recvSliceVector.position, recvSliceVector.normal, recvSliceVector.impulse);
 			}
 		}
 
