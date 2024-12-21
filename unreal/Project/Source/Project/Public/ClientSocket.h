@@ -419,6 +419,10 @@ private:
 	HANDLE hIocp;  // I/O 완료 포트 핸들
 	//std::mutex recvMutex;  // 수신 큐를 보호하기 위한 뮤텍스
 	//std::mutex playerQueueMutex;
+
+	std::vector<std::thread> workerThreads;
+	std::thread sendThread;
+
 	Concurrency::concurrent_queue<std::vector<char>> recvQueue;
 	Concurrency::concurrent_queue<std::vector<char>> sendQueue;
 
