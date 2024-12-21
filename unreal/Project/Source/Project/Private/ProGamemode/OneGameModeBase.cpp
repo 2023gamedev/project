@@ -1172,6 +1172,12 @@ void AOneGameModeBase::UpdateCuttingZombie(uint32 ZombieId, FVector zombieLocati
             BaseZombie->sync_cutPlane = planePosition;
             BaseZombie->sync_cutNormal = planeNormal;
             BaseZombie->sync_cutImpulse = impulseDirection;
+
+            UE_LOG(LogTemp, Warning, TEXT("zombieLocation.x : %f, zombieLocation.y : %f, zombieLocation.z : %f"), zombieLocation.X, zombieLocation.Y, zombieLocation.Z);
+            UE_LOG(LogTemp, Warning, TEXT("planePosition.x : %f, planePosition.y : %f, planePosition.z : %f"), planePosition.X, planePosition.Y, planePosition.Z);
+            UE_LOG(LogTemp, Warning, TEXT("planeNormal.x : %f, planeNormal.y : %f, planeNormal.z : %f"), planeNormal.X, planeNormal.Y, planeNormal.Z);
+            UE_LOG(LogTemp, Warning, TEXT("impulseDirection.x : %f, impulseDirection.y : %f, impulseDirection.z : %f"), impulseDirection.X, impulseDirection.Y, impulseDirection.Z);
+
         }
     }
 }

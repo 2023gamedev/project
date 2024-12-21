@@ -267,8 +267,8 @@ void ABaseZombie::Tick(float DeltaTime)
 	// cut dead 동기화
 	if (GetHP() <= 0 && m_bIsCuttingDead == false && doAction_setIsCuttingDead_onTick == true) {
 
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 사망 클라 동기화 작업실행!")));
-		//UE_LOG(LogTemp, Log, TEXT("좀비 절단 사망 클라 동기화 작업실행!"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 사망 클라 동기화 작업실행!")));
+		UE_LOG(LogTemp, Log, TEXT("좀비 절단 사망 클라 동기화 작업실행!"));
 
 		m_bIsCuttingDead = true;
 		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
@@ -553,7 +553,21 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 				0,
 				1.0f
 			);
+
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("CutZombie!(직접 실행)\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
+				GetZombieId(), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z, planeposition_center.X, planeposition_center.Y, planeposition_center.Z, planenormal.X, planenormal.Y, planenormal.Z, sync_cutImpulse.X, sync_cutImpulse.Y, sync_cutImpulse.Z));
+			UE_LOG(LogTemp, Log, TEXT("CutZombie!(직접 실행)\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
+				GetZombieId(), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z, planeposition_center.X, planeposition_center.Y, planeposition_center.Z, planenormal.X, planenormal.Y, planenormal.Z, sync_cutImpulse.X, sync_cutImpulse.Y, sync_cutImpulse.Z);
+
 		}
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("CutZombie!(동기화)\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
+			GetZombieId(), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z, planeposition.X, planeposition.Y, planeposition.Z, planenormal.X, planenormal.Y, planenormal.Z, sync_cutImpulse.X, sync_cutImpulse.Y, sync_cutImpulse.Z));
+		UE_LOG(LogTemp, Log, TEXT("CutZombie!(동기화)\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
+			GetZombieId(), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z, planeposition.X, planeposition.Y, planeposition.Z, planenormal.X, planenormal.Y, planenormal.Z, sync_cutImpulse.X, sync_cutImpulse.Y, sync_cutImpulse.Z);
+
 	}
 	//========================================
 

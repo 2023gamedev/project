@@ -154,12 +154,18 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						slicepacket.SerializeToString(&serializedData);
 
 						bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+
+						GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 패킷 전송!\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"), 
+							Zombie->GetZombieId(), Zombie->GetActorLocation().X, Zombie->GetActorLocation().Y, Zombie->GetActorLocation().Z, planeposition_center.X, planeposition_center.Y, planeposition_center.Z, planenormal.X, planenormal.Y, planenormal.Z, WeaponForward.X, WeaponForward.Y, WeaponForward.Z));
+						UE_LOG(LogTemp, Log, TEXT("좀비 절단 패킷 전송!\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
+							Zombie->GetZombieId(), Zombie->GetActorLocation().X, Zombie->GetActorLocation().Y, Zombie->GetActorLocation().Z, planeposition_center.X, planeposition_center.Y, planeposition_center.Z, planenormal.X, planenormal.Y, planenormal.Z, WeaponForward.X, WeaponForward.Y, WeaponForward.Z);
 					}
 				}
 
 				Zombie->SetCuttingDeadWithAnim();
 			}
 			else {
+
 				Zombie->SetNormalDeadWithAnim();
 			}
 
