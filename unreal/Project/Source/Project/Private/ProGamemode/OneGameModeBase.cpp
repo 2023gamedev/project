@@ -439,9 +439,9 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     }
 
    // UE_LOG(LogTemp, Warning, TEXT("DropPosBefore!!!!!!"));
-    FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
+   FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
    // UE_LOG(LogTemp, Warning, TEXT("ItemBoxClassesBefore!!!!!!"));
-    //ItemBoxClasses.Add(AItemBoxActor::StaticClass()); // spawn시 .add하지 말고 비어있는 인덱스에다가 아이템 다시 넣어주기
+   //ItemBoxClasses.Add(AItemBoxActor::StaticClass()); // spawn시 .add하지 말고 비어있는 인덱스에다가 아이템 다시 넣어주기
     
     int32 newindex = INDEX_NONE;
     bool bAdded = false;

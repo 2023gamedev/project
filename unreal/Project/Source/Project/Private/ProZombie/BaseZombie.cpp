@@ -267,8 +267,8 @@ void ABaseZombie::Tick(float DeltaTime)
 	// cut dead 동기화
 	if (GetHP() <= 0 && m_bIsCuttingDead == false && doAction_setIsCuttingDead_onTick == true) {
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 사망 클라 동기화 작업실행!")));
-		UE_LOG(LogTemp, Log, TEXT("좀비 절단 사망 클라 동기화 작업실행!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 사망 클라 동기화 작업실행!")));
+		//UE_LOG(LogTemp, Log, TEXT("좀비 절단 사망 클라 동기화 작업실행!"));
 
 		m_bIsCuttingDead = true;
 		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
@@ -452,123 +452,109 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 	// 절단 디버깅 용 - 화면 출력
 	//========================================
 
-	FVector Center;
-	FVector Right;  // 평면의 오른쪽 방향
-	FVector Forward;  // 평면의 앞쪽 방향
-	FVector Scale;  // 평면의 스케일
-	float Weapon_Scale = 0.f;	// 무기별 스케일 조정
+	//FVector Center;
+	//FVector Right;  // 평면의 오른쪽 방향
+	//FVector Forward;  // 평면의 앞쪽 방향
+	//FVector Scale;  // 평면의 스케일
+	//float Weapon_Scale = 0.f;	// 무기별 스케일 조정
 
-	if (do_self == true && PlayerWeapon) {
-		Center = PlayerWeapon->PlaneComponent->GetComponentLocation();
-		Right = PlayerWeapon->PlaneComponent->GetRightVector();  // 평면의 오른쪽 방향
-		Forward = PlayerWeapon->PlaneComponent->GetForwardVector();  // 평면의 앞쪽 방향
-		Scale = PlayerWeapon->PlaneComponent->GetComponentScale();  // 평면의 스케일
-
-
-		if (PlayerWeapon->WeaponName == "ButchersKnife") { Weapon_Scale = 45.f; }
-		else if (PlayerWeapon->WeaponName == "FireAxe") { Weapon_Scale = 50.f; }
-		else if (PlayerWeapon->WeaponName == "SashimiKnife") { Weapon_Scale = 40.f; }
-
-		float HalfWidth = Weapon_Scale * Scale.X;  // 평면의 폭
-		float HalfHeight = Weapon_Scale * Scale.Y; // 평면의 높이
-
-		// 꼭짓점 계산
-		FVector TopLeft = Center - Right * HalfWidth + Forward * HalfHeight;
-		FVector TopRight = Center + Right * HalfWidth + Forward * HalfHeight;
-		FVector BottomLeft = Center - Right * HalfWidth - Forward * HalfHeight;
-		FVector BottomRight = Center + Right * HalfWidth - Forward * HalfHeight;
-
-		// 꼭짓점을 리스트에 추가
-		TArray PlaneVertexs = { TopLeft, TopRight, BottomLeft, BottomRight };
-
-		if (PlaneVertexs.Num() >= 4) {
-			float displaceTime = 30.f;
-
-			// 히트 지점에 평면의 선 그리기
-			DrawDebugLine(
-				GetWorld(),
-				PlaneVertexs[0],			// 시작 위치
-				PlaneVertexs[1],			// 히트 지점
-				FColor::Green,				// 선 색상
-				false,						// 지속 여부
-				displaceTime,				// 지속 시간
-				0,							// 깊이 우선 여부
-				1.0f						// 선 두께
-			);
-
-			DrawDebugLine(
-				GetWorld(),
-				PlaneVertexs[0],
-				PlaneVertexs[2],
-				FColor::Green,
-				false,
-				displaceTime,
-				0,
-				1.0f
-			);
-
-			DrawDebugLine(
-				GetWorld(),
-				PlaneVertexs[2],
-				PlaneVertexs[3],
-				FColor::Green,
-				false,
-				displaceTime,
-				0,
-				1.0f
-			);
-
-			DrawDebugLine(
-				GetWorld(),
-				PlaneVertexs[1],
-				PlaneVertexs[3],
-				FColor::Green,
-				false,
-				displaceTime,
-				0,
-				1.0f
-			);
-
-			FVector planeposition_center = Center;	//(PlaneVertexs[0] + PlaneVertexs[1] + PlaneVertexs[2] + PlaneVertexs[3]) / 4.0f;
-
-			DrawDebugPoint(
-				GetWorld(),
-				planeposition_center,
-				5.0f,
-				FColor::Yellow,
-				false,
-				displaceTime,
-				0
-			);
-
-			FVector planenormal = FVector::CrossProduct(PlaneVertexs[3] - PlaneVertexs[0], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
-
-			DrawDebugLine(
-				GetWorld(),
-				planeposition_center,
-				planeposition_center + planenormal * 20.0f,
-				FColor::Yellow,
-				false,
-				displaceTime,
-				0,
-				1.0f
-			);
+	//if (do_self == true && PlayerWeapon) {
+	//	Center = PlayerWeapon->PlaneComponent->GetComponentLocation();
+	//	Right = PlayerWeapon->PlaneComponent->GetRightVector();  // 평면의 오른쪽 방향
+	//	Forward = PlayerWeapon->PlaneComponent->GetForwardVector();  // 평면의 앞쪽 방향
+	//	Scale = PlayerWeapon->PlaneComponent->GetComponentScale();  // 평면의 스케일
 
 
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("CutZombie!(직접 실행)\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
-				GetZombieId(), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z, planeposition_center.X, planeposition_center.Y, planeposition_center.Z, planenormal.X, planenormal.Y, planenormal.Z, sync_cutImpulse.X, sync_cutImpulse.Y, sync_cutImpulse.Z));
-			UE_LOG(LogTemp, Log, TEXT("CutZombie!(직접 실행)\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
-				GetZombieId(), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z, planeposition_center.X, planeposition_center.Y, planeposition_center.Z, planenormal.X, planenormal.Y, planenormal.Z, sync_cutImpulse.X, sync_cutImpulse.Y, sync_cutImpulse.Z);
+	//	if (PlayerWeapon->WeaponName == "ButchersKnife") { Weapon_Scale = 45.f; }
+	//	else if (PlayerWeapon->WeaponName == "FireAxe") { Weapon_Scale = 50.f; }
+	//	else if (PlayerWeapon->WeaponName == "SashimiKnife") { Weapon_Scale = 40.f; }
 
-		}
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("CutZombie!(동기화)\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
-			GetZombieId(), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z, planeposition.X, planeposition.Y, planeposition.Z, planenormal.X, planenormal.Y, planenormal.Z, sync_cutImpulse.X, sync_cutImpulse.Y, sync_cutImpulse.Z));
-		UE_LOG(LogTemp, Log, TEXT("CutZombie!(동기화)\n좀비 id: %d, 좀비 location: ( %f, %f, %f), 절단 position: ( %f, %f, %f), 절단 normal: ( %f, %f, %f), 무기 방향: ( %f, %f, %f)"),
-			GetZombieId(), GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z, planeposition.X, planeposition.Y, planeposition.Z, planenormal.X, planenormal.Y, planenormal.Z, sync_cutImpulse.X, sync_cutImpulse.Y, sync_cutImpulse.Z);
+	//	float HalfWidth = Weapon_Scale * Scale.X;  // 평면의 폭
+	//	float HalfHeight = Weapon_Scale * Scale.Y; // 평면의 높이
 
-	}
+	//	// 꼭짓점 계산
+	//	FVector TopLeft = Center - Right * HalfWidth + Forward * HalfHeight;
+	//	FVector TopRight = Center + Right * HalfWidth + Forward * HalfHeight;
+	//	FVector BottomLeft = Center - Right * HalfWidth - Forward * HalfHeight;
+	//	FVector BottomRight = Center + Right * HalfWidth - Forward * HalfHeight;
+
+	//	// 꼭짓점을 리스트에 추가
+	//	TArray PlaneVertexs = { TopLeft, TopRight, BottomLeft, BottomRight };
+
+	//	if (PlaneVertexs.Num() >= 4) {
+	//		float displaceTime = 30.f;
+
+	//		// 히트 지점에 평면의 선 그리기
+	//		DrawDebugLine(
+	//			GetWorld(),
+	//			PlaneVertexs[0],			// 시작 위치
+	//			PlaneVertexs[1],			// 히트 지점
+	//			FColor::Green,				// 선 색상
+	//			false,						// 지속 여부
+	//			displaceTime,				// 지속 시간
+	//			0,							// 깊이 우선 여부
+	//			1.0f						// 선 두께
+	//		);
+
+	//		DrawDebugLine(
+	//			GetWorld(),
+	//			PlaneVertexs[0],
+	//			PlaneVertexs[2],
+	//			FColor::Green,
+	//			false,
+	//			displaceTime,
+	//			0,
+	//			1.0f
+	//		);
+
+	//		DrawDebugLine(
+	//			GetWorld(),
+	//			PlaneVertexs[2],
+	//			PlaneVertexs[3],
+	//			FColor::Green,
+	//			false,
+	//			displaceTime,
+	//			0,
+	//			1.0f
+	//		);
+
+	//		DrawDebugLine(
+	//			GetWorld(),
+	//			PlaneVertexs[1],
+	//			PlaneVertexs[3],
+	//			FColor::Green,
+	//			false,
+	//			displaceTime,
+	//			0,
+	//			1.0f
+	//		);
+
+	//		FVector planeposition_center = Center;	//(PlaneVertexs[0] + PlaneVertexs[1] + PlaneVertexs[2] + PlaneVertexs[3]) / 4.0f;
+
+	//		DrawDebugPoint(
+	//			GetWorld(),
+	//			planeposition_center,
+	//			5.0f,
+	//			FColor::Yellow,
+	//			false,
+	//			displaceTime,
+	//			0
+	//		);
+
+	//		FVector planenormal = FVector::CrossProduct(PlaneVertexs[3] - PlaneVertexs[0], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
+
+	//		DrawDebugLine(
+	//			GetWorld(),
+	//			planeposition_center,
+	//			planeposition_center + planenormal * 20.0f,
+	//			FColor::Yellow,
+	//			false,
+	//			displaceTime,
+	//			0,
+	//			1.0f
+	//		);
+	//	}
+	//}
 	//========================================
 
 	USkeletalMeshComponent* Skeleton = GetMesh();
