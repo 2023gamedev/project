@@ -396,7 +396,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
         iclass = EItemClass::NONE;
     }
 
-    // 선택된 아이템 박스 클래스로 아이템 박스 생성
+    // 선택된 아이템 박스 클래스로 아이템 박스 생성 
     AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itempos, FRotator::ZeroRotator);
 
     //UE_LOG(LogTemp, Error, TEXT("ITEM___111"));

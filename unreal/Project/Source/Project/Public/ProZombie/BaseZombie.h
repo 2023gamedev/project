@@ -166,7 +166,7 @@ public:
 	bool m_bIsStanding = false;
 
 	UFUNCTION(BlueprintCallable)
-	void CutZombie(FVector planeposition, FVector planenormal, bool do_self);
+	void CutZombie(FVector planeposition, FVector planenormal, bool do_self); 
 
 	void SliceProceduralmeshTest(FVector planeposition, FVector planenormal);
 

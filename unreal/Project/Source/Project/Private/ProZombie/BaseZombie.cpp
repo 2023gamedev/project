@@ -432,7 +432,7 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 }
 
 void ABaseZombie::SetNormalDeadWithAnim()
-{
+{ 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("좀비 사망 직접 실행! - normal dead")));
 	//UE_LOG(LogTemp, Log, TEXT("좀비 사망 직접 실행! - normal dead"));
 

@@ -173,7 +173,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
-		if (GameInstance->ClientSocketPtr->Q_jump.try_pop(recvJump)) {
+		if (GameInstance->ClientSocketPtr->Q_jump.try_pop(recvJump)) { 
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				MyGameMode->UpdatePlayerJump(recvJump.PlayerId);

@@ -6,7 +6,7 @@
 ANWBook::ANWBook()
 {
 
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = false; 
 
 	NormalWeapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Book"));
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BookBox"));

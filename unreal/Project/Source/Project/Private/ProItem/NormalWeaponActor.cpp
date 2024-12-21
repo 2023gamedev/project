@@ -35,7 +35,7 @@ void ANormalWeaponActor::PlaceItem()
 void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABaseZombie* Zombie = Cast<ABaseZombie>(OtherActor);
-	if (Zombie) {
+	if (Zombie) { 
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Zombie Damaged!"));
 
@@ -115,7 +115,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 					if (PlaneVertexs.Num() >= 4) {
 						FVector planeposition_center = Center;	//(PlaneVertexs[0] + PlaneVertexs[1] + PlaneVertexs[2] + PlaneVertexs[3]) / 4.0f;
-			
+
 						FVector planenormal = FVector::CrossProduct(PlaneVertexs[3] - PlaneVertexs[0], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
 
 						Zombie->PlayerWeapon = this;
@@ -127,7 +127,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 						slicepacket.set_packet_type(24);
 						slicepacket.set_zombieid(Zombie->GetZombieId());
-						
+
 						// Location 설정
 						slicepacket.mutable_location()->set_x(Zombie->GetActorLocation().X);
 						slicepacket.mutable_location()->set_y(Zombie->GetActorLocation().Y);
@@ -154,6 +154,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						slicepacket.SerializeToString(&serializedData);
 
 						bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+					}
 				}
 
 				Zombie->SetCuttingDeadWithAnim();
