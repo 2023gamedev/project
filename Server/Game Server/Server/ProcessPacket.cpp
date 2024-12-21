@@ -569,6 +569,19 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
+        // 좀비 HP 업데이트
+        int recvzombieid = Packet.zombieid();
+
+        for (auto& z : zombieDB) {
+            if (z->ZombieData.zombieID == recvzombieid) {
+                z->zombieHP = 0;
+                playerDB[id].killcount++;
+
+                cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
+                cout << endl;
+            }
+        }
+
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());

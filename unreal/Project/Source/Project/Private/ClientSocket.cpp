@@ -16,17 +16,29 @@ ClientSocket::ClientSocket(UProGameInstance* Inst)
 	recvBuffer.len = BUFSIZE;
 
 	if (ConnectServer(CurrentServerType)) {
-		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
+		const int NumThreads = 4;
+		for (int i = 0; i < NumThreads; ++i) {
+			workerThreads.emplace_back([this]() {
+				this->Run(); // IOCP 작업 처리
+				});
+		}
+
+		sendThread = std::thread([this]() {
+			this->StartSend(); // 송신 작업 처리
+			});
 	}
 }
 
 ClientSocket::~ClientSocket()
 {
-	if (Thread)
-	{
-		Thread->WaitForCompletion();
-		Thread->Kill();
-		delete Thread;
+	for (auto& thread : workerThreads) {
+		if (thread.joinable()) {
+			thread.join();
+		}
+	}
+
+	if (sendThread.joinable()) {
+		sendThread.join();
 	}
 }
 
