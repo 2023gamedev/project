@@ -268,7 +268,7 @@ void ABaseZombie::Tick(float DeltaTime)
 	if (GetHP() <= 0 && m_bIsCuttingDead == false && doAction_setIsCuttingDead_onTick == true) {
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 사망 클라 동기화 작업실행!")));
-		//UE_LOG(LogTemp, Log, TEXT("좀비 절단 사망 클라 동기화 작업실행!"));
+		UE_LOG(LogTemp, Log, TEXT("좀비 절단 사망 클라 동기화 작업실행!"));
 
 		m_bIsCuttingDead = true;
 		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
