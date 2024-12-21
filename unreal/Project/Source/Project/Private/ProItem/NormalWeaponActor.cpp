@@ -122,7 +122,36 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						Zombie->CutZombie(planeposition_center, planenormal);
 
 						// 여기에서 클라 좀비 절단 패킷 send
-						//
+
+						Protocol::slice_vector slicepacket;
+
+						slicepacket.set_packet_type(24);
+						slicepacket.set_zombieid(Zombie->GetZombieId());
+						
+						// Location 설정
+						slicepacket.mutable_location()->set_x(Zombie->GetActorLocation().X);
+						slicepacket.mutable_location()->set_y(Zombie->GetActorLocation().Y);
+						slicepacket.mutable_location()->set_z(Zombie->GetActorLocation().Z);
+
+						// Position 설정
+						slicepacket.mutable_position()->set_x(planeposition_center.X);
+						slicepacket.mutable_position()->set_y(planeposition_center.Y);
+						slicepacket.mutable_position()->set_z(planeposition_center.Z);
+
+						// Normal 설정
+						slicepacket.mutable_normal()->set_x(planenormal.X);
+						slicepacket.mutable_normal()->set_y(planenormal.Y);
+						slicepacket.mutable_normal()->set_z(planenormal.Z);
+
+						// Impulse 설정
+						slicepacket.mutable_impulse()->set_x(Zombie->WeaponForward.X);
+						slicepacket.mutable_impulse()->set_y(Zombie->WeaponForward.Y);
+						slicepacket.mutable_impulse()->set_z(Zombie->WeaponForward.Z);
+
+						std::string serializedData;
+						slicepacket.SerializeToString(&serializedData);
+
+						bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 					}
 				}
 
