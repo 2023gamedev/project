@@ -119,7 +119,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 						FVector planenormal = FVector::CrossProduct(PlaneVertexs[3] - PlaneVertexs[0], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
 
 						Zombie->PlayerWeapon = this;
-						Zombie->CutZombie(planeposition_center, planenormal);
+						Zombie->CutZombie(planeposition_center, planenormal, true);
 
 						// 여기에서 클라 좀비 절단 패킷 send
 
