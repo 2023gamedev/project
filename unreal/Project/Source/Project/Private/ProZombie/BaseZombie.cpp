@@ -955,7 +955,7 @@ void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 	m_bBeAttacked = false;
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 
-	doAction_takeDamage_onTick = true;
+	doAction_takeDamage_onTick = false;
 
 	//if (BloodFX != NULL) {
 	//	BloodFX->EndPlay(EEndPlayReason::Destroyed);
@@ -1034,9 +1034,9 @@ void ABaseZombie::WaittingTimerElapsed()
 
 	SetDie(false);
 
-	doAction_takeDamage_onTick = true;
-	doAction_setIsNormalDead_onTick = true;		// 이거 지금 ResurrectionTimerElapsed를 모두 주석해놔서 불릴 일이 없긴함 (즉, 해당 클라가 좀비 직접 죽이면 doAction_setIsNormalDead_onTick 값 영원히 false임)
-	doAction_setIsCuttingDead_onTick = true;
+	doAction_takeDamage_onTick = false;
+	doAction_setIsNormalDead_onTick = false;		// 이거 지금 ResurrectionTimerElapsed를 모두 주석해놔서 불릴 일이 없긴함 (즉, 해당 클라가 좀비 직접 죽이면 doAction_setIsNormalDead_onTick 값 영원히 false임)
+	doAction_setIsCuttingDead_onTick = false;
 	// 그래도 부활하는 걸 고려하면 여기에 설정하는 게 맞음
 }
 
