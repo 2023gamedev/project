@@ -1243,14 +1243,22 @@ void ABaseCharacter::GetItem()
 
 			ItemBoxId = itembox->GetItemBoxId();
 
-			if (itembox->ItemClassType == EItemClass::KEYITEM) {
-				if (itembox->ItemName.ToString().Contains("Car")) {
-					Send_GetKey(1, ItemBoxId);
+			// 5분 안지났을때만 send 보내도록 수정 
+			if (GameTimerUIWidget) {
+
+				if (GameTimerUIWidget->RoofTopClose == false) {
+					if (itembox->ItemClassType == EItemClass::KEYITEM) {
+						if (itembox->ItemName.ToString().Contains("Car")) {
+							Send_GetKey(1, ItemBoxId);
+						}
+						else if (itembox->ItemName.ToString().Contains("Roof")) {
+							Send_GetKey(2, ItemBoxId);
+						}
+					}
 				}
-				else if (itembox->ItemName.ToString().Contains("Roof")) {
-					Send_GetKey(2, ItemBoxId);
-				}
+
 			}
+
 
 			else {
 				Send_Destroy(ItemBoxId);
@@ -1727,15 +1735,47 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 		}
 	}
 	else if (CurrentInterActor->InterActorName == "RoofTopDoorActor") {
-		ARoofTopDoorActor* RoofTopDoorActor = Cast<ARoofTopDoorActor>(CurrentInterActor);
-		if (RoofTopDoorActor) {
+		//ARoofTopDoorActor* RoofTopDoorActor = Cast<ARoofTopDoorActor>(CurrentInterActor);
+		//if (RoofTopDoorActor) {
+		//	if (CurrentKeyItem->KeyName == "RoofKey1") {
+		//		if (RoofTopDoorActor->bIsDisableUnlock) {
+		//			FText KText = FText::FromString(TEXT("이미 헬기는 떠났다."));
+		//			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+		//		}
+		//		else {
+		//			RoofTopDoorActor->UnlockKey1();
+		//			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
+		//			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
+		//			PlaySoundForPlayer(Sound);
+		//			UpdateKeySlot();
+		//			Send_OpenRoot(2);
+		//		}
+
+		//	}
+		//	else if (CurrentKeyItem->KeyName == "RoofKey2") {
+		//		if (RoofTopDoorActor->bIsDisableUnlock) {
+		//			FText KText = FText::FromString(TEXT("이미 헬기는 떠났다."));
+		//			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
+		//		}
+		//		else {
+		//			RoofTopDoorActor->UnlockKey2();
+		//			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
+		//			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
+		//			PlaySoundForPlayer(Sound);
+		//			UpdateKeySlot();
+		//			Send_OpenRoot(2);
+		//		}
+		//	}
+		//}
+
+		
+		if (GameTimerUIWidget) {
 			if (CurrentKeyItem->KeyName == "RoofKey1") {
-				if (RoofTopDoorActor->bIsDisableUnlock) {
+				if (GameTimerUIWidget->RoofTopClose == false) {
 					FText KText = FText::FromString(TEXT("이미 헬기는 떠났다."));
 					ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 				}
 				else {
-					RoofTopDoorActor->UnlockKey1();
 					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKEY1 UnLock");
 					USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
 					PlaySoundForPlayer(Sound);
@@ -1745,12 +1785,11 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 
 			}
 			else if (CurrentKeyItem->KeyName == "RoofKey2") {
-				if (RoofTopDoorActor->bIsDisableUnlock) {
+				if (GameTimerUIWidget->RoofTopClose == false) {
 					FText KText = FText::FromString(TEXT("이미 헬기는 떠났다."));
 					ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 				}
 				else {
-					RoofTopDoorActor->UnlockKey2();
 					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ROOFKey2 Unlock");
 					USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
 					PlaySoundForPlayer(Sound);
