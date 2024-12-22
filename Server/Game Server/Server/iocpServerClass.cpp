@@ -791,17 +791,50 @@ void IOCP_CORE::Zombie_BT_Thread()
 #endif
 		}
 
-		//콘솔창에서 한 싸이클씩 돌아가게
-		//cout << "(계속 진행)아무거나 입력 후 엔터: ";
-		//char one_cycle;
-		//cin >> one_cycle;
-		//if (cin.fail()) {
-		//	cin.clear();
-		//	cin.ignore(1000, '\n');
-		//}
-		//cin.clear();			//한번더 써서 남은 개행 문자까지 싹 지워줌
-		//cin.ignore(1000, '\n');
-		//cout << endl;
+		for (const auto& player : playerDB) {
+			Protocol::ZombiePathList zPathList;
+			zPathList.set_packet_type(10);
+
+			for (const auto& zom : zombieDB) {
+				if (player.second.floor == zom->z_floor) {
+
+					if (zom->path.empty() || zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
+						continue;
+					}
+
+					Protocol::ZombiePath* zPath = zPathList.add_zombiepaths();
+					zPath->set_zombieid(zom->ZombieData.zombieID);
+					zPath->set_packet_type(10);
+
+					// Path1 설정
+					Protocol::Vector3* Destination1 = zPath->mutable_path1();
+					Destination1->set_x(get<0>(zom->path[zom->ZombiePathIndex]));
+					Destination1->set_y(get<1>(zom->path[zom->ZombiePathIndex]));
+					Destination1->set_z(get<2>(zom->path[zom->ZombiePathIndex]));
+
+					// Path2 설정 (다음 경로가 존재하는 경우)
+					if ((zom->ZombiePathIndex + 1) < zom->path.size()) {
+						Protocol::Vector3* Destination2 = zPath->mutable_path2();
+						Destination2->set_x(get<0>(zom->path[zom->ZombiePathIndex + 1]));
+						Destination2->set_y(get<1>(zom->path[zom->ZombiePathIndex + 1]));
+						Destination2->set_z(get<2>(zom->path[zom->ZombiePathIndex + 1]));
+					}
+
+					// 현재 위치 설정
+					Protocol::Vector3* currentLocation = zPath->mutable_location();
+					currentLocation->set_x(zom->ZombieData.x);
+					currentLocation->set_y(zom->ZombieData.y);
+					currentLocation->set_z(zom->ZombieData.z);
+				}
+			}
+
+			std::string serializedData;
+			zPathList.SerializeToString(&serializedData);
+			
+			IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+			printf("send zombiedatalist\n");
+			
+		}
 
 	}
 

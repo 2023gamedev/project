@@ -794,7 +794,7 @@ void Zombie::Wait()
 
 			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
 			MoveTo(IOCP_CORE::BT_deltaTime.count());
-			SendPath();		
+			//SendPath();		
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -821,7 +821,7 @@ void Zombie::Wait()
 
 			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
 			MoveTo(IOCP_CORE::BT_deltaTime.count());
-			SendPath();
+			//SendPath();
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -845,7 +845,7 @@ void Zombie::Wait()
 
 			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
 			MoveTo(IOCP_CORE::BT_deltaTime.count());
-			SendPath();
+			//SendPath();
 		}
 		else {
 #ifdef ENABLE_BT_LOG

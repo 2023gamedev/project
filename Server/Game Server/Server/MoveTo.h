@@ -22,7 +22,7 @@ public:
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        zom.SendPath();
+        //zom.SendPath();
         
         //bool result = zom.MoveTo(); 
         //if (result)
@@ -43,7 +43,7 @@ public:
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        zom.SendPath();
+        //zom.SendPath();
 
         return "MoveTo-Succeed";
     }
@@ -59,7 +59,7 @@ public:
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        zom.SendPath();
+        //zom.SendPath();
 
         return "MoveTo-Succeed";
     }
@@ -73,7 +73,7 @@ public:
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        zom.SendPath();
+        //zom.SendPath();
 
         return "MoveTo-Succeed";
     }
@@ -88,7 +88,7 @@ public:
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        zom.SendPath();
+        //zom.SendPath();
 
         return "MoveTo-Succeed";
     }

@@ -72,6 +72,11 @@ message ZombiePath {
     Vector3 location = 5;
 }
 
+message ZombiePathList{
+    uint32 packet_type = 1;
+    repeated ZombiePath zombiepaths = 2;
+}
+
 message PatrolPath {
     uint32 packet_type = 1;
     uint32 zombieid = 2;
