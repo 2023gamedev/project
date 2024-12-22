@@ -82,8 +82,16 @@ void ABaseZombie::Tick(float DeltaTime)
 			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_1)"));
 
 			float weight = CutProceduralMesh_1->CalculateMass();
-			if (weight < min_weight)
+			if (weight < min_weight) {
 				weight = min_weight;
+				CutProceduralMesh_1->SetMassOverrideInKg(NAME_None, weight, true);
+			}
+			// 너무 얇게 짤려 컨벡스 메시 자체가 생성 안되었을 경우!
+			int32 ConvexElementCount = CutProceduralMesh_1->GetBodySetup()->AggGeom.ConvexElems.Num();
+			if (ConvexElementCount == 0) {
+				CreateAndApplyBoundingBox(CutProceduralMesh_1);
+				CutProceduralMesh_1->SetMassOverrideInKg(NAME_None, weight, true);
+			}
 			//UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
 
 			float x_baseImpulse = 3500.0f; //FMath::RandRange(2000.0f, 5000.0f);
@@ -137,8 +145,16 @@ void ABaseZombie::Tick(float DeltaTime)
 			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_2)"));
 
 			float weight = CutProceduralMesh_2->CalculateMass();
-			if (weight < min_weight)
+			if (weight < min_weight) {
 				weight = min_weight;
+				CutProceduralMesh_2->SetMassOverrideInKg(NAME_None, weight, true);
+			}
+			// 너무 얇게 짤려 컨벡스 메시 자체가 생성 안되었을 경우!
+			int32 ConvexElementCount = CutProceduralMesh_2->GetBodySetup()->AggGeom.ConvexElems.Num();
+			if (ConvexElementCount == 0) {
+				CreateAndApplyBoundingBox(CutProceduralMesh_2);
+				CutProceduralMesh_2->SetMassOverrideInKg(NAME_None, weight, true);
+			}
 			//UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
 
 			float x_baseImpulse = 10000.0f; //FMath::RandRange(8000.0f, 12000.0f);
@@ -794,6 +810,49 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
+}
+
+void ABaseZombie::CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh)
+{
+	// 1. 메시의 바운딩 박스를 가져옴
+	FBox BoundingBox = ProceduralMesh->CalcBounds(ProceduralMesh->GetComponentTransform()).GetBox();
+
+	// 2. 바운딩 박스의 크기와 중심 계산
+	FVector BoxExtent = BoundingBox.GetExtent();  // 반경 (반쪽 크기)
+	FVector BoxCenter = BoundingBox.GetCenter(); // 중심 위치
+
+	// 디버깅용: 바운딩 박스 정보를 출력
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,
+	//	FString::Printf(TEXT("ProceduralMesh has NO ConvexMesh!! ====> BoundingBox Created!!!\nBoundingBox Extent: %s, Center: %s"),
+	//		*BoxExtent.ToString(), *BoxCenter.ToString()));
+	UE_LOG(LogTemp, Log, TEXT("ProceduralMesh has NO ConvexMesh!! ====> BoundingBox Created!!!\nBoundingBox Extent: %s, Center: %s"),
+		*BoxExtent.ToString(), *BoxCenter.ToString());
+
+	// 3. 충돌 설정 - 기존 Convex Mesh를 대체
+	ProceduralMesh->ClearCollisionConvexMeshes(); // 기존 충돌 제거
+
+	// 4. 바운딩 박스 크기를 기반으로 충돌 형상 생성
+	TArray<FVector> ConvexVerts;
+
+	// 바운딩 박스의 8개 꼭짓점 계산
+	ConvexVerts.Add(BoundingBox.Min);
+	ConvexVerts.Add(FVector(BoundingBox.Max.X, BoundingBox.Min.Y, BoundingBox.Min.Z));
+	ConvexVerts.Add(FVector(BoundingBox.Min.X, BoundingBox.Max.Y, BoundingBox.Min.Z));
+	ConvexVerts.Add(FVector(BoundingBox.Max.X, BoundingBox.Max.Y, BoundingBox.Min.Z));
+	ConvexVerts.Add(FVector(BoundingBox.Min.X, BoundingBox.Min.Y, BoundingBox.Max.Z));
+	ConvexVerts.Add(FVector(BoundingBox.Max.X, BoundingBox.Min.Y, BoundingBox.Max.Z));
+	ConvexVerts.Add(FVector(BoundingBox.Min.X, BoundingBox.Max.Y, BoundingBox.Max.Z));
+	ConvexVerts.Add(BoundingBox.Max);
+
+	// 새로운 Convex Mesh를 적용
+	ProceduralMesh->AddCollisionConvexMesh(ConvexVerts);
+
+	// 5. 충돌 다시 활성화
+	ProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	ProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+
+	// 6. 물리 시뮬레이션 활성화
+	ProceduralMesh->SetSimulatePhysics(true);
 }
 
 void ABaseZombie::SetCuttingDeadWithAnim()

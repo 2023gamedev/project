@@ -170,6 +170,8 @@ public:
 
 	void SliceProceduralmeshTest(FVector planeposition, FVector planenormal);
 
+	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
+
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
 	UProceduralMeshComponent* CutProceduralMesh_1;
