@@ -420,6 +420,31 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 				BloodFX.Add(NewBloodFX);
 			}
 		}
+
+		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieBeAttacked.ZombieBeAttacked")); // 에셋 경로
+
+		if (GetZombieName() == "NormalZombie") {
+			AZombieAIController* NormalZombieController = Cast<AZombieAIController>(this->GetController());
+			if (NormalZombieController && NormalZombieController->IsLocalController() && Sound)
+			{
+				UGameplayStatics::PlaySound2D(NormalZombieController, Sound);
+			}
+		}
+		else if (GetZombieName() == "RunningZombie") {
+			ARunningZombieAIController* RunningZombieController = Cast<ARunningZombieAIController>(this->GetController());
+			if (RunningZombieController && RunningZombieController->IsLocalController() && Sound)
+			{
+				UGameplayStatics::PlaySound2D(RunningZombieController, Sound);
+			}
+		}
+		else if (GetZombieName() == "ShoutingZombie") {
+			AShoutingZombieAIController* ShoutingZombieController = Cast<AShoutingZombieAIController>(this->GetController());
+			if (ShoutingZombieController && ShoutingZombieController->IsLocalController() && Sound)
+			{
+				UGameplayStatics::PlaySound2D(ShoutingZombieController, Sound);
+			}
+		}
+
 	}
 	else {
 		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
