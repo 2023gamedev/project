@@ -93,72 +93,101 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 }
 
 void IOCP_CORE::IOCP_WorkerThread() {
-	while (TRUE == (!ServerShutdown)) {
+	while (!ServerShutdown) {
 		DWORD key;
 		DWORD iosize;
 		OVLP_EX* my_overlap;
 
-		BOOL result = GetQueuedCompletionStatus(g_hIocp, &iosize, (PULONG_PTR)&key, reinterpret_cast<LPOVERLAPPED*>(&my_overlap), INFINITE);
+		BOOL result = GetQueuedCompletionStatus(
+			g_hIocp, &iosize, (PULONG_PTR)&key,
+			reinterpret_cast<LPOVERLAPPED*>(&my_overlap),
+			INFINITE
+		);
 
 		auto client_it = g_players.find(key);
 		if (client_it == g_players.end()) {
-			// 유효하지 않은 클라이언트 키에 대한 처리, 예: 로그 출력, 계속하기
 			continue;
 		}
 		PLAYER_INFO* user = client_it->second;
 
-		// 클라이언트가 접속을 끊었을 경우
-		if (FALSE == result || 0 == iosize) {
-			if (FALSE == result) {
+		// 수신 오류 or 0바이트 -> 연결 끊김
+		if (!result || iosize == 0) {
+			if (!result) {
 				int err_no = WSAGetLastError();
-				IOCP_ErrorDisplay("WorkerThreadStart::GetQueuedCompletionStatus", err_no, __LINE__);
+				IOCP_ErrorDisplay("WorkerThread::GQCS", err_no, __LINE__);
 			}
-
 			DisconnectClient(key);
 			printf("[ No. %3u ] Disconnected\n", key);
-
 			continue;
 		}
-		else if (OP_SERVER_RECV == my_overlap->operation) {
-			// 클라이언트로부터 데이터를 받았을 경우
+
+		if (my_overlap->operation == OP_SERVER_RECV) {
+			// 새로 수신된 데이터: user->recv_overlap.iocp_buffer ~ iosize
 			char* buf_ptr = reinterpret_cast<char*>(user->recv_overlap.iocp_buffer);
 			int remained = iosize;
 
-			// 남은 데이터를 처리하는 로직
-			while (0 < remained) {
-				// 버퍼에 데이터를 추가
-				int copySize = min(remained, MAX_PACKET_SIZE - user->previous_size);
+			// 남은 바이트를 user->packet_buff에 누적
+			while (remained > 0) {
+				int space = MAX_PACKET_SIZE - user->previous_size;
+				int copySize = min(remained, space);
+
 				memcpy(user->packet_buff + user->previous_size, buf_ptr, copySize);
 				user->previous_size += copySize;
 				buf_ptr += copySize;
 				remained -= copySize;
 
-				if (IOCP_CORE::IOCP_ProcessPacket(key, user->packet_buff, user->previous_size)) {
-					// 파싱 및 처리가 성공적으로 완료되면 버퍼 초기화
-					user->previous_size = 0;
+				// 4바이트 길이 헤더 기반 패킷 파싱
+				while (true) {
+					// 최소 4바이트 있어야 길이 확인 가능
+					if (user->previous_size < 4) {
+						break;
+					}
+
+					// 패킷 길이 읽기
+					uint32_t protobufSize = 0;
+					memcpy(&protobufSize, user->packet_buff, 4);
+
+					// 아직 패킷이 다 안 들어왔으면 대기
+					if (user->previous_size < (4 + protobufSize)) {
+						break;
+					}
+
+					// 이제 (4 + protobufSize) 바이트가 하나의 패킷
+					// -> 이 구간을 IOCP_ProcessPacket에 넘긴다
+					bool parseOk = IOCP_ProcessPacket(
+						key,
+						user->packet_buff + 4,  // 헤더 뒤부터
+						protobufSize           // 실제 Protobuf 데이터 길이
+					);
+
+					// leftover(남은 데이터) 이동
+					int leftover = user->previous_size - (4 + protobufSize);
+					if (leftover > 0) {
+						memmove(user->packet_buff, user->packet_buff + (4 + protobufSize), leftover);
+					}
+					user->previous_size = leftover;
+
+					if (!parseOk) {
+						// 패킷 파싱 실패 시 처리(로그 등)
+					}
 				}
 			}
 
-			// 다음 데이터를 받기 위한 WSARecv 호출
+			// 다음 수신
 			DWORD flags = 0;
-			int retval = WSARecv(user->s, &user->recv_overlap.wsabuf, 1, NULL, &flags, &user->recv_overlap.original_overlap, NULL);
-			if (SOCKET_ERROR == retval) {
-				int err_no = WSAGetLastError();
-				if (ERROR_IO_PENDING != err_no) {
-					IOCP_ErrorDisplay("WorkerThreadStart::WSARecv", err_no, __LINE__);
-				}
-				continue;
-			}
+			WSARecv(user->s, &user->recv_overlap.wsabuf, 1, NULL, &flags,
+				&user->recv_overlap.original_overlap, NULL);
 		}
-		else if (OP_SERVER_SEND == my_overlap->operation) {
-			// 서버에서 메세지를 보냈으면, 메모리를 해제해 준다.
+		else if (my_overlap->operation == OP_SERVER_SEND) {
+			// 송신 완료
 			delete my_overlap;
 		}
 		else {
-			cout << "Unknown IOCP event !!\n";
+			printf("Unknown overlap operation\n");
 		}
 	}
 }
+
 
 
 void IOCP_CORE::IOCP_AcceptThread()
@@ -195,36 +224,54 @@ void IOCP_CORE::IOCP_AcceptThread()
 		// accept()
 		struct sockaddr_in clientaddr;
 		int addrlen = sizeof(clientaddr);
-		SOCKET client_sock = WSAAccept(listen_sock, reinterpret_cast<sockaddr *>(&clientaddr), &addrlen, NULL, NULL);
+		SOCKET client_sock = WSAAccept(listen_sock, reinterpret_cast<sockaddr*>(&clientaddr), &addrlen, NULL, NULL);
 		if (INVALID_SOCKET == client_sock) {
 			int err_no = WSAGetLastError();
 			IOCP_ErrorDisplay("Accept::WSAAccept", err_no, __LINE__);
-			while (true);
+			continue; // 무한루프 대신 continue
 		}
-
-		/* DB 관련 login 기능이 여기에 추가되어야 한다. 로그인이 번호가 제대로 맞으면 통과, 아니면 클라이언트 연결을 끊는다. 로그인을 하면 DB에서 정보를 가져온다 */
 
 		playerIndex += 1;
-		printf("[ No. %3u ] Client IP = %s, Port = %d is Connected\n", playerIndex, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+		printf("[ No. %3u ] Client IP = %s, Port = %d is Connected\n",
+			playerIndex, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
-		WSABUF wsabuf;
-		wsabuf.buf = reinterpret_cast<char*>(&playerIndex);
-		wsabuf.len = sizeof(playerIndex);
-
-		DWORD sent;
-		OVERLAPPED sendOverlap;
-		ZeroMemory(&sendOverlap, sizeof(sendOverlap));
-
-		retval = WSASend(client_sock, &wsabuf, 1, &sent, 0, &sendOverlap, NULL);
+		// Nagle 비활성화 (선택사항)
+		BOOL bNoDelay = TRUE;
+		retval = setsockopt(client_sock, IPPROTO_TCP, TCP_NODELAY, (char*)&bNoDelay, sizeof(bNoDelay));
 		if (retval == SOCKET_ERROR) {
 			int err_no = WSAGetLastError();
-			IOCP_ErrorQuit(L"id send()", err_no);
+			IOCP_ErrorDisplay("setsockopt::TCP_NODELAY", err_no, __LINE__);
 		}
 
+		// ---- "길이(4) + playerIndex(4)" 형태로 8바이트 전송 ---
+		{
+			uint32_t packetSize = sizeof(playerIndex); // 4
+			uint32_t totalSize = 4 + packetSize;       // 8
+
+			char sendBuf[8] = { 0 };
+			memcpy(sendBuf, &packetSize, 4);
+			memcpy(sendBuf + 4, &playerIndex, 4);
+
+			WSABUF wsabuf;
+			wsabuf.buf = sendBuf;
+			wsabuf.len = totalSize; // 8
+
+			DWORD sent = 0;
+			OVERLAPPED sendOverlap;
+			ZeroMemory(&sendOverlap, sizeof(sendOverlap));
+
+			retval = WSASend(client_sock, &wsabuf, 1, &sent, 0, &sendOverlap, NULL);
+			if (retval == SOCKET_ERROR) {
+				int err_no = WSAGetLastError();
+				IOCP_ErrorQuit(L"id send()", err_no);
+			}
+		}
+
+		// ----- IOCP 등록 -----
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(client_sock), g_hIocp, playerIndex, 0);
 
-		PLAYER_INFO *user = new PLAYER_INFO;
-
+		// PLAYER_INFO 객체 생성
+		PLAYER_INFO* user = new PLAYER_INFO;
 		user->s = client_sock;
 		user->connected = true;
 		user->id = playerIndex;
@@ -238,10 +285,8 @@ void IOCP_CORE::IOCP_AcceptThread()
 
 		g_players[user->id] = user;
 
-		/* 주변 클라이언트에 대해 뿌릴 정보 뿌리고, 시야 리스트나 처리해야 할 정보들도 함께 넣는다. */
-
-		// 클라이언트에서 응답오길 기다리기
-		DWORD flags{ 0 };
+		// 첫 수신 준비
+		DWORD flags = 0;
 		retval = WSARecv(client_sock, &user->recv_overlap.wsabuf, 1, NULL, &flags, &user->recv_overlap.original_overlap, NULL);
 		if (SOCKET_ERROR == retval) {
 			int err_no = WSAGetLastError();
@@ -250,6 +295,7 @@ void IOCP_CORE::IOCP_AcceptThread()
 			}
 		}
 	}
+
 }
 
 void IOCP_CORE::DisconnectClient(unsigned int id) {
@@ -274,22 +320,34 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const char* serializedData, siz
 
 	PLAYER_INFO* user = it->second;
 
+	// 1) [4바이트 길이 + 실제데이터] 준비
+	uint32_t packetSize = (uint32_t)dataSize;
+	uint32_t totalSize = 4 + packetSize;
+	// iocp_buffer 크기가 totalSize보다 크다고 가정 (예: MAX_PACKET_SIZE 확인)
+
 	OVLP_EX* over = new OVLP_EX;
 	memset(over, 0, sizeof(OVLP_EX));
 	over->operation = OP_SERVER_SEND;
-	over->wsabuf.buf = reinterpret_cast<char*>(over->iocp_buffer);
-	over->wsabuf.len = static_cast<ULONG>(dataSize); // dataSize를 ULONG으로 변환하여 할당
-	memcpy(over->iocp_buffer, serializedData, dataSize); // 직렬화된 데이터를 iocp_buffer에 복사
 
-	DWORD flags{ 0 };
+	// a) 4바이트 길이 기록
+	memcpy(over->iocp_buffer, &packetSize, sizeof(packetSize));
+	// b) 그 뒤에 실제 데이터
+	memcpy(over->iocp_buffer + 4, serializedData, dataSize);
+
+	over->wsabuf.buf = reinterpret_cast<char*>(over->iocp_buffer);
+	over->wsabuf.len = totalSize; // 4 + dataSize
+
+	DWORD flags = 0;
 	int retval = WSASend(user->s, &over->wsabuf, 1, NULL, flags, &over->original_overlap, NULL);
-	if (SOCKET_ERROR == retval) {
+	if (retval == SOCKET_ERROR) {
 		int err_no = WSAGetLastError();
-		if (ERROR_IO_PENDING != err_no) {
+		if (err_no != WSA_IO_PENDING) {
 			IOCP_ErrorDisplay("SendPacket::WSASend", err_no, __LINE__);
+			// 필요 시 delete over; (메모리 해제)
 		}
 	}
 }
+
 
 void IOCP_CORE::IOCP_ErrorDisplay(const char *msg, int err_no, int line)
 {

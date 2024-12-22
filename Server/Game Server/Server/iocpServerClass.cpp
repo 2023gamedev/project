@@ -204,12 +204,47 @@ void IOCP_CORE::IOCP_WorkerThread() {
 				buf_ptr += copySize;
 				remained -= copySize;
 				
-				std::string packetData(user->packet_buff, user->previous_size);
-				user->recvQueue.push(packetData);
-				user->previous_size = 0;
+				// 더 이상 처리할 패킷이 없을 때까지 반복
+				while (true) {
+					// 최소 4바이트(길이 헤더) 이상 있어야 패킷 크기를 알 수 있음
+					if (user->previous_size < 4) {
+						break;
+					}
 
-				if (user->recvQueue.try_pop(packetData)) {
-					IOCP_ProcessPacket(key, packetData);
+					// 패킷 길이 읽기 (4바이트)
+					uint32_t packetSize = 0;
+					memcpy(&packetSize, user->packet_buff, sizeof(packetSize));
+
+					// 유효성 검사
+					// 1) packetSize가 너무 크면 에러
+					if (packetSize > MAX_PACKET_SIZE - 4) {
+						// 비정상 패킷 처리. 연결 종료 등
+						printf("Invalid packetSize: %u\n", packetSize);
+						user->previous_size = 0; // 데이터 초기화
+						break;
+					}
+
+					// 2) 아직 전체 패킷(4 + packetSize)을 다 못 받았으면 다음 수신 대기
+					if (user->previous_size < (4 + packetSize)) {
+						break;
+					}
+
+					// [4 + packetSize] 만큼이 완성된 패킷
+					// 패킷 데이터 추출
+					std::string fullPacket((char*)user->packet_buff, 4 + packetSize);
+
+					// fullPacket에서 4바이트 헤더 제외, 실제 페이로드
+					std::string payload = fullPacket.substr(4);
+
+					// 패킷 처리
+					IOCP_ProcessPacket(user->id, payload);
+
+					// leftover(남은 데이터) 이동
+					int leftover = user->previous_size - (4 + packetSize);
+					if (leftover > 0) {
+						memmove(user->packet_buff, user->packet_buff + (4 + packetSize), leftover);
+					}
+					user->previous_size = leftover;
 				}
 			}
 
@@ -290,11 +325,20 @@ void IOCP_CORE::IOCP_AcceptThread()
 			IOCP_ErrorDisplay("setsockopt::TCP_NODELAY", err_no, __LINE__);
 		}
 
-		WSABUF wsabuf;
-		wsabuf.buf = reinterpret_cast<char*>(&playerIndex);
-		wsabuf.len = sizeof(playerIndex);
+		uint32_t packetSize = sizeof(playerIndex); // playerIndex = 4바이트
+		uint32_t totalSize = 4 + packetSize;        // 길이(4바이트) + playerIndex(4바이트)
 
-		DWORD sent;
+		char sendBuf[128] = { 0 }; // 임시 송신 버퍼
+		// a) 4바이트 길이
+		memcpy(sendBuf, &packetSize, sizeof(packetSize));
+		// b) playerIndex(4바이트)
+		memcpy(sendBuf + 4, &playerIndex, sizeof(playerIndex));
+
+		WSABUF wsabuf;
+		wsabuf.buf = sendBuf;
+		wsabuf.len = totalSize; // 4 + 4 = 8바이트
+
+		DWORD sent = 0;
 		OVERLAPPED sendOverlap;
 		ZeroMemory(&sendOverlap, sizeof(sendOverlap));
 
@@ -368,29 +412,40 @@ void IOCP_CORE::IOCP_SendPacket(unsigned int id, const char* serializedData, siz
 void IOCP_CORE::IOCP_SendNextPacket(PLAYER_INFO* user)
 {
 	std::string data;
-
 	if (!user->sendQueue.try_pop(data)) {
-		user->isSending = false; 
+		user->isSending = false;
 		return;
 	}
 
+	// 1) 패킷 크기(4바이트) + 실제 데이터 -> 전체 길이
+	uint32_t packetSize = static_cast<uint32_t>(data.size());
+	uint32_t totalSize = 4 + packetSize;
+
+	// 2) Overlapped 구조체 세팅
 	OVLP_EX* over = new OVLP_EX;
 	memset(over, 0, sizeof(OVLP_EX));
 	over->operation = OP_SERVER_SEND;
+
+	// 3) iocp_buffer에 [4바이트 길이 + 데이터]를 복사
+	//    iocp_buffer가 totalSize보다 크다고 가정 (안전성 체크 필요)
+	memcpy(over->iocp_buffer, &packetSize, sizeof(packetSize));          // 길이 4바이트
+	memcpy(over->iocp_buffer + 4, data.data(), data.size());            // 실제 데이터
+
 	over->wsabuf.buf = reinterpret_cast<char*>(over->iocp_buffer);
-	over->wsabuf.len = static_cast<ULONG>(data.size());
-	memcpy(over->iocp_buffer, data.data(), data.size());
+	over->wsabuf.len = totalSize;  // 4 + 데이터 길이
 
-	DWORD flags{ 0 };
+	// 4) 비동기 송신
+	DWORD flags = 0;
 	int retval = WSASend(user->s, &over->wsabuf, 1, NULL, flags, &over->original_overlap, NULL);
-
-	if (SOCKET_ERROR == retval) {
+	if (retval == SOCKET_ERROR) {
 		int err_no = WSAGetLastError();
-		if (ERROR_IO_PENDING != err_no) {
+		if (err_no != WSA_IO_PENDING) {
 			IOCP_ErrorDisplay("SendPacket::WSASend", err_no, __LINE__);
+			// 보통 여기에 delete over; 등을 해주고 나가야 메모리 누수 방지 가능
 		}
 	}
 }
+
 
 void IOCP_CORE::IOCP_ErrorDisplay(const char *msg, int err_no, int line)
 {
