@@ -1255,14 +1255,15 @@ void ABaseCharacter::GetItem()
 							Send_GetKey(2, ItemBoxId);
 						}
 					}
+					else {
+						Send_Destroy(ItemBoxId);
+
+					}
 				}
 
+
 			}
 
-
-			else {
-				Send_Destroy(ItemBoxId);
-			}
 			itembox->Destroy();
 			
 			AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());

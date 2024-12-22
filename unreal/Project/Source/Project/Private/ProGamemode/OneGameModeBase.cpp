@@ -1186,7 +1186,7 @@ void AOneGameModeBase::UpdateCuttingZombie(uint32 ZombieId, FVector zombieLocati
 void AOneGameModeBase::DestroyItem(uint32 Itemid, uint32 Playerid)
 {
     UWorld* World = GetWorld();
-
+    UE_LOG(LogTemp, Warning, TEXT("DestroyItem"));
     if (!World)
     {
         UE_LOG(LogTemp, Warning, TEXT("DestroyItem: GetWorld() returned nullptr"));
