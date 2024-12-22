@@ -299,6 +299,11 @@ void AZombieAIController::Tick(float DeltaTime)
 			}
 		}
 	}
+	// 좀비가 플레이어를 죽였는데 마지막 동기화 작업에서 m_bPlayerInSight가 true여서, 서버에서 PlayerInsight가 계속 true인 걸 방지하는 코드 (즉, 좀비가 플레이어를 죽이고 그자리에 가만히 서있는 버그 방지)
+	else if(OwnerZombie->MyChar->GetHP() <= 0 && m_bPlayerInSight == true) {
+		m_bPlayerInSight = false;
+		Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
+	}
 }
 
 void AZombieAIController::Send_Detected()

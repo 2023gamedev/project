@@ -263,42 +263,50 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 	if (PlayerPawn == nullptr)
 		return;
 
-	FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
-	FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
+	if (OwnerZombie->MyChar->GetHP() > 0) {	// 살아 있을 때만 좀비시야 검사 
 
-	float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
+		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
+		FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
 
-	float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
-	bool InZombieSight = FieldOfView <= DotProduct ? true : false;
+		float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 
-	if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
-	{
+		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
+		bool InZombieSight = FieldOfView <= DotProduct ? true : false;
 
-		NearestPawn = PlayerPawn;
+		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
+		{
 
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
-		//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
+			NearestPawn = PlayerPawn;
 
-	}
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
+			//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
 
-	// NearestPawn에 따라 상태 변경
-	if (NearestPawn) {	// NearestPawn 존재 O -> 나를 포착함
-		if (m_bPlayerInSight == false) {
-			m_bPlayerInSight = true;
-			ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
-			Send_Detected(); // 플레이어 감지 메시지 전송
-			LastSeenPlayer = BaseCharacter;
-			UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
+		}
+
+		// NearestPawn에 따라 상태 변경
+		if (NearestPawn) {	// NearestPawn 존재 O -> 나를 포착함
+			if (m_bPlayerInSight == false) {
+				m_bPlayerInSight = true;
+				ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
+				Send_Detected(); // 플레이어 감지 메시지 전송
+				LastSeenPlayer = BaseCharacter;
+				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
+			}
+		}
+		else {	// NearestPawn 존재 X -> 나를 못 봄
+			if (m_bPlayerInSight == true) {
+				m_bPlayerInSight = false;
+				Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
+				UE_LOG(LogNet, Display, TEXT("Zombie #%d Lost Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
+			}
 		}
 	}
-	else {	// NearestPawn 존재 X -> 나를 못 봄
-		if (m_bPlayerInSight == true) {
-			m_bPlayerInSight = false;
-			Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
-			UE_LOG(LogNet, Display, TEXT("Zombie #%d Lost Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
-		}
+	// 좀비가 플레이어를 죽였는데 마지막 동기화 작업에서 m_bPlayerInSight가 true여서, 서버에서 PlayerInsight가 계속 true인 걸 방지하는 코드 (즉, 좀비가 플레이어를 죽이고 그자리에 가만히 서있는 버그 방지)
+	else if (OwnerZombie->MyChar->GetHP() <= 0 && m_bPlayerInSight == true) {
+		m_bPlayerInSight = false;
+		Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
 	}
 }
 

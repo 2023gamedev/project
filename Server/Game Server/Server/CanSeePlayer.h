@@ -17,17 +17,6 @@ public:
 
         bool result = zom.PlayerInSight;
 
-        for (auto player : playerDB_BT) {
-            // 죽은 플레이어 무시
-            if (player.second.health <= 0) {
-                result = false;
-            }
-            // 연결 끊긴 플레이어 무시
-            if (g_players.find(player.first) == g_players.end()) {
-                result = false;
-            }
-        }
-
         //cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시야에 플레이어가 있는가?: " << boolalpha << result << endl;
         //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [CanSeePlayer Task] 결과: \"" << boolalpha << result << "\"" << endl;
         //cout << endl;

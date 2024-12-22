@@ -630,6 +630,11 @@ void Zombie::ReachFinalDestination()
 		case TARGET::PLAYER:
 			// 사실상 실행될 일 없음
 			// 딱히 뭐 할 것도 없고;;
+
+			// (특수한 경우) 좀비가 플레이어를 쫓아가다가 해당 플레이어가 연결 끊으면 PlayerInSight가 계속 true인 상태로 남는 버그 방지를 위해
+			// -> 해당 연결 끊긴 플레이어 자리에서 계속 CanSeePlayer가 실행되고 뒤에서 실질적으로 아무 작업(SearchClosestPlayer 등에서 연결 끊긴 플레이어는 무시 작업함)을 안해서 가만히 멍때리는 버그 방지 
+			PlayerInSight = false;
+
 #ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '플레이어'" << endl;
 #endif
