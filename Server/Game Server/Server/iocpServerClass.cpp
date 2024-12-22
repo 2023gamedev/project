@@ -10,6 +10,7 @@
 #include "MoveTo.h"
 #include "CanAttack.h"
 #include "CanNotAttack.h"
+#include "CanSeePlayer.h"
 
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
