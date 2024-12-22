@@ -543,7 +543,9 @@
 // [+] 접속 안한 다른 클라는 UI에서 빼서 보여주기 
 
 *** [+] 러닝 좀비 버그들
-- 러닝 좀비만 죽을때 사운드 2번 들림
+// - 러닝 좀비만 죽을때 사운드 2번 들림
+// -> BeAttacked()[피격=사망 사운드 재생 & 피격 애니메이션]를 피가 남아 있을 때만 실행되도록 하게 바꾸니 고쳐짐 
+// -> 다른 좀비도 사실 죽을때도 BeAttacked() 불려서 두번 들려야했지만, 원래 메시는 히든되서 하나만 들리게 된건데 러닝좀비만 좀 이상하게 히든이 늦게되는지 둘다 겹쳐서 재생된듯;;
 - 에디터에서 러닝 좀비가 있는 층으로 갈때 
 "LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie
 LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie"

@@ -495,6 +495,9 @@ public:
 	void ProStartGameTimerEnd();
 	void ProGameTimerEnd();
 
+	//무기 깨졌을때에 문구	
+	void CommentDestroyWeapon();
+
 
 	virtual uint32 GetPlayerId() const;
 	void SetPlayerId(uint32 NewPlayerId);

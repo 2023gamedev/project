@@ -374,26 +374,37 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 			}
 			case 10:
 			{
-				Protocol::ZombiePath zombiepath;
-				if (zombiepath.ParseFromArray(buffer.data(), buffer.size()))
-				{
-					ZombiePath localZombiePath;
+				Protocol::ZombiePathList zombiePathList;
+				if (zombiePathList.ParseFromArray(buffer.data(), buffer.size())) {
+					for (int i = 0; i < zombiePathList.zombiepaths_size(); ++i) {
+						const auto& zombiepath = zombiePathList.zombiepaths(i);
 
-					localZombiePath.ZombieId = zombiepath.zombieid();
-					//UE_LOG(LogNet, Display, TEXT("Zombie ID: #%d"), localZombiePath.ZombieId);
+						// 로컬 좀비 데이터 구조 생성
+						ZombiePath localZombiePath;
+						localZombiePath.ZombieId = zombiepath.zombieid();
 
-					// 경로 입력
-					localZombiePath.Path1.emplace_back(zombiepath.path1().x(), zombiepath.path1().y(), zombiepath.path1().z());
-					localZombiePath.Path2.emplace_back(zombiepath.path2().x(), zombiepath.path2().y(), zombiepath.path2().z());
+						// 경로 입력
+						localZombiePath.Path1.emplace_back(
+							zombiepath.path1().x(), zombiepath.path1().y(), zombiepath.path1().z());
+						localZombiePath.Path2.emplace_back(
+							zombiepath.path2().x(), zombiepath.path2().y(), zombiepath.path2().z());
 
-					// 위치 값도 추가
-					localZombiePath.Location = FVector(zombiepath.location().x(), zombiepath.location().y(), zombiepath.location().z());
-					//UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"), localZombiePath.ZombieId, localZombiePath.Location.X, localZombiePath.Location.Y, localZombiePath.Location.Z);
+						// 위치 값 추가
+						localZombiePath.Location = FVector(
+							zombiepath.location().x(), zombiepath.location().y(), zombiepath.location().z());
 
-					// 큐에 ZombiePath 객체를 추가
-					Q_path.push(localZombiePath);
-					//UE_LOG(LogNet, Display, TEXT("ZombiePath recv: %d"), localZombiePath.ZombieId);
+						// 큐에 ZombiePath 객체 추가
+						Q_path.push(localZombiePath);
+
+						// 디버그 로그 (필요에 따라 활성화)
+						// UE_LOG(LogNet, Display, TEXT("Zombie #%d's Location: ( %.2f, %.2f, %.2f )"),
+						//     localZombiePath.ZombieId, localZombiePath.Location.X, localZombiePath.Location.Y, localZombiePath.Location.Z);
+					}
+
+					// 디버그 로그
+					UE_LOG(LogNet, Display, TEXT("Processed %d ZombiePaths"), zombiePathList.zombiepaths_size());
 				}
+
 				break;
 			}
 

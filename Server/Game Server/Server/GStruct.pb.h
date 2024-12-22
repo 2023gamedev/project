@@ -2,7 +2,6 @@
 // source: Gstruct.proto
 
 #define PROTOBUF_USE_DLLS
-
 #ifndef GOOGLE_PROTOBUF_INCLUDED_Gstruct_2eproto
 #define GOOGLE_PROTOBUF_INCLUDED_Gstruct_2eproto
 
@@ -83,6 +82,9 @@ extern ZombieDataListDefaultTypeInternal _ZombieDataList_default_instance_;
 class ZombiePath;
 struct ZombiePathDefaultTypeInternal;
 extern ZombiePathDefaultTypeInternal _ZombiePath_default_instance_;
+class ZombiePathList;
+struct ZombiePathListDefaultTypeInternal;
+extern ZombiePathListDefaultTypeInternal _ZombiePathList_default_instance_;
 class Zombie_attack;
 struct Zombie_attackDefaultTypeInternal;
 extern Zombie_attackDefaultTypeInternal _Zombie_attack_default_instance_;
@@ -142,6 +144,7 @@ template<> ::Protocol::Vector3* Arena::CreateMaybeMessage<::Protocol::Vector3>(A
 template<> ::Protocol::Zombie* Arena::CreateMaybeMessage<::Protocol::Zombie>(Arena*);
 template<> ::Protocol::ZombieDataList* Arena::CreateMaybeMessage<::Protocol::ZombieDataList>(Arena*);
 template<> ::Protocol::ZombiePath* Arena::CreateMaybeMessage<::Protocol::ZombiePath>(Arena*);
+template<> ::Protocol::ZombiePathList* Arena::CreateMaybeMessage<::Protocol::ZombiePathList>(Arena*);
 template<> ::Protocol::Zombie_attack* Arena::CreateMaybeMessage<::Protocol::Zombie_attack>(Arena*);
 template<> ::Protocol::Zombie_hp* Arena::CreateMaybeMessage<::Protocol::Zombie_hp>(Arena*);
 template<> ::Protocol::destroy_item* Arena::CreateMaybeMessage<::Protocol::destroy_item>(Arena*);
@@ -1920,6 +1923,174 @@ class ZombiePath final :
 };
 // -------------------------------------------------------------------
 
+class ZombiePathList final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.ZombiePathList) */ {
+ public:
+  inline ZombiePathList() : ZombiePathList(nullptr) {}
+  ~ZombiePathList() override;
+  explicit PROTOBUF_CONSTEXPR ZombiePathList(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ZombiePathList(const ZombiePathList& from);
+  ZombiePathList(ZombiePathList&& from) noexcept
+    : ZombiePathList() {
+    *this = ::std::move(from);
+  }
+
+  inline ZombiePathList& operator=(const ZombiePathList& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ZombiePathList& operator=(ZombiePathList&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ZombiePathList& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ZombiePathList* internal_default_instance() {
+    return reinterpret_cast<const ZombiePathList*>(
+               &_ZombiePathList_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(ZombiePathList& a, ZombiePathList& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ZombiePathList* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ZombiePathList* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ZombiePathList* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ZombiePathList>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ZombiePathList& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ZombiePathList& from) {
+    ZombiePathList::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ZombiePathList* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.ZombiePathList";
+  }
+  protected:
+  explicit ZombiePathList(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kZombiepathsFieldNumber = 2,
+    kPacketTypeFieldNumber = 1,
+  };
+  // repeated .Protocol.ZombiePath zombiepaths = 2;
+  int zombiepaths_size() const;
+  private:
+  int _internal_zombiepaths_size() const;
+  public:
+  void clear_zombiepaths();
+  ::Protocol::ZombiePath* mutable_zombiepaths(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ZombiePath >*
+      mutable_zombiepaths();
+  private:
+  const ::Protocol::ZombiePath& _internal_zombiepaths(int index) const;
+  ::Protocol::ZombiePath* _internal_add_zombiepaths();
+  public:
+  const ::Protocol::ZombiePath& zombiepaths(int index) const;
+  ::Protocol::ZombiePath* add_zombiepaths();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ZombiePath >&
+      zombiepaths() const;
+
+  // uint32 packet_type = 1;
+  void clear_packet_type();
+  uint32_t packet_type() const;
+  void set_packet_type(uint32_t value);
+  private:
+  uint32_t _internal_packet_type() const;
+  void _internal_set_packet_type(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.ZombiePathList)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ZombiePath > zombiepaths_;
+    uint32_t packet_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Gstruct_2eproto;
+};
+// -------------------------------------------------------------------
+
 class PatrolPath final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.PatrolPath) */ {
  public:
@@ -1968,7 +2139,7 @@ class PatrolPath final :
                &_PatrolPath_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(PatrolPath& a, PatrolPath& b) {
     a.Swap(&b);
@@ -2167,7 +2338,7 @@ class Detected final :
                &_Detected_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(Detected& a, Detected& b) {
     a.Swap(&b);
@@ -2348,7 +2519,7 @@ class Time final :
                &_Time_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(Time& a, Time& b) {
     a.Swap(&b);
@@ -2507,7 +2678,7 @@ class Equip_Item final :
                &_Equip_Item_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(Equip_Item& a, Equip_Item& b) {
     a.Swap(&b);
@@ -2693,7 +2864,7 @@ class ping final :
                &_ping_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(ping& a, ping& b) {
     a.Swap(&b);
@@ -2852,7 +3023,7 @@ class patrol_hit final :
                &_patrol_hit_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    15;
 
   friend void swap(patrol_hit& a, patrol_hit& b) {
     a.Swap(&b);
@@ -3011,7 +3182,7 @@ class set_item final :
                &_set_item_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    16;
 
   friend void swap(set_item& a, set_item& b) {
     a.Swap(&b);
@@ -3268,7 +3439,7 @@ class ItemDataList final :
                &_ItemDataList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    17;
 
   friend void swap(ItemDataList& a, ItemDataList& b) {
     a.Swap(&b);
@@ -3436,7 +3607,7 @@ class set_car final :
                &_set_car_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    18;
 
   friend void swap(set_car& a, set_car& b) {
     a.Swap(&b);
@@ -3693,7 +3864,7 @@ class CarDataList final :
                &_CarDataList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    19;
 
   friend void swap(CarDataList& a, CarDataList& b) {
     a.Swap(&b);
@@ -3861,7 +4032,7 @@ class destroy_item final :
                &_destroy_item_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    20;
 
   friend void swap(destroy_item& a, destroy_item& b) {
     a.Swap(&b);
@@ -4031,7 +4202,7 @@ class drop_item final :
                &_drop_item_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   friend void swap(drop_item& a, drop_item& b) {
     a.Swap(&b);
@@ -4277,7 +4448,7 @@ class detach_item final :
                &_detach_item_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   friend void swap(detach_item& a, detach_item& b) {
     a.Swap(&b);
@@ -4447,7 +4618,7 @@ class get_key final :
                &_get_key_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(get_key& a, get_key& b) {
     a.Swap(&b);
@@ -4628,7 +4799,7 @@ class escape final :
                &_escape_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(escape& a, escape& b) {
     a.Swap(&b);
@@ -4798,7 +4969,7 @@ class game_clear final :
                &_game_clear_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(game_clear& a, game_clear& b) {
     a.Swap(&b);
@@ -5033,7 +5204,7 @@ class send_complete final :
                &_send_complete_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(send_complete& a, send_complete& b) {
     a.Swap(&b);
@@ -5192,7 +5363,7 @@ class slice_vector final :
                &_slice_vector_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(slice_vector& a, slice_vector& b) {
     a.Swap(&b);
@@ -6562,6 +6733,70 @@ inline void ZombiePath::set_allocated_location(::Protocol::Vector3* location) {
   }
   _impl_.location_ = location;
   // @@protoc_insertion_point(field_set_allocated:Protocol.ZombiePath.location)
+}
+
+// -------------------------------------------------------------------
+
+// ZombiePathList
+
+// uint32 packet_type = 1;
+inline void ZombiePathList::clear_packet_type() {
+  _impl_.packet_type_ = 0u;
+}
+inline uint32_t ZombiePathList::_internal_packet_type() const {
+  return _impl_.packet_type_;
+}
+inline uint32_t ZombiePathList::packet_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.ZombiePathList.packet_type)
+  return _internal_packet_type();
+}
+inline void ZombiePathList::_internal_set_packet_type(uint32_t value) {
+  
+  _impl_.packet_type_ = value;
+}
+inline void ZombiePathList::set_packet_type(uint32_t value) {
+  _internal_set_packet_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.ZombiePathList.packet_type)
+}
+
+// repeated .Protocol.ZombiePath zombiepaths = 2;
+inline int ZombiePathList::_internal_zombiepaths_size() const {
+  return _impl_.zombiepaths_.size();
+}
+inline int ZombiePathList::zombiepaths_size() const {
+  return _internal_zombiepaths_size();
+}
+inline void ZombiePathList::clear_zombiepaths() {
+  _impl_.zombiepaths_.Clear();
+}
+inline ::Protocol::ZombiePath* ZombiePathList::mutable_zombiepaths(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.ZombiePathList.zombiepaths)
+  return _impl_.zombiepaths_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ZombiePath >*
+ZombiePathList::mutable_zombiepaths() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.ZombiePathList.zombiepaths)
+  return &_impl_.zombiepaths_;
+}
+inline const ::Protocol::ZombiePath& ZombiePathList::_internal_zombiepaths(int index) const {
+  return _impl_.zombiepaths_.Get(index);
+}
+inline const ::Protocol::ZombiePath& ZombiePathList::zombiepaths(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.ZombiePathList.zombiepaths)
+  return _internal_zombiepaths(index);
+}
+inline ::Protocol::ZombiePath* ZombiePathList::_internal_add_zombiepaths() {
+  return _impl_.zombiepaths_.Add();
+}
+inline ::Protocol::ZombiePath* ZombiePathList::add_zombiepaths() {
+  ::Protocol::ZombiePath* _add = _internal_add_zombiepaths();
+  // @@protoc_insertion_point(field_add:Protocol.ZombiePathList.zombiepaths)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ZombiePath >&
+ZombiePathList::zombiepaths() const {
+  // @@protoc_insertion_point(field_list:Protocol.ZombiePathList.zombiepaths)
+  return _impl_.zombiepaths_;
 }
 
 // -------------------------------------------------------------------
@@ -8969,6 +9204,8 @@ inline void slice_vector::set_allocated_impulse(::Protocol::Vector3* impulse) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
