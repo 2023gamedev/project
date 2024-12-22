@@ -412,6 +412,7 @@ public:
 	bool recv_itempacket = false;
 	bool recv_carpacket = false;
 
+	std::vector<char> recvBufferCache;
 
 
 private:

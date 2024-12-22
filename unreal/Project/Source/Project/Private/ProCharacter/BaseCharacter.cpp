@@ -1243,26 +1243,27 @@ void ABaseCharacter::GetItem()
 
 			ItemBoxId = itembox->GetItemBoxId();
 
-			// 5분 안지났을때만 send 보내도록 수정 
-			if (GameTimerUIWidget) {
-
-				if (GameTimerUIWidget->RoofTopClose == false) {
-					if (itembox->ItemClassType == EItemClass::KEYITEM) {
-						if (itembox->ItemName.ToString().Contains("Car")) {
-							Send_GetKey(1, ItemBoxId);
-						}
-						else if (itembox->ItemName.ToString().Contains("Roof")) {
-							Send_GetKey(2, ItemBoxId);
-						}
-					}
-					else {
-						Send_Destroy(ItemBoxId);
-
-					}
+			if (itembox->ItemClassType == EItemClass::KEYITEM) {
+				if (itembox->ItemName.ToString().Contains("Car")) {
+					Send_GetKey(1, ItemBoxId);
 				}
 
-
+				else if (itembox->ItemName.ToString().Contains("Roof")) {
+					if (GameTimerUIWidget) {
+						if (GameTimerUIWidget->RoofTopClose == false) {
+							Send_GetKey(2, ItemBoxId);
+						}
+						else {
+							Send_Destroy(ItemBoxId);
+						}
+					}
+				}
 			}
+
+			else {
+				Send_Destroy(ItemBoxId);
+			}
+			
 
 			itembox->Destroy();
 			
@@ -1774,7 +1775,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 		
 		if (GameTimerUIWidget) {
 			if (CurrentKeyItem->KeyName == "RoofKey1") {
-				if (GameTimerUIWidget->RoofTopClose == false) {
+				if (GameTimerUIWidget->RoofTopClose == true) {
 					FText KText = FText::FromString(TEXT("이미 헬기는 떠났다."));
 					ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 				}
@@ -1788,7 +1789,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 
 			}
 			else if (CurrentKeyItem->KeyName == "RoofKey2") {
-				if (GameTimerUIWidget->RoofTopClose == false) {
+				if (GameTimerUIWidget->RoofTopClose == true) {
 					FText KText = FText::FromString(TEXT("이미 헬기는 떠났다."));
 					ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 				}

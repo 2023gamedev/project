@@ -16,16 +16,7 @@ ClientSocket::ClientSocket(UProGameInstance* Inst)
 	recvBuffer.len = BUFSIZE;
 
 	if (ConnectServer(CurrentServerType)) {
-		const int NumThreads = 4;
-		for (int i = 0; i < NumThreads; ++i) {
-			workerThreads.emplace_back([this]() {
-				this->Run(); // IOCP 작업 처리
-				});
-		}
-
-		sendThread = std::thread([this]() {
-			this->StartSend(); // 송신 작업 처리
-			});
+		Thread = FRunnableThread::Create(this, TEXT("Network Thread"));
 	}
 }
 
@@ -98,11 +89,38 @@ uint32 ClientSocket::Run()
 
 void ClientSocket::ProcessRecvQueue()
 {
-	std::vector<char> buffer;
-	while (recvQueue.try_pop(buffer))
-	{
-		// 수신된 데이터 처리
-		ProcessPacket(buffer);
+	std::vector<char> raw;
+	while (recvQueue.try_pop(raw)) {
+		// raw 데이터(길이+페이로드)가 여러 번 들어올 수도, 분할될 수도 있으므로,
+		// 누적 버퍼에 append한 뒤, 패킷 파싱 로직 수행
+		recvBufferCache.insert(recvBufferCache.end(), raw.begin(), raw.end());
+
+		// 패킷 파싱
+		while (true) {
+			// 최소 4바이트 있어야 길이 확인 가능
+			if (recvBufferCache.size() < 4) {
+				break;
+			}
+			// 4바이트 길이 읽기
+			uint32_t packetSize = 0;
+			memcpy(&packetSize, recvBufferCache.data(), 4);
+
+			// 아직 패킷 전부 못 받았으면 대기
+			if (recvBufferCache.size() < (4 + packetSize)) {
+				break;
+			}
+
+			// 패킷 하나 완성
+			std::vector<char> onePacket(recvBufferCache.begin() + 4,
+				recvBufferCache.begin() + 4 + packetSize);
+
+			// 나머지 leftover
+			recvBufferCache.erase(recvBufferCache.begin(),
+				recvBufferCache.begin() + (4 + packetSize));
+
+			// 이제 onePacket이 "순수 데이터"
+			ProcessPacket(onePacket);
+		}
 	}
 }
 
@@ -696,9 +714,22 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 
 bool ClientSocket::Send(const int SendSize, void* SendData)
 {
-	// 송신 데이터를 큐에 추가
-	sendQueue.push(std::vector<char>((char*)SendData, (char*)SendData + SendSize));
+	// 1) [4바이트 길이 + 실제 데이터]로 구성할 버퍼 생성
+	uint32_t packetSize = static_cast<uint32_t>(SendSize);  // 실제 데이터 크기
+	uint32_t totalSize = 4 + packetSize;                    // 4바이트 길이 + 실제 데이터
 
+	// 메모리를 한번에 할당하여, 헤더(4) + Payload(SendData)
+	std::vector<char> buffer(totalSize);
+
+	// [0..3]에 패킷 길이 기록
+	memcpy(buffer.data(), &packetSize, sizeof(packetSize));
+	// [4..(4+packetSize-1)]에 실제 데이터 복사
+	memcpy(buffer.data() + 4, (char*)SendData, SendSize);
+
+	// 2) 큐에 넣기
+	sendQueue.push(std::move(buffer));
+
+	// 3) isSending 상태 확인 후, 전송 스레드 기동
 	bool expected = false;
 	if (isSending.compare_exchange_strong(expected, true)) {
 		StartSend(); // 송신 작업 시작
@@ -711,16 +742,19 @@ void ClientSocket::StartSend()
 	while (true) {
 		std::vector<char> data;
 
+		// 큐에서 데이터 꺼내기
 		if (!sendQueue.try_pop(data)) {
 			// 송신할 데이터가 없으면 플래그 해제 후 종료
 			isSending.store(false);
 			return;
 		}
 
+		// 4바이트 길이 + 실제 데이터가 담긴 버퍼
 		WSABUF wsaBuf;
-		wsaBuf.buf = const_cast<char*>(data.data());
-		wsaBuf.len = data.size();
+		wsaBuf.buf = reinterpret_cast<char*>(data.data());
+		wsaBuf.len = static_cast<ULONG>(data.size());
 
+		// Overlapped 생성
 		auto sendOverlap = std::make_unique<OVERLAPPED>();
 		ZeroMemory(sendOverlap.get(), sizeof(OVERLAPPED));
 
@@ -731,13 +765,14 @@ void ClientSocket::StartSend()
 			int err = WSAGetLastError();
 			if (err != WSA_IO_PENDING) {
 				UE_LOG(LogNet, Error, TEXT("WSASend failed: %d"), err);
-				// 재시도 로직 추가
+
+				// 재시도 로직
 				constexpr int MaxRetries = 3;
 				for (int retry = 1; retry <= MaxRetries; ++retry) {
 					UE_LOG(LogNet, Warning, TEXT("Retrying WSASend... Attempt %d"), retry);
 					result = WSASend(Socket, &wsaBuf, 1, &bytesSent, 0, sendOverlap.get(), NULL);
 					if (result != SOCKET_ERROR || WSAGetLastError() == WSA_IO_PENDING) {
-						sendOverlap.release();
+						sendOverlap.release(); // 성공 혹은 IO_PENDING이면 Overlapped 유지
 						return;
 					}
 				}
@@ -748,6 +783,7 @@ void ClientSocket::StartSend()
 				return;
 			}
 		}
+		// 정상 혹은 IO_PENDING이면 Overlapped 유지(WorkerThread에서 해제)
 		sendOverlap.release();
 	}
 }
