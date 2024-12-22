@@ -29,7 +29,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float m_fMaxSightDistance = 500.f;
+	float m_fMaxSightDistance = 150.f;
 
 	UPROPERTY(EditAnywhere)
 	float m_fRadius = 50.f;

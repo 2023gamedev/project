@@ -74,6 +74,7 @@ void ABaseZombie::Tick(float DeltaTime)
 	// CutProceduralMesh Impulse 적용
 	if (CutProceduralMesh_1) {
 		FVector WeaponForward;
+		float min_weight = 10.f;
 
 		if (procMesh_AddImpulse_1 == false && PlayerWeapon) {
 			WeaponForward = PlayerWeapon->GetActorRotation().Vector();
@@ -81,6 +82,8 @@ void ABaseZombie::Tick(float DeltaTime)
 			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_1)"));
 
 			float weight = CutProceduralMesh_1->CalculateMass();
+			if (weight < min_weight)
+				weight = min_weight;
 			//UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
 
 			float x_baseImpulse = 3500.0f; //FMath::RandRange(2000.0f, 5000.0f);
@@ -126,6 +129,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 	if (CutProceduralMesh_2) {
 		FVector WeaponForward;
+		float min_weight = 10.f;
 
 		if (procMesh_AddImpulse_2 == false && PlayerWeapon) {
 			WeaponForward = PlayerWeapon->GetActorRotation().Vector();
@@ -133,6 +137,8 @@ void ABaseZombie::Tick(float DeltaTime)
 			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_2)"));
 
 			float weight = CutProceduralMesh_2->CalculateMass();
+			if (weight < min_weight)
+				weight = min_weight;
 			//UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
 
 			float x_baseImpulse = 10000.0f; //FMath::RandRange(8000.0f, 12000.0f);

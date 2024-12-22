@@ -252,7 +252,7 @@ void ItemController::SpawnItemBoxes(int itemID, std::string itemName, EItemClass
 
     items.push_back(newItemData);
 
-    printf("Spawned Item ID: %d, itemName: %s\n", itemID, itemName.c_str());
+    //printf("Spawned Item ID: %d, itemName: %s\n", itemID, itemName.c_str());
 }
 
 void ItemController::SendItemData(int id)
@@ -396,7 +396,7 @@ void ItemController::SpawnInterItem(int carid, const std::string carname)
 
     cars.push_back(newCarData);
 
-    printf("Spawned InterItem ID: %d, itemName: %s\n", carid, carname.c_str());
+    //printf("Spawned InterItem ID: %d, itemName: %s\n", carid, carname.c_str());
 }
 
 void ItemController::SendCarData(int id)
