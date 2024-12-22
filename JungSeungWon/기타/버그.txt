@@ -591,6 +591,8 @@ LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal
 ***** - ProcessPacket 송수신 쓰레드에서 zombie 데이터 값 변경해주려고 좀비 수 만큼 루프(해당 좀비 검색)를 도는게 좀 많아서 이거 최적화
 => zombieDB를 벡터가 아닌 맵으로 바꾸기 (검색 최적화) -> 대신, 맵 크래쉬랑 에러 발생 위험성 높으니 조심하고
 
+- 깃 작업 할때는 언리얼 에디터 끄고 작업하기 (자꾸 깃이랑 커밋 동기화 문제 일으킴)
+
 
 
 
