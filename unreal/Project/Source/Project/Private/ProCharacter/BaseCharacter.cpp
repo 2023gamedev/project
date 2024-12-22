@@ -1729,6 +1729,8 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 			Send_OpenRoot(1);
 		}
 		else {
+			FText KText = FText::FromString(TEXT("여기에 쓰는 것이 아닌 것 같다."));
+			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/unlockfailed.unlockfailed")); // 에셋 경로
 			PlaySoundForPlayer(Sound);
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "Key NOT SAME!!!!");
@@ -1796,6 +1798,12 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 					UpdateKeySlot();
 					Send_OpenRoot(2);
 				}
+			}
+			else {
+				FText KText = FText::FromString(TEXT("여기에 쓰는 것이 아닌 것 같다."));
+				ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+				USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/unlockfailed.unlockfaile")); // 에셋 경로
+				PlaySoundForPlayer(Sound);
 			}
 		}
 	}
@@ -2804,6 +2812,13 @@ void ABaseCharacter::ProGameTimerEnd()
 		// 'quit' 명령을 실행하여 게임 종료
 		PlayerController->ConsoleCommand("quit");
 	}
+}
+
+void ABaseCharacter::CommentDestroyWeapon()
+{
+	// 시작시 Text
+	FText KText = FText::FromString(TEXT("무기가 깨졌다!"));
+	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 }
 
 uint32 ABaseCharacter::GetPlayerId() const

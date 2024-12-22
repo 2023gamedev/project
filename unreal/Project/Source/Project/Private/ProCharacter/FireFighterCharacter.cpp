@@ -68,21 +68,22 @@ void AFireFighterCharacter::NoSmokeIsDying()
 		//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDyingTimer ON -> My Client is a FireFighter (PlayerId: 99)"));
 
 		SetHP(GetHP() - 1);
-		if (GetHP() <= 0 && !IsDeadPlay()) {
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("NoSmokeIsDying -> PlayDead!")));
-			//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDying -> PlayDead!"));
-			SetDeadPlay(true);
+		if (GetHP() <= 0) {
+			if (!IsDeadPlay()) {
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("NoSmokeIsDying -> PlayDead!")));
+				//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDying -> PlayDead!"));
+				SetDeadPlay(true);
+				GetWorld()->GetTimerManager().ClearTimer(DyingHandle);
 
-			if (IsDeadPlay() && !IsDead()) {
-				PlayDead();
+				if (IsDeadPlay() && !IsDead()) {
+					PlayDead();
+				}
+			}
+			else if (IsDeadPlay()) {
+				GetWorld()->GetTimerManager().ClearTimer(DyingHandle);
 			}
 		}
-		else {
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("NoSmokeIsDyingTimer OFF -> Other Client is the FireFighter")));
-			//UE_LOG(LogTemp, Log, TEXT("NoSmokeIsDyingTimer OFF -> Other Client is the FireFighter"));
 
-			GetWorld()->GetTimerManager().ClearTimer(DyingHandle);
-		}
 	}
 }
 
