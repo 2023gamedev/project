@@ -2814,6 +2814,13 @@ void ABaseCharacter::ProGameTimerEnd()
 	}
 }
 
+void ABaseCharacter::CommentDestroyWeapon()
+{
+	// 시작시 Text
+	FText KText = FText::FromString(TEXT("무기가 깨졌다!"));
+	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+}
+
 uint32 ABaseCharacter::GetPlayerId() const
 {
 	return PlayerId;

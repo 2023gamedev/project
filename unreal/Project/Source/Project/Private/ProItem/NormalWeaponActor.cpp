@@ -190,6 +190,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/break.break")); // 에셋 경로
 
 			OwnerCharacter->PlaySoundForPlayer(Sound);
+			OwnerCharacter->CommentDestroyWeapon();
 		}
 
 	}
