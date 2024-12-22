@@ -46,6 +46,11 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), ZombieId);	// 이미 앞에서 검사해서 의미 없긴하지만
 		return;
 	}
+
+	// 좀비 공격 중일 때는 MoveTo 정지 
+	if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->AttackMontage) == true) {
+		return;
+	}
 	
 	std::tuple<float,float,float> target = OwnerZombie->NextPath[indx];
 	
@@ -220,6 +225,7 @@ void AZombieAIController::Tick(float DeltaTime)
 
 
 	Super::Tick(DeltaTime);
+
 
 	// 좀비 사망시 => 그대로 고개 멈춤
 	if (OwnerZombie->GetHP() <= 0) { return; }

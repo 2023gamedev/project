@@ -46,6 +46,11 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		return;
 	}
 
+	// 좀비 공격 중일 때는 MoveTo 정지 
+	if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->AttackMontage) == true) {
+		return;
+	}
+
 	std::tuple<float, float, float> target = OwnerZombie->NextPath[indx];
 
 	// 현재 목표 노드
