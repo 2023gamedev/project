@@ -1774,7 +1774,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 		
 		if (GameTimerUIWidget) {
 			if (CurrentKeyItem->KeyName == "RoofKey1") {
-				if (GameTimerUIWidget->RoofTopClose == false) {
+				if (GameTimerUIWidget->RoofTopClose == true) {
 					FText KText = FText::FromString(TEXT("이미 헬기는 떠났다."));
 					ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 				}
@@ -1788,7 +1788,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 
 			}
 			else if (CurrentKeyItem->KeyName == "RoofKey2") {
-				if (GameTimerUIWidget->RoofTopClose == false) {
+				if (GameTimerUIWidget->RoofTopClose == true) {
 					FText KText = FText::FromString(TEXT("이미 헬기는 떠났다."));
 					ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 				}
