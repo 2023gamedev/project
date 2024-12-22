@@ -225,26 +225,23 @@ void UChoiceCharacterUI::Init()
 
     const TMap<uint32, FString>& LobbyPlayers = LobbyPlayer->GetLobbyPlayers();
 
-    TArray<FString> PlayerNames;
-    LobbyPlayers.GenerateValueArray(PlayerNames);
+    if (First_Player && LobbyPlayers.Contains(1))
+    {
+        First_Player->SetText(FText::FromString(LobbyPlayers[1]));
+    }
+    if (Second_Player && LobbyPlayers.Contains(2))
+    {
+        Second_Player->SetText(FText::FromString(LobbyPlayers[2]));
+    }
+    if (Third_Player && LobbyPlayers.Contains(3))
+    {
+        Third_Player->SetText(FText::FromString(LobbyPlayers[3]));
+    }
+    if (Fourth_Player && LobbyPlayers.Contains(4))
+    {
+        Fourth_Player->SetText(FText::FromString(LobbyPlayers[4]));
+    }
 
-    // PlayerNames 배열의 순서대로 텍스트 위젯에 설정
-    if (PlayerNames.IsValidIndex(0) && First_Player)
-    {
-        First_Player->SetText(FText::FromString(PlayerNames[0]));
-    }
-    if (PlayerNames.IsValidIndex(1) && Second_Player)
-    {
-        Second_Player->SetText(FText::FromString(PlayerNames[1]));
-    }
-    if (PlayerNames.IsValidIndex(2) && Third_Player)
-    {
-        Third_Player->SetText(FText::FromString(PlayerNames[2]));
-    }
-    if (PlayerNames.IsValidIndex(3) && Fourth_Player)
-    {
-        Fourth_Player->SetText(FText::FromString(PlayerNames[3]));
-    }
 }
 
 
