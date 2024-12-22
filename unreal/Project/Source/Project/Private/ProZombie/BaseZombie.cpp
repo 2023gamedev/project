@@ -430,9 +430,10 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 
 			BloodFX.Add(NewBloodFX);
 		}
+
+		BeAttacked();
 	}
 
-	BeAttacked();
 
 	return Damage;
 }
