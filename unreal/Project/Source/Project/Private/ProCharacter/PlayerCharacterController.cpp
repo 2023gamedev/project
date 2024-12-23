@@ -84,7 +84,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	// 캐릭터 움직임 통신 작업
 	TimeSinceLastSend += DeltaTime; // 시간 누적
 
-	if (TimeSinceLastSend >= 0.1f) // 0.1초마다 실행
+	if (TimeSinceLastSend >= 0.02f) // 0.02초마다 실행
 	{
 		CheckAndSendMovement();
 		TimeSinceLastSend = 0.0f; // 초기화
