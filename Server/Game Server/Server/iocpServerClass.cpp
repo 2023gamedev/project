@@ -888,7 +888,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 			zPathList.SerializeToString(&serializedData);
 			
 			IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-			printf("send zombiedatalist\n");
+			//printf("send zombiedatalist\n");
 			
 		}
 
