@@ -71,10 +71,6 @@ void APlayerCharacterController::BeginPlay()
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
-// [좀비 절단 동기화 패킷] 좀비 절단시에 필요한 값들
-// - 좀비 아이디, 좀비 죽은 위치, 절단 평면 위 한 점, 절단 평면의 법선 벡터, 좀비 시체에 가할 impulse 방향벡터 (무기가 바라보는 방향)
-// - uint32	  ,	FVector(0.f,0.f,0.f),  FVector(0.f,0.f,0.f), FVector(0.f,0.f,0.f), FVector(0.f,0.f,0.f)
-
 
 void APlayerCharacterController::Tick(float DeltaTime)
 {
@@ -101,30 +97,53 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	{
 		if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 		{
-			//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
-			// 현재 GameMode 인스턴스를 얻기
-			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-			{
-				// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
-				MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
-					recvPlayerData.username, recvPlayerData.hp);
+			// 플레이어 큐가 너무 많이 쌓여서 전체적인 캐릭터 동기화에 딜레이가 생기는 걸 방지하기 위해
+			int threshold = 10;	// 10개 이상 쌓이면 이전 데이터 try_pop해서 비우기 
+			int loop = 0;	// 몇번 try_pop 할 횟수
 
-				// 현재 컨트롤러가 빙의한 Pawn 가져오기
-				APawn* ControlledPawn = GetPawn();
+			if (GameInstance->ClientSocketPtr->Q_player.unsafe_size() >= threshold) {
+				loop = threshold;
+			}
+			else {
+				loop = 1;	// 10개 이하면 아래 for문 한번만 실행되게(try_pop 한번만) 하려고
+			}
 
+			int pop_cnt = 0;
 
-				//UE_LOG(LogNet, Display, TEXT("Update Other Player12432543543535: PlayerId=%d"), recvPlayerData.PlayerId);
-				//UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%f"), recvPlayerData.hp);
-				//UE_LOG(LogNet, Display, TEXT("Update Other Player        : hp=%f"), recvPlayerData.hp);
+			for (pop_cnt = 0; pop_cnt < loop; pop_cnt++) {
 
-				// 빙의된 Pawn이 ACharacter라면 캐스팅
-				if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
+				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+
+				// 현재 GameMode 인스턴스를 얻기
+				if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 				{
-					if (ControlledCharacter) {
+					// GameMode 내의 함수 호출하여 다른 플레이어의 위치 업데이트
+					MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
+						recvPlayerData.username, recvPlayerData.hp);
 
-						ControlledCharacter->UpdateOtherPlayerUI(recvPlayerData.PlayerId, recvPlayerData.hp, recvPlayerData.charactertype, recvPlayerData.username);
+					// 현재 컨트롤러가 빙의한 Pawn 가져오기
+					APawn* ControlledPawn = GetPawn();
+
+					//UE_LOG(LogNet, Display, TEXT("Update Other Player12432543543535: PlayerId=%d"), recvPlayerData.PlayerId);
+					//UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%f"), recvPlayerData.hp);
+					//UE_LOG(LogNet, Display, TEXT("Update Other Player        : hp=%f"), recvPlayerData.hp);
+
+					// 빙의된 Pawn이 ACharacter라면 캐스팅
+					if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
+					{
+						if (ControlledCharacter) {
+
+							ControlledCharacter->UpdateOtherPlayerUI(recvPlayerData.PlayerId, recvPlayerData.hp, recvPlayerData.charactertype, recvPlayerData.username);
+						}
 					}
 				}
+
+				if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData) == false)
+					break;
+			}
+			if (loop == threshold) {
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Q_player cleared (try_pop count): %d"), pop_cnt));
+				UE_LOG(LogTemp, Log, TEXT("Q_player cleared (try_pop count): %d"), pop_cnt);
 			}
 		}
 

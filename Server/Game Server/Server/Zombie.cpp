@@ -289,9 +289,10 @@ void Zombie::SetTargetLocation(TARGET t)
 				//cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 찾기 시도 - #" << try_cnt << endl;
 
 				if (try_cnt >= 5) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 					cout << "좀비 #" << ZombieData.zombieID << "랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...)" << endl;
-#endif
+//#endif
+					break;
 				}
 			}
 		}

@@ -83,7 +83,7 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     SpawnItemBoxes(59, "CarKey3", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(60, "CarKey4", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
 
-    cout << endl;
+    //cout << endl;
 
     SpawnInterItem(1, "CarActor");
     SpawnInterItem(2, "CarActor");
@@ -94,7 +94,7 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     SpawnInterItem(7, "CarActor");
     SpawnInterItem(8, "RoofTopDoorActor");
 
-    cout << endl;
+    //cout << endl;
 
     
 }
