@@ -418,7 +418,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         for (const auto& player : g_players) {
             if (player.first != id && player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                printf("%d 한테 키 보냈음\n", player.first);
+                printf("%d 한테 아이템 삭제 보냈음\n", player.first);
             }
         }
         return true;
@@ -441,7 +441,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         for (const auto& player : g_players) {
             if (player.second->isInGame) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                printf("%d 한테 키 보냈음\n", player.first);
+                printf("%d 한테 키 획득 보냈음\n", player.first);
             }
         }
 
@@ -501,7 +501,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 21:
     {
-        printf("\n[ No. %3u ] recv send complet packet !!\n", id);
+        printf("\n[ No. %3u ] recv send complete packet !!\n", id);
         Protocol::send_complete Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
 
