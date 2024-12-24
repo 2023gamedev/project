@@ -256,12 +256,13 @@ struct JoinPlayer
 {
 	std::string username;
 	uint32 playerid;
+	uint32 roomid;
 
 
-	JoinPlayer() : username(""), playerid(0) {}
+	JoinPlayer() : username(""), playerid(0), roomid(0) {}
 
-	JoinPlayer(std::string Inusername, uint32 Inplayerid)
-		:username(Inusername), playerid(Inplayerid) {}
+	JoinPlayer(std::string Inusername, uint32 Inplayerid, uint32 Inroomid)
+		:username(Inusername), playerid(Inplayerid), roomid(Inroomid) {}
 };
 
 struct LeavePlayer
