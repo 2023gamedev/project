@@ -29,7 +29,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float m_fMaxSightDistance = 150.f;
+	float m_fMaxSightDistance = 100.f;	// 아이템 줍기, 키 사용 가능거리 
 
 	UPROPERTY(EditAnywhere)
 	float m_fRadius = 50.f;
