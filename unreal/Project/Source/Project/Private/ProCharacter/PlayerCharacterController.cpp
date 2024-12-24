@@ -80,7 +80,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	// 캐릭터 움직임 통신 작업
 	TimeSinceLastSend += DeltaTime; // 시간 누적
 
-	if (TimeSinceLastSend >= 0.02f) // 0.02초마다 실행
+	if (TimeSinceLastSend >= 0.02f) // 0.02초마다 전송 실행 (약 60분에 1초 => 최소 60 프레임이 방어되면 캐릭터 움직임 딜레이되는 일 없음)
 	{
 		CheckAndSendMovement();
 		TimeSinceLastSend = 0.0f; // 초기화
@@ -98,14 +98,14 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 		{
 			// 플레이어 큐가 너무 많이 쌓여서 전체적인 캐릭터 동기화에 딜레이가 생기는 걸 방지하기 위해
-			int threshold = 10;	// 10개 이상 쌓이면 이전 데이터 try_pop해서 비우기 
+			int threshold = 2;	// 2개 이상 쌓이면 이전 데이터 try_pop해서 비우기 
 			int loop = 0;	// 몇번 try_pop 할 횟수
 
 			if (GameInstance->ClientSocketPtr->Q_player.unsafe_size() >= threshold) {
-				loop = threshold;
+				loop = GameInstance->ClientSocketPtr->Q_player.unsafe_size();	// 쌓여있는거 다 비우기
 			}
 			else {
-				loop = 1;	// 10개 이하면 아래 for문 한번만 실행되게(try_pop 한번만) 하려고
+				loop = 1;	// threshold 이하면 아래 for문 한번만 실행되게(try_pop 한번만) 하려고
 			}
 
 			int pop_cnt = 0;
@@ -141,7 +141,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData) == false)
 					break;
 			}
-			if (loop == threshold) {
+			if (loop != 1) {
 				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Q_player cleared (try_pop count): %d"), pop_cnt));
 				UE_LOG(LogTemp, Log, TEXT("Q_player cleared (try_pop count): %d"), pop_cnt);
 			}
@@ -186,15 +186,38 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 		if (GameInstance->ClientSocketPtr->Q_run.try_pop(recvRun))
 		{
-			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
-			{
-				if (recvRun.b_run == 1) {
-					MyGameMode->UpdatePlayerRun(recvRun.PlayerId, false);
+			// 러닝 큐가 너무 많이 쌓여서 걷기/뛰기 애니메이션 동기화에 딜레이가 생기는 걸 방지하기 위해
+			int threshold = 2;	// 2개 이상 쌓이면 이전 데이터 try_pop해서 비우기 
+			int loop = 0;	// 몇번 try_pop 할 횟수
+
+			if (GameInstance->ClientSocketPtr->Q_run.unsafe_size() >= threshold) {
+				loop = GameInstance->ClientSocketPtr->Q_run.unsafe_size();	// 쌓여있는거 다 비우기
+			}
+			else {
+				loop = 1;	// threshold 이하면 아래 for문 한번만 실행되게(try_pop 한번만) 하려고
+			}
+
+			int pop_cnt = 0;
+
+			for (pop_cnt = 0; pop_cnt < loop; pop_cnt++) {
+
+				if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+				{
+					if (recvRun.b_run == 1) {
+						MyGameMode->UpdatePlayerRun(recvRun.PlayerId, false);
+					}
+					else if (recvRun.b_run == 2) {
+						MyGameMode->UpdatePlayerRun(recvRun.PlayerId, true);
+					}
+					//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
 				}
-				else if(recvRun.b_run == 2) {
-					MyGameMode->UpdatePlayerRun(recvRun.PlayerId, true);
-				}
-				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+
+				if (GameInstance->ClientSocketPtr->Q_run.try_pop(recvRun) == false)
+					break;
+			}
+			if (loop != 1) {
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Q_run cleared (try_pop count): %d"), pop_cnt));
+				UE_LOG(LogTemp, Log, TEXT("Q_run cleared (try_pop count): %d"), pop_cnt);
 			}
 		}
 
