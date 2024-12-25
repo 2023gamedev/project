@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Task.h"
+#include "iocpServerClass.h"
 
 using std::vector;
 using std::unique_ptr;

@@ -11,6 +11,7 @@
 #include "CanAttack.h"
 #include "CanNotAttack.h"
 #include "CanSeePlayer.h"
+#include "Selector.h"
 
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
@@ -540,6 +541,10 @@ void IOCP_CORE::Zombie_BT_Initialize()
 
 	//======[Task] 메모리 할당======
 
+	//<Selector>들
+	sel_detect = new Selector;
+	sel_canseeplayer = new Selector;
+
 	//<Selector Detact> 가 가지는 Task들
 
 	//[CanSeePlayer-Task]
@@ -571,16 +576,16 @@ void IOCP_CORE::Zombie_BT_Initialize()
 
 	//<Selector-Detect> 할당
 	//<Selector-Detect>에 해당 Task들 '순서대로' 삽입
-	sel_detect.AddChild(t_canseeplayer);
-	sel_detect.AddChild(t_hasshouting);
-	sel_detect.AddChild(t_hasfootsound);
-	sel_detect.AddChild(t_hasinvestigated);
-	sel_detect.AddChild(t_nothaslastknownplayerlocation);
+	sel_detect->AddChild(t_canseeplayer);
+	sel_detect->AddChild(t_hasshouting);
+	sel_detect->AddChild(t_hasfootsound);
+	sel_detect->AddChild(t_hasinvestigated);
+	sel_detect->AddChild(t_nothaslastknownplayerlocation);
 
 	//<Selector-CanSeePlayer> 할당
 	//<Selector-CanSeePlayer>에 해당 Task들 '순서대로' 삽입
-	sel_canseeplayer.AddChild(t_canattack);
-	sel_canseeplayer.AddChild(t_cannotattack);
+	sel_canseeplayer->AddChild(t_canattack);
+	sel_canseeplayer->AddChild(t_cannotattack);
 
 	//{Sequence-CanAttack} 할당
 	//{Sequence-CanAttack}에 해당 Task들 '순서대로' 삽입
@@ -725,17 +730,23 @@ void IOCP_CORE::Zombie_BT_Thread()
 				break;
 
 #ifdef	ENABLE_BT_LOG
-			cout << endl;
-			cout << "//========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
-			cout << endl;
+			if (zom->printLog == true) {
+				cout << endl;
+				cout << "//========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
+				cout << endl;
+			}
 #endif
 
 			// 좀비가 사망시 BT 중지
 			if (zom->zombieHP <= 0.f) {
 #ifdef	ENABLE_BT_LOG
-				cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 사망함." << endl << endl;
-				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
-				cout << endl;
+				if (zom->printLog == true) {
+					cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 사망함." << endl << endl;
+					cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
+					cout << endl;
+
+					zom->printLog = false;
+				}
 #endif
 				continue;
 			}
@@ -765,11 +776,24 @@ void IOCP_CORE::Zombie_BT_Thread()
 			if (same_floor == false) {
 				//cout << endl;
 #ifdef	ENABLE_BT_LOG
-				cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 플레이어들이 없는 층에 존재. -> BT 실행 잠시 중지" << endl << endl;
-				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
-				cout << endl;
+				if (zom->printLog == true) {
+					cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 플레이어들이 없는 층에 존재. -> BT 실행 잠시 중지" << endl << endl;
+					cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
+					cout << endl;
+
+					zom->printLog = false;
+				}
 #endif
 				continue;
+			}
+			else {
+				if (zom->printLog == false) {
+					cout << endl;
+					cout << "//========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
+					cout << endl;
+
+					zom->printLog = true;
+				}
 			}
 
 
@@ -781,13 +805,13 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 
 			//<Selector-Detect> 실행
-			result = sel_detect.Sel_Detect(*zom);
+			result = sel_detect->Sel_Detect(*zom);
 
 			//<Selector-Detect> 결과 값에 따라 다음 Task들 실행
 			if (result == "CanSeePlayer-Succeed") {
 
 				//<Selector-CanSeePlayer> 실행
-				result = sel_canseeplayer.Sel_CanSeePlayer(*zom);
+				result = sel_canseeplayer->Sel_CanSeePlayer(*zom);
 
 				//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 실행
 				if (result == "CanAttack-Succeed") {
@@ -847,11 +871,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 #endif
 		}
 
-		for (const auto& player : playerDB) {
+		for (const auto& player : playerDB_BT) {
 			Protocol::ZombiePathList zPathList;
 			zPathList.set_packet_type(10);
 
-			for (const auto& zom : zombieDB) {
+			for (const auto& zom : zombieDB_BT) {
 				if (player.second.floor == zom->z_floor) {
 
 					if (zom->path.empty() || zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
@@ -898,6 +922,9 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 
 	//========할당한 메모리 해제========
+
+	delete(sel_detect);
+	delete(sel_canseeplayer);
 
 	delete(t_canseeplayer);
 	delete(t_cannotattack);

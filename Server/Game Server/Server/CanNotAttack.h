@@ -30,13 +30,10 @@ public:
                 continue;
             }
 
-            //zom.SetDistance(player.first, 1, 2);         //DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 갱신 
-                                                        //(바로 앞에 작업인 CanAttack Task에서 이미 해당 작업을 진행하기에 또 할 필요X)
-
             if (zom.DistanceTo_PlayerInsight.find(player.first) != zom.DistanceTo_PlayerInsight.end()) {
                 if (zom.DistanceTo_PlayerInsight.at(player.first) > zom.CanAttackDistance && zom.DistanceTo_PlayerInsight.at(player.first) > 0 || zom.DistanceTo_PlayerInsight.at(player.first) <= 0) 
                 {   }
-                else {
+                else {  // 사실상 여기에 걸리면 안됨!
                     result = false;
                 }
             }
@@ -48,17 +45,17 @@ public:
 
             return "CanNotAttack-Succeed";
         }
-        else {
+        else {  // 사실상 여기에 걸리면 안됨!
             if (zom.PlayerInSight == false) {
-                //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
                 cout << "Zombie #" << zom.ZombieData.zombieID;
                 cout << " PlayerInSight Data Race Occured ERROR!!!" << endl;
             }
             else {
-                //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
                 cout << "Zombie #" << zom.ZombieData.zombieID;
                 cout << " got ERROR!!! And I dont know whhhhhyyyyy!!!" << endl;
             }
+
+            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
 
             return "Fail";
         }

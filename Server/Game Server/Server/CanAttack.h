@@ -22,8 +22,6 @@ public:
                 continue;
             }
 
-            zom.SetDistance(player.first, 1, 2);       // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 갱신 
-
             if (zom.DistanceTo_PlayerInsight.find(player.first) != zom.DistanceTo_PlayerInsight.end()) {
                 //cout << "플레이어\'#" << player.first << "\' 좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시야에 있음!" << endl;
 

@@ -79,7 +79,7 @@ void ZombiePathfinder::FindPath(vector<tuple<float, float, float>>& t)
         }
     }
     else {
-        //cout << "[Error] No path found.\n";
+        cout << "[Error] No path found.\n";
     }
 }
 

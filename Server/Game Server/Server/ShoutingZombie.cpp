@@ -7,11 +7,8 @@
 ShoutingZombie::ShoutingZombie()
 	: Zombie()
 {
-	//SetHP(0);
-
-	//SetSpeed(0);
-
 	bShouted = false;
+
 }
 
 ShoutingZombie::ShoutingZombie(Zombie_Data z_d)
@@ -22,6 +19,7 @@ ShoutingZombie::ShoutingZombie(Zombie_Data z_d)
 	SetSpeed(ShoutingZombieSpeed);
 	
 	bShouted = false;
+
 }
 
 void ShoutingZombie::Shout(vector<Zombie*>& zombies)

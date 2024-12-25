@@ -114,7 +114,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     float DeltaX = std::abs(player.second.x - Escape_Location.x);
                     float DeltaY = std::abs(player.second.y - Escape_Location.y);
 
-                    // 범위를 벗어나는지 확인
+                    // 탈출존 범위를 벗어나는지 확인
                     if (DeltaX >= 150.0f || DeltaY >= 150.0f || player.second.floor != Escape_Location.floor) {
                         bAllPlayersInRange = false; // 한 명이라도 범위를 벗어나면 false
                         break;
@@ -296,9 +296,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     if (z->IsAttacking)
                         break;
 
-                    z->PlayerInSight = true;
+                    //z->PlayerInSight = true;
                     z->KnewPlayerLocation = true;
-                    z->SetDistance(Packet.playerid(), 1, 1);   //DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 추가하기
+                    z->SetDistance(Packet.playerid(), 1);   // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 데이터 새로 추가하기 (생성)
 
 #ifdef ENABLE_BT_LOG
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
@@ -321,8 +321,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     if (z->IsAttacking)
                         break;
 
-                    z->PlayerInSight = false;
-                    z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     //그냥 이렇게 마이너스값 넣어 놓고 이건 없는 데이터로 치자 (마이너스값은 절대 설정될 수 없으니)
+                    //z->PlayerInSight = false;
+                    z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     // -1 => 이제 탐지 거리를 벗어남 표시
 
 #ifdef ENABLE_BT_LOG
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!: " << endl;

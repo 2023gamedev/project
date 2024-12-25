@@ -128,6 +128,8 @@ public:
 
     float zombieHP;
 
+    bool printLog = true;
+
 
     Zombie();
 
@@ -138,13 +140,15 @@ public:
 
     void DetermineFloor(float startZ);
 
-    void SetDistance(int playerid, int distanceType, int setType);    // distanceType = 1: Detect / 2: FootSound, setTpye = 1: Insert / 2: Update
+    void SetDistance(int playerid, int distanceType);    // distanceType = 1: Detect / 2: FootSound
 
     void SetTargetLocation(TARGET t);
 
     void Attack();
 
-    bool FootSoundCheck();
+    bool PlayerInSight_Update_Check();
+
+    bool FootSound_Update_Check();
 
     void SendPath();
 

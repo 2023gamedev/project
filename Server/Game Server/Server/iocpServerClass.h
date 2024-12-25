@@ -12,8 +12,7 @@
 
 
 // BT
-#include "Task.h"
-#include "Selector.h"
+//#include "Selector.h"
 #include "Sequence.h"
 
 //#include "CanSeePlayer.h"
@@ -30,15 +29,17 @@
 //#define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그)
 //#undef ENABLE_BT_LOG	// 비활성화
 
+
 class ZombieController;
 class Zombie;
 class ZombiePathFinder;
 class ItemController;
 
-class TMoveTo;	// 전방 선언 -> static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해 (순환 포함 문제를 피하기 위해)
+class TMoveTo;	// 전방 선언 -> static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해 (순환 포함 문제를 피하기 위해)  [+] 해당 클래스 변수 여기서 사용하려면 포인터로 선언해서 사용
 class TCanAttack;
 class TCanNotAttack;
 class TCanSeePlayer;
+class Selector;
 
 
 using OVLP_EX = struct Overlap_ex {
@@ -158,9 +159,9 @@ public:
 	//<Selector> 선언 
 
 	//<Selector-Detect> (사실상 최상위 노드)
-	Selector sel_detect;
+	Selector* sel_detect;
 	//<Selector-CanSeePlayer>  
-	Selector sel_canseeplayer;
+	Selector* sel_canseeplayer;
 
 	//{Sequence} 선언
 
