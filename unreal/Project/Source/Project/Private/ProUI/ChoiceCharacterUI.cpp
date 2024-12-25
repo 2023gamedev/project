@@ -223,23 +223,28 @@ void UChoiceCharacterUI::Init()
         //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ReadyButton Init End");
     }
 
-    const TMap<uint32, FString>& LobbyPlayers = LobbyPlayer->GetLobbyPlayers();
+    const TMap<uint32, TMap<uint32, FString>>& LobbyPlayers = LobbyPlayer->GetLobbyPlayers();
+    uint32 CurrentRoomId = GameInstance->ClientSocketPtr->MyRoomId;
+    const TMap<uint32, FString>* CurrentRoomPlayers = LobbyPlayers.Find(CurrentRoomId);
 
-    if (First_Player && LobbyPlayers.Contains(1))
+    if (CurrentRoomPlayers)
     {
-        First_Player->SetText(FText::FromString(LobbyPlayers[1]));
-    }
-    if (Second_Player && LobbyPlayers.Contains(2))
-    {
-        Second_Player->SetText(FText::FromString(LobbyPlayers[2]));
-    }
-    if (Third_Player && LobbyPlayers.Contains(3))
-    {
-        Third_Player->SetText(FText::FromString(LobbyPlayers[3]));
-    }
-    if (Fourth_Player && LobbyPlayers.Contains(4))
-    {
-        Fourth_Player->SetText(FText::FromString(LobbyPlayers[4]));
+        if (First_Player && CurrentRoomPlayers->Contains(1))
+        {
+            First_Player->SetText(FText::FromString((*CurrentRoomPlayers)[1]));
+        }
+        if (Second_Player && CurrentRoomPlayers->Contains(2))
+        {
+            Second_Player->SetText(FText::FromString((*CurrentRoomPlayers)[2]));
+        }
+        if (Third_Player && CurrentRoomPlayers->Contains(3))
+        {
+            Third_Player->SetText(FText::FromString((*CurrentRoomPlayers)[3]));
+        }
+        if (Fourth_Player && CurrentRoomPlayers->Contains(4))
+        {
+            Fourth_Player->SetText(FText::FromString((*CurrentRoomPlayers)[4]));
+        }
     }
 
 }

@@ -32,11 +32,9 @@ public:
 	// Sets default values for this pawn's properties
 	ALobbyPlayer();
 
-	TMap <uint32, FString> LobbyPlayers;
-
 	TMap<uint32, TMap<uint32, FString>> RoomLobbyPlayers;
 
-	const TMap<uint32, FString>& GetLobbyPlayers() const { return LobbyPlayers; }
+	const TMap<uint32, TMap<uint32, FString>>& GetLobbyPlayers() const { return RoomLobbyPlayers; }
 
 protected:
 	// Called when the game starts or when spawned

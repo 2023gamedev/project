@@ -230,6 +230,10 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 					Q_jplayer.push(JoinPlayer(JP_Packet.name(), JP_Packet.playerid(), JP_Packet.roomid()));
 				}
 
+				if (MyPlayerId == JP_Packet.playerid()) {
+					MyRoomId = JP_Packet.roomid();
+				}
+
 				UE_LOG(LogNet, Display, TEXT("Received Join Player:"));
 
 				break;
