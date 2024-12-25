@@ -32,7 +32,7 @@ public:
 	void SendChat(const FString& FormattedMessage);
 	int32 FindEmptySlot();
 	void UpdatePlayerReadyState(uint32 playerid, bool Ready);
-	void AddPlayerToList(const FString& PlayerName);
+	void AddPlayerToList(const uint32 roomid, const FString& PlayerName);
 	void RemovePlayerFromList(const FString& PlayerName);
 	void AddChatMessage(const FString& Message);
 	void AllReady();

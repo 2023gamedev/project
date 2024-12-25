@@ -112,7 +112,7 @@ void UWaitingRoomUI::OnSendButtonClicked()
     ChatText->SetText(FText::GetEmpty());
 }
 
-void UWaitingRoomUI::AddPlayerToList(const FString& PlayerName)
+void UWaitingRoomUI::AddPlayerToList(const uint32 roomid, const FString& PlayerName)
 {
     int32 SlotIndex = FindEmptySlot();
     if (SlotIndex == -1 || SlotIndex >= PlayerSlots.Num())
