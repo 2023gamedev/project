@@ -227,7 +227,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::SC_JoinPlayer JP_Packet;
 
 				if (JP_Packet.ParseFromArray(buffer.data(), buffer.size())) {
-					Q_jplayer.push(JoinPlayer(JP_Packet.name(), JP_Packet.playerid()));
+					Q_jplayer.push(JoinPlayer(JP_Packet.name(), JP_Packet.playerid(), JP_Packet.roomid()));
 				}
 
 				UE_LOG(LogNet, Display, TEXT("Received Join Player:"));
