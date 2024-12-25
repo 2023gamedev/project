@@ -161,6 +161,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
                     ExistingPlayerPacket.set_name(player.second->username); // 기존 플레이어 정보
                     ExistingPlayerPacket.set_playerid(player.first);
+                    ExistingPlayerPacket.set_roomid(room_id);
                     ExistingPlayerPacket.set_type(10);
 
                     string existingSerializedData;
