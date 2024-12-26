@@ -515,10 +515,10 @@ void Zombie::MoveTo(float deltasecond)
 #endif
 
 	if (PathX >= 2366.f) {	// 계단쪽 넘어로 이동하려하면
-//#ifdef	ENABLE_BT_LOG
+#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 계단 넘어로 이동 방지로 인해 정지" << endl;
 		//cout << endl;
-//#endif
+#endif
 		ReachFinalDestination();
 		ZombiePathIndex = 1;
 		return;
