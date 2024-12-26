@@ -699,6 +699,10 @@ void IOCP_CORE::Zombie_BT_Thread()
 			if (g_players.size() == 0) {
 				cout << "연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
 				cout << endl;
+
+				std::cout << "Press Enter to exit...";
+				std::cin.get(); // 사용자가 Enter를 입력할 때까지 대기 (콘솔 애플리케이션이 실행 후 바로 종료되면서 콘솔 창이 닫히는거 방지)
+
 				result = "NO PLAYER";
 				break;			// 완전히 BT 쓰레드 종료시킴
 			}
