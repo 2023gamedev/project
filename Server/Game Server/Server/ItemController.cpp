@@ -105,7 +105,7 @@ ItemController::~ItemController()
 
 void ItemController::ItemRandomLocationSetting()
 {
-    // 0~19은 B1 20~39는 F1 40~59는 F2
+    // 0~19은 B1, 20~39는 F1, 40~59는 F2
     // B1
     ItemRandomLocationStruct[0].sLocation = FVector(2330.f, 3200.f, 975.0626f);
     ItemRandomLocationStruct[1].sLocation = FVector(1880.f, 3870.f, 975.0626f);

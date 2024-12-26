@@ -486,21 +486,6 @@ void IOCP_CORE::Timer_Thread()
 
 			// deltaTime을 누적하여 GameTime에 더함
 			GameTime += deltaTime.count();  // 초 단위
-			
-			//for (auto& zom : zombieDB) {
-			//	if (!(zom->path.empty())) {
-					//if (zom->ZombiePathIndex >= zom->path.size()) {
-					//	 // cout << "Zombie has reached the final destination." << endl;
-					//	continue; // 경로 끝에 도달
-					//}
-					//zom->MoveTo(deltaTime.count());
-			//	}
-			//}
-
-			// GameTime을 문자열로 변환
-			//std::string gameTimeStr = std::to_string(GameTime);
-
-
 
 			std::chrono::duration<float> sendInterval = currentTime - lastSendTime;
 			if (sendInterval.count() >= 1.0f) {
@@ -699,13 +684,14 @@ void IOCP_CORE::Zombie_BT_Thread()
 			result = "NO PLAYER";
 		}
 		else {
+#ifdef	ENABLE_BT_LOG
 			//for (auto player : playerDB_BT) {
 			//	float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
 			//	cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
 			//	//cout << endl;
 			//}
 			//cout << endl;
-
+#endif
 			result = "HAS PLAYER";
 
 
@@ -713,8 +699,8 @@ void IOCP_CORE::Zombie_BT_Thread()
 			if (g_players.size() == 0) {
 				cout << "연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
 				cout << endl;
-				break;			// 완전히 BT 쓰레드 종료시킴
 				result = "NO PLAYER";
+				break;			// 완전히 BT 쓰레드 종료시킴
 			}
 			else {
 				result = "HAS PLAYER";
@@ -773,8 +759,9 @@ void IOCP_CORE::Zombie_BT_Thread()
 					break;
 				}
 			}
+			//cout << endl;
+
 			if (same_floor == false) {
-				//cout << endl;
 #ifdef	ENABLE_BT_LOG
 				if (zom->printLog == true) {
 					cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 플레이어들이 없는 층에 존재. -> BT 실행 잠시 중지" << endl << endl;
@@ -859,11 +846,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 				cout << "<Selector-Detect> EEEERRRROOOOOORRRR - ZombieID #" << zom->ZombieData.zombieID << endl;
 			}
 
-
+#ifdef	ENABLE_BT_LOG
 			//z_x = zom->ZombieData.x;					z_y = zom->ZombieData.y;					z_z = zom->ZombieData.z;
 			//cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 새로운 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 			//cout << endl;
-
+#endif
 
 #ifdef	ENABLE_BT_LOG
 			cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;

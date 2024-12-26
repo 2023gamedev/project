@@ -12,18 +12,18 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
 
     //// 지하 1층 
     SpawnZombies(1, 0, Vector3(1800.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
-       SpawnZombies(2, 0, Vector3(1000.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
-      SpawnZombies(3, 0, Vector3(600.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
+        SpawnZombies(2, 0, Vector3(1000.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
+        SpawnZombies(3, 0, Vector3(600.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
     SpawnZombies(4, 0, Vector3(2100.f, 2400.f, 1050.275f), Rotator(0.f, 0.f, 0.f), 1, -800.f);
-      SpawnZombies(5, 0, Vector3(1200.f, 2710.f, 1050.275f), Rotator(0.f, 0.f, 0.f), 1, -700.f);
+        SpawnZombies(5, 0, Vector3(1200.f, 2710.f, 1050.275f), Rotator(0.f, 0.f, 0.f), 1, -700.f);
     SpawnZombies(6, 0, Vector3(400.f, 3800.f, 1050.275f), Rotator(0.f, 0.f, 0.f), 1, 1200.f);
     SpawnZombies(7, 0, Vector3(1320.f, 3100.f, 1040.275f), Rotator(0.f, -90.f, 0.f), 0, 0.f);
-      SpawnZombies(8, 0, Vector3(1400.f, 2800.f, 1040.275f), Rotator(0.f, 30.f, 0.f), 0, 0.f);
+        SpawnZombies(8, 0, Vector3(1400.f, 2800.f, 1040.275f), Rotator(0.f, 30.f, 0.f), 0, 0.f);
     SpawnZombies(9, 0, Vector3(1000.f, 3320.f, 1040.275f), Rotator(0.f, 10.f, 0.f), 0, 0.f);
     SpawnZombies(10, 0, Vector3(2200.f, 3100.f, 1040.275f), Rotator(0.f, 90.f, 0.f), 0, 0.f);
 
     //// 지상 1층
-       SpawnZombies(11, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
+        SpawnZombies(11, 1, Vector3(600.f, 600.f, 1989.212f), Rotator(0.f, 180.f, 0.f), 0, 0.f);
     //SpawnZombies(12, 1, Vector3(1000.f, 2600.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
 
         SpawnZombies(13, 0, Vector3(220.f, 1200.f, 1989.212f), Rotator(0.f, 0.f, 0.f), 0, 0.f);
@@ -81,9 +81,6 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     new_zombie_data.zombietype = zombieType;
     new_zombie_data.patroltype = patrolType;
     new_zombie_data.patrolrange = patrolRange;
-
-    //좀비 초기 위치
-    //vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{position.X, position.Y, position.Z}} };
 
     //좀비 인스턴스 생성
     Zombie* new_zombie;

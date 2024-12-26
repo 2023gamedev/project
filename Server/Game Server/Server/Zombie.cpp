@@ -114,6 +114,8 @@ Zombie::~Zombie()
 	// -> 그래서 여기서 만약 new 할당된 메모리 delete 하려하면 할당된 메모리도 없는데 지울려 해서 에러 (지금은 다 없애서 없긴하지만... 미리 소멸자가 여러번 불리는 건 마찬가지)
 	// -> 이유는 모르겠음 그냥
 	// + 혹시 전방 선언해서?? / 복사 생성되서?? / 암시적 삭제??
+
+	cout << "++++++++++++++++++++++ ~Zombie() 호출!!! ++++++++++++++++++++++" << endl;	// 이거 전혀 안 불리는데...
 }
 
 void Zombie::DetermineFloor(float startZ)
@@ -175,17 +177,14 @@ void Zombie::SetDistance(int playerid, int distanceType)
 	}
 	else if (setMap->find(playerid) != setMap->end()) {		// map에 이미 playerid가 이미 있으면 -> 수정, 갱신
 		// PlayerInsight 업데이트
-		if (distanceType == 1 /*&& setMap->at(playerid) != -1.0f*/) {	// 하지만 해당 값이 -1 (관측되지 않은 상태) 이면 수정/갱신 X -> 해당 조건식 검사할 필요X (데이터레이스는 이미 방지했고 수정이 필요한 놈만 해당 함수 부를 꺼니까)
-			setMap->at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 예외처리 꼭! 필요! (DistanceTo_PlayerInsight.find(playerid) == DistanceTo_PlayerInsight.end() -> 이거와 같이)
+		if (distanceType == 1) {
+			setMap->at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 위에서 미리 예외처리 꼭! 필요!
 			//(*setMap)[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
 												// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 
 		}
 		// FootSound 업데이트
 		else if (distanceType == 2) {
-			//if (playerDB_BT[playerid].IsRunning == true) -> 굳이 검사해줄 필요 없음 (마찬가지로 업데이트가 필요한 놈만 부르니까)
 			setMap->at(playerid) = dist;
-			//else
-			//	setMap->at(playerid) = -1.0f;	// FootSound_Update_Check에서 작업 처리함
 		}
 	}
 
@@ -660,65 +659,61 @@ void Zombie::UpdatePath(vector<tuple<float, float, float>> newPatrol_path)
 
 void Zombie::ReachFinalDestination()
 {
-	//UpdatePath();
-	
-	// 혹시 몰라서 한번 더 체크
-	//if (ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
 #ifdef	ENABLE_BT_LOG
-		cout << "좀비 '#" << ZombieData.zombieID << "' 타겟 좌표[최종 목표 지점] ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
+	cout << "좀비 '#" << ZombieData.zombieID << "' 타겟 좌표[최종 목표 지점] ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " ) 에 도착!!!" << endl;
 #endif
 
 
-		// BT 플래그 값 전체 초기화
-		HeardShouting = false;
-		HeardFootSound = false;
-		KnewPlayerLocation = false;
-		RandPatrolSet = false;
+	// BT 플래그 값 전체 초기화
+	HeardShouting = false;
+	HeardFootSound = false;
+	KnewPlayerLocation = false;
+	RandPatrolSet = false;
 
 
-		//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
-		switch (targetType) {
-		case TARGET::PLAYER:
-			// 사실상 실행될 일 없음
-			// 딱히 뭐 할 것도 없고;;
+	//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
+	switch (targetType) {
+	case TARGET::PLAYER:
+		// 사실상 실행될 일 없음
+		// 딱히 뭐 할 것도 없고;;
 
 #ifdef	ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '플레이어'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '플레이어'" << endl;
 #endif
-			break;
-		case TARGET::SHOUTING:
-			//HeardShouting = false;
+		break;
+	case TARGET::SHOUTING:
+		//HeardShouting = false;
 #ifdef	ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '샤우팅'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '샤우팅'" << endl;
 #endif
-			break;
-		case TARGET::FOOTSOUND:
-			//HeardFootSound = false;
+		break;
+	case TARGET::FOOTSOUND:
+		//HeardFootSound = false;
 #ifdef	ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '발소리'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '발소리'" << endl;
 #endif
-			break;
-		case TARGET::INVESTIGATED:
-			//KnewPlayerLocation = false;
+		break;
+	case TARGET::INVESTIGATED:
+		//KnewPlayerLocation = false;
 #ifdef	ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '이전 발견 위치'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '이전 발견 위치'" << endl;
 #endif
-			break;
-		case TARGET::PATROL:
-			//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
-			//RandPatrolSet = false;
+		break;
+	case TARGET::PATROL:
+		//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
+		//RandPatrolSet = false;
 #ifdef	ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '랜덤 패트롤'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '랜덤 패트롤'" << endl;
 #endif
-			break;
-		}
+		break;
+	}
 
 #ifdef	ENABLE_BT_LOG
-		cout << endl;
+	cout << endl;
 #endif
-	//}
 }
 
+// 이제 더이상 사용 X
 void Zombie::SendPath()
 {
 
@@ -959,7 +954,6 @@ void Zombie::Wait()
 
 			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
 			MoveTo(IOCP_CORE::BT_deltaTime.count());
-			//SendPath();		
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -990,7 +984,6 @@ void Zombie::Wait()
 
 			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
 			MoveTo(IOCP_CORE::BT_deltaTime.count());
-			//SendPath();
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1018,7 +1011,6 @@ void Zombie::Wait()
 
 			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
 			MoveTo(IOCP_CORE::BT_deltaTime.count());
-			//SendPath();
 		}
 		else {
 #ifdef ENABLE_BT_LOG

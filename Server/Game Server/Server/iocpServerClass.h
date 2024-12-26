@@ -26,7 +26,7 @@
 //#include "MoveTo.h"
 
 
-#define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그)
+#define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그) ==> "끊김 현상 심하니 필요할 때만 키도록;;"
 #undef ENABLE_BT_LOG	// 이거 주석 풀면 -> 비활성화
 
 
