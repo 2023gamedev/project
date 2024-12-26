@@ -514,6 +514,16 @@ void Zombie::MoveTo(float deltasecond)
 	spacing = true;
 #endif
 
+	if (PathX >= 2366.f) {	// 계단쪽 넘어로 이동하려하면
+//#ifdef	ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 계단 넘어로 이동 방지로 인해 정지" << endl;
+		//cout << endl;
+//#endif
+		ReachFinalDestination();
+		ZombiePathIndex = 1;
+		return;
+	}
+
 	// 타겟 방향 계산
 	float dx = PathX - ZombieData.x;
 	float dy = PathY - ZombieData.y;

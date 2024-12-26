@@ -5,6 +5,9 @@
 /Plugins
 *.sln
 *_BuiltData.uasset
+*.lib
+*.exp
+*.target
 
 /Binaries
 
