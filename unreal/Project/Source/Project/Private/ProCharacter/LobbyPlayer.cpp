@@ -170,8 +170,8 @@ void ALobbyPlayer::Tick(float DeltaTime)
 		if (WaitingRoomUIWidget)
 		{
 			FString FStringname = FString(UTF8_TO_TCHAR(recvJplayer.username.c_str()));
-			WaitingRoomUIWidget->AddPlayerToList(FStringname);
-			LobbyPlayers.Add(recvJplayer.playerid, FStringname);
+			WaitingRoomUIWidget->AddPlayerToList(recvJplayer.roomid, FStringname);
+			RoomLobbyPlayers.FindOrAdd(recvJplayer.roomid).Add(recvJplayer.playerid, FStringname);
 			WaitingRoomUIWidget->Waiting_LobbyPlayers.FindOrAdd(recvJplayer.playerid, FStringname);
 		}
 	}

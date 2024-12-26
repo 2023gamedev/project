@@ -353,6 +353,7 @@ public:
 	uint32 MyPlayerId = 0;		// 실제 서버에서 관리하는 플레이어 DB에서 나의 인덱스 번호
 	uint32 OtherPlayerId = 0;
 	uint32 ZombieId = 0;
+	uint32 MyRoomId = 0;
 	std::string MyUserName;
 
 	Concurrency::concurrent_queue<PlayerData> Q_player;
