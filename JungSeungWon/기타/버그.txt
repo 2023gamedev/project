@@ -587,6 +587,8 @@ LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal
 
 ***** [+] 채팅에서 엔터 기능 넣기
 
+>>>>>>> ***** [+] 갑자기, 지금 버전에서 죽고나서 '유다희' 메세지 안 나옴;;
+
 
 <Note>
 - 여기 버그 리스트 정리 좀 하기;;;
