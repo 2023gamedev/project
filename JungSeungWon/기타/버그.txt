@@ -606,6 +606,8 @@ LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal
 
 ***** [+] 좀비 패트롤때는 걷기 구현 => 속도 느리게 하고 거기에 맞춰서 애니메이션 배속도 같이 느리게하고
 
+*** [+] 프로젝트 이름 좀 바꾸기? (그냥 Project말구... 진짜 타이틀로) & 패키징 실행파일 아이콘 지정하기
+
 
 <Note>
 - 여기 버그 리스트 정리 좀 하기;;;
