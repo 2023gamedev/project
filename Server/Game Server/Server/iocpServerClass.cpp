@@ -557,7 +557,7 @@ void IOCP_CORE::Zombie_BT_Initialize()
 	//[Attack-Task]
 	t_attack = new TAttack;
 
-	//========작업 할당========
+	//======== 트리 작성 (작업 할당) ========
 
 	//<Selector-Detect> 할당
 	//<Selector-Detect>에 해당 Task들 '순서대로' 삽입
