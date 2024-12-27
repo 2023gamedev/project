@@ -76,8 +76,9 @@ void ABaseZombie::Tick(float DeltaTime)
 		FVector WeaponForward;
 		float min_weight = 10.f;
 
-		if (procMesh_AddImpulse_1 == false && PlayerWeapon) {
-			WeaponForward = PlayerWeapon->GetActorRotation().Vector();
+		if (procMesh_AddImpulse_1 == false) {
+			if (PlayerWeapon)
+				WeaponForward = PlayerWeapon->GetActorRotation().Vector();
 
 			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_1)"));
 
@@ -92,7 +93,7 @@ void ABaseZombie::Tick(float DeltaTime)
 				CreateAndApplyBoundingBox(CutProceduralMesh_1);
 				CutProceduralMesh_1->SetMassOverrideInKg(NAME_None, weight, true);
 			}
-			//UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
+			UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
 
 			float x_baseImpulse = 3500.0f; //FMath::RandRange(2000.0f, 5000.0f);
 			float x_impulse = SetImpulseByWeight(weight, x_baseImpulse);
@@ -107,13 +108,13 @@ void ABaseZombie::Tick(float DeltaTime)
 			//UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
 
 			if (doAction_setIsCuttingDead_onTick == false) {
-				UE_LOG(LogTemp, Log, TEXT("Weapon Foward Vector: %s"), *WeaponForward.ToString());
+				UE_LOG(LogTemp, Log, TEXT("[Add Impulse on Tick] Weapon Foward Vector: %s"), *WeaponForward.ToString());
 
 				CutProceduralMesh_1->AddImpulseAtLocation(FVector(WeaponForward.X * x_impulse, WeaponForward.Y * y_impulse, WeaponForward.Z * z_impulse), CutProceduralMesh_1->K2_GetComponentLocation());
 				procMesh_AddImpulse_1 = true;
 			}
-			else {
-				UE_LOG(LogTemp, Log, TEXT("Sync Impulse Direction Vector: %s"), *sync_cutImpulse.ToString());
+			else if (doAction_setIsCuttingDead_onTick == true) {
+				UE_LOG(LogTemp, Log, TEXT("[Add Impulse on Tick] Sync Impulse (Weapon) Vector: %s"), *sync_cutImpulse.ToString());
 
 				CutProceduralMesh_1->AddImpulseAtLocation(FVector(sync_cutImpulse.X * x_impulse, sync_cutImpulse.Y * y_impulse, sync_cutImpulse.Z * z_impulse), CutProceduralMesh_1->K2_GetComponentLocation());
 				procMesh_AddImpulse_1 = true;
@@ -139,8 +140,9 @@ void ABaseZombie::Tick(float DeltaTime)
 		FVector WeaponForward;
 		float min_weight = 10.f;
 
-		if (procMesh_AddImpulse_2 == false && PlayerWeapon) {
-			WeaponForward = PlayerWeapon->GetActorRotation().Vector();
+		if (procMesh_AddImpulse_2 == false) {
+			if (PlayerWeapon)
+				WeaponForward = PlayerWeapon->GetActorRotation().Vector();
 
 			//UE_LOG(LogTemp, Log, TEXT("(CutProcedural_2)"));
 
@@ -155,7 +157,7 @@ void ABaseZombie::Tick(float DeltaTime)
 				CreateAndApplyBoundingBox(CutProceduralMesh_2);
 				CutProceduralMesh_2->SetMassOverrideInKg(NAME_None, weight, true);
 			}
-			//UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
+			UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
 
 			float x_baseImpulse = 10000.0f; //FMath::RandRange(8000.0f, 12000.0f);
 			float x_impulse = SetImpulseByWeight(weight, x_baseImpulse);
@@ -170,13 +172,13 @@ void ABaseZombie::Tick(float DeltaTime)
 			//UE_LOG(LogTemp, Log, TEXT("Z Impulse: %f"), z_impulse);
 
 			if (doAction_setIsCuttingDead_onTick == false) {
-				UE_LOG(LogTemp, Log, TEXT("Weapon Backward Vector: %s"), *(-WeaponForward).ToString());
+				UE_LOG(LogTemp, Log, TEXT("[Add Impulse on Tick] Weapon Backward Vector: %s"), *(-WeaponForward).ToString());
 
 				CutProceduralMesh_2->AddImpulseAtLocation(FVector(-WeaponForward.X * x_impulse, -WeaponForward.Y * y_impulse, z_impulse), CutProceduralMesh_2->K2_GetComponentLocation());
 				procMesh_AddImpulse_2 = true;
 			}
-			else {
-				UE_LOG(LogTemp, Log, TEXT("Sync Impulse Backward Direction Vector : % s"), *(-sync_cutImpulse).ToString());
+			else if (doAction_setIsCuttingDead_onTick == true) {
+				UE_LOG(LogTemp, Log, TEXT("[Add Impulse on Tick] Sync Impulse (Weapon) Backward Vector : % s"), *(-sync_cutImpulse).ToString());
 
 				CutProceduralMesh_2->AddImpulseAtLocation(FVector(-sync_cutImpulse.X * x_impulse, -sync_cutImpulse.Y * y_impulse, z_impulse), CutProceduralMesh_2->K2_GetComponentLocation());
 				procMesh_AddImpulse_2 = true;
