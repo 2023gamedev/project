@@ -15,7 +15,7 @@
 
 
 UENUM(BlueprintType)
-enum class EZombie
+enum class EZombie : uint8
 {
     NORMAL,
     SHOUTING,
@@ -24,7 +24,7 @@ enum class EZombie
 
 // Zombie는 패트롤을 어느쪽으로 할 것인가
 UENUM(BlueprintType)
-enum class EZombiePatrol
+enum class EZombiePatrol : uint8
 {
     NOTPATROL,
     PATROLX,
@@ -33,7 +33,7 @@ enum class EZombiePatrol
 
 // 캐릭터 선택을 위한 enum 클래스
 UENUM(BlueprintType)
-enum class EPlayerCharacter
+enum class EPlayerCharacter : uint8
 {
     GIRL,
     EMPLOYEE,
@@ -42,7 +42,7 @@ enum class EPlayerCharacter
 };
 
 UENUM(BlueprintType)
-enum class EItemFloor
+enum class EItemFloor : uint8
 {
     FLOORB1, // 지하 1층
     FLOOR1,  // 1층
