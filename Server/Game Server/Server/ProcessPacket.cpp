@@ -104,12 +104,18 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         bool bAllPlayersInRange = true;
         int alive_cnt = 0;
         int dead_cnt = 0;
+        int disconnected = 0;
         int bestkill_cnt = 0;
         std::string bestkill_player;
 
         if (b_IsEscaping) {
             for (const auto& player : playerDB) {
-                if (player.second.health != 0) {
+                if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
+                    disconnected++;
+                    continue;
+                }
+
+                if (player.second.health > 0) {
                     alive_cnt++;
                     float DeltaX = std::abs(player.second.x - Escape_Location.x);
                     float DeltaY = std::abs(player.second.y - Escape_Location.y);
