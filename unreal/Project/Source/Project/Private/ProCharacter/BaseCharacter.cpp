@@ -616,7 +616,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	if (GameUIWidget) {
 		if (GameTimerUIWidget->IsTimeUp()) {
-			ProStartGameTimerEnd();
+			//ProStartGameTimerEnd();		//10분 지나면 자동으로 겜 끝나게하는 기능
 		}
 		GameTimerUIWidget->UpdateTimer();
 	}
