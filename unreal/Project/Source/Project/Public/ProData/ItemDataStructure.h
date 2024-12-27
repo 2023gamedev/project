@@ -21,7 +21,7 @@ public:
 };
 
 UENUM(BlueprintType)
-enum class EItemType
+enum class EItemType : uint8
 {
 	ITEM_NONE				UMETA(DisplayName = "None"),
 	ITEM_USEABLE			UMETA(DisplayName = "Useable"),
@@ -31,7 +31,7 @@ enum class EItemType
 };
 
 UENUM(BlueprintType)
-enum class EItemClass
+enum class EItemClass : uint8
 {
 	NORMALWEAPON			UMETA(DisplayName = "NormalWeapon"),
 	THROWINGWEAPON			UMETA(DisplayName = "ThrowingWeapon"),
@@ -69,7 +69,7 @@ public:
 };
 
 UENUM(BlueprintType)
-enum class ESlotType
+enum class ESlotType : uint8
 {
 	SLOT_NONE				UMETA(DisplayName = "None"),
 	SLOT_ITEM				UMETA(DisplayName = "Item"),

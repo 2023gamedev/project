@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
+#include "ProceduralMeshComponent.h"
 #include "BloodNiagaEffect.generated.h"
  
 class ABaseZombie;
