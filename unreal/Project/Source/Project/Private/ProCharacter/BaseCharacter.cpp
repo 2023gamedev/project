@@ -917,6 +917,10 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 						FString HowToEscape = " Escape::Roof ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
 					}
+					else if (root == 0) {
+						FString HowToEscape = " Escape::Failed ";
+						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+					}
 
 					FString TimerString = FString::Printf(TEXT("%d:%d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
 					ProGameClearUIWidget->SetMessage(2, TimerString);

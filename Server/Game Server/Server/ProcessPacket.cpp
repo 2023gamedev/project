@@ -101,17 +101,23 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             }
         }
 
+
         bool bAllPlayersInRange = true;
         int alive_cnt = 0;
         int dead_cnt = 0;
         int disconnected = 0;
         int bestkill_cnt = 0;
-        std::string bestkill_player;
+        std::string bestkill_player = "None";   // 모두 0킬이면 None 띄움
 
-        if (b_IsEscaping) {
+        // 탈출 체크
+        if (b_IsEscaping) { // 탈출존이 열린 상태
             for (const auto& player : playerDB) {
                 if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
                     disconnected++;
+                    if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
+                        bestkill_cnt = player.second.killcount;
+                        bestkill_player = player.second.username;
+                    }
                     continue;
                 }
 
@@ -137,31 +143,69 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             }
 
             if (bAllPlayersInRange) {
-                Protocol::game_clear clear_packet;
-
-                clear_packet.set_packet_type(20);
-                clear_packet.set_root(Escape_Root);
-                clear_packet.set_alive_players(alive_cnt);
-                clear_packet.set_dead_players(dead_cnt);
-                clear_packet.set_open_player(Root_Open_Player);
-                
-                clear_packet.set_best_killcount(bestkill_cnt);
-                clear_packet.set_best_kill_player(bestkill_player);
-
-                for (const auto& player : g_players) {
-                    if (player.second->isInGame) {
-
-                        clear_packet.set_my_killcount(playerDB[player.first].killcount);
-
-                        string serializedData;
-                        clear_packet.SerializeToString(&serializedData);
-                        IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                    }
-                }
+                Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player);
 
                 return true;
             }
         }
+
+
+        // 접속해있는 플레이어들이 모두 사망했는지 검사
+        int totalplayer_cnt = g_players.size();
+        int deadplayer_cnt = 0;
+
+        for (const auto player : g_players) {   // 연결이 되어 있는 플레이어들 중
+            if (playerDB.find(player.first) != playerDB.end()) {    // abort 에러 크래쉬 방지
+                if (playerDB.at(player.first).health <= 0) {        // 체력확인
+                    deadplayer_cnt++;
+                }
+            }
+        }
+
+        // "모든 플레이어들이 사망" 또는 "게임시간이 10분을 넘으면" 게임오버 엔딩 점수판 띄우게하기
+        if (totalplayer_cnt == deadplayer_cnt && playerDB_BT.size() != 0 || GameTime >= 10 * 60.f) {
+            // 점수판 계산
+            alive_cnt = 0;
+            dead_cnt = 0;
+            disconnected = 0;
+            bestkill_cnt = 0;
+            bestkill_player = "None";
+
+            for (const auto player : playerDB) {
+                if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
+                    disconnected++;
+                    if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
+                        bestkill_cnt = player.second.killcount;
+                        bestkill_player = player.second.username;
+                    }
+                    continue;
+                }
+
+                if (GameTime >= 10 * 60.f) {    // 게임 시간 초과 엔딩은 그냥 모든 플레이어가 실패라고 띄워야해서
+                    dead_cnt++;
+                    continue;
+                }
+                else {
+                    if (player.second.health > 0) {
+                        alive_cnt++;
+                    }
+                    else {
+                        dead_cnt++;
+                    }
+                }
+
+                if (bestkill_cnt < player.second.killcount) {
+                    bestkill_cnt = player.second.killcount;
+                    bestkill_player = player.second.username;
+                }
+            }
+
+            // 전송작업
+            Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player);
+
+            return true;
+        }
+
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
@@ -253,7 +297,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     //    Packet.ParseFromArray(packet.data(), packet.size());
     //    string serializedData;
     //    Packet.SerializeToString(&serializedData);
-
     //    
     //    // 해당 플레이어 run-bool값 변경
     //    for (auto& player : playerDB) {
@@ -261,7 +304,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     //            player.second.IsRunning = Packet.b_run();
     //        }
     //    }
-
     //    // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
     //    for (const auto& player : g_players) {
     //        if (player.first != id && player.second->isInGame) {
@@ -606,3 +648,27 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     }
 }
 
+void IOCP_CORE::Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player)
+{
+    Protocol::game_clear clear_packet;
+
+    clear_packet.set_packet_type(20);
+    clear_packet.set_root(Escape_Root);
+    clear_packet.set_alive_players(alive_cnt);
+    clear_packet.set_dead_players(dead_cnt);
+    clear_packet.set_open_player(Root_Open_Player);
+
+    clear_packet.set_best_killcount(bestkill_cnt);
+    clear_packet.set_best_kill_player(bestkill_player);
+
+    for (const auto& player : g_players) {
+        if (player.second->isInGame) {
+
+            clear_packet.set_my_killcount(playerDB[player.first].killcount);
+
+            string serializedData;
+            clear_packet.SerializeToString(&serializedData);
+            IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+        }
+    }
+}

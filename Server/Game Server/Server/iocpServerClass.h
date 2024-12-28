@@ -127,6 +127,8 @@ public:
 	void DisconnectClient(unsigned int clientId);
 
 	bool IOCP_ProcessPacket(int id, const std::string& packet);
+	void Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player);
+
 	void IOCP_SendNextPacket(PLAYER_INFO* user);
 	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);
 
@@ -208,8 +210,10 @@ public:
 	TAttack* t_attack;
 	
 	static float BT_INTERVAL;		// BT 작동 인터벌 설정
+	static float GAME_TIMER_INTERVAL;	// 게임 타이머 시간 누적 인터벌 설정
 
 	static std::chrono::duration<float> BT_deltaTime;
+	static std::chrono::duration<float> GT_deltaTime;
 
 	//==========================
 
@@ -237,8 +241,11 @@ private:
 
 	Vector3D Escape_Location;
 	bool b_IsEscaping = false;
-	int Escape_Root;
-	string Root_Open_Player;
+	int Escape_Root = 0;
+	string Root_Open_Player = "None";
 
 	int roofkey_cnt = 0;
+
+	//int player_loading_cnt = 0;
+	//bool all_player_loading = false;
 };

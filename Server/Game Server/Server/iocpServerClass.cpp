@@ -31,9 +31,11 @@ std::vector<tuple<float, float, float>> g_valispositionsF1;
 std::vector<tuple<float, float, float>> g_valispositionsF2;
 
 
-float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정
+float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정 (0.1초)
+float IOCP_CORE::GAME_TIMER_INTERVAL = 0.005f;	// 게임 타이머 시간 누적 인터벌 설정 (0.005초 - 5ms)
 
 std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// MoveTo에서 계산용으로 사용
+std::chrono::duration<float> IOCP_CORE::GT_deltaTime;	// 게임 타이머 누적용 deltaTime
 
 bool UPDATEMAP = false;		// 맵 txt 업데이트 유무
 
@@ -654,20 +656,44 @@ void IOCP_CORE::Zombie_BT_Thread()
 	//========작업 실행==========
 
 	string result = "Initial";
-
-	auto lastBTTime = std::chrono::high_resolution_clock::now();
+	
+	std::chrono::steady_clock::time_point initial_time = std::chrono::high_resolution_clock::now();	// 게임 서버 프로그램이 켜진 시간 저장
+	std::chrono::steady_clock::time_point lastBTTime = initial_time;
+	std::chrono::steady_clock::time_point lastGTTime = initial_time;
 	
 	while (true) {
 
 		//서버가 먼저 켜지고 좀비 BT가 실행되도록
 		if (bServerOn == false)
 			continue;
-		
+
+		if (b_Timer == false) {
+			continue;
+		}
+		else if (b_Timer == true) {	// (아무) 플레이어가 서버로 접속하면 (로딩 중도 포함임)
+			if (lastBTTime == initial_time && lastGTTime == initial_time) {	// 실제 클라들이 인게임으로 넘어갔을 때 lastTime 다시 제대로 초기화
+				lastBTTime = std::chrono::high_resolution_clock::now();
+				lastGTTime = std::chrono::high_resolution_clock::now();
+			}
+		}
+
 		auto currentTime = std::chrono::high_resolution_clock::now();
 
 		BT_deltaTime = currentTime - lastBTTime;
+		GT_deltaTime = currentTime - lastGTTime;
+
+		// 게임 타이머 계산 (원래 타이머 쓰레드에서 계산했는데 해당 쓰레드 딱히 필요가 없어서 지금 주석처리해놈)
+		if (GT_deltaTime.count() > 0.005f) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
+			// deltaTime을 누적하여 GameTime에 더함
+			GameTime += GT_deltaTime.count();  // 초 단위 (* -> 이렇게 부동소수점 누적하면, 나중에 시간 지날 수록 정확도 떨어짐)
+			lastGTTime = currentTime;
+		}
+
+		cout << "게임 경과시간: " << GameTime << "초" << endl;
+
+		// BT 작동 인터벌 설정
 		if (BT_deltaTime.count() < BT_INTERVAL) {
-			continue;							
+			continue;
 		}
 
 		lastBTTime = currentTime;
@@ -901,10 +927,10 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 			std::string serializedData;
 			zPathList.SerializeToString(&serializedData);
-			
+
 			IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 			//printf("send zombiedatalist\n");
-			
+
 		}
 
 	}

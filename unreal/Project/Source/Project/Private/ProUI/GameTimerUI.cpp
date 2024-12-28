@@ -43,7 +43,7 @@ void UGameTimerUI::UpdateTimer()
 		if (Character) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("!RoofTopClose && m_iMinites >= 5")));
 			FText KText = FText::FromString(TEXT("헬기가 떠났습니다."));
-			FText KMissionText1 = FText::FromString(TEXT("실패"));
+			FText KMissionText1 = FText::FromString(TEXT("옥상 탈출 실패"));
 			FText KMissionText2 = FText::FromString(TEXT(""));
 			Character->ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
 
