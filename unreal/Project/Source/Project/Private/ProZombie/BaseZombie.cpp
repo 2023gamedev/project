@@ -45,8 +45,6 @@ ABaseZombie::ABaseZombie()
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 400.f;
 
-	ShoutingFX = CreateDefaultSubobject<AShoutingNiagaEffect>(TEXT("ShoutingFX"));
-
 	ShoutingFX = nullptr;
 	
 	ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/Mesh/SlicedBloodMaterial.SlicedBloodMaterial"));
@@ -970,38 +968,6 @@ void ABaseZombie::Shouting()
 	AnimInstance->PlayShoutingMontage();
 
 	AnimInstance->SetCurrentPawnSpeed(0);
-
-
-	//UWorld* World = GetWorld();
-	//FVector Center = GetActorLocation();
-	//float DetectRadius = 2000.f;
-
-	//if (nullptr == World) return;
-	//TArray<FOverlapResult> OverlapResults;
-	//FCollisionQueryParams CollisionQueryParam(NAME_None, false, this);
-	//bool bResult = World->OverlapMultiByChannel(
-	//	OverlapResults,
-	//	Center,
-	//	FQuat::Identity,
-	//	ECollisionChannel::ECC_GameTraceChannel4,
-	//	FCollisionShape::MakeSphere(DetectRadius),
-	//	CollisionQueryParam
-	//);
-
-	//if (bResult) {
-
-	//	for (const FOverlapResult& OverlapResult : OverlapResults)
-	//	{
-	//		// ABaseZombie인지 확인
-	//		ABaseZombie* OverlappedZombie = Cast<ABaseZombie>(OverlapResult.GetActor());
-	//		if (OverlappedZombie)
-	//		{
-	//			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEAR"));
-	//			OverlappedZombie->UpdateLastKnownPositionByFootSound(GetActorLocation());
-	//		}
-
-	//	}
-	//}
 
 	m_bIsShouting = true;
 

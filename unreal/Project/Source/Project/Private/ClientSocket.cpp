@@ -424,7 +424,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 					}
 
 					// 디버그 로그
-					UE_LOG(LogNet, Display, TEXT("Processed %d ZombiePaths"), zombiePathList.zombiepaths_size());
+					//UE_LOG(LogNet, Display, TEXT("Processed %d ZombiePaths"), zombiePathList.zombiepaths_size());
 				}
 
 				break;

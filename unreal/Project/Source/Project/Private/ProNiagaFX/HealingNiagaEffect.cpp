@@ -4,7 +4,7 @@
 #include "ProNiagaFX/HealingNiagaEffect.h"
 #include "Components/WidgetComponent.h"
 #include "NiagaraFunctionLibrary.h"
-#include "ProCharacter/BaseCharacter.h"
+//#include "ProCharacter/BaseCharacter.h"
 //#include "Engine.h"
 //#include "EngineUtils.h"
 
@@ -24,7 +24,7 @@ AHealingNiagaEffect::AHealingNiagaEffect()
 	if (NE.Succeeded())
 	{
 		HealingFXSystem = NE.Object;
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX working fine");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX System found");
 	}
 }
 

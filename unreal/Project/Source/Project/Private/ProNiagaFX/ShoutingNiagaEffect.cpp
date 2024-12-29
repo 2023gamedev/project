@@ -4,7 +4,7 @@
 #include "ProNiagaFX/ShoutingNiagaEffect.h"
 #include "Components/WidgetComponent.h"
 #include "NiagaraFunctionLibrary.h"
-#include "ProZombie/BaseZombie.h"
+//#include "ProZombie/BaseZombie.h"
 
 // Sets default values
 AShoutingNiagaEffect::AShoutingNiagaEffect()
@@ -16,10 +16,13 @@ AShoutingNiagaEffect::AShoutingNiagaEffect()
  
 	RootComponent = Mesh;
 
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Shouting FX generated");
+
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NE(TEXT("/Script/Niagara.NiagaraSystem'/Game/ShoutingEffect.ShoutingEffect'"));
 	if (NE.Succeeded())
 	{
 		ShoutingFXSystem = NE.Object;
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Shouting FX System found");
 	}
 }
 
@@ -32,6 +35,7 @@ void AShoutingNiagaEffect::BeginPlay()
 	if (ShoutingFXComponent)
 	{
 		ShoutingFXComponent->Activate();
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Shouting FX played");
 	}
 
 }
@@ -47,6 +51,8 @@ void AShoutingNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
 	if (ShoutingFXComponent)
 		ShoutingFXComponent->Deactivate();
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Shouting FX ended");
 
 	Destroy();
 }

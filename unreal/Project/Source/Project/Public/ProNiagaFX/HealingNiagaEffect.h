@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
+#include "ProCharacter/BaseCharacter.h"
 #include "HealingNiagaEffect.generated.h"
 
 class ABaseCharacter;

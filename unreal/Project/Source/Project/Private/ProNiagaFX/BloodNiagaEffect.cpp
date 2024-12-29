@@ -4,7 +4,7 @@
 #include "ProNiagaFX/BloodNiagaEffect.h"
 #include "Components/WidgetComponent.h"
 #include "NiagaraFunctionLibrary.h"
-#include "ProZombie/BaseZombie.h"
+//#include "ProZombie/BaseZombie.h"
 
 // Sets default values
 ABloodNiagaEffect::ABloodNiagaEffect()
