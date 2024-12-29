@@ -53,6 +53,12 @@ message Zombie_hp {
     float damage = 3;
 }
 
+message Zombie_shouting{
+    uint32 packet_type = 1;
+    uint32 zombieid = 2;
+    uint32 playerid = 3;
+}
+
 message ZombieDataList {
     uint32 packet_type = 1;
     repeated Zombie zombies = 2;
