@@ -2,6 +2,7 @@
 
 
 #include "ProUI/WaitingRoomUI.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "LStruct.pb.h"
 
@@ -30,6 +31,20 @@ void UWaitingRoomUI::Init()
         SendButton->SetClickMethod(EButtonClickMethod::DownAndUp);
         SendButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnSendButtonClicked);
         SendButton->SetIsEnabled(true);
+    }
+
+    //if (!ChatText_IE.IsValid())
+    //{
+    //    ChatText_IE = SNew(SEditableTextBox_IgnoreEnter);
+    //
+    //    // Slate 위젯을 UWidget으로 감싸서 ChatTextWidget에 할당
+    //    //ChatTextWidget->SetWidget(SNew(SEditableTextBox_IgnoreEnter));
+    //}
+
+    if (ChatText) 
+    {
+        ChatText->OnTextCommitted.AddDynamic(this, &UWaitingRoomUI::OnSendButtonEntered);
+        ChatText->SetIsEnabled(true);
     }
 
     PlayerSlots.Add(PlayerSlot1);
@@ -110,6 +125,30 @@ void UWaitingRoomUI::OnSendButtonClicked()
     SendChat(FormattedMessage);
 
     ChatText->SetText(FText::GetEmpty());
+
+    // 입력창에 다시 포커스를 설정
+    FSlateApplication::Get().SetKeyboardFocus(ChatText->TakeWidget());
+}
+
+void UWaitingRoomUI::OnSendButtonEntered(const FText& Text, ETextCommit::Type CommitMethod)
+{
+    if (CommitMethod == ETextCommit::OnEnter)
+    {
+        // 포커스를 계속 유지하기 위한 코드
+        ChatText->SetFocus();   // 작동안됨 -> EditableTextBox 자체가 엔터를 입력받으면 (OnTextCommitted 실행되면) 포커스를 자동으로 잃는 특성이 있음
+
+        if (!ChatText || ChatText->GetText().IsEmpty() || Text.IsEmpty())
+        {
+            return;
+        }
+
+        FString ChatMessage = ChatText->GetText().ToString();
+        FString FormattedMessage = FString::Printf(TEXT("%s: %s"), *(GameInstance->MyUserName), *ChatMessage);
+
+        SendChat(FormattedMessage);
+
+        ChatText->SetText(FText::GetEmpty());
+    }
 }
 
 void UWaitingRoomUI::AddPlayerToList(const uint32 roomid, const FString& PlayerName)
