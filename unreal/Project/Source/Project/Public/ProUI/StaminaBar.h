@@ -23,7 +23,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable, Category = "StaminaBar")
-    void UpdateStaminaBar(float CurrenStamina/*, float MaxStamina*/);
+    void UpdateStaminaBar(float CurrentStamina, float MaxStamina);
 
     UPROPERTY(BlueprintReadWrite, Category = "StaminaBar")
     float m_fCurrentStaminaRatio = 0.f;

@@ -18,13 +18,13 @@ void UStaminaBar::NativeConstruct()
 	}
 }
 
-void UStaminaBar::UpdateStaminaBar(float CurrenStamina/*, float MaxStamina*/)
+void UStaminaBar::UpdateStaminaBar(float CurrentStamina, float MaxStamina)
 {
-	//m_fMaxStamina = MaxStamina;
+	m_fMaxStamina = MaxStamina;
 	if (m_fMaxStamina <= 0.f) {
 		return;
 	}
 
-	m_fCurrentStamina = CurrenStamina;
+	m_fCurrentStamina = CurrentStamina;
 	m_fCurrentStaminaRatio = FMath::Clamp(m_fCurrentStamina / m_fMaxStamina, 0.0f, 1.0f);
 }

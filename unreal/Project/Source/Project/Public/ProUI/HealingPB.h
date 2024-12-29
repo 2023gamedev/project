@@ -32,4 +32,10 @@ public:
 
     UPROPERTY(BlueprintReadWrite, Category = "HealingPB")
     float m_fMaxHealing;
+
+    UPROPERTY(EditAnywhere)
+    bool bWasHealing = false;
+
+    UPROPERTY(EditAnywhere)
+    bool bIsHealing = false;
 };

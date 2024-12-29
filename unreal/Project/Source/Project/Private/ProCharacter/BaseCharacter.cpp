@@ -2596,6 +2596,8 @@ void ABaseCharacter::StartHealingTimer(float healingspeed, float healingduration
 	m_fItemHealingSpeed = healingspeed;
 	m_fItemHealingDuration = healingduration;
 
+	SetHealing(0.01f);	// 힐링 시작되면 0부터 차는 것 처럼 보이도록 SetVisibility 조작
+
 	GetWorld()->GetTimerManager().SetTimer(HealingHandle, this, &ABaseCharacter::HealingTimerElapsed, 1.0f, true, 1.0f);
 
 }
@@ -2733,8 +2735,8 @@ void ABaseCharacter::UseStaminaTimerElapsed()
 {
 	if (GetVelocity().Size() == 0.f && GetStamina() > 0) {
 		SetStamina(GetStamina() + 5);
-		if (GetStamina() > 100) {
-			SetStamina(100);
+		if (GetStamina() > GetMaxStamina()) {
+			SetStamina(GetMaxStamina());
 		}
 		return;
 	}
@@ -2781,8 +2783,8 @@ void ABaseCharacter::OtherUnEquipItem(uint32 itemtype)
 void ABaseCharacter::HealingStaminaTimerElapsed()
 {
 	SetStamina(GetStamina() + 5);
-	if (GetStamina() > 100) {
-		SetStamina(100);
+	if (GetStamina() > GetMaxStamina()) {
+		SetStamina(GetMaxStamina());
 	}
 }
 

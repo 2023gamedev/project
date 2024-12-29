@@ -15,7 +15,7 @@ UConditionUI::UConditionUI(const FObjectInitializer& ObjectInitializer)
 void UConditionUI::UpdateBar()
 {
 	HPBar->UpdateHealthBar(Character->GetHP(), Character->GetMaxHP());
-	StaminaBar->UpdateStaminaBar(Character->GetStamina());
+	StaminaBar->UpdateStaminaBar(Character->GetStamina(), Character->GetMaxStamina());
 	HealingPB->UpdateHealingPB(Character->GetHealing());
 }
 
