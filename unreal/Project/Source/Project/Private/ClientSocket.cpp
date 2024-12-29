@@ -599,6 +599,14 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 					UE_LOG(LogNet, Display, TEXT("recv slicevector"));
 				}
 			}
+			case 25:
+			{
+				Protocol::Zombie_shouting shoutingpacket;
+				if (shoutingpacket.ParseFromArray(buffer.data(), buffer.size()))
+				{
+					UE_LOG(LogNet, Display, TEXT("recv zombie shouting packet"));
+				}
+			}
 
 			}
 

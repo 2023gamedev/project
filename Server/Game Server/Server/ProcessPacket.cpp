@@ -634,6 +634,23 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         return true;
     }
+    case 25:
+    {
+        Protocol::Zombie_shouting Packet;
+        Packet.ParseFromArray(packet.data(), packet.size());
+
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        for (const auto& player : g_players) {
+            if (player.first != id && player.second->isInGame) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                printf("%d 에게 좀비 샤우팅 전송\n", player.first);
+            }
+        }
+
+        return false;
+    }
 
     default: {
         printf("\nERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
