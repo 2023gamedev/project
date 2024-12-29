@@ -23,14 +23,14 @@ public:
 
 
     UFUNCTION(BlueprintCallable, Category = "StaminaBar")
-    void UpdateStaminaBar(float currenstamina);
+    void UpdateStaminaBar(float CurrenStamina/*, float MaxStamina*/);
 
     UPROPERTY(BlueprintReadWrite, Category = "StaminaBar")
-    float m_fCurrentStaminaRatio;
+    float m_fCurrentStaminaRatio = 0.f;
   
     UPROPERTY(BlueprintReadWrite, Category = "StaminaBar")
-    float m_fCurrentStamina;
+    float m_fCurrentStamina = 0.f;
 
     UPROPERTY(BlueprintReadWrite, Category = "StaminaBar")
-    float m_fMaxStamina;
+    float m_fMaxStamina = 0.f;
 };

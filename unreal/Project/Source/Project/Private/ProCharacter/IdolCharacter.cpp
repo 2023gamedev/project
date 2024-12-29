@@ -24,6 +24,7 @@ AIdolCharacter::AIdolCharacter()
 	SetBasicSpeed(5);
 	SetSTR(5);
 	SetStamina(100);
+	SetMaxStamina(100);
 	SetSpecialEffect(true);
 	SetCharacterName("IdolCharacter");
 }

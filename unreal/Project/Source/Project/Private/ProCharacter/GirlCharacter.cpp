@@ -24,6 +24,7 @@ AGirlCharacter::AGirlCharacter()
 	SetBasicSpeed(6);
 	SetSTR(3);
 	SetStamina(100);
+	SetMaxStamina(100);
 	SetSpecialEffect(false);
 	SetCharacterName("GirlCharacter");
 }

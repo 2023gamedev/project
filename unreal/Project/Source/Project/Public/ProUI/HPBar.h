@@ -26,12 +26,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "HealthBar")
     void UpdateHealthBar(float CurrentHealth, float MaxHealth);
 
-
-
-    // 현재 체력
     UPROPERTY(BlueprintReadWrite, Category = "HPBar")
     float m_fCurrentHPRatio = 0.f;
-
 
     // 현재 체력
     UPROPERTY(BlueprintReadWrite, Category = "HPBar")

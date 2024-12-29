@@ -6,17 +6,25 @@
 UStaminaBar::UStaminaBar(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	m_fCurrentStamina = 100.f;
-	m_fMaxStamina	  = 100.f;
 }
 
 void UStaminaBar::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	if (Character != nullptr) {
+		m_fCurrentStamina = Character->GetStamina();
+		m_fMaxStamina = Character->GetMaxStamina();
+	}
 }
 
-void UStaminaBar::UpdateStaminaBar(float currenstamina)
+void UStaminaBar::UpdateStaminaBar(float CurrenStamina/*, float MaxStamina*/)
 {
-	m_fCurrentStamina = currenstamina;
+	//m_fMaxStamina = MaxStamina;
+	if (m_fMaxStamina <= 0.f) {
+		return;
+	}
+
+	m_fCurrentStamina = CurrenStamina;
 	m_fCurrentStaminaRatio = FMath::Clamp(m_fCurrentStamina / m_fMaxStamina, 0.0f, 1.0f);
 }

@@ -288,9 +288,11 @@ public:
 
 	bool IsUsingKey() { return bIsKeyPlaying; }
 
-
 	float GetStamina() { return m_fStamina; }
 	void SetStamina(float stamina) { m_fStamina = stamina; }
+
+	float GetMaxStamina() { return m_fMaxStamina; }
+	void SetMaxStamina(float maxstamina) { m_fMaxStamina = maxstamina; }
 
 	float GetHealing() { return m_fHealing; }
 	void SetHealing(float Healing) { m_fHealing = Healing; }
@@ -552,9 +554,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	float m_fBasicSpeed = 0.f;
 
-
 	UPROPERTY(EditAnywhere)
 	float m_fStamina = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float m_fMaxStamina = 0.f;
 
 	UPROPERTY(EditAnywhere)
 	float m_fHealing = 0.f;		// 얘 딱히 쓰는데 없음...

@@ -26,6 +26,7 @@ AFireFighterCharacter::AFireFighterCharacter()
 	SetBasicSpeed(5);
 	SetSTR(7);
 	SetStamina(100);
+	SetMaxStamina(100);
 	SetSpecialEffect(true);
 	SetCharacterName("FireFighterCharacter");
 }

@@ -28,6 +28,4 @@ void UHPBar::UpdateHealthBar(float currenthealth, float MaxHealth)
 
 	m_fCurrentHealth = currenthealth;
 	m_fCurrentHPRatio = FMath::Clamp(m_fCurrentHealth / m_fMaxHealth, 0.0f, 1.0f);
-
 }
-

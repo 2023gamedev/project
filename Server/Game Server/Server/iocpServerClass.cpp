@@ -689,7 +689,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 			lastGTTime = currentTime;
 		}
 
-		cout << "게임 경과시간: " << GameTime << "초" << endl;
+		//cout << "게임 경과시간: " << GameTime << "초" << endl;
 
 		// BT 작동 인터벌 설정
 		if (BT_deltaTime.count() < BT_INTERVAL) {
@@ -783,7 +783,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 pathfinder.floor: " << zom->pathfinder.floor << endl;
 			for (auto player : playerDB_BT) {
 				//cout << "플레이어 #" << player.first << " 의 floor: " << player.second.floor << endl;
-				if (zom->z_floor == player.second.floor) {
+				if (zom->z_floor == player.second.floor && g_players.find(player.first) != g_players.end()) {	// 좀비 있는 층에 플레이어 있고, 해당 플레이어 서버랑 연결되어 있는 상태라면
 					same_floor = true;
 					//cout << endl;
 					break;
@@ -803,7 +803,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 #endif
 				continue;
 			}
-			else {
+			else if (same_floor == true) {
 				if (zom->printLog == false) {
 					cout << endl;
 					cout << "//========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
