@@ -45,6 +45,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         itemclass->SendCarData(id);
     }
 
+
     // 패킷의 타입을 확인하여 처리
     switch (tempPacket.packet_type()) {
     case 1: {
@@ -162,8 +163,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             }
         }
 
-        // "모든 플레이어들이 사망" 또는 "게임시간이 10분을 넘으면" 게임오버 엔딩 점수판 띄우게하기
-        if (totalplayer_cnt == deadplayer_cnt && playerDB_BT.size() != 0 || GameTime >= 10 * 60.f) {
+        // 모든 플레이어들이 사망 게임오버 엔딩 점수판 띄우게하기
+        if (totalplayer_cnt == deadplayer_cnt && playerDB_BT.size() != 0) {
             // 점수판 계산
             alive_cnt = 0;
             dead_cnt = 0;
@@ -181,17 +182,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     continue;
                 }
 
-                if (GameTime >= 10 * 60.f) {    // 게임 시간 초과 엔딩은 그냥 모든 플레이어가 실패라고 띄워야해서
-                    dead_cnt++;
-                    continue;
+                if (player.second.health > 0) {
+                    alive_cnt++;
                 }
                 else {
-                    if (player.second.health > 0) {
-                        alive_cnt++;
-                    }
-                    else {
-                        dead_cnt++;
-                    }
+                    dead_cnt++;
                 }
 
                 if (bestkill_cnt < player.second.killcount) {

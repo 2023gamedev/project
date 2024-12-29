@@ -691,6 +691,38 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 		//cout << "게임 경과시간: " << GameTime << "초" << endl;
 
+		 // 게임시간이 10분을 넘으면 게임오버 엔딩 점수판 띄우게하기
+		if (GameTime >= 10 * 60.f) {
+			// 점수판 계산
+			int alive_cnt = 0;
+			int dead_cnt = 0;
+			int disconnected = 0;
+			int bestkill_cnt = 0;
+			std::string bestkill_player = "None";
+
+			for (const auto player : playerDB) {
+				if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
+					disconnected++;
+					if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
+						bestkill_cnt = player.second.killcount;
+						bestkill_player = player.second.username;
+					}
+					continue;
+				}
+
+				// 게임 시간 초과 엔딩은 그냥 모든 플레이어가 실패라고 띄워야해서
+				dead_cnt++;
+
+				if (bestkill_cnt < player.second.killcount) {
+					bestkill_cnt = player.second.killcount;
+					bestkill_player = player.second.username;
+				}
+			}
+
+			// 전송작업
+			Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player);
+		}
+
 		// BT 작동 인터벌 설정
 		if (BT_deltaTime.count() < BT_INTERVAL) {
 			continue;
