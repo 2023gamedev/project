@@ -38,7 +38,7 @@ void AZombieAIController::BeginPlay()
 void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 {
 	FVector zomlocation;
-	
+
 	if (OwnerZombie) {
 		zomlocation = OwnerZombie->GetActorLocation();
 	}
@@ -51,24 +51,27 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->AttackMontage) == true) {
 		return;
 	}
-	
-	std::tuple<float,float,float> target = OwnerZombie->NextPath[indx];
-	
+
+	std::tuple<float, float, float> target = OwnerZombie->NextPath[indx];
+
 	// 현재 목표 노드
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
 
-	if (PathX != 0.f || PathY != 0.f) { // 좀비 이동경로 확인용 debugline
-		FVector Pos;
-		Pos.X = get<0>(target);
-		Pos.Y = get<1>(target);
-		Pos.Z = get<2>(target);
-		FVector Start = Pos + FVector(0, 0, 100);
-		FVector End = Pos - FVector(0, 0, 100);
-		FCollisionQueryParams Params;
-
-		//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+	if (PathX == -100000.f && PathY == -100000.f) {
+		return;
 	}
+
+	// 좀비 이동경로 확인용 debugline
+	FVector Pos;
+	Pos.X = get<0>(target);
+	Pos.Y = get<1>(target);
+	Pos.Z = get<2>(target);
+	FVector Start = Pos + FVector(0, 0, 100);
+	FVector End = Pos - FVector(0, 0, 100);
+	FCollisionQueryParams Params;
+
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("zomlocation.X: %f , zomlocation.Y: %f"), zomlocation.X, zomlocation.Y));
 
@@ -87,28 +90,28 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		idleDuration = 0;	// 다시 초기화
 	}
 
-	
+
 	// 타겟 방향 계산
 	float dx = PathX - zomlocation.X;
 	float dy = PathY - zomlocation.Y;
-	
+
 	// 거리를 계산
 	float distance = sqrt(dx * dx + dy * dy);
-	
+
 	// 이동 방향 벡터를 정규화
 	float directionX = dx / distance;
 	float directionY = dy / distance;
-	
+
 	// 이동 거리 계산
 	float moveDistance = OwnerZombie->GetSpeed() * 100.f * deltasecond;
-	
+
 	// 이동 벡터 계산
 	float moveX = directionX * moveDistance;
 	float moveY = directionY * moveDistance;
-	
+
 	// 목표에 도착했는지 확인
 	float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
-	
+
 	if (newDistance < moveDistance) {
 		zomlocation.X = PathX;
 		zomlocation.Y = PathY;
@@ -117,7 +120,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		indx++;
 
 		// 경로의 끝에 도착 = 최종 목표지점에 도착
-		if (get<0>(OwnerZombie->NextPath[indx]) == 0 && get<1>(OwnerZombie->NextPath[indx]) == 0 && get<2>(OwnerZombie->NextPath[indx]) == 0) {
+		if (get<0>(OwnerZombie->NextPath[indx]) == -100000.f && get<1>(OwnerZombie->NextPath[indx]) == -100000.f && get<2>(OwnerZombie->NextPath[indx]) == -100000.f) {
 			indx--;
 		}
 		else {	// 꼭지점을 넘어 갈 때
@@ -129,11 +132,11 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	}
 	else {
 		// 타겟 방향으로 이동
-		zomlocation.X  += moveX;
-		zomlocation.Y  += moveY;
+		zomlocation.X += moveX;
+		zomlocation.Y += moveY;
 	}
 
-	
+
 	OwnerZombie->SetActorLocation(zomlocation);
 	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->GetSpeed());
 }
@@ -183,16 +186,21 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 	else {
 		// 다음 행선지 쪽으로 회전시키기
 		if (indx + 1 < 2) {	// 더 자연스러운 고개 돌림을 위함
-			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == 0 && get<1>(OwnerZombie->NextPath[indx + 1]) == 0 && get<2>(OwnerZombie->NextPath[indx + 1]) == 0)) {
+			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == -100000.f && get<1>(OwnerZombie->NextPath[indx + 1]) == -100000.f && get<2>(OwnerZombie->NextPath[indx + 1]) == -100000.f)) {
 				zombieDest.X = get<0>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx + 1]);
 			}
 		}
 		else {
-			zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
-			zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
-			zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			if (false == (get<0>(OwnerZombie->NextPath[indx]) == -100000.f && get<1>(OwnerZombie->NextPath[indx]) == -100000.f && get<2>(OwnerZombie->NextPath[indx]) == -100000.f)) {
+				zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
+				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
+				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			}
+			else {
+				return;
+			}
 		}
 	}
 

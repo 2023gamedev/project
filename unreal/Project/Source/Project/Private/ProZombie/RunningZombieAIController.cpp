@@ -67,17 +67,21 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
 
-	if (PathX != 0.f || PathY != 0.f) { // 좀비 이동경로 확인용 debugline
-		FVector Pos;
-		Pos.X = get<0>(target);
-		Pos.Y = get<1>(target);
-		Pos.Z = get<2>(target);
-		FVector Start = Pos + FVector(0, 0, 100);
-		FVector End = Pos - FVector(0, 0, 100);
-		FCollisionQueryParams Params;
-
-		//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+	if (PathX == -100000.f || PathY == -100000.f) {
+		return;
 	}
+
+	// 좀비 이동경로 확인용 debugline
+	FVector Pos;
+	Pos.X = get<0>(target);
+	Pos.Y = get<1>(target);
+	Pos.Z = get<2>(target);
+	FVector Start = Pos + FVector(0, 0, 100);
+	FVector End = Pos - FVector(0, 0, 100);
+	FCollisionQueryParams Params;
+
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+
 
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
@@ -122,7 +126,7 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		indx++;
 
 		// 경로의 끝에 도착 = 최종 목표지점에 도착
-		if (get<0>(OwnerZombie->NextPath[indx]) == 0 && get<1>(OwnerZombie->NextPath[indx]) == 0 && get<2>(OwnerZombie->NextPath[indx]) == 0) {
+		if (get<0>(OwnerZombie->NextPath[indx]) == -100000.f && get<1>(OwnerZombie->NextPath[indx]) == -100000.f && get<2>(OwnerZombie->NextPath[indx]) == -100000.f) {
 			indx--;
 		}
 		else {	// 꼭지점을 넘어 갈 때
@@ -188,16 +192,24 @@ void ARunningZombieAIController::ZombieTurn(float deltasecond, int& indx)
 	else {
 		// 다음 행선지 쪽으로 회전시키기
 		if (indx + 1 < 2) {	// 더 자연스러운 고개 돌림을 위함
-			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == 0 && get<1>(OwnerZombie->NextPath[indx + 1]) == 0 && get<2>(OwnerZombie->NextPath[indx + 1]) == 0)) {
+			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == -100000.f && get<1>(OwnerZombie->NextPath[indx + 1]) == -100000.f && get<2>(OwnerZombie->NextPath[indx + 1]) == -100000.f)) {
 				zombieDest.X = get<0>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx + 1]);
 			}
+			else {
+				return;
+			}
 		}
 		else {
-			zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
-			zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
-			zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			if (false == (get<0>(OwnerZombie->NextPath[indx]) == -100000.f && get<1>(OwnerZombie->NextPath[indx]) == -100000.f && get<2>(OwnerZombie->NextPath[indx]) == -100000.f)) {
+				zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
+				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
+				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			}
+			else {
+				return;
+			}
 		}
 	}
 
@@ -252,7 +264,6 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(120.0f / 2.0f));
 
 	APawn* NearestPawn = nullptr;
-	float NearestDist = FLT_MAX;
 
 	uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 

@@ -52,6 +52,9 @@ ABaseZombie::ABaseZombie()
 	{
 		Material_Blood = MaterialFinder.Object;
 	}
+
+	NextPath[0] = { -100000.f, -100000.f, -100000.f };	// 더미값 지정
+	NextPath[1] = { -100000.f, -100000.f, -100000.f };
 }
 
 // Called when the game starts or when spawned

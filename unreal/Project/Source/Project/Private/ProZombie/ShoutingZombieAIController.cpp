@@ -57,17 +57,20 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
 
-	if (PathX != 0.f || PathY != 0.f) { // 좀비 이동경로 확인용 debugline
-		FVector Pos;
-		Pos.X = get<0>(target);
-		Pos.Y = get<1>(target);
-		Pos.Z = get<2>(target);
-		FVector Start = Pos + FVector(0, 0, 100);
-		FVector End = Pos - FVector(0, 0, 100);
-		FCollisionQueryParams Params;
-
-		//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+	if (PathX == -100000.f && PathY == -100000.f) {
+		return;
 	}
+
+	// 좀비 이동경로 확인용 debugline
+	FVector Pos;
+	Pos.X = get<0>(target);
+	Pos.Y = get<1>(target);
+	Pos.Z = get<2>(target);
+	FVector Start = Pos + FVector(0, 0, 100);
+	FVector End = Pos - FVector(0, 0, 100);
+	FCollisionQueryParams Params;
+
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
 
 	//이미 도착지점에 도착했을때
 	if (zomlocation.X == PathX && zomlocation.Y == PathY) {
@@ -112,7 +115,7 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		indx++;
 
 		// 경로의 끝에 도착 = 최종 목표지점에 도착
-		if (get<0>(OwnerZombie->NextPath[indx]) == 0 && get<1>(OwnerZombie->NextPath[indx]) == 0 && get<2>(OwnerZombie->NextPath[indx]) == 0) {
+		if (get<0>(OwnerZombie->NextPath[indx]) == -100000.f && get<1>(OwnerZombie->NextPath[indx]) == -100000.f && get<2>(OwnerZombie->NextPath[indx]) == -100000.f) {
 			indx--;
 		}
 		else {	// 꼭지점을 넘어 갈 때
@@ -183,7 +186,7 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 			zombieDest.Z = LastSeenPlayer->GetActorLocation().Z;
 		}
 		else {
-			UE_LOG(LogTemp, Error, TEXT("Zombie #%d's LastSeenPlayer is nullptr!"), ZombieId);	
+			UE_LOG(LogTemp, Error, TEXT("Zombie #%d's LastSeenPlayer is nullptr!"), ZombieId);
 			return;
 		}
 	}
@@ -191,16 +194,24 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 	else {
 		// 다음 행선지 쪽으로 회전시키기
 		if (indx + 1 < 2) {	// 더 자연스러운 고개 돌림을 위함
-			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == 0 && get<1>(OwnerZombie->NextPath[indx + 1]) == 0 && get<2>(OwnerZombie->NextPath[indx + 1]) == 0)) {
+			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == -100000.f && get<1>(OwnerZombie->NextPath[indx + 1]) == -100000.f && get<2>(OwnerZombie->NextPath[indx + 1]) == -100000.f)) {
 				zombieDest.X = get<0>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx + 1]);
 			}
+			else {
+				return;
+			}
 		}
 		else {
-			zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
-			zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
-			zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			if (false == (get<0>(OwnerZombie->NextPath[indx]) == -100000.f && get<1>(OwnerZombie->NextPath[indx]) == -100000.f && get<2>(OwnerZombie->NextPath[indx]) == -100000.f)) {
+				zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
+				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
+				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			}
+			else {
+				return;
+			}
 		}
 	}
 
@@ -262,7 +273,6 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(120.0f / 2.0f));
 
 	APawn* NearestPawn = nullptr;
-	float NearestDist = FLT_MAX;
 
 	uint32 myPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 
@@ -270,23 +280,34 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 	// 좀비들의 시야 검사 "나 자신"에 대해서만 실시==========================
 	PlayerPawn = Cast<APawn>(OwnerZombie->MyChar);
 
-	if (PlayerPawn == nullptr)
+	if (PlayerPawn == nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("PlayerPawn is NULL!!!")));
 		return;
+	}
 
 	if (OwnerZombie->MyChar->GetHP() > 0) {	// 살아 있을 때만 좀비시야 검사 
+
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("(OwnerZombie->MyChar->GetHP() > 0) => Detect Check Initiate!!!")));
 
 		FVector PlayerLocation = PlayerPawn->GetActorLocation(); // 플레이어의 위치
 		FVector DirectionToPlayer = (PlayerLocation - ZombieLocation).GetSafeNormal(); // 플레이어로 향하는 방향 벡터
 
 		float DotProduct = FVector::DotProduct(ZombieForward, DirectionToPlayer);
 
-		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
-		bool InZombieSight = FieldOfView <= DotProduct ? true : false;
+		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);	// 거리 검사
+		bool InZombieSight = FieldOfView <= DotProduct ? true : false;	// 시야 각 내에 들어와 있는지 검사
+		bool LineOfSightTo_Player = LineOfSightTo(PlayerPawn);			// 장애물에는 가려지진 않았는지 검사 (360도 전 방향으로 검사)
 
-		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Distance: %f"), Distance));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("LineOfSightTo: %s"), LineOfSightTo_Player ? TEXT("true") : TEXT("false")));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("InZombieSight: %s"), InZombieSight ? TEXT("true") : TEXT("false")));
+
+		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo_Player && InZombieSight)
 		{
 
 			NearestPawn = PlayerPawn;
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player!!!")));
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
