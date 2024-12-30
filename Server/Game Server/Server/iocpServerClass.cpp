@@ -16,6 +16,7 @@
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
+std::unordered_map<unsigned int, GameSession*> g_sessions;
 
 std::unordered_map<int, Player> playerDB_BT;
 
@@ -1103,5 +1104,31 @@ void IOCP_CORE::SendPingToClients()
 			}
 		}
 		++it;  // 삭제되지 않은 경우에만 반복자를 증가시킴
+	}
+}
+
+unsigned int IOCP_CORE::CreateSession() {
+	static std::atomic<unsigned int> sessionCounter{ 1 };
+	unsigned int sessionID = sessionCounter++;
+
+	auto* session = new GameSession();
+	session->sessionID = sessionID;
+
+	{
+		std::lock_guard<std::mutex> lock(g_sessionsMutex);
+		g_sessions[sessionID] = session;
+	}
+
+	std::cout << "Session created: " << sessionID << std::endl;
+	return sessionID;
+}
+
+void IOCP_CORE::DeleteSession(unsigned int sessionID) {
+	std::lock_guard<std::mutex> lock(g_sessionsMutex);
+	auto it = g_sessions.find(sessionID);
+	if (it != g_sessions.end()) {
+		delete it->second; // 메모리 해제
+		g_sessions.erase(it);
+		std::cout << "Session deleted: " << sessionID << std::endl;
 	}
 }
