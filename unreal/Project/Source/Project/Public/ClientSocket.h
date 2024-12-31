@@ -340,6 +340,18 @@ struct SliceVector
 		normal(InNormal), impulse(InImpulse) {}
 };
 
+struct ZombieShouting
+{
+	uint32 zombieid;
+	uint32 playerid;
+
+	ZombieShouting()
+		: zombieid(0), playerid(0) {}
+
+	ZombieShouting(uint32 Inzombieid, uint32 Inplayerid)
+		: zombieid(Inzombieid), playerid(Inplayerid) {}
+};
+
 class UProGameInstance;
 
 class PROJECT_API ClientSocket : public FRunnable
@@ -382,6 +394,7 @@ public:
 	Concurrency::concurrent_queue<GameClear> Q_gclear;
 	Concurrency::concurrent_queue<Drop_Item> Q_dropitem;
 	Concurrency::concurrent_queue<SliceVector> Q_slicevector;
+	Concurrency::concurrent_queue<ZombieShouting> Q_shouting;
 
 
 	virtual bool Init() override;
