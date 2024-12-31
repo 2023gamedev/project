@@ -281,7 +281,7 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 	PlayerPawn = Cast<APawn>(OwnerZombie->MyChar);
 
 	if (PlayerPawn == nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("PlayerPawn is NULL!!!")));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] PlayerPawn is NULL!!! (from AI Controller)")));
 		return;
 	}
 
@@ -298,16 +298,16 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 		bool InZombieSight = FieldOfView <= DotProduct ? true : false;	// 시야 각 내에 들어와 있는지 검사
 		bool LineOfSightTo_Player = LineOfSightTo(PlayerPawn);			// 장애물에는 가려지진 않았는지 검사 (360도 전 방향으로 검사)
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Distance: %f"), Distance));
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("LineOfSightTo: %s"), LineOfSightTo_Player ? TEXT("true") : TEXT("false")));
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("InZombieSight: %s"), InZombieSight ? TEXT("true") : TEXT("false")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Distance: %f"), Distance));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("LineOfSightTo: %s"), LineOfSightTo_Player ? TEXT("true") : TEXT("false")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("InZombieSight: %s"), InZombieSight ? TEXT("true") : TEXT("false")));
 
 		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo_Player && InZombieSight)
 		{
 
 			NearestPawn = PlayerPawn;
 
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player!!!")));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player!!!")));
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
