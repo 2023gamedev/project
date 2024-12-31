@@ -121,6 +121,7 @@ public:
 	Drop_Item recvDropItem;
 	DetachItem recvDetachItem;
 	SliceVector recvSliceVector;
+	ZombieShouting recvZombieShouting;
 
 	uint32 PlayerId;
 	uint32 ZombieId;

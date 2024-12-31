@@ -373,6 +373,13 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
+		if (GameInstance->ClientSocketPtr->Q_shouting.try_pop(recvZombieShouting)) {
+			if (AOneGameModeBase * MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				// zombieshouting 함수 호출 추가
+			}
+		}
+
 		//UpdateCuttingZombie(uint32 ZombieId, FVector zombieLocation, FVector planePosition, FVector planeNormal, FVector impulseDirection)
 
 		bool recvping = false;

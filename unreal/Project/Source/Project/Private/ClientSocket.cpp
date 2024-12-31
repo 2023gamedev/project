@@ -598,18 +598,20 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 					UE_LOG(LogNet, Display, TEXT("recv slicevector"));
 				}
+				break;
 			}
 			case 25:
 			{
 				Protocol::Zombie_shouting shoutingpacket;
 				if (shoutingpacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
+					Q_shouting.push(ZombieShouting(shoutingpacket.zombieid(), shoutingpacket.playerid()));
+
 					UE_LOG(LogNet, Display, TEXT("recv zombie shouting packet"));
 				}
+				break;
 			}
-
 			}
-
 		}
 	}
 }
