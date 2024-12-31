@@ -1183,6 +1183,45 @@ void AOneGameModeBase::UpdateCuttingZombie(uint32 ZombieId, FVector zombieLocati
     }
 }
 
+void AOneGameModeBase::UpdateShoutingZombie(uint32 ZombieId, uint32 PlayerId)
+{
+    UWorld* World = GetWorld();
+
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateShoutingZombie: GetWorld() returned nullptr"));
+        return;
+    }
+
+    // ZombieMap에서 ZombieID로 해당 샤우팅 좀비를 찾음
+    ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieId);
+    if (ZombiePtr && *ZombiePtr)
+    {
+        ABaseZombie* BaseZombie = *ZombiePtr;
+        if (BaseZombie)
+        {
+            BaseZombie->Shouting();
+            
+            // 해당 좀비에 연결된 AIController 찾기
+            AShoutingZombieAIController* AIShoutingZombieController = Cast<AShoutingZombieAIController>(BaseZombie->GetController());
+            if (AIShoutingZombieController)
+            {
+                UE_LOG(LogTemp, Log, TEXT("Found AI Controller: %s"), *AIShoutingZombieController->GetName());
+
+                AIShoutingZombieController->shoutingTo_PlayerId = PlayerId;
+            }
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("[Error] No AI Controller is possessing this zombie!"));
+                return;
+            }
+
+            UE_LOG(LogTemp, Log, TEXT("UpdateShoutingZombie - ZombieId: %d, PlayerId: %d"), ZombieId, PlayerId);
+
+        }
+    }
+}
+
 void AOneGameModeBase::DestroyItem(uint32 Itemid, uint32 Playerid)
 {
     UWorld* World = GetWorld();

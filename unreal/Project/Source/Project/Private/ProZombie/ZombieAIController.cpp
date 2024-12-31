@@ -22,8 +22,6 @@ AZombieAIController::AZombieAIController()
 {
 	//OwnerZombie = Cast<ANormalZombie>(GetPawn());		//=> OneGameModeBase.cpp에 UpdateZombie()에서 해당 새로운 AIController 생성하고 바로 새좀비와 Possess하고 OwnerZombie도 할당 하지만, 생성자가 먼저 불려 에러 일으킴
 	OwnerZombie = nullptr;
-
-	attackPlayerID = 0;	
 }
 
 void AZombieAIController::BeginPlay()
@@ -43,7 +41,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		zomlocation = OwnerZombie->GetActorLocation();
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), ZombieId);	// 이미 앞에서 검사해서 의미 없긴하지만
+		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), Zombie_Id);	// 이미 앞에서 검사해서 의미 없긴하지만
 		return;
 	}
 
@@ -172,7 +170,7 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 
 		if (result == false) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] ZombieTurn(ToPlayer) - Couldn't find Player ID #%d"), attackPlayerID));
-			UE_LOG(LogTemp, Error, TEXT("[ERROR] ZombieTurn(ToPlayer) #%d - Couldn't find Player ID #%d"), ZombieId, attackPlayerID);
+			UE_LOG(LogTemp, Error, TEXT("[ERROR] ZombieTurn(ToPlayer) #%d - Couldn't find Player ID #%d"), Zombie_Id, attackPlayerID);
 			return;
 		}
 		else {
@@ -317,11 +315,12 @@ void AZombieAIController::Tick(float DeltaTime)
 void AZombieAIController::Send_Detected()
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-	ZombieId = ZombiePawn->GetZombieId();
+	if (Zombie_Id == 9999)
+		Zombie_Id = ZombiePawn->GetZombieId();
 	uint32 PlayerId = GameInstance->ClientSocketPtr->MyPlayerId;
 
 	Protocol::Detected packet;
-	packet.set_zombieid(ZombieId);
+	packet.set_zombieid(Zombie_Id);
 	packet.set_playerid(PlayerId);
 	packet.set_player_insight(true);
 	packet.set_packet_type(9);
@@ -335,11 +334,12 @@ void AZombieAIController::Send_Detected()
 void AZombieAIController::Send_PlayerLost()
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-	ZombieId = ZombiePawn->GetZombieId();
+	if (Zombie_Id == 9999)
+		Zombie_Id = ZombiePawn->GetZombieId();
 	uint32 PlayerId = GameInstance->ClientSocketPtr->MyPlayerId;
 
 	Protocol::Detected packet;
-	packet.set_zombieid(ZombieId);
+	packet.set_zombieid(Zombie_Id);
 	packet.set_playerid(PlayerId);
 	packet.set_player_insight(false);
 	packet.set_packet_type(9);

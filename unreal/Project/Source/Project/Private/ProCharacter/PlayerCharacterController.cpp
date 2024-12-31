@@ -370,6 +370,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if (AOneGameModeBase * MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				// zombieshouting 함수 호출 추가
+				MyGameMode->UpdateShoutingZombie(recvZombieShouting.zombieid, recvZombieShouting.playerid);
 			}
 		}
 

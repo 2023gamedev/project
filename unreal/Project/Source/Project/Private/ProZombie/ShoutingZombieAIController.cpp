@@ -21,9 +21,6 @@ const FName AShoutingZombieAIController::PatrolLocationKey(TEXT("PatrolLocation"
 AShoutingZombieAIController::AShoutingZombieAIController()
 {
 	OwnerZombie = nullptr;
-
-	attackPlayerID = 0;
-
 }
 
 void AShoutingZombieAIController::BeginPlay()
@@ -42,7 +39,7 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		zomlocation = OwnerZombie->GetActorLocation();
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), ZombieId);	// 이미 앞에서 검사해서 의미 없긴하지만
+		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), Zombie_Id);	// 이미 앞에서 검사해서 의미 없긴하지만
 		return;
 	}
 
@@ -167,7 +164,7 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 
 		if (result == false) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] ZombieTurn(ToPlayer) - Couldn't find Player ID #%d"), attackPlayerID));
-			UE_LOG(LogTemp, Error, TEXT("[ERROR] ZombieTurn(ToPlayer) #%d - Couldn't find Player ID #%d"), ZombieId, attackPlayerID);
+			UE_LOG(LogTemp, Error, TEXT("[ERROR] ZombieTurn(ToPlayer) #%d - Couldn't find Player ID #%d"), Zombie_Id, attackPlayerID);
 			return;
 		}
 		else {
@@ -179,15 +176,39 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 	}
 	// 좀비가 샤우팅 중일때 => 플레이어 쪽으로 시선 돌리기
 	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->ShoutingMontage) == true) {
-		// 해당 플레이어 쪽으로 회전시키기
-		if (LastSeenPlayer) {
-			zombieDest.X = LastSeenPlayer->GetActorLocation().X;
-			zombieDest.Y = LastSeenPlayer->GetActorLocation().Y;
-			zombieDest.Z = LastSeenPlayer->GetActorLocation().Z;
+		TArray<AActor*> Players;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Players);
+		ABaseCharacter* Char = nullptr;
+
+		// 플레이어 찾기
+		bool result = false;
+		for (AActor* Player : Players)
+		{
+			Char = Cast<ABaseCharacter>(Player);
+
+			// 플레이어 자기 자신일 때는 Char->GetPlayerId() 에 99가 담기므로
+			if (Char->GetPlayerId() == 99) {
+				if (GameInstance->ClientSocketPtr->MyPlayerId == shoutingTo_PlayerId) {
+					result = true;
+					break;
+				}
+			}
+			else if (Char->GetPlayerId() == shoutingTo_PlayerId) {
+				result = true;
+				break;
+			}
+		}
+
+		if (result == false) {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] ZombieTurn(ToPlayer) - Couldn't find Player ID #%d"), attackPlayerID));
+			UE_LOG(LogTemp, Error, TEXT("[ERROR] ZombieTurn(Shouting) #%d - Couldn't find Player ID #%d"), Zombie_Id, shoutingTo_PlayerId);
+			return;
 		}
 		else {
-			UE_LOG(LogTemp, Error, TEXT("Zombie #%d's LastSeenPlayer is nullptr!"), ZombieId);
-			return;
+			// 해당 플레이어 쪽으로 회전시키기
+			zombieDest.X = Char->GetActorLocation().X;
+			zombieDest.Y = Char->GetActorLocation().Y;
+			zombieDest.Z = Char->GetActorLocation().Z;
 		}
 	}
 	// 아니면 이동 중이므로
@@ -328,6 +349,7 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 				// 샤우팅 실행
 				if (OwnerZombie->IsShouted() == false) {
 					OwnerZombie->Shouting();
+					shoutingTo_PlayerId = myPlayerId;
 				}
 			}
 		}
@@ -349,11 +371,12 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 void AShoutingZombieAIController::Send_Detected()
 {
 	auto* ZombiePawn = Cast<AShoutingZombie>(GetPawn());
-	ZombieId = ZombiePawn->GetZombieId();
+	if (Zombie_Id == 9999)
+		Zombie_Id = ZombiePawn->GetZombieId();
 	uint32 PlayerId = GameInstance->ClientSocketPtr->MyPlayerId;
 
 	Protocol::Detected packet;
-	packet.set_zombieid(ZombieId);
+	packet.set_zombieid(Zombie_Id);
 	packet.set_playerid(PlayerId);
 	packet.set_player_insight(true);
 	packet.set_packet_type(9);
@@ -367,11 +390,12 @@ void AShoutingZombieAIController::Send_Detected()
 void AShoutingZombieAIController::Send_PlayerLost()
 {
 	auto* ZombiePawn = Cast<AShoutingZombie>(GetPawn());
-	ZombieId = ZombiePawn->GetZombieId();
+	if (Zombie_Id == 9999)
+		Zombie_Id = ZombiePawn->GetZombieId();
 	uint32 PlayerId = GameInstance->ClientSocketPtr->MyPlayerId;
 
 	Protocol::Detected packet;
-	packet.set_zombieid(ZombieId);
+	packet.set_zombieid(Zombie_Id);
 	packet.set_playerid(PlayerId);
 	packet.set_player_insight(false);
 	packet.set_packet_type(9);
