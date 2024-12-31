@@ -202,7 +202,7 @@ void UProGameInstance::OnLevelLoadComplete(FName LevelName)
     // 로딩 완료 시 UI 제거
     if (LoadingUI)
     {
-        LoadingUI->RemoveFromViewport();
+        LoadingUI->RemoveFromParent();
         LoadingUI = nullptr;
     }
 
@@ -286,7 +286,7 @@ void UProGameInstance::HideLoadingScreen()
 {
     if (LoadingScreenWidget)
     {
-        LoadingScreenWidget->RemoveFromViewport();
+        LoadingScreenWidget->RemoveFromParent();
         LoadingScreenWidget = nullptr;
     }
 }

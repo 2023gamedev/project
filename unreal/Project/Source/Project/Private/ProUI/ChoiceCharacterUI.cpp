@@ -121,28 +121,32 @@ void UChoiceCharacterUI::UpdatePlayerReadyState(uint32 player_num, bool Ready)
     if (player_num == 1)
     {
         First_Ready->SetText(FText::FromString("READY"));
-        First_Ready->Font.Size = 50;
+        FSlateFontInfo FontInfo = First_Ready->GetFont();
+        FontInfo.Size = 50;
         First_Ready->SetJustification(ETextJustify::Center);
         First_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
     }
     else if (player_num == 2)
     {
         Second_Ready->SetText(FText::FromString("READY"));
-        Second_Ready->Font.Size = 50;
+        FSlateFontInfo FontInfo = Second_Ready->GetFont();
+        FontInfo.Size = 50;
         Second_Ready->SetJustification(ETextJustify::Center);
         Second_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
     }
     else if (player_num == 3)
     {
         Third_Ready->SetText(FText::FromString("READY"));
-        Third_Ready->Font.Size = 50;
+        FSlateFontInfo FontInfo = Third_Ready->GetFont();
+        FontInfo.Size = 50;
         Third_Ready->SetJustification(ETextJustify::Center);
         Third_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
     }
     else if (player_num == 4)
     {
         Fourth_Ready->SetText(FText::FromString("READY"));
-        Fourth_Ready->Font.Size = 50;
+        FSlateFontInfo FontInfo = Fourth_Ready->GetFont();
+        FontInfo.Size = 50;
         Fourth_Ready->SetJustification(ETextJustify::Center);
         Fourth_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
     }

@@ -350,7 +350,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     // 샤우팅 좀비일 경우에
                     if (z->ZombieData.zombietype == 1) {
                         ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);  // 다운 캐스팅 사용!
-                        sz->Shout(zombieDB);
+                        sz->Shout(zombieDB, id);
                     }
 
                     break;
@@ -634,7 +634,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         return true;
     }
-    case 25:
+    /*case 25:
     {
         Protocol::Zombie_shouting Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
@@ -650,7 +650,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         }
 
         return false;
-    }
+    }*/
 
     default: {
         printf("\nERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());

@@ -687,7 +687,7 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 		return false;
 	}
 
-	ServerAddr.sin_addr.s_addr = inet_addr(serverAddress.c_str());
+	inet_pton(AF_INET, serverAddress.c_str(), &ServerAddr.sin_addr);
 
 	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
 

@@ -8,14 +8,14 @@
 #include <concurrent_queue.h>
 #include <mutex>
 
-#include "Windows/AllowWindowsPlatformTypes.h"
-#include "Windows/prewindowsapi.h"
+#include "Windows/WindowsHWrapper.h"
 
 #pragma comment(lib, "ws2_32.lib")
 #include <WinSock2.h>
+#include <WS2tcpip.h>
 
-#include "Windows/PostWindowsApi.h"
-#include "Windows/HideWindowsPlatformTypes.h"
+
+
 
 
 constexpr int BUFSIZE = 8192;
