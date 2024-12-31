@@ -11,5 +11,5 @@ public:
 
 	ShoutingZombie(Zombie_Data zd);
 
-	void Shout(vector<Zombie*>& zombies);
+	void Shout(vector<Zombie*>& zombies, int playerid);
 };
