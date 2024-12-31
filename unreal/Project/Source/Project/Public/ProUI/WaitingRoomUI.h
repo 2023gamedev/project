@@ -77,8 +77,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UScrollBox* ChattingList;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UOverlay* ChatOverlay; // ChatText를 감쌀 Overlay 컨테이너
+	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	//UOverlay* ChatOverlay; // ChatText를 감쌀 Overlay 컨테이너
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UEditableTextBox* ChatText;
