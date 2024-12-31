@@ -65,8 +65,6 @@ IOCP_CORE::IOCP_CORE()
 	UpdateEdgesMap(unrealFilePath + filePath, filePath);
 	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
 	
-	//timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
-	
 	//==========Zombie_BT 초기화
 	Zombie_BT_Initialize();
 	//==========Zombie_BT 쓰레드 시작 (Zombie BT 실행 시작)
@@ -159,8 +157,6 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 	acceptThread.join();
 
 	zombie_thread.join();
-
-	//timer_thread.join();
 }
 
 void IOCP_CORE::IOCP_WorkerThread() {
@@ -471,57 +467,6 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 	exit(-1);
 }
 
-void IOCP_CORE::Timer_Thread()
-{
-	printf("Timer Thread Started\n");
-	auto lastTime = std::chrono::high_resolution_clock::now();
-	auto lastSendTime = std::chrono::high_resolution_clock::now();
-	auto lastPingTime = std::chrono::high_resolution_clock::now();
-
-	while (!ServerShutdown)
-	{
-		if (b_Timer) 
-		{
-			// 현재 시간 측정
-			auto currentTime = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<float> deltaTime = currentTime - lastTime;
-			lastTime = currentTime;
-
-			// deltaTime을 누적하여 GameTime에 더함
-			GameTime += deltaTime.count();  // 초 단위
-
-			std::chrono::duration<float> sendInterval = currentTime - lastSendTime;
-			if (sendInterval.count() >= 1.0f) {
-				Protocol::Time packet;
-				packet.set_timer(GameTime);
-				packet.set_packet_type(3);
-
-				std::string serializedData;
-				packet.SerializeToString(&serializedData);
-
-				for (auto& playerPair : g_players)
-				{
-					PLAYER_INFO* player = playerPair.second;
-					if (player->connected) {
-						IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
-					}
-					//cout << "send" << '\n';
-					//printf("Send Timer");
-				}
-
-				lastSendTime = currentTime;
-			}
-
-			// 5초마다 Ping 메시지 전송
-			std::chrono::duration<float> pingInterval = currentTime - lastPingTime;
-			if (pingInterval.count() >= 5.0f) {
-				//SendPingToClients();
-				lastPingTime = currentTime;
-			}
-		}
-	}
-}
-
 void IOCP_CORE::Zombie_BT_Initialize()
 {
 	//======[좀비 BT 생성]======
@@ -683,7 +628,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 		BT_deltaTime = currentTime - lastBTTime;
 		GT_deltaTime = currentTime - lastGTTime;
 
-		// 게임 타이머 계산 (원래 타이머 쓰레드에서 계산했는데 해당 쓰레드 딱히 필요가 없어서 지금 주석처리해놈)
+		// 게임 타이머 계산 
 		if (GT_deltaTime.count() > 0.005f) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
 			// deltaTime을 누적하여 GameTime에 더함
 			GameTime += GT_deltaTime.count();  // 초 단위 (* -> 이렇게 부동소수점 누적하면, 나중에 시간 지날 수록 정확도 떨어짐)
