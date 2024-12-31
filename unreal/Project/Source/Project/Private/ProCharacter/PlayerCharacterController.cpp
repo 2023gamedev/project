@@ -76,15 +76,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CheckAndSendMovement();
 
-	// 캐릭터 움직임 통신 작업
-	TimeSinceLastSend += DeltaTime; // 시간 누적
-
-	if (TimeSinceLastSend >= 0.02f) // 0.02초마다 전송 실행 (약 60분에 1초 => 최소 60 프레임이 방어되면 캐릭터 움직임 딜레이되는 일 없음)
-	{
-		CheckAndSendMovement();
-		TimeSinceLastSend = 0.0f; // 초기화
-	}
 	Check_run();
 	Send_Attack();
 	Send_Equipment();

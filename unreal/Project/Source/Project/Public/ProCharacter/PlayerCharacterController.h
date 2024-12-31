@@ -143,8 +143,6 @@ public:
 	bool sendRun = false;
 	bool sendjump = false;
 	bool b_clear = false;
-
-	float TimeSinceLastSend{};
 	
 
 };
