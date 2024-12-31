@@ -144,7 +144,6 @@ public:
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
-	void Timer_Thread();
 	void Zombie_BT_Thread();
 
 	bool LoadEdgesMap(const string& filePath,
@@ -236,7 +235,6 @@ private:
 	int cpuCore;
 
 	vector<thread*> worker_threads;
-	thread timer_thread;
 
 	thread zombie_thread;
 

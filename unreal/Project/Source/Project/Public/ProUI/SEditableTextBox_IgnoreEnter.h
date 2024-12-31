@@ -15,10 +15,10 @@ public:
     SLATE_END_ARGS()
 
     /** Constructs this widget with the given arguments */
-    /*void Construct(const FArguments& InArgs)
+    void Construct(const FArguments& InArgs)
     {
         SEditableTextBox_IgnoreEnter::Construct(InArgs);
-    }*/
+    }
 
     /** Override OnKeyDown to handle Enter key */
     virtual FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent) override;

@@ -13,7 +13,7 @@
 #include "Components/EditableTextBox.h"
 #include "ProGamemode/ProGameInstance.h"
 #include "ProUI/SEditableTextBox_IgnoreEnter.h"
-#include "Components/Widget.h"
+#include "Components/Overlay.h" 
 
 #include "WaitingRoomUI.generated.h"
 
@@ -77,8 +77,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UScrollBox* ChattingList;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	//UWidget* ChatTextWidget;  // UWidget로 선언하여 Slate 위젯을 포함할 수 있도록
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UOverlay* ChatOverlay; // ChatText를 감쌀 Overlay 컨테이너
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UEditableTextBox* ChatText;
@@ -101,10 +101,13 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void OnSendButtonEntered(const FText& Text, ETextCommit::Type CommitMethod);
 
-	//TSharedPtr<SEditableTextBox_IgnoreEnter> ChatText_IE;	// 실제 Slate 위젯을 보유
+	TSharedPtr<SEditableTextBox_IgnoreEnter> ChatText_IE;	// 실제 Slate 위젯을 보유
 
 public:
 
 	bool bIsReady = false;
+
+protected:
+	virtual void NativeConstruct() override;
 	
 };
