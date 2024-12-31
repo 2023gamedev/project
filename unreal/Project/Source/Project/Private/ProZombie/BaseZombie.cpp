@@ -910,6 +910,8 @@ void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bIsAttacking = false;
 
+	afterAnim_idleDuration = afterAnim_idleInterpol;
+
 	m_DAttackEnd.Broadcast();
 }
 
@@ -986,7 +988,9 @@ void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 	
 	m_bIsShouting = false;
 	SetShouted(true);
-	
+
+	afterAnim_idleDuration = afterAnim_idleInterpol;
+
 	m_DShoutingEnd.Broadcast();
 
 	if (ShoutingFX != NULL) {
@@ -1018,6 +1022,8 @@ void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 
 	doAction_takeDamage_onTick = false;
+
+	afterAnim_idleDuration = afterAnim_idleInterpol;
 
 	//if (BloodFX != NULL) {
 	//	BloodFX->EndPlay(EEndPlayReason::Destroyed);

@@ -59,6 +59,18 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		return;
 	}
 
+	// 공격/피격 애니메이션이 끝나면 제자리에 잠시 idle 상태로 있게하는 일종의 보간작업
+	if (OwnerZombie->afterAnim_idleDuration > 0.f) {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, FString::Printf(TEXT("Zombie #%d afterAnim_idleDuration left: %f s"), OwnerZombie->ZombieId, OwnerZombie->afterAnim_idleDuration));
+
+		OwnerZombie->afterAnim_idleDuration -= deltasecond;
+		if (OwnerZombie->afterAnim_idleDuration <= 0) {
+			OwnerZombie->afterAnim_idleDuration = 0;
+		}
+
+		return;
+	}
+
 	std::tuple<float, float, float> target = OwnerZombie->NextPath[indx];
 
 	// 현재 목표 노드
@@ -86,7 +98,7 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		idleDuration += deltasecond;
 
 		if (idleDuration >= 0.3f) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
-			OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	//애니메이션 정지
+			OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	// 애니메이션 idle로 전환
 		}
 		return;
 	}
@@ -185,6 +197,10 @@ void ARunningZombieAIController::ZombieTurn(float deltasecond, int& indx)
 			zombieDest.Y = Char->GetActorLocation().Y;
 			zombieDest.Z = Char->GetActorLocation().Z;
 		}
+	}
+	// 좀비가 idle 상태일때 => 고개 그대로
+	else if (OwnerZombie->CachedAnimInstance->m_fCurrentPawnSpeed == 0) {
+		return;
 	}
 	// 아니면 이동 중이므로
 	else {

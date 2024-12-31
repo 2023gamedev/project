@@ -35,7 +35,7 @@ std::vector<tuple<float, float, float>> g_valispositionsF2;
 float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정 (0.1초)
 float IOCP_CORE::GAME_TIMER_INTERVAL = 0.005f;	// 게임 타이머 시간 누적 인터벌 설정 (0.005초 - 5ms)
 
-std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// MoveTo에서 계산용으로 사용
+std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// BT 작동 인터벌 체크 & MoveTo에서 계산용으로 사용
 std::chrono::duration<float> IOCP_CORE::GT_deltaTime;	// 게임 타이머 누적용 deltaTime
 
 bool UPDATEMAP = false;		// 맵 txt 업데이트 유무
@@ -755,6 +755,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 				continue;
 			}
 
+			// WaitOneTick_SendPath 다시 초기화
+			if (zom->HaveToWait == false && zom->WaitOneTick_SendPath == true) {
+				zom->WaitOneTick_SendPath = false;
+			}
+
 			// 좀비가 플레이어들이 없는 층에 있다면 좀비 BT 실행 멈추고 있기
 			bool same_floor = false;
 			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 z_floor: " << zom->z_floor << endl;
@@ -866,14 +871,19 @@ void IOCP_CORE::Zombie_BT_Thread()
 #endif
 		}
 
-		for (const auto& player : playerDB_BT) {
+		for (const auto player : playerDB_BT) {
 			Protocol::ZombiePathList zPathList;
 			zPathList.set_packet_type(10);
 
-			for (const auto& zom : zombieDB_BT) {
-				if (player.second.floor == zom->z_floor) {
+			for (const auto zom : zombieDB_BT) {
+				if (player.second.floor == zom->z_floor) {	// 플레이어 같은 층에 있는 좀비의 path만 받음
 
-					if (zom->path.empty() || zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
+					// path 보낼 필요 없는 좀비들 예외처리 (최적화)
+					if (zom->GetHP() <= 0.f
+						|| zom->path.empty() 
+						|| zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/
+						|| zom->HaveToWait == true
+						|| zom->WaitOneTick_SendPath == true) {
 						continue;
 					}
 
@@ -900,6 +910,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 					currentLocation->set_x(zom->ZombieData.x);
 					currentLocation->set_y(zom->ZombieData.y);
 					currentLocation->set_z(zom->ZombieData.z);
+
+#ifdef	ENABLE_BT_LOG
+					cout << "<<플레이어 #" << player.first << " 에게 SendPath 전송 완료 - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
+					cout << endl;
+#endif
 				}
 			}
 

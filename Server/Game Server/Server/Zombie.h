@@ -117,6 +117,8 @@ public:
                             //-> 샤우팅 좀비만을 위한 변수지만, shouting zombie(하위-자식 클래스)에 만들면 zombie(상위-부모 클래스)에서 shouting zombie의 멤버 변수에 접근 못해서 그냥 여기에;;
 
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
+    
+    bool WaitOneTick_SendPath;  // 애니메이션 재생 끝난직후 HaveToWait이 바로 false가 되며 SendPath가 보내져, 클라의 ZombieMoveTo가 실행되어 살짝 움직이게 되는 걸 막기위한 부울변수 (그리고 애니메이션 끝난 직후에는 path 보낼 필요도 사실상 없음)
 
     FLOOR z_floor;          // 좀비가 스폰 된 층
 

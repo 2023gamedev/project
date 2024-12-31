@@ -32,7 +32,7 @@ void ALobbyGameMode::BeginPlay()
     if (World) {
 
         for (TActorIterator<ALobbyPlayer> ActorItr(World); ActorItr; ++ActorItr) {
-            UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
+            UE_LOG(LogTemp, Log, TEXT("DefaultPawn Complete"));
             DefaultPawn = *ActorItr;
             if (DefaultPawn) {
                 break;

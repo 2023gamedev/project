@@ -75,7 +75,7 @@ void AOneGameModeBase::BeginPlay()
     //if (World) {
 
     //    for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
-    //        UE_LOG(LogTemp, Error, TEXT("DefaultPawn Complete"));
+    //        UE_LOG(LogTemp, Log, TEXT("DefaultPawn Complete"));
     //        DefaultPawn = *ActorItr;
     //        if (DefaultPawn) {
     //            break;
@@ -939,20 +939,22 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
     }
 
     // 0번 좀비가 제대로 함수 호출을 하긴 하는지 확인
-    UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
+    //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
 
     ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieID);
-    if (!ZombiePtr)
+    if (ZombiePtr == nullptr)
     {
         UE_LOG(LogTemp, Warning, TEXT("Could not find Zombie ID: %d"), ZombieID);
     }
+
+    // 기존 좀비 존재함 => 업데이트 ===> (근데 사실상 이제는 사용 안함 -> PlayerCharacterController Tick 맨 아래에서 SetActorLocation을 직접 설정함)
     if (ZombiePtr && *ZombiePtr && IsValid(*ZombiePtr))
     {
         ABaseZombie* BaseZombie = *ZombiePtr;
         if (BaseZombie)
         {
 
-            // 기존 캐릭터 위치 업데이트
+            // 기존 좀비 위치 업데이트
             BaseZombie->SetActorLocation(NewLocation);
             BaseZombie->SetActorRotation(NewRotation);
 
@@ -963,9 +965,9 @@ void AOneGameModeBase::UpdateZombie(uint32 ZombieID, uint32 ZombieType, FVector 
             //UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d at new location"), ZombieID);
         }
     }
+    // 기존 좀비가 없으면 새로운 좀비 생성
     else
     {
-        // 기존 좀비가 없으면 새로운 좀비 생성
         FActorSpawnParameters SpawnParams;
         SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
         ABaseZombie* NewZombie = World->SpawnActor<ABaseZombie>(ZombieClass, NewLocation, NewRotation, SpawnParams);

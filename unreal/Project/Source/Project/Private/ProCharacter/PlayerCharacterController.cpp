@@ -419,22 +419,27 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (ZombieMap.IsEmpty() == true) {
 			break;
 		}
-
+		
 		ABaseZombie** zombie = ZombieMap.Find(tmp_path.ZombieId);
 
 		if (zombie == nullptr || *zombie == nullptr) {
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("(Q_path) Could not find Zombie ID: %d"), tmp_path.ZombieId));
+			UE_LOG(LogTemp, Warning, TEXT("(Q_path) Could not find Zombie ID: %d"), tmp_path.ZombieId);
 			continue;  // 좀비를 찾을 수 없으면 다음으로 넘어감
 		}
 
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId));
 		//UE_LOG(LogNet, Display, TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId);
 
 		// 좀비 위치 서버에서 받은 위치로 갱신
-		if(tmp_path.Location.IsZero() == false)
+		if (tmp_path.Location.IsZero() == false) 
 			(*zombie)->SetActorLocation(tmp_path.Location);
-		
+
 		// 좀비 목적지 설정
-		if (tmp_path.Path1.empty() == false) 
+		if (tmp_path.Path1.empty() == false) {
 			(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
+			(*zombie)->afterAnim_idleDuration = 0.f;	// 서버로부터 새로운 ZombiePath를 받으면 실행 => ZombieMoveTo idle 상태 초기화 => 다시 움직이게 함!
+		}
 		else
 			(*zombie)->NextPath[0] = std::tuple<float, float, float>();
 		
@@ -929,7 +934,7 @@ void APlayerCharacterController::QuickNWeapon(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
-	UE_LOG(LogTemp, Error, TEXT("QuickNWeapon"));
+	UE_LOG(LogTemp, Log, TEXT("QuickNWeapon"));
 
 	basecharacter->QuickNWeapon();
 
@@ -940,9 +945,7 @@ void APlayerCharacterController::QuickTWeapon(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
-
-	UE_LOG(LogTemp, Error, TEXT("QuickTWeapon"));
-
+	UE_LOG(LogTemp, Log, TEXT("QuickTWeapon"));
 
 	basecharacter->QuickTWeapon();
 
@@ -953,8 +956,7 @@ void APlayerCharacterController::QuickBHItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
-	UE_LOG(LogTemp, Error, TEXT("QuickBHItem"));
-
+	UE_LOG(LogTemp, Log, TEXT("QuickBHItem"));
 
 	basecharacter->QuickBHItem();
 
@@ -966,7 +968,7 @@ void APlayerCharacterController::QuickHItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
-	UE_LOG(LogTemp, Error, TEXT("QuickHItem"));
+	UE_LOG(LogTemp, Log, TEXT("QuickHItem"));
 
 	basecharacter->QuickHItem();
 
@@ -977,7 +979,7 @@ void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
-	UE_LOG(LogTemp, Error, TEXT("QuickKeyItem"));
+	UE_LOG(LogTemp, Log, TEXT("QuickKeyItem"));
 
 	basecharacter->QuickKeyItem();
 

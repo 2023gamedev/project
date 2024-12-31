@@ -272,4 +272,8 @@ public:
 	bool print_Velocity_1 = true;
 	bool print_Velocity_2 = true;
 
+	const float afterAnim_idleInterpol = 0.25f;	// -> 0.25초 idle: 공격/피격/샤우팅 애니메이션 재생후 바로 ZombieMoveTo 불려서 움직이게 되는 거 방지 (보간작업)
+	UPROPERTY(EditAnywhere)
+	float afterAnim_idleDuration = 0.f;
+
 };
