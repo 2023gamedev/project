@@ -187,6 +187,8 @@ public:
     int32 GetItemBoxNumber() { return m_iItemBoxNumber; }
 
     void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
+    
+    void SpawnOnDeathGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector playerlocation);
 
     void CarActorRandomLocationSetting();
 

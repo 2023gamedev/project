@@ -69,6 +69,7 @@ public:
 	// 바닥에 떨어트리는 델리게이트 
 	FThrowOnGround ThrowOnGround;
 	void SpawnOnGround(int slotindex);
+	void SpawnAllOnGround();
 
 	//void AttackCheck();
 
