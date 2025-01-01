@@ -21,5 +21,8 @@
 # 5.3->5.5 버전업으로 발생한 깨진 파일 (에디터를 킬때마다 자동 변경됨)
 /Project/Content/StarterContent/Architecture/Floor_400x400.uasset
 
+# 컴파일 로컬 캐시 파일
+/Project/Binaries/Win64/UnrealEditor.modules
+
 # 연결 서버 ip 설정용
 ipconfig.txt
