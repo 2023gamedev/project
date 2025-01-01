@@ -81,8 +81,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         CS_Packet.SerializeToString(&serializedData);
 
         int ready_cnt = 0;
+        int room_player_cnt = 0;
+
         for (const auto& player : g_players) {
             if (player.second->room_num == g_players[CS_Packet.playerid()]->room_num) {
+                room_player_cnt++;
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 
                 if (player.second->ready == true) {
@@ -91,7 +94,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             }
         }
 
-        if (ready_cnt == 2) {
+        if (ready_cnt == room_player_cnt) {
             Protocol::WaitingAllReady SC_Packet;
             SC_Packet.set_type(14);
             SC_Packet.set_allready(true);
@@ -272,8 +275,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         CS_Packet.SerializeToString(&serializedData);
 
         int ready_cnt = 0;
+        int room_player_cnt = 0;
+
         for (const auto& player : g_players) {
             if (player.second->room_num == g_players[CS_Packet.playerid()]->room_num) {
+
+                room_player_cnt++;
+
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 
                 if (player.second->ready == true) {
@@ -282,7 +290,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
             }
         }
 
-        if (ready_cnt == 2){
+        if (ready_cnt == room_player_cnt){
             Protocol::SelectAllReady SC_Packet;
             SC_Packet.set_type(6);
             SC_Packet.set_ready(true);
