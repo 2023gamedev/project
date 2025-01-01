@@ -37,6 +37,7 @@ void UZombieAnimInstance::PlayAttackMontage()
 {
 	if (!Montage_IsPlaying(AttackMontage)) {
 		Montage_Play(AttackMontage, 1.f);
+		SetCurrentPawnSpeed(0);	// 애니메이션 잠시 정지 (idle 상태) => 해당 애니메이션 끝나고 바로 적용시킬려고 (+ endplay때 부르는 것보다 여기가 더 확실함)
 	}
 }
 
@@ -44,6 +45,7 @@ void UZombieAnimInstance::PlayShoutingMontage()
 {
 	if (!Montage_IsPlaying(ShoutingMontage)) {
 		Montage_Play(ShoutingMontage, 1.f);
+		SetCurrentPawnSpeed(0);	// 애니메이션 잠시 정지 (idle 상태) => 해당 애니메이션 끝나고 바로 적용시킬려고
 	}
 }
 
@@ -51,6 +53,7 @@ void UZombieAnimInstance::PlayBeAttackedMontage()
 {
 	if (!Montage_IsPlaying(BeAttackedMontage)) {
 		Montage_Play(BeAttackedMontage, 1.f);
+		SetCurrentPawnSpeed(0);	// 애니메이션 잠시 정지 (idle 상태) => 해당 애니메이션 끝나고 바로 적용시킬려고
 	}
 }
 

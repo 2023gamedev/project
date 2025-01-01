@@ -51,6 +51,8 @@ Zombie::Zombie()
 
 	HaveToWait = false;
 
+	WaitOneTick_SendPath = false;
+
 	DetermineFloor(ZombieData.z);
 
 	//speed = 0.f;
@@ -98,6 +100,8 @@ Zombie::Zombie(Zombie_Data z_d)
 	IsShouting = false;
 
 	HaveToWait = false;
+
+	WaitOneTick_SendPath = false;
 
 	DetermineFloor(ZombieData.z);
 
@@ -948,12 +952,11 @@ void Zombie::Wait()
 
 			HaveToWait = false;
 
+			WaitOneTick_SendPath = true;
+
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
 
 			IsShouting = false;		// 마찬가지
-
-			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
-			MoveTo(IOCP_CORE::BT_deltaTime.count());
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -979,11 +982,10 @@ void Zombie::Wait()
 
 			HaveToWait = false;
 
+			WaitOneTick_SendPath = true;
+
 			IsShouting = false;		// 혹시 샤우팅중이다가 공격 할 경우를 대비해서 -> 리셋 개념
 									//=> 사실 필요 없음 -> 샤우팅을 항상 먼저 할테고 그동안 공격은 못하므로
-
-			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
-			MoveTo(IOCP_CORE::BT_deltaTime.count());
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1009,8 +1011,7 @@ void Zombie::Wait()
 
 			HaveToWait = false;
 
-			// 좀비 애니메이션 재생 후 순간이동하는 걸 막기위해
-			MoveTo(IOCP_CORE::BT_deltaTime.count());
+			WaitOneTick_SendPath = true;
 		}
 		else {
 #ifdef ENABLE_BT_LOG

@@ -8,6 +8,7 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "ProGamemode/ProGameInstance.h"
+
 #include "ChoiceCharacterUI.generated.h"
 
 /**
@@ -24,6 +25,7 @@ UCLASS()
 class PROJECT_API UChoiceCharacterUI : public UUserWidget
 {
 	GENERATED_BODY()
+
 public:
 
 	void Init();
@@ -45,13 +47,25 @@ public:
 	UButton* GirlButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* GirlBGButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* EmployeeButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* EmployeeBGButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* IdolButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* IdolBGButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* FireFighterButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* FireFighterBGButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ReadyButton;
@@ -92,10 +106,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* Fourth_Ready;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* Ready_TextBlock;
+
 
 	bool b_ready = true;
 
-	//virtual void NativeTick(FGeometry MyGeometry) override;
+
+//protected:
+
+	//virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
+
 
 private:
 

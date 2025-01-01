@@ -22,8 +22,6 @@ AZombieAIController::AZombieAIController()
 {
 	//OwnerZombie = Cast<ANormalZombie>(GetPawn());		//=> OneGameModeBase.cpp에 UpdateZombie()에서 해당 새로운 AIController 생성하고 바로 새좀비와 Possess하고 OwnerZombie도 할당 하지만, 생성자가 먼저 불려 에러 일으킴
 	OwnerZombie = nullptr;
-
-	attackPlayerID = 0;	
 }
 
 void AZombieAIController::BeginPlay()
@@ -38,12 +36,12 @@ void AZombieAIController::BeginPlay()
 void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 {
 	FVector zomlocation;
-	
+
 	if (OwnerZombie) {
 		zomlocation = OwnerZombie->GetActorLocation();
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), ZombieId);	// 이미 앞에서 검사해서 의미 없긴하지만
+		UE_LOG(LogTemp, Error, TEXT("Zombie #%d's OwnerZombie is nullptr!"), Zombie_Id);	// 이미 앞에서 검사해서 의미 없긴하지만
 		return;
 	}
 
@@ -51,24 +49,39 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->AttackMontage) == true) {
 		return;
 	}
-	
-	std::tuple<float,float,float> target = OwnerZombie->NextPath[indx];
-	
+
+	// 공격/피격 애니메이션이 끝나면 제자리에 잠시 idle 상태로 있게하는 일종의 보간작업
+	if (OwnerZombie->afterAnim_idleDuration > 0.f) {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, FString::Printf(TEXT("Zombie #%d afterAnim_idleDuration left: %f s"), OwnerZombie->ZombieId, OwnerZombie->afterAnim_idleDuration));
+
+		OwnerZombie->afterAnim_idleDuration -= deltasecond;
+		if (OwnerZombie->afterAnim_idleDuration <= 0) {
+			OwnerZombie->afterAnim_idleDuration = 0;
+		}
+
+		return;
+	}
+
+	std::tuple<float, float, float> target = OwnerZombie->NextPath[indx];
+
 	// 현재 목표 노드
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
 
-	if (PathX != 0.f || PathY != 0.f) { // 좀비 이동경로 확인용 debugline
-		FVector Pos;
-		Pos.X = get<0>(target);
-		Pos.Y = get<1>(target);
-		Pos.Z = get<2>(target);
-		FVector Start = Pos + FVector(0, 0, 100);
-		FVector End = Pos - FVector(0, 0, 100);
-		FCollisionQueryParams Params;
-
-		//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.f);
+	if (PathX == -100000.f && PathY == -100000.f) {
+		return;
 	}
+
+	// 좀비 이동경로 확인용 debugline
+	FVector Pos;
+	Pos.X = get<0>(target);
+	Pos.Y = get<1>(target);
+	Pos.Z = get<2>(target);
+	FVector Start = Pos + FVector(0, 0, 100);
+	FVector End = Pos - FVector(0, 0, 100);
+	FCollisionQueryParams Params;
+
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f/* 3.f*/);
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("zomlocation.X: %f , zomlocation.Y: %f"), zomlocation.X, zomlocation.Y));
 
@@ -79,7 +92,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		idleDuration += deltasecond;
 
 		if (idleDuration >= 0.3f) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
-			OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	//애니메이션 정지
+			OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	// 애니메이션 idle로 전환
 		}
 		return;
 	}
@@ -87,28 +100,28 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		idleDuration = 0;	// 다시 초기화
 	}
 
-	
+
 	// 타겟 방향 계산
 	float dx = PathX - zomlocation.X;
 	float dy = PathY - zomlocation.Y;
-	
+
 	// 거리를 계산
 	float distance = sqrt(dx * dx + dy * dy);
-	
+
 	// 이동 방향 벡터를 정규화
 	float directionX = dx / distance;
 	float directionY = dy / distance;
-	
+
 	// 이동 거리 계산
 	float moveDistance = OwnerZombie->GetSpeed() * 100.f * deltasecond;
-	
+
 	// 이동 벡터 계산
 	float moveX = directionX * moveDistance;
 	float moveY = directionY * moveDistance;
-	
+
 	// 목표에 도착했는지 확인
 	float newDistance = sqrt((PathX - zomlocation.X) * (PathX - zomlocation.X) + (PathY - zomlocation.Y) * (PathY - zomlocation.Y));
-	
+
 	if (newDistance < moveDistance) {
 		zomlocation.X = PathX;
 		zomlocation.Y = PathY;
@@ -117,7 +130,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		indx++;
 
 		// 경로의 끝에 도착 = 최종 목표지점에 도착
-		if (get<0>(OwnerZombie->NextPath[indx]) == 0 && get<1>(OwnerZombie->NextPath[indx]) == 0 && get<2>(OwnerZombie->NextPath[indx]) == 0) {
+		if (get<0>(OwnerZombie->NextPath[indx]) == -100000.f && get<1>(OwnerZombie->NextPath[indx]) == -100000.f && get<2>(OwnerZombie->NextPath[indx]) == -100000.f) {
 			indx--;
 		}
 		else {	// 꼭지점을 넘어 갈 때
@@ -129,11 +142,11 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	}
 	else {
 		// 타겟 방향으로 이동
-		zomlocation.X  += moveX;
-		zomlocation.Y  += moveY;
+		zomlocation.X += moveX;
+		zomlocation.Y += moveY;
 	}
 
-	
+
 	OwnerZombie->SetActorLocation(zomlocation);
 	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->GetSpeed());
 }
@@ -169,7 +182,7 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 
 		if (result == false) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] ZombieTurn(ToPlayer) - Couldn't find Player ID #%d"), attackPlayerID));
-			UE_LOG(LogTemp, Error, TEXT("[ERROR] ZombieTurn(ToPlayer) #%d - Couldn't find Player ID #%d"), ZombieId, attackPlayerID);
+			UE_LOG(LogTemp, Error, TEXT("[ERROR] ZombieTurn(ToPlayer) #%d - Couldn't find Player ID #%d"), Zombie_Id, attackPlayerID);
 			return;
 		}
 		else {
@@ -179,20 +192,29 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 			zombieDest.Z = Char->GetActorLocation().Z;
 		}
 	}
+	// 좀비가 idle 상태일때 => 고개 그대로
+	else if (OwnerZombie->CachedAnimInstance->m_fCurrentPawnSpeed == 0) {
+		return;
+	}
 	// 아니면 이동 중이므로
 	else {
 		// 다음 행선지 쪽으로 회전시키기
 		if (indx + 1 < 2) {	// 더 자연스러운 고개 돌림을 위함
-			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == 0 && get<1>(OwnerZombie->NextPath[indx + 1]) == 0 && get<2>(OwnerZombie->NextPath[indx + 1]) == 0)) {
+			if (false == (get<0>(OwnerZombie->NextPath[indx + 1]) == -100000.f && get<1>(OwnerZombie->NextPath[indx + 1]) == -100000.f && get<2>(OwnerZombie->NextPath[indx + 1]) == -100000.f)) {
 				zombieDest.X = get<0>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx + 1]);
 			}
 		}
 		else {
-			zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
-			zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
-			zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			if (false == (get<0>(OwnerZombie->NextPath[indx]) == -100000.f && get<1>(OwnerZombie->NextPath[indx]) == -100000.f && get<2>(OwnerZombie->NextPath[indx]) == -100000.f)) {
+				zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
+				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
+				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			}
+			else {
+				return;
+			}
 		}
 	}
 
@@ -309,11 +331,12 @@ void AZombieAIController::Tick(float DeltaTime)
 void AZombieAIController::Send_Detected()
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-	ZombieId = ZombiePawn->GetZombieId();
+	if (Zombie_Id == 9999)
+		Zombie_Id = ZombiePawn->GetZombieId();
 	uint32 PlayerId = GameInstance->ClientSocketPtr->MyPlayerId;
 
 	Protocol::Detected packet;
-	packet.set_zombieid(ZombieId);
+	packet.set_zombieid(Zombie_Id);
 	packet.set_playerid(PlayerId);
 	packet.set_player_insight(true);
 	packet.set_packet_type(9);
@@ -327,11 +350,12 @@ void AZombieAIController::Send_Detected()
 void AZombieAIController::Send_PlayerLost()
 {
 	auto* ZombiePawn = Cast<ANormalZombie>(GetPawn());
-	ZombieId = ZombiePawn->GetZombieId();
+	if (Zombie_Id == 9999)
+		Zombie_Id = ZombiePawn->GetZombieId();
 	uint32 PlayerId = GameInstance->ClientSocketPtr->MyPlayerId;
 
 	Protocol::Detected packet;
-	packet.set_zombieid(ZombieId);
+	packet.set_zombieid(Zombie_Id);
 	packet.set_playerid(PlayerId);
 	packet.set_player_insight(false);
 	packet.set_packet_type(9);

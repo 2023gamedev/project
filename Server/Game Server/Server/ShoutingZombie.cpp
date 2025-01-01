@@ -22,7 +22,7 @@ ShoutingZombie::ShoutingZombie(Zombie_Data z_d)
 
 }
 
-void ShoutingZombie::Shout(vector<Zombie*>& zombies)
+void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid)
 {
 	if (bShouted == false) {
 		bShouted = true;
@@ -58,5 +58,21 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies)
 		HaveToWait = true;	// 좀비 BT 대기상태로 변경
 
 		animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 샤우팅 시작 시간
+
+		Protocol::Zombie_shouting shoutingpacket;
+
+		shoutingpacket.set_packet_type(25);
+		shoutingpacket.set_playerid(playerid);
+		shoutingpacket.set_zombieid(ZombieData.zombieID);
+
+		string serializedData;
+		shoutingpacket.SerializeToString(&serializedData);
+
+		for (const auto& player : g_players) {
+			if (player.first != playerid && player.second->isInGame) {
+				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+			}
+		}
+		
 	}
 }

@@ -2,6 +2,7 @@
 
 
 #include "ProUI/ChoiceCharacterUI.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "ProGamemode/LobbyGameMode.h"
 #include "Components/CanvasPanelSlot.h"
@@ -11,11 +12,22 @@ void UChoiceCharacterUI::OnClickedGirlButton()
 {
     //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedGirlButton");
 
+    GirlBGButton->SetVisibility(ESlateVisibility::HitTestInvisible); // 보이지만 클릭 불가
+    IdolBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    FireFighterBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    EmployeeBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+
     ChoicedGirl.Execute();
 }
+
 void UChoiceCharacterUI::OnClickedEmployeeButton()
 {
     //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedEmployeeButton");
+
+    GirlBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    IdolBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    FireFighterBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    EmployeeBGButton->SetVisibility(ESlateVisibility::HitTestInvisible); // 보이지만 클릭 불가
 
     ChoicedEmployee.Execute();
 }
@@ -24,12 +36,22 @@ void UChoiceCharacterUI::OnClickedIdolButton()
 {
     //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedIdolButton");
 
+    GirlBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    IdolBGButton->SetVisibility(ESlateVisibility::HitTestInvisible); // 보이지만 클릭 불가
+    FireFighterBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    EmployeeBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+
     ChoicedIdol.Execute();
 }
 
 void UChoiceCharacterUI::OnClickedFireFighterButton()
 {
     //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedFireFighterButton");
+
+    GirlBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    IdolBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+    FireFighterBGButton->SetVisibility(ESlateVisibility::HitTestInvisible); // 보이지만 클릭 불가
+    EmployeeBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
 
     ChoicedFireFighter.Execute();
 }
@@ -52,13 +74,25 @@ void UChoiceCharacterUI::OnClickedReadyButton()
     // 직렬화된 데이터를 서버로 전송
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
+
     b_ready = !b_ready;
 
-    if (GirlButton) GirlButton->SetIsEnabled(false);
-    if (EmployeeButton) EmployeeButton->SetIsEnabled(false);
-    if (IdolButton) IdolButton->SetIsEnabled(false);
-    if (FireFighterButton) FireFighterButton->SetIsEnabled(false);
-    if (ReadyButton) ReadyButton->SetIsEnabled(false);
+    if (b_ready == false) {
+        if (GirlButton) GirlButton->SetIsEnabled(false);
+        if (EmployeeButton) EmployeeButton->SetIsEnabled(false);
+        if (IdolButton) IdolButton->SetIsEnabled(false);
+        if (FireFighterButton) FireFighterButton->SetIsEnabled(false);
+
+        Ready_TextBlock->SetText(FText::FromString("Cancel"));
+    }
+    else {
+        if (GirlButton) GirlButton->SetIsEnabled(true);
+        if (EmployeeButton) EmployeeButton->SetIsEnabled(true);
+        if (IdolButton) IdolButton->SetIsEnabled(true);
+        if (FireFighterButton) FireFighterButton->SetIsEnabled(true);
+
+        Ready_TextBlock->SetText(FText::FromString("Ready"));
+    }
 
 }
 
@@ -118,33 +152,53 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
 
 void UChoiceCharacterUI::UpdatePlayerReadyState(uint32 player_num, bool Ready)
 {
-    if (player_num == 1)
-    {
-        First_Ready->SetText(FText::FromString("READY"));
-        First_Ready->Font.Size = 50;
-        First_Ready->SetJustification(ETextJustify::Center);
-        First_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+    if (Ready == true) {
+        if (player_num == 1)
+        {
+            First_Ready->SetText(FText::FromString("READY"));
+            FSlateFontInfo FontInfo = First_Ready->GetFont();
+            FontInfo.Size = 50;
+            First_Ready->SetJustification(ETextJustify::Center);
+            First_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+        }
+        else if (player_num == 2)
+        {
+            Second_Ready->SetText(FText::FromString("READY"));
+            FSlateFontInfo FontInfo = Second_Ready->GetFont();
+            FontInfo.Size = 50;
+            Second_Ready->SetJustification(ETextJustify::Center);
+            Second_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+        }
+        else if (player_num == 3)
+        {
+            Third_Ready->SetText(FText::FromString("READY"));
+            FSlateFontInfo FontInfo = Third_Ready->GetFont();
+            FontInfo.Size = 50;
+            Third_Ready->SetJustification(ETextJustify::Center);
+            Third_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+        }
+        else if (player_num == 4)
+        {
+            Fourth_Ready->SetText(FText::FromString("READY"));
+            FSlateFontInfo FontInfo = Fourth_Ready->GetFont();
+            FontInfo.Size = 50;
+            Fourth_Ready->SetJustification(ETextJustify::Center);
+            Fourth_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+        }
     }
-    else if (player_num == 2)
-    {
-        Second_Ready->SetText(FText::FromString("READY"));
-        Second_Ready->Font.Size = 50;
-        Second_Ready->SetJustification(ETextJustify::Center);
-        Second_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
-    }
-    else if (player_num == 3)
-    {
-        Third_Ready->SetText(FText::FromString("READY"));
-        Third_Ready->Font.Size = 50;
-        Third_Ready->SetJustification(ETextJustify::Center);
-        Third_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
-    }
-    else if (player_num == 4)
-    {
-        Fourth_Ready->SetText(FText::FromString("READY"));
-        Fourth_Ready->Font.Size = 50;
-        Fourth_Ready->SetJustification(ETextJustify::Center);
-        Fourth_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+    else {
+        if (player_num == 1) {
+            First_Ready->SetText(FText::FromString(""));
+        }
+        else if (player_num == 2) {
+            Second_Ready->SetText(FText::FromString(""));
+        }
+        else if (player_num == 3) {
+            Third_Ready->SetText(FText::FromString(""));
+        }
+        else if (player_num == 4) {
+            Fourth_Ready->SetText(FText::FromString(""));
+        }
     }
 }
 
@@ -172,7 +226,7 @@ void UChoiceCharacterUI::Init()
     {
         //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "GirlButton Init");
         GirlButton->SetClickMethod(EButtonClickMethod::DownAndUp);
-        GirlButton->OnClicked.AddUniqueDynamic(this, &UChoiceCharacterUI::OnClickedGirlButton);
+        GirlButton->OnClicked.AddUniqueDynamic(this, &UChoiceCharacterUI::OnClickedGirlButton); // [+] AddUniqueDynamic <-> AddDynamic: AddUniqueDynamic은 중복하여 함수를 호출하지 X (버튼에 사용하기 적합)
         GirlButton->SetIsEnabled(true);
         //StartButton->SetVisibility(ESlateVisibility::Hidden);
 

@@ -121,6 +121,7 @@ public:
 	Drop_Item recvDropItem;
 	DetachItem recvDetachItem;
 	SliceVector recvSliceVector;
+	ZombieShouting recvZombieShouting;
 
 	uint32 PlayerId;
 	uint32 ZombieId;
@@ -143,8 +144,7 @@ public:
 	bool sendRun = false;
 	bool sendjump = false;
 	bool b_clear = false;
-
-	float TimeSinceLastSend{};
 	
+	float TimeSinceLastSend;
 
 };

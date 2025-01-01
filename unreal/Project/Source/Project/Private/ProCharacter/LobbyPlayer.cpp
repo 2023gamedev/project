@@ -243,7 +243,7 @@ void ALobbyPlayer::MoveChoiceCharacterUI()
 			return;
 		}
 
-		//StartGameUIWidget->RemoveFromViewport();
+		//StartGameUIWidget->RemoveFromParent();
 
 
 
@@ -281,7 +281,7 @@ void ALobbyPlayer::MoveStartGameUI()
 			return;
 		}
 
-		//StartGameUIWidget->RemoveFromViewport();
+		//StartGameUIWidget->RemoveFromParent();
 
 
 

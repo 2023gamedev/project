@@ -70,6 +70,14 @@ using PLAYER_INFO = struct Client_INFO {
 	atomic<bool> isSending = false;  // 현재 전송 중인지 여부를 나타내는 플래그
 };
 
+struct GameSession {
+	unsigned int sessionID;                       // 세션 ID
+	std::vector<PLAYER_INFO*> players;            // 세션에 포함된 플레이어
+	std::vector<Zombie*> zombies;                 // 세션에 포함된 좀비
+	std::mutex sessionMutex;                      // 동기화를 위한 뮤텍스
+	bool isActive = true;                         // 세션 활성화 여부
+};
+
 struct Vector3D {
 	float x, y;
 	FLOOR floor;
@@ -77,6 +85,7 @@ struct Vector3D {
 
 extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 extern std::unordered_map<int, Player> playerDB;
+extern std::unordered_map<unsigned int, GameSession*> g_sessions;
 
 extern std::unordered_map<int, Player> playerDB_BT;
 
@@ -135,7 +144,6 @@ public:
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
-	void Timer_Thread();
 	void Zombie_BT_Thread();
 
 	bool LoadEdgesMap(const string& filePath,
@@ -145,6 +153,9 @@ public:
 	bool UpdateEdgesMap(const string& originalFilePath, const string& copiedFilePath);
 
 	void SendPingToClients();
+
+	unsigned int CreateSession();
+	void DeleteSession(unsigned int sessionID);
 
 	void Zombie_BT_Initialize();
 	void ServerOn();
@@ -224,7 +235,6 @@ private:
 	int cpuCore;
 
 	vector<thread*> worker_threads;
-	thread timer_thread;
 
 	thread zombie_thread;
 
@@ -245,6 +255,8 @@ private:
 	string Root_Open_Player = "None";
 
 	int roofkey_cnt = 0;
+
+	std::mutex g_sessionsMutex;
 
 	//int player_loading_cnt = 0;
 	//bool all_player_loading = false;

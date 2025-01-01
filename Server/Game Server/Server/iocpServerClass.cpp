@@ -16,6 +16,7 @@
 
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, Player> playerDB;
+std::unordered_map<unsigned int, GameSession*> g_sessions;
 
 std::unordered_map<int, Player> playerDB_BT;
 
@@ -34,7 +35,7 @@ std::vector<tuple<float, float, float>> g_valispositionsF2;
 float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정 (0.1초)
 float IOCP_CORE::GAME_TIMER_INTERVAL = 0.005f;	// 게임 타이머 시간 누적 인터벌 설정 (0.005초 - 5ms)
 
-std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// MoveTo에서 계산용으로 사용
+std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// BT 작동 인터벌 체크 & MoveTo에서 계산용으로 사용
 std::chrono::duration<float> IOCP_CORE::GT_deltaTime;	// 게임 타이머 누적용 deltaTime
 
 bool UPDATEMAP = false;		// 맵 txt 업데이트 유무
@@ -63,8 +64,6 @@ IOCP_CORE::IOCP_CORE()
 	filePath = "EdgesF2.txt";
 	UpdateEdgesMap(unrealFilePath + filePath, filePath);
 	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
-	
-	//timer_thread = thread(&IOCP_CORE::Timer_Thread, this);
 	
 	//==========Zombie_BT 초기화
 	Zombie_BT_Initialize();
@@ -158,8 +157,6 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 	acceptThread.join();
 
 	zombie_thread.join();
-
-	//timer_thread.join();
 }
 
 void IOCP_CORE::IOCP_WorkerThread() {
@@ -470,57 +467,6 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 	exit(-1);
 }
 
-void IOCP_CORE::Timer_Thread()
-{
-	printf("Timer Thread Started\n");
-	auto lastTime = std::chrono::high_resolution_clock::now();
-	auto lastSendTime = std::chrono::high_resolution_clock::now();
-	auto lastPingTime = std::chrono::high_resolution_clock::now();
-
-	while (!ServerShutdown)
-	{
-		if (b_Timer) 
-		{
-			// 현재 시간 측정
-			auto currentTime = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<float> deltaTime = currentTime - lastTime;
-			lastTime = currentTime;
-
-			// deltaTime을 누적하여 GameTime에 더함
-			GameTime += deltaTime.count();  // 초 단위
-
-			std::chrono::duration<float> sendInterval = currentTime - lastSendTime;
-			if (sendInterval.count() >= 1.0f) {
-				Protocol::Time packet;
-				packet.set_timer(GameTime);
-				packet.set_packet_type(3);
-
-				std::string serializedData;
-				packet.SerializeToString(&serializedData);
-
-				for (auto& playerPair : g_players)
-				{
-					PLAYER_INFO* player = playerPair.second;
-					if (player->connected) {
-						IOCP_SendPacket(player->id, serializedData.data(), serializedData.size());
-					}
-					//cout << "send" << '\n';
-					//printf("Send Timer");
-				}
-
-				lastSendTime = currentTime;
-			}
-
-			// 5초마다 Ping 메시지 전송
-			std::chrono::duration<float> pingInterval = currentTime - lastPingTime;
-			if (pingInterval.count() >= 5.0f) {
-				//SendPingToClients();
-				lastPingTime = currentTime;
-			}
-		}
-	}
-}
-
 void IOCP_CORE::Zombie_BT_Initialize()
 {
 	//======[좀비 BT 생성]======
@@ -682,7 +628,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 		BT_deltaTime = currentTime - lastBTTime;
 		GT_deltaTime = currentTime - lastGTTime;
 
-		// 게임 타이머 계산 (원래 타이머 쓰레드에서 계산했는데 해당 쓰레드 딱히 필요가 없어서 지금 주석처리해놈)
+		// 게임 타이머 계산 
 		if (GT_deltaTime.count() > 0.005f) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
 			// deltaTime을 누적하여 GameTime에 더함
 			GameTime += GT_deltaTime.count();  // 초 단위 (* -> 이렇게 부동소수점 누적하면, 나중에 시간 지날 수록 정확도 떨어짐)
@@ -809,6 +755,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 				continue;
 			}
 
+			// WaitOneTick_SendPath 다시 초기화
+			if (zom->HaveToWait == false && zom->WaitOneTick_SendPath == true) {
+				zom->WaitOneTick_SendPath = false;
+			}
+
 			// 좀비가 플레이어들이 없는 층에 있다면 좀비 BT 실행 멈추고 있기
 			bool same_floor = false;
 			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 z_floor: " << zom->z_floor << endl;
@@ -920,14 +871,19 @@ void IOCP_CORE::Zombie_BT_Thread()
 #endif
 		}
 
-		for (const auto& player : playerDB_BT) {
+		for (const auto player : playerDB_BT) {
 			Protocol::ZombiePathList zPathList;
 			zPathList.set_packet_type(10);
 
-			for (const auto& zom : zombieDB_BT) {
-				if (player.second.floor == zom->z_floor) {
+			for (const auto zom : zombieDB_BT) {
+				if (player.second.floor == zom->z_floor) {	// 플레이어 같은 층에 있는 좀비의 path만 받음
 
-					if (zom->path.empty() || zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
+					// path 보낼 필요 없는 좀비들 예외처리 (최적화)
+					if (zom->GetHP() <= 0.f
+						|| zom->path.empty() 
+						|| zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/
+						|| zom->HaveToWait == true
+						|| zom->WaitOneTick_SendPath == true) {
 						continue;
 					}
 
@@ -954,6 +910,11 @@ void IOCP_CORE::Zombie_BT_Thread()
 					currentLocation->set_x(zom->ZombieData.x);
 					currentLocation->set_y(zom->ZombieData.y);
 					currentLocation->set_z(zom->ZombieData.z);
+
+#ifdef	ENABLE_BT_LOG
+					cout << "<<플레이어 #" << player.first << " 에게 SendPath 전송 완료 - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
+					cout << endl;
+#endif
 				}
 			}
 
@@ -1103,5 +1064,31 @@ void IOCP_CORE::SendPingToClients()
 			}
 		}
 		++it;  // 삭제되지 않은 경우에만 반복자를 증가시킴
+	}
+}
+
+unsigned int IOCP_CORE::CreateSession() {
+	static std::atomic<unsigned int> sessionCounter{ 1 };
+	unsigned int sessionID = sessionCounter++;
+
+	auto* session = new GameSession();
+	session->sessionID = sessionID;
+
+	{
+		std::lock_guard<std::mutex> lock(g_sessionsMutex);
+		g_sessions[sessionID] = session;
+	}
+
+	std::cout << "Session created: " << sessionID << std::endl;
+	return sessionID;
+}
+
+void IOCP_CORE::DeleteSession(unsigned int sessionID) {
+	std::lock_guard<std::mutex> lock(g_sessionsMutex);
+	auto it = g_sessions.find(sessionID);
+	if (it != g_sessions.end()) {
+		delete it->second; // 메모리 해제
+		g_sessions.erase(it);
+		std::cout << "Session deleted: " << sessionID << std::endl;
 	}
 }

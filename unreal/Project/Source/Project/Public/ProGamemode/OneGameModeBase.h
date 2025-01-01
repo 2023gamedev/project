@@ -180,6 +180,8 @@ public:
 
     void UpdateZombieHP(uint32 ZombieId, float Damage);
 
+    void UpdateShoutingZombie(uint32 ZombieId, uint32 PlayerId);
+
     void DestroyItem(uint32 Itemid, uint32 Playerid);
 
     int32 GetItemBoxNumber() { return m_iItemBoxNumber; }

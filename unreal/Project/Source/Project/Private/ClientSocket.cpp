@@ -598,18 +598,20 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 
 					UE_LOG(LogNet, Display, TEXT("recv slicevector"));
 				}
+				break;
 			}
 			case 25:
 			{
 				Protocol::Zombie_shouting shoutingpacket;
 				if (shoutingpacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
+					Q_shouting.push(ZombieShouting(shoutingpacket.zombieid(), shoutingpacket.playerid()));
+
 					UE_LOG(LogNet, Display, TEXT("recv zombie shouting packet"));
 				}
+				break;
 			}
-
 			}
-
 		}
 	}
 }
@@ -685,7 +687,7 @@ bool ClientSocket::ConnectServer(ServerType serverType)
 		return false;
 	}
 
-	ServerAddr.sin_addr.s_addr = inet_addr(serverAddress.c_str());
+	inet_pton(AF_INET, serverAddress.c_str(), &ServerAddr.sin_addr);
 
 	retval = connect(Socket, (sockaddr*)&ServerAddr, sizeof(sockaddr));
 

@@ -85,8 +85,8 @@ public:
 	//ZombiePath recvZombiePath;
 	ZombieHP recvZombieHP;
 
-	uint32 ZombieId;
-	uint32 AttackZombieId;
+	uint32 Zombie_Id = 9999;
+	//uint32 AttackZombieId;
 	//FVector NewLocation;
 	//FVector PreviousLocation;
 	//FRotator PreviousRotation;
@@ -96,7 +96,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	ABaseZombie* OwnerZombie;
 
-	int attackPlayerID;
+	UPROPERTY(EditAnywhere)
+	uint32 attackPlayerID = 9999;	// 공격시에 바라 볼 플레이어 (공격할 대상)
 
 	float PreviousHp = 0.f;
 
