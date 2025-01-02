@@ -57,5 +57,6 @@ void AShoutingNiagaEffect::EndPlay(EEndPlayReason::Type type)
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Shouting FX ended");
 
-	Destroy();
+	//Destroy();
+	Super::EndPlay(type);	// 안 부르면 엔진이 정상적인 정리 작업을 수행하지 못해, 리소스가 제대로 해제되지 않거나(메모리 누수) 레벨 언로드가 지연되어 프레임 드랍과 같은 문제가 발생한다
 }
