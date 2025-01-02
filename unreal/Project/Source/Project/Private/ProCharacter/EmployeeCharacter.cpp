@@ -6,8 +6,8 @@
 AEmployeeCharacter::AEmployeeCharacter()
 {
 	// 위에 FObjectFinder는 기존것 밑에는 새롭게 애니메이션한 부분
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/CharacterAsset/Employee/EmployeeCharacter_UE.EmployeeCharacter_UE"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/CharacterAsset/JEmployee/Employee.Employee"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/CharacterAsset/Employee/EmployeeCharacter_UE.EmployeeCharacter_UE"));
+	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/CharacterAsset/JEmployee/Employee.Employee"));
 
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
