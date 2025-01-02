@@ -17,32 +17,39 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 	m_bPawnRun = false;
 	m_bIsInAir = false;
 	m_bIsDead = false;
+	// 위에 FObjectFinder는 기존것 밑에는 새롭게 애니메이션한 부분
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployee.BP_AMEmployee"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeeJ.BP_AMEmployeeJ"));
 	if (ATTACK_MONTAGE.Succeeded()) {
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
 	
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> PICKUP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeePickup.BP_AMEmployeePickup"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> PICKUP_MONTAGE(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeePickupJ.BP_AMEmployeePickupJ"));
 	if (PICKUP_MONTAGE.Succeeded()) {
 		PickUpMontage = PICKUP_MONTAGE.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> HEALING_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeeHealing.BP_AMEmployeeHealing"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> HEALING_MONTAGE(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeeHealingJ.BP_AMEmployeeHealingJ"));
 	if (HEALING_MONTAGE.Succeeded()) {
 		HealingMontage = HEALING_MONTAGE.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> BH_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeeBleedHealing.BP_AMEmployeeBleedHealing"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> BH_MONTAGE(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeeBleedHealingJ.BP_AMEmployeeBleedHealingJ"));
 	if (BH_MONTAGE.Succeeded()) {
 		BleedHealingMontage = BH_MONTAGE.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> OK_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeeOpenKey.BP_AMEmployeeOpenKey"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> OK_MONTAGE(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeeOpenKeyJ.BP_AMEmployeeOpenKeyJ"));
 	if (OK_MONTAGE.Succeeded()) {
 		OpenKeyMontage = OK_MONTAGE.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> JUMP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/Other_Jump.Other_Jump"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> JUMP_MONTAGE(TEXT("/Game/CharacterAsset/JAnimation/Other_Jump.Other_Jump"));
 	if (JUMP_MONTAGE.Succeeded()) {
 		JumpMontage = JUMP_MONTAGE.Object;
 	}

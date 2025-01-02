@@ -538,18 +538,113 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
    // 직렬화된 데이터를 서버로 전송
    bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
-   // 추가 수정 필요
-    // 여기서 send 해주는게 좋을듯? 아이템 정보들과 아이템 위치를 담아서
-    // 그 send한것은 ItemBoxClasses[ItemBoxId]에 SpawnedItemBox 생성해서 넣어주는 새로운 함수가 있으면 될것같다.
-    // (물론 ItemBoxClasses[ItemBoxId]가 혹시 인덱스 오류 우려되면 for문으로 비어있는 자리 넣어줘도 될듯)
-    // 
-    // SpawnedItemBox->ItemName = itemname;
-    // SpawnedItemBox->ItemClassType = itemclass;
-    // SpawnedItemBox->Texture = texture;
-    // SpawnedItemBox->Count = count;
-    // SpawnedItemBox->ItemBoxId = newindex; 이 5가지랑 itemboxpos 묶어 보내면 될듯?
+}
 
-   //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
+void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector playerlocation)
+{
+
+    FVector DropPos = playerlocation;
+
+    float RandomX = FMath::RandRange(-200.0f, 200.0f);
+    float RandomY = FMath::RandRange(-200.0f, 200.0f);
+
+    DropPos.X += RandomX;
+    DropPos.Y += RandomY;
+
+    int32 newindex = INDEX_NONE;
+    bool bAdded = false;
+    for (int32 i = 0; i < ItemBoxClasses.Num(); ++i)
+    {
+        if (ItemBoxClasses[i] == nullptr)
+        {
+            ItemBoxClasses[i] = AItemBoxActor::StaticClass();
+            newindex = i;
+            bAdded = true;
+            break;
+        }
+    }
+
+    if (!bAdded)
+    {
+        // 빈 자리가 없으면 새로 추가
+        ItemBoxClasses.Add(AItemBoxActor::StaticClass());
+        newindex = m_iItemBoxNumber;
+        ++m_iItemBoxNumber;
+    }
+
+    //UE_LOG(LogTemp, Warning, TEXT("SelectedItemBoxClassBefore!!!!!!"));
+    //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem -> ItemBoxClasses.Num(): %d"), ItemBoxClasses.Num());
+   // UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem ->  GetItemBoxNumber(): %d"), GetItemBoxNumber());
+
+    if (newindex == INDEX_NONE)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem IndexERROR"));
+        return;
+    }
+    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[newindex];
+    FVector itemboxpos = DropPos + FVector(0.f, 0.f, -60.149886f);
+
+    //UE_LOG(LogTemp, Warning, TEXT("SpawnedItemBoxBefore!!!!!!"));
+    AItemBoxActor* SpawnedItemBox = GetWorld()->SpawnActor<AItemBoxActor>(SelectedItemBoxClass, itemboxpos, FRotator::ZeroRotator);
+
+    if (SpawnedItemBox) {
+        SpawnedItemBox->ItemName = itemname;
+        SpawnedItemBox->ItemClassType = itemclass;
+        SpawnedItemBox->Texture = texture;
+        SpawnedItemBox->Count = count;
+        SpawnedItemBox->ItemBoxId = newindex;
+    }
+
+    ++m_iItemBoxNumber;
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
+
+    uint32 iclass{};
+
+    if (itemclass == EItemClass::NORMALWEAPON) {
+        iclass = 1;
+    }
+    else if (itemclass == EItemClass::THROWINGWEAPON) {
+        iclass = 2;
+    }
+    else if (itemclass == EItemClass::HEALINGITEM) {
+        iclass = 3;
+    }
+    else if (itemclass == EItemClass::BLEEDINGHEALINGITEM) {
+        iclass = 4;
+    }
+    else if (itemclass == EItemClass::KEYITEM) {
+        iclass = 5;
+    }
+    else if (itemclass == EItemClass::BAGITEM) {
+        iclass = 6;
+    }
+    else if (itemclass == EItemClass::NONE) {
+        iclass = 7;
+    }
+
+
+    Protocol::drop_item droppacket;
+
+    droppacket.set_packet_type(22);
+    std::string ItemNameStr(TCHAR_TO_UTF8(*itemname.ToString()));
+    droppacket.set_itemname(ItemNameStr);
+    droppacket.set_itemclass(iclass);
+    droppacket.set_count(count);
+    if (texture) {
+        FString TexturePath = texture->GetPathName();
+        std::string TexturePathStr(TCHAR_TO_UTF8(*TexturePath));
+        droppacket.set_texture_path(TexturePathStr);
+    }
+    droppacket.set_itemid(newindex + 1);
+    droppacket.set_posx(itemboxpos.X);
+    droppacket.set_posy(itemboxpos.Y);
+    droppacket.set_posz(itemboxpos.Z);
+
+    std::string serializedData;
+    droppacket.SerializeToString(&serializedData);
+
+    // 직렬화된 데이터를 서버로 전송
+    bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
 void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, FVector itempos)

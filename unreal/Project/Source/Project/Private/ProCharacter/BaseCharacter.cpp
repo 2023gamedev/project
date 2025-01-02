@@ -120,8 +120,9 @@ ABaseCharacter::ABaseCharacter()
 	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 30.f));
 
 
-
+	// 위에 FObjectFinder는 기존것 밑에는 새롭게 애니메이션한 부분
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/CharacterAsset/Employee/EmployeeCharacter_UE.EmployeeCharacter_UE"));
+	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_MANNEQUIN(TEXT("/Game/CharacterAsset/JEmployee/Employee.Employee"));
 
 	if (SK_MANNEQUIN.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_MANNEQUIN.Object);
@@ -130,6 +131,7 @@ ABaseCharacter::ABaseCharacter()
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance> CHARACTER_ANIM(TEXT("/Game/CharacterAsset/Animation/BP_EmployeeAnimBlueprint.BP_EmployeeAnimBlueprint_C"));
+	//static ConstructorHelpers::FClassFinder<UAnimInstance> CHARACTER_ANIM(TEXT("/Game/CharacterAsset/JAnimation/BP_EmployeeAnimBlueprintJ.BP_EmployeeAnimBlueprintJ_C"));
 
 	if (CHARACTER_ANIM.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(CHARACTER_ANIM.Class);
@@ -703,6 +705,10 @@ void ABaseCharacter::PlayDead()
 
 	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
 
+	if (PlayerId == 99) {
+		SpawnAllOnGround();
+	}
+
 	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 	if (controller != nullptr) {
 		controller->DisabledControllerInput();
@@ -1106,6 +1112,85 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 	//}
 
 
+}
+
+void ABaseCharacter::SpawnAllOnGround()
+{
+	for (int i = 0; i < 20; ++i) {
+		if (i < 0 || i > Inventory.Num()) {
+			return;
+		}
+		auto CurrentInvenSlot = this->Inventory[i];
+		if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {
+			if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
+				DestroyBleedingHealingItem();
+				QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
+				QuickSlot[0].Name = "nullptr";
+				QuickSlot[0].ItemClassType = EItemClass::NONE;
+				QuickSlot[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+				QuickSlot[0].Count = 0;
+				QuickSlot[0].SlotReference = -1;
+
+			}
+			else if (CurrentInvenSlot.ItemClassType == EItemClass::HEALINGITEM) {
+				DestroyHealingItem();
+				QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
+				QuickSlot[1].Name = "nullptr";
+				QuickSlot[1].ItemClassType = EItemClass::NONE;
+				QuickSlot[1].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+				QuickSlot[1].Count = 0;
+				QuickSlot[1].SlotReference = -1;
+
+			}
+			else if (CurrentInvenSlot.ItemClassType == EItemClass::THROWINGWEAPON) {
+				DestroyThrowWeapon();
+				QuickSlot[2].Type = EItemType::ITEM_QUICK_NONE;
+				QuickSlot[2].Name = "nullptr";
+				QuickSlot[2].ItemClassType = EItemClass::NONE;
+				QuickSlot[2].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+				QuickSlot[2].Count = 0;
+				QuickSlot[2].SlotReference = -1;
+
+			}
+			else if (CurrentInvenSlot.ItemClassType == EItemClass::KEYITEM) {
+				DestroyKeyItem();
+
+				QuickSlot[3].Type = EItemType::ITEM_QUICK_NONE;
+				QuickSlot[3].Name = "nullptr";
+				QuickSlot[3].ItemClassType = EItemClass::NONE;
+				QuickSlot[3].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+				QuickSlot[3].Count = 0;
+				QuickSlot[3].SlotReference = -1;
+
+			}
+			else if (CurrentInvenSlot.ItemClassType == EItemClass::NORMALWEAPON) {
+				DestroyNormalWeapon();
+
+				QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
+				QuickSlot[4].Name = "nullptr";
+				QuickSlot[4].ItemClassType = EItemClass::NONE;
+				QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
+				QuickSlot[4].Count = 0;
+				QuickSlot[4].SlotReference = -1;
+
+			}
+
+			AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
+
+			if (GameMode) {
+				GameMode->SpawnOnDeathGroundItem(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count, GetActorLocation());
+			}
+
+		}
+		else if (CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
+
+			AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
+
+			if (GameMode) {
+				GameMode->SpawnOnDeathGroundItem(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count, GetActorLocation());
+			}
+		}
+	}
 }
 
 
