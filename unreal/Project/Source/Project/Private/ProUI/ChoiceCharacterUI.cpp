@@ -17,6 +17,8 @@ void UChoiceCharacterUI::OnClickedGirlButton()
     FireFighterBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
     EmployeeBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
 
+    ReadyButton->SetIsEnabled(true);
+
     ChoicedGirl.Execute();
 }
 
@@ -28,6 +30,8 @@ void UChoiceCharacterUI::OnClickedEmployeeButton()
     IdolBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
     FireFighterBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
     EmployeeBGButton->SetVisibility(ESlateVisibility::HitTestInvisible); // 보이지만 클릭 불가
+
+    ReadyButton->SetIsEnabled(true);
 
     ChoicedEmployee.Execute();
 }
@@ -41,6 +45,8 @@ void UChoiceCharacterUI::OnClickedIdolButton()
     FireFighterBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
     EmployeeBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
 
+    ReadyButton->SetIsEnabled(true);
+
     ChoicedIdol.Execute();
 }
 
@@ -52,6 +58,8 @@ void UChoiceCharacterUI::OnClickedFireFighterButton()
     IdolBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
     FireFighterBGButton->SetVisibility(ESlateVisibility::HitTestInvisible); // 보이지만 클릭 불가
     EmployeeBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
+
+    ReadyButton->SetIsEnabled(true);
 
     ChoicedFireFighter.Execute();
 }
@@ -272,7 +280,7 @@ void UChoiceCharacterUI::Init()
 
         ReadyButton->SetClickMethod(EButtonClickMethod::DownAndUp);
         ReadyButton->OnClicked.AddUniqueDynamic(this, &UChoiceCharacterUI::OnClickedReadyButton);
-        ReadyButton->SetIsEnabled(true);
+        ReadyButton->SetIsEnabled(false);  // 캐릭을 선택안하고 클릭하는 걸 방지
 
         //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ReadyButton Init End");
     }

@@ -195,6 +195,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 }
             }
 
+            Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
+            //Root_Open_Player = "None";
+
             // 전송작업
             Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player);
 
