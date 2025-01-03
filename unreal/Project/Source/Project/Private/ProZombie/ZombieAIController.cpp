@@ -68,7 +68,11 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	float PathX = get<0>(target);
 	float PathY = get<1>(target);
 
-	if (PathX == -100000.f && PathY == -100000.f) {
+	if (PathX == -100000.f && PathY == -100000.f) {	// 초기 더미값
+		return;
+	}
+
+	if (PathX == 9999.f && PathY == 9999.f) {	// 서버 좀비 HaveToWait 상태일때 (애니메이션 재생 중일 떄)
 		return;
 	}
 
