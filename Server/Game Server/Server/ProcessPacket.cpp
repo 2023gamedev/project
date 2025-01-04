@@ -61,6 +61,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
+        if (clientInfo->roomid == 0) {
+            clientInfo->roomid = Packet.roomnum();
+        }
+
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
             //playerDB[Packet.playerid()] = pl; //-> 이렇게 사용하면 초기화 빼먹은 값 더미 값 씌워질 수 있음
@@ -144,7 +148,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             }
 
             if (bAllPlayersInRange) {
-                Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player);
+                Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, clientInfo);
 
                 return true;
             }
@@ -199,7 +203,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             //Root_Open_Player = "None";
 
             // 전송작업
-            Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player);
+            Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, clientInfo);
 
             return true;
         }
@@ -207,7 +211,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second != nullptr) {
+            if (player.first != id && player.second->isInGame && player.second != nullptr && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
@@ -246,7 +250,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         if (id == min_it->first) {
             for (const auto& player : g_players) {
-                if (player.first != id && player.second->isInGame) {
+                if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                     IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 }
             }
@@ -264,7 +268,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
@@ -281,7 +285,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
@@ -321,7 +325,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
@@ -408,7 +412,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.SerializeToString(&serializedData);
 
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
@@ -462,7 +466,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 printf("%d 한테 아이템 삭제 보냈음\n", player.first);
             }
@@ -485,7 +489,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.SerializeToString(&serializedData);
 
         for (const auto& player : g_players) {
-            if (player.second->isInGame) {
+            if (player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 printf("%d 한테 키 획득 보냈음\n", player.first);
             }
@@ -503,7 +507,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         destroyPacket.SerializeToString(&DserializedData);
 
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, DserializedData.data(), DserializedData.size());
                 printf("%d 한테 키 삭제 보냈음\n", player.first);
             }
@@ -538,7 +542,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.second->isInGame) {
+            if (player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
@@ -575,7 +579,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.SerializeToString(&serializedData);
 
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 printf("%d 에게 아이템 드랍 전송\n", player.first);
             }
@@ -596,7 +600,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.SerializeToString(&serializedData);
 
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 printf("%d 에게 아이템 장착 해제 전송\n", player.first);
             }
@@ -629,7 +633,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         }
 
         for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
+            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 printf("%d 에게 슬라이싱 해제 전송\n", player.first);
             }
@@ -637,23 +641,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         return true;
     }
-    /*case 25:
-    {
-        Protocol::Zombie_shouting Packet;
-        Packet.ParseFromArray(packet.data(), packet.size());
-
-        string serializedData;
-        Packet.SerializeToString(&serializedData);
-
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                printf("%d 에게 좀비 샤우팅 전송\n", player.first);
-            }
-        }
-
-        return false;
-    }*/
 
     default: {
         printf("\nERROR, Unknown signal -> [ %u ] protocol num = %d\n", id, tempPacket.packet_type());
@@ -663,7 +650,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     }
 }
 
-void IOCP_CORE::Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player)
+void IOCP_CORE::Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player, PLAYER_INFO* clientInfo)
 {
     Protocol::game_clear clear_packet;
 
@@ -677,7 +664,7 @@ void IOCP_CORE::Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std:
     clear_packet.set_best_kill_player(bestkill_player);
 
     for (const auto& player : g_players) {
-        if (player.second->isInGame) {
+        if (player.second->isInGame && player.second->roomid == clientInfo->roomid) {
 
             clear_packet.set_my_killcount(playerDB[player.first].killcount);
 

@@ -16,6 +16,7 @@ message Character {
     uint32 b_jump = 12;
     bool isingame = 13;
     string username = 14;
+    uint32 roomnum = 15;
 };
 
 message jump {
