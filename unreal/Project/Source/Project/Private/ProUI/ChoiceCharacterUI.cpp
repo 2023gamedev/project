@@ -312,21 +312,33 @@ void UChoiceCharacterUI::Init()
         // 이름 정렬된 순서에 맞게 출력
         for (auto player : SortedArray) {
             ++player_num;
-            if (player_num == 1 && First_Player)
-            {
+            if (player_num == 1 && First_Player) {
                 First_Player->SetText(FText::FromString(player.Value));
+                First_Image->SetIsEnabled(true);
             }
-            if (player_num == 2 && Second_Player)
-            {
+            else if (player_num < 1) {
+                First_Image->SetIsEnabled(false);
+            }
+            if (player_num == 2 && Second_Player) {
                 Second_Player->SetText(FText::FromString(player.Value));
+                Second_Image->SetIsEnabled(true);
             }
-            if (player_num == 3 && Third_Player)
-            {
+            else if (player_num < 2) {
+                Second_Image->SetIsEnabled(false);
+            }
+            if (player_num == 3 && Third_Player) {
                 Third_Player->SetText(FText::FromString(player.Value));
+                Third_Image->SetIsEnabled(true);
             }
-            if (player_num == 4 && Fourth_Player)
-            {
+            else if (player_num < 3) {
+                Third_Image->SetIsEnabled(false);
+            }
+            if (player_num == 4 && Fourth_Player) {
                 Fourth_Player->SetText(FText::FromString(player.Value));
+                Fourth_Image->SetIsEnabled(true);
+            }
+            else if (player_num < 4) {
+                Fourth_Image->SetIsEnabled(false);
             }
         }
     }
