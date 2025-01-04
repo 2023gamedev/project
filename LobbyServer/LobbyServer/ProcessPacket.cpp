@@ -167,6 +167,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
                     ExistingPlayerPacket.set_roomid(room_id);
                     ExistingPlayerPacket.set_type(10);
 
+                    //cout << "새로 들어온 플레이어 #" << id << "에게 기존에 방 #" << room_id << "에 있던 플레이어 #" << player.first << "(" << player.second->username << ") 전송!" << endl;
+
                     string existingSerializedData;
                     ExistingPlayerPacket.SerializeToString(&existingSerializedData);
 
@@ -185,6 +187,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
 
             for (const auto& player : g_players) {
                 if (player.second->room_num == room_id) {
+
+                    //cout << "방 #" << room_id << "에 기존 플레이어 #" << player.first << "에게 새로운 플레이어 #" << id << "(" << g_players[id]->username << ") 전송!" << endl;
+
                     // 새 플레이어 정보 브로드캐스트
                     IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 }
