@@ -62,6 +62,7 @@ using PLAYER_INFO = struct Client_INFO {
 	bool send_zombie = false;
 	bool send_item = false;
 	bool send_car = false;
+	int roomid = 0;
 	
 	// 전송 대기열 추가
 	Concurrency::concurrent_queue<std::string> sendQueue;  // 전송할 데이터를 담는 대기열
@@ -136,7 +137,7 @@ public:
 	void DisconnectClient(unsigned int clientId);
 
 	bool IOCP_ProcessPacket(int id, const std::string& packet);
-	void Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player);
+	void Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player, PLAYER_INFO* clientInfo);
 
 	void IOCP_SendNextPacket(PLAYER_INFO* user);
 	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);

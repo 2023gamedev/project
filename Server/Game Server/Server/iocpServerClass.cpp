@@ -668,7 +668,8 @@ void IOCP_CORE::Zombie_BT_Thread()
 			Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
 
 			// 전송작업
-			Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player);
+			// 세션 나누면서 마지막 인자 추가해야할듯.. 지금 상태에서는 서버에 접속한 전부에게 전송
+			//Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, clientInfo);
 		}
 
 		// BT 작동 인터벌 설정
