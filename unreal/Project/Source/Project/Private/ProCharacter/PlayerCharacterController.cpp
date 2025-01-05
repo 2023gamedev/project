@@ -223,7 +223,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 		}
 
-		if (GameInstance->ClientSocketPtr->Q_jump.try_pop(recvJump)) { 
+		if (GameInstance->ClientSocketPtr->Q_jump.try_pop(recvJump)) {
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				MyGameMode->UpdatePlayerJump(recvJump.PlayerId);
@@ -255,7 +255,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 				UE_LOG(LogNet, Display, TEXT("queue try pop Q_dropitem"));
 
-				MyGameMode->SpawnOtherCharGroundItemBoxes((recvDropItem.itemid-1), Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos);
+				MyGameMode->SpawnOtherCharGroundItemBoxes((recvDropItem.itemid - 1), Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos);
 			}
 		}
 
@@ -293,7 +293,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 			}
 		}
-		
+
 		if (GameInstance->ClientSocketPtr->Q_escape.try_pop(recvEscapeRoot)) {
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
@@ -334,12 +334,12 @@ void APlayerCharacterController::Tick(float DeltaTime)
 						FString OpenPlayerFStr = FString(OpenStr.c_str());  // std::string을 FString으로 변환
 
 						ControlledCharacter->ProGameClear(recvGameClear.root
-							,recvGameClear.alive_players
+							, recvGameClear.alive_players
 							, recvGameClear.dead_players
-						, OpenPlayerFStr
-						, recvGameClear.my_kill_count
-						, recvGameClear.best_kill_count
-						, bestkillplayerFStr);
+							, OpenPlayerFStr
+							, recvGameClear.my_kill_count
+							, recvGameClear.best_kill_count
+							, bestkillplayerFStr);
 					}
 
 
@@ -376,7 +376,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		}
 
 		if (GameInstance->ClientSocketPtr->Q_shouting.try_pop(recvZombieShouting)) {
-			if (AOneGameModeBase * MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
+			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
 				// zombieshouting 함수 호출 추가
 				MyGameMode->UpdateShoutingZombie(recvZombieShouting.zombieid, recvZombieShouting.playerid);
@@ -419,7 +419,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		if (ZombieMap.IsEmpty() == true) {
 			break;
 		}
-		
+
 		ABaseZombie** zombie = ZombieMap.Find(tmp_path.ZombieId);
 
 		if (zombie == nullptr || *zombie == nullptr) {
@@ -428,25 +428,53 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			continue;  // 좀비를 찾을 수 없으면 다음으로 넘어감
 		}
 
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId));
-		//UE_LOG(LogNet, Display, TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId);
+		bool isAnimPlaying_besideWalking = false;	// 걷기 애니메이션 말고 다른 애니메이션 (공격, 피격, 샤우팅) 재생 중인지
 
-		// 좀비 위치 서버에서 받은 위치로 갱신
-		if (tmp_path.Location.IsZero() == false) 
-			(*zombie)->SetActorLocation(tmp_path.Location);
+		if ((*zombie)->CachedAnimInstance->Montage_IsPlaying((*zombie)->CachedAnimInstance->AttackMontage) == true
+			|| (*zombie)->CachedAnimInstance->Montage_IsPlaying((*zombie)->CachedAnimInstance->BeAttackedMontage) == true
+			|| (*zombie)->CachedAnimInstance->Montage_IsPlaying((*zombie)->CachedAnimInstance->ShoutingMontage) == true) {
 
-		// 좀비 목적지 설정
-		if (tmp_path.Path1.empty() == false) {
-			(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
-			(*zombie)->afterAnim_idleDuration = 0.f;	// 서버로부터 새로운 ZombiePath를 받으면 실행 => ZombieMoveTo idle 상태 초기화 => 다시 움직이게 함!
+			isAnimPlaying_besideWalking = true;
+
 		}
-		else
-			(*zombie)->NextPath[0] = std::tuple<float, float, float>();
-		
-		if (tmp_path.Path2.empty() == false)
-			(*zombie)->NextPath[1] = *(tmp_path.Path2.begin());
-		else
-			(*zombie)->NextPath[1] = std::tuple<float, float, float>();
+
+		if (isAnimPlaying_besideWalking == false) {	// 공격, 피격, 샤우팅 애니메이션이 재생 중이지 않을때만
+
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID=%d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId));
+			//UE_LOG(LogNet, Display, TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId);
+
+			// 좀비 위치 서버에서 받은 위치로 갱신
+			if (tmp_path.Location.IsZero() == false)
+				(*zombie)->SetActorLocation(tmp_path.Location);
+
+			// 좀비 목적지 설정
+			if (tmp_path.Path1.empty() == false) {
+
+				// 서버에서 해당 좀비 애니메이션 재생중이면 path1 에 { 9999.f, 9999.f, 9999.f } 담아서 보냄
+				if (*(tmp_path.Path1.begin()) == std::tuple{ 9999.f, 9999.f, 9999.f }) {
+					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID=%d (HaveToWait)"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId));
+					
+					// + MontageEnded 보다 먼저 실행되서 ZombieMoveTo 실행됨 => ZombieMoveTo 내에 path1 { 9999.f, 9999.f, 9999.f } 면 return하는 예외처리!
+					(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
+				}
+				else {
+					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID=%d, Path=(%.2f , %.2f , %.2f)"), 
+					//	tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId, get<0>(*(tmp_path.Path1.begin())), get<1>(*(tmp_path.Path1.begin())), get<2>(*(tmp_path.Path1.begin()))));
+
+					(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
+
+					(*zombie)->afterAnim_idleDuration = 0.f;	// 서버로부터 새로운 ZombiePath를 받으면 실행 => ZombieMoveTo idle 상태 초기화 => 다시 움직이게 함!
+				}
+				
+			}
+			else
+				(*zombie)->NextPath[0] = std::tuple<float, float, float>();
+
+			if (tmp_path.Path2.empty() == false)
+				(*zombie)->NextPath[1] = *(tmp_path.Path2.begin());
+			else
+				(*zombie)->NextPath[1] = std::tuple<float, float, float>();
+		}
 	}
 
 }

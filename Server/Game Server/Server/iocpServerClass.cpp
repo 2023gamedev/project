@@ -885,9 +885,13 @@ void IOCP_CORE::Zombie_BT_Thread()
 					if (zom->GetHP() <= 0.f
 						|| zom->path.empty() 
 						|| zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/
-						|| zom->HaveToWait == true
+						//|| zom->HaveToWait == true	/* 이러면, 다른 층에서 있던 플레이어 애니메이션 재생 중이던 좀비 위치를 갱신 못 받아서 이상함 */
 						|| zom->WaitOneTick_SendPath == true) {
 						continue;
+					}
+
+					if (zom->HaveToWait == true) {
+						zom->path[zom->ZombiePathIndex] = { 9999.f,9999.f,9999.f };	// 애니메이션 재생 중임을 알리기 위해
 					}
 
 					Protocol::ZombiePath* zPath = zPathList.add_zombiepaths();

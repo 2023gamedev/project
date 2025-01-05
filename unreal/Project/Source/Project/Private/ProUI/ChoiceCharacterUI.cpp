@@ -291,24 +291,55 @@ void UChoiceCharacterUI::Init()
 
     if (CurrentRoomPlayers)
     {
-        if (First_Player && CurrentRoomPlayers->Contains(1))
+        // 키 배열을 추출
+        TArray<uint32> SortedKeys;
+        CurrentRoomPlayers->GetKeys(SortedKeys);
+
+        // 키 배열 정렬
+        SortedKeys.Sort();
+
+        // 정렬된 키-값 쌍을 TArray로 저장
+        TArray<TPair<uint32, FString>> SortedArray;
+        for (uint32 Key : SortedKeys)
         {
-            First_Player->SetText(FText::FromString((*CurrentRoomPlayers)[1]));
+            if (const FString* Value = CurrentRoomPlayers->Find(Key))
+            {
+                SortedArray.Add(TPair<uint32, FString>(Key, *Value));
+            }
         }
-        if (Second_Player && CurrentRoomPlayers->Contains(2))
-        {
-            Second_Player->SetText(FText::FromString((*CurrentRoomPlayers)[2]));
-        }
-        if (Third_Player && CurrentRoomPlayers->Contains(3))
-        {
-            Third_Player->SetText(FText::FromString((*CurrentRoomPlayers)[3]));
-        }
-        if (Fourth_Player && CurrentRoomPlayers->Contains(4))
-        {
-            Fourth_Player->SetText(FText::FromString((*CurrentRoomPlayers)[4]));
+
+        int player_num = 0;
+        // 이름 정렬된 순서에 맞게 출력
+        for (auto player : SortedArray) {
+            ++player_num;
+            if (player_num == 1 && First_Player) {
+                First_Player->SetText(FText::FromString(player.Value));
+                First_Image->SetIsEnabled(true);
+            }
+            else if (player_num < 1) {
+                First_Image->SetIsEnabled(false);
+            }
+            if (player_num == 2 && Second_Player) {
+                Second_Player->SetText(FText::FromString(player.Value));
+                Second_Image->SetIsEnabled(true);
+            }
+            else if (player_num < 2) {
+                Second_Image->SetIsEnabled(false);
+            }
+            if (player_num == 3 && Third_Player) {
+                Third_Player->SetText(FText::FromString(player.Value));
+                Third_Image->SetIsEnabled(true);
+            }
+            else if (player_num < 3) {
+                Third_Image->SetIsEnabled(false);
+            }
+            if (player_num == 4 && Fourth_Player) {
+                Fourth_Player->SetText(FText::FromString(player.Value));
+                Fourth_Image->SetIsEnabled(true);
+            }
+            else if (player_num < 4) {
+                Fourth_Image->SetIsEnabled(false);
+            }
         }
     }
-
 }
-
-

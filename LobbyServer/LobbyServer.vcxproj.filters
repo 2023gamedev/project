@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Protocol">
+      <UniqueIdentifier>{bd758084-4ee3-4866-b507-34704f2942cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LobbyServer\iocpServerClass.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="LobbyServer\protocol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -27,14 +27,17 @@
     <ClInclude Include="LobbyServer\Common.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LobbyServer\LStruct.pb.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="LobbyServer\LoginManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyServer\iocpServerClass.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="LobbyServer\Room.h">
-      <Filter>소스 파일</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LobbyServer\LoginManager.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="LobbyServer\LStruct.pb.h">
+      <Filter>Protocol</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -47,19 +50,19 @@
     <ClCompile Include="LobbyServer\ProcessPacket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="LobbyServer\LStruct.pb.cc">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="LobbyServer\LoginManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LobbyServer\Room.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="LobbyServer\LStruct.pb.cc">
+      <Filter>Protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="LobbyServer\Lstruct.proto">
-      <Filter>소스 파일</Filter>
+      <Filter>Protocol</Filter>
     </None>
   </ItemGroup>
 </Project>
