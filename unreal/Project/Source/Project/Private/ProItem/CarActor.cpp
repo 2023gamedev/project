@@ -15,8 +15,17 @@ ACarActor::ACarActor()
 	Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("CTRIGGER"));
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CARACTOR"));
 
+	RectLight_1 = CreateDefaultSubobject<URectLightComponent>(TEXT("RectLight_1"));
+	RectLight_2 = CreateDefaultSubobject<URectLightComponent>(TEXT("RectLight_2"));
+	RectLight_1_f = CreateDefaultSubobject<URectLightComponent>(TEXT("RectLight_1_f"));
+	RectLight_2_f = CreateDefaultSubobject<URectLightComponent>(TEXT("RectLight_2_f"));
+
 	RootComponent = Trigger;
 	StaticMesh->SetupAttachment(RootComponent);
+	RectLight_1->SetupAttachment(RootComponent);
+	RectLight_2->SetupAttachment(RootComponent);
+	RectLight_1_f->SetupAttachment(RootComponent);
+	RectLight_2_f->SetupAttachment(RootComponent);
 
 	Trigger->SetBoxExtent(FVector(50.f, 50.f, 50.f));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_CAR(TEXT("/Game/VehicleVarietyPack/Meshes/SM_Hatchback.SM_Hatchback"));
@@ -24,9 +33,50 @@ ACarActor::ACarActor()
 		StaticMesh->SetStaticMesh(SM_CAR.Object);
 	}
 
-
 	Trigger->SetCollisionProfileName(TEXT("ItemBoxPS"));
 	StaticMesh->SetRelativeLocation(FVector(0.f, 0.f, -60.f));
+
+	// RectLight 설정
+	RectLight_1->SetRelativeLocation(FVector(190.052262f, 49.871861f, 6.323853f));
+	RectLight_1->SetRelativeRotation(FRotator(0.f, 180.f, 0.f));
+	
+	RectLight_1->SetIntensity(5000.0f);					// 밝기 설정
+	RectLight_1->SetLightColor(FLinearColor::Yellow);	// 색상 설정
+	RectLight_1->SetSourceWidth(30.0f);					// 너비 설정
+	RectLight_1->SetSourceHeight(15.0f);				// 높이 설정
+	RectLight_1->SetBarnDoorAngle(45.f);				// 반도어 각도 설정
+
+	RectLight_1_f->SetRelativeLocation(FVector(190.052262f, 49.871861f, 6.323853f));
+			   
+	RectLight_1_f->SetIntensity(5000.0f);					// 밝기 설정
+	RectLight_1_f->SetLightColor(FLinearColor::Yellow);	// 색상 설정
+	RectLight_1_f->SetSourceWidth(30.0f);					// 너비 설정
+	RectLight_1_f->SetSourceHeight(15.0f);				// 높이 설정
+	RectLight_1_f->SetBarnDoorAngle(45.f);				// 반도어 각도 설정
+	RectLight_1_f->SetAttenuationRadius(200.f);			// 빛의 감쇠 범위
+
+	RectLight_2->SetRelativeLocation(FVector(190.052262f, -48.966053f, 6.323853f));
+	RectLight_2->SetRelativeRotation(FRotator(0.f, 180.f, 0.f));
+
+	RectLight_2->SetIntensity(5000.0f);					// 밝기 설정
+	RectLight_2->SetLightColor(FLinearColor::Yellow);	// 색상 설정
+	RectLight_2->SetSourceWidth(30.0f);					// 너비 설정
+	RectLight_2->SetSourceHeight(15.0f);				// 높이 설정
+	RectLight_2->SetBarnDoorAngle(45.f);				// 반도어 각도 설정
+
+	RectLight_2_f->SetRelativeLocation(FVector(190.052262f, -48.966053f, 6.323853f));
+			  
+	RectLight_2_f->SetIntensity(5000.0f);					// 밝기 설정
+	RectLight_2_f->SetLightColor(FLinearColor::Yellow);	// 색상 설정
+	RectLight_2_f->SetSourceWidth(30.0f);					// 너비 설정
+	RectLight_2_f->SetSourceHeight(15.0f);				// 높이 설정
+	RectLight_2_f->SetBarnDoorAngle(45.f);				// 반도어 각도 설정
+	RectLight_2_f->SetAttenuationRadius(200.f);			// 빛의 감쇠 범위
+
+	RectLight_1->SetHiddenInGame(true);
+	RectLight_1_f->SetHiddenInGame(true);
+	RectLight_2->SetHiddenInGame(true);
+	RectLight_2_f->SetHiddenInGame(true);
 
 	InterActorName = "CarActor";
 	bIsUnlock = false;
@@ -35,6 +85,11 @@ ACarActor::ACarActor()
 void ACarActor::UnLock()
 {
 	bIsUnlock = true;
+
+	RectLight_1->SetHiddenInGame(false);
+	RectLight_1_f->SetHiddenInGame(false);
+	RectLight_2->SetHiddenInGame(false);
+	RectLight_2_f->SetHiddenInGame(false);
 
 	//GetWorldTimerManager().SetTimer(ClearTimer, this, &ACarActor::ClearAddScore, 10.0f, false);
 }
