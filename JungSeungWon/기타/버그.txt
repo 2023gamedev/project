@@ -495,7 +495,7 @@ $$$ >>>>>>> ***** [+] 좀비 슬라이스 동기화 문제 -> 애니메이션 �
 // -> 이거 혹시 급하게 중간 데모용으로 피 튀는 거 구현한 부분 때문?
 
 ***** [+] 옥상키 하나만 먹었는데 UI는 둘다 먹었다고 지워 질때 있음
-\\ -> 키 하나 먹고 떨궈서 다시 주웠을때
+***** -> 키 하나 먹고 떨궈서 다시 주웠을때
 
 ***** [+] 키 들고 있을때 손에 키 줘고 있는게 보이게 하기 
 -> 키가 워낙 작다보니, 추가로 아이콘을 띄워주거나 키를 들때는 스텐스를 바꾸던가 해서 표시나게
@@ -590,10 +590,10 @@ $$$ >>>>>>> ***** [+] 좀비 슬라이스 동기화 문제 -> 애니메이션 �
 // - 러닝 좀비만 죽을때 사운드 2번 들림
 // -> BeAttacked()[피격=사망 사운드 재생 & 피격 애니메이션]를 피가 남아 있을 때만 실행되도록 하게 바꾸니 고쳐짐 
 // -> 다른 좀비도 사실 죽을때도 BeAttacked() 불려서 두번 들려야했지만, 원래 메시는 히든되서 하나만 들리게 된건데 러닝좀비만 좀 이상하게 히든이 늦게되는지 둘다 겹쳐서 재생된듯;;
-- 에디터에서 러닝 좀비가 있는 층으로 갈때 
-"LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie
-LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie"
-해당 에러를 항상 띄움
+// - 에디터에서 러닝 좀비가 있는 층으로 갈때 
+// "LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie
+// LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie"
+// 해당 에러를 항상 띄움 => 머테리얼 0번 glass 머테리얼 수정한 거 때문이였음
 
 [+] BaseZombie.cpp에서 PostInitializeComponents에서 
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
