@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "ProItem/InterActor.h"
+#include "Components/RectLightComponent.h"
+
 #include "CarActor.generated.h"
 
 /**
@@ -36,6 +38,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool bIsUnlock;
 
-
+	UPROPERTY(EditAnywhere)
+	URectLightComponent* RectLight_1;
+	UPROPERTY(EditAnywhere)
+	URectLightComponent* RectLight_1_f;
+	UPROPERTY(EditAnywhere)
+	URectLightComponent* RectLight_2;
+	UPROPERTY(EditAnywhere)
+	URectLightComponent* RectLight_2_f;
 
 };

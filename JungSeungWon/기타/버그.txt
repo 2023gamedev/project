@@ -495,7 +495,7 @@ $$$ >>>>>>> ***** [+] 좀비 슬라이스 동기화 문제 -> 애니메이션 �
 // -> 이거 혹시 급하게 중간 데모용으로 피 튀는 거 구현한 부분 때문?
 
 ***** [+] 옥상키 하나만 먹었는데 UI는 둘다 먹었다고 지워 질때 있음
-\\ -> 키 하나 먹고 떨궈서 다시 주웠을때
+***** -> 키 하나 먹고 떨궈서 다시 주웠을때
 
 ***** [+] 키 들고 있을때 손에 키 줘고 있는게 보이게 하기 
 -> 키가 워낙 작다보니, 추가로 아이콘을 띄워주거나 키를 들때는 스텐스를 바꾸던가 해서 표시나게
@@ -579,7 +579,7 @@ $$$ >>>>>>> ***** [+] 좀비 슬라이스 동기화 문제 -> 애니메이션 �
 
 [+] 한글 아이디 로그인/등록은 되지만 인게임 화면에서 글씨 깨져보임
 
->>>>>>> ***** [+] 차키로 열린 차는 전조등을 켜서 표시하기?
+// [+] 차키로 열린 차는 전조등을 켜서 표시하기?
 [+] 옥상도 열리면 문도 같이 열리게?
 
 [+] 죽을때 공중에 있으면 땅으로 꺼지면서 크래쉬 일어남 ㅋㅋㅋㅋ
@@ -590,10 +590,10 @@ $$$ >>>>>>> ***** [+] 좀비 슬라이스 동기화 문제 -> 애니메이션 �
 // - 러닝 좀비만 죽을때 사운드 2번 들림
 // -> BeAttacked()[피격=사망 사운드 재생 & 피격 애니메이션]를 피가 남아 있을 때만 실행되도록 하게 바꾸니 고쳐짐 
 // -> 다른 좀비도 사실 죽을때도 BeAttacked() 불려서 두번 들려야했지만, 원래 메시는 히든되서 하나만 들리게 된건데 러닝좀비만 좀 이상하게 히든이 늦게되는지 둘다 겹쳐서 재생된듯;;
-- 에디터에서 러닝 좀비가 있는 층으로 갈때 
-"LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie
-LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie"
-해당 에러를 항상 띄움
+// - 에디터에서 러닝 좀비가 있는 층으로 갈때 
+// "LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie
+// LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal mesh /Game/ZombieAsset/RunningZombie/RunningZombie.RunningZombie"
+// 해당 에러를 항상 띄움 => 머테리얼 0번 glass 머테리얼 수정한 거 때문이였음
 
 [+] BaseZombie.cpp에서 PostInitializeComponents에서 
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
@@ -688,7 +688,7 @@ LogSkeletalMesh: Error: Material with missing usage flag was applied to skeletal
 // [+] 게임시간 초과 엔딩/모두 사망 엔딩에서 탈출루트를 뚫어놓은 상태에서 게임오버되면 탈출방식이 해당 루트로 나옴 (Fail이 아니라) + 문을 연사람도 나옴 (문 연사람은 괜찮은데 탈출방식은 Fail 띄우자)
 // [+] 10분 초과 체크를 ProcessPacket에 플레이어 패킷을 받는 코드에 붙어 있어서 10분 지나도 플레이어들이 아무도 안 움직이면 게임오버 UI 안됨
 
-***** [+] 인벤토리에서 우측 아이템들중 장착하고 있는 템들은 테두리를 빨갛게해서 표시해주기
+>>>>>>> ***** [+] 인벤토리에서 우측 아이템들중 장착하고 있는 템들은 테두리를 빨갛게해서 표시해주기
 
 $$ >>>>>>> ***** [+] 게임 사운드 오류 => 다른 층에 플레이어가 내는 소리들이 이상하게 너무 가까이 들리는 거 같음
 
@@ -706,8 +706,8 @@ $$ >>>>>>> ***** [+] 게임 사운드 오류 => 다른 층에 플레이어가 �
 
 ***** [+] 다른 클라 출혈에 죽는게 아니라 피격 당해서 죽게되면 (마지막 데미지가 좀비의 타격일때) 해당 클라 다른 클라들에서는 죽음 애니메이션 동기화 미스됨
 
->>>>>>> ***** [+] 다른 클라가 좀비를 죽이면 "LogTemp: Error: [Error] BloodFX.Num() < 2 => BloodFX spawn failed!!!" 에러코드가 항상 나옴;;
-=> 원인 찾기
+// [+] 다른 클라가 좀비를 죽이면 "LogTemp: Error: [Error] BloodFX.Num() < 2 => BloodFX spawn failed!!!" 에러코드가 항상 나옴;;
+// => 원인 찾기 ===> 피 이펙트 동기화에서는 이펙터를 하나만 생성하고 있었음
 
 >>>>>>> ***** [+] 클라에서 좀비가 모두 스폰되기도 전에 BT가 실행되서 좀비 path 보냄 => (스폰 기다리고 path 보내기)
 
