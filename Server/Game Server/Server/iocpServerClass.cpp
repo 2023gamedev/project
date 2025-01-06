@@ -13,12 +13,12 @@
 #include "CanSeePlayer.h"
 #include "Selector.h"
 
-
+std::unordered_map<int, RoomState> room_states;
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
-std::unordered_map<int, Player> playerDB;
-std::unordered_map<unsigned int, GameSession*> g_sessions;
-
-std::unordered_map<int, Player> playerDB_BT;
+std::unordered_map<int, std::unordered_map<int, PLAYER_INFO*>> room_players;
+std::unordered_map<int, std::unordered_map<int, Player>> playerDB;
+std::unordered_map<int, std::unordered_map<int, Player>> playerDB_BT;
+std::unordered_map<int, ZombieController*> zombieControllers;
 
 
 std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB2;
@@ -570,15 +570,15 @@ void IOCP_CORE::ServerOn()
 	cout << "<< 좀비 BT 관련 로그 출력 ON >>" << endl;
 #endif
 
-	for (const auto player : playerDB) {
-		float p_x = player.second.x;
-		float p_y = player.second.y;
-		float p_z = player.second.z;
+	//for (const auto player : playerDB) {
+	//	float p_x = player.second.x;
+	//	float p_y = player.second.y;
+	//	float p_z = player.second.z;
 
-		//이거 플레이어는 서버 초기화 후에 추가되서 하나도 안 찍힘 (따로 찍고 싶으면 플레그 값 설정해서 나중에 플레이어 다 받으면 찍어야 할 듯)
-		cout << "플레이어 \'#" << player.first << "\' 의 시작 위치: ( "
-			<< std::setw(8) << p_x << ", " << std::setw(8) << p_y << ", " << std::setw(8) << p_z << " )" << endl;
-	}
+	//	//이거 플레이어는 서버 초기화 후에 추가되서 하나도 안 찍힘 (따로 찍고 싶으면 플레그 값 설정해서 나중에 플레이어 다 받으면 찍어야 할 듯)
+	//	cout << "플레이어 \'#" << player.first << "\' 의 시작 위치: ( "
+	//		<< std::setw(8) << p_x << ", " << std::setw(8) << p_y << ", " << std::setw(8) << p_z << " )" << endl;
+	//}
 
 	cout << endl;
 
@@ -597,7 +597,7 @@ void IOCP_CORE::ServerOn()
 }
 
 
-void IOCP_CORE::Zombie_BT_Thread()
+void IOCP_CORE::Zombie_BT_Thread(int roomid)
 {
 	//========작업 실행==========
 
@@ -646,7 +646,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 			int bestkill_cnt = 0;
 			std::string bestkill_player = "None";
 
-			for (const auto player : playerDB) {
+			for (const auto player : playerDB[roomid]) {
 				if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
 					disconnected++;
 					if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
@@ -665,7 +665,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 				}
 			}
 
-			Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
+			room_states[roomid].Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
 
 			// 전송작업
 			// 세션 나누면서 마지막 인자 추가해야할듯.. 지금 상태에서는 서버에 접속한 전부에게 전송
@@ -703,7 +703,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 
 
 			// 접속이 끊긴 것도 한 번 더 검사
-			if (g_players.size() == 0) {
+			if (room_players[roomid].size() == 0) {
 				cout << "연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
 				cout << endl;
 
@@ -767,7 +767,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 			bool same_floor = false;
 			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 z_floor: " << zom->z_floor << endl;
 			//cout << "좀비 #" << zom->ZombieData.zombieID << " 의 pathfinder.floor: " << zom->pathfinder.floor << endl;
-			for (auto player : playerDB_BT) {
+			for (auto player : playerDB_BT[roomid]) {
 				//cout << "플레이어 #" << player.first << " 의 floor: " << player.second.floor << endl;
 				if (zom->z_floor == player.second.floor && g_players.find(player.first) != g_players.end()) {	// 좀비 있는 층에 플레이어 있고, 해당 플레이어 서버랑 연결되어 있는 상태라면
 					same_floor = true;
@@ -874,7 +874,7 @@ void IOCP_CORE::Zombie_BT_Thread()
 #endif
 		}
 
-		for (const auto player : playerDB_BT) {
+		for (const auto player : playerDB_BT[roomid]) {
 			Protocol::ZombiePathList zPathList;
 			zPathList.set_packet_type(10);
 
@@ -1071,31 +1071,5 @@ void IOCP_CORE::SendPingToClients()
 			}
 		}
 		++it;  // 삭제되지 않은 경우에만 반복자를 증가시킴
-	}
-}
-
-unsigned int IOCP_CORE::CreateSession() {
-	static std::atomic<unsigned int> sessionCounter{ 1 };
-	unsigned int sessionID = sessionCounter++;
-
-	auto* session = new GameSession();
-	session->sessionID = sessionID;
-
-	{
-		std::lock_guard<std::mutex> lock(g_sessionsMutex);
-		g_sessions[sessionID] = session;
-	}
-
-	std::cout << "Session created: " << sessionID << std::endl;
-	return sessionID;
-}
-
-void IOCP_CORE::DeleteSession(unsigned int sessionID) {
-	std::lock_guard<std::mutex> lock(g_sessionsMutex);
-	auto it = g_sessions.find(sessionID);
-	if (it != g_sessions.end()) {
-		delete it->second; // 메모리 해제
-		g_sessions.erase(it);
-		std::cout << "Session deleted: " << sessionID << std::endl;
 	}
 }

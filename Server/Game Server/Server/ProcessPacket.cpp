@@ -7,7 +7,7 @@
 #include "Zombie.h"
 #include "ShoutingZombie.h"
 
-#include <algorithm>
+std::mutex roomPlayersMutex;
 
 bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     // g_players에서 클라이언트 정보 검색
@@ -16,11 +16,6 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         // 유효하지 않은 클라이언트 ID에 대한 처리
         return false;
     }
-
-    auto min_it = std::min_element(g_players.begin(), g_players.end(),
-        [](const std::pair<unsigned int, PLAYER_INFO*>& a, const std::pair<unsigned int, PLAYER_INFO*>& b) {
-            return a.first < b.first;
-        });
 
     PLAYER_INFO* clientInfo = it->second;
 
@@ -61,48 +56,51 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
+        // 게임룸에 플레이어 추가
         if (clientInfo->roomid == 0) {
             clientInfo->roomid = Packet.roomnum();
+            AddPlayerToRoom(Packet.roomnum(), clientInfo);
         }
+
 
         // 지금은 수정 됐지만 혹시해서 남김 -> 클라 플레이어 초기화 id 설정값이 99인데 이걸 전송 받는 경우가 생겼었다
         if (Packet.playerid() != 99) {
             //playerDB[Packet.playerid()] = pl; //-> 이렇게 사용하면 초기화 빼먹은 값 더미 값 씌워질 수 있음
-            playerDB[Packet.playerid()].username = Packet.username();
+            playerDB[Packet.roomnum()][Packet.playerid()].username = Packet.username();
 
-            playerDB[Packet.playerid()].x = Packet.x();
-            playerDB[Packet.playerid()].y = Packet.y();
-            playerDB[Packet.playerid()].z = Packet.z();
+            playerDB[Packet.roomnum()][Packet.playerid()].x = Packet.x();
+            playerDB[Packet.roomnum()][Packet.playerid()].y = Packet.y();
+            playerDB[Packet.roomnum()][Packet.playerid()].z = Packet.z();
 
-            playerDB[Packet.playerid()].health = Packet.hp();
+            playerDB[Packet.roomnum()][Packet.playerid()].health = Packet.hp();
 
             //cout << "player hp: " << Packet.hp() << endl;
 
             if (Packet.b_run() == 1) {
-                playerDB[Packet.playerid()].IsRunning = false;
+                playerDB[Packet.roomnum()][Packet.playerid()].IsRunning = false;
                 //printf("\n[ No. %3u ] Walk Packet Received !!\n", id);
             }
             else if (Packet.b_run() == 2) {
-                playerDB[Packet.playerid()].IsRunning = true;
+                playerDB[Packet.roomnum()][Packet.playerid()].IsRunning = true;
                 //printf("\n[ No. %3u ] Run Packet Received !!\n", id);
             }
 
             //cout << "player IsRunning: " << Packet.b_run() << endl;
 
             if (Packet.z() < 800.f) {
-                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_B2;
+                playerDB[Packet.roomnum()][Packet.playerid()].floor = FLOOR::FLOOR_B2;
             }
             else if (Packet.z() < 1800.f) {
-                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_B1;
+                playerDB[Packet.roomnum()][Packet.playerid()].floor = FLOOR::FLOOR_B1;
             }
             else if (Packet.z() < 2500.f) {
-                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F1;
+                playerDB[Packet.roomnum()][Packet.playerid()].floor = FLOOR::FLOOR_F1;
             }
             else if (Packet.z() < 3600.f) {
-                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F2;
+                playerDB[Packet.roomnum()][Packet.playerid()].floor = FLOOR::FLOOR_F2;
             }
             else {
-                playerDB[Packet.playerid()].floor = FLOOR::FLOOR_F3;
+                playerDB[Packet.roomnum()][Packet.playerid()].floor = FLOOR::FLOOR_F3;
             }
         }
 
@@ -115,9 +113,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         std::string bestkill_player = "None";   // 모두 0킬이면 None 띄움
 
         // 탈출 체크
-        if (b_IsEscaping) { // 탈출존이 열린 상태
-            for (const auto& player : playerDB) {
-                if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
+        if (room_states[Packet.roomnum()].b_IsEscaping) { // 탈출존이 열린 상태
+            int roomId = clientInfo->roomid;
+            for (const auto& player : playerDB[roomId]) {
+                if (room_players[roomId].find(player.first) == room_players[roomId].end()) { // 연결이 끊긴 플레이어라면  
                     disconnected++;
                     if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
                         bestkill_cnt = player.second.killcount;
@@ -128,11 +127,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
                 if (player.second.health > 0) {
                     alive_cnt++;
-                    float DeltaX = std::abs(player.second.x - Escape_Location.x);
-                    float DeltaY = std::abs(player.second.y - Escape_Location.y);
+                    float DeltaX = std::abs(player.second.x - room_states[roomId].Escape_Location.x);
+                    float DeltaY = std::abs(player.second.y - room_states[roomId].Escape_Location.y);
 
                     // 탈출존 범위를 벗어나는지 확인
-                    if (DeltaX >= 150.0f || DeltaY >= 150.0f || player.second.floor != Escape_Location.floor) {
+                    if (DeltaX >= 150.0f || DeltaY >= 150.0f || player.second.floor != room_states[roomId].Escape_Location.floor) {
                         bAllPlayersInRange = false; // 한 명이라도 범위를 벗어나면 false
                         break;
                     }
@@ -148,7 +147,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             }
 
             if (bAllPlayersInRange) {
-                Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, clientInfo);
+                Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, clientInfo->roomid);
 
                 return true;
             }
@@ -156,12 +155,12 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
 
         // 접속해있는 플레이어들이 모두 사망했는지 검사
-        int totalplayer_cnt = g_players.size();
+        int totalplayer_cnt = room_players[Packet.roomnum()].size();
         int deadplayer_cnt = 0;
 
-        for (const auto player : g_players) {   // 연결이 되어 있는 플레이어들 중
-            if (playerDB.find(player.first) != playerDB.end()) {    // abort 에러 크래쉬 방지
-                if (playerDB.at(player.first).health <= 0) {        // 체력확인
+        for (const auto player : room_players[Packet.roomnum()]) {   // 연결이 되어 있는 플레이어들 중
+            if (playerDB[Packet.roomnum()].find(player.first) != playerDB[Packet.roomnum()].end()) {    // abort 에러 크래쉬 방지
+                if (playerDB[Packet.roomnum()].at(player.first).health <= 0) {        // 체력확인
                     deadplayer_cnt++;
                 }
             }
@@ -176,8 +175,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             bestkill_cnt = 0;
             bestkill_player = "None";
 
-            for (const auto player : playerDB) {
-                if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
+            for (const auto player : playerDB[Packet.roomnum()]) {
+                if (room_players[Packet.roomnum()].find(player.first) == room_players[Packet.roomnum()].end()) { // 연결이 끊긴 플레이어라면  
                     disconnected++;
                     if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
                         bestkill_cnt = player.second.killcount;
@@ -199,22 +198,27 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 }
             }
 
-            Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
+            room_states[Packet.roomnum()].Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
             //Root_Open_Player = "None";
 
             // 전송작업
-            Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, clientInfo);
+            Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, clientInfo->roomid);
 
             return true;
         }
 
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second != nullptr && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
+
         return true;
     } break;
 
@@ -248,13 +252,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             zombiecontroller.setZombiePosition(zombiedata);
         }*/
 
-        if (id == min_it->first) {
+        /*if (id == min_it->first) {
             for (const auto& player : g_players) {
                 if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
                     IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
                 }
             }
-        }
+        }*/
         return true;
     } break;
 
@@ -267,9 +271,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.SerializeToString(&serializedData);
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
         return true;
@@ -284,9 +292,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.SerializeToString(&serializedData);
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
         return true;
@@ -324,9 +336,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.SerializeToString(&serializedData);
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
         return true;
@@ -411,9 +427,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
 
@@ -436,7 +456,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 }
 
                 if (z->zombieHP <= 0) {
-                    playerDB[id].killcount++;
+                    playerDB[roomId][id].killcount++;
 
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
                     cout << endl;
@@ -465,10 +485,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.SerializeToString(&serializedData);
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                printf("%d 한테 아이템 삭제 보냈음\n", player.first);
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
         return true;
@@ -488,10 +511,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        for (const auto& player : g_players) {
-            if (player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                printf("%d 한테 키 획득 보냈음\n", player.first);
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
 
@@ -506,10 +532,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string DserializedData;
         destroyPacket.SerializeToString(&DserializedData);
 
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, DserializedData.data(), DserializedData.size());
-                printf("%d 한테 키 삭제 보냈음\n", player.first);
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
 
@@ -524,26 +551,31 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
+        int roomId = clientInfo->roomid;
+
         if (Packet.root() == 2) {
-            roofkey_cnt++;
+            room_states[roomId].roofkey_cnt++;
         }
 
-        if (roofkey_cnt == 2 || Packet.root() == 1) {
+        if (room_states[roomId].roofkey_cnt == 2 || Packet.root() == 1) {
             // 문 연 위치 저장, 상태를 탈출 준비 상태로 변경
-            Escape_Location.x = playerDB[id].x;
-            Escape_Location.y = playerDB[id].y;
-            Escape_Location.floor = playerDB[id].floor;
+            room_states[roomId].Escape_Location.x = playerDB[roomId][id].x;
+            room_states[roomId].Escape_Location.y = playerDB[roomId][id].y;
+            room_states[roomId].Escape_Location.floor = playerDB[roomId][id].floor;
 
-            b_IsEscaping = true;
-            Escape_Root = Packet.root();
-            Root_Open_Player = playerDB[id].username;
+            room_states[roomId].b_IsEscaping = true;
+            room_states[roomId].Escape_Root = Packet.root();
+            room_states[roomId].Root_Open_Player = playerDB[roomId][id].username;
         }
 
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
-        for (const auto& player : g_players) {
-            if (player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
         return true;
@@ -578,10 +610,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                printf("%d 에게 아이템 드랍 전송\n", player.first);
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
 
@@ -599,10 +634,13 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                printf("%d 에게 아이템 장착 해제 전송\n", player.first);
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
        
@@ -619,23 +657,26 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
+        int roomId = clientInfo->roomid;
+
         // 좀비 HP 업데이트
         int recvzombieid = Packet.zombieid();
 
         for (auto& z : zombieDB) {
             if (z->ZombieData.zombieID == recvzombieid) {
                 z->zombieHP = 0;
-                playerDB[id].killcount++;
+                playerDB[roomId][id].killcount++;
 
                 cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
                 cout << endl;
             }
         }
 
-        for (const auto& player : g_players) {
-            if (player.first != id && player.second->isInGame && player.second->roomid == clientInfo->roomid) {
-                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-                printf("%d 에게 슬라이싱 해제 전송\n", player.first);
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr && playerId != id) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
             }
         }
 
@@ -650,27 +691,40 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     }
 }
 
-void IOCP_CORE::Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player, PLAYER_INFO* clientInfo)
+void IOCP_CORE::Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player, int roomid)
 {
     Protocol::game_clear clear_packet;
 
     clear_packet.set_packet_type(20);
-    clear_packet.set_root(Escape_Root);
+    clear_packet.set_root(room_states[roomid].Escape_Root);
     clear_packet.set_alive_players(alive_cnt);
     clear_packet.set_dead_players(dead_cnt);
-    clear_packet.set_open_player(Root_Open_Player);
+    clear_packet.set_open_player(room_states[roomid].Root_Open_Player);
 
     clear_packet.set_best_killcount(bestkill_cnt);
     clear_packet.set_best_kill_player(bestkill_player);
 
-    for (const auto& player : g_players) {
-        if (player.second->isInGame && player.second->roomid == clientInfo->roomid) {
+    for (const auto& player : room_players[roomid]) {
 
-            clear_packet.set_my_killcount(playerDB[player.first].killcount);
+        clear_packet.set_my_killcount(playerDB[roomid][player.first].killcount);
 
-            string serializedData;
-            clear_packet.SerializeToString(&serializedData);
-            IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-        }
+        string serializedData;
+        clear_packet.SerializeToString(&serializedData);
+        IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
     }
+}
+
+void IOCP_CORE::AddPlayerToRoom(int roomId, PLAYER_INFO* clientInfo) {
+    std::lock_guard<std::mutex> lock(roomPlayersMutex);
+
+    // 해당 roomId가 존재하지 않으면 방 생성
+    if (room_players.find(roomId) == room_players.end()) {
+        room_players[roomId] = std::unordered_map<int, PLAYER_INFO*>();
+        std::thread(&IOCP_CORE::Zombie_BT_Thread, this, roomId);
+        zombieControllers[roomId] = new ZombieController(*this);
+        std::cout << "Room " << roomId << " created." << std::endl;
+    }
+
+    room_players[roomId][clientInfo->id] = clientInfo;
+    std::cout << "Player " << clientInfo->id << " added to room " << roomId << std::endl;
 }

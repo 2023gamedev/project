@@ -84,11 +84,23 @@ struct Vector3D {
 	FLOOR floor;
 };
 
-extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
-extern std::unordered_map<int, Player> playerDB;
-extern std::unordered_map<unsigned int, GameSession*> g_sessions;
+struct RoomState {
+	int roofkey_cnt{};
+	std::string Root_Open_Player = "None";
+	Vector3D Escape_Location;
+	bool b_IsEscaping = false;
+	int Escape_Root{};
+};
 
-extern std::unordered_map<int, Player> playerDB_BT;
+extern std::unordered_map<int, RoomState> room_states; // 방 ID -> RoomState
+
+
+extern std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
+//extern std::unordered_map<int, Player> playerDB;
+extern std::unordered_map<int, std::unordered_map<int, PLAYER_INFO*>> room_players;
+extern std::unordered_map<int, std::unordered_map<int, Player>> playerDB;
+extern std::unordered_map<int, std::unordered_map<int, Player>> playerDB_BT;
+extern std::unordered_map<int, ZombieController*> zombieControllers;
 
 struct TupleHash {
 	size_t operator()(const tuple<float, float, float>& t) const {
@@ -137,7 +149,9 @@ public:
 	void DisconnectClient(unsigned int clientId);
 
 	bool IOCP_ProcessPacket(int id, const std::string& packet);
-	void Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player, PLAYER_INFO* clientInfo);
+	void Send_GameEnd(int alive_cnt, int dead_cnt, int bestkill_cnt, std::string bestkill_player, int roomid);
+
+	void AddPlayerToRoom(int roomId, PLAYER_INFO* clientInfo);
 
 	void IOCP_SendNextPacket(PLAYER_INFO* user);
 	void IOCP_SendPacket(unsigned int id, const char* serializedData, size_t dataSize);
@@ -145,7 +159,7 @@ public:
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
-	void Zombie_BT_Thread();
+	void Zombie_BT_Thread(int roomid);
 
 	bool LoadEdgesMap(const string& filePath,
 		vector<tuple<float, float, float>>& positions,
@@ -249,13 +263,6 @@ private:
 	float GameTime = 0.f;
 
 	bool b_Timer = false;
-
-	Vector3D Escape_Location;
-	bool b_IsEscaping = false;
-	int Escape_Root = 0;
-	string Root_Open_Player = "None";
-
-	int roofkey_cnt = 0;
 
 	std::mutex g_sessionsMutex;
 
