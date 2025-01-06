@@ -303,9 +303,6 @@ void ABaseZombie::Tick(float DeltaTime)
 		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
 
-		CutZombie(sync_cutPlane, sync_cutNormal, false);
-
-
 		BloodFX.Empty();
 
 		FRotator RandRotate;
@@ -314,15 +311,26 @@ void ABaseZombie::Tick(float DeltaTime)
 		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
-		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
+		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
 
-		if (NewBloodFX) {
-			NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
-			//NewBloodFX->blood_spawnloop = true;
-			NewBloodFX->spawn_flag = true;
+		if (NewBloodFX_0) {
+			NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
+			//NewBloodFX_0->blood_spawnloop = true;
 
-			BloodFX.Add(NewBloodFX);
+			BloodFX.Add(NewBloodFX_0);
 		}
+
+		ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
+
+		if (NewBloodFX_1) {
+			NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
+			//NewBloodFX_1->blood_spawnloop = true;
+
+			BloodFX.Add(NewBloodFX_1);
+		}
+
+
+		CutZombie(sync_cutPlane, sync_cutNormal, false);
 	}
 
 
