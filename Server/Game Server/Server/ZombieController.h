@@ -44,7 +44,7 @@ enum class EZombiePatrol
 class ZombieController
 {
 public:
-	ZombieController(IOCP_CORE& mainServe);
+	ZombieController(IOCP_CORE& mainServe, int roomid);
 	~ZombieController();
 
 	IOCP_CORE* iocpServer;
@@ -52,5 +52,7 @@ public:
 
 	void SendZombieData(int id);
 	void SendZombieUpdate(const Zombie_Data& z);
+
+	int zombie_roomid;
 };
 

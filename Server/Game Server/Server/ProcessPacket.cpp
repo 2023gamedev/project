@@ -721,7 +721,7 @@ void IOCP_CORE::AddPlayerToRoom(int roomId, PLAYER_INFO* clientInfo) {
     if (room_players.find(roomId) == room_players.end()) {
         room_players[roomId] = std::unordered_map<int, PLAYER_INFO*>();
         std::thread(&IOCP_CORE::Zombie_BT_Thread, this, roomId);
-        zombieControllers[roomId] = new ZombieController(*this);
+        zombieControllers[roomId] = new ZombieController(*this, roomId);
         std::cout << "Room " << roomId << " created." << std::endl;
     }
 

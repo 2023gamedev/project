@@ -5,7 +5,7 @@
 #include "ShoutingZombie.h"
 
 
-ZombieController::ZombieController(IOCP_CORE& mainServer)
+ZombieController::ZombieController(IOCP_CORE& mainServer, int roomid)
 {
     // 서버 설정
     iocpServer = &mainServer;
@@ -62,6 +62,8 @@ ZombieController::ZombieController(IOCP_CORE& mainServer)
     //SpawnZombies(38, 0, Vector3(1600.f, 2000.f, 90.212f), Rotator(0.f, -120.f, 0.f), 0, 0.f);
         SpawnZombies(39, 0, Vector3(200.f, 200.f, 90.212f), Rotator(0.f, -20.f, 0.f), 0, 0.f);
     //SpawnZombies(40, 0, Vector3(800.f, 2800.f, 90.212f), Rotator(0.f, 60.f, 0.f), 0, 0.f);
+
+        zombie_roomid = roomid;
 }
 
 ZombieController::~ZombieController()
@@ -82,6 +84,7 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
     new_zombie_data.zombietype = zombieType;
     new_zombie_data.patroltype = patrolType;
     new_zombie_data.patrolrange = patrolRange;
+    new_zombie_data.roomID = zombie_roomid;
 
     //좀비 인스턴스 생성
     Zombie* new_zombie;

@@ -60,6 +60,8 @@ Zombie::Zombie()
 	targetType = Zombie::TARGET::NULL_TARGET;
 
 	ClosestPlayerID = 0;
+
+	roomid = 0;
 }
 
 Zombie::Zombie(Zombie_Data z_d)
@@ -110,6 +112,8 @@ Zombie::Zombie(Zombie_Data z_d)
 	targetType = Zombie::TARGET::PATROL;
 
 	ClosestPlayerID = 0;
+
+	roomid = z_d.roomID;
 }
 
 Zombie::~Zombie()
@@ -161,7 +165,7 @@ void Zombie::SetDistance(int playerid, int distanceType)
 		setMap = &DistanceTo_FootSound;
 
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB_BT[playerid].x, playerDB_BT[playerid].y, playerDB_BT[playerid].z}} };
+	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB_BT[roomid][playerid].x, playerDB_BT[roomid][playerid].y, playerDB_BT[roomid][playerid].z}} };
 
 	float dist = sqrt(powf(zl[0][0][0] - pl[0][0][0], 2) + powf(zl[0][0][1] - pl[0][0][1], 2) + powf(zl[0][0][2] - pl[0][0][2], 2));
 
@@ -356,7 +360,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 
 	if (searchMap.size() != 0) {
 
-		for (auto player : playerDB_BT) {
+		for (auto player : playerDB_BT[roomid]) {
 			// 죽은 플레이어 무시
 			if (player.second.health <= 0) {
 				continue;
@@ -393,7 +397,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 		}
 
 		// 혹시 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
-		for (auto player : playerDB_BT) {
+		for (auto player : playerDB_BT[roomid]) {
 			// 죽은 플레이어 무시
 			if (player.second.health <= 0) {
 				continue;
@@ -444,7 +448,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 		}
 
 		// {주의} map 사용 할 때 주의할 점 (playerDB_BT[ClosestPlayerID].x) => 이런식으로 사용하면 키값이 없을 경우 "새로 해당 키에 실제 데이터는 없이" 더미 데이터가 새로 추가가 됨!
-		closest_player_pos = vector<vector<vector<float>>>{ {{playerDB_BT[ClosestPlayerID].x, playerDB_BT[ClosestPlayerID].y, playerDB_BT[ClosestPlayerID].z}} };
+		closest_player_pos = vector<vector<vector<float>>>{ {{playerDB_BT[roomid][ClosestPlayerID].x, playerDB_BT[roomid][ClosestPlayerID].y, playerDB_BT[roomid][ClosestPlayerID].z}} };
 	}
 	else {	// (searchMap.size() == 0)
 		if (distanceType == 1) {
@@ -754,7 +758,7 @@ void Zombie::SendPath()
 
 		//cout << "좀비 #" << ZombieData.zombieID << " 의 z_floor: " << z_floor << endl;
 		
-		for (const auto& player : playerDB_BT) {
+		for (const auto& player : playerDB_BT[roomid]) {
 			//cout << "playerDB_BT key: " << player.first << " 의 floor: " << player.second.floor << endl;
 		
 			if (z_floor == player.second.floor) {	// 클라 자기 층에 있는 좀비 정보만 받기 - 최적화 
@@ -782,7 +786,7 @@ bool Zombie::PlayerInSight_Update_Check()
 
 
 	// 시야에 있는 플레이어들 DistanceTo_PlayerInsight 맵 갱신
-	for (auto player : playerDB_BT) {
+	for (auto player : playerDB_BT[roomid]) {
 		// 죽은 플레이어 무시
 		if (player.second.health <= 0) {
 			continue;
@@ -805,8 +809,8 @@ bool Zombie::PlayerInSight_Update_Check()
 		if (distTo_playerinsight.second >= 0) {
 			bool really_detected = true;
 
-			if (playerDB_BT.find(distTo_playerinsight.first) != playerDB_BT.end()) {	// 아래 at 사용시에 혹시 모를 abort에러 방지용
-				if (playerDB_BT.at(distTo_playerinsight.first).health <= 0) { // 플레이어가 이제 죽었다면
+			if (playerDB_BT[roomid].find(distTo_playerinsight.first) != playerDB_BT[roomid].end()) {	// 아래 at 사용시에 혹시 모를 abort에러 방지용
+				if (playerDB_BT[roomid].at(distTo_playerinsight.first).health <= 0) { // 플레이어가 이제 죽었다면
 					distTo_playerinsight.second = -1.0f;	// 더이상 탐지 불가로 바꾸기
 					really_detected = false;
 				}
@@ -855,7 +859,7 @@ bool Zombie::FootSound_Update_Check()
 
 
 	// 뛰고 있는 플레이어들 DistanceTo_FootSound 맵에 갱신
-	for (auto player : playerDB_BT) {
+	for (auto player : playerDB_BT[roomid]) {
 		// 죽은 플레이어 무시
 		if (player.second.health <= 0) {
 			continue;
@@ -877,8 +881,8 @@ bool Zombie::FootSound_Update_Check()
 	// 좀비가 근처에서 발소리가 하나라도 났었는지 체크
 	for (auto& distTo_footSound : DistanceTo_FootSound) {
 
-		if (playerDB_BT.find(distTo_footSound.first) != playerDB_BT.end()) {	// 아래 at 사용시에 혹시 모를 abort에러 방지용
-			if (playerDB_BT.at(distTo_footSound.first).health <= 0) { // 플레이어가 이제 죽었다면
+		if (playerDB_BT[roomid].find(distTo_footSound.first) != playerDB_BT[roomid].end()) {	// 아래 at 사용시에 혹시 모를 abort에러 방지용
+			if (playerDB_BT[roomid].at(distTo_footSound.first).health <= 0) { // 플레이어가 이제 죽었다면
 				distTo_footSound.second = -1.0f;	// 더이상 탐지 불가로 바꾸기
 				continue;
 			}

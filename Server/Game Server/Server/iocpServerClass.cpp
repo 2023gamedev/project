@@ -68,12 +68,12 @@ IOCP_CORE::IOCP_CORE()
 	//==========Zombie_BT 초기화
 	Zombie_BT_Initialize();
 	//==========Zombie_BT 쓰레드 시작 (Zombie BT 실행 시작)
-	zombie_thread = thread(&IOCP_CORE::Zombie_BT_Thread, this);
+	//zombie_thread = thread(&IOCP_CORE::Zombie_BT_Thread, this);
 
 	//Nodes = nodeclass->LoadNodesFromFile();
 
 	//======좀비 스폰 & 초기화======
-	zombieclass = new ZombieController(*this);
+	//zombieclass = new ZombieController(*this);
 
 	itemclass = new ItemController(*this);
 

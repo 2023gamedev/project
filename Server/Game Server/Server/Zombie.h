@@ -27,6 +27,7 @@ public:
     float x, y, z;
     float pitch, yaw, roll;
     int zombietype;             // 0 - 일반 좀비, 1 - 샤우팅 좀비, 2 - 뛰는 좀비
+    int roomID;
 
     // 사실상 밑에 두개는 사용 X (현재는)
     int patroltype;
@@ -131,6 +132,8 @@ public:
     float zombieHP;
 
     bool printLog = true;
+
+    int roomid = 0;
 
 
     Zombie();
