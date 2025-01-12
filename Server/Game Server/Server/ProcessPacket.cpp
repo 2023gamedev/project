@@ -28,16 +28,18 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         //printf("SendDatas!! Playerid=#%d\n", id);
     }
 
-    if (!clientInfo->send_zombie) {
-        zombieclass->SendZombieData(id);
-    }
+    if (clientInfo->roomid != 0 && !zombieDB.empty()) {
+        if (!clientInfo->send_zombie) {
+            zombieControllers[clientInfo->roomid]->SendZombieData(id);
+        }
 
-    if (clientInfo->send_zombie && !clientInfo->send_item) {
-        itemclass->SendItemData(id);
-    }
+        if (clientInfo->send_zombie && !clientInfo->send_item) {
+            itemclass->SendItemData(id);
+        }
 
-    if (clientInfo->send_zombie && clientInfo->send_item && !clientInfo->send_car) {
-        itemclass->SendCarData(id);
+        if (clientInfo->send_zombie && clientInfo->send_item && !clientInfo->send_car) {
+            itemclass->SendCarData(id);
+        }
     }
 
 
@@ -720,8 +722,8 @@ void IOCP_CORE::AddPlayerToRoom(int roomId, PLAYER_INFO* clientInfo) {
     // 해당 roomId가 존재하지 않으면 방 생성
     if (room_players.find(roomId) == room_players.end()) {
         room_players[roomId] = std::unordered_map<int, PLAYER_INFO*>();
-        std::thread(&IOCP_CORE::Zombie_BT_Thread, this, roomId);
-        zombieControllers[roomId] = new ZombieController(*this, roomId);
+        zombie_threads.emplace_back(&IOCP_CORE::Zombie_BT_Thread, this, roomId);
+        zombieControllers[roomId] = new ZombieController(this, roomId);
         std::cout << "Room " << roomId << " created." << std::endl;
     }
 
