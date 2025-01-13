@@ -952,6 +952,7 @@ bool Zombie::FootSound_Update_Check()
 	return result;
 }
 
+// wait 실행 순위: 피격 > 공격 > 샤우팅 > 숨고르기
 void Zombie::Wait()
 {
 	//cout << "좀비 '#" << ZombieData.zombieID << "' BT 잠시 대기." << endl;
@@ -974,15 +975,11 @@ void Zombie::Wait()
 #endif
 
 			IsBeingAttacked = false;
-
 			HaveToWait = false;
-
 			WaitOneTick_SendPath = true;
 
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
-
-			IsShouting = false;		// 마찬가지
-
+			IsShouting = false;		
 			IsStandingStill = false;
 		}
 		else {
@@ -1006,13 +1003,10 @@ void Zombie::Wait()
 #endif
 
 			IsAttacking = false;
-
 			HaveToWait = false;
-
 			WaitOneTick_SendPath = true;
 
-			IsShouting = false;		// 혹시 샤우팅중이다가 공격 할 경우를 대비해서 -> 리셋 개념
-			//=> 사실 필요 없음 -> 샤우팅을 항상 먼저 할테고 그동안 공격은 못하므로
+			IsShouting = false;		
 			IsStandingStill = false;
 		}
 		else {
@@ -1036,12 +1030,10 @@ void Zombie::Wait()
 #endif
 
 			IsShouting = false;
+			HaveToWait = false;
+			WaitOneTick_SendPath = true;
 
 			IsStandingStill = false;
-
-			HaveToWait = false;
-
-			WaitOneTick_SendPath = true;
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1063,9 +1055,7 @@ void Zombie::Wait()
 #endif
 
 			IsStandingStill = false;
-
 			HaveToWait = false;
-
 			WaitOneTick_SendPath = true;
 		}
 		else {
