@@ -447,7 +447,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 if (z->zombieHP < z->NormalZombieStartHP) {
                     z->IsBeingAttacked = true;  // 좀비 피격중으로 변경
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
-                    z->animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
+                    z->waitStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
 
                     //cout << "================================================================================================================================================================================" << endl;
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
