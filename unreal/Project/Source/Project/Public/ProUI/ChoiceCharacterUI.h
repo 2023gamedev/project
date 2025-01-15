@@ -8,6 +8,8 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "ProGamemode/ProGameInstance.h"
+#include "Components/MultiLineEditableText.h"
+#include "Components/MultiLineEditableTextBox.h"
 
 #include "ChoiceCharacterUI.generated.h"
 
@@ -43,6 +45,8 @@ public:
 	FChoicedIdol ChoicedIdol;
 	FChoicedFireFighter ChoicedFireFighter;
 
+	TMap<uint32, uint32> PlayersCharacter;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* GirlButton;
 
@@ -68,6 +72,12 @@ public:
 	UButton* FireFighterBGButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UMultiLineEditableTextBox* CharDescription_DisAdvantage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UMultiLineEditableTextBox* CharDescription_Advantage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ReadyButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -83,7 +93,7 @@ public:
 	UImage* Fourth_Image;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UTextBlock * First_Player;
+	UTextBlock* First_Player;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* Second_Player;
