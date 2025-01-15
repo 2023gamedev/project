@@ -211,7 +211,7 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
         }
 
         // 다른 사람이 선택한 캐릭 중복선택 X
-        /*PlayersCharacter.Add(recvSelect.PlayerId, recvSelect.Character_type);
+        PlayersCharacter.Add(recvSelect.PlayerId, recvSelect.Character_type);
 
         GirlButton->SetIsEnabled(true);
         EmployeeButton->SetIsEnabled(true);
@@ -219,13 +219,14 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
         FireFighterButton->SetIsEnabled(true);
 
         uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-        for (uint32 playerID = 1; playerID < (uint32)PlayersCharacter.Num(); playerID++) {
+        for (uint32 playerID = 1; playerID <= (uint32)PlayersCharacter.Num(); playerID++) {
             if (MyPlayerId == playerID)
                 continue;
 
             if (PlayersCharacter.Contains(playerID) == true) {
                 uint32* playerCharType = PlayersCharacter.Find(playerID);
-                UE_LOG(LogTemp, Log, TEXT("PlayerID: %d, CharacterType: %d"), playerID, *playerCharType);
+                if (*playerCharType == 0) continue;  // 초기화값임
+                //UE_LOG(LogTemp, Log, TEXT("PlayerID: %d, CharacterType: %d"), playerID, *playerCharType);
                 switch (*playerCharType) {
                 case 1:
                     if (GirlButton)
@@ -245,7 +246,7 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
                     break;
                 }
             }
-        }*/
+        }
     }
 }
 
@@ -405,6 +406,7 @@ void UChoiceCharacterUI::Init()
         // 이름 정렬된 순서에 맞게 출력
         for (auto player : SortedArray) {
             ++player_num;
+            PlayersCharacter.Add(player_num, 0);        // 초기화 (맵 크기 설정 때문에)
             if (player_num == 1 && First_Player) {
                 First_Player->SetText(FText::FromString(player.Value));
                 First_Image->SetIsEnabled(true);
