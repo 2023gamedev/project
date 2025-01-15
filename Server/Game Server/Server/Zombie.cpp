@@ -49,6 +49,8 @@ Zombie::Zombie()
 
 	IsShouting = false;
 
+	IsStandingStill = false;
+
 	HaveToWait = false;
 
 	WaitOneTick_SendPath = false;
@@ -100,6 +102,8 @@ Zombie::Zombie(Zombie_Data z_d)
 	IsBeingAttacked = false;
 
 	IsShouting = false;
+
+	IsStandingStill = false;
 
 	HaveToWait = false;
 
@@ -487,7 +491,7 @@ void Zombie::Attack()
 
 	HaveToWait = true;	// 좀비 BT 대기상태로 변경
 
-	animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 공격 시작 시간
+	waitStartTime = std::chrono::high_resolution_clock::now();		// 좀비 공격 시작 시간
 }
 
 void Zombie::MoveTo(float deltasecond)
@@ -708,11 +712,28 @@ void Zombie::ReachFinalDestination()
 #endif
 		break;
 	case TARGET::PATROL:
-		//랜덤한 근처 장소로 이동하게 만들어서 배회 => 배회 중 목적지 닿으면 또 근처 장소 랜덤하게 타겟 잡아서 다시 이동
 		//RandPatrolSet = false;
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '랜덤 패트롤'" << endl;
 #endif
+
+		// 일정 확률로 좀비 잠시 멍때리기 (숨고르기) 상태 만들기
+		std::random_device rd;
+		std::mt19937 mt(rd());
+
+		std::uniform_int_distribution<int> stand_still_chance(0, 100);		// 0~100
+		std::uniform_int_distribution<int> stand_still_duration(5, 10);		// 5~10
+
+		if (stand_still_chance(mt) >= (100 - 40)) {	// 40퍼센트의 확률
+			IsStandingStill = true;
+			waitStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
+			ZombieStandingStillDuration = (float)stand_still_duration(mt);
+
+#ifdef	ENABLE_BT_LOG
+			cout << "좀비 #" << ZombieData.zombieID << " 잠시 숨고르기 상태 발동" << endl;
+#endif
+		}
+
 		break;
 	}
 
@@ -931,6 +952,7 @@ bool Zombie::FootSound_Update_Check()
 	return result;
 }
 
+// wait 실행 순위: 피격 > 공격 > 샤우팅 > 숨고르기
 void Zombie::Wait()
 {
 	//cout << "좀비 '#" << ZombieData.zombieID << "' BT 잠시 대기." << endl;
@@ -941,7 +963,7 @@ void Zombie::Wait()
 	if (IsBeingAttacked) {
 
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
+		std::chrono::duration<float> deltaTime = waitAfterTime - waitStartTime;
 
 #ifdef ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 가 피격 당하였습니다!" << endl;
@@ -953,14 +975,12 @@ void Zombie::Wait()
 #endif
 
 			IsBeingAttacked = false;
-
 			HaveToWait = false;
-
 			WaitOneTick_SendPath = true;
 
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
-
-			IsShouting = false;		// 마찬가지
+			IsShouting = false;		
+			IsStandingStill = false;
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -971,10 +991,10 @@ void Zombie::Wait()
 	else if (IsAttacking) {
 
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
+		std::chrono::duration<float> deltaTime = waitAfterTime - waitStartTime;
 
 #ifdef ENABLE_BT_LOG
-		cout << "좀비 #" << ZombieData.zombieID  << " 가 공격 중입니다!" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 가 공격 중입니다!" << endl;
 #endif
 
 		if (deltaTime.count() >= ZombieAttackAnimDuration) {
@@ -983,13 +1003,11 @@ void Zombie::Wait()
 #endif
 
 			IsAttacking = false;
-
 			HaveToWait = false;
-
 			WaitOneTick_SendPath = true;
 
-			IsShouting = false;		// 혹시 샤우팅중이다가 공격 할 경우를 대비해서 -> 리셋 개념
-									//=> 사실 필요 없음 -> 샤우팅을 항상 먼저 할테고 그동안 공격은 못하므로
+			IsShouting = false;		
+			IsStandingStill = false;
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1000,10 +1018,10 @@ void Zombie::Wait()
 	else if (IsShouting) {	// - 샤우팅 좀비 샤우팅 애니메이션
 
 		auto waitAfterTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> deltaTime = waitAfterTime - animStartTime;
+		std::chrono::duration<float> deltaTime = waitAfterTime - waitStartTime;
 
 #ifdef ENABLE_BT_LOG
-		cout << "좀비 #" << ZombieData.zombieID  << " 가 샤우팅 중입니다!" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 가 샤우팅 중입니다!" << endl;
 #endif
 
 		if (deltaTime.count() >= ZombieShoutingAnimDuration) {
@@ -1012,14 +1030,37 @@ void Zombie::Wait()
 #endif
 
 			IsShouting = false;
-
 			HaveToWait = false;
-
 			WaitOneTick_SendPath = true;
+
+			IsStandingStill = false;
 		}
 		else {
 #ifdef ENABLE_BT_LOG
 			cout << "샤우팅 애니메이션 남은 시간: " << ZombieShoutingAnimDuration - deltaTime.count() << "s" << endl;
+#endif
+		}
+	}
+	else if (IsStandingStill) {
+		auto waitAfterTime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<float> deltaTime = waitAfterTime - waitStartTime;
+
+#ifdef ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 가 숨고르기 중입니다!" << endl;
+#endif
+
+		if (deltaTime.count() >= ZombieStandingStillDuration) {
+#ifdef ENABLE_BT_LOG
+			cout << "숨고르기 상태 끝 " << endl;
+#endif
+
+			IsStandingStill = false;
+			HaveToWait = false;
+			WaitOneTick_SendPath = true;
+		}
+		else {
+#ifdef ENABLE_BT_LOG
+			cout << "숨고르기 남은 시간: " << ZombieStandingStillDuration - deltaTime.count() << "s" << endl;
 #endif
 		}
 	}

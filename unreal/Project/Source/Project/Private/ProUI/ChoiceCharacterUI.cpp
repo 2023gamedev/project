@@ -19,6 +19,20 @@ void UChoiceCharacterUI::OnClickedGirlButton()
 
     ReadyButton->SetIsEnabled(true);
 
+    // 설명 텍스트 설정
+    CharDescription_DisAdvantage->SetText(FText::FromString(TEXT("체력 낮음, 근력 매우낮음")));
+    CharDescription_Advantage->SetText(FText::FromString(TEXT("스피드 아주 빠름, 스테미나 많음")));
+    // 텍스트 스타일 설정
+    FSlateFontInfo FontInfo;    FTextBlockStyle TextStyle;
+    FontInfo.FontObject = LoadObject<UObject>(nullptr, TEXT("/Game/profont/MYYeongnamnu_Font.MYYeongnamnu_Font")); // 폰트 경로
+    FontInfo.Size = 50; // 폰트 크기
+    TextStyle = CharDescription_DisAdvantage->WidgetStyle.TextStyle;
+    TextStyle.SetFont(FontInfo);
+    CharDescription_DisAdvantage->SetTextStyle(TextStyle);
+    TextStyle = CharDescription_Advantage->WidgetStyle.TextStyle;
+    TextStyle.SetFont(FontInfo);
+    CharDescription_Advantage->SetTextStyle(TextStyle);
+
     ChoicedGirl.Execute();
 }
 
@@ -32,6 +46,21 @@ void UChoiceCharacterUI::OnClickedEmployeeButton()
     EmployeeBGButton->SetVisibility(ESlateVisibility::HitTestInvisible); // 보이지만 클릭 불가
 
     ReadyButton->SetIsEnabled(true);
+    
+    // 설명 텍스트 설정
+    CharDescription_DisAdvantage->SetText(FText::FromString(TEXT("스피드 느림")));
+    CharDescription_Advantage->SetText(FText::FromString(TEXT("빠른 문열기,\n 시작아이템 서류가방 제공 (인벤토리+5)")));
+    // 텍스트 스타일 설정
+    FSlateFontInfo FontInfo;    FTextBlockStyle TextStyle;
+    FontInfo.FontObject = LoadObject<UObject>(nullptr, TEXT("/Game/profont/MYYeongnamnu_Font.MYYeongnamnu_Font")); // 폰트 경로
+    FontInfo.Size = 50; // 폰트 크기
+    TextStyle = CharDescription_DisAdvantage->WidgetStyle.TextStyle;
+    TextStyle.SetFont(FontInfo);
+    CharDescription_DisAdvantage->SetTextStyle(TextStyle);
+    FontInfo.Size = 40; // 폰트 크기
+    TextStyle = CharDescription_Advantage->WidgetStyle.TextStyle;
+    TextStyle.SetFont(FontInfo);
+    CharDescription_Advantage->SetTextStyle(TextStyle);
 
     ChoicedEmployee.Execute();
 }
@@ -46,6 +75,21 @@ void UChoiceCharacterUI::OnClickedIdolButton()
     EmployeeBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
 
     ReadyButton->SetIsEnabled(true);
+    
+    // 설명 텍스트 설정
+    CharDescription_DisAdvantage->SetText(FText::FromString(TEXT("출혈확률 높음")));
+    CharDescription_Advantage->SetText(FText::FromString(TEXT("출혈 회복 아이템\n 높은확률로 다시 사용가능")));
+    // 텍스트 스타일 설정
+    FSlateFontInfo FontInfo;    FTextBlockStyle TextStyle;
+    FontInfo.FontObject = LoadObject<UObject>(nullptr, TEXT("/Game/profont/MYYeongnamnu_Font.MYYeongnamnu_Font")); // 폰트 경로
+    FontInfo.Size = 50; // 폰트 크기
+    TextStyle = CharDescription_DisAdvantage->WidgetStyle.TextStyle;
+    TextStyle.SetFont(FontInfo);
+    CharDescription_DisAdvantage->SetTextStyle(TextStyle);
+    FontInfo.Size = 40; // 폰트 크기
+    TextStyle = CharDescription_Advantage->WidgetStyle.TextStyle;
+    TextStyle.SetFont(FontInfo);
+    CharDescription_Advantage->SetTextStyle(TextStyle);
 
     ChoicedIdol.Execute();
 }
@@ -60,6 +104,20 @@ void UChoiceCharacterUI::OnClickedFireFighterButton()
     EmployeeBGButton->SetVisibility(ESlateVisibility::Hidden); // 숨김
 
     ReadyButton->SetIsEnabled(true);
+
+    // 설명 텍스트 설정
+    CharDescription_DisAdvantage->SetText(FText::FromString(TEXT("담배를 주기적으로 피워줘야 함")));
+    CharDescription_Advantage->SetText(FText::FromString(TEXT("체력 높음, 근력 매우 높음")));
+    // 텍스트 스타일 설정
+    FSlateFontInfo FontInfo;    FTextBlockStyle TextStyle;
+    FontInfo.FontObject = LoadObject<UObject>(nullptr, TEXT("/Game/profont/MYYeongnamnu_Font.MYYeongnamnu_Font")); // 폰트 경로
+    FontInfo.Size = 50; // 폰트 크기
+    TextStyle = CharDescription_DisAdvantage->WidgetStyle.TextStyle;
+    TextStyle.SetFont(FontInfo);
+    CharDescription_DisAdvantage->SetTextStyle(TextStyle);
+    TextStyle = CharDescription_Advantage->WidgetStyle.TextStyle;
+    TextStyle.SetFont(FontInfo);
+    CharDescription_Advantage->SetTextStyle(TextStyle);
 
     ChoicedFireFighter.Execute();
 }
@@ -115,9 +173,9 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
 {
     //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "NewTexture?");
     UTexture2D* NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Girl/girl.girl"));
-    if (NewTexture)
-    {
+    if (NewTexture) {
         //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "NewTexture!");
+
         if (recvSelect.Character_type == 1) {
             NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/Girl/girl.girl"));
         }
@@ -131,29 +189,63 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
             NewTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/CharacterAsset/FireFighter/fire.fire"));
         }
 
-        if (recvSelect.PlayerId == 1)
-        {
+        if (recvSelect.PlayerId == 1) {
             FSlateBrush Brush;
             Brush.SetResourceObject(NewTexture);   // 텍스처를 브러시에 설정
-            First_Image->SetBrush(Brush);      // UImage에 브러시 설정
+            First_Image->SetBrush(Brush);      // UImage에 브러시 설정    
         }
-        else if (recvSelect.PlayerId == 2)
-        {
+        else if (recvSelect.PlayerId == 2) {
             FSlateBrush Brush;
             Brush.SetResourceObject(NewTexture);
             Second_Image->SetBrush(Brush);
         }
-        else if (recvSelect.PlayerId == 3)
-        {
+        else if (recvSelect.PlayerId == 3) {
             FSlateBrush Brush;
             Brush.SetResourceObject(NewTexture);
             Third_Image->SetBrush(Brush);
         }
-        else if (recvSelect.PlayerId == 4)
-        {
+        else if (recvSelect.PlayerId == 4) {
             FSlateBrush Brush;
             Brush.SetResourceObject(NewTexture);
             Fourth_Image->SetBrush(Brush);
+        }
+
+        // 다른 사람이 선택한 캐릭 중복선택 X
+        PlayersCharacter.Add(recvSelect.PlayerId, recvSelect.Character_type);
+
+        GirlButton->SetIsEnabled(true);
+        EmployeeButton->SetIsEnabled(true);
+        IdolButton->SetIsEnabled(true);
+        FireFighterButton->SetIsEnabled(true);
+
+        uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+        for (uint32 playerID = 1; playerID <= (uint32)PlayersCharacter.Num(); playerID++) {
+            if (MyPlayerId == playerID)
+                continue;
+
+            if (PlayersCharacter.Contains(playerID) == true) {
+                uint32* playerCharType = PlayersCharacter.Find(playerID);
+                if (*playerCharType == 0) continue;  // 초기화값임
+                //UE_LOG(LogTemp, Log, TEXT("PlayerID: %d, CharacterType: %d"), playerID, *playerCharType);
+                switch (*playerCharType) {
+                case 1:
+                    if (GirlButton)
+                        GirlButton->SetIsEnabled(false);
+                    break;
+                case 2:
+                    if (EmployeeButton)
+                        EmployeeButton->SetIsEnabled(false);
+                    break;
+                case 3:
+                    if (IdolButton)
+                        IdolButton->SetIsEnabled(false);
+                    break;
+                case 4:
+                    if (FireFighterButton)
+                        FireFighterButton->SetIsEnabled(false);
+                    break;
+                }
+            }
         }
     }
 }
@@ -165,7 +257,7 @@ void UChoiceCharacterUI::UpdatePlayerReadyState(uint32 player_num, bool Ready)
         {
             First_Ready->SetText(FText::FromString("READY"));
             FSlateFontInfo FontInfo = First_Ready->GetFont();
-            FontInfo.Size = 50;
+            FontInfo.Size = 60;
             First_Ready->SetJustification(ETextJustify::Center);
             First_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
         }
@@ -173,7 +265,7 @@ void UChoiceCharacterUI::UpdatePlayerReadyState(uint32 player_num, bool Ready)
         {
             Second_Ready->SetText(FText::FromString("READY"));
             FSlateFontInfo FontInfo = Second_Ready->GetFont();
-            FontInfo.Size = 50;
+            FontInfo.Size = 60;
             Second_Ready->SetJustification(ETextJustify::Center);
             Second_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
         }
@@ -181,7 +273,7 @@ void UChoiceCharacterUI::UpdatePlayerReadyState(uint32 player_num, bool Ready)
         {
             Third_Ready->SetText(FText::FromString("READY"));
             FSlateFontInfo FontInfo = Third_Ready->GetFont();
-            FontInfo.Size = 50;
+            FontInfo.Size = 60;
             Third_Ready->SetJustification(ETextJustify::Center);
             Third_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
         }
@@ -189,7 +281,7 @@ void UChoiceCharacterUI::UpdatePlayerReadyState(uint32 player_num, bool Ready)
         {
             Fourth_Ready->SetText(FText::FromString("READY"));
             FSlateFontInfo FontInfo = Fourth_Ready->GetFont();
-            FontInfo.Size = 50;
+            FontInfo.Size = 60;
             Fourth_Ready->SetJustification(ETextJustify::Center);
             Fourth_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
         }
@@ -285,6 +377,8 @@ void UChoiceCharacterUI::Init()
         //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ReadyButton Init End");
     }
 
+
+    // 플레이어 이름 띄우기 & 빈 칸들 비활성화
     const TMap<uint32, TMap<uint32, FString>>& LobbyPlayers = LobbyPlayer->GetLobbyPlayers();
     uint32 CurrentRoomId = GameInstance->ClientSocketPtr->MyRoomId;
     const TMap<uint32, FString>* CurrentRoomPlayers = LobbyPlayers.Find(CurrentRoomId);
@@ -312,11 +406,13 @@ void UChoiceCharacterUI::Init()
         // 이름 정렬된 순서에 맞게 출력
         for (auto player : SortedArray) {
             ++player_num;
+            PlayersCharacter.Add(player_num, 0);        // 초기화 (맵 크기 설정 때문에)
             if (player_num == 1 && First_Player) {
                 First_Player->SetText(FText::FromString(player.Value));
                 First_Image->SetIsEnabled(true);
             }
             else if (player_num < 1) {
+                First_Player->SetText(FText::FromString(""));
                 First_Image->SetIsEnabled(false);
             }
             if (player_num == 2 && Second_Player) {
@@ -324,6 +420,7 @@ void UChoiceCharacterUI::Init()
                 Second_Image->SetIsEnabled(true);
             }
             else if (player_num < 2) {
+                Second_Player->SetText(FText::FromString(""));
                 Second_Image->SetIsEnabled(false);
             }
             if (player_num == 3 && Third_Player) {
@@ -331,6 +428,7 @@ void UChoiceCharacterUI::Init()
                 Third_Image->SetIsEnabled(true);
             }
             else if (player_num < 3) {
+                Third_Player->SetText(FText::FromString(""));
                 Third_Image->SetIsEnabled(false);
             }
             if (player_num == 4 && Fourth_Player) {
@@ -338,6 +436,7 @@ void UChoiceCharacterUI::Init()
                 Fourth_Image->SetIsEnabled(true);
             }
             else if (player_num < 4) {
+                Fourth_Player->SetText(FText::FromString(""));
                 Fourth_Image->SetIsEnabled(false);
             }
         }

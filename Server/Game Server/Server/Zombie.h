@@ -73,6 +73,8 @@ public:
 
     const float ZombieShoutingAnimDuration = 4.3f;    // 좀비 샤우팅 애니메이션 재생 시간 (* 정확히는 4.30초)
 
+    float ZombieStandingStillDuration = 0.f;    // 좀비 숨고르기 (멍때리기) 지속 시간 (5~10초)
+
     const float NormalZombieStartHP = 20.0f;        // 20.0f
     const float NormalZombieSpeed = 200.0f;         // 200.0f
 
@@ -110,12 +112,14 @@ public:
 
     bool RandPatrolSet;     // 랜덤 패트롤 지점이 set 되면 true
 
-    bool IsAttacking;       // 해당 좀비 지금 공격 중인가? (애니메이션 재생 중인 가?)
+    bool IsAttacking;       // 해당 좀비 지금 공격 중인가? (애니메이션 재생 중인가?)
 
-    bool IsBeingAttacked;   // 해당 좀비 지금 피격 당하는 중인가? (애니메이션 재생 중인 가?)
+    bool IsBeingAttacked;   // 해당 좀비 지금 피격 당하는 중인가? (애니메이션 재생 중인가?)
 
-    bool IsShouting;        // 해당 '샤우팅' 좀비 지금 샤우팅 중인가? (애니메이션 재생 중인 가?) 
+    bool IsShouting;        // 해당 '샤우팅' 좀비 지금 샤우팅 중인가? (애니메이션 재생 중인가?) 
                             //-> 샤우팅 좀비만을 위한 변수지만, shouting zombie(하위-자식 클래스)에 만들면 zombie(상위-부모 클래스)에서 shouting zombie의 멤버 변수에 접근 못해서 그냥 여기에;;
+
+    bool IsStandingStill;   // 해당 좀비가 잠시 가만히 서있는 상태인가? (숨고르기)
 
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
     
@@ -123,7 +127,7 @@ public:
 
     FLOOR z_floor;          // 좀비가 스폰 된 층
 
-    std::chrono::steady_clock::time_point animStartTime;      // 좀비 애니메이션 시작 시간
+    std::chrono::steady_clock::time_point waitStartTime;      // 좀비 대기 시작 시간
 
     TARGET targetType;
 

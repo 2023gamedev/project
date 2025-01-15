@@ -372,6 +372,16 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!!: " << endl;
 #endif
 
+                    // 숨고르기 상태였을 경우 대비 리셋 (숨고르기 상태이지 멍때리기 상태가 아니므로, 쉬다가도 플레이어 보면 반응하게)
+                    if (z->IsStandingStill == true) {
+                        z->IsStandingStill = false;
+                        z->HaveToWait = false;
+
+#ifdef ENABLE_BT_LOG
+                        cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 숨고르기 상태 벗어남 (플레이어 포착)" << endl;
+#endif
+                    }
+
                     // 샤우팅 좀비일 경우에
                     if (z->ZombieData.zombietype == 1) {
                         ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);  // 다운 캐스팅 사용!
@@ -449,7 +459,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 if (z->zombieHP < z->NormalZombieStartHP) {
                     z->IsBeingAttacked = true;  // 좀비 피격중으로 변경
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
-                    z->animStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
+                    z->waitStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
 
                     //cout << "================================================================================================================================================================================" << endl;
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
