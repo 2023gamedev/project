@@ -28,7 +28,7 @@ AIdolCharacter::AIdolCharacter()
 	SetSTR(5);
 	SetStamina(100);
 	SetMaxStamina(100);
-	SetSpecialEffect(true);
+	SetStaminaHealing(5);
 	SetCharacterName("IdolCharacter");
 }
 

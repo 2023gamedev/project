@@ -2819,7 +2819,7 @@ void ABaseCharacter::UseStamina()
 void ABaseCharacter::UseStaminaTimerElapsed()
 {
 	if (GetVelocity().Size() == 0.f && GetStamina() > 0) {
-		SetStamina(GetStamina() + 5);
+		SetStamina(GetStamina() + m_fstaminaHealing);
 		if (GetStamina() > GetMaxStamina()) {
 			SetStamina(GetMaxStamina());
 		}
@@ -2867,7 +2867,7 @@ void ABaseCharacter::OtherUnEquipItem(uint32 itemtype)
 
 void ABaseCharacter::HealingStaminaTimerElapsed()
 {
-	SetStamina(GetStamina() + 5);
+	SetStamina(GetStamina() + m_fstaminaHealing);
 	if (GetStamina() > GetMaxStamina()) {
 		SetStamina(GetMaxStamina());
 	}

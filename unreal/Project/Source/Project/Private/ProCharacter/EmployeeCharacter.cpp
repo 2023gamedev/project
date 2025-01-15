@@ -28,7 +28,7 @@ AEmployeeCharacter::AEmployeeCharacter()
 	SetSTR(4);
 	SetStamina(100 + 30);
 	SetMaxStamina(100 + 30);
-	SetSpecialEffect(false);
+	SetStaminaHealing(5);
 	SetCharacterName("EmployeeCharacter");
 }
 

@@ -295,6 +295,8 @@ public:
 	float GetMaxStamina() { return m_fMaxStamina; }
 	void SetMaxStamina(float maxstamina) { m_fMaxStamina = maxstamina; }
 
+	void SetStaminaHealing(float staminahealing) { m_fstaminaHealing = staminahealing; }
+
 	float GetHealing() { return m_fHealing; }
 	void SetHealing(float Healing) { m_fHealing = Healing; }
 
@@ -345,8 +347,8 @@ public:
 	bool IsBringCurrentKeyItem() { return m_bIsBringCurrentKeyItem; }
 	void SetBringCurrentKeyItem(bool bringcurrentkeyitem) { m_bIsBringCurrentKeyItem = bringcurrentkeyitem; }
 
-	bool IsSpecialEffect() { return m_bSpecialEffect; }
-	void SetSpecialEffect(bool specialeffect) { m_bSpecialEffect = specialeffect; }
+	//bool IsSpecialEffect() { return m_bSpecialEffect; }	
+	//void SetSpecialEffect(bool specialeffect) { m_bSpecialEffect = specialeffect; }
 
 	bool IsSpotLight() { return m_bOnSpotLight; }
 	void SetSpotLight(bool spotlight) { m_bOnSpotLight = spotlight; }
@@ -562,6 +564,9 @@ private:
 	float m_fMaxStamina = 0.f;
 
 	UPROPERTY(EditAnywhere)
+	float m_fstaminaHealing = 0.f;
+
+	UPROPERTY(EditAnywhere)
 	float m_fHealing = 0.f;		// 얘 딱히 쓰는데 없음...
 
 	UPROPERTY(EditAnywhere)
@@ -593,8 +598,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool m_bThrowWHandIn = false;
 
-	UPROPERTY(EditAnywhere)
-	bool m_bSpecialEffect = false;
+	//UPROPERTY(EditAnywhere)
+	//bool m_bSpecialEffect = false;	// 이거 안 씀;;
 
 	UPROPERTY(EditAnywhere)
 	FName m_nCarryBagName;

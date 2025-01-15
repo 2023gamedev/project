@@ -26,9 +26,9 @@ AGirlCharacter::AGirlCharacter()
 	SetMaxHP(40);
 	SetBasicSpeed(6);
 	SetSTR(3);
-	SetStamina(100);
-	SetMaxStamina(100);
-	SetSpecialEffect(false);
+	SetStamina(100 + 40);
+	SetMaxStamina(100 + 40);
+	SetStaminaHealing(5 + 0.5f);
 	SetCharacterName("GirlCharacter");
 }
 

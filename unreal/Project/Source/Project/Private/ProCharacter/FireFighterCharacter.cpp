@@ -30,7 +30,7 @@ AFireFighterCharacter::AFireFighterCharacter()
 	SetSTR(7);
 	SetStamina(100);
 	SetMaxStamina(100);
-	SetSpecialEffect(true);
+	SetStaminaHealing(5);
 	SetCharacterName("FireFighterCharacter");
 }
 
