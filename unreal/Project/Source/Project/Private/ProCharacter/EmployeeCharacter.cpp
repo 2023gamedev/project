@@ -35,13 +35,15 @@ AEmployeeCharacter::AEmployeeCharacter()
 void AEmployeeCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// 회사원 캐릭 시작시 아이템 (회사원 캐릭 특성)
-	Inventory[0].Type = EItemType::ITEM_USEABLE;
-	Inventory[0].Name = "BagActor";
-	Inventory[0].ItemClassType = EItemClass::BAGITEM;
-	Inventory[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"));	// 나중에 서류 케이스 이미지 새로 받아서 서류 케이스로 바꿔주기
-	Inventory[0].Count = 0;
+	if (Inventory.Num() > 0) {
+		Inventory[0].Type = EItemType::ITEM_USEABLE;
+		Inventory[0].Name = "BagActor";
+		Inventory[0].ItemClassType = EItemClass::BAGITEM;
+		Inventory[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"));	// 나중에 서류 케이스 이미지 새로 받아서 서류 케이스로 바꿔주기
+		Inventory[0].Count = 0;
+	}
 }
 
 void AEmployeeCharacter::Tick(float DeltaTime)
