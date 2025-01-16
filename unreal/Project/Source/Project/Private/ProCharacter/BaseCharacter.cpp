@@ -10,7 +10,6 @@
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "ProGamemode/OneGameModeBase.h"
-
 #include "ProZombie/BaseZombie.h"
 
 // 노말 무기
@@ -56,7 +55,6 @@
 #include "ProItem/KRoofKey1.h"
 #include "ProItem/KRoofKey2.h"
 
-
 // 출혈회복 아이템
 #include "ProItem/BleedingHealingItemActor.h"
 #include "ProItem/BHBandage.h"
@@ -93,8 +91,7 @@
 #define playtime_3_5_sec 3.5f				// '깨끗한 옷' 사용시간
 #define playtime_3_sec 3.f					// '더러운 옷' 사용시간
 
-
-
+#define playkey_anim_playtime_for_employee	3.73f	// 회사원 캐릭 빠른 열쇠 사용시간 (약 +40% 더 빠름) 
 
 
 
@@ -147,7 +144,6 @@ ABaseCharacter::ABaseCharacter()
 	if (PLAYER_GAMEUI.Succeeded()) {
 		GameUIClass = PLAYER_GAMEUI.Class;
 	}
-
 
 	static ConstructorHelpers::FClassFinder <UConditionUI> PLAYER_CONDITIONUI(TEXT("/Game/UI/Condition.Condition_C"));
 
@@ -235,7 +231,6 @@ ABaseCharacter::ABaseCharacter()
 	CurrentKeyItem = nullptr;
 
 	HealingFX = nullptr;
-
 }
 
 // Called when the game starts or when spawned
@@ -350,9 +345,6 @@ void ABaseCharacter::BeginPlay()
 
 		OtherPlayerUIOffset(GameInstance->ClientSocketPtr->GetMyPlayerId());
 	}
-
-	
-
 
 	if (GameUIClass != nullptr) {
 
@@ -472,13 +464,9 @@ void ABaseCharacter::BeginPlay()
 			else if (playerlocationid == 4) {
 				SetActorLocation(FVector(690.f, -660.f, 1037.0001f));
 			}
-
 		}
 
-
-		
 	}
-
 
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -503,20 +491,17 @@ void ABaseCharacter::BeginPlay()
 
 	
 
-
-
-
 //// Slice 용 Weapon - TEST
 //if (CurrentWeapon == nullptr) { 
-
+//
 //	CurrentWeapon = GetWorld()->SpawnActor<ANWButchersKnife>(ANWButchersKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 //	//CurrentWeapon->ItemHandPos = FVector(-1.538658f, 1.908217f, 0.224630f);
 //	//CurrentWeapon->ItemHandRot = FRotator(4.949407f, -31.214014f, -172.213653f);
-
+//
 //	CurrentWeapon->ItemHandPos = FVector(-0.757521f, 1.883819f, 1.937180f);
 //	CurrentWeapon->ItemHandRot = FRotator(-12.172822f, -34.649834f, -158.006864f);
-
-
+//
+//
 //	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("IsBringCurrentWeapon"));
 //	FName WeaponSocket = TEXT("RightHandSocket");
 //	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
@@ -526,10 +511,8 @@ void ABaseCharacter::BeginPlay()
 //	CurrentWeapon->m_fCharacterSTR = m_fSTR;
 //	CurrentWeapon->m_fWeaponDurability = 50.f;
 //	SetNWHandIn(true);
-
+//
 //}
-
-
 }
 
 // Called every frame
@@ -1068,8 +1051,6 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 		Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 		Inventory[slotindex].Count = 0;
 
-
-
 		GameUIUpdate();
 		UE_LOG(LogTemp, Warning, TEXT("ThrowOnGround.ExecuteIfBound!!!!!!!!!!!!!"));
 		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
@@ -1087,36 +1068,23 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 	}
 
 
-
-	//if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT || CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
-	//	if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
-
-
-	//		DestroyBleedingHealingItemSlot();
-	//	}
-	//	else if (CurrentInvenSlot.ItemClassType == EItemClass::HEALINGITEM) {
-
-
-	//		DestroyHealingItemSlot();
-	//	}
-	//	else if (CurrentInvenSlot.ItemClassType == EItemClass::THROWINGWEAPON) {
-
-
-	//		DestroyThrowWeaponItemSlot();
-	//	}
-	//	else if (CurrentInvenSlot.ItemClassType == EItemClass::KEYITEM) {
-
-	//		DestroyKeyItemSlot();
-	//	}
-	//	else if (CurrentInvenSlot.ItemClassType == EItemClass::NORMALWEAPON) {
-
-
-	//		DestroyNormalWepaonItemSlot();
-	//	}
-
-	//}
-
-
+	/*if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT || CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
+		if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
+			DestroyBleedingHealingItemSlot();
+		}
+		else if (CurrentInvenSlot.ItemClassType == EItemClass::HEALINGITEM) {
+			DestroyHealingItemSlot();
+		}
+		else if (CurrentInvenSlot.ItemClassType == EItemClass::THROWINGWEAPON) {
+			DestroyThrowWeaponItemSlot();
+		}
+		else if (CurrentInvenSlot.ItemClassType == EItemClass::KEYITEM) {
+			DestroyKeyItemSlot();
+		}
+		else if (CurrentInvenSlot.ItemClassType == EItemClass::NORMALWEAPON) {
+			DestroyNormalWepaonItemSlot();
+		}
+	}*/
 }
 
 void ABaseCharacter::SpawnAllOnGround()
@@ -1292,14 +1260,13 @@ void ABaseCharacter::GetItem()
 			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
-					
-					if (i >= GetInvenSize()) {
-						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
-						return;
-					}
-					else {
-						break;
-					}
+					//if (i >= GetInvenSize()) {
+					//	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
+					//	return;
+					//}
+					//else {
+					//	break;
+					//}
 				}
 				else {
 					--ItemCountInInventory;
@@ -1389,7 +1356,6 @@ void ABaseCharacter::ShowActionText(FText Text, const FSlateColor& Color, float 
 			TextMissionUIWidget->SetVisibility(ESlateVisibility::Visible);
 
 			Cast<UTextMissionUI>(TextMissionUIWidget)->PlayFadeOutAnimation();
-
 		}
 	}
 }
@@ -1518,6 +1484,7 @@ void ABaseCharacter::InventoryOnOff()
 	}
 
 }
+
 // 아마도 안쓸예정
 //void ABaseCharacter::AttackCheck()
 //{
@@ -1795,12 +1762,19 @@ void ABaseCharacter::PlayKey()
 			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime / default_playkey_anim_playtime;
 			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
-			PlayKeyAnim(); // 애니메이션 시작
+			float AnimPlaySpeed;
+			
+			if (GetCharacterName() == "Employee")	// 회사원 캐릭 특성
+				AnimPlaySpeed = default_playkey_anim_playtime / playkey_anim_playtime_for_employee;
+			else
+				AnimPlaySpeed = 1.f;
+
+			PlayKeyAnim(AnimPlaySpeed); // 애니메이션 시작
 		}
 	}
 }
 
-void ABaseCharacter::PlayKeyAnim()
+void ABaseCharacter::PlayKeyAnim(float PlaySpeed)
 {
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	if (!AnimInstance) {
@@ -1808,8 +1782,7 @@ void ABaseCharacter::PlayKeyAnim()
 		return;
 	}
 
-	float AnimPlaySpeed = 1.f;
-	AnimInstance->PlayKeyMontage(AnimPlaySpeed);
+	AnimInstance->PlayKeyMontage(PlaySpeed);
 
 	// 첫 연결만 이벤트 바인딩
 	if (KeyMontageFlag == 0) {
@@ -1885,7 +1858,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 		//			UpdateKeySlot();
 		//			Send_OpenRoot(2);
 		//		}
-
+		//
 		//	}
 		//	else if (CurrentKeyItem->KeyName == "RoofKey2") {
 		//		if (RoofTopDoorActor->bIsDisableUnlock) {
@@ -1954,7 +1927,6 @@ void ABaseCharacter::PickUpMontageEnded(UAnimMontage* Montage, bool interrup)
 
 void ABaseCharacter::Throw() // throwweapon 생성 시 작성 필요
 {
-
 }
 
 // 아이템을 먹고 아이템이 사라졌을때 다른 아이템을 주웠을때 인덱스 오류가 발생하는듯 수정 예정
@@ -1968,7 +1940,6 @@ void ABaseCharacter::UpdateHealingSlot()
 		Inventory[slotindex].Count = Inventory[slotindex].Count - 1;
 	}
 
-
 	if (QuickSlot[1].Count == 0) {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "UpdateHealing Count == 0!!!!!!");
 		DestroyHealingItemSlot();
@@ -1980,7 +1951,7 @@ void ABaseCharacter::UpdateHealingSlot()
 
 void ABaseCharacter::UpdateBHealingSlot()
 {
-	if (GetCharacterName() == "IdolCharacter") {
+	if (GetCharacterName() == "IdolCharacter") {	// 아이돌 캐릭 특성
 		float RandomValue = FMath::FRand();
 		if (RandomValue >= 1.f - 0.4f) {	// 40퍼센트의 확률로 출혈 회복 아이템 재사용
 			// 이때, 여기에서 "갸차 성공!" 메세지 작게 띄우기
@@ -2036,14 +2007,10 @@ void ABaseCharacter::PickUp()
 		++m_iPickUpMontageFlag;
 		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::PickUpMontageEnded);
 	}
-
-
-
 }
 
 void ABaseCharacter::QuickNWeapon()
 {
-
 	if (IsBHHandIn()) {
 		CurrentBleedingHealingItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		CurrentBleedingHealingItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
@@ -2211,6 +2178,7 @@ bool ABaseCharacter::CanSetWeapon()
 {
 	return (CurrentWeapon == nullptr);
 }
+
 // 아마도 안쓸예정
 //void ABaseCharacter::SetWeapon(ANormalWeaponActor* NewWeapon)
 //{
@@ -2595,8 +2563,6 @@ void ABaseCharacter::DestroyNormalWepaonItemSlot()
 	Inventory[slotindex].ItemClassType = EItemClass::NONE;
 	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 	Inventory[slotindex].Count = 0;
-
-
 
 	GameUIUpdate();
 }

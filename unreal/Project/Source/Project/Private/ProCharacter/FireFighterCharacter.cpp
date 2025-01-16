@@ -95,6 +95,7 @@ void AFireFighterCharacter::NoSmokeIsDying()
 
 void AFireFighterCharacter::Smoking(AHealingItemActor* smokeActor)
 {
+	// 소방관 캐릭 특성
 	if (smokeActor != nullptr) {
 		float originalSmoke_healingSpeed = 1.0f;
 		smokeActor->m_fHealingSpeed = originalSmoke_healingSpeed + 1.6f;	// 소방관 담배로 인한 체력 회복 +160% 효력 발휘

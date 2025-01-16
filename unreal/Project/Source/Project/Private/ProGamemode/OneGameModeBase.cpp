@@ -342,10 +342,6 @@ int32 AOneGameModeBase::RandomCarKey()
     return -1;
 }
 
-
-
-
-
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos)
 {
     int32 itembindex = itemboxindex - 1;
@@ -410,7 +406,6 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
     ++m_iItemBoxNumber;
     UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> m_iItemBoxNumber: %d"), m_iItemBoxNumber);
 }
-
 
 void AOneGameModeBase::NullPtrItemBoxesIndex(int32 itemboxindex)
 {

@@ -447,8 +447,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
 
 					Character->SetCarryBagName("BigBagActor");
-					Character->SetInvenSize(20);
-
+					//Character->SetInvenSize(20);
 
 					for (int i = 10; i < 20; ++i) {
 						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
@@ -466,7 +465,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					Character->Inventory[SlotIndex].Type = EItemType::ITEM_NONE;
 
 					Character->SetCarryBagName("BigBagActor");
-					Character->SetInvenSize(20);
+					//Character->SetInvenSize(20);
 
 					for (int i = 5; i < 20; ++i) {
 						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
@@ -481,7 +480,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 					Character->Inventory[SlotIndex].Type = EItemType::ITEM_NONE;
 
 					Character->SetCarryBagName("BagActor");
-					Character->SetInvenSize(10);
+					//Character->SetInvenSize(10);
 
 					for (int i = 5; i < 10; ++i) {
 						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));

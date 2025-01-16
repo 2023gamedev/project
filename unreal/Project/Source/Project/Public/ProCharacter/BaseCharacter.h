@@ -190,7 +190,6 @@ public:
 	void ShowMissionText(FText Text, const FSlateColor& Color, int TextNumber);
 
 
-
 	FTimerHandle CarKeyFindHandle;
 	void CarKeyFindUpdateUI();
 
@@ -257,7 +256,6 @@ public:
 	void PickUp();
 
 	void OtherPickUp();
-
 
 	void QuickNWeapon();
 	void QuickBHItem();
@@ -363,8 +361,8 @@ public:
 	void SetCarryBagName(FName carrybagname) { m_nCarryBagName = carrybagname; };
 	FName GetCarryBagName() { return m_nCarryBagName; }
 
-	void SetInvenSize(int invensize) { m_iInvenSize = invensize; };
-	int GetInvenSize() { return m_iInvenSize; }
+	//void SetInvenSize(int invensize) { m_iInvenSize = invensize; };
+	//int GetInvenSize() { return m_iInvenSize; }
 
 	void SetStartLocation(FVector startlocation) { m_VStartLocation = startlocation; }
 	FVector GetStartLocation() { return m_VStartLocation; }
@@ -458,7 +456,6 @@ public:
 	void OtherUnEquipItem(uint32 itemtype);
 
 
-	
 	UPROPERTY(EditAnywhere)
 	int32 GameClearFlag = 0;
 
@@ -476,7 +473,7 @@ public:
 	void HealingStamina();
 	void HealingStaminaTimerElapsed();
 
-	void PlayKeyAnim();
+	void PlayKeyAnim(float PlaySpeed);
 
 	void UpdateOpenKey(uint32 keyindex);
 
@@ -605,8 +602,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	FName m_nCarryBagName;
 
-	UPROPERTY(EditAnywhere)
-	int m_iInvenSize = 5;
+	//UPROPERTY(EditAnywhere)
+	//int m_iInvenSize = 5;				// 이거 안 씀;;
 
 	// 어택
 	UPROPERTY(EditAnywhere)
