@@ -251,7 +251,7 @@ private:
 
 	vector<thread*> worker_threads;
 
-	thread zombie_thread;
+	vector<thread> zombie_threads;
 
 	bool ServerShutdown{ false };
 

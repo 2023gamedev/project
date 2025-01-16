@@ -6,7 +6,7 @@
 
 #include "Zombie.h"
 
-class IOCP_CORE;
+//class IOCP_CORE;
 
 
 struct Vector3 {
@@ -44,7 +44,7 @@ enum class EZombiePatrol
 class ZombieController
 {
 public:
-	ZombieController(IOCP_CORE& mainServe, int roomid);
+	ZombieController(IOCP_CORE* mainServe, int roomid);
 	~ZombieController();
 
 	IOCP_CORE* iocpServer;

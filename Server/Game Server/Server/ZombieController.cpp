@@ -5,10 +5,10 @@
 #include "ShoutingZombie.h"
 
 
-ZombieController::ZombieController(IOCP_CORE& mainServer, int roomid)
+ZombieController::ZombieController(IOCP_CORE* mainServer, int roomid)
 {
     // 서버 설정
-    iocpServer = &mainServer;
+    iocpServer = mainServer;
 
     //// 지하 1층 
     //SpawnZombies(1, 0, Vector3(1800.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);

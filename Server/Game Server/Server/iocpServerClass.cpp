@@ -156,7 +156,7 @@ void IOCP_CORE::IOCP_MakeWorkerThreads()
 
 	acceptThread.join();
 
-	zombie_thread.join();
+	//zombie_thread.join();
 }
 
 void IOCP_CORE::IOCP_WorkerThread() {
