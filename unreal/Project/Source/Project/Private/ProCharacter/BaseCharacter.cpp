@@ -1920,6 +1920,11 @@ void ABaseCharacter::PickUpMontageEnded(UAnimMontage* Montage, bool interrup)
 	m_bIsPickUping = false;
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+
+	if (AnimInstance) {
+		AnimInstance->PickUpEnd();
+	}
+
 	if (!AnimInstance || Montage != AnimInstance->GetOpenKeyMontage()) {
 		return;
 	}
