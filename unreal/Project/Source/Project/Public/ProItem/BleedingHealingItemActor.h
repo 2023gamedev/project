@@ -31,7 +31,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = BleedingHealingItem)
 	UStaticMeshComponent* BleedingHealingItem;
 
-	// 무기의 스탯들
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fHealingSuccessProbability;
 

@@ -1939,6 +1939,15 @@ void ABaseCharacter::UpdateHealingSlot()
 
 void ABaseCharacter::UpdateBHealingSlot()
 {
+	if (GetCharacterName() == "IdolCharacter") {
+		float RandomValue = FMath::FRand();
+		if (RandomValue >= 1.f - 0.4f) {	// 40퍼센트의 확률로 출혈 회복 아이템 재사용
+			// 이때, 여기에서 "갸차 성공!" 메세지 작게 띄우기
+
+			return;
+		}
+	}
+
 	QuickSlot[0].Count = QuickSlot[0].Count - 1;
 	int slotindex = QuickSlot[0].SlotReference;
 	Inventory[slotindex].Count = Inventory[slotindex].Count - 1;
@@ -2968,6 +2977,7 @@ bool ABaseCharacter::GetAttack()
 {
 	return b_attack;
 }
+
 void ABaseCharacter::OtherSpawnItemBefore()
 {
 	if (CurrentWeapon != nullptr) {
@@ -2987,6 +2997,7 @@ void ABaseCharacter::OtherSpawnItemBefore()
 	}
 
 }
+
 void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 {
 	OtherSpawnItemBefore();
