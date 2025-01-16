@@ -86,6 +86,7 @@ void UPlayerCharacterAnimInstance::AttackEnd()
 void UPlayerCharacterAnimInstance::PlayAttackMontage()
 {
 	if (!Montage_IsPlaying(AttackMontage)) {
+		m_bIsAttacking = true;
 		Montage_Play(AttackMontage, 1.f);
 	}
 }

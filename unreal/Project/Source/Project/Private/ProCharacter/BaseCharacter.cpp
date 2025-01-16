@@ -1175,13 +1175,17 @@ void ABaseCharacter::SpawnAllOnGround()
 void ABaseCharacter::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	m_bIsAttacking = false;
-	m_DAttackEnd.Broadcast();
+	//m_DAttackEnd.Broadcast();
 
-	m_bIsPickUping = false;
-	m_DPickUpEnd.Broadcast();
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
-	m_bIsBleedHealing = false;
-	m_DBleedingHealingEnd.Broadcast();
+	AnimInstance->AttackEnd();
+
+	//m_bIsPickUping = false;
+	//m_DPickUpEnd.Broadcast();
+
+	//m_bIsBleedHealing = false;
+	//m_DBleedingHealingEnd.Broadcast();
 }
 
 
@@ -1523,10 +1527,11 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 	AnimInstance->PlayAttackMontage();
 	m_bIsAttacking = true;
 
-	m_DAttackEnd.AddLambda([this]() -> void {
-		m_bIsAttacking = false;
-		//UE_LOG(LogTemp, Display, TEXT("AttackEnd: %d"), PlayerId);
-		});
+	//m_DAttackEnd.AddLambda([this]() -> void {
+	//	m_bIsAttacking = false;
+	//	//UE_LOG(LogTemp, Display, TEXT("AttackEnd: %d"), PlayerId);
+	//	});
+
 	m_bIsAttacking = false;
 }
 
