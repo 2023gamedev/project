@@ -926,6 +926,10 @@ void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 // 좀비가 플레이어 공격할 때 충돌체크
 void ABaseZombie::AttackCheck()
 {
+	// 이미 죽은 상태일때는 때리지 못하도록
+	if (GetHP() <= 0)
+		return;
+
 	FHitResult HitResult;
 	FCollisionQueryParams Params(NAME_None, false, this);
 	bool bResult = GetWorld()->SweepSingleByChannel(
@@ -940,26 +944,26 @@ void ABaseZombie::AttackCheck()
 
 
 	// debug 용(충돌 범위 확인 용)
-	//FVector TraceVec = GetActorForwardVector() * m_fAttackRange;
-	//FVector Center = GetActorLocation() + TraceVec * 0.5f;
-	//float HalfHeight = m_fAttackRange * 0.5f + 50.f;
-	//FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
-	//FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-	//float DebugLifeTime = m_fAttackRadius;
+	FVector TraceVec = GetActorForwardVector() * m_fAttackRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = m_fAttackRange * 0.5f + 50.f;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = m_fAttackRadius;
 
 
-	//DrawDebugCapsule(GetWorld(),
-	//	Center,
-	//	HalfHeight,
-	//	m_fAttackRadius,
-	//	CapsuleRot,
-	//	DrawColor,
-	//	false,
-	//	DebugLifeTime);
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		m_fAttackRadius,
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime);
 
 	if (bResult) {
 
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
 		//UE_LOG(LogNet, Display, TEXT("Player #%d got hit - HP: %d"), HitResult.GetActor()->PlayerId, HitResult.GetActor()->GetHp());
 		FDamageEvent DamageEvent;
 		HitResult.GetActor()->TakeDamage(GetSTR(), DamageEvent, GetController(), this);
