@@ -654,6 +654,9 @@ private:
 	int m_iBleedHealingMontageFlag;
 
 	UPROPERTY(EditAnywhere)
+	int m_iAttackMontageFlag;
+
+	UPROPERTY(EditAnywhere)
 	bool bIsKeyPlaying;
 
 	UPROPERTY(EditAnywhere)
