@@ -1633,11 +1633,14 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 	HealingFX->OwnerChar = this;
 
 	if (CurrentHealingItem != nullptr) {
+
+		if (CurrentHealingItem->HName == "Smoke") {
+			Smoking(CurrentHealingItem);
+		}
+
 		StartHealingTimer(CurrentHealingItem->m_fHealingSpeed, CurrentHealingItem->m_fHealingDuration);
 	}
-	if (CurrentHealingItem->HName == "Smoke") {
-		Smoking();
-	}
+	
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "HealingMontageEnd!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	UpdateHealingSlot();
@@ -2819,7 +2822,7 @@ void ABaseCharacter::UseStamina()
 void ABaseCharacter::UseStaminaTimerElapsed()
 {
 	if (GetVelocity().Size() == 0.f && GetStamina() > 0) {
-		SetStamina(GetStamina() + m_fstaminaHealing);
+		SetStamina(GetStamina() + GetStaminaHealing());
 		if (GetStamina() > GetMaxStamina()) {
 			SetStamina(GetMaxStamina());
 		}
@@ -2867,7 +2870,7 @@ void ABaseCharacter::OtherUnEquipItem(uint32 itemtype)
 
 void ABaseCharacter::HealingStaminaTimerElapsed()
 {
-	SetStamina(GetStamina() + m_fstaminaHealing);
+	SetStamina(GetStamina() + GetStaminaHealing());
 	if (GetStamina() > GetMaxStamina()) {
 		SetStamina(GetMaxStamina());
 	}

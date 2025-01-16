@@ -2,8 +2,10 @@
 
 
 #include "ProCharacter/FireFighterCharacter.h"
+
 #include "ProCharacter/PlayerCharacterAnimInstance.h"
 #include "ProCharacter/PlayerCharacterController.h"
+#include "ProItem/HealingItemActor.h"
 
 AFireFighterCharacter::AFireFighterCharacter()
 {
@@ -43,7 +45,7 @@ void AFireFighterCharacter::BeginPlay()
 
 void AFireFighterCharacter::SmokeTimer()
 {
-	GetWorld()->GetTimerManager().SetTimer(SmokeHandle, this, &AFireFighterCharacter::LimitSmoking, 120.0f, false);	// 2분후 타이머 실행 (담배를 안 피울 시 체력 금단현상 시작)
+	GetWorld()->GetTimerManager().SetTimer(SmokeHandle, this, &AFireFighterCharacter::LimitSmoking, 60.0f, false);	// 1분후 타이머 실행 (담배를 안 피울 시 체력 금단현상 시작)
 }
 
 void AFireFighterCharacter::LimitSmoking()
@@ -91,8 +93,13 @@ void AFireFighterCharacter::NoSmokeIsDying()
 	}
 }
 
-void AFireFighterCharacter::Smoking()
+void AFireFighterCharacter::Smoking(AHealingItemActor* smokeActor)
 {
+	if (smokeActor != nullptr) {
+		float originalSmoke_healingSpeed = 1.0f;
+		smokeActor->m_fHealingSpeed = originalSmoke_healingSpeed + 0.8f;	// 소방관 담배로 인한 체력 회복 +80% 효력 발휘
+	}
+
 	SmokingIcon();
 	GetWorld()->GetTimerManager().ClearTimer(SmokeHandle);
 	GetWorld()->GetTimerManager().ClearTimer(DyingHandle);

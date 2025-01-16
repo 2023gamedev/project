@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
+
 #include "FireFighterCharacter.generated.h"
 
 /**
  * 
  */
- // FireFighter Ä³¸¯ÅÍ Å¬·¡½º
+ // FireFighter ìºë¦­í„° í´ë˜ìŠ¤
 UCLASS()
 class PROJECT_API AFireFighterCharacter : public ABaseCharacter
 {
@@ -30,7 +31,7 @@ public:
 	void LimitSmoking();
 	void NoSmokeIsDying();
 
-	virtual void Smoking() override;
+	virtual void Smoking(AHealingItemActor* smokeActor) override;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 };

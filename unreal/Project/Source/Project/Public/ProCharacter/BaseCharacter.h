@@ -295,6 +295,7 @@ public:
 	float GetMaxStamina() { return m_fMaxStamina; }
 	void SetMaxStamina(float maxstamina) { m_fMaxStamina = maxstamina; }
 
+	float GetStaminaHealing() { return m_fstaminaHealing; }
 	void SetStaminaHealing(float staminahealing) { m_fstaminaHealing = staminahealing; }
 
 	float GetHealing() { return m_fHealing; }
@@ -429,7 +430,7 @@ public:
 	void ProGameEnd();
 
 	// 소방관
-	virtual void Smoking() {};
+	virtual void Smoking(AHealingItemActor* smokeActor) {};
 
 	// 출혈 회복
 	FBleedHealingEndPlayerDelegate m_DBleedingHealingEnd;
