@@ -17,6 +17,9 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 	m_bPawnRun = false;
 	m_bIsInAir = false;
 	m_bIsDead = false;
+	m_bIsAttacking = false;
+	m_bIsPickUp = false;
+
 	// 위에 FObjectFinder는 기존것 밑에는 새롭게 애니메이션한 부분
 	//static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployee.BP_AMEmployee"));
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeeJ.BP_AMEmployeeJ"));
@@ -71,6 +74,15 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
+void UPlayerCharacterAnimInstance::PickUpEnd()
+{
+	m_bIsPickUp = false;
+}
+void UPlayerCharacterAnimInstance::AttackEnd()
+{
+	m_bIsAttacking = false;
+}
+
 void UPlayerCharacterAnimInstance::PlayAttackMontage()
 {
 	if (!Montage_IsPlaying(AttackMontage)) {
@@ -81,6 +93,7 @@ void UPlayerCharacterAnimInstance::PlayAttackMontage()
 void UPlayerCharacterAnimInstance::PlayPickUpMontage()
 {
 	if (!Montage_IsPlaying(PickUpMontage)) {
+		m_bIsPickUp = true;
 		Montage_Play(PickUpMontage, 3.f);
 	}
 }
