@@ -522,7 +522,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
        std::string TexturePathStr(TCHAR_TO_UTF8(*TexturePath));
        droppacket.set_texture_path(TexturePathStr);
    }
-   droppacket.set_itemid(newindex+1);
+   droppacket.set_itemid(newindex + 1);
    droppacket.set_posx(itemboxpos.X);
    droppacket.set_posy(itemboxpos.Y);
    droppacket.set_posz(itemboxpos.Z);
