@@ -34,6 +34,9 @@ public:
 	void PlayBleedHealingMontage(float PlaySpeed);
 	void PlayJumpMontage();
 
+	void PickUpEnd();
+	void AttackEnd();
+
 	FOnAttackStartCheckDelegate OnAttackStartCheck;
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
 	FOnFootSoundCheckDelegate OnFootSoundCheck;
@@ -72,6 +75,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool m_bIsHandInWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+	bool m_bIsAttacking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+	bool m_bIsPickUp;
 
 	// 애니메이션 몽타주
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
