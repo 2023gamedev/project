@@ -83,10 +83,15 @@
 #define default_healing_anim_playtime 4.57f
 #define default_bleedhealing_anim_playtime 9.f
 #define default_playkey_anim_playtime 5.23f
-//#define playtime_8_sec 8.f			// 키 사용시간 (너무 긴거 같아서 걍 default_playkey_anim_playtime 5.23초 하기로 함)
-#define playtime_4_sec 4.f			// 참치캔, 소독약, 연고 사용시간
-#define playtime_3_5_sec 3.5f		// 과자 사용시간
-#define playtime_3_sec 3.f			// 음료수, 담배, 물 사용시 & 출혈 회복용 아이템 사용시간
+
+#define playtime_7_sec 7.f					// 참치캔 사용시간
+#define playtime_6_sec 6.f					// 소독약, 연고 사용시간
+#define playtime_5_5_sec 5.5f				// 과자, '붕대' 사용시간
+#define playtime_5_sec 5.f					// '거즈' 사용시간
+#define playtime_4_5_sec 4.5f				// 담배 사용시간
+#define playtime_4_sec 4.f					// 물, 음료수 사용시간
+#define playtime_3_5_sec 3.5f				// '깨끗한 옷' 사용시간
+#define playtime_3_sec 3.f					// '더러운 옷' 사용시간
 
 
 
@@ -1575,25 +1580,39 @@ void ABaseCharacter::Healing()
 		float WidgetPlaySpeed = 1.f;
 		float AnimPlaySpeed = 1.f;
 
-		if (CurrentHealingItem->HName == "CannedTuna" || CurrentHealingItem->HName == "Ointment" || CurrentHealingItem->HName == "Disinfectant") {
+		if (CurrentHealingItem->HName == "CannedTuna") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_7_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_healing_anim_playtime / playtime_7_sec;
+			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
+		}
+		else if (CurrentHealingItem->HName == "Ointment" || CurrentHealingItem->HName == "Disinfectant") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_6_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_healing_anim_playtime / playtime_6_sec;
+			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
+		}
+		else if (CurrentHealingItem->HName == "Snack") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_5_5_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_healing_anim_playtime / playtime_5_5_sec;
+			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
+		}
+		else if (CurrentHealingItem->HName == "Drink" || CurrentHealingItem->HName == "Water") {
 			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_4_sec;
 			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
 			AnimPlaySpeed = default_healing_anim_playtime / playtime_4_sec;
 			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
 		}
-		else if (CurrentHealingItem->HName == "Snack") {
-			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_5_sec;
+		else if (CurrentHealingItem->HName == "Smoke") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_4_5_sec;
 			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
-			AnimPlaySpeed = default_healing_anim_playtime / playtime_3_5_sec;
-			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
-		}
-		else if (CurrentHealingItem->HName == "Drink" || CurrentHealingItem->HName == "Smoke" || CurrentHealingItem->HName == "Water") {
-			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
-			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
-
-			AnimPlaySpeed = default_healing_anim_playtime / playtime_3_sec;
+			AnimPlaySpeed = default_healing_anim_playtime / playtime_4_5_sec;
 			AnimInstance->PlayHealingMontage(AnimPlaySpeed);
 		}
 
@@ -1662,17 +1681,39 @@ void ABaseCharacter::BleedHealing()
 		float WidgetPlaySpeed = 1.f;
 		float AnimPlaySpeed = 1.f;
 
-		WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
-		CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+		if (CurrentBleedingHealingItem->BHName == "DirtyClothes") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
-		AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
-		AnimInstance->PlayBleedHealingMontage(AnimPlaySpeed);
+			AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_sec;
+			AnimInstance->PlayBleedHealingMontage(AnimPlaySpeed);
+		}
+		else if (CurrentBleedingHealingItem->BHName == "Clothes") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_3_5_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_3_5_sec;
+			AnimInstance->PlayBleedHealingMontage(AnimPlaySpeed);
+		}
+		else if (CurrentBleedingHealingItem->BHName == "Gauze") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_5_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_5_sec;
+			AnimInstance->PlayBleedHealingMontage(AnimPlaySpeed);
+		}
+		else if (CurrentBleedingHealingItem->BHName == "Bandage") {
+			WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playtime_5_5_sec;
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
+
+			AnimPlaySpeed = default_bleedhealing_anim_playtime / playtime_5_5_sec;
+			AnimInstance->PlayBleedHealingMontage(AnimPlaySpeed);
+		}
 
 		if (m_iBleedHealingMontageFlag == 0) {
 			++m_iBleedHealingMontageFlag;
 			AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::BleedHealingMontageEnded);
 		}
-
 	}
 }
 
