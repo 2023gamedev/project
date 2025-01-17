@@ -143,6 +143,13 @@ void UChoiceCharacterUI::OnClickedReadyButton()
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
     if (b_ready == true) {
+        // Cancel 상태일 때 버튼의 색상 설정 (노랑)
+        FButtonStyle ButtonStyle = ReadyButton->WidgetStyle;
+        ButtonStyle.Normal.TintColor = FSlateColor(FLinearColor(0.8f, 0.8f, 0.f, 0.7f));
+        ButtonStyle.Hovered.TintColor = FSlateColor(FLinearColor(1.f, 1.f, 0.f, 0.8f));
+        ButtonStyle.Pressed.TintColor = FSlateColor(FLinearColor(0.6f, 0.6f, 0.f, 0.6f));
+        ReadyButton->SetStyle(ButtonStyle);
+
         if (GirlButton) GirlButton->SetIsEnabled(false);
         if (EmployeeButton) EmployeeButton->SetIsEnabled(false);
         if (IdolButton) IdolButton->SetIsEnabled(false);
@@ -151,6 +158,13 @@ void UChoiceCharacterUI::OnClickedReadyButton()
         Ready_TextBlock->SetText(FText::FromString("Cancel"));
     }
     else {
+        // 다시 Ready 상태일 때 버튼의 색상 설정 (초록)
+        FButtonStyle ButtonStyle = ReadyButton->WidgetStyle;
+        ButtonStyle.Normal.TintColor = FSlateColor(FLinearColor(0.f, 0.8f, 0.f, 0.7f));
+        ButtonStyle.Hovered.TintColor = FSlateColor(FLinearColor(0.f, 1.f, 0.f, 0.8f));
+        ButtonStyle.Pressed.TintColor = FSlateColor(FLinearColor(0.f, 0.6f, 0.f, 0.6f));
+        ReadyButton->SetStyle(ButtonStyle);
+
         if (GirlButton) GirlButton->SetIsEnabled(true);
         if (EmployeeButton) EmployeeButton->SetIsEnabled(true);
         if (IdolButton) IdolButton->SetIsEnabled(true);
@@ -228,7 +242,7 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
             if (PlayersCharacter.Contains(playerID) == true) {
                 uint32* playerCharType = PlayersCharacter.Find(playerID);
                 if (*playerCharType == 0) continue;  // 초기화값임
-                //UE_LOG(LogTemp, Log, TEXT("PlayerID: %d, CharacterType: %d"), playerID, *playerCharType);
+                //UE_LOG(LogTemp, Log, TEXT("PlayerID: %d, CharacterType: %d"), playerID, *playerCharType); 
                 switch (*playerCharType) {
                 case 1:
                     if (GirlButton)
@@ -255,35 +269,39 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
 void UChoiceCharacterUI::UpdatePlayerReadyState(uint32 player_num, bool Ready)
 {
     if (Ready == true) {
-        if (player_num == 1)
+        if (player_num == 1 && First_Ready)
         {
             First_Ready->SetText(FText::FromString("READY"));
             FSlateFontInfo FontInfo = First_Ready->GetFont();
-            FontInfo.Size = 60;
+            FontInfo.Size = 50;
+            First_Ready->SetFont(FontInfo);
             First_Ready->SetJustification(ETextJustify::Center);
             First_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
         }
-        else if (player_num == 2)
+        else if (player_num == 2 && Second_Ready)
         {
             Second_Ready->SetText(FText::FromString("READY"));
             FSlateFontInfo FontInfo = Second_Ready->GetFont();
-            FontInfo.Size = 60;
+            FontInfo.Size = 50;
+            Second_Ready->SetFont(FontInfo);
             Second_Ready->SetJustification(ETextJustify::Center);
             Second_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
         }
-        else if (player_num == 3)
+        else if (player_num == 3 && Third_Ready)
         {
             Third_Ready->SetText(FText::FromString("READY"));
             FSlateFontInfo FontInfo = Third_Ready->GetFont();
-            FontInfo.Size = 60;
+            FontInfo.Size = 50;
+            Third_Ready->SetFont(FontInfo);
             Third_Ready->SetJustification(ETextJustify::Center);
             Third_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
         }
-        else if (player_num == 4)
+        else if (player_num == 4 && Fourth_Ready)
         {
             Fourth_Ready->SetText(FText::FromString("READY"));
             FSlateFontInfo FontInfo = Fourth_Ready->GetFont();
-            FontInfo.Size = 60;
+            FontInfo.Size = 50;
+            Fourth_Ready->SetFont(FontInfo);
             Fourth_Ready->SetJustification(ETextJustify::Center);
             Fourth_Ready->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
         }
@@ -371,6 +389,13 @@ void UChoiceCharacterUI::Init()
     if (ReadyButton)
     {
         //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "ReadyButton Init");
+
+         // 버튼의 초기 색상 설정 (초록)
+        FButtonStyle ButtonStyle = ReadyButton->WidgetStyle;
+        ButtonStyle.Normal.TintColor = FSlateColor(FLinearColor(0.f, 0.8f, 0.f, 0.7f));
+        ButtonStyle.Hovered.TintColor = FSlateColor(FLinearColor(0.f, 1.f, 0.f, 0.8f));
+        ButtonStyle.Pressed.TintColor = FSlateColor(FLinearColor(0.f, 0.6f, 0.f, 0.6f));
+        ReadyButton->SetStyle(ButtonStyle);
 
         ReadyButton->SetClickMethod(EButtonClickMethod::DownAndUp);
         ReadyButton->OnClicked.AddUniqueDynamic(this, &UChoiceCharacterUI::OnClickedReadyButton);

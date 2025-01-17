@@ -39,6 +39,13 @@ void UWaitingRoomUI::Init()
 
     if (ReadyButton)
     {
+        // 버튼의 초기 색상 설정 (초록)
+        FButtonStyle ButtonStyle = ReadyButton->WidgetStyle;
+        ButtonStyle.Normal.TintColor = FSlateColor(FLinearColor(0.f, 0.8f, 0.f, 0.7f));
+        ButtonStyle.Hovered.TintColor = FSlateColor(FLinearColor(0.f, 1.f, 0.f, 0.8f));
+        ButtonStyle.Pressed.TintColor = FSlateColor(FLinearColor(0.f, 0.6f, 0.f, 0.6f));
+        ReadyButton->SetStyle(ButtonStyle);
+
         ReadyButton->SetClickMethod(EButtonClickMethod::DownAndUp);
         ReadyButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnReadyButtonClicked);
         ReadyButton->SetIsEnabled(true);
@@ -83,6 +90,14 @@ void UWaitingRoomUI::Init()
 void UWaitingRoomUI::OnReadyButtonClicked()
 {
     if (!bIsReady) {
+        // Cancel 상태일 때 버튼의 색상 설정 (노랑)
+        FButtonStyle ButtonStyle = ReadyButton->WidgetStyle;
+        ButtonStyle.Normal.TintColor = FSlateColor(FLinearColor(0.8f, 0.8f, 0.f, 0.7f));
+        ButtonStyle.Hovered.TintColor = FSlateColor(FLinearColor(1.f, 1.f, 0.f, 0.8f));
+        ButtonStyle.Pressed.TintColor = FSlateColor(FLinearColor(0.6f, 0.6f, 0.f, 0.6f));
+        ReadyButton->SetStyle(ButtonStyle);
+
+
         Protocol::WaitingReady ReadyPacket;
         ReadyPacket.set_type(5);
         ReadyPacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
@@ -97,6 +112,14 @@ void UWaitingRoomUI::OnReadyButtonClicked()
         bIsReady = true;
     }
     else {
+        // 다시 Ready 상태일 때 버튼의 색상 설정 (초록)
+        FButtonStyle ButtonStyle = ReadyButton->WidgetStyle;
+        ButtonStyle.Normal.TintColor = FSlateColor(FLinearColor(0.f, 0.8f, 0.f, 0.7f));
+        ButtonStyle.Hovered.TintColor = FSlateColor(FLinearColor(0.f, 1.f, 0.f, 0.8f));
+        ButtonStyle.Pressed.TintColor = FSlateColor(FLinearColor(0.f, 0.6f, 0.f, 0.6f));
+        ReadyButton->SetStyle(ButtonStyle);
+
+
         Protocol::WaitingReady ReadyPacket;
         ReadyPacket.set_type(5);
         ReadyPacket.set_playerid(GameInstance->ClientSocketPtr->GetMyPlayerId());
