@@ -35,6 +35,8 @@ AIdolCharacter::AIdolCharacter()
 void AIdolCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	m_fBleedPercent += 0.2f;	// 아이돌 캐릭 특성 - 출혈 확률: (기존)30% + (추가)20% = 50% 
 }
 
 void AIdolCharacter::Tick(float DeltaTime)

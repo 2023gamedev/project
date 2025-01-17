@@ -1765,15 +1765,21 @@ void ABaseCharacter::PlayKey()
 
 			CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
-			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime / default_playkey_anim_playtime;
-			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
-
+			float WidgetPlaySpeed;
 			float AnimPlaySpeed;
-			
-			if (GetCharacterName() == "Employee")	// 회사원 캐릭 특성
+
+			if (GetCharacterName() == "Employee") {	// 회사원 캐릭 특성 -> 빠른 열쇠 사용시간 (약 +40% 더 빠름) 
+				WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playkey_anim_playtime_for_employee;
+				
 				AnimPlaySpeed = default_playkey_anim_playtime / playkey_anim_playtime_for_employee;
-			else
-				AnimPlaySpeed = 1.f;
+			}
+			else {
+				WidgetPlaySpeed = default_circularPB_widget_anim_playtime / default_playkey_anim_playtime;
+
+				AnimPlaySpeed = 1.f; //default_playkey_anim_playtime / default_playkey_anim_playtime;
+			}
+
+			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
 
 			PlayKeyAnim(AnimPlaySpeed); // 애니메이션 시작
 		}
@@ -2808,7 +2814,7 @@ void ABaseCharacter::BleedingTimerElapsed()
 bool ABaseCharacter::RandomBleeding()
 {
 	float RandomValue = FMath::FRand();
-	return RandomValue <= m_fBleedPercent;
+	return RandomValue <= m_fBleedPercent; 
 }
 
 bool ABaseCharacter::RandomBleedHealing(float bhpercent)
