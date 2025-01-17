@@ -41,9 +41,7 @@ void UWaitingRoomUI::Init()
     {
         ReadyButton->SetClickMethod(EButtonClickMethod::DownAndUp);
         ReadyButton->OnClicked.AddDynamic(this, &UWaitingRoomUI::OnReadyButtonClicked);
-
         ReadyButton->SetIsEnabled(true);
-
     }
 
     if (BackButton)

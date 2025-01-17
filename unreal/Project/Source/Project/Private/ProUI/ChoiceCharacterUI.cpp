@@ -126,6 +126,8 @@ void UChoiceCharacterUI::OnClickedReadyButton()
 {
     //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "OnClickedReadyButton");
 
+    b_ready = !b_ready;
+
     uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
     Protocol::SelectReady Packet;
 
@@ -140,10 +142,7 @@ void UChoiceCharacterUI::OnClickedReadyButton()
     // 직렬화된 데이터를 서버로 전송
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
-
-    b_ready = !b_ready;
-
-    if (b_ready == false) {
+    if (b_ready == true) {
         if (GirlButton) GirlButton->SetIsEnabled(false);
         if (EmployeeButton) EmployeeButton->SetIsEnabled(false);
         if (IdolButton) IdolButton->SetIsEnabled(false);
@@ -212,6 +211,9 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
 
         // 다른 사람이 선택한 캐릭 중복선택 X
         PlayersCharacter.Add(recvSelect.PlayerId, recvSelect.Character_type);
+
+        if (b_ready == true)
+            return; // 이미 레디 누른 상태면 아래 작업 필요 X
 
         GirlButton->SetIsEnabled(true);
         EmployeeButton->SetIsEnabled(true);

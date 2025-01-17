@@ -361,8 +361,8 @@ public:
 	void SetCarryBagName(FName carrybagname) { m_nCarryBagName = carrybagname; };
 	FName GetCarryBagName() { return m_nCarryBagName; }
 
-	//void SetInvenSize(int invensize) { m_iInvenSize = invensize; };
-	//int GetInvenSize() { return m_iInvenSize; }
+	void SetInvenSize(int invensize) { m_iInvenSize = invensize; };
+	int GetInvenSize() { return m_iInvenSize; }
 
 	void SetStartLocation(FVector startlocation) { m_VStartLocation = startlocation; }
 	FVector GetStartLocation() { return m_VStartLocation; }
@@ -443,8 +443,7 @@ public:
 	bool m_bIsBleedHealing = false;
 
 	UPROPERTY(EditAnywhere)
-	float m_fBleedPercent = 0.3f;
-
+	float m_fBleedPercent = 0.3f; 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	AInterActor* CurrentInterActor;
@@ -454,7 +453,6 @@ public:
 
 	void OtherSpawnItemBefore();
 	void OtherUnEquipItem(uint32 itemtype);
-
 
 	UPROPERTY(EditAnywhere)
 	int32 GameClearFlag = 0;
@@ -500,7 +498,6 @@ public:
 
 	//무기 깨졌을때에 문구	
 	void CommentDestroyWeapon();
-
 
 	virtual uint32 GetPlayerId() const;
 	void SetPlayerId(uint32 NewPlayerId);
@@ -580,7 +577,6 @@ private:
 	bool m_bJump = false;
 
 	// 인벤토리
-
 	UPROPERTY(EditAnywhere)
 	bool m_bNWHandIn = false;
 
@@ -602,8 +598,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	FName m_nCarryBagName;
 
-	//UPROPERTY(EditAnywhere)
-	//int m_iInvenSize = 5;				// 이거 안 씀;;
+	UPROPERTY(EditAnywhere)
+	int m_iInvenSize = 5;				// 이거 안 씀;;
 
 	// 어택
 	UPROPERTY(EditAnywhere)

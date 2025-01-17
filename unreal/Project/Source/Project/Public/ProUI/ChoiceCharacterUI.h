@@ -120,11 +120,10 @@ public:
 	UTextBlock* Ready_TextBlock;
 
 
-	bool b_ready = true;
+	bool b_ready = false;
 
 
 //protected:
-
 	//virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
 
 
