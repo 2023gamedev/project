@@ -1528,6 +1528,7 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 	}
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
+	AnimInstance->AttackStart();
 	AnimInstance->PlayAttackMontage();
 	m_bIsAttacking = true;
 
@@ -2016,7 +2017,7 @@ void ABaseCharacter::PickUp()
 		return;
 	}
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-
+	AnimInstance->PickUpStart();
 	AnimInstance->PlayPickUpMontage();
 	m_bIsPickUping = true;
 
