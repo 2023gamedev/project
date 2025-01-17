@@ -7,6 +7,7 @@
 #include "LStruct.pb.h"
 #include "Widgets/Input/SEditableTextBox.h"
 
+
 void UWaitingRoomUI::NativeConstruct()
 {
     Super::NativeConstruct();
@@ -16,15 +17,10 @@ void UWaitingRoomUI::NativeConstruct()
         // SEditableTextBox_IgnoreEnter 초기화
         //ChatText_IE = SNew(SEditableTextBox_IgnoreEnter);
 
-
-
         // 방법1
         // Slate 위젯을 Overlay에 추가
         //TSharedRef<SWidget> SlateWidgetRef = ChatText_IE.ToSharedRef();
-
         //ChatOverlay->AddChild(Cast<UWidget>(SlateWidgetRef));
-
-
 
         // 방법2
         // 기존 컨테이너에서 사용할 수 있도록 추가하는 래퍼 생성
@@ -236,7 +232,6 @@ void UWaitingRoomUI::AddPlayerToList(const uint32 roomid, const FString& PlayerN
     UE_LOG(LogTemp, Log, TEXT("Added player %s to slot %d"), *PlayerName, SlotIndex);
 }
 
-
 void UWaitingRoomUI::RemovePlayerFromList(const FString& PlayerName)
 {
     if (!PlayerList) return;
@@ -259,8 +254,6 @@ void UWaitingRoomUI::RemovePlayerFromList(const FString& PlayerName)
         }
     }
 }
-
-
 
 void UWaitingRoomUI::AddChatMessage(const FString& Message)
 {

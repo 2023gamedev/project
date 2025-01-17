@@ -599,7 +599,7 @@ private:
 	FName m_nCarryBagName;
 
 	UPROPERTY(EditAnywhere)
-	int m_iInvenSize = 5;				// 이거 안 씀;;
+	int m_iInvenSize = 5;				
 
 	// 어택
 	UPROPERTY(EditAnywhere)

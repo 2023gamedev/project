@@ -1265,20 +1265,20 @@ void ABaseCharacter::GetItem()
 			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
-					//if (i >= GetInvenSize()) {
-					//	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
-					//	return;
-					//}
-					//else {
-					//	break;
-					//}
+					if (i >= GetInvenSize()) {
+						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
+						return;
+					}
+					else {
+						break;
+					}
 				}
 				else {
 					--ItemCountInInventory;
 				}
 			}
 
-			if (ItemCountInInventory == 0) { 
+			if (ItemCountInInventory == 0) { // 이거 위에 if (i >= GetInvenSize()) 랑 중복 검사되는 거 아닌가..?
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenMAX!!!");
 				return;
 			}
