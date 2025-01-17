@@ -92,7 +92,7 @@
 #define playtime_3_5_sec 3.5f				// '깨끗한 옷' 사용시간
 #define playtime_3_sec 3.f					// '더러운 옷' 사용시간
 
-#define playkey_anim_playtime_for_employee	3.73f	// 회사원 캐릭 빠른 열쇠 사용시간 (약 +40% 더 빠름) 
+#define playkey_anim_playtime_for_employee	2.5f	// 회사원 캐릭 빠른 열쇠 사용시간 (약 +100% 더 빠름) 
 
 
 
@@ -1773,10 +1773,17 @@ void ABaseCharacter::PlayKey()
 			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime / default_playkey_anim_playtime;
 			float AnimPlaySpeed = 1.f; //default_playkey_anim_playtime / default_playkey_anim_playtime;
 
-			if (GetCharacterName() == "Employee") {	// 회사원 캐릭 특성 -> 빠른 열쇠 사용시간 (약 +40% 더 빠름) 
+			if (GetCharacterName() == "EmployeeCharacter") {	// 회사원 캐릭 특성 -> 빠른 열쇠 사용시간 (약 +100% 더 빠름) 
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Black, FString::Printf(TEXT("(PlayKey) This character is Employee!!!")));
+
 				WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playkey_anim_playtime_for_employee;
 				
 				AnimPlaySpeed = default_playkey_anim_playtime / playkey_anim_playtime_for_employee;
+
+				// 실제로 배속이 정상 작동하는지 확인해보려고 (1초만에 문염)
+				//WidgetPlaySpeed = default_circularPB_widget_anim_playtime / 1.f;
+				//
+				//AnimPlaySpeed = default_playkey_anim_playtime / 1.f;
 			}
 
 			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
@@ -1951,7 +1958,7 @@ void ABaseCharacter::Throw() // throwweapon 생성 시 작성 필요
 {
 }
 
-// 아이템을 먹고 아이템이 사라졌을때 다른 아이템을 주웠을때 인덱스 오류가 발생하는듯 수정 예정
+// 아이템을 먹고 아이템이 사라졌을때 다른 아이템을 주웠을때 인덱스 오류가 발생하는듯 수정 예정 -> ?? 이젠 고친건가?
 
 void ABaseCharacter::UpdateHealingSlot()
 {
