@@ -34,7 +34,10 @@ public:
 	void PlayBleedHealingMontage(float PlaySpeed);
 	void PlayJumpMontage();
 
+	void PickUpStart();
 	void PickUpEnd();
+
+	void AttackStart();
 	void AttackEnd();
 
 	FOnAttackStartCheckDelegate OnAttackStartCheck;

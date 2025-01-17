@@ -74,6 +74,16 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
+void UPlayerCharacterAnimInstance::PickUpStart()
+{
+	m_bIsPickUp = true;
+}
+void UPlayerCharacterAnimInstance::AttackStart()
+{
+	m_bIsAttacking = true;
+}
+
+
 void UPlayerCharacterAnimInstance::PickUpEnd()
 {
 	m_bIsPickUp = false;
@@ -86,7 +96,7 @@ void UPlayerCharacterAnimInstance::AttackEnd()
 void UPlayerCharacterAnimInstance::PlayAttackMontage()
 {
 	if (!Montage_IsPlaying(AttackMontage)) {
-		m_bIsAttacking = true;
+		//m_bIsAttacking = true;
 		Montage_Play(AttackMontage, 1.f);
 	}
 }
@@ -94,7 +104,7 @@ void UPlayerCharacterAnimInstance::PlayAttackMontage()
 void UPlayerCharacterAnimInstance::PlayPickUpMontage()
 {
 	if (!Montage_IsPlaying(PickUpMontage)) {
-		m_bIsPickUp = true;
+		//m_bIsPickUp = true;
 		Montage_Play(PickUpMontage, 3.f);
 	}
 }
