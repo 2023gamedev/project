@@ -882,8 +882,6 @@ void ABaseCharacter::RoofKeyFindUpdateUI()
 	PlaySoundForPlayer(Sound);
 	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 
-
-	// 시작시 오른쪽 MissionText
 	FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하기"));
 	ShowMissionText(KMissionText1, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 1);
 }
@@ -1260,13 +1258,16 @@ void ABaseCharacter::GetItem()
 
 		auto itembox = Cast<AItemBoxActor>(PlayerSight->GetHitActor());
 		if (itembox) {
-			int32 ItemCountInInventory = 20; // 인벤이 꽉찼을때 못먹게 하기
+			int32 ItemCountInInventory = 20;
 
 			// 아이템박스에 있는 아이템에 대한 정보를 가져온다.
 			for (int i = 0; i < 20; ++i) {
 				if (Inventory[i].Type == EItemType::ITEM_NONE) {
-					if (i >= GetInvenSize()) {
-						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!!");
+					if (i >= GetInvenSize()) {	// (예외처리) - 현재 인벤토리 사이즈보다 더 많이 못 먹게 하기 (5칸, 10칸 일때)
+						FText KText = FText::FromString(TEXT("인벤토리가 꽉 찾습니다."));
+						ShowActionText(KText, FSlateColor(FLinearColor(0.2f, 0.2f, 0.2f)), 3.f);
+
+						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenSizeMAX!!! (i >= GetInvenSize())");
 						return;
 					}
 					else {
@@ -1278,8 +1279,11 @@ void ABaseCharacter::GetItem()
 				}
 			}
 
-			if (ItemCountInInventory == 0) { // 이거 위에 if (i >= GetInvenSize()) 랑 중복 검사되는 거 아닌가..?
-				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenMAX!!!");
+			if (ItemCountInInventory == 0) { // (예외처리) - 인벤이 풀로 20개 꽉 찼을때 못 먹게 하기
+				FText KText = FText::FromString(TEXT("인벤토리가 꽉 찾습니다."));
+				ShowActionText(KText, FSlateColor(FLinearColor(0.2f, 0.2f, 0.2f)), 3.f);
+
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, "InvenMAX!!! (ItemCountInInventory == 0)");
 				return;
 			}
 
@@ -1713,10 +1717,10 @@ void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interr
 
 	//m_DBleedingHealingEnd.AddLambda([this]() -> void {
 	//	m_bIsBleedHealing = false;
-
+	//
 	//	if (CurrentBleedingHealingItem != nullptr) {
 	//		m_bBleeding = RandomBleedHealing(CurrentBleedingHealingItem->m_fHealingSuccessProbability);
-
+	//
 	//		if (m_bBleeding) {
 	//			FText KText = FText::FromString(TEXT("지혈에 실패했습니다."));
 	//			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
@@ -1727,7 +1731,7 @@ void ABaseCharacter::BleedHealingMontageEnded(UAnimMontage* Montage, bool interr
 	//			ConditionUIWidget->BloodImageVisible(ESlateVisibility::Hidden);
 	//		}
 	//	}
-
+	//
 	//	UpdateBHealingSlot();
 	//	});
 
@@ -1765,18 +1769,13 @@ void ABaseCharacter::PlayKey()
 
 			CircularPB_Widget->SetVisibility(ESlateVisibility::Visible);
 
-			float WidgetPlaySpeed;
-			float AnimPlaySpeed;
+			float WidgetPlaySpeed = default_circularPB_widget_anim_playtime / default_playkey_anim_playtime;
+			float AnimPlaySpeed = 1.f; //default_playkey_anim_playtime / default_playkey_anim_playtime;
 
 			if (GetCharacterName() == "Employee") {	// 회사원 캐릭 특성 -> 빠른 열쇠 사용시간 (약 +40% 더 빠름) 
 				WidgetPlaySpeed = default_circularPB_widget_anim_playtime / playkey_anim_playtime_for_employee;
 				
 				AnimPlaySpeed = default_playkey_anim_playtime / playkey_anim_playtime_for_employee;
-			}
-			else {
-				WidgetPlaySpeed = default_circularPB_widget_anim_playtime / default_playkey_anim_playtime;
-
-				AnimPlaySpeed = 1.f; //default_playkey_anim_playtime / default_playkey_anim_playtime;
 			}
 
 			CircularPB_Widget->StartVisibleAnimation(WidgetPlaySpeed);
@@ -1806,18 +1805,24 @@ void ABaseCharacter::PlayKeyAnim(float PlaySpeed)
 void ABaseCharacter::UpdateOpenKey(uint32 keyindex)
 {
 	if (keyindex == 1) {
-		FText KText = FText::FromString(TEXT("풀렸다.지하로 탈출하라"));
-		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+		FText KText = FText::FromString(TEXT("차문이 열렸다. 지하로 탈출하라!"));
+		ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 0.0f, 1.0f)), 5.f);
+
+		FText KMissionText1 = FText::FromString(TEXT("지하로 탈출하기(열림)"));		// '(열림)' 문구 추가
+		ShowMissionText(KMissionText1, FSlateColor(FLinearColor(0.0f, 0.0f, 1.0f)), 4);		// 초록에서 파랑으로
 	}
 	else if (keyindex == 2) {
 		++m_iOpenRoofKey;
 		if (m_iOpenRoofKey == 1) {
 			FText KText = FText::FromString(TEXT("옥상문 잠금이 하나 풀렸다."));
-			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+			ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 0.0f, 0.8f)), 5.f);
 		}
 		else if (m_iOpenRoofKey == 2) {
-			FText KText = FText::FromString(TEXT("옥상이 풀렸다. 탈출하라"));
-			ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+			FText KText = FText::FromString(TEXT("옥상이 열렸다. 탈출하라!"));
+			ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 0.0f, 1.0f)), 5.f);
+
+			FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하기(열림)"));		// '(열림)' 문구 추가
+			ShowMissionText(KMissionText1, FSlateColor(FLinearColor(0.0f, 0.0f, 1.0f)), 1);		// 초록에서 파랑으로
 		}
 	}
 }
@@ -2945,7 +2950,7 @@ void ABaseCharacter::CommentDestroyWeapon()
 {
 	// 시작시 Text
 	FText KText = FText::FromString(TEXT("무기가 깨졌다!"));
-	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+	ShowActionText(KText, FSlateColor(FLinearColor(0.8f, 0.0f, 0.0f)), 5.f);
 }
 
 uint32 ABaseCharacter::GetPlayerId() const
