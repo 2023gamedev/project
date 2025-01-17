@@ -1908,7 +1908,6 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 					UpdateKeySlot();
 					Send_OpenRoot(2);
 				}
-
 			}
 			else if (CurrentKeyItem->KeyName == "RoofKey2") {
 				if (GameTimerUIWidget->RoofTopClose == true) {
