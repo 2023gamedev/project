@@ -9,6 +9,7 @@ ZombieController::ZombieController(IOCP_CORE* mainServer, int roomid)
 {
     // 서버 설정
     iocpServer = mainServer;
+    zombie_roomid = roomid;
 
     //// 지하 1층 
     //SpawnZombies(1, 0, Vector3(1800.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
@@ -62,8 +63,6 @@ ZombieController::ZombieController(IOCP_CORE* mainServer, int roomid)
     //SpawnZombies(38, 0, Vector3(1600.f, 2000.f, 90.212f), Rotator(0.f, -120.f, 0.f), 0, 0.f);
         SpawnZombies(39, 0, Vector3(200.f, 200.f, 90.212f), Rotator(0.f, -20.f, 0.f), 0, 0.f);
     //SpawnZombies(40, 0, Vector3(800.f, 2800.f, 90.212f), Rotator(0.f, 60.f, 0.f), 0, 0.f);
-
-        zombie_roomid = roomid;
 }
 
 ZombieController::~ZombieController()
@@ -96,7 +95,7 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
         new_zombie = new RunningZombie(new_zombie_data);
 
     // zombiedata 벡터에 추가
-    iocpServer->zombieDB.emplace_back(new_zombie);
+    iocpServer->zombieDB[zombie_roomid].emplace_back(new_zombie);
 
 
     //cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << iocpServer->zombie.size() << endl;
@@ -106,7 +105,7 @@ void ZombieController::SendZombieData(int id)
 {
     Protocol::ZombieDataList zombieDataList;
 
-    for (const auto& z : iocpServer->zombieDB) {
+    for (const auto& z : iocpServer->zombieDB[zombie_roomid]) {
         Protocol::Zombie* zombie = zombieDataList.add_zombies();
         zombie->set_zombieid(z->ZombieData.zombieID);
         zombie->set_x(z->ZombieData.x);

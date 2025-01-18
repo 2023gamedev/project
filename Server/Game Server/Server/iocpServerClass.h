@@ -179,8 +179,8 @@ public:
 	bool bServerOn;
 
 	//좀비 벡터
-	vector<Zombie*> zombieDB;
-	vector<Zombie*> zombieDB_BT;
+	std::unordered_map<int, vector<Zombie*>> zombieDB;
+	std::unordered_map<int, vector<Zombie*>> zombieDB_BT;
 
 	//======Zombie_BT 선언======
 

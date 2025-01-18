@@ -18,6 +18,7 @@ std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, std::unordered_map<int, PLAYER_INFO*>> room_players;
 std::unordered_map<int, std::unordered_map<int, Player>> playerDB;
 std::unordered_map<int, std::unordered_map<int, Player>> playerDB_BT;
+
 std::unordered_map<int, ZombieController*> zombieControllers;
 
 
@@ -582,14 +583,14 @@ void IOCP_CORE::ServerOn()
 
 	cout << endl;
 
-	for (const auto zom : zombieDB) {
+	/*for (const auto zom : zombieDB]) {
 		float z_x = zom->ZombieData.x;
 		float z_y = zom->ZombieData.y;
 		float z_z = zom->ZombieData.z;
 
 		cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 시작 위치: ( "
 			<< std::setw(8) << z_x << ", " << std::setw(8) << z_y << ", " << std::setw(8) << z_z << " ) , HP: " << zom->GetHP() << " , floor: "  << zom->z_floor << endl;
-	}
+	}*/
 
 	cout << endl;
 
@@ -669,7 +670,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 			// 전송작업
 			// 세션 나누면서 마지막 인자 추가해야할듯.. 지금 상태에서는 서버에 접속한 전부에게 전송
-			//Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, clientInfo);
+			Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, roomid);
 		}
 
 		// BT 작동 인터벌 설정
@@ -720,7 +721,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 
 		// 좀비가 있을때 BT 실행
-		for (auto& zom : zombieDB_BT) {
+		for (auto& zom : zombieDB_BT[roomid]) {
 
 			// 플레이어가 있을때 BT 실행
 			if (result == "NO PLAYER")
@@ -878,7 +879,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			Protocol::ZombiePathList zPathList;
 			zPathList.set_packet_type(10);
 
-			for (const auto zom : zombieDB_BT) {
+			for (const auto zom : zombieDB_BT[roomid]) {
 				if (player.second.floor == zom->z_floor) {	// 플레이어 같은 층에 있는 좀비의 path만 받음
 
 					// path 보낼 필요 없는 좀비들 예외처리 (최적화)

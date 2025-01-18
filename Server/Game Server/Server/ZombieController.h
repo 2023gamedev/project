@@ -6,7 +6,7 @@
 
 #include "Zombie.h"
 
-//class IOCP_CORE;
+class IOCP_CORE;
 
 
 struct Vector3 {
