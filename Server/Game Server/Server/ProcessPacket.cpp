@@ -28,20 +28,19 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         //printf("SendDatas!! Playerid=#%d\n", id);
     }
 
-    if (clientInfo->roomid != 0 && !zombieDB.empty()) {
+    if (clientInfo->roomid != 0 && !zombieDB[clientInfo->roomid].empty()) {
         if (!clientInfo->send_zombie) {
-            zombieControllers[clientInfo->roomid]->SendZombieData(id);
+            zombieControllers[clientInfo->roomid]->SendZombieData(clientInfo->id);
         }
 
         if (clientInfo->send_zombie && !clientInfo->send_item) {
-            itemclass->SendItemData(id);
+            itemclass->SendItemData(clientInfo->id);
         }
 
         if (clientInfo->send_zombie && clientInfo->send_item && !clientInfo->send_car) {
-            itemclass->SendCarData(id);
+            itemclass->SendCarData(clientInfo->id);
         }
     }
-
 
     // 패킷의 타입을 확인하여 처리
     switch (tempPacket.packet_type()) {
@@ -357,9 +356,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         Packet.ParseFromArray(packet.data(), packet.size());
 
         int recvzombieid = Packet.zombieid();
+        int roomId = clientInfo->roomid;
 
         if (Packet.player_insight()) {
-            for (auto& z : zombieDB) {
+            for (auto& z : zombieDB[roomId]) {
                 if (z->ZombieData.zombieID == recvzombieid) {
                     if (z->IsAttacking)
                         break;
@@ -385,7 +385,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     // 샤우팅 좀비일 경우에
                     if (z->ZombieData.zombietype == 1) {
                         ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);  // 다운 캐스팅 사용!
-                        sz->Shout(zombieDB, id);
+                        sz->Shout(zombieDB[roomId], id);
                     }
 
                     break;
@@ -394,7 +394,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         }
 
         else {
-            for (auto& z : zombieDB) {
+            for (auto& z : zombieDB[roomId]) {
                 if (z->ZombieData.zombieID == recvzombieid) {
                     if (z->IsAttacking)
                         break;
@@ -452,7 +452,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         // 좀비 HP 업데이트
         int recvzombieid = Packet.zombieid();
 
-        for (auto& z : zombieDB) {
+        for (auto& z : zombieDB[roomId]) {
             if (z->ZombieData.zombieID == recvzombieid) {
                 z->zombieHP = max(0, z->zombieHP - Packet.damage());
 
@@ -547,7 +547,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         if (room_players.find(roomId) != room_players.end()) {
             for (const auto& [playerId, playerInfo] : room_players[roomId]) {
                 if (playerInfo != nullptr && playerId != id) {
-                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                    IOCP_SendPacket(playerId, DserializedData.data(), DserializedData.size());
                 }
             }
         }
@@ -674,7 +674,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         // 좀비 HP 업데이트
         int recvzombieid = Packet.zombieid();
 
-        for (auto& z : zombieDB) {
+        for (auto& z : zombieDB[roomId]) {
             if (z->ZombieData.zombieID == recvzombieid) {
                 z->zombieHP = 0;
                 playerDB[roomId][id].killcount++;
