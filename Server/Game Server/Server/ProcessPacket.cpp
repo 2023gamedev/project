@@ -377,9 +377,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                         z->IsStandingStill = false;
                         z->HaveToWait = false;
 
-#ifdef ENABLE_BT_LOG
+//#ifdef ENABLE_BT_LOG
                         cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 숨고르기 상태 벗어남 (플레이어 포착)" << endl;
-#endif
+//#endif
                     }
 
                     // 샤우팅 좀비일 경우에

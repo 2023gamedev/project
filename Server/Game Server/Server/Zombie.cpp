@@ -225,6 +225,7 @@ bool Zombie::RandomPatrol()
 		px = ZombieData.x + dist(mt);
 
 		if (ZombieData.x >= 2366.f) {
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
 			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
 			return false;
 		}
@@ -234,6 +235,7 @@ bool Zombie::RandomPatrol()
 		py = ZombieData.y + dist(mt);
 
 		if (ZombieData.x <= -1200.f) {
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
 			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
 			return false;
 		}
@@ -279,11 +281,12 @@ void Zombie::SetTargetLocation(TARGET t)
 			TargetLocation = closest_player_pos;
 			PrevTargetLocation = TargetLocation;
 		}
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 		else {
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
 			cout << "[Error] 좀비 따라갈 플레이어를 찾지못함! (closest_player_pos.size() == 0)" << endl;
 		}
-#endif
+//#endif
 		break;
 	case TARGET::SHOUTING:
 #ifdef	ENABLE_BT_LOG
@@ -301,11 +304,12 @@ void Zombie::SetTargetLocation(TARGET t)
 			TargetLocation = closest_player_pos;
 			UpdatePath();
 		}
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 		else {
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
 			cout << "[Error] 좀비 따라갈 발소리를 찾지못함! (closest_player_pos.size() == 0)" << endl;
 		}
-#endif
+//#endif
 		break;
 	case TARGET::INVESTIGATED:
 #ifdef	ENABLE_BT_LOG
@@ -331,7 +335,7 @@ void Zombie::SetTargetLocation(TARGET t)
 
 				if (try_cnt >= 5) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
 //#ifdef	ENABLE_BT_LOG
-					cout << "좀비 #" << ZombieData.zombieID << "랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...) => 좀비 해당 한 틱동안 멍때림" << endl;
+					cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...) => 좀비 해당 한 틱동안 멍때림" << endl;
 //#endif
 					break;
 				}
@@ -396,6 +400,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 		}
 
 		if (distanceType == 1 && PlayerInSight == false && min == FLT_MAX) {
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
 			cout << "[ERROR] Data Race!!! -> PlayerInSight is false after CanSeePlayer Sequence check!" << endl;
 			return;
 		}
@@ -424,9 +429,11 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 
 		if (closest_players.size() == 0) {
 			if (distanceType == 1) {
+				cout << "좀비 #" << ZombieData.zombieID << " - ";
 				cout << "[ERROR] closest_players.size() == 0 -> 가장 가까운 플레이어(좀비시야) 찾을 수 없음" << endl;
 			}
 			else if (distanceType == 2) {
+				cout << "좀비 #" << ZombieData.zombieID << " - ";
 				cout << "[ERROR] closest_players.size() == 0 -> 가장 가까운 플레이어(발소리) 찾을 수 없음" << endl;
 			}
 
@@ -457,9 +464,11 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 	else {	// (searchMap.size() == 0)
 		if (distanceType == 1) {
 			// BT에서 타겟을 플레이어로 했는데, DistanceTo_PlayerInsight 맵이 비어 있다면 절대 안됨
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
 			cout << "DistanceTo_PlayerInsight Map \"ERROR\"!!! -> Target is set to Player but DistanceTo_PlayerInsight Map is empty" << endl;
 		}
 		else if (distanceType == 2) {
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
 			cout << "DistanceTo_FootSound Map \"ERROR\"!!! -> Target is set to FootSound but DistanceTo_FootSound Map is empty" << endl;
 		}
 	}
@@ -729,9 +738,9 @@ void Zombie::ReachFinalDestination()
 			waitStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
 			ZombieStandingStillDuration = (float)stand_still_duration(mt);
 
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 잠시 숨고르기 상태 발동" << endl;
-#endif
+//#endif
 		}
 
 		break;
@@ -952,7 +961,7 @@ bool Zombie::FootSound_Update_Check()
 	return result;
 }
 
-// wait 실행 순위: 피격 > 공격 > 샤우팅 > 숨고르기
+// wait 실행 우선순위: 피격 > 공격 > 샤우팅 > 숨고르기
 void Zombie::Wait()
 {
 	//cout << "좀비 '#" << ZombieData.zombieID << "' BT 잠시 대기." << endl;
@@ -1050,9 +1059,10 @@ void Zombie::Wait()
 #endif
 
 		if (deltaTime.count() >= ZombieStandingStillDuration) {
-#ifdef ENABLE_BT_LOG
+//#ifdef ENABLE_BT_LOG
+			cout << "좀비 #" << ZombieData.zombieID << " ";
 			cout << "숨고르기 상태 끝 " << endl;
-#endif
+//#endif
 
 			IsStandingStill = false;
 			HaveToWait = false;
