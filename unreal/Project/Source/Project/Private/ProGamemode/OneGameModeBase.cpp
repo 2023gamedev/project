@@ -775,6 +775,7 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FV
         // 선택된 아이템 박스 클래스로 아이템 박스 생성
         ACarActor* SpawnedCarActor = GetWorld()->SpawnActor<ACarActor>(SelectedInterActorClass, Location, Rotation);
         SpawnedCarActor->CarKeyName = CarKey;
+        SpawnedCarActor->CarID = InterActorindex;
     }
     else if (InterName == "RoofTopDoorActor") {
 
@@ -782,6 +783,18 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FV
     }
 
 
+}
+
+void AOneGameModeBase::TurnOnCarHeadlights(int32 carID)
+{
+    for (TActorIterator<ACarActor> It(GetWorld()); It; ++It)
+    {
+        ACarActor* CarActor = *It;
+        if (CarActor && CarActor->CarID == carID)
+        {
+            CarActor->UnLock();
+        }
+    }
 }
 
 void AOneGameModeBase::SpawnInterActorStaticClasses()

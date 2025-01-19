@@ -305,6 +305,9 @@ void APlayerCharacterController::Tick(float DeltaTime)
 						ControlledCharacter->UpdateOpenKey(recvEscapeRoot.root);
 					}
 				}
+
+				MyGameMode->TurnOnCarHeadlights(recvEscapeRoot.carid);
+				UE_LOG(LogNet, Display, TEXT("tur on headlight: carid = %d"), recvEscapeRoot.carid);
 			}
 		}
 

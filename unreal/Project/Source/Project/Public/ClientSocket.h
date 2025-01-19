@@ -234,11 +234,12 @@ struct Escape_Root
 {
 	uint32 playerid;
 	uint32 root;
+	uint32 carid;
 
-	Escape_Root() : playerid(0), root(0) {}
+	Escape_Root() : playerid(0), root(0), carid(0) {}
 
-	Escape_Root(uint32 Inplayerid, uint32 Inroot)
-		: playerid(Inplayerid), root(Inroot) {}
+	Escape_Root(uint32 Inplayerid, uint32 Inroot, uint32 Incarid)
+		: playerid(Inplayerid), root(Inroot), carid(Incarid) {}
 };
 
 struct Chatting
