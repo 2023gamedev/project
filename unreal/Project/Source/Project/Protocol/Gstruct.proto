@@ -192,6 +192,7 @@ message escape {
     uint32 packet_type = 1;
     uint32 playerid = 2;
     uint32 root = 3;
+    uint32 carid = 4;
 }
 
 message game_clear {
