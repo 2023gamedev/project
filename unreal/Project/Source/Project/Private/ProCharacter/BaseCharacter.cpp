@@ -1856,7 +1856,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
 			PlaySoundForPlayer(Sound);
 			UpdateKeySlot();
-			Send_OpenRoot(1);
+			Send_OpenRoot(1, CarActor->CarID);
 		}
 		else {
 			FText KText = FText::FromString(TEXT("여기에 쓰는 것이 아닌 것 같다."));
@@ -1912,7 +1912,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 					USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
 					PlaySoundForPlayer(Sound);
 					UpdateKeySlot();
-					Send_OpenRoot(2);
+					Send_OpenRoot(2, 8/*옥상키 인덱스*/);
 				}
 			}
 			else if (CurrentKeyItem->KeyName == "RoofKey2") {
@@ -1925,7 +1925,7 @@ void ABaseCharacter::KeyMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 					USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/UnLockDoor.UnLockDoor")); // 에셋 경로
 					PlaySoundForPlayer(Sound);
 					UpdateKeySlot();
-					Send_OpenRoot(2);
+					Send_OpenRoot(2, 8);
 				}
 			}
 			else {
@@ -3369,11 +3369,12 @@ void ABaseCharacter::Send_GetKey(uint32 itemid, uint32 itemboxid)
 	}
 }
 
-void ABaseCharacter::Send_OpenRoot(uint32 itemid)
+void ABaseCharacter::Send_OpenRoot(uint32 itemid, uint32 carid)
 {
 	Protocol::escape rootPacket;
 	// itemid 1 = car, 2 = rooftopdoor
 	rootPacket.set_root(itemid);
+	rootPacket.set_carid(carid);
 	rootPacket.set_packet_type(19);
 
 	std::string serializedData;

@@ -527,7 +527,7 @@ public:
 
 	void Send_GetKey(uint32 itemid, uint32 itemboxid);
 
-	void Send_OpenRoot(uint32 itemid);
+	void Send_OpenRoot(uint32 itemid, uint32 carid);
 
 	void Send_DetachItem(uint32 itemtype);
 
