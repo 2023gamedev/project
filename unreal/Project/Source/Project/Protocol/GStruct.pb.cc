@@ -437,6 +437,7 @@ PROTOBUF_CONSTEXPR escape::escape(
     /*decltype(_impl_.packet_type_)*/0u
   , /*decltype(_impl_.playerid_)*/0u
   , /*decltype(_impl_.root_)*/0u
+  , /*decltype(_impl_.carid_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct escapeDefaultTypeInternal {
   PROTOBUF_CONSTEXPR escapeDefaultTypeInternal()
@@ -775,6 +776,7 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::escape, _impl_.packet_type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::escape, _impl_.playerid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::escape, _impl_.root_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::escape, _impl_.carid_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::game_clear, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -837,9 +839,9 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 242, -1, -1, sizeof(::Protocol::detach_item)},
   { 251, -1, -1, sizeof(::Protocol::get_key)},
   { 261, -1, -1, sizeof(::Protocol::escape)},
-  { 270, -1, -1, sizeof(::Protocol::game_clear)},
-  { 284, -1, -1, sizeof(::Protocol::send_complete)},
-  { 292, -1, -1, sizeof(::Protocol::slice_vector)},
+  { 271, -1, -1, sizeof(::Protocol::game_clear)},
+  { 285, -1, -1, sizeof(::Protocol::send_complete)},
+  { 293, -1, -1, sizeof(::Protocol::slice_vector)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -936,24 +938,24 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r\022\020\n\010itemtype"
   "\030\003 \001(\r\"S\n\007get_key\022\023\n\013packet_type\030\001 \001(\r\022\016"
   "\n\006itemid\030\002 \001(\r\022\021\n\titemboxid\030\003 \001(\r\022\020\n\010pla"
-  "yerid\030\004 \001(\r\"=\n\006escape\022\023\n\013packet_type\030\001 \001"
-  "(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004root\030\003 \001(\r\"\271\001\n\ng"
-  "ame_clear\022\023\n\013packet_type\030\001 \001(\r\022\014\n\004root\030\002"
-  " \001(\r\022\025\n\ralive_players\030\003 \001(\r\022\024\n\014dead_play"
-  "ers\030\004 \001(\r\022\023\n\013open_player\030\005 \001(\t\022\024\n\014my_kil"
-  "lcount\030\006 \001(\r\022\030\n\020best_kill_player\030\007 \001(\t\022\026"
-  "\n\016best_killcount\030\010 \001(\r\";\n\rsend_complete\022"
-  "\023\n\013packet_type\030\001 \001(\r\022\025\n\rcomplete_type\030\002 "
-  "\001(\r\"\306\001\n\014slice_vector\022\023\n\013packet_type\030\001 \001("
-  "\r\022\020\n\010zombieid\030\002 \001(\r\022#\n\010location\030\003 \001(\0132\021."
-  "Protocol.Vector3\022#\n\010position\030\004 \001(\0132\021.Pro"
-  "tocol.Vector3\022!\n\006normal\030\005 \001(\0132\021.Protocol"
-  ".Vector3\022\"\n\007impulse\030\006 \001(\0132\021.Protocol.Vec"
-  "tor3b\006proto3"
+  "yerid\030\004 \001(\r\"L\n\006escape\022\023\n\013packet_type\030\001 \001"
+  "(\r\022\020\n\010playerid\030\002 \001(\r\022\014\n\004root\030\003 \001(\r\022\r\n\005ca"
+  "rid\030\004 \001(\r\"\271\001\n\ngame_clear\022\023\n\013packet_type\030"
+  "\001 \001(\r\022\014\n\004root\030\002 \001(\r\022\025\n\ralive_players\030\003 \001"
+  "(\r\022\024\n\014dead_players\030\004 \001(\r\022\023\n\013open_player\030"
+  "\005 \001(\t\022\024\n\014my_killcount\030\006 \001(\r\022\030\n\020best_kill"
+  "_player\030\007 \001(\t\022\026\n\016best_killcount\030\010 \001(\r\";\n"
+  "\rsend_complete\022\023\n\013packet_type\030\001 \001(\r\022\025\n\rc"
+  "omplete_type\030\002 \001(\r\"\306\001\n\014slice_vector\022\023\n\013p"
+  "acket_type\030\001 \001(\r\022\020\n\010zombieid\030\002 \001(\r\022#\n\010lo"
+  "cation\030\003 \001(\0132\021.Protocol.Vector3\022#\n\010posit"
+  "ion\030\004 \001(\0132\021.Protocol.Vector3\022!\n\006normal\030\005"
+  " \001(\0132\021.Protocol.Vector3\022\"\n\007impulse\030\006 \001(\013"
+  "2\021.Protocol.Vector3b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 2972, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 2987, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 29,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -8393,12 +8395,13 @@ escape::escape(const escape& from)
       decltype(_impl_.packet_type_){}
     , decltype(_impl_.playerid_){}
     , decltype(_impl_.root_){}
+    , decltype(_impl_.carid_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.packet_type_, &from._impl_.packet_type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.root_) -
-    reinterpret_cast<char*>(&_impl_.packet_type_)) + sizeof(_impl_.root_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.carid_) -
+    reinterpret_cast<char*>(&_impl_.packet_type_)) + sizeof(_impl_.carid_));
   // @@protoc_insertion_point(copy_constructor:Protocol.escape)
 }
 
@@ -8410,6 +8413,7 @@ inline void escape::SharedCtor(
       decltype(_impl_.packet_type_){0u}
     , decltype(_impl_.playerid_){0u}
     , decltype(_impl_.root_){0u}
+    , decltype(_impl_.carid_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -8438,8 +8442,8 @@ void escape::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.packet_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.root_) -
-      reinterpret_cast<char*>(&_impl_.packet_type_)) + sizeof(_impl_.root_));
+      reinterpret_cast<char*>(&_impl_.carid_) -
+      reinterpret_cast<char*>(&_impl_.packet_type_)) + sizeof(_impl_.carid_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -8469,6 +8473,14 @@ const char* escape::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.root_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 carid = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.carid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -8520,6 +8532,12 @@ uint8_t* escape::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_root(), target);
   }
 
+  // uint32 carid = 4;
+  if (this->_internal_carid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_carid(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -8551,6 +8569,11 @@ size_t escape::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_root());
   }
 
+  // uint32 carid = 4;
+  if (this->_internal_carid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_carid());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -8578,6 +8601,9 @@ void escape::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBU
   if (from._internal_root() != 0) {
     _this->_internal_set_root(from._internal_root());
   }
+  if (from._internal_carid() != 0) {
+    _this->_internal_set_carid(from._internal_carid());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -8596,8 +8622,8 @@ void escape::InternalSwap(escape* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(escape, _impl_.root_)
-      + sizeof(escape::_impl_.root_)
+      PROTOBUF_FIELD_OFFSET(escape, _impl_.carid_)
+      + sizeof(escape::_impl_.carid_)
       - PROTOBUF_FIELD_OFFSET(escape, _impl_.packet_type_)>(
           reinterpret_cast<char*>(&_impl_.packet_type_),
           reinterpret_cast<char*>(&other->_impl_.packet_type_));

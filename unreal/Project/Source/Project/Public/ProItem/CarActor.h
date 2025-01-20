@@ -36,6 +36,9 @@ public:
 	FName CarKeyName;
 
 	UPROPERTY(EditAnywhere)
+	int32 CarID{};
+
+	UPROPERTY(EditAnywhere)
 	bool bIsUnlock;
 
 	UPROPERTY(EditAnywhere)

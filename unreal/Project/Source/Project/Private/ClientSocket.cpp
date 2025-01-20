@@ -541,7 +541,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::escape escapepacket;
 				if (escapepacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					Q_escape.push(Escape_Root(escapepacket.playerid(), escapepacket.root()));
+					Q_escape.push(Escape_Root(escapepacket.playerid(), escapepacket.root(), escapepacket.carid()));
 					UE_LOG(LogNet, Display, TEXT("escape root open %d"), escapepacket.root());
 				}
 				break;

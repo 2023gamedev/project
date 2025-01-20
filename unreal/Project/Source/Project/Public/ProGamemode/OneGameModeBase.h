@@ -196,6 +196,8 @@ public:
 
     void SpawnInterItem(int32 InterActorindex, FName InterName, FVector carpos, FRotator carrotator, FName carkeyname);
 
+    void TurnOnCarHeadlights(int32 carID);
+
     void SpawnInterActorStaticClasses();
 
 

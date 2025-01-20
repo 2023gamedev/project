@@ -5060,6 +5060,7 @@ class escape final :
     kPacketTypeFieldNumber = 1,
     kPlayeridFieldNumber = 2,
     kRootFieldNumber = 3,
+    kCaridFieldNumber = 4,
   };
   // uint32 packet_type = 1;
   void clear_packet_type();
@@ -5088,6 +5089,15 @@ class escape final :
   void _internal_set_root(uint32_t value);
   public:
 
+  // uint32 carid = 4;
+  void clear_carid();
+  uint32_t carid() const;
+  void set_carid(uint32_t value);
+  private:
+  uint32_t _internal_carid() const;
+  void _internal_set_carid(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.escape)
  private:
   class _Internal;
@@ -5099,6 +5109,7 @@ class escape final :
     uint32_t packet_type_;
     uint32_t playerid_;
     uint32_t root_;
+    uint32_t carid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -8796,6 +8807,26 @@ inline void escape::_internal_set_root(uint32_t value) {
 inline void escape::set_root(uint32_t value) {
   _internal_set_root(value);
   // @@protoc_insertion_point(field_set:Protocol.escape.root)
+}
+
+// uint32 carid = 4;
+inline void escape::clear_carid() {
+  _impl_.carid_ = 0u;
+}
+inline uint32_t escape::_internal_carid() const {
+  return _impl_.carid_;
+}
+inline uint32_t escape::carid() const {
+  // @@protoc_insertion_point(field_get:Protocol.escape.carid)
+  return _internal_carid();
+}
+inline void escape::_internal_set_carid(uint32_t value) {
+  
+  _impl_.carid_ = value;
+}
+inline void escape::set_carid(uint32_t value) {
+  _internal_set_carid(value);
+  // @@protoc_insertion_point(field_set:Protocol.escape.carid)
 }
 
 // -------------------------------------------------------------------
