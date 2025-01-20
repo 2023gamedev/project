@@ -949,7 +949,7 @@ void ABaseZombie::AttackCheck()
 	float HalfHeight = m_fAttackRange * 0.5f + 50.f;
 	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-	float DebugLifeTime = m_fAttackRadius;
+	float DebugLifeTime = 5.0f;
 
 
 	DrawDebugCapsule(GetWorld(),

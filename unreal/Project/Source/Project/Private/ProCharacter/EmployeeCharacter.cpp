@@ -43,6 +43,7 @@ void AEmployeeCharacter::BeginPlay()
 		Inventory[0].ItemClassType = EItemClass::BAGITEM;
 		Inventory[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"));	// 나중에 서류 케이스 이미지 새로 받아서 서류 케이스로 바꿔주기
 		Inventory[0].Count = 0;
+
 		GameUIUpdate();
 	}	// 이니셜라이저에 넣으니 초기화 안된 메모리 엑세스 에러 발생해서 여기에서 
 
