@@ -516,33 +516,33 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 	//FVector Forward;  // 평면의 앞쪽 방향
 	//FVector Scale;  // 평면의 스케일
 	//float Weapon_Scale = 0.f;	// 무기별 스케일 조정
-
+	//
 	//if (do_self == true && PlayerWeapon) {
 	//	Center = PlayerWeapon->PlaneComponent->GetComponentLocation();
 	//	Right = PlayerWeapon->PlaneComponent->GetRightVector();  // 평면의 오른쪽 방향
 	//	Forward = PlayerWeapon->PlaneComponent->GetForwardVector();  // 평면의 앞쪽 방향
 	//	Scale = PlayerWeapon->PlaneComponent->GetComponentScale();  // 평면의 스케일
-
-
+	//
+	//
 	//	if (PlayerWeapon->WeaponName == "ButchersKnife") { Weapon_Scale = 45.f; }
 	//	else if (PlayerWeapon->WeaponName == "FireAxe") { Weapon_Scale = 50.f; }
 	//	else if (PlayerWeapon->WeaponName == "SashimiKnife") { Weapon_Scale = 40.f; }
-
+	//
 	//	float HalfWidth = Weapon_Scale * Scale.X;  // 평면의 폭
 	//	float HalfHeight = Weapon_Scale * Scale.Y; // 평면의 높이
-
+	//
 	//	// 꼭짓점 계산
 	//	FVector TopLeft = Center - Right * HalfWidth + Forward * HalfHeight;
 	//	FVector TopRight = Center + Right * HalfWidth + Forward * HalfHeight;
 	//	FVector BottomLeft = Center - Right * HalfWidth - Forward * HalfHeight;
 	//	FVector BottomRight = Center + Right * HalfWidth - Forward * HalfHeight;
-
+	//
 	//	// 꼭짓점을 리스트에 추가
 	//	TArray PlaneVertexs = { TopLeft, TopRight, BottomLeft, BottomRight };
-
+	//
 	//	if (PlaneVertexs.Num() >= 4) {
 	//		float displaceTime = 30.f;
-
+	//
 	//		// 히트 지점에 평면의 선 그리기
 	//		DrawDebugLine(
 	//			GetWorld(),
@@ -554,7 +554,7 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 	//			0,							// 깊이 우선 여부
 	//			1.0f						// 선 두께
 	//		);
-
+	//
 	//		DrawDebugLine(
 	//			GetWorld(),
 	//			PlaneVertexs[0],
@@ -565,7 +565,7 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 	//			0,
 	//			1.0f
 	//		);
-
+	//
 	//		DrawDebugLine(
 	//			GetWorld(),
 	//			PlaneVertexs[2],
@@ -576,7 +576,7 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 	//			0,
 	//			1.0f
 	//		);
-
+	//
 	//		DrawDebugLine(
 	//			GetWorld(),
 	//			PlaneVertexs[1],
@@ -587,9 +587,9 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 	//			0,
 	//			1.0f
 	//		);
-
+	//
 	//		FVector planeposition_center = Center;	//(PlaneVertexs[0] + PlaneVertexs[1] + PlaneVertexs[2] + PlaneVertexs[3]) / 4.0f;
-
+	//
 	//		DrawDebugPoint(
 	//			GetWorld(),
 	//			planeposition_center,
@@ -599,9 +599,9 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 	//			displaceTime,
 	//			0
 	//		);
-
+	//
 	//		FVector planenormal = FVector::CrossProduct(PlaneVertexs[3] - PlaneVertexs[0], PlaneVertexs[1] - PlaneVertexs[2]).GetSafeNormal();
-
+	//
 	//		DrawDebugLine(
 	//			GetWorld(),
 	//			planeposition_center,
@@ -614,6 +614,7 @@ void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_
 	//		);
 	//	}
 	//}
+	
 	//========================================
 
 	USkeletalMeshComponent* Skeleton = GetMesh();
@@ -772,28 +773,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 		if (CutProceduralMesh_2)
 		{
 			CutProceduralMesh_2->RegisterComponent(); // 컴포넌트 등록
-
-			// 러닝 좀비 텍스쳐 깨짐 해결
-			if (m_sZombieName == "RunningZombie") {
-				if (CutProceduralMesh_2->GetNumMaterials() == 2) {
-					CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(2));
-				}
-				else if (CutProceduralMesh_2->GetNumMaterials() == 3) {
-					CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(2));
-					CutProceduralMesh_2->SetMaterial(1, GetMesh()->GetMaterial(3));
-				}
-				else if (CutProceduralMesh_2->GetNumMaterials() == 4) {
-					CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(1));
-					CutProceduralMesh_2->SetMaterial(1, GetMesh()->GetMaterial(2));
-					CutProceduralMesh_2->SetMaterial(2, GetMesh()->GetMaterial(3));
-				}
-				else if (CutProceduralMesh_2->GetNumMaterials() == 5) {
-					CutProceduralMesh_2->SetMaterial(0, GetMesh()->GetMaterial(0));
-					CutProceduralMesh_2->SetMaterial(1, GetMesh()->GetMaterial(1));
-					CutProceduralMesh_2->SetMaterial(2, GetMesh()->GetMaterial(2));
-					CutProceduralMesh_2->SetMaterial(3, GetMesh()->GetMaterial(3));
-				}
-			}
 
 			// 절단 부위 material 설정
 			CutProceduralMesh_2->SetMaterial(CutProceduralMesh_2->GetNumMaterials() - 1, Material_Blood);
