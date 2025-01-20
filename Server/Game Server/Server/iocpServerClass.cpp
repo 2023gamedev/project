@@ -384,6 +384,9 @@ void IOCP_CORE::DisconnectClient(unsigned int id) {
     if (g_players.find(id) != g_players.end()) {
         PLAYER_INFO *user = g_players[id];
 
+		room_players[user->roomid].erase(id);
+		playerDB[user->roomid].erase(id);
+
         delete user;
         g_players.erase(id);
     }
@@ -682,8 +685,8 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 
 		// BT-송수신 쓰레드간의 데이터 레이스 방지를 위해
-		zombieDB_BT = zombieDB;
-		playerDB_BT = playerDB;
+		zombieDB_BT[roomid] = zombieDB[roomid];
+		playerDB_BT[roomid] = playerDB[roomid];
 
 
 		if (playerDB_BT.size() == 0) {
@@ -941,6 +944,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 	//========할당한 메모리 해제========
 
+	// 이거 때문에라도 스레드 만들때 마다 동적으로 따로 생성해줘야 할듯
 	delete(sel_detect);
 	delete(sel_canseeplayer);
 
