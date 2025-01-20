@@ -10,20 +10,20 @@ UZombieAnimInstance::UZombieAnimInstance()
 	m_bIsCuttingDead = false;
 	m_bIsStanding = false;
 	// 위에 FObjectFinder는 기존것 밑에는 새롭게 애니메이션한 부분
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMAttackZombie.BP_AMAttackZombie"));
-	//static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/ZombieAsset/TAnimation/BP_AMAttackZombieT.BP_AMAttackZombieT"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMAttackZombie.BP_AMAttackZombie"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/ZombieAsset/TAnimation/BP_AMAttackZombieT.BP_AMAttackZombieT"));
 	if (ATTACK_MONTAGE.Succeeded()) {
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SHOUTING_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMShouting.BP_AMShouting"));
-	//static ConstructorHelpers::FObjectFinder<UAnimMontage> SHOUTING_MONTAGE(TEXT("/Game/ZombieAsset/TAnimation/BP_AMShoutingT.BP_AMShoutingT"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> SHOUTING_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMShouting.BP_AMShouting"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SHOUTING_MONTAGE(TEXT("/Game/ZombieAsset/TAnimation/BP_AMShoutingT.BP_AMShoutingT"));
 	if (SHOUTING_MONTAGE.Succeeded()) {
 		ShoutingMontage = SHOUTING_MONTAGE.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> BEATTACKED_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMBeAttackedZombie.BP_AMBeAttackedZombie"));
-	//static ConstructorHelpers::FObjectFinder<UAnimMontage> BEATTACKED_MONTAGE(TEXT("/Game/ZombieAsset/TAnimation/BP_AMBeAttackedZombieT.BP_AMBeAttackedZombieT"));
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> BEATTACKED_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMBeAttackedZombie.BP_AMBeAttackedZombie"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> BEATTACKED_MONTAGE(TEXT("/Game/ZombieAsset/TAnimation/BP_AMBeAttackedZombieT.BP_AMBeAttackedZombieT"));
 	if (BEATTACKED_MONTAGE.Succeeded()) {
 		BeAttackedMontage = BEATTACKED_MONTAGE.Object;
 	}
