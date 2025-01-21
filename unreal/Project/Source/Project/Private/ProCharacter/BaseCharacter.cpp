@@ -1222,12 +1222,14 @@ void ABaseCharacter::Run()
 {
 	if (m_bRun) {
 		m_bRun = false;
+
 		HealingStamina();
 		GetWorld()->GetTimerManager().ClearTimer(UseStaminaHandle);
 	}
 	else {
 		if (!m_bZeroStamina) {
 			m_bRun = true;
+
 			UseStamina();
 			GetWorld()->GetTimerManager().ClearTimer(HealingStaminaHandle);
 		}
@@ -2855,6 +2857,24 @@ void ABaseCharacter::SmokingIcon()
 			ConditionUIWidget->SmokingImageVisible(ESlateVisibility::Hidden);
 		}
 	}
+
+}
+
+void ABaseCharacter::RunWalkIcon(bool bisrun)
+{
+	if (bisrun) {
+		if (ConditionUIWidget) {
+			ConditionUIWidget->WalkImageVisible(ESlateVisibility::Hidden);
+			ConditionUIWidget->RunImageVisible(ESlateVisibility::Visible);
+		}
+	}
+	else {
+		if (ConditionUIWidget) {
+			ConditionUIWidget->WalkImageVisible(ESlateVisibility::Visible);
+			ConditionUIWidget->RunImageVisible(ESlateVisibility::Hidden);
+		}
+	}
+
 
 }
 
