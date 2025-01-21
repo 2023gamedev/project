@@ -92,6 +92,24 @@ struct RoomState {
 	int Escape_Root{};
 };
 
+struct Zombie_BT_struct {
+	Selector* sel_detect;
+	Selector* sel_canseeplayer;
+
+	TCanSeePlayer* t_canseeplayer;
+	THasShouting* t_hasshouting;
+	THasFootSound* t_hasfootsound;
+	THasInvestigated* t_hasinvestigated;
+	TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
+
+	TCanNotAttack* t_cannotattack;
+	TCanAttack* t_canattack;
+
+	TMoveTo* t_moveto;
+	TAttack* t_attack;
+};
+
+extern std::unordered_map<int, Zombie_BT_struct> room_data_map;
 extern std::unordered_map<int, RoomState> room_states; // 방 ID -> RoomState
 
 
@@ -172,7 +190,7 @@ public:
 	unsigned int CreateSession();
 	void DeleteSession(unsigned int sessionID);
 
-	void Zombie_BT_Initialize();
+	void Zombie_BT_Initialize(int roomid);
 	void ServerOn();
 
 	//서버가 먼저 켜지고 좀비 BT가 실행되도록 하기위해 사용 
@@ -184,12 +202,12 @@ public:
 
 	//======Zombie_BT 선언======
 
-	//<Selector> 선언 
+	////<Selector> 선언 
 
-	//<Selector-Detect> (사실상 최상위 노드)
-	Selector* sel_detect;
-	//<Selector-CanSeePlayer>  
-	Selector* sel_canseeplayer;
+	////<Selector-Detect> (사실상 최상위 노드)
+	//Selector* sel_detect;
+	////<Selector-CanSeePlayer>  
+	//Selector* sel_canseeplayer;
 
 	//{Sequence} 선언
 
@@ -206,34 +224,34 @@ public:
 	//{Sequence-NotHasLastKnownPlayerLocation}
 	Sequence seq_nothaslastknownplayerlocation;
 
-	//[Task] 선언
+	////[Task] 선언
 
-	//<Selector Detact> 가 가지는 Task들
+	////<Selector Detact> 가 가지는 Task들
 
-	//[CanSeePlayer-Task]
-	TCanSeePlayer* t_canseeplayer;
-	//[HasShouting-Task]
-	THasShouting* t_hasshouting;
-	//[HasFootSound-Task]
-	THasFootSound* t_hasfootsound;
-	//[HasInvestigated-Task]
-	THasInvestigated* t_hasinvestigated;
-	//[NotHasLastKnownPlayerLocation-Task]
-	TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
+	////[CanSeePlayer-Task]
+	//TCanSeePlayer* t_canseeplayer;
+	////[HasShouting-Task]
+	//THasShouting* t_hasshouting;
+	////[HasFootSound-Task]
+	//THasFootSound* t_hasfootsound;
+	////[HasInvestigated-Task]
+	//THasInvestigated* t_hasinvestigated;
+	////[NotHasLastKnownPlayerLocation-Task]
+	//TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
 
-	//<Selector CanSeePlayer> 가 가지는 Task들
+	////<Selector CanSeePlayer> 가 가지는 Task들
 
-	//[CanNotAttack-Task]
-	TCanNotAttack* t_cannotattack;
-	//[CanAttack-Task]
-	TCanAttack* t_canattack;
+	////[CanNotAttack-Task]
+	//TCanNotAttack* t_cannotattack;
+	////[CanAttack-Task]
+	//TCanAttack* t_canattack;
 
-	//{Sequence} 가 가지는 Task들
+	////{Sequence} 가 가지는 Task들
 
-	//[MoveTo-Task]
-	TMoveTo* t_moveto;
-	//[Attack-Task]
-	TAttack* t_attack;
+	////[MoveTo-Task]
+	//TMoveTo* t_moveto;
+	////[Attack-Task]
+	//TAttack* t_attack;
 	
 	static float BT_INTERVAL;		// BT 작동 인터벌 설정
 	static float GAME_TIMER_INTERVAL;	// 게임 타이머 시간 누적 인터벌 설정
