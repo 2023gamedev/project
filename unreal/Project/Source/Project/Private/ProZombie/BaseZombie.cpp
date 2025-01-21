@@ -937,14 +937,14 @@ void ABaseZombie::AttackCheck()
 		CapsuleRot,
 		DrawColor,
 		false,
-		DebugLifeTime);
+		DebugLifeTime);*/
 
 	if (bResult) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
 		//UE_LOG(LogNet, Display, TEXT("Player #%d got hit - HP: %d"), HitResult.GetActor()->PlayerId, HitResult.GetActor()->GetHp());
 		FDamageEvent DamageEvent;
 		HitResult.GetActor()->TakeDamage(GetSTR(), DamageEvent, GetController(), this);
-	}*/
+	}
 }
 
 void ABaseZombie::Shouting()

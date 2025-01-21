@@ -1979,11 +1979,14 @@ void ABaseCharacter::UpdateHealingSlot()
 
 void ABaseCharacter::UpdateBHealingSlot()
 {
-	if (GetCharacterName() == "IdolCharacter") {	// 아이돌 캐릭 특성
+	if (GetCharacterName() == "IdolCharacter" && m_bBleeding == false) {	// 아이돌 캐릭 특성
 		float RandomValue = FMath::FRand();
 		if (RandomValue >= 1.f - 0.4f) {	// 40퍼센트의 확률로 출혈 회복 아이템 재사용
 			FText KText = FText::FromString(TEXT("지혈에 성공하였습니다.\n+ 지혈 아이템 재사용 가능 성공!"));
 			ShowActionText(KText, FSlateColor(FLinearColor(0.0f, 0.0f, 1.0f)), 5.f);
+
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("m_bBleeding: %s"), m_bBleeding ? TEXT("true") : TEXT("false")));
+																  
 			return;
 		}
 	}
