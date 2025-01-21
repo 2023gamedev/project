@@ -923,13 +923,12 @@ void ABaseZombie::AttackCheck()
 
 
 	// debug 용(충돌 범위 확인 용)
-	FVector TraceVec = GetActorForwardVector() * m_fAttackRange;
+	/*FVector TraceVec = GetActorForwardVector() * m_fAttackRange;
 	FVector Center = GetActorLocation() + TraceVec * 0.5f;
 	float HalfHeight = m_fAttackRange * 0.5f + 50.f;
 	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
 	float DebugLifeTime = 5.0f;
-
 
 	DrawDebugCapsule(GetWorld(),
 		Center,
@@ -941,12 +940,11 @@ void ABaseZombie::AttackCheck()
 		DebugLifeTime);
 
 	if (bResult) {
-
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Actor")));
 		//UE_LOG(LogNet, Display, TEXT("Player #%d got hit - HP: %d"), HitResult.GetActor()->PlayerId, HitResult.GetActor()->GetHp());
 		FDamageEvent DamageEvent;
 		HitResult.GetActor()->TakeDamage(GetSTR(), DamageEvent, GetController(), this);
-	}
+	}*/
 }
 
 void ABaseZombie::Shouting()
