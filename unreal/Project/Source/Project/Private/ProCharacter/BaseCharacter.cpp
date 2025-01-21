@@ -2054,6 +2054,7 @@ void ABaseCharacter::QuickNWeapon()
 	else if (IsKeyHandIn()) {
 		CurrentKeyItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		CurrentKeyItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		KeyIcon(false);
 		SetKeyHandIn(false);
 	}
 	else if (IsThrowWHandIn()) {
@@ -2088,6 +2089,7 @@ void ABaseCharacter::QuickBHItem()
 	else if (IsKeyHandIn()) {
 		CurrentKeyItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		CurrentKeyItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		KeyIcon(false);
 		SetKeyHandIn(false);
 	}
 	else if (IsThrowWHandIn()) {
@@ -2121,6 +2123,7 @@ void ABaseCharacter::QuickHItem()
 	else if (IsKeyHandIn()) {
 		CurrentKeyItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		CurrentKeyItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+		KeyIcon(false);
 		SetKeyHandIn(false);
 	}
 	else if (IsThrowWHandIn()) {
@@ -2154,6 +2157,7 @@ void ABaseCharacter::QuickTWeapon() // throwweapon 생성 시 작성 필요
 	//else if (IsKeyHandIn()) {
 	//	CurrentKeyItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	//	CurrentKeyItem->SetActorLocation(FVector(0.f, 0.f, 0.f));
+	//  KeyIcon(false);
 	//  SetKeyHandIn(false);
 	//}
 	//else if (IsHealHandIn()) {
@@ -2199,6 +2203,7 @@ void ABaseCharacter::QuickKeyItem()
 		CurrentKeyItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Socket);
 		CurrentKeyItem->SetActorRelativeRotation(CurrentKeyItem->ItemHandRot);
 		CurrentKeyItem->SetActorRelativeLocation(CurrentKeyItem->ItemHandPos);
+		KeyIcon(true);
 		SetKeyHandIn(true);
 	}
 }
@@ -2569,6 +2574,7 @@ void ABaseCharacter::DestroyKeyItem()
 	}
 	SetKeyHandIn(false);
 	CurrentKeyItem = nullptr;
+	KeyIcon(false);
 
 	if (GetPlayerId() == 99) {
 		Send_DetachItem(4);
@@ -2876,6 +2882,20 @@ void ABaseCharacter::RunWalkIcon(bool bisrun)
 	}
 
 
+}
+
+void ABaseCharacter::KeyIcon(bool bisbringkey)
+{
+	if (bisbringkey) {
+		if (ConditionUIWidget) {
+			ConditionUIWidget->KeyImageVisible(ESlateVisibility::Visible);
+		}
+	}
+	else {
+		if (ConditionUIWidget) {
+			ConditionUIWidget->KeyImageVisible(ESlateVisibility::Hidden);
+		}
+	}
 }
 
 void ABaseCharacter::UseStamina()
