@@ -29,6 +29,21 @@ void UConditionUI::SmokingImageVisible(ESlateVisibility visibillity)
 	SmokingImg->SetVisibility(visibillity);
 }
 
+void UConditionUI::WalkImageVisible(ESlateVisibility visibillity)
+{
+	WalkImg->SetVisibility(visibillity);
+}
+
+void UConditionUI::RunImageVisible(ESlateVisibility visibillity)
+{
+	RunImg->SetVisibility(visibillity);
+}
+
+void UConditionUI::KeyImageVisible(ESlateVisibility visibillity)
+{
+	KeyImg->SetVisibility(visibillity);
+}
+
 void UConditionUI::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -49,5 +64,32 @@ void UConditionUI::NativeConstruct()
 		BrushS.SetResourceObject(LoadedSmokingTexture);
 		SmokingImg->SetBrush(BrushS);
 		SmokingImg->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	UTexture2D* LoadedRunningTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/runicon.runicon"));
+	if (LoadedRunningTexture) {
+
+		FSlateBrush BrushR;
+		BrushR.SetResourceObject(LoadedRunningTexture);
+		RunImg->SetBrush(BrushR);
+		RunImg->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	UTexture2D* LoadedWalkingTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/walkicon.walkicon"));
+	if (LoadedWalkingTexture) {
+
+		FSlateBrush BrushW;
+		BrushW.SetResourceObject(LoadedWalkingTexture);
+		WalkImg->SetBrush(BrushW);
+		WalkImg->SetVisibility(ESlateVisibility::Visible);
+	}
+
+	UTexture2D* LoadedKeyTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/keyicon.keyicon"));
+	if (LoadedKeyTexture) {
+
+		FSlateBrush BrushS;
+		BrushS.SetResourceObject(LoadedKeyTexture);
+		KeyImg->SetBrush(BrushS);
+		KeyImg->SetVisibility(ESlateVisibility::Hidden);
 	}
 }

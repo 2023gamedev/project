@@ -130,9 +130,14 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Select_Packet.SerializeToString(&serializedData);
 
+        int room_id = g_players[id]->room_num;
+
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            if (player.second->room_num == room_id) {
+                IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+                printf("전송된 방번호: %d", player.second->room_num);
+            }
         }
         return true;
     }
@@ -254,11 +259,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, Packet* buffer, int bufferSize) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
-        int room_num = g_players[id]->room_num;
+        int room_id = g_players[id]->room_num;
 
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         for (const auto& player : g_players) {
-            if (player.second->room_num == room_num) {
+            if (player.second->room_num == room_id) {
                 IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
             }
         }
