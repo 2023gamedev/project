@@ -526,27 +526,27 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 
 	//{Sequence-CanAttack} 할당
 	//{Sequence-CanAttack}에 해당 Task들 '순서대로' 삽입
-	seq_canattack.AddChild(zombie_bt_map[roomid].t_attack);
+	zombie_bt_map[roomid].seq_canattack.AddChild(zombie_bt_map[roomid].t_attack);
 
 	//{Sequence-CanNotAttack} 할당
 	//{Sequence-CanNotAttack}에 해당 Task들 '순서대로' 삽입
-	seq_cannotattack.AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_cannotattack.AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasShouting} 할당
 	//{Sequence-HasShouting}에 해당 Task들 '순서대로' 삽입
-	seq_hasshouting.AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_hasshouting.AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasFootSound} 할당
 	//{Sequence-HasFootSound}에 해당 Task들 '순서대로' 삽입
-	seq_hasfootsound.AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_hasfootsound.AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasInvestigated} 할당
 	//{Sequence-HasInvestigated}에 해당 Task들 '순서대로' 삽입
-	seq_hasinvestigated.AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_hasinvestigated.AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-NotHasLastKnownPlayerLocation} 할당
 	//{Sequence-NotHasLastKnownPlayerLocation}에 해당 Task들 '순서대로' 삽입
-	seq_nothaslastknownplayerlocation.AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//==========================
 }
@@ -825,13 +825,13 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 				if (result == "CanAttack-Succeed") {
 
 					//{Sequence-CanAttack} 실행
-					result = seq_canattack.Seq_CanAttack(*zom);
+					result = zombie_bt_map[roomid].seq_canattack.Seq_CanAttack(*zom);
 
 				}
 				else if (result == "CanNotAttack-Succeed") {
 
 					//{Sequence-CanNotAttack} 실행
-					result = seq_cannotattack.Seq_CanNotAttack(*zom);
+					result = zombie_bt_map[roomid].seq_cannotattack.Seq_CanNotAttack(*zom);
 
 				}
 				else {	//result == "Fail"
@@ -842,25 +842,25 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			else if (result == "HasShouting-Succeed") {
 
 				//{Sequence-HasShouting} 실행
-				result = seq_hasshouting.Seq_HasShouting(*zom);
+				result = zombie_bt_map[roomid].seq_hasshouting.Seq_HasShouting(*zom);
 
 			}
 			else if (result == "HasFootSound-Succeed") {
 
 				//{Sequence-HasFootSound} 실행
-				result = seq_hasfootsound.Seq_HasFootSound(*zom);
+				result = zombie_bt_map[roomid].seq_hasfootsound.Seq_HasFootSound(*zom);
 
 			}
 			else if (result == "HasInvestigated-Succeed") {
 
 				//{Sequence-HasInvestigated} 실행
-				result = seq_hasinvestigated.Seq_HasInvestigated(*zom);
+				result = zombie_bt_map[roomid].seq_hasinvestigated.Seq_HasInvestigated(*zom);
 
 			}
 			else if (result == "NotHasLastKnownPlayerLocation-Succeed") {
 
 				//{Sequence-NotHasLastKnownPlayerLocation} 실행
-				result = seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
+				result = zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
 
 			}
 			else {	//result == "Fail"

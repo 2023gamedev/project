@@ -107,6 +107,13 @@ struct Zombie_BT_struct {
 
 	TMoveTo* t_moveto;
 	TAttack* t_attack;
+
+	Sequence seq_cannotattack;
+	Sequence seq_canattack;
+	Sequence seq_hasshouting;
+	Sequence seq_hasfootsound;
+	Sequence seq_hasinvestigated;
+	Sequence seq_nothaslastknownplayerlocation;
 };
 
 extern std::unordered_map<int, Zombie_BT_struct> room_data_map;
@@ -212,17 +219,17 @@ public:
 	//{Sequence} 선언
 
 	//{Sequence-CanNotAttack}
-	Sequence seq_cannotattack;
-	//{Sequence-CanAttack}
-	Sequence seq_canattack;
-	//{Sequence-HasShouting}
-	Sequence seq_hasshouting;
-	//{Sequence-HasFootSound}
-	Sequence seq_hasfootsound;
-	//{Sequence-HasInvestigated}
-	Sequence seq_hasinvestigated;
-	//{Sequence-NotHasLastKnownPlayerLocation}
-	Sequence seq_nothaslastknownplayerlocation;
+	//Sequence seq_cannotattack;
+	////{Sequence-CanAttack}
+	//Sequence seq_canattack;
+	////{Sequence-HasShouting}
+	//Sequence seq_hasshouting;
+	////{Sequence-HasFootSound}
+	//Sequence seq_hasfootsound;
+	////{Sequence-HasInvestigated}
+	//Sequence seq_hasinvestigated;
+	////{Sequence-NotHasLastKnownPlayerLocation}
+	//Sequence seq_nothaslastknownplayerlocation;
 
 	////[Task] 선언
 
