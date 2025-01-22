@@ -734,12 +734,13 @@ void Zombie::ReachFinalDestination()
 		std::uniform_int_distribution<int> stand_still_duration(5, 10);		// 5~10
 
 		if (stand_still_chance(mt) >= (100 - 40)) {	// 40퍼센트의 확률
+			HaveToWait = true;
 			IsStandingStill = true;
 			waitStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
 			ZombieStandingStillDuration = (float)stand_still_duration(mt);
 
 //#ifdef	ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " 잠시 숨고르기 상태 발동" << endl;
+			cout << "좀비 #" << ZombieData.zombieID << " 잠시 숨고르기 상태 발동 (" << ZombieStandingStillDuration << "초 동안)" << endl;
 //#endif
 		}
 
