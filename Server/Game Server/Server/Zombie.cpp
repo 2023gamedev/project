@@ -474,7 +474,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 	}
 }
 
-void Zombie::Attack()
+void Zombie::Attack(int roomid)
 {
 #ifdef	ENABLE_BT_LOG
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 플레이어 \'#" << ClosestPlayerID << "\' 을 공격하였습니다!" << endl;
@@ -492,7 +492,7 @@ void Zombie::Attack()
 	string serializedData;
 	attackpacket.SerializeToString(&serializedData);
 
-	for (const auto& player : g_players) {
+	for (const auto& player : playerDB[roomid]) {
 		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 	}
 

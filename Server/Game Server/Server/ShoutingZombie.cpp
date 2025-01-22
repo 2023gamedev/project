@@ -22,7 +22,7 @@ ShoutingZombie::ShoutingZombie(Zombie_Data z_d)
 
 }
 
-void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid)
+void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid, int roomid)
 {
 	if (bShouted == false) {
 		bShouted = true;
@@ -31,7 +31,6 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid)
 		cout << "샤우팅 좀비 '#" << ZombieData.zombieID << "' 샤우팅!!!" << endl;
 		cout << endl;
 #endif
-
 		// 다른 좀비들 샤우팅 소리 포착 체크
 		for (auto& zom : zombies) {
 			if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// 샤우팅 좀비와 같은 층 좀비만 검사
@@ -68,8 +67,8 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid)
 		string serializedData;
 		shoutingpacket.SerializeToString(&serializedData);
 
-		for (const auto& player : g_players) {
-			if (player.first != playerid && player.second->isInGame) {
+		for (const auto& player : playerDB[roomid]) {
+			if (player.first != playerid) {
 				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 			}
 		}
