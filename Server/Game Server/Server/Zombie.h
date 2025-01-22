@@ -153,7 +153,7 @@ public:
 
     void SetTargetLocation(TARGET t);
 
-    void Attack();
+    void Attack(int roomid);
 
     bool PlayerInSight_Update_Check();
 
