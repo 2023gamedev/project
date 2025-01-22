@@ -459,6 +459,8 @@ public:
 
 	void LimitSmokingIcon();
 	void SmokingIcon();
+	void RunWalkIcon(bool bisrun);
+	void KeyIcon(bool bisbringkey);
 
 	// 스태미나 부분
 	FTimerHandle UseStaminaHandle;

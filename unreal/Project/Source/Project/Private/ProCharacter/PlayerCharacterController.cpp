@@ -615,6 +615,7 @@ void APlayerCharacterController::Check_run()
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
 	if (b_run) {	// 뛰기 모드 ON
+		basecharacter->RunWalkIcon(b_run);
 		if (b_move_forward || b_move_left) {	// 플레이어 실제 이동 중
 
 			if (basecharacter->m_bZeroStamina) {	
@@ -643,7 +644,7 @@ void APlayerCharacterController::Check_run()
 		}
 	}
 	else {			// 뛰기 모드 OFF
-
+		basecharacter->RunWalkIcon(b_run);
 		if (basecharacter->IsRun() == true) {	// 아직 캐릭터 Run 상태 ON 라면
 			basecharacter->Run();				// 캐릭터 Run 상태 OFF
 			IsRlyRun = basecharacter->IsRun();	// IsRlyRun = false;
