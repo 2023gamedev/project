@@ -278,8 +278,6 @@ private:
 	ZombieController* zombieclass;
 	ItemController* itemclass;
 
-	float GameTime = 0.f;
-
 	bool b_Timer = false;
 
 	std::mutex g_sessionsMutex;

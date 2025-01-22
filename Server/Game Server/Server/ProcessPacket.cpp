@@ -168,7 +168,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         }
 
         // 모든 플레이어들이 사망 게임오버 엔딩 점수판 띄우게하기
-        if (totalplayer_cnt == deadplayer_cnt && playerDB_BT.size() != 0) {
+        if (totalplayer_cnt == deadplayer_cnt && playerDB_BT[Packet.roomnum()].size() != 0) {
             // 점수판 계산
             alive_cnt = 0;
             dead_cnt = 0;

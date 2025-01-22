@@ -446,7 +446,6 @@ void IOCP_CORE::IOCP_SendNextPacket(PLAYER_INFO* user)
 		int err_no = WSAGetLastError();
 		if (err_no != WSA_IO_PENDING) {
 			IOCP_ErrorDisplay("SendPacket::WSASend", err_no, __LINE__);
-			// 보통 여기에 delete over; 등을 해주고 나가야 메모리 누수 방지 가능
 		}
 	}
 }
@@ -608,7 +607,8 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 	string result = "Initial";
 	
-	std::chrono::steady_clock::time_point initial_time = std::chrono::high_resolution_clock::now();	// 게임 서버 프로그램이 켜진 시간 저장
+	float GameTime = 0.f;
+	std::chrono::steady_clock::time_point initial_time = std::chrono::high_resolution_clock::now();	// 스레드가 켜진 시간 저장
 	std::chrono::steady_clock::time_point lastBTTime = initial_time;
 	std::chrono::steady_clock::time_point lastGTTime = initial_time;
 	
