@@ -1,5 +1,11 @@
 #pragma once
 
+#include <jdbc/mysql_driver.h>
+#include <jdbc/mysql_connection.h>
+#include <jdbc/cppconn/statement.h>
+#include <jdbc/cppconn/prepared_statement.h>
+#include <jdbc/cppconn/resultset.h>
+
 class LoginManager {
 public:
     LoginManager();
@@ -10,6 +16,9 @@ private:
         string username;
         string password;
     };
+
+    sql::mysql::MySQL_Driver* driver;
+    std::unique_ptr<sql::Connection> conn;
 
     std::unordered_map<std::string, bool> logged_in_users;
     std::mutex login_mutex;
@@ -22,6 +31,8 @@ public:
     bool Logout(const string& username);
     void SaveToUser(const string& filename, const string& username, const string& password);
     void LoadFromFile(const string& filename);
+
+    void LoadFromDB();
 
     // 기타 사용자 관리 기능 구현
 };

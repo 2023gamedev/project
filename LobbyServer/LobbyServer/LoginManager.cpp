@@ -3,10 +3,16 @@
 LoginManager::LoginManager()
 {
     LoadFromFile("users.txt");
+
+    /*driver = sql::mysql::get_mysql_driver_instance();
+    conn = std::unique_ptr<sql::Connection>(driver->connect("tcp://127.0.0.1:3306", "root", "password"));
+    conn->setSchema("logindata");
+    LoadFromDB();*/
 }
 
 LoginManager::~LoginManager()
 {
+    conn->close();
 }
 
 // 회원가입
@@ -43,6 +49,23 @@ bool LoginManager::Login(const string& username, const string& password)
     cout << username << " " << password << endl;
     cout << "등록되지 않은 아이디거나 비밀번호가 틀렸습니다." << endl;
     return false;
+
+    /*std::unique_ptr<sql::PreparedStatement> pstmt(
+        conn->prepareStatement("SELECT COUNT(*) FROM users WHERE username = ? AND password = ?")
+    );
+    pstmt->setString(1, username);
+    pstmt->setString(2, password);
+
+    std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery());
+    res->next();
+
+    if (res->getInt(1) > 0) {
+        logged_in_users[username] = true;
+        return true;
+    }
+
+    cout << "등록되지 않은 아이디거나 비밀번호가 틀렸습니다." << endl;
+    return false;*/
 }
 
 bool LoginManager::Logout(const string& username)
@@ -65,6 +88,13 @@ void LoginManager::SaveToUser(const string& filename, const string& username, co
         file << username << " " << password << endl;
         file.close();
     }
+
+    //std::unique_ptr<sql::PreparedStatement> pstmt(
+    //    conn->prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)")
+    //);
+    //pstmt->setString(1, username);
+    //pstmt->setString(2, password);
+    //pstmt->executeUpdate();
 }
 
 // 파일 불러오기
@@ -78,5 +108,16 @@ void LoginManager::LoadFromFile(const string& filename)
             users.push_back({ username, password });
         }
         file.close();
+    }
+}
+
+void LoginManager::LoadFromDB() {
+    std::unique_ptr<sql::Statement> stmt(conn->createStatement());
+    std::unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT username, password FROM users"));
+
+    while (res->next()) {
+        string username = res->getString("username");
+        string password = res->getString("password");
+        users.push_back({ username, password });
     }
 }

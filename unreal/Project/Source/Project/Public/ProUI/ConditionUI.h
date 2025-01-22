@@ -40,8 +40,20 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UImage* SmokingImg;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UImage* RunImg;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UImage* WalkImg;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UImage* KeyImg;
+
     void UpdateBar();
     void BloodImageVisible(ESlateVisibility visibillity);
     void SmokingImageVisible(ESlateVisibility visibillity);
+    void WalkImageVisible(ESlateVisibility visibillity);
+    void RunImageVisible(ESlateVisibility visibillity);
+    void KeyImageVisible(ESlateVisibility visibillity);
     virtual void NativeConstruct() override;
 };
