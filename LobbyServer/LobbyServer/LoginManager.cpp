@@ -2,12 +2,12 @@
 
 LoginManager::LoginManager()
 {
-    LoadFromFile("users.txt");
+    //LoadFromFile("users.txt");
 
-    /*driver = sql::mysql::get_mysql_driver_instance();
+    driver = sql::mysql::get_mysql_driver_instance();
     conn = std::unique_ptr<sql::Connection>(driver->connect("tcp://127.0.0.1:3306", "root", "password"));
     conn->setSchema("logindata");
-    LoadFromDB();*/
+    LoadFromDB();
 }
 
 LoginManager::~LoginManager()
@@ -40,7 +40,7 @@ bool LoginManager::Login(const string& username, const string& password)
     }
 
     std::lock_guard<std::mutex> lock(login_mutex);
-    for (const auto& user : users) {
+    /*for (const auto& user : users) {
         if (user.username == username && user.password == password) {
             logged_in_users[username] = true;
             return true;
@@ -48,9 +48,9 @@ bool LoginManager::Login(const string& username, const string& password)
     }
     cout << username << " " << password << endl;
     cout << "등록되지 않은 아이디거나 비밀번호가 틀렸습니다." << endl;
-    return false;
+    return false;*/
 
-    /*std::unique_ptr<sql::PreparedStatement> pstmt(
+    std::unique_ptr<sql::PreparedStatement> pstmt(
         conn->prepareStatement("SELECT COUNT(*) FROM users WHERE username = ? AND password = ?")
     );
     pstmt->setString(1, username);
@@ -65,7 +65,7 @@ bool LoginManager::Login(const string& username, const string& password)
     }
 
     cout << "등록되지 않은 아이디거나 비밀번호가 틀렸습니다." << endl;
-    return false;*/
+    return false;
 }
 
 bool LoginManager::Logout(const string& username)
@@ -83,18 +83,18 @@ bool LoginManager::Logout(const string& username)
 void LoginManager::SaveToUser(const string& filename, const string& username, const string& password)
 {
     users.push_back({ username, password });
-    ofstream file(filename, ios::app);
+    /*ofstream file(filename, ios::app);
     if (file.is_open()) {
         file << username << " " << password << endl;
         file.close();
-    }
+    }*/
 
-    //std::unique_ptr<sql::PreparedStatement> pstmt(
-    //    conn->prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)")
-    //);
-    //pstmt->setString(1, username);
-    //pstmt->setString(2, password);
-    //pstmt->executeUpdate();
+    std::unique_ptr<sql::PreparedStatement> pstmt(
+        conn->prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)")
+    );
+    pstmt->setString(1, username);
+    pstmt->setString(2, password);
+    pstmt->executeUpdate();
 }
 
 // 파일 불러오기
