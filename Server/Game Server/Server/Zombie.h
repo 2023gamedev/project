@@ -127,7 +127,8 @@ public:
 
     FLOOR z_floor;          // 좀비가 스폰 된 층
 
-    std::chrono::steady_clock::time_point waitStartTime;      // 좀비 대기 시작 시간
+    std::chrono::steady_clock::time_point waitAnimStartTime;      // 좀비 대기 시작 시간 (애니메이션을 맞춰 대기하기 위한 용도)
+    std::chrono::steady_clock::time_point waitBrainlessStartTime;      // 좀비 대기 시작 시간 (숨고르기를 맞춰 대기하기 위한 용도)
 
     TARGET targetType;
 

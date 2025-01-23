@@ -56,7 +56,7 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid, int roomid)
 
 		HaveToWait = true;	// 좀비 BT 대기상태로 변경
 
-		waitStartTime = std::chrono::high_resolution_clock::now();		// 좀비 샤우팅 시작 시간
+		waitAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 샤우팅 시작 시간
 
 		Protocol::Zombie_shouting shoutingpacket;
 
