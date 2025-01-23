@@ -337,10 +337,10 @@ void Zombie::SetTargetLocation(TARGET t)
 #endif
 
 				if (deltaTime.count() >= ZombieStandingStillDuration) {
-//#ifdef ENABLE_BT_LOG
+#ifdef ENABLE_BT_LOG
 					cout << "좀비 #" << ZombieData.zombieID << " ";
 					cout << "숨고르기 상태 끝 " << endl;
-//#endif
+#endif
 
 					IsStandingStill = false;
 				}
@@ -770,9 +770,9 @@ void Zombie::ReachFinalDestination()
 			waitBrainlessStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
 			ZombieStandingStillDuration = (float)stand_still_duration(mt);
 
-//#ifdef	ENABLE_BT_LOG
+#ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 잠시 숨고르기 상태 발동 (" << ZombieStandingStillDuration << "초 동안)" << endl;
-//#endif
+#endif
 		}
 
 		break;
@@ -1082,30 +1082,7 @@ void Zombie::Wait()
 #endif
 		}
 	}
-	/*else if (IsStandingStill) {
-		auto waitAfterTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> deltaTime = waitAfterTime - waitAnimStartTime;
-
-#ifdef ENABLE_BT_LOG
-		cout << "좀비 #" << ZombieData.zombieID << " 가 숨고르기 중입니다!" << endl;
-#endif
-
-		if (deltaTime.count() >= ZombieStandingStillDuration) {
-//#ifdef ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " ";
-			cout << "숨고르기 상태 끝 " << endl;
-//#endif
-
-			IsStandingStill = false;
-			HaveToWait = false;
-			WaitOneTick_SendPath = true;
-		}
-		else {
-#ifdef ENABLE_BT_LOG
-			cout << "숨고르기 남은 시간: " << ZombieStandingStillDuration - deltaTime.count() << "s" << endl;
-#endif
-		}
-	}*/
+	
 
 #ifdef ENABLE_BT_LOG
 	cout << endl;
