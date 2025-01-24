@@ -741,13 +741,13 @@ void AOneGameModeBase::CarActorRandomLocationSetting()
 
 void AOneGameModeBase::CarKeyRandomSetting()
 {
-    CarKeyRandom[0].CarKeyName = "CarKey1";
-    CarKeyRandom[1].CarKeyName = "CarKey2";
-    CarKeyRandom[2].CarKeyName = "CarKey3";
-    CarKeyRandom[3].CarKeyName = "CarKey4";
-    CarKeyRandom[4].CarKeyName = "None";
-    CarKeyRandom[5].CarKeyName = "None";
-    CarKeyRandom[6].CarKeyName = "None";
+    CarKeyRandom[0].CarKeyName = "CarKey1"; // 지상 1층 파란색 키
+    CarKeyRandom[1].CarKeyName = "CarKey2"; // 지상 1층 파란색 키
+    CarKeyRandom[2].CarKeyName = "CarKey3"; // 지상 2층 빨간색 키 1
+    CarKeyRandom[3].CarKeyName = "CarKey4"; // 지상 2층 빨간색 키 2
+    CarKeyRandom[4].CarKeyName = "None";    // 꽝 - 맞는 열쇠가 없는 차량
+    CarKeyRandom[5].CarKeyName = "None";    // 꽝 - 맞는 열쇠가 없는 차량
+    CarKeyRandom[6].CarKeyName = "None";    // 꽝 - 맞는 열쇠가 없는 차량
 
     for (int i = 0; i < 7; ++i) {
         CarKeyRandom[i].bIsSeatCarKey = false;
@@ -776,7 +776,7 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FV
         SpawnedCarActor->CarKeyName = CarKey;
         SpawnedCarActor->CarID = InterActorindex;
         
-        if (InterActorindex == 5 || InterActorindex == 6) {
+        if (InterActorindex == 2 || InterActorindex == 3) { // 지상 2층 빨간키에 맞는 차량들
             GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CarID is #%d! Have to change color to RED!!!"), InterActorindex));
 
             SpawnedCarActor->ChangeColorToRed();
