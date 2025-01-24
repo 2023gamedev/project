@@ -126,6 +126,18 @@ void ACarActor::ClearAddScore()
 
 }
 
+void ACarActor::ChangeColorToRed()
+{
+	// 원래는 바꿀 머테리얼만 읽어와서 기존 스태틱메시에 해당 머테리얼을 교체하는 게 메모리 상으로 좋지만, 그럼 귀찮아서 일단 이렇게 구현...
+	UStaticMesh* SM_CAR_RED = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, TEXT("/Game/VehicleVarietyPack/Meshes/SM_Hatchback_RED.SM_Hatchback_RED")));
+
+	if (SM_CAR_RED) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Car #%d changed color to RED!!!"), CarID));
+
+		StaticMesh->SetStaticMesh(SM_CAR_RED);
+	}
+}
+
 // Called when the game starts or when spawned
 void ACarActor::BeginPlay()
 {

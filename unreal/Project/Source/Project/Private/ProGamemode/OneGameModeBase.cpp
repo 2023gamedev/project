@@ -757,7 +757,7 @@ void AOneGameModeBase::CarKeyRandomSetting()
 void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FVector carpos, FRotator carrotator, FName carkeyname)
 {
     int32 interAindex = InterActorindex - 1;
-    UE_LOG(LogTemp, Warning, TEXT("SpawnInterItem -> InterActorindex: %d"), interAindex);
+    UE_LOG(LogTemp, Warning, TEXT("SpawnInterItem -> InterActorindex: %d, SpawnInterName: %s"), interAindex, *InterName.ToString());
     if (interAindex >= 8) {
         return;
     }
@@ -772,10 +772,15 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FV
 
         FName CarKey = carkeyname;
 
-        // 선택된 아이템 박스 클래스로 아이템 박스 생성
         ACarActor* SpawnedCarActor = GetWorld()->SpawnActor<ACarActor>(SelectedInterActorClass, Location, Rotation);
         SpawnedCarActor->CarKeyName = CarKey;
         SpawnedCarActor->CarID = InterActorindex;
+        
+        if (InterActorindex == 5 || InterActorindex == 6) {
+            GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CarID is #%d! Have to change color to RED!!!"), InterActorindex));
+
+            SpawnedCarActor->ChangeColorToRed();
+        }
     }
     else if (InterName == "RoofTopDoorActor") {
 
