@@ -757,7 +757,7 @@ void AOneGameModeBase::CarKeyRandomSetting()
 void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FVector carpos, FRotator carrotator, FName carkeyname)
 {
     int32 interAindex = InterActorindex - 1;
-    UE_LOG(LogTemp, Warning, TEXT("SpawnInterItem -> InterActorindex: %d, SpawnInterName: %s"), interAindex, *InterName.ToString());
+    UE_LOG(LogTemp, Log, TEXT("SpawnInterItem -> InterActorindex: %d, SpawnInterName: %s"), interAindex, *InterName.ToString());
     if (interAindex >= 8) {
         return;
     }
@@ -777,7 +777,8 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FV
         SpawnedCarActor->CarID = InterActorindex;
         
         if (InterActorindex == 2 || InterActorindex == 3) { // 지상 2층 빨간키에 맞는 차량들
-            GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CarID is #%d! Have to change color to RED!!!"), InterActorindex));
+            //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CarID is #%d! Have to change color to RED!!!"), InterActorindex));
+            UE_LOG(LogTemp, Log, TEXT("CarID is #%d! Have to change color to RED!!!"), InterActorindex);
 
             SpawnedCarActor->ChangeColorToRed();
         }
