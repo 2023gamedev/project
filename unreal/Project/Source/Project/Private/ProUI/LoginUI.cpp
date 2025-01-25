@@ -112,6 +112,14 @@ void ULoginUI::OnRegisterButtonClicked()
     }
 }
 
+void ULoginUI::OnTextCommitted(const FText& Text, ETextCommit::Type CommitType)
+{
+    if (CommitType == ETextCommit::OnEnter)
+    {
+        OnLoginButtonClicked(); // 로그인 버튼의 동작을 호출
+    }
+}
+
 void ULoginUI::Init()
 {
 
@@ -132,5 +140,15 @@ void ULoginUI::Init()
         RegisterButton->OnClicked.AddDynamic(this, &ULoginUI::OnRegisterButtonClicked);
         RegisterButton->SetIsEnabled(true);
 
+    }
+
+    if (IDBox)
+    {
+        IDBox->OnTextCommitted.AddDynamic(this, &ULoginUI::OnTextCommitted);
+    }
+
+    if (PasswordBox)
+    {
+        PasswordBox->OnTextCommitted.AddDynamic(this, &ULoginUI::OnTextCommitted);
     }
 }

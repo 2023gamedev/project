@@ -690,7 +690,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 		playerDB_BT[roomid] = playerDB[roomid];
 
 
-		if (playerDB_BT.size() == 0) {
+		if (playerDB_BT[roomid].size() == 0) {
 			//cout << "연결된 플레이어가 없습니다... => (playerDB_BT.size() == 0)" << endl;
 			//cout << endl;
 			result = "NO PLAYER";
@@ -885,6 +885,8 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 			for (const auto zom : zombieDB_BT[roomid]) {
 				if (player.second.floor == zom->z_floor) {	// 플레이어 같은 층에 있는 좀비의 path만 받음
+					//cout << "<<방 #" << roomid << " - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
+
 
 					// path 보낼 필요 없는 좀비들 예외처리 (최적화)
 					if (zom->GetHP() <= 0.f
@@ -923,6 +925,8 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					currentLocation->set_y(zom->ZombieData.y);
 					currentLocation->set_z(zom->ZombieData.z);
 
+					cout << "<<방 #" << roomid << " SendPath 전송 완료 - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
+
 #ifdef	ENABLE_BT_LOG
 					cout << "<<플레이어 #" << player.first << " 에게 SendPath 전송 완료 - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
 					cout << endl;
@@ -945,7 +949,6 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 	//========할당한 메모리 해제========
 
-	// 이거 때문에라도 스레드 만들때 마다 동적으로 따로 생성해줘야 할듯
 	delete(zombie_bt_map[roomid].sel_detect);
 	delete(zombie_bt_map[roomid].sel_canseeplayer);
 

@@ -52,6 +52,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UAlertUI* AlertUIWidget;
 
+	UFUNCTION(BlueprintCallable)
+	void OnTextCommitted(const FText& Text, ETextCommit::Type CommitType);
+
 private:
 
 	UFUNCTION(BlueprintCallable)
