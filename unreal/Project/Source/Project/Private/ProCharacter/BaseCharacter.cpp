@@ -877,13 +877,15 @@ void ABaseCharacter::CarKeyFindUpdateUI()
 
 void ABaseCharacter::RoofKeyFindUpdateUI()
 {
-	FText KText = FText::FromString(TEXT("옥상으로 탈출하라."));
-	USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
-	PlaySoundForPlayer(Sound);
-	ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
+	if (!(GameTimerUIWidget->RoofTopClose)) { // 5분에서 5분 5초사이에 먹으면 헬기 떠난 문구 뜬 다음에 이 문구로 수정되는 문제 방지용 if
+		FText KText = FText::FromString(TEXT("옥상으로 탈출하라."));
+		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ChartFindKey.ChartFindKey")); // 에셋 경로
+		PlaySoundForPlayer(Sound);
+		ShowActionText(KText, FSlateColor(FLinearColor(1.0f, 1.0f, 1.0f)), 5.f);
 
-	FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하기"));
-	ShowMissionText(KMissionText1, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 1);
+		FText KMissionText1 = FText::FromString(TEXT("옥상으로 탈출하기"));
+		ShowMissionText(KMissionText1, FSlateColor(FLinearColor(0.0f, 1.0f, 0.0f)), 1);
+	}
 }
 
 void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead_players, const FString& open_player, uint32 my_kill_count, uint32 best_kill_count, const FString& best_kill_player)
