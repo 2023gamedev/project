@@ -33,6 +33,7 @@ class UCircularPB_UI;
 class AHealingNiagaEffect;
 class UTextMissionUI;
 class UOtherPlayerUI;
+class UGameChatUI;
 class AInterActor;
 
 
@@ -176,6 +177,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	UOtherPlayerUI* OtherPlayer3UIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UGameChatUI> GameChatUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UGameChatUI* GameChatUIWidget;
 
 	// 게임 전체 UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")

@@ -75,6 +75,7 @@
 #include "ProUI/CircularPB_UI.h"
 #include "ProUI/TextMissionUI.h"
 #include "ProUI/OtherPlayerUI.h"
+#include "ProUI/GameChatUI.h"
 #include "ProCharacter/PlayerCharacterController.h"
 #include "ProNiagaFX/HealingNiagaEffect.h"
 
@@ -199,6 +200,12 @@ ABaseCharacter::ABaseCharacter()
 
 	if (PLAYER_OTHERPLAYER3UI.Succeeded()) {
 		OtherPlayer3UIClass = PLAYER_OTHERPLAYER3UI.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder <UGameChatUI> GAME_CHAT_UI(TEXT("/Game/UI/BP_GameChatUI.BP_GameChatUI_C"));
+
+	if (GAME_CHAT_UI.Succeeded()) {
+		GameChatUIClass = GAME_CHAT_UI.Class;
 	}
 
 	//SpringArm->TargetArmLength = 300.f;
@@ -433,6 +440,23 @@ void ABaseCharacter::BeginPlay()
 
 		CircularPB_Widget->AddToViewport();
 		CircularPB_Widget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	if (GameChatUIClass != nullptr) {
+
+		APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
+		if (controller == nullptr) {
+			return;
+		}
+
+		GameChatUIWidget = CreateWidget<UGameChatUI>(controller, GameChatUIClass);
+
+		if (!GameChatUIWidget) {
+			return;
+		}
+
+		GameChatUIWidget->Character = this;
+		GameChatUIWidget->AddToViewport();
 	}
 
 
