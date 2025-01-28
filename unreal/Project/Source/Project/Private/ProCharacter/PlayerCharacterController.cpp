@@ -24,7 +24,7 @@
 //Network
 #include "GStruct.pb.h"
 
-
+#include "ProUI/GameChatUI.h"
 
 // EnhancedInput
 #include "InputMappingContext.h"
@@ -308,6 +308,17 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 				MyGameMode->TurnOnCarHeadlights(recvEscapeRoot.carid);
 				UE_LOG(LogNet, Display, TEXT("tur on headlight: carid = %d"), recvEscapeRoot.carid);
+			}
+		}
+
+		if (GameInstance->ClientSocketPtr->Q_Gchat.try_pop(recvGameChat)) {
+			APawn* ControlledPawn = GetPawn();
+			if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
+			{
+				if (ControlledCharacter->GameChatUIWidget)
+				{
+					ControlledCharacter->GameChatUIWidget->AddChatMessage(recvGameChat.chat);
+				}
 			}
 		}
 

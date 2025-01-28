@@ -122,6 +122,7 @@ public:
 	DetachItem recvDetachItem;
 	SliceVector recvSliceVector;
 	ZombieShouting recvZombieShouting;
+	GameChatting recvGameChat;
 
 	uint32 PlayerId;
 	uint32 ZombieId;

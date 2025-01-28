@@ -265,7 +265,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 4:
     {
-        printf("\n[ No. %3u ] character Packet Received !!\n", id);
+        printf("\n[ No. %3u ] character attack Packet Received !!\n", id);
         Protocol::Character_Attack Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
@@ -683,6 +683,29 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         }
 
         return true;
+    }
+
+    case 26:
+    {
+        printf("\n[ No. %3u ] recv chatting packet !!\n", id);
+
+        Protocol::chatting Packet;
+        Packet.ParseFromArray(packet.data(), packet.size());
+        string serializedData;
+        Packet.SerializeToString(&serializedData);
+
+        // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
+        int roomId = clientInfo->roomid;
+
+        if (room_players.find(roomId) != room_players.end()) {
+            for (const auto& [playerId, playerInfo] : room_players[roomId]) {
+                if (playerInfo != nullptr) {
+                    IOCP_SendPacket(playerId, serializedData.data(), serializedData.size());
+                }
+            }
+        }
+        return true;
+
     }
 
     default: {

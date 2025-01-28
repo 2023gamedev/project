@@ -611,6 +611,17 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				}
 				break;
 			}
+			case 26:
+			{
+				Protocol::chatting gamechatpacket;
+				if (gamechatpacket.ParseFromArray(buffer.data(), buffer.size())) {
+
+					FString FStringchat = FString(UTF8_TO_TCHAR(gamechatpacket.chat().c_str()));
+
+					Q_Gchat.push(GameChatting(gamechatpacket.playerid(), FStringchat));
+				}
+				break;
+			}
 			}
 		}
 	}

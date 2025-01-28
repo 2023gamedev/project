@@ -219,3 +219,9 @@ message slice_vector{
     Vector3 normal = 5;
     Vector3 impulse = 6;
 }
+
+message chatting{
+    uint32 packet_type = 1;
+    uint32 playerid = 2;
+    string chat = 3;
+}
