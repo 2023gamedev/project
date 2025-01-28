@@ -993,7 +993,7 @@ bool Zombie::FootSound_Update_Check()
 	return result;
 }
 
-// wait 실행 우선순위: 피격 > 공격 > 샤우팅 > 숨고르기
+// wait 실행 우선순위: 피격 > 공격 > 샤우팅
 void Zombie::Wait()
 {
 	//cout << "좀비 '#" << ZombieData.zombieID << "' BT 잠시 대기." << endl;
