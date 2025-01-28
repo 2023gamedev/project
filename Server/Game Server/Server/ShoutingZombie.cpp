@@ -16,7 +16,9 @@ ShoutingZombie::ShoutingZombie(Zombie_Data z_d)
 {
 	SetHP(ShoutingZombieStartHP);
 
-	SetSpeed(ShoutingZombieSpeed);
+	//SetSpeed(ShoutingZombieSpeed);
+
+	SetZombieType(ZOMBIE_TYPE::SHOUTING_ZOMBIE);
 	
 	bShouted = false;
 

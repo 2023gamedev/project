@@ -49,6 +49,13 @@ public:
         PATROL
     };
 
+    enum ZOMBIE_TYPE {
+        NULL_TYPE,
+        NORMAL_ZOMBIE,
+        RUNNING_ZOMBIE,
+        SHOUTING_ZOMBIE
+    };
+
 
     IOCP_CORE* iocpServer;
 
@@ -76,15 +83,23 @@ public:
     float ZombieStandingStillDuration = 0.f;    // 좀비 숨고르기 (멍때리기) 지속 시간 (5~10초)
 
     const float NormalZombieStartHP = 20.0f;        // 20.0f
-    const float NormalZombieSpeed = 200.0f;         // 200.0f
+    const float NormalZombieSpeed = 200.0f;         // 200.0f (뛰기 스피드)
+    const float NormalZombieWalkSpeed = 100.0f;     // 100.0f (걷기 스피드)
 
     const float RunningZombieStartHP = 20.0f;        // 20.0f
-    const float RunningZombieSpeed = 300.0f;         // 300.0f
+    const float RunningZombieSpeed = 300.0f;         // 300.0f (뛰기 스피드)
+    const float RunningZombieWalkSpeed = 200.0f;     // 200.0f (걷기 스피드)
 
     const float ShoutingZombieStartHP = 30.0f;        // 30.0f
-    const float ShoutingZombieSpeed = 230.0f;         // 230.0f
+    const float ShoutingZombieSpeed = 230.0f;         // 230.0f (뛰기 스피드)
+    const float ShoutingZombieWalkSpeed = 150.0f;     // 150.0f (걷기 스피드)
+
+    const float ZombieInvestigatedSpeed_Offset = 40.f;     // 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +40.f 스피드
+    const float ZombieHeardFootSoundSpeed_Offset = -20.f;   // 발소리를 들었을 때는 뛰기 스피드에서 -20.f 스피드
 
     float ZombieSpeed;
+
+    ZOMBIE_TYPE ZombieType;
 
     Zombie_Data ZombieData;     // 통신에서 주로 사용할 데이터
 
@@ -185,5 +200,8 @@ public:
 
     float GetSpeed() const { return ZombieSpeed; }
     void SetSpeed(float speed) { ZombieSpeed = speed; }
+
+    ZOMBIE_TYPE GetZombieType() const { return ZombieType; }
+    void SetZombieType(ZOMBIE_TYPE z_type) { ZombieType = z_type; }
 
 };

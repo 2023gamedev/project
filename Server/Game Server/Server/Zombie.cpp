@@ -64,6 +64,8 @@ Zombie::Zombie()
 	ClosestPlayerID = 0;
 
 	roomid = 0;
+
+	SetZombieType(ZOMBIE_TYPE::NULL_TYPE);
 }
 
 Zombie::Zombie(Zombie_Data z_d)
@@ -118,6 +120,8 @@ Zombie::Zombie(Zombie_Data z_d)
 	ClosestPlayerID = 0;
 
 	roomid = z_d.roomID;
+
+	SetZombieType(ZOMBIE_TYPE::NULL_TYPE);
 }
 
 Zombie::~Zombie()
@@ -587,6 +591,48 @@ void Zombie::MoveTo(float deltasecond)
 	float directionY = dy / distance;
 
 	// 이동 거리 계산
+	// 좀비 속도 지정 (걷기/뛰기)
+	if (targetType == TARGET::INVESTIGATED || targetType == TARGET::PATROL) {	// 걷기
+		float walk_speed_offset = 0.f;
+		if (targetType == TARGET::INVESTIGATED)	// 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +ZombieInvestigatedSpeed_Offset 만큼의 스피드
+			walk_speed_offset = ZombieInvestigatedSpeed_Offset;
+		
+		switch (GetZombieType()) {
+		case ZOMBIE_TYPE::NULL_TYPE:
+			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정!!! ---> Speed = 0" << endl;
+			break;
+		case ZOMBIE_TYPE::NORMAL_ZOMBIE:
+			ZombieSpeed = NormalZombieWalkSpeed + walk_speed_offset;
+			break;
+		case ZOMBIE_TYPE::RUNNING_ZOMBIE:
+			ZombieSpeed = RunningZombieWalkSpeed + walk_speed_offset;
+			break;
+		case ZOMBIE_TYPE::SHOUTING_ZOMBIE:
+			ZombieSpeed = ShoutingZombieWalkSpeed + walk_speed_offset;
+			break;
+		}
+	}
+	else if (targetType == TARGET::PLAYER || targetType == TARGET::SHOUTING || targetType == TARGET::FOOTSOUND) {	// 뛰기
+		float run_speed_offset = 0.f;
+		if (targetType == TARGET::FOOTSOUND)	// 발소리를 들었을 때는 뛰기 스피드에서 +ZombieHeardFootSoundSpeed_Offset 만큼의 스피드
+			run_speed_offset = ZombieHeardFootSoundSpeed_Offset;
+
+		switch (GetZombieType()) {
+		case ZOMBIE_TYPE::NULL_TYPE:
+			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정!!! ---> Speed = 0" << endl;
+			break;
+		case ZOMBIE_TYPE::NORMAL_ZOMBIE:
+			ZombieSpeed = NormalZombieSpeed + run_speed_offset;
+			break;
+		case ZOMBIE_TYPE::RUNNING_ZOMBIE:
+			ZombieSpeed = RunningZombieSpeed + run_speed_offset;
+			break;
+		case ZOMBIE_TYPE::SHOUTING_ZOMBIE:
+			ZombieSpeed = ShoutingZombieSpeed + run_speed_offset;
+			break;
+		}
+	}
+
 	float moveDistance = ZombieSpeed * deltasecond;
 
 	// 이동 벡터 계산
