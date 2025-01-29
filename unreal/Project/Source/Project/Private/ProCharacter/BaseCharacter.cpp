@@ -202,7 +202,7 @@ ABaseCharacter::ABaseCharacter()
 		OtherPlayer3UIClass = PLAYER_OTHERPLAYER3UI.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder <UGameChatUI> GAME_CHAT_UI(TEXT("/Game/UI/BP_GameChatUI.BP_GameChatUI_C"));
+	static ConstructorHelpers::FClassFinder <UGameChatUI> GAME_CHAT_UI(TEXT("/Game/UI/BP_GameChatting.BP_GameChatting_C"));
 
 	if (GAME_CHAT_UI.Succeeded()) {
 		GameChatUIClass = GAME_CHAT_UI.Class;

@@ -925,7 +925,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					currentLocation->set_y(zom->ZombieData.y);
 					currentLocation->set_z(zom->ZombieData.z);
 
-					cout << "<<방 #" << roomid << " SendPath 전송 완료 - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
+					//cout << "<<방 #" << roomid << " SendPath 전송 완료 - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
 
 #ifdef	ENABLE_BT_LOG
 					cout << "<<플레이어 #" << player.first << " 에게 SendPath 전송 완료 - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;

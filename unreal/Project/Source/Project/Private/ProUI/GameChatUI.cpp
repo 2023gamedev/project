@@ -52,6 +52,8 @@ void UGameChatUI::SendChat(const FString& FormattedMessage)
 
 void UGameChatUI::OnSendButtonEntered(const FText& Text, ETextCommit::Type CommitMethod)
 {
+    UE_LOG(LogTemp, Log, TEXT("OnSendButtonEntered() called!"));
+
     if (CommitMethod == ETextCommit::OnEnter)
     {
         if (!ChatText || ChatText->GetText().IsEmpty() || Text.IsEmpty())
