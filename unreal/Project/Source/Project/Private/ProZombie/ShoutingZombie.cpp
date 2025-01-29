@@ -30,16 +30,17 @@ AShoutingZombie::AShoutingZombie()
 	//}
 
 
-	SetHP(30);
-	m_fHP_Prev = 30;
-	SetStartHP(30);
-	float speed = 2.3f;
+	SetHP(ShoutingZombieStartHP);
+	m_fHP_Prev = ShoutingZombieStartHP;
+	SetStartHP(ShoutingZombieStartHP);
+	float speed = ShoutingZombieSpeed;
 	SetSpeed(speed);
-	GetCharacterMovement()->MaxWalkSpeed = speed * 100.f;
+	GetCharacterMovement()->MaxWalkSpeed = ShoutingZombieSpeed;
 	SetSTR(FMath::RandRange(4, 8)); // 수정 필요 4 ~ 8
 	SetSpecialAbility(true);
 	SetZombieName("ShoutingZombie");
-	SetTurningSpeed(90.f);
+	SetTurningSpeed(GetTurningSpeed());
+	targetType = TARGET::PATROL;
 }
 
 void AShoutingZombie::BeginPlay()

@@ -40,6 +40,16 @@ protected:
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 public:	
+	enum TARGET {
+		NULL_TARGET,
+		PLAYER,
+		SHOUTING,
+		FOOTSOUND,
+		INVESTIGATED,
+		PATROL
+	};
+
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
@@ -63,7 +73,7 @@ public:
 	float GetSpeed() { return m_fSpeed; }
 	void SetSpeed(float speed) { m_fSpeed = speed; }	
 	
-	float GetTurningSpeed() { return m_fTurningSpeedDegree; }
+	float GetTurningSpeed() { return m_fTurningSpeedDegree; }		// 90.f
 	void SetTurningSpeed(float degree) { m_fTurningSpeedDegree = degree; }
 		
 	bool IsDie() { return m_bDie; }
@@ -238,7 +248,7 @@ private:
 
 	// 1초당 고개 돌리는 각도
 	UPROPERTY(EditAnywhere)
-	float m_fTurningSpeedDegree;
+	float m_fTurningSpeedDegree = 90.f;		// 90.f
 
 public:
 	UPROPERTY(EditAnywhere)
@@ -276,4 +286,22 @@ public:
 	UPROPERTY(EditAnywhere)
 	float afterAnim_idleDuration = 0.f;
 
+	// 좀비 설정값들
+	const float NormalZombieStartHP = 20.0f;        // 20.0f
+	const float NormalZombieSpeed = 200.0f;         // 200.0f (뛰기 스피드)
+	const float NormalZombieWalkSpeed = 100.0f;     // 100.0f (걷기 스피드)
+
+	const float RunningZombieStartHP = 20.0f;        // 20.0f
+	const float RunningZombieSpeed = 300.0f;         // 300.0f (뛰기 스피드)
+	const float RunningZombieWalkSpeed = 200.0f;     // 200.0f (걷기 스피드)
+
+	const float ShoutingZombieStartHP = 30.0f;        // 30.0f
+	const float ShoutingZombieSpeed = 230.0f;         // 230.0f (뛰기 스피드)
+	const float ShoutingZombieWalkSpeed = 150.0f;     // 150.0f (걷기 스피드)
+
+	const float ZombieInvestigatedSpeed_Offset = 40.f;     // 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +40.f 스피드
+	const float ZombieHeardFootSoundSpeed_Offset = -20.f;   // 발소리를 들었을 때는 뛰기 스피드에서 -20.f 스피드
+
+	
+	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(0-NULL_TARGET,	1-PLAYER, 2-SHOUTING, 3-FOOTSOUND, 4-INVESTIGATED, 5-PATROL)
 };

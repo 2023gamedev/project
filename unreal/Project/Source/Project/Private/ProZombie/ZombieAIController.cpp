@@ -116,8 +116,32 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	float directionX = dx / distance;
 	float directionY = dy / distance;
 
+	// 좀비 속도 지정 (걷기/뛰기)
+	float ZombieSpeed = 0.f;
+	if (OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED || OwnerZombie->targetType == OwnerZombie->TARGET::PATROL) {	// 걷기
+		float walk_speed_offset = 0.f;
+		if (OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED)	// 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +ZombieInvestigatedSpeed_Offset 만큼의 스피드
+			walk_speed_offset = OwnerZombie->ZombieInvestigatedSpeed_Offset;
+	
+		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieWalkSpeed);
+		ZombieSpeed = OwnerZombie->GetSpeed() + walk_speed_offset;
+	}
+	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING || OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND) {	// 뛰기
+		float run_speed_offset = 0.f;
+		if (OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND)	// 발소리를 들었을 때는 뛰기 스피드에서 +ZombieHeardFootSoundSpeed_Offset 만큼의 스피드
+			run_speed_offset = OwnerZombie->ZombieHeardFootSoundSpeed_Offset;
+
+		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieSpeed);
+		ZombieSpeed = OwnerZombie->GetSpeed() + run_speed_offset;
+	}
+
+	if (ZombieSpeed == 0.f) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId));
+		UE_LOG(LogTemp, Error, TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId);
+	}
+	
 	// 이동 거리 계산
-	float moveDistance = OwnerZombie->GetSpeed() * 100.f * deltasecond;
+	float moveDistance = ZombieSpeed * deltasecond;
 
 	// 이동 벡터 계산
 	float moveX = directionX * moveDistance;
@@ -138,7 +162,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 			indx--;
 		}
 		else {	// 꼭지점을 넘어 갈 때
-			float mid_deltasecond = newDistance / OwnerZombie->GetSpeed() * 100.f;
+			float mid_deltasecond = newDistance / ZombieSpeed;
 			float after_deltasecond = deltasecond - mid_deltasecond;
 
 			ZombieMoveTo(after_deltasecond, indx);
@@ -152,7 +176,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 
 	OwnerZombie->SetActorLocation(zomlocation);
-	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(OwnerZombie->GetSpeed());
+	OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(ZombieSpeed);
 }
 
 void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
@@ -307,6 +331,10 @@ void AZombieAIController::Tick(float DeltaTime)
 		if (NearestPawn) {	// NearestPawn 존재 O -> 나를 포착함
 			if (m_bPlayerInSight == false) {
 				m_bPlayerInSight = true;
+
+				// 서버에서 통신을 받아와 설정해줘야하지만 일단 테스트(확인) 용으로 작성함 ~~~> 나중에 지워야함
+				OwnerZombie->targetType = OwnerZombie->TARGET::PLAYER;
+
 				ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
 				Send_Detected(); // 플레이어 감지 메시지 전송
 				LastSeenPlayer = BaseCharacter;
@@ -318,6 +346,10 @@ void AZombieAIController::Tick(float DeltaTime)
 		else {	// NearestPawn 존재 X -> 나를 못 봄
 			if (m_bPlayerInSight == true) {
 				m_bPlayerInSight = false;
+
+				// 서버에서 통신을 받아와 설정해줘야하지만 일단 테스트(확인) 용으로 작성함 ~~~> 나중에 지워야함
+				OwnerZombie->targetType = OwnerZombie->TARGET::PATROL;
+
 				Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
 
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Zombie #%d Lost Player ID #%d"), OwnerZombie->GetZombieId(), myPlayerId));

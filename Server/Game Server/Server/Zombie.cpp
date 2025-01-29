@@ -590,7 +590,6 @@ void Zombie::MoveTo(float deltasecond)
 	float directionX = dx / distance;
 	float directionY = dy / distance;
 
-	// 이동 거리 계산
 	// 좀비 속도 지정 (걷기/뛰기)
 	if (targetType == TARGET::INVESTIGATED || targetType == TARGET::PATROL) {	// 걷기
 		float walk_speed_offset = 0.f;
@@ -633,6 +632,7 @@ void Zombie::MoveTo(float deltasecond)
 		}
 	}
 
+	// 이동 거리 계산
 	float moveDistance = ZombieSpeed * deltasecond;
 
 	// 이동 벡터 계산

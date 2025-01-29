@@ -30,16 +30,17 @@ ARunningZombie::ARunningZombie()
 	//}
 
 
-	SetHP(20);
-	m_fHP_Prev = 20;
-	SetStartHP(20);
-	float speed = 3.f;
+	SetHP(RunningZombieStartHP);
+	m_fHP_Prev = RunningZombieStartHP;
+	SetStartHP(RunningZombieStartHP);
+	float speed = RunningZombieSpeed;
 	SetSpeed(speed);
-	GetCharacterMovement()->MaxWalkSpeed = speed * 100.f;
+	GetCharacterMovement()->MaxWalkSpeed = RunningZombieSpeed;
 	SetSTR(FMath::RandRange(4, 8)); 
 	SetSpecialAbility(true);
 	SetZombieName("RunningZombie");
-	SetTurningSpeed(90.f);
+	SetTurningSpeed(GetTurningSpeed());
+	targetType = TARGET::PATROL;
 }
 
 void ARunningZombie::BeginPlay()
