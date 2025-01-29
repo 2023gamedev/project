@@ -270,6 +270,12 @@ public:
 	// bool IsKey() { return m_bIsk; }
 	// bool IsTH() { return m_bIsk; }
 
+	FRotator GetSpringArmRot() { return m_rSpringArmRot; }
+	void SetSpringArmRot(FRotator springarmrot) { m_rSpringArmRot = springarmrot; }
+
+	float GetSpringArmPitch() { return m_fPitch; }
+	void SetSpringArmPitch(float pitch) { m_fPitch = pitch; }
+
 	float GetHP() { return m_fHP; }
 	void SetHP(float hp) { m_fHP = hp; }
 
@@ -665,6 +671,13 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int m_iOpenRoofKey;
+
+	// 스프링암 회전값
+	UPROPERTY(EditAnywhere)
+	FRotator m_rSpringArmRot;
+
+	UPROPERTY(EditAnywhere)
+	float m_fPitch;
 
 	float LastStopAnimTime = 0.f;
 

@@ -609,6 +609,11 @@ void ABaseCharacter::Tick(float DeltaTime)
 		}
 		GameTimerUIWidget->UpdateTimer();
 	}
+
+	if (SpringArm) {
+		SetSpringArmRot(SpringArm->GetComponentRotation());
+		SetSpringArmPitch(FMath::Clamp(m_rSpringArmRot.Pitch, -90.0f, 90.0f));
+	}
 }
 
 void ABaseCharacter::PostInitializeComponents()

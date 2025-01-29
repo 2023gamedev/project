@@ -19,6 +19,7 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 	m_bIsDead = false;
 	m_bIsAttacking = false;
 	m_bIsPickUp = false;
+	m_fPitch = 0.f;
 
 	// 위에 FObjectFinder는 기존것 밑에는 새롭게 애니메이션한 부분
 	//static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployee.BP_AMEmployee"));
@@ -70,6 +71,7 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		if (character) {
 			m_bIsInAir = character->GetMovementComponent()->IsFalling();
 			m_bIsHandInWeapon = character->IsNWHandIn();
+			m_fPitch = character->GetSpringArmPitch();
 		}
 	}
 }
