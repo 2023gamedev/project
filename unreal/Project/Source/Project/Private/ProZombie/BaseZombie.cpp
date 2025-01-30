@@ -770,6 +770,174 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			Material_Blood
 		);
 
+
+		TArray<FVector> Vertices;
+		TArray<int32> Triangles;
+		TArray<FVector> Normals;
+		TArray<FVector2D> UVs;
+		TArray<FColor> Colors;
+		TArray<FProcMeshTangent> Tangents;
+
+		// 모든 섹션에 대해 데이터 추출
+		for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_1->GetNumSections(); ++SectionIndex)
+		{
+			FProcMeshSection* Section = CutProceduralMesh_1->GetProcMeshSection(SectionIndex);
+
+			if (Section)
+			{
+				// 버텍스 배열 처리
+				for (const FProcMeshVertex& Vertex : Section->ProcVertexBuffer)
+				{
+					Vertices.Add(Vertex.Position);
+					Normals.Add(Vertex.Normal);
+					UVs.Add(Vertex.UV0);
+
+
+					const FVector XTangentStatic = Vertex.Tangent.TangentX;
+
+					Tangents.Add(FProcMeshTangent(FVector(XTangentStatic.X, XTangentStatic.Y, XTangentStatic.Z), false));
+
+					Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+				}
+
+				UE_LOG(LogTemp, Warning, TEXT("Section->ProcIndexBuffer.Num() : %d "), Section->ProcIndexBuffer.Num());
+
+				// 인덱스 배열 처리
+				for (int32 i = 0; i < Section->ProcIndexBuffer.Num(); i += 3)
+				{
+					Triangles.Add(Section->ProcIndexBuffer[i]);
+					Triangles.Add(Section->ProcIndexBuffer[i + 1]);
+					Triangles.Add(Section->ProcIndexBuffer[i + 2]);
+				}
+			}
+		}
+
+		TMap<int32, TSet<int32>> AdjacencyMap; // 버텍스 간 연결 정보
+		TMap<int32, int32> VertexToSectionMap; // 버텍스가 속한 섹션 정보
+
+		for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_1->GetNumSections(); SectionIndex++)
+		{
+			FProcMeshSection* Section = CutProceduralMesh_1->GetProcMeshSection(SectionIndex);
+
+			if (Section)
+			{
+				TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
+				TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
+
+				for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
+				{
+					int32 V1 = SectionTriangles[i];
+					int32 V2 = SectionTriangles[i + 1];
+					int32 V3 = SectionTriangles[i + 2];
+
+					// 머터리얼 섹션과 버텍스를 매핑
+					VertexToSectionMap.Add(V1, SectionIndex);
+					VertexToSectionMap.Add(V2, SectionIndex);
+					VertexToSectionMap.Add(V3, SectionIndex);
+
+					// 인접 리스트 생성
+					AdjacencyMap.FindOrAdd(V1).Add(V2);
+					AdjacencyMap.FindOrAdd(V1).Add(V3);
+					AdjacencyMap.FindOrAdd(V2).Add(V1);
+					AdjacencyMap.FindOrAdd(V2).Add(V3);
+					AdjacencyMap.FindOrAdd(V3).Add(V1);
+					AdjacencyMap.FindOrAdd(V3).Add(V2);
+				}
+			}
+		}
+
+		TSet<int32> VisitedVertices;
+		TArray<TArray<int32>> MeshChunks; // 분리된 메쉬 덩어리 그룹
+
+		for (const auto& Pair : AdjacencyMap)
+		{
+			int32 StartVertex = Pair.Key;
+
+			if (!VisitedVertices.Contains(StartVertex))
+			{
+				TArray<int32> CurrentChunk;
+				TArray<int32> Stack = { StartVertex };
+
+				while (Stack.Num() > 0)
+				{
+					int32 CurrentVertex = Stack.Pop();
+
+					if (!VisitedVertices.Contains(CurrentVertex))
+					{
+						VisitedVertices.Add(CurrentVertex);
+						CurrentChunk.Add(CurrentVertex);
+
+						for (int32 Neighbor : AdjacencyMap[CurrentVertex])
+						{
+							// 절단 단면 섹션(마지막 섹션)인 경우 연결을 무시 (단절된 상태 유지)
+							if (VertexToSectionMap[Neighbor] != CutProceduralMesh_1->GetNumSections() - 1)
+							{
+								Stack.Add(Neighbor);
+							}
+						}
+					}
+				}
+
+				MeshChunks.Add(CurrentChunk); // 현재 연결된 컴포넌트를 저장
+			}
+		}
+
+		for (const TArray<int32>& Chunk : MeshChunks)
+		{
+			TArray<FVector> ChunkVertices;
+			TArray<int32> ChunkTriangles;
+			TMap<int32, int32> VertexMapping;
+
+
+			TArray<FVector> ChunkNormals;
+			TArray<FVector2D> ChunkUVs;
+			TArray<FColor> ChunkColors;
+			TArray<FProcMeshTangent> ChunkTangents;
+
+			// 덩어리에 포함된 버텍스 추가
+			for (int32 OldIndex : Chunk)
+			{
+				int32 NewIndex = ChunkVertices.Add(Vertices[OldIndex]);
+				ChunkNormals.Add(Normals[OldIndex]);
+				ChunkUVs.Add(UVs[OldIndex]);
+				ChunkColors.Add(Colors[OldIndex]);
+				ChunkTangents.Add(Tangents[OldIndex]);
+
+				VertexMapping.Add(OldIndex, NewIndex);
+			}
+
+			// 해당 버텍스들이 포함된 삼각형 필터링
+			for (int32 i = 0; i < Triangles.Num(); i += 3)
+			{
+				int32 V1 = Triangles[i];
+				int32 V2 = Triangles[i + 1];
+				int32 V3 = Triangles[i + 2];
+
+				// 삼각형이 덩어리에 포함되는지 확인
+				if (Chunk.Contains(V1) && Chunk.Contains(V2) && Chunk.Contains(V3))
+				{
+					ChunkTriangles.Add(VertexMapping[V1]);
+					ChunkTriangles.Add(VertexMapping[V2]);
+					ChunkTriangles.Add(VertexMapping[V3]);
+				}
+				else
+				{
+					//UE_LOG(LogTemp, Warning, TEXT("Skipping triangle (%d, %d, %d), vertices not in chunk."), V1, V2, V3);
+				}
+			}
+			// 새로운 메쉬 생성 (실제 메쉬를 생성하지 않고 로그 찍기)
+			//UE_LOG(LogTemp, Log, TEXT("Creating mesh chunk with %d vertices and %d triangles."), ChunkVertices.Num(), ChunkTriangles.Num());
+
+			// 실제로 메쉬를 생성하지 않고, 로그 메시지만 출력
+			 UProceduralMeshComponent* NewMesh = NewObject<UProceduralMeshComponent>(Owner);
+
+			 NewMesh->CreateMeshSection(0, ChunkVertices, ChunkTriangles, ChunkNormals, ChunkUVs, ChunkColors, ChunkTangents, true);
+			 NewMesh->AttachToComponent(Owner->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+			 NewMesh->SetVisibility(true);
+			 NewMesh->RegisterComponent();
+		}
+
+
 		if (CutProceduralMesh_2)
 		{
 			CutProceduralMesh_2->RegisterComponent(); // 컴포넌트 등록
