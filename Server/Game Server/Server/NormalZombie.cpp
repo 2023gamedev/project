@@ -15,6 +15,8 @@ NormalZombie::NormalZombie(Zombie_Data z_d)
 {
 	SetHP(NormalZombieStartHP);
 
-	SetSpeed(NormalZombieSpeed);
+	//SetSpeed(NormalZombieSpeed);
+
+	SetZombieType(ZOMBIE_TYPE::NORMAL_ZOMBIE);
 
 }

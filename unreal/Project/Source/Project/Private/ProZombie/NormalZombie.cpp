@@ -36,16 +36,17 @@ ANormalZombie::ANormalZombie()
 	//
 
 
-	SetHP(20);
-	m_fHP_Prev = 20;
-	SetStartHP(20);
-	float speed = 2.f;
+	SetHP(NormalZombieStartHP);
+	m_fHP_Prev = NormalZombieStartHP;
+	SetStartHP(NormalZombieStartHP);
+	float speed = NormalZombieSpeed;
 	SetSpeed(speed);
-	GetCharacterMovement()->MaxWalkSpeed = speed * 100.f;
+	GetCharacterMovement()->MaxWalkSpeed = NormalZombieSpeed;
 	SetSTR(FMath::RandRange(4, 8));
 	SetSpecialAbility(false);
 	SetZombieName("NormalZombie");
-	SetTurningSpeed(90.f);
+	SetTurningSpeed(GetTurningSpeed());
+	targetType = TARGET::PATROL;
 }
 
 void ANormalZombie::BeginPlay()

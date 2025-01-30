@@ -15,6 +15,8 @@ RunningZombie::RunningZombie(Zombie_Data z_d)
 {
 	SetHP(RunningZombieStartHP);
 	
-	SetSpeed(RunningZombieSpeed);
+	//SetSpeed(RunningZombieSpeed);
+
+	SetZombieType(ZOMBIE_TYPE::RUNNING_ZOMBIE);
 
 }
