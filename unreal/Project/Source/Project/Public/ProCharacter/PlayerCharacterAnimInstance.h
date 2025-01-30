@@ -26,6 +26,7 @@ public:
 	void SetIsPawnRun(bool run) { m_bPawnRun = run; }
 	void SetIsPawnAir(bool air) { m_bIsInAir = air; }
 	void SetIsDead(bool dead) { m_bIsDead = dead; }
+	void SetPitch(float pitch) { m_fPitch = pitch; }
 
 	void PlayAttackMontage();
 	void PlayPickUpMontage();
@@ -84,6 +85,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool m_bIsPickUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+	float m_fPitch;
 
 	// 애니메이션 몽타주
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
