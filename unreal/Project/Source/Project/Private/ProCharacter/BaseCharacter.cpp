@@ -609,11 +609,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 		}
 		GameTimerUIWidget->UpdateTimer();
 	}
-
-	if (SpringArm) {
-		SetSpringArmRot(SpringArm->GetComponentRotation());
-		SetSpringArmPitch(FMath::Clamp(m_rSpringArmRot.Pitch, -90.0f, 90.0f));
-	}
 }
 
 void ABaseCharacter::PostInitializeComponents()
@@ -1533,7 +1528,22 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 	if (m_bIsAttacking) {
 		return;
 	}
+
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (Camera) {
+		// 1️⃣ 카메라의 현재 회전값 가져오기
+		FRotator CameraRot = Camera->GetComponentRotation();
+
+
+		SetSpringArmPitch( -(FMath::Clamp(CameraRot.Pitch, -90.0f, 90.0f)));
+		m_fPitch = FMath::GetMappedRangeValueClamped(
+			FVector2D(-90, 90), // 입력 범위 (-90 ~ 90)
+			FVector2D(-30, 30), // 출력 범위 (-30 ~ 30)
+			m_fPitch // 현재 Pitch 값
+		);
+		//UE_LOG(LogTemp, Warning, TEXT("m_fPitch: %.2f"), m_fPitch);
+		AnimInstance->SetPitch(m_fPitch);
+	}
 
 	AnimInstance->AttackStart();
 	AnimInstance->PlayAttackMontage();

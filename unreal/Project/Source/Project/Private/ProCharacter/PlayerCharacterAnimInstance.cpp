@@ -71,7 +71,6 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		if (character) {
 			m_bIsInAir = character->GetMovementComponent()->IsFalling();
 			m_bIsHandInWeapon = character->IsNWHandIn();
-			m_fPitch = character->GetSpringArmPitch();
 		}
 	}
 }

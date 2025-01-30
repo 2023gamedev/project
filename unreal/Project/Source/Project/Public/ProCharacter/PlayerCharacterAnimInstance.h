@@ -26,6 +26,7 @@ public:
 	void SetIsPawnRun(bool run) { m_bPawnRun = run; }
 	void SetIsPawnAir(bool air) { m_bIsInAir = air; }
 	void SetIsDead(bool dead) { m_bIsDead = dead; }
+	void SetPitch(float pitch) { m_fPitch = pitch; }
 
 	void PlayAttackMontage();
 	void PlayPickUpMontage();
