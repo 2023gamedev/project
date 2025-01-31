@@ -2018,6 +2018,7 @@ class ZombiePath final :
     kLocationFieldNumber = 5,
     kPacketTypeFieldNumber = 1,
     kZombieidFieldNumber = 2,
+    kTargetTypeFieldNumber = 6,
   };
   // .Protocol.Vector3 path1 = 3;
   bool has_path1() const;
@@ -2091,6 +2092,15 @@ class ZombiePath final :
   void _internal_set_zombieid(uint32_t value);
   public:
 
+  // uint32 target_type = 6;
+  void clear_target_type();
+  uint32_t target_type() const;
+  void set_target_type(uint32_t value);
+  private:
+  uint32_t _internal_target_type() const;
+  void _internal_set_target_type(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.ZombiePath)
  private:
   class _Internal;
@@ -2104,6 +2114,7 @@ class ZombiePath final :
     ::Protocol::Vector3* location_;
     uint32_t packet_type_;
     uint32_t zombieid_;
+    uint32_t target_type_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -7191,6 +7202,26 @@ inline void ZombiePath::set_allocated_location(::Protocol::Vector3* location) {
   }
   _impl_.location_ = location;
   // @@protoc_insertion_point(field_set_allocated:Protocol.ZombiePath.location)
+}
+
+// uint32 target_type = 6;
+inline void ZombiePath::clear_target_type() {
+  _impl_.target_type_ = 0u;
+}
+inline uint32_t ZombiePath::_internal_target_type() const {
+  return _impl_.target_type_;
+}
+inline uint32_t ZombiePath::target_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.ZombiePath.target_type)
+  return _internal_target_type();
+}
+inline void ZombiePath::_internal_set_target_type(uint32_t value) {
+  
+  _impl_.target_type_ = value;
+}
+inline void ZombiePath::set_target_type(uint32_t value) {
+  _internal_set_target_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.ZombiePath.target_type)
 }
 
 // -------------------------------------------------------------------

@@ -418,6 +418,8 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 						localZombiePath.Location = FVector(
 							zombiepath.location().x(), zombiepath.location().y(), zombiepath.location().z());
 
+						localZombiePath.targetType = zombiepath.target_type();
+
 						// 큐에 ZombiePath 객체 추가
 						Q_path.push(localZombiePath);
 

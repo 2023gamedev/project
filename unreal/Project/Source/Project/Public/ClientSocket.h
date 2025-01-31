@@ -132,11 +132,12 @@ struct ZombiePath
 	std::vector<std::tuple<float, float, float>> Path1;
 	std::vector<std::tuple<float, float, float>> Path2;
 	FVector Location;
+	uint32 targetType;
 
-	ZombiePath() : ZombieId(0), Path1(), Path2(), Location(FVector::ZeroVector) {}
+	ZombiePath() : ZombieId(0), Path1(), Path2(), Location(FVector::ZeroVector), targetType(0) {}
 
-	ZombiePath(uint32 InZombieId, const std::vector<std::tuple<float, float, float>>& InPath1, const std::vector<std::tuple<float, float, float>>& InPath2, const FVector& InLocation)
-		: ZombieId(InZombieId), Path1(InPath1), Path2(InPath2), Location(InLocation) {}
+	ZombiePath(uint32 InZombieId, const std::vector<std::tuple<float, float, float>>& InPath1, const std::vector<std::tuple<float, float, float>>& InPath2, const FVector& InLocation, uint32 IntargetType)
+		: ZombieId(InZombieId), Path1(InPath1), Path2(InPath2), Location(InLocation), targetType(IntargetType) {}
 };
 
 struct ZombieHP
