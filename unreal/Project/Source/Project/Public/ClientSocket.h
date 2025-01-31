@@ -128,6 +128,7 @@ struct CharacterSelect
 struct ZombiePath
 {
 	uint32 ZombieId;
+	uint32 TargetType;	// 현재 쫓아가고 있는 타겟의 타입 (0-NULL_TARGET,	1-PLAYER, 2-SHOUTING, 3-FOOTSOUND, 4-INVESTIGATED, 5-PATROL)
 	std::vector<std::tuple<float, float, float>> Path1;
 	std::vector<std::tuple<float, float, float>> Path2;
 	FVector Location;

@@ -442,6 +442,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			continue;  // 좀비를 찾을 수 없으면 다음으로 넘어감
 		}
 
+		//(*zombie)->targetType = tmp_path.TargetType;
+
 		bool isAnimPlaying_besideWalking = false;	// 걷기 애니메이션 말고 다른 애니메이션 (공격, 피격, 샤우팅) 재생 중인지
 
 		if ((*zombie)->CachedAnimInstance->Montage_IsPlaying((*zombie)->CachedAnimInstance->AttackMontage) == true
@@ -449,7 +451,6 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			|| (*zombie)->CachedAnimInstance->Montage_IsPlaying((*zombie)->CachedAnimInstance->ShoutingMontage) == true) {
 
 			isAnimPlaying_besideWalking = true;
-
 		}
 
 		if (isAnimPlaying_besideWalking == false) {	// 공격, 피격, 샤우팅 애니메이션이 재생 중이지 않을때만

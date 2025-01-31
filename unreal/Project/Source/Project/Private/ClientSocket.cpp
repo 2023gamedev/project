@@ -405,6 +405,9 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 						ZombiePath localZombiePath;
 						localZombiePath.ZombieId = zombiepath.zombieid();
 
+						// 타겟 타입 설정
+						//localZombiePath.TargetType = zombiepath.targettype();
+
 						// 경로 입력
 						localZombiePath.Path1.emplace_back(
 							zombiepath.path1().x(), zombiepath.path1().y(), zombiepath.path1().z());
