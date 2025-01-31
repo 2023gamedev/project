@@ -904,6 +904,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					Protocol::ZombiePath* zPath = zPathList.add_zombiepaths();
 					zPath->set_zombieid(zom->ZombieData.zombieID);
 					zPath->set_packet_type(10);
+					zPath->set_target_type(zom->targetType);
 
 					// Path1 설정
 					Protocol::Vector3* Destination1 = zPath->mutable_path1();

@@ -41,7 +41,7 @@ public:
 class Zombie {
 public:
     enum TARGET {
-        NULL_TARGET,
+        NULL_TARGET = 1,
         PLAYER,
         SHOUTING,
         FOOTSOUND,
