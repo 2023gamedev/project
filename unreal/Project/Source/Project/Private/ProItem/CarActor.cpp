@@ -132,7 +132,7 @@ void ACarActor::ChangeColorToRed()
 	UStaticMesh* SM_CAR_RED = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, TEXT("/Game/VehicleVarietyPack/Meshes/SM_Hatchback_RED.SM_Hatchback_RED")));
 
 	if (SM_CAR_RED) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Car #%d changed color to RED!!!"), CarID));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Car #%d changed color to RED!!!"), CarID));
 
 		StaticMesh->SetStaticMesh(SM_CAR_RED);
 	}

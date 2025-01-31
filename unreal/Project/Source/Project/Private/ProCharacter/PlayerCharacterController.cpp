@@ -144,7 +144,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 					break;
 			}
 			if (loop != 1) {
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Q_player cleared (try_pop count): %d"), pop_cnt));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Q_player cleared (try_pop count): %d"), pop_cnt));
 				//UE_LOG(LogTemp, Log, TEXT("Q_player cleared (try_pop count): %d"), pop_cnt);
 			}
 		}
@@ -218,7 +218,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 					break;
 			}
 			if (loop != 1) {
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Q_run cleared (try_pop count): %d"), pop_cnt));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("Q_run cleared (try_pop count): %d"), pop_cnt));
 				//UE_LOG(LogTemp, Log, TEXT("Q_run cleared (try_pop count): %d"), pop_cnt);
 			}
 		}
