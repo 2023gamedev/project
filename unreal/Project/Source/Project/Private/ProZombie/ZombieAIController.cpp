@@ -125,6 +125,8 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieWalkSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed() + walk_speed_offset;
+
+		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.7f);
 	}
 	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING || OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND) {	// 뛰기
 		float run_speed_offset = 0.f;
@@ -133,6 +135,8 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed() + run_speed_offset;
+
+		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(1.0f);
 	}
 
 	if (ZombieSpeed == 0.f) {
