@@ -13,6 +13,28 @@ void UGameChatUI::Init()
     {
         ChatText->OnTextCommitted.AddDynamic(this, &UGameChatUI::OnSendButtonEntered);
         ChatText->SetIsEnabled(true);
+        ChatText->SetVisibility(ESlateVisibility::Hidden);
+    }
+}
+
+bool UGameChatUI::IsChatVisible() const
+{
+    return ChatText && ChatText->GetVisibility() == ESlateVisibility::Visible;
+}
+
+
+void UGameChatUI::ToggleChatVisibility(bool bChatVisible)
+{
+    if (!ChatText) return;
+
+    if (bChatVisible)
+    {
+        ChatText->SetVisibility(ESlateVisibility::Visible);
+        ChatText->SetKeyboardFocus();
+    }
+    else
+    {
+        ChatText->SetVisibility(ESlateVisibility::Hidden);
     }
 }
 
@@ -58,6 +80,8 @@ void UGameChatUI::OnSendButtonEntered(const FText& Text, ETextCommit::Type Commi
     {
         if (!ChatText || ChatText->GetText().IsEmpty() || Text.IsEmpty())
         {
+            // 입력이 없으면 채팅창을 숨김
+            ToggleChatVisibility(false);
             return;
         }
 

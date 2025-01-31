@@ -11,7 +11,7 @@
 /**
  * 
  */
-// InputAction ¿ë Å¬·¡½º
+// InputAction ìš© í´ë˜ìŠ¤
 UCLASS()
 class PROJECT_API UInputDataAsset : public UDataAsset
 {
@@ -63,4 +63,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UInputAction* InputQuickKeyItem;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UInputAction* InputChatToggle;
 };

@@ -25,15 +25,21 @@ public:
 
 	void Init();
 
+	bool IsChatVisible() const;
+
 	void AddChatMessage(const FString& Message);
 
 	void SendChat(const FString& FormattedMessage);
+
+	void ToggleChatVisibility(bool bChatVisible);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UScrollBox* GameChatBox;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UEditableTextBox* ChatText;
+
+	bool bIsChatVisible = false;
 
 private:
 

@@ -739,6 +739,7 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputQuickBHItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickBHItem);
 				PEI->BindAction(InputActions->InputQuickHItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickHItem);
 				PEI->BindAction(InputActions->InputQuickKeyItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickKeyItem);
+				PEI->BindAction(InputActions->InputChatToggle, ETriggerEvent::Completed, this, &APlayerCharacterController::ChatToggle);
 				 
 			}
 			else
@@ -1030,6 +1031,30 @@ void APlayerCharacterController::QuickKeyItem(const FInputActionValue& Value)
 	e_KeyItem = true;
 }
 
+void APlayerCharacterController::ChatToggle(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Log, TEXT("ChatToggle"));
+
+	bool bIsChatVisible = basecharacter->GameChatUIWidget->IsChatVisible();
+
+	if (bIsChatVisible)
+	{
+		// 채팅창이 열려 있으면 닫기
+		basecharacter->GameChatUIWidget->ToggleChatVisibility(false);
+		SetInputMode(FInputModeGameOnly());
+		bShowMouseCursor = false;
+	}
+	else
+	{
+		// 채팅창이 닫혀 있으면 열기
+		basecharacter->GameChatUIWidget->ToggleChatVisibility(true);
+		basecharacter->GameChatUIWidget->SetKeyboardFocus();
+		SetInputMode(FInputModeGameOnly());
+		bShowMouseCursor = false;
+	}
+}
 
 
 void APlayerCharacterController::InputCoolTime()

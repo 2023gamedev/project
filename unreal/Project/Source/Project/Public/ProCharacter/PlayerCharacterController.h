@@ -57,6 +57,8 @@ public:
 	void QuickHItem(const FInputActionValue& Value);
 	void QuickKeyItem(const FInputActionValue& Value);
 
+	void ChatToggle(const FInputActionValue& Value);
+
 	FTimerHandle InputCoolTimeHandle;
 	void InputCoolTime();
 	bool m_bIsInputEnabled = true;
