@@ -41,7 +41,7 @@ protected:
 
 public:	
 	enum TARGET {
-		NULL_TARGET,
+		NULL_TARGET = 1,
 		PLAYER,
 		SHOUTING,
 		FOOTSOUND,
@@ -303,5 +303,5 @@ public:
 	const float ZombieHeardFootSoundSpeed_Offset = -20.f;   // 발소리를 들었을 때는 뛰기 스피드에서 -20.f 스피드
 
 	
-	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(0-NULL_TARGET,	1-PLAYER, 2-SHOUTING, 3-FOOTSOUND, 4-INVESTIGATED, 5-PATROL)
+	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL)
 };

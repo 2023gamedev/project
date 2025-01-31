@@ -1561,13 +1561,13 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 		FRotator CameraRot = Camera->GetComponentRotation();
 
 
-		SetSpringArmPitch( -(FMath::Clamp(CameraRot.Pitch, -90.0f, 90.0f)));
+		SetSpringArmPitch( -(FMath::Clamp(CameraRot.Pitch, -30.0f, 10.0f)));
 		m_fPitch = FMath::GetMappedRangeValueClamped(
-			FVector2D(-90, 90), // 입력 범위 (-90 ~ 90)
+			FVector2D(-10, 30), // 입력 범위 (-10 ~ 30)
 			FVector2D(-30, 30), // 출력 범위 (-30 ~ 30)
 			m_fPitch // 현재 Pitch 값
 		);
-		//UE_LOG(LogTemp, Warning, TEXT("m_fPitch: %.2f"), m_fPitch);
+		UE_LOG(LogTemp, Warning, TEXT("m_fPitch: %.2f"), m_fPitch);
 		AnimInstance->SetPitch(m_fPitch);
 	}
 

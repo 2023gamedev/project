@@ -145,7 +145,7 @@ public:
     std::chrono::steady_clock::time_point waitAnimStartTime;      // 좀비 대기 시작 시간 (애니메이션을 맞춰 대기하기 위한 용도)
     std::chrono::steady_clock::time_point waitBrainlessStartTime;      // 좀비 대기 시작 시간 (숨고르기를 맞춰 대기하기 위한 용도)
 
-    TARGET targetType;
+    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL)
 
     int ZombiePathIndex = 0;
 
