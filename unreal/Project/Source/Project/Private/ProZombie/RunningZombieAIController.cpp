@@ -347,12 +347,10 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 			if (m_bPlayerInSight == false) {
 				m_bPlayerInSight = true;
 
-				// 서버에서 통신을 받아와 설정해줘야하지만 일단 테스트(확인) 용으로 작성함 ~~~> 나중에 지워야함
-				OwnerZombie->targetType = OwnerZombie->TARGET::PLAYER;
-
 				ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
 				Send_Detected(); // 플레이어 감지 메시지 전송
 				LastSeenPlayer = BaseCharacter;
+
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 			}
 		}
@@ -360,10 +358,8 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 			if (m_bPlayerInSight == true) {
 				m_bPlayerInSight = false;
 
-				// 서버에서 통신을 받아와 설정해줘야하지만 일단 테스트(확인) 용으로 작성함 ~~~> 나중에 지워야함
-				OwnerZombie->targetType = OwnerZombie->TARGET::PATROL;
-
 				Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
+
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Lost Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 			}
 		}
