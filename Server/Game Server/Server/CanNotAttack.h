@@ -18,7 +18,7 @@ public:
             cout << " DistanceTo_PlayerInsight Map ERROR!!! -> Detected is done [Player is in sight -> (PlayerInSight == true)] but DistanceTo_PlayerInsight Map is empty" << endl;
         }
 
-        for (auto player : playerDB_BT[zom.roomid]) {
+        /*for (auto player : playerDB_BT[zom.roomid]) {
             // 죽은 플레이어 무시
             if (player.second.health <= 0) {
                 continue;
@@ -52,7 +52,7 @@ public:
             }
 
             //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
-        }
+        }*/
 
         return result;
     }
