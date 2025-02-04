@@ -864,7 +864,166 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 
 		// test3 절단된 섹션
-		TSet<FVector> CutSectionVertices; 
+		//TSet<FVector> CutSectionVertices; 
+
+		//TArray<FVector> Vertices;
+		//TArray<int32> Triangles;
+		//TArray<FVector> Normals;
+		//TArray<FVector2D> UVs;
+		//TArray<FColor> Colors;
+		//TArray<FProcMeshTangent> Tangents;
+
+		//FProcMeshSection* CutSection = CutProceduralMesh_1->GetProcMeshSection(CutProceduralMesh_1->GetNumSections() - 1);
+		//if (CutSection)
+		//{
+		//	for (const FProcMeshVertex& Vertex : CutSection->ProcVertexBuffer)
+		//	{
+		//		CutSectionVertices.Add(Vertex.Position);  
+		//	}
+		//}
+
+		//TSet<int32> VisitedVertices; 
+
+		//TArray<TArray<int32>> MeshChunks;
+
+		//TMap<int32, TSet<int32>> AdjacencyMap; 
+		//TMap<int32, int32> VertexToSectionMap;
+
+		//for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_1->GetNumSections(); ++SectionIndex)
+		//{
+		//	FProcMeshSection* Section = CutProceduralMesh_1->GetProcMeshSection(SectionIndex);
+
+		//	if (Section)
+		//	{
+		//		TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
+		//		TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
+
+		//		for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
+		//		{
+		//			int32 V1 = SectionTriangles[i];
+		//			int32 V2 = SectionTriangles[i + 1];
+		//			int32 V3 = SectionTriangles[i + 2];
+
+		//			// 🔹 버텍스가 속한 섹션을 저장
+		//			VertexToSectionMap.Add(V1, SectionIndex);
+		//			VertexToSectionMap.Add(V2, SectionIndex);
+		//			VertexToSectionMap.Add(V3, SectionIndex);
+
+		//			// 🔹 인접 리스트 구축 (버텍스 간 연결 정보)
+		//			AdjacencyMap.FindOrAdd(V1).Add(V2);
+		//			AdjacencyMap.FindOrAdd(V1).Add(V3);
+		//			AdjacencyMap.FindOrAdd(V2).Add(V1);
+		//			AdjacencyMap.FindOrAdd(V2).Add(V3);
+		//			AdjacencyMap.FindOrAdd(V3).Add(V1);
+		//			AdjacencyMap.FindOrAdd(V3).Add(V2);
+		//		}
+
+		//		for (const FProcMeshVertex& Vertex : Section->ProcVertexBuffer)
+		//		{
+		//			Vertices.Add(Vertex.Position);
+		//			Normals.Add(Vertex.Normal);
+		//			UVs.Add(Vertex.UV0);
+
+		//			const FVector XTangentStatic = Vertex.Tangent.TangentX;
+
+		//			Tangents.Add(FProcMeshTangent(FVector(XTangentStatic.X, XTangentStatic.Y, XTangentStatic.Z), false));
+
+		//			Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+		//		}
+
+		//		for (int32 i = 0; i < Section->ProcIndexBuffer.Num(); i += 3)
+		//		{
+		//			Triangles.Add(Section->ProcIndexBuffer[i]);
+		//			Triangles.Add(Section->ProcIndexBuffer[i + 1]);
+		//			Triangles.Add(Section->ProcIndexBuffer[i + 2]);
+		//		}
+
+		//		TArray<int32> CurrentChunk;
+		//		TArray<int32> Stack;
+
+		//		for (int32 i = 0; i < Section->ProcVertexBuffer.Num(); ++i)
+		//		{
+		//			int32 VertexIndex = i;
+		//			if (!VisitedVertices.Contains(VertexIndex))
+		//			{
+		//				Stack.Add(VertexIndex);
+		//				while (Stack.Num() > 0)
+		//				{
+		//					int32 CurrentVertex = Stack.Pop();
+
+		//					if (!VisitedVertices.Contains(CurrentVertex))
+		//					{
+		//						VisitedVertices.Add(CurrentVertex);
+		//						CurrentChunk.Add(CurrentVertex);
+
+		//						for (int32 Neighbor : AdjacencyMap[CurrentVertex]) 
+		//						{
+		//							if (!VisitedVertices.Contains(Neighbor))
+		//							{
+		//								Stack.Add(Neighbor);
+		//							}
+		//						}
+		//					}
+		//				}
+
+		//				if (CurrentChunk.Num() > 0)
+		//				{
+		//					MeshChunks.Add(CurrentChunk);
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
+
+
+		//for (const TArray<int32>& Chunk : MeshChunks)
+		//{
+		//	TArray<FVector> ChunkVertices;
+		//	TArray<int32> ChunkTriangles;
+		//	TArray<FVector> ChunkNormals;
+		//	TArray<FVector2D> ChunkUVs;
+		//	TArray<FColor> ChunkColors;
+		//	TArray<FProcMeshTangent> ChunkTangents;
+
+		//	TMap<int32, int32> VertexMapping;
+
+
+		//	for (int32 OldIndex : Chunk)
+		//	{
+		//		int32 NewIndex = ChunkVertices.Add(Vertices[OldIndex]);
+		//		ChunkNormals.Add(Normals[OldIndex]);
+		//		ChunkUVs.Add(UVs[OldIndex]);
+		//		ChunkColors.Add(Colors[OldIndex]);
+		//		ChunkTangents.Add(Tangents[OldIndex]);
+
+		//		VertexMapping.Add(OldIndex, NewIndex);
+		//	}
+
+
+		//	for (int32 i = 0; i < Triangles.Num(); i += 3)
+		//	{
+		//		int32 V1 = Triangles[i];
+		//		int32 V2 = Triangles[i + 1];
+		//		int32 V3 = Triangles[i + 2];
+
+		//		if (Chunk.Contains(V1) && Chunk.Contains(V2) && Chunk.Contains(V3))
+		//		{
+		//			ChunkTriangles.Add(VertexMapping[V1]);
+		//			ChunkTriangles.Add(VertexMapping[V2]);
+		//			ChunkTriangles.Add(VertexMapping[V3]);
+		//		}
+		//	}
+
+		//	UProceduralMeshComponent* NewMesh = NewObject<UProceduralMeshComponent>(Owner);
+		//	NewMesh->CreateMeshSection(0, ChunkVertices, ChunkTriangles, ChunkNormals, ChunkUVs, ChunkColors, ChunkTangents, true);
+		//	NewMesh->AttachToComponent(Owner->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		//	NewMesh->SetVisibility(true);
+		//	NewMesh->RegisterComponent();
+		//}
+
+
+		// test4
+		TSet<FVector> CutSectionVertices;  // 절단된 단면 버텍스 저장
 
 		TArray<FVector> Vertices;
 		TArray<int32> Triangles;
@@ -873,81 +1032,95 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 		TArray<FColor> Colors;
 		TArray<FProcMeshTangent> Tangents;
 
+		TMap<int32, TSet<int32>> AdjacencyMap;  
+		TMap<int32, int32> VertexToSectionMap;  
+
 		FProcMeshSection* CutSection = CutProceduralMesh_1->GetProcMeshSection(CutProceduralMesh_1->GetNumSections() - 1);
 		if (CutSection)
 		{
 			for (const FProcMeshVertex& Vertex : CutSection->ProcVertexBuffer)
 			{
-				CutSectionVertices.Add(Vertex.Position);  
+				CutSectionVertices.Add(Vertex.Position);
 			}
 		}
-
-		TSet<int32> VisitedVertices; 
-
-		TArray<TArray<int32>> MeshChunks;
-
-
 		for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_1->GetNumSections(); ++SectionIndex)
 		{
 			FProcMeshSection* Section = CutProceduralMesh_1->GetProcMeshSection(SectionIndex);
+			if (!Section) continue;
 
-			if (Section)
+			TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
+			TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
+
+			TMap<int32, int32> LocalToGlobalVertexMap;  
+
+			for (int32 i = 0; i < SectionVertices.Num(); i++)
 			{
+				int32 GlobalIndex = Vertices.Add(SectionVertices[i].Position);
+				Normals.Add(SectionVertices[i].Normal);
+				UVs.Add(SectionVertices[i].UV0);
+				Tangents.Add(SectionVertices[i].Tangent);
+				Colors.Add(FColor(0, 0, 0, 255));
 
-				for (const FProcMeshVertex& Vertex : Section->ProcVertexBuffer)
+				LocalToGlobalVertexMap.Add(i, GlobalIndex);
+				VertexToSectionMap.Add(GlobalIndex, SectionIndex);
+			}
+
+			for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
+			{
+				int32 V1 = LocalToGlobalVertexMap[SectionTriangles[i]];
+				int32 V2 = LocalToGlobalVertexMap[SectionTriangles[i + 1]];
+				int32 V3 = LocalToGlobalVertexMap[SectionTriangles[i + 2]];
+
+				Triangles.Add(V1);
+				Triangles.Add(V2);
+				Triangles.Add(V3);
+
+				AdjacencyMap.FindOrAdd(V1).Add(V2);
+				AdjacencyMap.FindOrAdd(V1).Add(V3);
+				AdjacencyMap.FindOrAdd(V2).Add(V1);
+				AdjacencyMap.FindOrAdd(V2).Add(V3);
+				AdjacencyMap.FindOrAdd(V3).Add(V1);
+				AdjacencyMap.FindOrAdd(V3).Add(V2);
+			}
+		}
+
+		TSet<int32> VisitedVertices;
+		TArray<TArray<int32>> MeshChunks;
+
+		for (const auto& Pair : AdjacencyMap)
+		{
+			int32 StartVertex = Pair.Key;
+			if (VisitedVertices.Contains(StartVertex)) continue;
+
+			TArray<int32> CurrentChunk;
+			TArray<int32> Stack = { StartVertex };
+
+			bool bContainsCutVertex = false;
+
+			while (Stack.Num() > 0)
+			{
+				int32 CurrentVertex = Stack.Pop();
+				if (VisitedVertices.Contains(CurrentVertex)) continue;
+
+				VisitedVertices.Add(CurrentVertex);
+				CurrentChunk.Add(CurrentVertex);
+
+				if (CutSectionVertices.Contains(Vertices[CurrentVertex]))
 				{
-					Vertices.Add(Vertex.Position);
-					Normals.Add(Vertex.Normal);
-					UVs.Add(Vertex.UV0);
-
-					const FVector XTangentStatic = Vertex.Tangent.TangentX;
-
-					Tangents.Add(FProcMeshTangent(FVector(XTangentStatic.X, XTangentStatic.Y, XTangentStatic.Z), false));
-
-					Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+					bContainsCutVertex = true;
 				}
 
-				for (int32 i = 0; i < Section->ProcIndexBuffer.Num(); i += 3)
+				for (int32 Neighbor : AdjacencyMap[CurrentVertex])
 				{
-					Triangles.Add(Section->ProcIndexBuffer[i]);
-					Triangles.Add(Section->ProcIndexBuffer[i + 1]);
-					Triangles.Add(Section->ProcIndexBuffer[i + 2]);
-				}
-
-				TArray<int32> CurrentChunk;
-				TArray<int32> Stack;
-
-				for (int32 i = 0; i < Section->ProcVertexBuffer.Num(); ++i)
-				{
-					int32 VertexIndex = i;
-					if (!VisitedVertices.Contains(VertexIndex))
+					if (!VisitedVertices.Contains(Neighbor))
 					{
-						Stack.Add(VertexIndex);
-						while (Stack.Num() > 0)
-						{
-							int32 CurrentVertex = Stack.Pop();
-
-							if (!VisitedVertices.Contains(CurrentVertex))
-							{
-								VisitedVertices.Add(CurrentVertex);
-								CurrentChunk.Add(CurrentVertex);
-
-								for (int32 Neighbor : AdjacencyMap[CurrentVertex]) 
-								{
-									if (!VisitedVertices.Contains(Neighbor))
-									{
-										Stack.Add(Neighbor);
-									}
-								}
-							}
-						}
-
-						if (CurrentChunk.Num() > 0)
-						{
-							MeshChunks.Add(CurrentChunk);
-						}
+						Stack.Add(Neighbor);
 					}
 				}
+			}
+			if (!bContainsCutVertex)
+			{
+				MeshChunks.Add(CurrentChunk);
 			}
 		}
 
@@ -972,6 +1145,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				ChunkColors.Add(Colors[OldIndex]);
 				ChunkTangents.Add(Tangents[OldIndex]);
 
+				//			const FVector XTangentStatic = Vertex.Tangent.TangentX;
+
+				//			Tangents.Add(FProcMeshTangent(FVector(XTangentStatic.X, XTangentStatic.Y, XTangentStatic.Z), false));
+
 				VertexMapping.Add(OldIndex, NewIndex);
 			}
 
@@ -990,12 +1167,14 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				}
 			}
 
+
 			UProceduralMeshComponent* NewMesh = NewObject<UProceduralMeshComponent>(Owner);
 			NewMesh->CreateMeshSection(0, ChunkVertices, ChunkTriangles, ChunkNormals, ChunkUVs, ChunkColors, ChunkTangents, true);
 			NewMesh->AttachToComponent(Owner->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 			NewMesh->SetVisibility(true);
 			NewMesh->RegisterComponent();
 		}
+
 
 		// TEST1
 		
