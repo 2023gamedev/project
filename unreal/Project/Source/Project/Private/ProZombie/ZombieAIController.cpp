@@ -97,11 +97,17 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 		if (idleDuration >= 0.3f) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
 			OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	// 애니메이션 idle로 전환
+
+			if (idleDuration >= 1.5f) {	// 만약 좀비가 제자리에 1.5초 이상 있을 시에
+				OwnerZombie->CachedAnimInstance->SetIsStandingStill(true);	// 애니메이션 standing still로 전환
+			}
 		}
+
 		return;
 	}
 	else {
 		idleDuration = 0;	// 다시 초기화
+		OwnerZombie->CachedAnimInstance->SetIsStandingStill(false);		// 다시 초기화
 	}
 
 

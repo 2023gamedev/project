@@ -29,6 +29,7 @@ public:
 	void SetIsCuttingDead(bool dead) { m_bIsCuttingDead = dead; }
 	void SetIsStanding(bool stand) { m_bIsStanding = stand; }
 	void SetPlayAnimSpeed(float speed) { m_fPlayAnimSpeed = speed; }
+	void SetIsStandingStill(bool standstill) { m_bIsStandingStill = standstill; }
 
 	void PlayAttackMontage();
 	void PlayShoutingMontage();
@@ -62,6 +63,8 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = AnimSpeed, Meta = (AllowPrivateAccess = true))
 	float m_fPlayAnimSpeed;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = StandingStill, Meta = (AllowPrivateAccess = true))
+	bool m_bIsStandingStill;
 
 private:
 	UFUNCTION()

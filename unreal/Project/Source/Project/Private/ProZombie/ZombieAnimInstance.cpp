@@ -9,6 +9,7 @@ UZombieAnimInstance::UZombieAnimInstance()
 	m_bIsNormalDead = false;
 	m_bIsCuttingDead = false;
 	m_bIsStanding = false;
+
 	// 위에 FObjectFinder는 기존것 밑에는 새롭게 애니메이션한 부분
 	//static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/ZombieAsset/Animation/BP_AMAttackZombie.BP_AMAttackZombie"));
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/ZombieAsset/TAnimation/BP_AMAttackZombieT.BP_AMAttackZombieT"));
