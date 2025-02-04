@@ -813,58 +813,52 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 
 			//<Selector-Detect> 실행
-			result = zombie_bt_map[roomid].sel_detect->Sel_Detect(*zom);
+			zombie_bt_map[roomid].sel_detect->Sel_Detect(*zom);
 
 			//<Selector-Detect> 결과 값에 따라 다음 Task들 실행
-			if (result == "CanSeePlayer-Succeed") {
+			if (zombie_bt_map[roomid].t_canseeplayer->result) {
 
 				//<Selector-CanSeePlayer> 실행
-				result = zombie_bt_map[roomid].sel_canseeplayer->Sel_CanSeePlayer(*zom);
+				zombie_bt_map[roomid].sel_canseeplayer->Sel_CanSeePlayer(*zom);
 
 				//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 실행
-				if (result == "CanAttack-Succeed") {
+				if (zombie_bt_map[roomid].t_canattack->result) {
 
 					//{Sequence-CanAttack} 실행
-					result = zombie_bt_map[roomid].seq_canattack.Seq_CanAttack(*zom);
+					zombie_bt_map[roomid].seq_canattack.Seq_CanAttack(*zom);
 
 				}
-				else if (result == "CanNotAttack-Succeed") {
+				else if (zombie_bt_map[roomid].t_cannotattack->result) {
 
 					//{Sequence-CanNotAttack} 실행
-					result = zombie_bt_map[roomid].seq_cannotattack.Seq_CanNotAttack(*zom);
+					zombie_bt_map[roomid].seq_cannotattack.Seq_CanNotAttack(*zom);
 
-				}
-				else {	//result == "Fail"
-					cout << "<Selector-CanSeePlayer> EEEERRRROOOOOORRRR - ZombieID #" << zom->ZombieData.zombieID << endl;
 				}
 
 			}
-			else if (result == "HasShouting-Succeed") {
+			else if (zombie_bt_map[roomid].t_hasshouting->result) {
 
 				//{Sequence-HasShouting} 실행
-				result = zombie_bt_map[roomid].seq_hasshouting.Seq_HasShouting(*zom);
+				zombie_bt_map[roomid].seq_hasshouting.Seq_HasShouting(*zom);
 
 			}
-			else if (result == "HasFootSound-Succeed") {
+			else if (zombie_bt_map[roomid].t_hasfootsound->result) {
 
 				//{Sequence-HasFootSound} 실행
-				result = zombie_bt_map[roomid].seq_hasfootsound.Seq_HasFootSound(*zom);
+				zombie_bt_map[roomid].seq_hasfootsound.Seq_HasFootSound(*zom);
 
 			}
-			else if (result == "HasInvestigated-Succeed") {
+			else if (zombie_bt_map[roomid].t_hasinvestigated->result) {
 
 				//{Sequence-HasInvestigated} 실행
-				result = zombie_bt_map[roomid].seq_hasinvestigated.Seq_HasInvestigated(*zom);
+				zombie_bt_map[roomid].seq_hasinvestigated.Seq_HasInvestigated(*zom);
 
 			}
-			else if (result == "NotHasLastKnownPlayerLocation-Succeed") {
+			else if (zombie_bt_map[roomid].t_nothaslastknownplayerlocation->result) {
 
 				//{Sequence-NotHasLastKnownPlayerLocation} 실행
-				result = zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
+				zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
 
-			}
-			else {	//result == "Fail"
-				cout << "<Selector-Detect> EEEERRRROOOOOORRRR - ZombieID #" << zom->ZombieData.zombieID << endl;
 			}
 
 #ifdef	ENABLE_BT_LOG
@@ -879,6 +873,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 #endif
 		}
 
+		// send_path 통신작업
 		for (const auto player : playerDB_BT[roomid]) {
 			Protocol::ZombiePathList zPathList;
 			zPathList.set_packet_type(10);
@@ -886,7 +881,6 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			for (const auto zom : zombieDB_BT[roomid]) {
 				if (player.second.floor == zom->z_floor) {	// 플레이어 같은 층에 있는 좀비의 path만 받음
 					//cout << "<<방 #" << roomid << " - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
-
 
 					// path 보낼 필요 없는 좀비들 예외처리 (최적화)
 					if (zom->GetHP() <= 0.f

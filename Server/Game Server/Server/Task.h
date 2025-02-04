@@ -1,42 +1,44 @@
 ﻿#pragma once
 
 #include <iostream>
-#include <string>
 
 #include "Zombie.h"
 
 using std::cout;
 using std::endl;
-using std::string;
 
 
 class Zombie;
 
 class Task {
 public:
+    //결과값 저장
+    bool result = false;
+
+
     //다음으로 행동할 Task 감지 [Selector-Service]
-    virtual string Detect(Zombie& zom) const = 0;
+    virtual bool Detect(Zombie& zom) { return false; };
 
     //플레이어를 보았는가 감지 [Selector-Decorator]
-    virtual string CanSeePlayer(Zombie& zom) const = 0;
+    virtual bool CanSeePlayer(Zombie& zom) { return false; };
 
     //공격 범위 내 검사 [Sequence-Decorator]
-    virtual string CanAttack(Zombie& zom) const = 0;
+    virtual bool CanAttack(Zombie& zom) { return false; };
 
     //CanAttack()의 역조건 [Sequence-Decorator]
-    virtual string CanNotAttack(Zombie& zom) const = 0;
+    virtual bool CanNotAttack(Zombie& zom) { return false; };
 
     //샤우팅 반경 내 검사 [Sequence-Decorator]
-    virtual string HasShouting(Zombie& zom) const = 0;
+    virtual bool HasShouting(Zombie& zom) { return false; };
 
     //발소리 반경 내 검사 [Sequence-Decorator]
-    virtual string HasFootSound(Zombie& zom) const = 0;
+    virtual bool HasFootSound(Zombie& zom) { return false; };
 
     //플레이어의 마지막 위치를 기억하는지 검사 [Sequence-Decorator]
-    virtual string HasInvestigated(Zombie& zom) const = 0;
+    virtual bool HasInvestigated(Zombie& zom) { return false; };
 
     //HasInvestigated()의 역조건 [Sequence-Decorator]
-    virtual string NotHasLastKnownPlayerLocation(Zombie& zom) const = 0;
+    virtual bool NotHasLastKnownPlayerLocation(Zombie& zom) { return false; };
 
 
     Task() = default;

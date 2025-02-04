@@ -7,17 +7,15 @@
 class TCanNotAttack : public Task {
 public:
 
-    string CanSeePlayer(Zombie& zom) const override {
+    bool CanSeePlayer(Zombie& zom) override {
         //cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
 
-        bool result = true;
+        result = true;
 
         if (zom.DistanceTo_PlayerInsight.size() == 0) {
             //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: \"false\"" << endl;
             cout << "Zombie #" << zom.ZombieData.zombieID;
             cout << " DistanceTo_PlayerInsight Map ERROR!!! -> Detected is done [Player is in sight -> (PlayerInSight == true)] but DistanceTo_PlayerInsight Map is empty" << endl;
-
-            return "Fail";
         }
 
         for (auto player : playerDB_BT[zom.roomid]) {
@@ -42,8 +40,6 @@ public:
 
         if (result) {
             //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
-
-            return "CanNotAttack-Succeed";
         }
         else {  // 사실상 여기에 걸리면 안됨!
             if (zom.PlayerInSight == false) {
@@ -56,19 +52,9 @@ public:
             }
 
             //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
-
-            return "Fail";
         }
-    }
 
-    //사실상 더미 함수들
-    string Detect(Zombie& zom) const override { return "Fail"; };
-    //string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
-    string CanAttack(Zombie& zom) const override { return "Fail"; };
-    string CanNotAttack(Zombie& zom) const override { return "Fail"; };
-    string HasShouting(Zombie& zom) const override { return "Fail"; };
-    string HasFootSound(Zombie& zom) const override { return "Fail"; };
-    string HasInvestigated(Zombie& zom) const override { return "Fail"; };
-    string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
+        return result;
+    }
 
 };

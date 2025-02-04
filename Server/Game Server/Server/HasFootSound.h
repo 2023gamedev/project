@@ -6,33 +6,21 @@
 class THasFootSound : public Task {
 public:
 
-    string Detect(Zombie& zom) const override {
+    bool Detect(Zombie& zom) override {
         //cout << "<Detect>의 [HasFootSound Task] 호출" << endl;
 
-        bool result = zom.FootSound_Update_Check();
+        result = zom.FootSound_Update_Check();
 
-        if (result == true) // 새로운 발소리를 들었을 경우에만 실행해서 가장 가까운 
+        if (result == true) // 새로운 발소리를 들었을 경우에만 실행해서 가장 가까운 플레이어의 발소리를 목표지점으로
             zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);
 
-        if (zom.HeardFootSound == true) // FootSound_Update_Check 결과 상관없이 이미 근처 발소리를 들은 경우에는 -> 계속 실행
+        if (zom.HeardFootSound == true) // FootSound_Update_Check 결과 상관없이 이미 근처 발소리를 들은 경우에는(이전에 들은 발소리를 아직 기억하는 경우) -> 계속 실행
             result = true;
 
         //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [HasFootSound Task] 결과: \"" << boolalpha << result << "\"" << endl;
         //cout << endl;
 
-        if (result)
-            return "HasFootSound-Succeed";
-        else
-            return "Fail";
+        return result;
     }
 
-    //사실상 더미 함수들
-    //string Detect(Zombie& zom) const override { return "Fail"; };
-    string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
-    string CanAttack(Zombie& zom) const override { return "Fail"; };
-    string CanNotAttack(Zombie& zom) const override { return "Fail"; };
-    string HasShouting(Zombie& zom) const override { return "Fail"; };
-    string HasFootSound(Zombie& zom) const override { return "Fail"; };
-    string HasInvestigated(Zombie& zom) const override { return "Fail"; };
-    string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
 };

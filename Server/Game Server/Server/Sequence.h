@@ -18,109 +18,106 @@ public:
     Sequence() = default;
 
 
-    string Seq_CanAttack(Zombie& zom) {
+    bool Seq_CanAttack(Zombie& zom) {
         //cout << "Sequence {CanAttack} 함수 호출" << endl;
         //cout << endl;
+
         for (const auto& child : seq_children) {
-            string result = child->CanAttack(zom);
-            if ("Fail" != result) {
-                //cout << "\"{Sequence CanAttack}의 Task 중 [" << result << "]!!!\"" << endl;
-                //cout << endl;
-                return result;
-            }
+            result = child->CanAttack(zom);
         }
-        cout << "\"Sequence CanAttack [ERROR]!!!\"" << endl;
-        cout << endl;
-        return "Fail";      //이건 실패 할 수 있음 (여기가 공격을 실행하는 Task인데 좀비의 공격이 벽에 막히는 경우를 생각해본다면) 
+
+        if (result == false) {
+            cout << "\"Sequence CanAttack [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;      //이건 실패 할 수 있음 (여기가 공격을 실행하는 Task인데 좀비의 공격이 벽에 막히는 경우를 생각해본다면) 
                             // [x] -> 공격 명령만 주고 실제 충돌체크는 클라에서 체크하고 결과 보내줌 (그래서 지금 시퀀스 CanAttack의 유일한 Task인 Attack에서 무조건 성공 리턴하게 만들어 놓음)
     }
 
-    string Seq_CanNotAttack(Zombie& zom) {
+    bool Seq_CanNotAttack(Zombie& zom) {
         //cout << "Sequence {CanNotAttack} 함수 호출" << endl;
         //cout << endl;
+
         for (const auto& child : seq_children) {
-            string result = child->CanNotAttack(zom);
-            if ("Fail" != result) {
-                //cout << "\"{Sequence CanNotAttack}의 Task 중 [" << result << "]!!!\"" << endl;
-                //cout << endl;
-                return result;
-            }
+            result = child->CanNotAttack(zom);
         }
-        cout << "\"Sequence CanNotAttack [ERROR]!!!\"" << endl;
-        cout << endl;
-        return "Fail";   //사실상 실패할 일은 없긴하지만
+
+        if (result == false) {
+            cout << "\"Sequence CanNotAttack [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;
     }
 
-    string Seq_HasShouting(Zombie& zom) {
+    bool Seq_HasShouting(Zombie& zom) {
+        //cout << "Sequence {HasShouting} 함수 호출" << endl;
+        //cout << endl;
+
         for (const auto& child : seq_children) {
-            string result = child->HasShouting(zom);
-            if ("Fail" != result) {
-                return result;
-            }
+            result = child->HasShouting(zom);
         }
-        cout << "\"Sequence HasShouting [ERROR]!!!\"" << endl;
-        cout << endl;
-        return "Fail";
+
+        if (result == false) {
+            cout << "\"Sequence HasShouting [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;
     }
 
-    string Seq_HasFootSound(Zombie& zom) {
+    bool Seq_HasFootSound(Zombie& zom) {
+        //cout << "Sequence {HasFootSound} 함수 호출" << endl;
+        //cout << endl;
+
         for (const auto& child : seq_children) {
-            string result = child->HasFootSound(zom);
-            if ("Fail" != result) {
-                return result;
-            }
+            result = child->HasFootSound(zom);
         }
-        cout << "\"Sequence HasFootSound [ERROR]!!!\"" << endl;
-        cout << endl;
-        return "Fail";
+
+        if (result == false) {
+            cout << "\"Sequence HasFootSound [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;
     }
 
-    string Seq_HasInvestigated(Zombie& zom) {
+    bool Seq_HasInvestigated(Zombie& zom) {
         //cout << "Sequence {HasInvestigated} 함수 호출" << endl;
         //cout << endl;
+
         for (const auto& child : seq_children) {
-            string result = child->HasInvestigated(zom);
-            if ("Fail" != result) {
-                //cout << "\"{Sequence HasInvestigated}의 Task 중 [" << result << "]!!!\"" << endl;
-                //cout << endl;
-                return result;
-            }
+            result = child->HasInvestigated(zom);
         }
-        cout << "\"Sequence HasInvestigated [ERROR]!!!\"" << endl;
-        cout << endl;
-        return "Fail";   //사실상 실패할 일은 없긴하지만
+
+        if (result == false) {
+            cout << "\"Sequence HasInvestigated [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;
     }
 
-    string Seq_NotHasLastKnownPlayerLocation(Zombie& zom) {
+    bool Seq_NotHasLastKnownPlayerLocation(Zombie& zom) {
         //cout << "Sequence {NotHasLastKnownPlayerLocation} 함수 호출" << endl;
         //cout << endl;
+
         for (const auto& child : seq_children) {
-            string result = child->NotHasLastKnownPlayerLocation(zom);
-            if ("Fail" != result) {
-                //cout << "\"{Sequence NotHasLastKnownPlayerLocation}의 Task 중 [" << result << "]!!!\"" << endl;
-                //cout << endl;
-                return result;
-            }
+            result = child->NotHasLastKnownPlayerLocation(zom);
         }
-        cout << "\"Sequence NotHasLastKnownPlayerLocation [ERROR]!!!\"" << endl;
-        cout << endl;
-        return "Fail";   //사실상 실패할 일은 없긴하지만
+
+        if (result == false) {
+            cout << "\"Sequence NotHasLastKnownPlayerLocation [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;
     }
 
 
     void AddChild(Task* child) {
         seq_children.emplace_back(move(child));
     }
-
-
-    //사실상 더미 함수들
-    string Detect(Zombie& zom) const override { return "Fail"; };
-    string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
-    string CanAttack(Zombie& zom) const override { return "Fail"; };
-    string CanNotAttack(Zombie& zom) const override { return "Fail"; };
-    string HasShouting(Zombie& zom) const override { return "Fail"; };
-    string HasFootSound(Zombie& zom) const override { return "Fail"; };
-    string HasInvestigated(Zombie& zom) const override { return "Fail"; };
-    string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
 
 };

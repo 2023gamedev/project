@@ -12,7 +12,7 @@ using std::endl;
 class TMoveTo : public Task {
 public:
 
-    string CanNotAttack(Zombie& zom) const override {
+    bool CanNotAttack(Zombie& zom) override {
         //cout << "{CanNotAttack}의 [MoveTo Task] 호출" << endl;
 
         // 플레이어를 보고 있으니, 계속 따라오게 해야되니까 => 매 틱마다 위치 갱신
@@ -22,59 +22,49 @@ public:
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
         
-        //bool result = zom.MoveTo(); 
-        //if (result)
-        //    return "MoveTo-Succeed";
-        //else
-        //    return "Fail";
-
-        return "MoveTo-Succeed";
+        //result = zom.MoveTo();
+        result = true;
+        return result;
     }
 
-    string HasShouting(Zombie& zom) const override {
+    bool HasShouting(Zombie& zom) override {
         //cout << "{HasShouting}의 [MoveTo Task] 호출" << endl;
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        return "MoveTo-Succeed";
+        result = true;
+        return result;
     }
 
-    string HasFootSound(Zombie& zom) const override {
+    bool HasFootSound(Zombie& zom) override {
         //cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        return "MoveTo-Succeed";
+        result = true;
+        return result;
     }
 
-    string HasInvestigated(Zombie& zom) const override {
+    bool HasInvestigated(Zombie& zom) override {
         //cout << "{HasInvestigated}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        return "MoveTo-Succeed";
+        result = true;
+        return result;
     }
 
-    string NotHasLastKnownPlayerLocation(Zombie& zom) const override {
+    bool NotHasLastKnownPlayerLocation(Zombie& zom) override {
         //cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
 
         zom.SetTargetLocation(Zombie::TARGET::PATROL);
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        return "MoveTo-Succeed";
+        result = true;
+        return result;
     }
-
-    //사실상 더미 함수들
-    string Detect(Zombie& zom) const override { return "Fail"; };
-    string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
-    string CanAttack(Zombie& zom) const override { return "Fail"; };
-    //string CanNotAttack(Zombie& zom) const override { return "Fail"; };
-    //string HasShouting(Zombie& zom) const override { return "Fail"; };
-    //string HasFootSound(Zombie& zom) const override { return "Fail"; };
-    //string HasInvestigated(Zombie& zom) const override { return "Fail"; };
-    //string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
 
 };

@@ -19,56 +19,49 @@ public:
     Selector() = default;
 
 
-    string Sel_Detect(Zombie& zom) {
+    bool Sel_Detect(Zombie& zom) {
         //cout << "Selector <Detect> 호출" << endl;
         //cout << endl;
+
+        result = false;
         for (const auto& child : sel_children) {
-            string result = child->Detect(zom); // 다형성 이용 (함수 오버라이딩)
-            if ("Fail" != result) {
-#ifdef	ENABLE_BT_LOG
-                cout << "\"<Selector Detect>의 Task 중 [" << result << "]!!!\"" << endl;
-                cout << endl;
-#endif
-                return result;
-            }
+            bool task_result = child->Detect(zom);  // 다형성 이용 (함수 오버라이딩)
+
+            if (result == false)
+                result = task_result; 
         }
-        cout << "\"Selector Detect [ERROR]!!!\"" << endl;
-        cout << endl;
-        return "Fail";   //사실상 실패할 일은 없긴하지만
+
+        if (result == false) {  // selector의 모든 task가 실패 할 경우(그럴 일은 없어야 하지만..)
+            cout << "\"Selector Detect [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;
     }
 
-    string Sel_CanSeePlayer(Zombie& zom) {
+    bool Sel_CanSeePlayer(Zombie& zom) {
         //cout << "Selector <CanSeePlayer> 함수 호출" << endl;
         //cout << endl;
+
+        result = false;
         for (const auto& child : sel_children) {
-            string result = child->CanSeePlayer(zom);
-            if ("Fail" != result) {
-#ifdef	ENABLE_BT_LOG
-                cout << "\"<Selector CanSeePlayer>의 Task 중 [" << result << "]!!!\"" << endl;
-                cout << endl;
-#endif
-                return result;
-            }
+            bool task_result = child->CanSeePlayer(zom);    // 다형성 이용 (함수 오버라이딩)
+
+            if (result == false)
+                result = task_result;
         }
-        cout << "\"Selector CanSeePlayer [ERROR]!!!\"" << endl;
-        cout << endl;
-        return "Fail";   //사실상 실패할 일은 없긴하지만
+
+        if (result == false) {  // selector의 모든 task가 실패 할 경우(그럴 일은 없어야 하지만..)
+            cout << "\"Selector CanSeePlayer [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result; 
     }
 
 
     void AddChild(Task* child) {
         sel_children.emplace_back(move(child));
     }
-
-
-    //사실상 더미 함수들
-    string Detect(Zombie& zom) const override { return "Fail"; };
-    string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
-    string CanAttack(Zombie& zom) const override { return "Fail"; };
-    string CanNotAttack(Zombie& zom) const override { return "Fail"; };
-    string HasShouting(Zombie& zom) const override { return "Fail"; };
-    string HasFootSound(Zombie& zom) const override { return "Fail"; };
-    string HasInvestigated(Zombie& zom) const override { return "Fail"; };
-    string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
 
 };
