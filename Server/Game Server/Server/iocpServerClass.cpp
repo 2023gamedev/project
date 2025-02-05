@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <set>
 
 #include "iocpServerClass.h"
 
@@ -731,13 +732,13 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			if (result == "NO PLAYER")
 				break;
 
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 			if (zom->printLog == true) {
 				cout << endl;
 				cout << "//========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
 				cout << endl;
 			}
-#endif
+//#endif
 
 			// 좀비가 사망시 BT 중지
 			if (zom->zombieHP <= 0.f) {
@@ -792,8 +793,9 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					zom->printLog = false;
 				}
 #endif
-				continue;
+				continue;	// 같은 층에 플레이어가 아무도 없으니 BT 스킵
 			}
+#ifdef	ENABLE_BT_LOG
 			else if (same_floor == true) {
 				if (zom->printLog == false) {
 					cout << endl;
@@ -803,6 +805,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					zom->printLog = true;
 				}
 			}
+#endif
 
 
 #ifdef	ENABLE_BT_LOG
@@ -812,54 +815,97 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 #endif
 
 
-			//<Selector-Detect> 실행
+			//task 우선순위를 위한 enum
+			enum TASK {
+				ATTACK = 10, 
+				RUNTO_PLAYER = 21, RUNTO_SHOUTING = 22, RUNTO_FOOTSOUND = 23, RUNTO_LASTKNOWN = 24,
+				WALKTO_PATROL = 30
+			};
+
+			//실제로 실행 시킬 task
+			int task = -1;
+			//결과값 저장 set(중복x, 삽입시 자동정렬-오름차순)
+			set<int> results;
+
+
+			//==== 실제 BT 실행 ====//
+			//<Selector-Detect> 실행(검사)
 			zombie_bt_map[roomid].sel_detect->Sel_Detect(*zom);
 
-			//<Selector-Detect> 결과 값에 따라 다음 Task들 실행
+			//<Selector-Detect> 검사 결과 기억하기
 			if (zombie_bt_map[roomid].t_canseeplayer->result) {
 
-				//<Selector-CanSeePlayer> 실행
+				//<Selector-CanSeePlayer> 실행(검사)
 				zombie_bt_map[roomid].sel_canseeplayer->Sel_CanSeePlayer(*zom);
 
-				//<Selector-CanSeePlayer> 결과 값에 따라 다음 Task들 실행
+				//<Selector-CanSeePlayer> 검사 결과 기억하기
 				if (zombie_bt_map[roomid].t_canattack->result) {
-
-					//{Sequence-CanAttack} 실행
-					zombie_bt_map[roomid].seq_canattack.Seq_CanAttack(*zom);
-
+					results.insert(ATTACK);
 				}
-				else if (zombie_bt_map[roomid].t_cannotattack->result) {
-
-					//{Sequence-CanNotAttack} 실행
-					zombie_bt_map[roomid].seq_cannotattack.Seq_CanNotAttack(*zom);
-
+				if (zombie_bt_map[roomid].t_cannotattack->result) {
+					results.insert(RUNTO_PLAYER);
 				}
-
 			}
-			else if (zombie_bt_map[roomid].t_hasshouting->result) {
-
-				//{Sequence-HasShouting} 실행
-				zombie_bt_map[roomid].seq_hasshouting.Seq_HasShouting(*zom);
-
+			if (zombie_bt_map[roomid].t_hasfootsound->result) {
+				results.insert(RUNTO_FOOTSOUND);
 			}
-			else if (zombie_bt_map[roomid].t_hasfootsound->result) {
+			if (zombie_bt_map[roomid].t_hasinvestigated->result) {
+				results.insert(RUNTO_LASTKNOWN);
+			}
+			if (zombie_bt_map[roomid].t_hasshouting->result) {
+				results.insert(RUNTO_SHOUTING);
+			}
+			if (zombie_bt_map[roomid].t_nothaslastknownplayerlocation->result) {
+				results.insert(WALKTO_PATROL);
+			}
 
+
+			//실행시킬 sequence(task) 지정
+			int prior_task = *results.begin();
+
+			if (prior_task >= 30) {
+				task = WALKTO_PATROL;
+			}
+			else if (prior_task >= 20) {
+				task = prior_task;	// 원래 우선순위가 같은 레벨에 task들은 서로 더 (거리)비교해서 우위를 따져야함
+			}
+			else if (prior_task >= 10) {
+				task = ATTACK;
+			}
+			
+
+			//실제 실행시킬 sequence(task)
+			switch (task) {
+			case ATTACK:
+				//{Sequence-CanAttack} 실행
+				zombie_bt_map[roomid].seq_canattack.Seq_CanAttack(*zom);
+				break;
+			case RUNTO_PLAYER:
+				//{Sequence-CanNotAttack} 실행
+				zombie_bt_map[roomid].seq_cannotattack.Seq_CanNotAttack(*zom);
+				break;
+			case RUNTO_FOOTSOUND:
 				//{Sequence-HasFootSound} 실행
 				zombie_bt_map[roomid].seq_hasfootsound.Seq_HasFootSound(*zom);
-
-			}
-			else if (zombie_bt_map[roomid].t_hasinvestigated->result) {
-
+				break;
+			case RUNTO_LASTKNOWN:
 				//{Sequence-HasInvestigated} 실행
 				zombie_bt_map[roomid].seq_hasinvestigated.Seq_HasInvestigated(*zom);
-
-			}
-			else if (zombie_bt_map[roomid].t_nothaslastknownplayerlocation->result) {
-
+				break;
+			case RUNTO_SHOUTING:
+				//{Sequence-HasShouting} 실행
+				zombie_bt_map[roomid].seq_hasshouting.Seq_HasShouting(*zom);
+				break;
+			case WALKTO_PATROL:
 				//{Sequence-NotHasLastKnownPlayerLocation} 실행
-				zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
-
+				 zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
+				break;
+			default:
+				cout << "[Error] task가 미지정되었습니다." << endl;
+				break;
 			}
+			//==== 실제 BT 종료 ====//
+
 
 #ifdef	ENABLE_BT_LOG
 			//z_x = zom->ZombieData.x;					z_y = zom->ZombieData.y;					z_z = zom->ZombieData.z;
@@ -867,11 +913,12 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			//cout << endl;
 #endif
 
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 			cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
 			cout << endl;
-#endif
+//#endif
 		}
+
 
 		// send_path 통신작업
 		for (const auto player : playerDB_BT[roomid]) {

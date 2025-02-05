@@ -8,7 +8,7 @@ class TCanAttack : public Task {
 public:
 
     bool CanSeePlayer(Zombie& zom) override {
-        //cout << "<CanSeePlayer>의 [CanAttack Task] 호출" << endl;
+        cout << "<CanSeePlayer>의 [CanAttack Task] 호출" << endl;
 
         result = false;
 
@@ -50,10 +50,10 @@ public:
         }
 
         if (result) {
-            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanAttack Task] 결과: \"true\"" << endl;
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanAttack Task] 결과: \"true\"" << endl;
         }
         else {
-            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanAttack Task] 결과: \"false\"" << endl;
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanAttack Task] 결과: \"false\"" << endl;
         }
 
         return result;
