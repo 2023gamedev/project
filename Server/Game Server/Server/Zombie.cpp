@@ -591,43 +591,37 @@ void Zombie::MoveTo(float deltasecond)
 	float directionY = dy / distance;
 
 	// 좀비 속도 지정 (걷기/뛰기)
-	if (targetType == TARGET::INVESTIGATED || targetType == TARGET::PATROL) {	// 걷기
-		float walk_speed_offset = 0.f;
-		if (targetType == TARGET::INVESTIGATED)	// 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +ZombieInvestigatedSpeed_Offset 만큼의 스피드
-			walk_speed_offset = ZombieInvestigatedSpeed_Offset;
+	if (targetType == TARGET::PATROL) {	// 걷기
 		
 		switch (GetZombieType()) {
 		case ZOMBIE_TYPE::NULL_TYPE:
 			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정!!! ---> Speed = 0" << endl;
 			break;
 		case ZOMBIE_TYPE::NORMAL_ZOMBIE:
-			ZombieSpeed = NormalZombieWalkSpeed + walk_speed_offset;
+			ZombieSpeed = NormalZombieWalkSpeed;
 			break;
 		case ZOMBIE_TYPE::RUNNING_ZOMBIE:
-			ZombieSpeed = RunningZombieWalkSpeed + walk_speed_offset;
+			ZombieSpeed = RunningZombieWalkSpeed;
 			break;
 		case ZOMBIE_TYPE::SHOUTING_ZOMBIE:
-			ZombieSpeed = ShoutingZombieWalkSpeed + walk_speed_offset;
+			ZombieSpeed = ShoutingZombieWalkSpeed;
 			break;
 		}
 	}
-	else if (targetType == TARGET::PLAYER || targetType == TARGET::SHOUTING || targetType == TARGET::FOOTSOUND) {	// 뛰기
-		float run_speed_offset = 0.f;
-		if (targetType == TARGET::FOOTSOUND)	// 발소리를 들었을 때는 뛰기 스피드에서 +ZombieHeardFootSoundSpeed_Offset 만큼의 스피드
-			run_speed_offset = ZombieHeardFootSoundSpeed_Offset;
+	else if (targetType == TARGET::PLAYER || targetType == TARGET::SHOUTING || targetType == TARGET::FOOTSOUND || targetType == TARGET::INVESTIGATED) {	// 뛰기
 
 		switch (GetZombieType()) {
 		case ZOMBIE_TYPE::NULL_TYPE:
 			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정!!! ---> Speed = 0" << endl;
 			break;
 		case ZOMBIE_TYPE::NORMAL_ZOMBIE:
-			ZombieSpeed = NormalZombieSpeed + run_speed_offset;
+			ZombieSpeed = NormalZombieSpeed;
 			break;
 		case ZOMBIE_TYPE::RUNNING_ZOMBIE:
-			ZombieSpeed = RunningZombieSpeed + run_speed_offset;
+			ZombieSpeed = RunningZombieSpeed;
 			break;
 		case ZOMBIE_TYPE::SHOUTING_ZOMBIE:
-			ZombieSpeed = ShoutingZombieSpeed + run_speed_offset;
+			ZombieSpeed = ShoutingZombieSpeed;
 			break;
 		}
 	}

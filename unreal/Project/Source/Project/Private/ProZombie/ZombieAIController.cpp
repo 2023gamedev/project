@@ -124,23 +124,18 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 	// 좀비 속도 지정 (걷기/뛰기)
 	float ZombieSpeed = 0.f;
-	if (OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED || OwnerZombie->targetType == OwnerZombie->TARGET::PATROL) {	// 걷기
-		float walk_speed_offset = 0.f;
-		if (OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED)	// 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +ZombieInvestigatedSpeed_Offset 만큼의 스피드
-			walk_speed_offset = OwnerZombie->ZombieInvestigatedSpeed_Offset;
-	
+	if (OwnerZombie->targetType == OwnerZombie->TARGET::PATROL) {	// 걷기
+
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieWalkSpeed);
-		ZombieSpeed = OwnerZombie->GetSpeed() + walk_speed_offset;
+		ZombieSpeed = OwnerZombie->GetSpeed();
 
 		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.7f);
 	}
-	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING || OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND) {	// 뛰기
-		float run_speed_offset = 0.f;
-		if (OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND)	// 발소리를 들었을 때는 뛰기 스피드에서 +ZombieHeardFootSoundSpeed_Offset 만큼의 스피드
-			run_speed_offset = OwnerZombie->ZombieHeardFootSoundSpeed_Offset;
+	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING 
+		|| OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND || OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED) {	// 뛰기
 
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieSpeed);
-		ZombieSpeed = OwnerZombie->GetSpeed() + run_speed_offset;
+		ZombieSpeed = OwnerZombie->GetSpeed();
 
 		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(1.0f);
 	}

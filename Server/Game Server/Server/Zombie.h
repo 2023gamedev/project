@@ -94,9 +94,6 @@ public:
     const float ShoutingZombieSpeed = 230.0f;         // 230.0f (뛰기 스피드)
     const float ShoutingZombieWalkSpeed = 150.0f;     // 150.0f (걷기 스피드)
 
-    const float ZombieInvestigatedSpeed_Offset = 40.f;     // 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +40.f 스피드
-    const float ZombieHeardFootSoundSpeed_Offset = -20.f;   // 발소리를 들었을 때는 뛰기 스피드에서 -20.f 스피드
-
     float ZombieSpeed;
 
     ZOMBIE_TYPE ZombieType;
