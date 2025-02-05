@@ -756,7 +756,7 @@ void Zombie::ReachFinalDestination()
 #endif
 
 
-	// BT 플래그 값 전체 초기화
+	// BT 플래그 값 전체 초기화 -> 만약! 병렬 구조로 만들 생각이라면 이렇게 전체 초기화 하지 말고 이미 순회한 플래그 값만 초기화 해야함
 	HeardShouting = false;
 	HeardFootSound = false;
 	KnewPlayerLocation = false;

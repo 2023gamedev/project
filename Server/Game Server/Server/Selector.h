@@ -27,8 +27,11 @@ public:
         for (const auto& child : sel_children) {
             bool task_result = child->Detect(zom);  // 다형성 이용 (함수 오버라이딩)
 
-            if (result == false)
+            if (result == false)  
                 result = task_result; 
+
+            if (result == true) // 최적화(먼저 한가지 task가 걸리면 해당 task 선택하고 바로 종료함) -> Selector 병렬적으로 사용하려면 해당 코드 지워야함
+                return result;
         }
 
         if (result == false) {  // selector의 모든 task가 실패 할 경우(그럴 일은 없어야 하지만..)
@@ -49,6 +52,9 @@ public:
 
             if (result == false)
                 result = task_result;
+
+            if (result == true) // 최적화(먼저 한가지 task가 걸리면 해당 task 선택하고 바로 종료함) -> Selector 병렬적으로 사용하려면 해당 코드 지워야함 
+                return result;
         }
 
         if (result == false) {  // selector의 모든 task가 실패 할 경우(그럴 일은 없어야 하지만..)
