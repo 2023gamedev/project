@@ -614,118 +614,120 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 	std::chrono::steady_clock::time_point lastGTTime = initial_time;
 	
 	while (true) {
+		// BT 작동 여부 판단
+		{
+			//서버가 먼저 켜지고 좀비 BT가 실행되도록
+			if (bServerOn == false)
+				continue;
 
-		//서버가 먼저 켜지고 좀비 BT가 실행되도록
-		if (bServerOn == false)
-			continue;
-
-		if (b_Timer == false) {
-			continue;
-		}
-		else if (b_Timer == true) {	// (아무) 플레이어가 서버로 접속하면 (로딩 중도 포함임)
-			if (lastBTTime == initial_time && lastGTTime == initial_time) {	// 실제 클라들이 인게임으로 넘어갔을 때 lastTime 다시 제대로 초기화
-				lastBTTime = std::chrono::high_resolution_clock::now();
-				lastGTTime = std::chrono::high_resolution_clock::now();
+			if (b_Timer == false) {
+				continue;
 			}
-		}
+			else if (b_Timer == true) {	// (아무) 플레이어가 서버로 접속하면 (로딩 중도 포함임)
+				if (lastBTTime == initial_time && lastGTTime == initial_time) {	// 실제 클라들이 인게임으로 넘어갔을 때 lastTime 다시 제대로 초기화
+					lastBTTime = std::chrono::high_resolution_clock::now();
+					lastGTTime = std::chrono::high_resolution_clock::now();
+				}
+			}
 
-		auto currentTime = std::chrono::high_resolution_clock::now();
+			auto currentTime = std::chrono::high_resolution_clock::now();
 
-		BT_deltaTime = currentTime - lastBTTime;
-		GT_deltaTime = currentTime - lastGTTime;
+			BT_deltaTime = currentTime - lastBTTime;
+			GT_deltaTime = currentTime - lastGTTime;
 
-		// 게임 타이머 계산 
-		if (GT_deltaTime.count() > 0.005f) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
-			// deltaTime을 누적하여 GameTime에 더함
-			GameTime += GT_deltaTime.count();  // 초 단위 (* -> 이렇게 부동소수점 누적하면, 나중에 시간 지날 수록 정확도 떨어짐)
-			lastGTTime = currentTime;
-		}
+			// 게임 타이머 계산 
+			if (GT_deltaTime.count() > 0.005f) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
+				// deltaTime을 누적하여 GameTime에 더함
+				GameTime += GT_deltaTime.count();  // 초 단위 (* -> 이렇게 부동소수점 누적하면, 나중에 시간 지날 수록 정확도 떨어짐)
+				lastGTTime = currentTime;
+			}
 
-		//cout << "게임 경과시간: " << GameTime << "초" << endl;
+			//cout << "게임 경과시간: " << GameTime << "초" << endl;
 
-		 // 게임시간이 10분을 넘으면 게임오버 엔딩 점수판 띄우게하기
-		if (GameTime >= 10 * 60.f) {
-			// 점수판 계산
-			int alive_cnt = 0;
-			int dead_cnt = 0;
-			int disconnected = 0;
-			int bestkill_cnt = 0;
-			std::string bestkill_player = "None";
+			 // 게임시간이 10분을 넘으면 게임오버 엔딩 점수판 띄우게하기
+			if (GameTime >= 10 * 60.f) {
+				// 점수판 계산
+				int alive_cnt = 0;
+				int dead_cnt = 0;
+				int disconnected = 0;
+				int bestkill_cnt = 0;
+				std::string bestkill_player = "None";
 
-			for (const auto player : playerDB[roomid]) {
-				if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
-					disconnected++;
-					if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
+				for (const auto player : playerDB[roomid]) {
+					if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
+						disconnected++;
+						if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
+							bestkill_cnt = player.second.killcount;
+							bestkill_player = player.second.username;
+						}
+						continue;
+					}
+
+					// 게임 시간 초과 엔딩은 그냥 모든 플레이어가 실패라고 띄워야해서
+					dead_cnt++;
+
+					if (bestkill_cnt < player.second.killcount) {
 						bestkill_cnt = player.second.killcount;
 						bestkill_player = player.second.username;
 					}
-					continue;
 				}
 
-				// 게임 시간 초과 엔딩은 그냥 모든 플레이어가 실패라고 띄워야해서
-				dead_cnt++;
+				room_states[roomid].Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
 
-				if (bestkill_cnt < player.second.killcount) {
-					bestkill_cnt = player.second.killcount;
-					bestkill_player = player.second.username;
-				}
+				// 전송작업
+				// 세션 나누면서 마지막 인자 추가해야할듯.. 지금 상태에서는 서버에 접속한 전부에게 전송
+				Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, roomid);
 			}
 
-			room_states[roomid].Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
+			// BT 작동 인터벌 설정
+			if (BT_deltaTime.count() < BT_INTERVAL) {
+				continue;
+			}
 
-			// 전송작업
-			// 세션 나누면서 마지막 인자 추가해야할듯.. 지금 상태에서는 서버에 접속한 전부에게 전송
-			Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, roomid);
-		}
-
-		// BT 작동 인터벌 설정
-		if (BT_deltaTime.count() < BT_INTERVAL) {
-			continue;
-		}
-
-		lastBTTime = currentTime;
+			lastBTTime = currentTime;
 
 
-		// BT-송수신 쓰레드간의 데이터 레이스 방지를 위해
-		zombieDB_BT[roomid] = zombieDB[roomid];
-		playerDB_BT[roomid] = playerDB[roomid];
+			// BT-송수신 쓰레드간의 데이터 레이스 방지를 위해
+			zombieDB_BT[roomid] = zombieDB[roomid];
+			playerDB_BT[roomid] = playerDB[roomid];
 
 
-		if (playerDB_BT[roomid].size() == 0) {
-			//cout << "연결된 플레이어가 없습니다... => (playerDB_BT.size() == 0)" << endl;
-			//cout << endl;
-			result = "NO PLAYER";
-		}
-		else {
-#ifdef	ENABLE_BT_LOG
-			//for (auto player : playerDB_BT) {
-			//	float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
-			//	cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
-			//	//cout << endl;
-			//}
-			//cout << endl;
-#endif
-			result = "HAS PLAYER";
-
-
-			// 접속이 끊긴 것도 한 번 더 검사
-			if (room_players[roomid].size() == 0) {
-				cout << "연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
-				cout << "방-" << roomid << " 좀비 BT 종료..." << endl;
-				cout << endl;
-
-				//std::cout << "Press Enter to exit...";
-				//std::cin.get(); // 사용자가 Enter를 입력할 때까지 대기 (콘솔 애플리케이션이 실행 후 바로 종료되면서 콘솔 창이 닫히는거 방지) 
-				//-> 이제 필요 없음 (로비서버처럼 모든 플레이어가 접속을 끊어도 계속 돌아감)
-
+			if (playerDB_BT[roomid].size() == 0) {
+				//cout << "연결된 플레이어가 없습니다... => (playerDB_BT.size() == 0)" << endl;
+				//cout << endl;
 				result = "NO PLAYER";
-				break;			// 완전히 BT 쓰레드 종료시킴
 			}
 			else {
+#ifdef	ENABLE_BT_LOG
+				//for (auto player : playerDB_BT) {
+				//	float p_x = player.second.x;					float p_y = player.second.y;					float p_z = player.second.z;
+				//	cout << "플레이어 \'#" << player.first << "\' 의 현재 위치: ( " << p_x << ", " << p_y << ", " << p_z << " )" << endl;
+				//	//cout << endl;
+				//}
+				//cout << endl;
+#endif
 				result = "HAS PLAYER";
-			}
-		}
 
+
+				// 접속이 끊긴 것도 한 번 더 검사
+				if (room_players[roomid].size() == 0) {
+					cout << "연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
+					cout << "방-" << roomid << " 좀비 BT 종료..." << endl;
+					cout << endl;
+
+					//std::cout << "Press Enter to exit...";
+					//std::cin.get(); // 사용자가 Enter를 입력할 때까지 대기 (콘솔 애플리케이션이 실행 후 바로 종료되면서 콘솔 창이 닫히는거 방지) 
+					//-> 이제 필요 없음 (로비서버처럼 모든 플레이어가 접속을 끊어도 계속 돌아감)
+
+					result = "NO PLAYER";
+					break;			// 완전히 BT 쓰레드 종료시킴
+				}
+				else {
+					result = "HAS PLAYER";
+				}
+			}
+
+		}
 
 		// 좀비가 있을때 BT 실행
 		for (auto& zom : zombieDB_BT[roomid]) {
