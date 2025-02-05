@@ -230,7 +230,7 @@ bool Zombie::RandomPatrol()
 
 		if (ZombieData.x >= 2366.f) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
-			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
+			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!! (계단 쪽을 넘어감)" << endl;
 			return false;
 		}
 	}
@@ -240,7 +240,7 @@ bool Zombie::RandomPatrol()
 
 		if (ZombieData.x <= -1200.f) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
-			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!!" << endl;
+			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!! (화장실 뒤쪽을 넘어)" << endl;
 			return false;
 		}
 	}
@@ -249,6 +249,9 @@ bool Zombie::RandomPatrol()
 
 	// 랜덤 패트롤 지점이 갈 수 있는 지 검사
 	if (CheckPath(dest_test, px, py, pz) == false) {
+//#ifdef	ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 지정 실패! (CheckPath 실패) 다시 검색!!!" << endl;
+//#endif
 		return false;
 	}
 
@@ -328,7 +331,7 @@ void Zombie::SetTargetLocation(TARGET t)
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '랜덤 패트롤'" << endl;
 #endif
-		int try_cnt = 0;
+		
 		if (RandPatrolSet == false) {
 			
 			if (IsStandingStill == true) {	// 숨고르기 상태라면 새로운 패트롤 지점 찾기 수행 X ====> 그냥 그자리에서 가만히 서있게함 (목적지가 같아서)
@@ -361,6 +364,7 @@ void Zombie::SetTargetLocation(TARGET t)
 
 
 			bool result = false;
+			int try_cnt = 0;
 			while (result == false) {
 				try_cnt++;
 #ifdef	ENABLE_BT_LOG
@@ -723,9 +727,6 @@ bool Zombie::CheckPath(vector<tuple<float, float, float>>& goalTest_path, float 
 	//cout << endl;
 
 	if (goalTest_path.empty() == true) {
-//#ifdef	ENABLE_BT_LOG
-		cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 지정 실패! (CheckPath 실패) 다시 검색!!!" << endl;
-//#endif
 		return false;
 	}
 
@@ -971,8 +972,10 @@ bool Zombie::FootSound_Update_Check()
 			continue;
 		}
 
-		if (player.second.IsRunning) {	// 일단 플레이어가 (거리 상관없이) 뛰었다면 FootSound map 접근
-			SetDistance(player.first, 2);	// 갱신 (만약 없었을 시에는 새로 생성)
+		if (player.second.IsRunning) {	// 일단 플레이어가 (거리 상관없이) 뛰었다면 
+			if (player.second.x < 2366.f) {	// 그리고, 계단 넘어가 아니라면 FootSound map 접근
+				SetDistance(player.first, 2);	// 갱신 (만약 없었을 시에는 새로 생성)
+			}
 		}
 		else {
 			// 굳이 뛰고 있는 상태가 아니라면 FootSound map 건드릴 필요 없음
@@ -1031,6 +1034,106 @@ bool Zombie::FootSound_Update_Check()
 #endif
 
 	return result;
+}
+
+void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>>& target_original_pos)
+{
+	float dx = target_original_pos[0][0][0] - ZombieData.x;
+	float dy = target_original_pos[0][0][1] - ZombieData.y;
+
+	// 거리를 계산
+	float distance = sqrt(dx * dx + dy * dy);
+
+	// 랜덤 탐색 범위 설정 (좀비와 발소리간의 거리에 따라, 멀면 멀수록 랜덤 탐색 범위도 커짐)
+	float radius = 0.f;
+
+	if (distance > CanHearDistance) {	// ~800
+		cout << "[Error]  좀비 #" << ZombieData.zombieID << " 's distance to FootSound is out of range already. (SetRandomTargetLocation -> over CanHearDistance)" << endl;
+		return;
+	}
+	else if (distance >= CanHearDistance - 300.f) { //800 ~ 500
+		radius = 100.f;
+	}
+	else if (distance >= CanHearDistance - 500.f) {	//500 ~ 300
+		radius = 50.f;
+	}
+	else if (distance >= CanHearDistance - 800.f) {	//300 ~ 0
+		radius = 0.f;
+	}
+	else {	//0~
+		cout << "[Error]  좀비 #" << ZombieData.zombieID << " 's distance to FootSound is out of range already. (SetRandomTargetLocation -> under Zero)" << endl;
+		return;
+	}
+
+	// 랜덤 탐색 지점(걸을 수 있는) 검색
+	bool result = false;
+	int try_cnt = 0;
+	while (result == false) {
+		try_cnt++;
+		if (try_cnt >= 5) {
+//#ifdef	ENABLE_BT_LOG
+			cout << "좀비 #" << ZombieData.zombieID << " SetRandomTargetLocation 결국 실패!!! (연속 5번 실패...) => 그냥 해당 지점으로 바로 감" << endl;
+//#endif
+			break;
+		}
+
+		result = SearchRandomWalkableLocation(target_original_pos, radius);
+	}
+
+}
+
+bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_original_pos, int search_radius)
+{
+	float px, py, pz;
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+
+	std::uniform_int_distribution<int> dist(-search_radius, search_radius);		//현 위치에서 반경 search_radius +-
+
+	px = target_original_pos[0][0][0] + dist(mt);
+	py = target_original_pos[0][0][1] + dist(mt);
+	pz = target_original_pos[0][0][2];
+
+	while (px >= 2366.f) {		
+		px =  + dist(mt);
+
+		if (target_original_pos[0][0][0] >= 2366.f) {
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
+			cout << "가 포착한 플레이어 발소리 이미 걸을 수 있는 지형을 벗어남!!! (계단 쪽을 넘어감)" << endl;
+			return false;
+		}
+	}
+
+	while (py <= -1200.f) {		
+		py =  + dist(mt);
+
+		if (target_original_pos[0][0][1] <= -1200.f) {	// 미리 footsound decorator(FootSound_Update_Check)에서 예외처리하긴함
+			cout << "좀비 #" << ZombieData.zombieID << " - ";
+			cout << "가 포착한 플레이어 발소리 이미 걸을 수 있는 지형을 벗어남!!! (화장실 뒤쪽을 넘어)" << endl;	
+			return false;
+		}
+	}
+
+	vector<tuple<float, float, float>> dest_test;
+
+	// 랜덤한 지점이 갈 수 있는 지 검사
+	if (CheckPath(dest_test, px, py, pz) == false) {
+//#ifdef	ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " SearchRandomWalkableLocation 찾기 실패! (CheckPath 실패) 다시 검색!!!" << endl;
+//#endif
+		return false;
+	}
+
+	if (dest_test.size() < 3) {
+		//cout << "좀비 #" << ZombieData.zombieID << " SearchRandomWalkableLocation 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
+		return false;
+	}
+
+	target_original_pos[0][0][0] = px;
+	target_original_pos[0][0][1] = py;
+	
+	return true;
 }
 
 // wait 실행 우선순위: 피격 > 공격 > 샤우팅

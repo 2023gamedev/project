@@ -70,7 +70,7 @@ public:
 
     // const float  CanSeePlayerDistance = 1000.0f; // 최대 시야거리 1000.0f
 
-    const float CanHearDistance = 500.f;            // 발소리 포착 가능거리 500.f
+    const float CanHearDistance = 800.f;            // 발소리 포착 가능거리 800.f
 
     const float CanHearShoutDistance = 2000.f;      // 샤우팅 소리 포착 가능 거리 2000.f
 
@@ -191,6 +191,11 @@ public:
     bool CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
 
     void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType);
+
+    // 발소리 포착시에 거리에 따라 탐지 실수하도록 하는 함수
+    void SetRandomTargetLocation(vector<vector<vector<float>>>& target_original_pos);
+
+    bool SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_original_pos, int search_radius);
 
     float GetHP() const { return zombieHP; }
     void SetHP(float hp) { zombieHP = hp; }
