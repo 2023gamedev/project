@@ -1061,7 +1061,6 @@ void Zombie::Wait()
 
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
 			IsShouting = false;		
-			//IsStandingStill = false;
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1088,7 +1087,6 @@ void Zombie::Wait()
 			WaitOneTick_SendPath = true;
 
 			IsShouting = false;		
-			//IsStandingStill = false;
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1113,8 +1111,6 @@ void Zombie::Wait()
 			IsShouting = false;
 			HaveToWait = false;
 			WaitOneTick_SendPath = true;
-
-			//IsStandingStill = false;
 		}
 		else {
 #ifdef ENABLE_BT_LOG
