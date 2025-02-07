@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "Task.h"
+#include "Sequence.h"
 
 
-class THasFootSound : public Task {
+class Seq_HasFootSound : public Sequence {
 public:
 
     bool Detect(Zombie& zom) override {

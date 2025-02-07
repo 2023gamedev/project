@@ -13,6 +13,7 @@
 #include "CanNotAttack.h"
 #include "CanSeePlayer.h"
 #include "Selector.h"
+#include "Detect.h"
 
 std::unordered_map<int, Zombie_BT_struct> zombie_bt_map;
 std::unordered_map<int, RoomState> room_states;
@@ -472,88 +473,171 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 	exit(-1);
 }
 
+//void IOCP_CORE::Zombie_BT_Initialize(int roomid)
+//{
+//	//======[좀비 BT 생성]======
+//	//======메모리 할당 -> 작업 할당======
+//
+//	//======[Task] 메모리 할당======
+//
+//	//<Selector>들
+//	zombie_bt_map[roomid].sel_detect = new Selector;
+//	zombie_bt_map[roomid].sel_canseeplayer = new Selector;
+//
+//	//<Selector Detact> 가 가지는 Task들
+//
+//	//[CanSeePlayer-Task]
+//	zombie_bt_map[roomid].t_canseeplayer = new TCanSeePlayer;
+//	//[HasShouting-Task]
+//	zombie_bt_map[roomid].t_hasshouting = new THasShouting;
+//	//[HasFootSound-Task]
+//	zombie_bt_map[roomid].t_hasfootsound = new THasFootSound;
+//	//[HasInvestigated-Task]
+//	zombie_bt_map[roomid].t_hasinvestigated = new THasInvestigated;
+//	//[NotHasLastKnownPlayerLocation-Task]
+//	zombie_bt_map[roomid].t_nothaslastknownplayerlocation = new TNotHasLastKnownPlayerLocation;
+//
+//	//<Selector CanSeePlayer> 가 가지는 Task들
+//
+//	//[CanNotAttack-Task]
+//	zombie_bt_map[roomid].t_cannotattack = new TCanNotAttack;
+//	//[CanAttack-Task]
+//	zombie_bt_map[roomid].t_canattack = new TCanAttack;
+//
+//	//{Sequence} 가 가지는 Task들
+//
+//	//[MoveTo-Task]
+//	zombie_bt_map[roomid].t_moveto = new TMoveTo;
+//	//[Attack-Task]
+//	zombie_bt_map[roomid].t_attack = new TAttack;
+//
+//	//======== 트리 작성 (작업 할당) ========
+//
+//	//<Selector-Detect> 할당
+//	//<Selector-Detect>에 해당 Task들 '순서대로' 삽입
+//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_canseeplayer);
+//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasshouting);
+//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasfootsound);
+//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasinvestigated);
+//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_nothaslastknownplayerlocation);
+//
+//	//<Selector-CanSeePlayer> 할당
+//	//<Selector-CanSeePlayer>에 해당 Task들 '순서대로' 삽입
+//	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].t_canattack);
+//	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].t_cannotattack);
+//
+//	//{Sequence-CanAttack} 할당
+//	//{Sequence-CanAttack}에 해당 Task들 '순서대로' 삽입
+//	zombie_bt_map[roomid].seq_canattack.AddChild(zombie_bt_map[roomid].t_attack);
+//
+//	//{Sequence-CanNotAttack} 할당
+//	//{Sequence-CanNotAttack}에 해당 Task들 '순서대로' 삽입
+//	zombie_bt_map[roomid].seq_cannotattack.AddChild(zombie_bt_map[roomid].t_moveto);
+//
+//	//{Sequence-HasShouting} 할당
+//	//{Sequence-HasShouting}에 해당 Task들 '순서대로' 삽입
+//	zombie_bt_map[roomid].seq_hasshouting.AddChild(zombie_bt_map[roomid].t_moveto);
+//
+//	//{Sequence-HasFootSound} 할당
+//	//{Sequence-HasFootSound}에 해당 Task들 '순서대로' 삽입
+//	zombie_bt_map[roomid].seq_hasfootsound.AddChild(zombie_bt_map[roomid].t_moveto);
+//
+//	//{Sequence-HasInvestigated} 할당
+//	//{Sequence-HasInvestigated}에 해당 Task들 '순서대로' 삽입
+//	zombie_bt_map[roomid].seq_hasinvestigated.AddChild(zombie_bt_map[roomid].t_moveto);
+//
+//	//{Sequence-NotHasLastKnownPlayerLocation} 할당
+//	//{Sequence-NotHasLastKnownPlayerLocation}에 해당 Task들 '순서대로' 삽입
+//	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.AddChild(zombie_bt_map[roomid].t_moveto);
+//
+//	//==========================
+//}
+
 void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 {
-	//======[좀비 BT 생성]======
-	//======메모리 할당 -> 작업 할당======
+	//======[[좀비 BT 생성]]======//
 
-	//======[Task] 메모리 할당======
+	//======[Task] 메모리 할당======//
 
 	//<Selector>들
-	zombie_bt_map[roomid].sel_detect = new Selector;
-	zombie_bt_map[roomid].sel_canseeplayer = new Selector;
 
-	//<Selector Detact> 가 가지는 Task들
+	//<Detect-Selector>
+	zombie_bt_map[roomid].sel_detect = new Sel_Detect;
+	//<CanSeePlayer-Selector>
+	zombie_bt_map[roomid].sel_canseeplayer = new Sel_CanSeePlayer;
 
-	//[CanSeePlayer-Task]
-	zombie_bt_map[roomid].t_canseeplayer = new TCanSeePlayer;
-	//[HasShouting-Task]
-	zombie_bt_map[roomid].t_hasshouting = new THasShouting;
-	//[HasFootSound-Task]
-	zombie_bt_map[roomid].t_hasfootsound = new THasFootSound;
-	//[HasInvestigated-Task]
-	zombie_bt_map[roomid].t_hasinvestigated = new THasInvestigated;
-	//[NotHasLastKnownPlayerLocation-Task]
-	zombie_bt_map[roomid].t_nothaslastknownplayerlocation = new TNotHasLastKnownPlayerLocation;
+	//{HasShouting-Sequence}
+	zombie_bt_map[roomid].seq_hasshouting = new Seq_HasShouting;
+	//{HasFootSound-Sequence}
+	zombie_bt_map[roomid].seq_hasfootsound = new Seq_HasFootSound;
+	//{HasInvestigated-Sequence}
+	zombie_bt_map[roomid].seq_hasinvestigated = new Seq_HasInvestigated;
+	//{NotHasLastKnownPlayerLocation-Sequence}
+	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation = new Seq_NotHasLastKnownPlayerLocation;
 
-	//<Selector CanSeePlayer> 가 가지는 Task들
-
-	//[CanNotAttack-Task]
-	zombie_bt_map[roomid].t_cannotattack = new TCanNotAttack;
-	//[CanAttack-Task]
-	zombie_bt_map[roomid].t_canattack = new TCanAttack;
-
-	//{Sequence} 가 가지는 Task들
+	//{CanNotAttack-Sequence}
+	zombie_bt_map[roomid].seq_cannotattack = new Seq_CanNotAttack;
+	//{CanAttack-Sequence}
+	zombie_bt_map[roomid].seq_canattack = new Seq_CanAttack;
 
 	//[MoveTo-Task]
 	zombie_bt_map[roomid].t_moveto = new TMoveTo;
 	//[Attack-Task]
 	zombie_bt_map[roomid].t_attack = new TAttack;
 
-	//======== 트리 작성 (작업 할당) ========
+	//======== 트리 작성 (작업 할당) ========//
 
-	//<Selector-Detect> 할당
-	//<Selector-Detect>에 해당 Task들 '순서대로' 삽입
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_canseeplayer);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasshouting);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasfootsound);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasinvestigated);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_nothaslastknownplayerlocation);
+	//<Selector-Detect> 할당 -> 필요 자식노드들 '순서대로' 삽입
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].sel_canseeplayer);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasinvestigated);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
 
-	//<Selector-CanSeePlayer> 할당
-	//<Selector-CanSeePlayer>에 해당 Task들 '순서대로' 삽입
-	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].t_canattack);
-	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].t_cannotattack);
+	//<Selector-CanSeePlayer> 할당 -> 필요 자식노드들 '순서대로' 삽입
+	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
+	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_cannotattack);
 
-	//{Sequence-CanAttack} 할당
-	//{Sequence-CanAttack}에 해당 Task들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_canattack.AddChild(zombie_bt_map[roomid].t_attack);
+	//{Sequence-CanAttack} 할당 -> 필요 자식노드들 '순서대로' 삽입
+	zombie_bt_map[roomid].seq_canattack->AddChild(zombie_bt_map[roomid].t_attack);
 
-	//{Sequence-CanNotAttack} 할당
-	//{Sequence-CanNotAttack}에 해당 Task들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_cannotattack.AddChild(zombie_bt_map[roomid].t_moveto);
+	//{Sequence-CanNotAttack} 할당 -> 필요 자식노드들 '순서대로' 삽입
+	zombie_bt_map[roomid].seq_cannotattack->AddChild(zombie_bt_map[roomid].t_moveto);
 
-	//{Sequence-HasShouting} 할당
-	//{Sequence-HasShouting}에 해당 Task들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasshouting.AddChild(zombie_bt_map[roomid].t_moveto);
+	//{Sequence-HasShouting} 할당 -> 필요 자식노드들 '순서대로' 삽입
+	zombie_bt_map[roomid].seq_hasshouting->AddChild(zombie_bt_map[roomid].t_moveto);
 
-	//{Sequence-HasFootSound} 할당
-	//{Sequence-HasFootSound}에 해당 Task들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasfootsound.AddChild(zombie_bt_map[roomid].t_moveto);
+	//{Sequence-HasFootSound} 할당 -> 필요 자식노드들 '순서대로' 삽입
+	zombie_bt_map[roomid].seq_hasfootsound->AddChild(zombie_bt_map[roomid].t_moveto);
 
-	//{Sequence-HasInvestigated} 할당
-	//{Sequence-HasInvestigated}에 해당 Task들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasinvestigated.AddChild(zombie_bt_map[roomid].t_moveto);
+	//{Sequence-HasInvestigated} 할당 -> 필요 자식노드들 '순서대로' 삽입
+	zombie_bt_map[roomid].seq_hasinvestigated->AddChild(zombie_bt_map[roomid].t_moveto);
 
-	//{Sequence-NotHasLastKnownPlayerLocation} 할당
-	//{Sequence-NotHasLastKnownPlayerLocation}에 해당 Task들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.AddChild(zombie_bt_map[roomid].t_moveto);
+	//{Sequence-NotHasLastKnownPlayerLocation} 할당 -> 필요 자식노드들 '순서대로' 삽입
+	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation->AddChild(zombie_bt_map[roomid].t_moveto);
 
-	//==========================
+	//==========================//
+}
+
+void IOCP_CORE::Zombie_BT_Delete(int roomid)
+{
+	delete(zombie_bt_map[roomid].sel_detect);
+	delete(zombie_bt_map[roomid].sel_canseeplayer);
+
+	delete(zombie_bt_map[roomid].seq_cannotattack);
+	delete(zombie_bt_map[roomid].seq_canattack);
+	delete(zombie_bt_map[roomid].seq_hasshouting);
+	delete(zombie_bt_map[roomid].seq_hasfootsound);
+	delete(zombie_bt_map[roomid].seq_hasinvestigated);
+	delete(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
+
+	delete(zombie_bt_map[roomid].t_attack);
+	delete(zombie_bt_map[roomid].t_moveto);
 }
 
 // ostream 연산자 오버로딩 - FLOOR cout 출력용
-std::ostream& operator<<(std::ostream& os, FLOOR floor) {
+std::ostream& operator<<(std::ostream& os, FLOOR floor) 
+{
 	switch (floor) {
 	case FLOOR::FLOOR_B2:       os << "B2"; break;
 	case FLOOR::FLOOR_B1:       os << "B1"; break;
@@ -579,7 +663,7 @@ void IOCP_CORE::ServerOn()
 	//	float p_x = player.second.x;
 	//	float p_y = player.second.y;
 	//	float p_z = player.second.z;
-
+	//
 	//	//이거 플레이어는 서버 초기화 후에 추가되서 하나도 안 찍힘 (따로 찍고 싶으면 플레그 값 설정해서 나중에 플레이어 다 받으면 찍어야 할 듯)
 	//	cout << "플레이어 \'#" << player.first << "\' 의 시작 위치: ( "
 	//		<< std::setw(8) << p_x << ", " << std::setw(8) << p_y << ", " << std::setw(8) << p_z << " )" << endl;
@@ -825,43 +909,43 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			zombie_bt_map[roomid].sel_detect->Sel_Detect(*zom);
 
 			//<Selector-Detect> 검사 결과에 따라 task 진행
-			if (zombie_bt_map[roomid].t_canseeplayer->result) {
+			//if (zombie_bt_map[roomid].sel_canseeplayer->result) {
 
-				//<Selector-CanSeePlayer> 실행(검사)
-				zombie_bt_map[roomid].sel_canseeplayer->Sel_CanSeePlayer(*zom);
+			//	//<Selector-CanSeePlayer> 실행(검사)
+			//	zombie_bt_map[roomid].sel_canseeplayer->Sel_CanSeePlayer(*zom);
 
-				//<Selector-CanSeePlayer> 검사 결과에 따라 task 진행
-				if (zombie_bt_map[roomid].t_canattack->result) {
+			//	//<Selector-CanSeePlayer> 검사 결과에 따라 task 진행
+			//	if (zombie_bt_map[roomid].t_canattack->result) {
 
-					//{Sequence-CanAttack} 실행
-					zombie_bt_map[roomid].seq_canattack.Seq_CanAttack(*zom);
-				}
-				else if (zombie_bt_map[roomid].t_cannotattack->result) {
+			//		//{Sequence-CanAttack} 실행
+			//		zombie_bt_map[roomid].seq_canattack.Seq_CanAttack(*zom);
+			//	}
+			//	else if (zombie_bt_map[roomid].t_cannotattack->result) {
 
-					//{Sequence-CanNotAttack} 실행
-					zombie_bt_map[roomid].seq_cannotattack.Seq_CanNotAttack(*zom);
-				}
-			}
-			else if (zombie_bt_map[roomid].t_hasshouting->result) {
+			//		//{Sequence-CanNotAttack} 실행
+			//		zombie_bt_map[roomid].seq_cannotattack.Seq_CanNotAttack(*zom);
+			//	}
+			//}
+			//else if (zombie_bt_map[roomid].t_hasshouting->result) {
 
-				//{Sequence-HasShouting} 실행
-				zombie_bt_map[roomid].seq_hasshouting.Seq_HasShouting(*zom);
-			}
-			else if (zombie_bt_map[roomid].t_hasfootsound->result) {
+			//	//{Sequence-HasShouting} 실행
+			//	zombie_bt_map[roomid].seq_hasshouting.Seq_HasShouting(*zom);
+			//}
+			//else if (zombie_bt_map[roomid].t_hasfootsound->result) {
 
-				//{Sequence-HasFootSound} 실행
-				zombie_bt_map[roomid].seq_hasfootsound.Seq_HasFootSound(*zom);
-			}
-			else if (zombie_bt_map[roomid].t_hasinvestigated->result) {
+			//	//{Sequence-HasFootSound} 실행
+			//	zombie_bt_map[roomid].seq_hasfootsound.Seq_HasFootSound(*zom);
+			//}
+			//else if (zombie_bt_map[roomid].t_hasinvestigated->result) {
 
-				//{Sequence-HasInvestigated} 실행
-				zombie_bt_map[roomid].seq_hasinvestigated.Seq_HasInvestigated(*zom);
-			}
-			else if (zombie_bt_map[roomid].t_nothaslastknownplayerlocation->result) {
+			//	//{Sequence-HasInvestigated} 실행
+			//	zombie_bt_map[roomid].seq_hasinvestigated.Seq_HasInvestigated(*zom);
+			//}
+			//else if (zombie_bt_map[roomid].t_nothaslastknownplayerlocation->result) {
 
-				//{Sequence-NotHasLastKnownPlayerLocation} 실행
-				zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
-			}
+			//	//{Sequence-NotHasLastKnownPlayerLocation} 실행
+			//	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.Seq_NotHasLastKnownPlayerLocation(*zom);
+			//}
 
 			//==== 실제 BT 종료 ====//
 
@@ -949,17 +1033,8 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 
 	//========할당한 메모리 해제========
+	Zombie_BT_Delete(roomid);
 
-	delete(zombie_bt_map[roomid].sel_detect);
-	delete(zombie_bt_map[roomid].sel_canseeplayer);
-
-	delete(zombie_bt_map[roomid].t_canseeplayer);
-	delete(zombie_bt_map[roomid].t_cannotattack);
-	delete(zombie_bt_map[roomid].t_moveto);
-	delete(zombie_bt_map[roomid].t_canattack);
-	delete(zombie_bt_map[roomid].t_attack);
-	delete(zombie_bt_map[roomid].t_hasinvestigated);
-	delete(zombie_bt_map[roomid].t_nothaslastknownplayerlocation);
 }
 
 

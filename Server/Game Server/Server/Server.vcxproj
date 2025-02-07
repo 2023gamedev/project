@@ -183,6 +183,7 @@
     <ClCompile Include="RunningZombie.cpp" />
     <ClCompile Include="ShoutingZombie.cpp" />
     <ClCompile Include="Zombie.cpp" />
+    <ClCompile Include="ZombieBT.cpp" />
     <ClCompile Include="ZombieController.cpp" />
     <ClCompile Include="ZombiePathfinder.cpp" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="CanAttack.h" />
     <ClInclude Include="CanNotAttack.h" />
     <ClInclude Include="CanSeePlayer.h" />
+    <ClInclude Include="Detect.h" />
     <ClInclude Include="GStruct.pb.h" />
     <ClInclude Include="HasFootSound.h" />
     <ClInclude Include="HasInvestigated.h" />
@@ -212,6 +214,7 @@
     <ClInclude Include="ShoutingZombie.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="Zombie.h" />
+    <ClInclude Include="ZombieBT.h" />
     <ClInclude Include="ZombieController.h" />
     <ClInclude Include="ZombiePathfinder.h" />
   </ItemGroup>

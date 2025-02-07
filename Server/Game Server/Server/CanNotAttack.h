@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "Task.h"
+#include "Sequence.h"
 #include "iocpServerClass.h"
 
 
-class TCanNotAttack : public Task {
+class Seq_CanNotAttack : public Sequence {
 public:
 
     bool CanSeePlayer(Zombie& zom) override {

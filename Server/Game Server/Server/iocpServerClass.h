@@ -15,6 +15,7 @@
 //#include "Selector.h"
 #include "Sequence.h"
 
+//#include "Detect.h"
 //#include "CanSeePlayer.h"
 #include "HasShouting.h"
 #include "HasFootSound.h"
@@ -26,7 +27,7 @@
 //#include "MoveTo.h"
 
 
-#define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그) ==> "끊김 현상 심하니 필요할 때만 키도록;;"
+#define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그) ==> "로그가 많아 끊김 현상이 심하니 필요할 때만 키도록;;"
 #undef ENABLE_BT_LOG	// 이거 주석 풀면 -> 비활성화
 
 
@@ -40,6 +41,7 @@ class TCanAttack;
 class TCanNotAttack;
 class TCanSeePlayer;
 class Selector;
+class Detect;
 
 
 using OVLP_EX = struct Overlap_ex {
@@ -92,28 +94,43 @@ struct RoomState {
 	int Escape_Root{};
 };
 
+//struct Zombie_BT_struct {
+//	Selector* sel_detect;
+//	Selector* sel_canseeplayer;
+//
+//	TCanSeePlayer* t_canseeplayer;
+//	THasShouting* t_hasshouting;
+//	THasFootSound* t_hasfootsound;
+//	THasInvestigated* t_hasinvestigated;
+//	TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
+//
+//	TCanNotAttack* t_cannotattack;
+//	TCanAttack* t_canattack;
+//
+//	TMoveTo* t_moveto;
+//	TAttack* t_attack;
+//
+//	Sequence seq_cannotattack;
+//	Sequence seq_canattack;
+//	Sequence seq_hasshouting;
+//	Sequence seq_hasfootsound;
+//	Sequence seq_hasinvestigated;
+//	Sequence seq_nothaslastknownplayerlocation;
+//};
+
 struct Zombie_BT_struct {
 	Selector* sel_detect;
 	Selector* sel_canseeplayer;
 
-	TCanSeePlayer* t_canseeplayer;
-	THasShouting* t_hasshouting;
-	THasFootSound* t_hasfootsound;
-	THasInvestigated* t_hasinvestigated;
-	TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
+	Sequence* seq_cannotattack;
+	Sequence* seq_canattack;
+	Sequence* seq_hasshouting;
+	Sequence* seq_hasfootsound;
+	Sequence* seq_hasinvestigated;
+	Sequence* seq_nothaslastknownplayerlocation;
 
-	TCanNotAttack* t_cannotattack;
-	TCanAttack* t_canattack;
-
-	TMoveTo* t_moveto;
-	TAttack* t_attack;
-
-	Sequence seq_cannotattack;
-	Sequence seq_canattack;
-	Sequence seq_hasshouting;
-	Sequence seq_hasfootsound;
-	Sequence seq_hasinvestigated;
-	Sequence seq_nothaslastknownplayerlocation;
+	Task* t_moveto;
+	Task* t_attack;
 };
 
 extern std::unordered_map<int, Zombie_BT_struct> room_data_map;
@@ -184,6 +201,8 @@ public:
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
+	void ServerOn();
+
 	void Zombie_BT_Thread(int roomid);
 
 	bool LoadEdgesMap(const string& filePath,
@@ -198,7 +217,7 @@ public:
 	void DeleteSession(unsigned int sessionID);
 
 	void Zombie_BT_Initialize(int roomid);
-	void ServerOn();
+	void Zombie_BT_Delete(int roomid);
 
 	//서버가 먼저 켜지고 좀비 BT가 실행되도록 하기위해 사용 
 	bool bServerOn;
@@ -208,57 +227,6 @@ public:
 	std::unordered_map<int, vector<Zombie*>> zombieDB_BT;
 
 	//======Zombie_BT 선언======
-
-	////<Selector> 선언 
-
-	////<Selector-Detect> (사실상 최상위 노드)
-	//Selector* sel_detect;
-	////<Selector-CanSeePlayer>  
-	//Selector* sel_canseeplayer;
-
-	//{Sequence} 선언
-
-	//{Sequence-CanNotAttack}
-	//Sequence seq_cannotattack;
-	////{Sequence-CanAttack}
-	//Sequence seq_canattack;
-	////{Sequence-HasShouting}
-	//Sequence seq_hasshouting;
-	////{Sequence-HasFootSound}
-	//Sequence seq_hasfootsound;
-	////{Sequence-HasInvestigated}
-	//Sequence seq_hasinvestigated;
-	////{Sequence-NotHasLastKnownPlayerLocation}
-	//Sequence seq_nothaslastknownplayerlocation;
-
-	////[Task] 선언
-
-	////<Selector Detact> 가 가지는 Task들
-
-	////[CanSeePlayer-Task]
-	//TCanSeePlayer* t_canseeplayer;
-	////[HasShouting-Task]
-	//THasShouting* t_hasshouting;
-	////[HasFootSound-Task]
-	//THasFootSound* t_hasfootsound;
-	////[HasInvestigated-Task]
-	//THasInvestigated* t_hasinvestigated;
-	////[NotHasLastKnownPlayerLocation-Task]
-	//TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
-
-	////<Selector CanSeePlayer> 가 가지는 Task들
-
-	////[CanNotAttack-Task]
-	//TCanNotAttack* t_cannotattack;
-	////[CanAttack-Task]
-	//TCanAttack* t_canattack;
-
-	////{Sequence} 가 가지는 Task들
-
-	////[MoveTo-Task]
-	//TMoveTo* t_moveto;
-	////[Attack-Task]
-	//TAttack* t_attack;
 	
 	static float BT_INTERVAL;		// BT 작동 인터벌 설정
 	static float GAME_TIMER_INTERVAL;	// 게임 타이머 시간 누적 인터벌 설정

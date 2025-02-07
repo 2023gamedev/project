@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "Task.h"
+#include "Sequence.h"
 
 
-class TNotHasLastKnownPlayerLocation : public Task {
+class Seq_NotHasLastKnownPlayerLocation : public Sequence {
 public:
 
     bool Detect(Zombie& zom) override {

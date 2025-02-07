@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "Task.h"
+#include "Sequence.h"
 
 
-class THasInvestigated : public Task {
+class Seq_HasInvestigated : public Sequence {
 public:
 
     bool Detect(Zombie& zom) override {

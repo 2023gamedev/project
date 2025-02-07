@@ -2,14 +2,14 @@
 
 #include <iostream>
 
-#include "Task.h"
+#include "Selector.h"
 #include "iocpServerClass.h"
 
 using std::cout;
 using std::endl;
 
 
-class TCanSeePlayer : public Task {
+class Sel_CanSeePlayer : public Selector {
 public:
 
     bool Detect(Zombie& zom) override {
