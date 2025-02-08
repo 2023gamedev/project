@@ -15,26 +15,6 @@ public:
     vector<unique_ptr<Task>> sel_children;      //근데, 굳이 unique_ptr을 사용해야 할...까? 고민 => C++에서 객체를 벡터에 직접 저장할 때, '슬라이스 현상'이 발생하며 해당 '스마트 포인터'는 이를 방지해줌
 
 
-    bool Sel_Detect(Zombie& zom) {
-        //cout << "Selector <Detect> 호출" << endl;
-        //cout << endl;
-
-        result = false;
-        for (const auto& child : sel_children) {
-            bool task_result = child->Detect(zom);  // 다형성 이용 (함수 오버라이딩)
-
-            if (result == false)  
-                result = task_result; 
-        }
-
-        if (result == false) {  // selector의 모든 task가 실패 할 경우(그럴 일은 없어야 하지만..)
-            cout << "\"Selector Detect [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
-            cout << endl;
-        }
-
-        return result;
-    }
-
     bool Sel_CanSeePlayer(Zombie& zom) {
         //cout << "Selector <CanSeePlayer> 함수 호출" << endl;
         //cout << endl;
