@@ -8,12 +8,21 @@
 
 #include "ZombiePathfinder.h"
 
-#include "MoveTo.h"
+#include "Task.h"
+#include "Selector.h"
+#include "Sequence.h"
+
+#include "Detect.h"
+#include "CanSeePlayer.h"
+#include "HasShouting.h"
+#include "HasFootSound.h"
+#include "HasInvestigated.h"
+#include "NotHasLastKnownPlayerLocation.h"
 #include "CanAttack.h"
 #include "CanNotAttack.h"
-#include "CanSeePlayer.h"
-#include "Selector.h"
-#include "Detect.h"
+#include "Attack.h"
+#include "MoveTo.h"
+
 
 std::unordered_map<int, Zombie_BT_struct> zombie_bt_map;
 std::unordered_map<int, RoomState> room_states;
@@ -23,7 +32,6 @@ std::unordered_map<int, std::unordered_map<int, Player>> playerDB;
 std::unordered_map<int, std::unordered_map<int, Player>> playerDB_BT;
 
 std::unordered_map<int, ZombieController*> zombieControllers;
-
 
 std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB2;
 std::unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash> g_EdgesMapB1;
@@ -43,6 +51,7 @@ std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// BT 작동 인터벌 체
 std::chrono::duration<float> IOCP_CORE::GT_deltaTime;	// 게임 타이머 누적용 deltaTime
 
 bool UPDATEMAP = false;		// 맵 txt 업데이트 유무
+
 
 IOCP_CORE::IOCP_CORE()
 {	
@@ -581,9 +590,9 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 	zombie_bt_map[roomid].seq_canattack = new Seq_CanAttack;
 
 	//[MoveTo-Task]
-	zombie_bt_map[roomid].t_moveto = new TMoveTo;
+	zombie_bt_map[roomid].t_moveto = new T_MoveTo;
 	//[Attack-Task]
-	zombie_bt_map[roomid].t_attack = new TAttack;
+	zombie_bt_map[roomid].t_attack = new T_Attack;
 
 	//======== 트리 작성 (작업 할당) ========//
 
@@ -595,8 +604,8 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
 
 	//<Selector-CanSeePlayer> 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
-	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_cannotattack);
+	//zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
+	//zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_cannotattack);
 
 	//{Sequence-CanAttack} 할당 -> 필요 자식노드들 '순서대로' 삽입
 	zombie_bt_map[roomid].seq_canattack->AddChild(zombie_bt_map[roomid].t_attack);
@@ -685,6 +694,54 @@ void IOCP_CORE::ServerOn()
 	bServerOn = true;
 }
 
+void IOCP_CORE::GameTimerEndCheck(int roomid, float& GameTime, std::chrono::steady_clock::time_point currentTime, std::chrono::steady_clock::time_point& lastGTTime)
+{
+	GT_deltaTime = currentTime - lastGTTime;
+
+	// 게임 타이머 계산 
+	if (GT_deltaTime.count() > 0.005f) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
+		// deltaTime을 누적하여 GameTime에 더함
+		GameTime += GT_deltaTime.count();  // 초 단위 (* -> 그냥 이렇게 부동소수점 누적하면, 나중에 시간 지날 수록 정확도 떨어짐)
+		lastGTTime = currentTime;
+	}
+
+	//cout << "게임 경과시간: " << GameTime << "초" << endl;
+
+	 // 게임시간이 10분을 넘으면 게임오버 엔딩 점수판 띄우게하기
+	if (GameTime >= 10 * 60.f) {
+		// 점수판 계산
+		int alive_cnt = 0;
+		int dead_cnt = 0;
+		int disconnected = 0;
+		int bestkill_cnt = 0;
+		std::string bestkill_player = "None";
+
+		for (const auto player : playerDB[roomid]) {
+			if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
+				disconnected++;
+				if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
+					bestkill_cnt = player.second.killcount;
+					bestkill_player = player.second.username;
+				}
+				continue;
+			}
+
+			// 게임 시간 초과 엔딩은 그냥 모든 플레이어가 실패라고 띄워야해서
+			dead_cnt++;
+
+			if (bestkill_cnt < player.second.killcount) {
+				bestkill_cnt = player.second.killcount;
+				bestkill_player = player.second.username;
+			}
+		}
+
+		room_states[roomid].Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
+
+		// 전송작업
+		// 세션 나누면서 마지막 인자 추가해야할듯.. 지금 상태에서는 서버에 접속한 전부에게 전송
+		Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, roomid);
+	}
+}
 
 void IOCP_CORE::Zombie_BT_Thread(int roomid)
 {
@@ -693,90 +750,23 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 	string result = "Initial";
 	
 	float GameTime = 0.f;
-	std::chrono::steady_clock::time_point initial_time = std::chrono::high_resolution_clock::now();	// 스레드가 켜진 시간 저장
-	std::chrono::steady_clock::time_point lastBTTime = initial_time;
-	std::chrono::steady_clock::time_point lastGTTime = initial_time;
+	std::chrono::steady_clock::time_point currentTime;
+	std::chrono::steady_clock::time_point lastBTTime = std::chrono::high_resolution_clock::now();
+	std::chrono::steady_clock::time_point lastGTTime = std::chrono::high_resolution_clock::now();
+
 	
 	while (true) {
 		// BT 작동 여부 판단
 		{
-			//서버가 먼저 켜지고 좀비 BT가 실행되도록
+			// 서버가 먼저 켜지고 좀비 BT가 실행되도록
 			if (bServerOn == false)
 				continue;
-
-			if (b_Timer == false) {
+			// (아무) 플레이어가 서버로 접속하면 b_Timer => true (로딩 중도 포함임)
+			if (b_Timer == false) 
 				continue;
-			}
-			else if (b_Timer == true) {	// (아무) 플레이어가 서버로 접속하면 (로딩 중도 포함임)
-				if (lastBTTime == initial_time && lastGTTime == initial_time) {	// 실제 클라들이 인게임으로 넘어갔을 때 lastTime 다시 제대로 초기화
-					lastBTTime = std::chrono::high_resolution_clock::now();
-					lastGTTime = std::chrono::high_resolution_clock::now();
-				}
-			}
 
-			auto currentTime = std::chrono::high_resolution_clock::now();
-
-			BT_deltaTime = currentTime - lastBTTime;
-			GT_deltaTime = currentTime - lastGTTime;
-
-			// 게임 타이머 계산 
-			if (GT_deltaTime.count() > 0.005f) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
-				// deltaTime을 누적하여 GameTime에 더함
-				GameTime += GT_deltaTime.count();  // 초 단위 (* -> 이렇게 부동소수점 누적하면, 나중에 시간 지날 수록 정확도 떨어짐)
-				lastGTTime = currentTime;
-			}
-
-			//cout << "게임 경과시간: " << GameTime << "초" << endl;
-
-			 // 게임시간이 10분을 넘으면 게임오버 엔딩 점수판 띄우게하기
-			if (GameTime >= 10 * 60.f) {
-				// 점수판 계산
-				int alive_cnt = 0;
-				int dead_cnt = 0;
-				int disconnected = 0;
-				int bestkill_cnt = 0;
-				std::string bestkill_player = "None";
-
-				for (const auto player : playerDB[roomid]) {
-					if (g_players.find(player.first) == g_players.end()) { // 연결이 끊긴 플레이어라면  
-						disconnected++;
-						if (bestkill_cnt < player.second.killcount) {   // 연결이 끊겼어도 젤 마니 좀비를 죽였을 수도 있으니
-							bestkill_cnt = player.second.killcount;
-							bestkill_player = player.second.username;
-						}
-						continue;
-					}
-
-					// 게임 시간 초과 엔딩은 그냥 모든 플레이어가 실패라고 띄워야해서
-					dead_cnt++;
-
-					if (bestkill_cnt < player.second.killcount) {
-						bestkill_cnt = player.second.killcount;
-						bestkill_player = player.second.username;
-					}
-				}
-
-				room_states[roomid].Escape_Root = 0;    // 탈출방법 0(실패)으로 초기화 => 이전에 문을 연적이 있으면 해당 변수 갱신되서, 게임오버에서 탈출방법 실패가 안뜸;;
-
-				// 전송작업
-				// 세션 나누면서 마지막 인자 추가해야할듯.. 지금 상태에서는 서버에 접속한 전부에게 전송
-				Send_GameEnd(alive_cnt, dead_cnt, bestkill_cnt, bestkill_player, roomid);
-			}
-
-			// BT 작동 인터벌 설정
-			if (BT_deltaTime.count() < BT_INTERVAL) {
-				continue;
-			}
-
-			lastBTTime = currentTime;
-
-
-			// BT-송수신 쓰레드간의 데이터 레이스 방지를 위해
-			zombieDB_BT[roomid] = zombieDB[roomid];
-			playerDB_BT[roomid] = playerDB[roomid];
-
-
-			if (playerDB_BT[roomid].size() == 0) {
+			// 연결된 플레이어가 있는지 검사
+			if (playerDB[roomid].size() == 0) {
 				//cout << "연결된 플레이어가 없습니다... => (playerDB_BT.size() == 0)" << endl;
 				//cout << endl;
 				result = "NO PLAYER";
@@ -792,8 +782,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 #endif
 				result = "HAS PLAYER";
 
-
-				// 접속이 끊긴 것도 한 번 더 검사
+				// 접속이 끊긴 것도 검사
 				if (room_players[roomid].size() == 0) {
 					cout << "연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
 					cout << "방-" << roomid << " 좀비 BT 종료..." << endl;
@@ -812,6 +801,23 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			}
 
 		}
+
+
+		currentTime = std::chrono::high_resolution_clock::now();
+		// 게임 10분 타이머 계산
+		GameTimerEndCheck(roomid, GameTime, currentTime, lastGTTime);
+
+		// BT 작동 인터벌 설정
+		BT_deltaTime = currentTime - lastBTTime;
+		if (BT_deltaTime.count() < BT_INTERVAL) {
+			continue;
+		}
+		lastBTTime = currentTime;
+		
+		// BT-송수신 쓰레드간의 데이터 레이스 방지를 위해
+		zombieDB_BT[roomid] = zombieDB[roomid];
+		playerDB_BT[roomid] = playerDB[roomid];
+
 
 		// 좀비가 있을때 BT 실행
 		for (auto& zom : zombieDB_BT[roomid]) {
@@ -906,7 +912,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			//==== 실제 BT 실행 ====//
 			
 			//<Selector-Detect> 실행(검사)
-			zombie_bt_map[roomid].sel_detect->Sel_Detect(*zom);
+			zombie_bt_map[roomid].sel_detect->Detect(*zom);
 
 			//<Selector-Detect> 검사 결과에 따라 task 진행
 			//if (zombie_bt_map[roomid].sel_canseeplayer->result) {

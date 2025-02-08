@@ -1,22 +1,27 @@
 ﻿#pragma once
 
 #include "Sequence.h"
-#include "iocpServerClass.h"
 
 
 class Seq_CanNotAttack : public Sequence {
 public:
 
     bool CanSeePlayer(Zombie& zom) override {
-        //cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
+#endif
 
         result = true;
 
         if (zom.DistanceTo_PlayerInsight.size() == 0) {
-            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: \"false\"" << endl;
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: \"false\"" << endl;
+#endif
             cout << "Zombie #" << zom.ZombieData.zombieID;
             cout << " DistanceTo_PlayerInsight Map ERROR!!! -> Player is in sight (PlayerInSight == true) but DistanceTo_PlayerInsight Map is empty" << endl;
-            //cout << endl;
+#ifdef ENABLE_BT_NODE_LOG
+            cout << endl;
+#endif
 
             result = false;
             return result;
@@ -43,8 +48,10 @@ public:
         }
 
         if (result) {
-            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
-            //cout << endl;
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
+            cout << endl;
+#endif
         }
         else {  // 사실상 여기에 걸리면 안됨! (CanNotAttack은 항상 CanAttack 검사가 실패할 경우에만 실행되므로 (CanSeePlayer 시퀀스로 직렬적, 순차적으로 작동))
             if (zom.PlayerInSight == false) {
@@ -52,13 +59,15 @@ public:
                 cout << " PlayerInSight Data Race Occured ERROR!!! -> CanSeePlayer Task is excecuted (PlayerInSight has to be true) but now PlayerInSight is false" << endl;
             }
             else {
-                cout << "Zombie #" << zom.ZombieData.zombieID;
-                cout << " got ERROR!!! And I dont know whhhhhyyyyy!!!" << endl;
+                //cout << "Zombie #" << zom.ZombieData.zombieID;
+                //cout << " got ERROR!!! And I dont know whhhhhyyyyy!!!" << endl;
                 // 만약, Detect Selector 를 병렬적으로 작동시키면 해당 에러 로그 필요 X
             }
 
-            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
-            //cout << endl;
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
+            cout << endl;
+#endif
         }
 
         return result;

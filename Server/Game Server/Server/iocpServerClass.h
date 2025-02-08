@@ -11,37 +11,33 @@
 #include <atomic>
 
 
+// 전방 선언 -> 순환 포함 문제를 피하기 위해 (ex: static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해)  [+] 해당 클래스 변수 여기서 사용하려면 포인터로 선언해서 사용
+class Zombie;
+class ZombiePathFinder;
+class ZombieController;
+class ItemController;
 // BT
-//#include "Selector.h"
-#include "Sequence.h"
+class Task;
+class Selector;
+class Sequence;
 
-//#include "Detect.h"
-//#include "CanSeePlayer.h"
-#include "HasShouting.h"
-#include "HasFootSound.h"
-#include "HasInvestigated.h"
-#include "NotHasLastKnownPlayerLocation.h"
-//#include "CanAttack.h"
-//#include "CanNotAttack.h"
-#include "Attack.h"
-//#include "MoveTo.h"
+class Sel_Detect;
+class Sel_CanSeePlayer;
+class Seq_HasShouting;
+class Seq_HasFootSound;
+class Seq_HasInvestigated;
+class Seq_NotHasLastKnownPlayerLocation;
+class Seq_CanAttack;
+class Seq_CanNotAttack;
+class T_Attack;
+class T_MoveTo;
 
 
 #define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그) ==> "로그가 많아 끊김 현상이 심하니 필요할 때만 키도록;;"
-#undef ENABLE_BT_LOG	// 이거 주석 풀면 -> 비활성화
+#undef ENABLE_BT_LOG	// 이거 주석 풀어서 -> 비활성화
 
-
-class ZombieController;
-class Zombie;
-class ZombiePathFinder;
-class ItemController;
-
-class TMoveTo;	// 전방 선언 -> static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해 (순환 포함 문제를 피하기 위해)  [+] 해당 클래스 변수 여기서 사용하려면 포인터로 선언해서 사용
-class TCanAttack;
-class TCanNotAttack;
-class TCanSeePlayer;
-class Selector;
-class Detect;
+#define ENABLE_BT_NODE_LOG	// 전처리기 디렉티브 활성화 (좀비 BT Node 관련 로그 cout 찍기 플래그)
+//#undef ENABLE_BT_NODE_LOG	// 이거 주석 풀어서 -> 비활성화
 
 
 using OVLP_EX = struct Overlap_ex {
@@ -93,30 +89,6 @@ struct RoomState {
 	bool b_IsEscaping = false;
 	int Escape_Root{};
 };
-
-//struct Zombie_BT_struct {
-//	Selector* sel_detect;
-//	Selector* sel_canseeplayer;
-//
-//	TCanSeePlayer* t_canseeplayer;
-//	THasShouting* t_hasshouting;
-//	THasFootSound* t_hasfootsound;
-//	THasInvestigated* t_hasinvestigated;
-//	TNotHasLastKnownPlayerLocation* t_nothaslastknownplayerlocation;
-//
-//	TCanNotAttack* t_cannotattack;
-//	TCanAttack* t_canattack;
-//
-//	TMoveTo* t_moveto;
-//	TAttack* t_attack;
-//
-//	Sequence seq_cannotattack;
-//	Sequence seq_canattack;
-//	Sequence seq_hasshouting;
-//	Sequence seq_hasfootsound;
-//	Sequence seq_hasinvestigated;
-//	Sequence seq_nothaslastknownplayerlocation;
-//};
 
 struct Zombie_BT_struct {
 	Selector* sel_detect;
@@ -201,10 +173,6 @@ public:
 	void IOCP_ErrorDisplay(const char *msg, int err_no, int line);
 	void IOCP_ErrorQuit(const wchar_t *msg, int err_no);
 
-	void ServerOn();
-
-	void Zombie_BT_Thread(int roomid);
-
 	bool LoadEdgesMap(const string& filePath,
 		vector<tuple<float, float, float>>& positions,
 		unordered_map<tuple<float, float, float>, vector<pair<tuple<float, float, float>, float>>, TupleHash>& EdgesMap);
@@ -218,6 +186,12 @@ public:
 
 	void Zombie_BT_Initialize(int roomid);
 	void Zombie_BT_Delete(int roomid);
+
+	void Zombie_BT_Thread(int roomid);
+
+	void GameTimerEndCheck(int roomid, float& GameTime, std::chrono::steady_clock::time_point currentTime, std::chrono::steady_clock::time_point& lastGTTime);
+
+	void ServerOn();
 
 	//서버가 먼저 켜지고 좀비 BT가 실행되도록 하기위해 사용 
 	bool bServerOn;
