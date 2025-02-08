@@ -8,7 +8,7 @@ public:
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "<Detect>의 [HasFootSound Task] 호출" << endl;
+        cout << "<Detect>의 (HasFootSound Decorator) 호출" << endl;
 #endif
 
         result = zom.FootSound_Update_Check();
@@ -30,9 +30,30 @@ public:
         }
 
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [HasFootSound Task] 결과: \"" << boolalpha << result << "\"" << endl;
+        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (HasFootSound Decorator) 결과: \"" << boolalpha << result << "\"" << endl;
         cout << endl;
 #endif
+
+        if (result == true)
+            HasFootSound(zom);
+
+        return result;
+    }
+
+    bool HasFootSound(Zombie& zom) {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "Sequence {HasFootSound} 호출" << endl;
+        cout << endl;
+#endif
+
+        for (const auto& child : seq_children) {
+            result = child->HasFootSound(zom);
+        }
+
+        if (result == false) {
+            cout << "\"Sequence HasFootSound [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
 
         return result;
     }

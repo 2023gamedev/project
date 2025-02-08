@@ -8,7 +8,7 @@ public:
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "<Detect>의 [HasInvestigated Task] 호출" << endl;
+        cout << "<Detect>의 (HasInvestigated Decorator) 호출" << endl;
 #endif
 
         result = zom.KnewPlayerLocation;
@@ -17,9 +17,30 @@ public:
         cout << "좀비 플레이어의 이전 위치 정보를 가지고 있는가?: " << boolalpha << result << endl;
         if (result)
             cout << "좀비가 가진 플레이어 이전 위치: ( " << zom.PrevTargetLocation[0][0][0] << ", " << zom.PrevTargetLocation[0][0][1] << ", " << zom.PrevTargetLocation[0][0][2] << " )" << endl;
-        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [HasInvestigated Task] 결과: \"" << boolalpha << result << "\"" << endl;
+        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (HasInvestigated Decorator) 결과: \"" << boolalpha << result << "\"" << endl;
         cout << endl;
 #endif
+
+        if (result == true)
+            HasInvestigated(zom);
+
+        return result;
+    }
+
+    bool HasInvestigated(Zombie& zom) {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "Sequence {HasInvestigated} 호출" << endl;
+        cout << endl;
+#endif
+
+        for (const auto& child : seq_children) {
+            result = child->HasInvestigated(zom);
+        }
+
+        if (result == false) {
+            cout << "\"Sequence HasInvestigated [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
 
         return result;
     }

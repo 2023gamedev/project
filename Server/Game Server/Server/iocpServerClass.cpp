@@ -604,8 +604,8 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
 
 	//<Selector-CanSeePlayer> 할당 -> 필요 자식노드들 '순서대로' 삽입
-	//zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
-	//zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_cannotattack);
+	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
+	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_cannotattack);
 
 	//{Sequence-CanAttack} 할당 -> 필요 자식노드들 '순서대로' 삽입
 	zombie_bt_map[roomid].seq_canattack->AddChild(zombie_bt_map[roomid].t_attack);

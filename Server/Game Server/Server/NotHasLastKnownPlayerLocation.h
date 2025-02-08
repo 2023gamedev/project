@@ -8,7 +8,7 @@ public:
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "<Detect>의 [NotHasLastKnownPlayerLocation Task] 호출" << endl;
+        cout << "<Detect>의 (NotHasLastKnownPlayerLocation Decorator) 호출" << endl;
 #endif
 
         result = !zom.KnewPlayerLocation;
@@ -24,9 +24,30 @@ public:
         //}
 
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [NotHasLastKnownPlayerLocation Task] 결과: \"" << boolalpha << result << "\"" << endl;
+        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (NotHasLastKnownPlayerLocation Decorator) 결과: \"" << boolalpha << result << "\"" << endl;
         cout << endl;
 #endif
+
+        if (result == true)
+            NotHasLastKnownPlayerLocation(zom);
+
+        return result;
+    }
+
+    bool NotHasLastKnownPlayerLocation(Zombie& zom) {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "Sequence {NotHasLastKnownPlayerLocation} 호출" << endl;
+        cout << endl;
+#endif
+
+        for (const auto& child : seq_children) {
+            result = child->NotHasLastKnownPlayerLocation(zom);
+        }
+
+        if (result == false) {
+            cout << "\"Sequence NotHasLastKnownPlayerLocation [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
 
         return result;
     }

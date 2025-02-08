@@ -8,7 +8,7 @@ public:
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "<Detect> 호출" << endl;
+        cout << "Selector <Detect> 호출" << endl;
         cout << endl;
 #endif
 

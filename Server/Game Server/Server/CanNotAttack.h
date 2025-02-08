@@ -8,14 +8,14 @@ public:
 
     bool CanSeePlayer(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
+        cout << "<CanSeePlayer>의 (CanNotAttack Decorator) 호출" << endl;
 #endif
 
         result = true;
 
         if (zom.DistanceTo_PlayerInsight.size() == 0) {
 #ifdef ENABLE_BT_NODE_LOG
-            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: \"false\"" << endl;
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: \"false\"" << endl;
 #endif
             cout << "Zombie #" << zom.ZombieData.zombieID;
             cout << " DistanceTo_PlayerInsight Map ERROR!!! -> Player is in sight (PlayerInSight == true) but DistanceTo_PlayerInsight Map is empty" << endl;
@@ -49,7 +49,7 @@ public:
 
         if (result) {
 #ifdef ENABLE_BT_NODE_LOG
-            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << result << endl;
             cout << endl;
 #endif
         }
@@ -65,9 +65,30 @@ public:
             }
 
 #ifdef ENABLE_BT_NODE_LOG
-            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << result << endl;
             cout << endl;
 #endif
+        }
+
+        if (result == true)
+            CanNotAttack(zom);
+
+        return result;
+    }
+
+    bool CanNotAttack(Zombie& zom) override {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "Sequence {CanNotAttack} 호출" << endl;
+        cout << endl;
+#endif
+
+        for (const auto& child : seq_children) {
+            result = child->CanNotAttack(zom);
+        }
+
+        if (result == false) {
+            cout << "\"Sequence CanNotAttack [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
         }
 
         return result;
