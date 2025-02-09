@@ -911,6 +911,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			}
 
 			TArray<FVector> CutSectionVertices2;
+			TArray<FVector> ClusterCenters;
 			FProcMeshSection* CutSection2 = CutProceduralMesh_2->GetProcMeshSection(CutProceduralMesh_2->GetNumSections() - 1);
 			if (CutSection2)
 			{
@@ -946,7 +947,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 
 			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2);
-			GetVerticesByCluster(CutSectionVertices2, Labels2);
+			GetVerticesByCluster(CutSectionVertices2, Labels2, ClusterCenters);
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
@@ -1024,6 +1025,59 @@ FName ABaseZombie::GetBoneNameForVertex(const FVector& TargetPosition)
 	//	// Bone 이름을 가져옴
 	//	return Skeleton->GetBoneName(ActualBone);
 	//}
+
+	// 버텍스가 없으면 빈 이름을 반환
+	return FName();
+}
+
+// 잘린 단면 부분은 가까운 버텍스 구하도록 함수 구현
+FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
+{
+	// SkeletalMeshComponent와 LODData 가져오기
+	USkeletalMeshComponent* Skeleton = GetMesh();
+	FSkeletalMeshRenderData* SkMeshRenderData = Skeleton->GetSkeletalMeshRenderData();
+	const FSkeletalMeshLODRenderData& DataArray = SkMeshRenderData->LODRenderData[0];
+	FSkinWeightVertexBuffer& SkinWeights = *Skeleton->GetSkinWeightBuffer(0);
+
+	// 가장 가까운 버텍스와 그 버텍스의 거리
+	float ClosestDistance = FLT_MAX;
+	int32 ClosestVertexIndex = -1;
+
+	// 모든 버텍스를 순회하여 주어진 좌표와 비교
+	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
+	{
+		const int32 NumSourceVertices = DataArray.RenderSections[j].NumVertices;
+		const int32 BaseVertexIndex = DataArray.RenderSections[j].BaseVertexIndex;
+
+		for (int32 i = 0; i < NumSourceVertices; i++)
+		{
+			const int32 VertexIndex = i + BaseVertexIndex;
+			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
+			FVector VertexPosition = FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z);
+
+			// 주어진 좌표와의 거리 계산
+			float Distance = FVector::Dist(VertexPosition, TargetPosition);
+
+			// 가장 가까운 버텍스 찾기
+			if (Distance < ClosestDistance)
+			{
+				ClosestDistance = Distance;
+				ClosestVertexIndex = VertexIndex;
+			}
+
+		}
+	}
+
+	// 가장 가까운 버텍스가 영향을 받는 Bone 찾기
+	if (ClosestVertexIndex != -1)
+	{
+		// 해당 버텍스의 Bone 인덱스를 가져옴
+		int32 BoneIndex = SkinWeights.GetBoneIndex(ClosestVertexIndex, 0);
+		int32 ActualBone = DataArray.RenderSections[0].BoneMap[BoneIndex]; // 이걸 0~끝까지 다 계산할 필요 있을까 싶어서 0인덱스만 계산
+
+		// Bone 이름을 가져옴
+		return Skeleton->GetBoneName(ActualBone);
+	}
 
 	// 버텍스가 없으면 빈 이름을 반환
 	return FName();
@@ -1136,7 +1190,7 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 
 }
 
-void ABaseZombie::GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels)
+void ABaseZombie::GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TArray<FVector>& ClusterCenters)
 {
 	TMap<int, TArray<FVector>> ClusteredVertices;
 
@@ -1150,12 +1204,34 @@ void ABaseZombie::GetVerticesByCluster(const TArray<FVector>& Vertices, const TA
 		}
 	}
 
-	// 각 클러스터에 포함된 버텍스들 출력
+	// 클러스터 개수만큼 배열 크기 설정
+	ClusterCenters.SetNum(ClusteredVertices.Num());
+
+	// 각 클러스터에 포함된 버텍스들 출력 및 평균 계산
 	for (const TPair<int, TArray<FVector>>& Cluster : ClusteredVertices)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, Cluster.Value.Num());
+		const TArray<FVector>& VerticesInCluster = Cluster.Value;
+		FVector ClusterCenter(0, 0, 0);
 
-		for (const FVector& Vertex : Cluster.Value)
+		// 클러스터 내 모든 버텍스의 합을 구함
+		for (const FVector& Vertex : VerticesInCluster)
+		{
+			ClusterCenter += Vertex;
+		}
+
+		// 평균 위치 계산 (버텍스 개수로 나눔)
+		if (VerticesInCluster.Num() > 0)
+		{
+			ClusterCenter /= VerticesInCluster.Num();
+		}
+
+		// 클러스터 ID에 맞게 평균값 저장
+		ClusterCenters[Cluster.Key] = ClusterCenter;
+
+		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, VerticesInCluster.Num());
+		UE_LOG(LogTemp, Warning, TEXT("Cluster %d Center: %s"), Cluster.Key, *ClusterCenter.ToString());
+
+		for (const FVector& Vertex : VerticesInCluster)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Vertex: %s"), *Vertex.ToString());
 		}

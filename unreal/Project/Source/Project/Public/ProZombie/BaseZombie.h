@@ -181,10 +181,12 @@ public:
 	void SliceProceduralmeshTest(FVector planeposition, FVector planenormal);
 
 	FName GetBoneNameForVertex(const FVector& TargetPosition);
+	FName GetBoneNameForCutPlaneVertex(const FVector& TargetPosition);
+
 	float CalculateEuclideanDistance(const FVector& Point1, const FVector& Point2);
 	float CalculateAverageDistance(const TArray<FVector>& Vertices);
 	void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels);
-	void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels);
+	void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TArray<FVector>& ClusterCenters);
 
 	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
 
