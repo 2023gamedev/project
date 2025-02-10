@@ -17,8 +17,9 @@ public:
 USTRUCT(BlueprintType)
 struct FZBoneStructure
 {
-    GENERATED_BODY()
-    //GENERATED_USTRUCT_BODY()
+    //GENERATED_BODY()
+    GENERATED_USTRUCT_BODY()
+
 public:
     // 본 이름
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -34,12 +35,7 @@ public:
     FZBoneStructure() {}
 
     // 초기화 생성자
-    FZBoneStructure(const FName& InName, TSharedPtr<FZBoneStructure> InParent = nullptr)
-        : Name(InName), Parent(InParent)
-    {
-        if (Parent.IsValid())
-        {
-            Parent.Pin()->Children.Add(MakeShared<FZBoneStructure>(*this));
-        }
-    }
+    FZBoneStructure(const FName& InName)
+        : Name(InName)
+    {}
 };

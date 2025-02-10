@@ -14,10 +14,12 @@
 #include "ProCharacter/BaseCharacter.h"
 #include "ProItem/NormalWeaponActor.h"
 
+// 구조체
+#include "ProData/ZBoneStruct.h"
+
 #include "BaseZombie.generated.h"
 
-// 구조체
-//#include "ProData/ZBoneStruct.h"
+
 
 
 
@@ -319,4 +321,11 @@ public:
 
 	
 	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(0-NULL_TARGET,	1-PLAYER, 2-SHOUTING, 3-FOOTSOUND, 4-INVESTIGATED, 5-PATROL)
+
+
+	TSharedPtr<FZBoneStructure> RootBone;  // **트리 루트 (최상위 본)**
+
+	void InitializeBoneHierarchy();  // 본 트리 초기화
+	void PrintBoneHierarchy(TSharedPtr<FZBoneStructure> Bone, int Depth = 0);
+
 };

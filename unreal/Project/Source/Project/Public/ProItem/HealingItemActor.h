@@ -32,7 +32,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = HealingItem)
 	UStaticMeshComponent* HealingItem;
 
-	// ¹«±âÀÇ ½ºÅÈµé
+	// ë¬´ê¸°ì˜ ìŠ¤íƒ¯ë“¤
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fHealingSpeed;
 

@@ -57,6 +57,245 @@ ABaseZombie::ABaseZombie()
 	NextPath[1] = { -100000.f, -100000.f, -100000.f };
 }
 
+void ABaseZombie::InitializeBoneHierarchy()
+{
+
+	RootBone = MakeShared<FZBoneStructure>(TEXT("Hips"));
+
+	// Left Leg 계열
+	TSharedPtr<FZBoneStructure> LeftUpLeg = MakeShared<FZBoneStructure>(TEXT("LeftUpLeg"));
+	TSharedPtr<FZBoneStructure> LeftLeg = MakeShared<FZBoneStructure>(TEXT("LeftLeg"));
+	TSharedPtr<FZBoneStructure> LeftFoot = MakeShared<FZBoneStructure>(TEXT("LeftFoot"));
+	TSharedPtr<FZBoneStructure> LeftToeBase = MakeShared<FZBoneStructure>(TEXT("LeftToeBase"));
+
+	// Left Leg 계열
+	TSharedPtr<FZBoneStructure> RightUpLeg = MakeShared<FZBoneStructure>(TEXT("RightUpLeg"));
+	TSharedPtr<FZBoneStructure> RightLeg = MakeShared<FZBoneStructure>(TEXT("RightLeg"));
+	TSharedPtr<FZBoneStructure> RightFoot = MakeShared<FZBoneStructure>(TEXT("RightFoot"));
+	TSharedPtr<FZBoneStructure> RightToeBase = MakeShared<FZBoneStructure>(TEXT("RightToeBase"));
+
+	// Spine 계열
+	TSharedPtr<FZBoneStructure> Spine = MakeShared<FZBoneStructure>(TEXT("Spine"));
+	TSharedPtr<FZBoneStructure> Spine1 = MakeShared<FZBoneStructure>(TEXT("Spine1"));
+	TSharedPtr<FZBoneStructure> Spine2 = MakeShared<FZBoneStructure>(TEXT("Spine2"));
+
+	// Left Arm 계열
+	TSharedPtr<FZBoneStructure> LeftShoulder = MakeShared<FZBoneStructure>(TEXT("LeftShoulder"));
+	TSharedPtr<FZBoneStructure> LeftArm = MakeShared<FZBoneStructure>(TEXT("LeftArm"));
+	TSharedPtr<FZBoneStructure> LeftForeArm = MakeShared<FZBoneStructure>(TEXT("LeftForeArm"));
+	TSharedPtr<FZBoneStructure> LeftHand = MakeShared<FZBoneStructure>(TEXT("LeftHand"));
+
+	TSharedPtr<FZBoneStructure> LeftHandIndex1 = MakeShared<FZBoneStructure>(TEXT("LeftHandIndex1"));
+	TSharedPtr<FZBoneStructure> LeftHandIndex2 = MakeShared<FZBoneStructure>(TEXT("LeftHandIndex2"));
+	TSharedPtr<FZBoneStructure> LeftHandIndex3 = MakeShared<FZBoneStructure>(TEXT("LeftHandIndex3"));
+
+	TSharedPtr<FZBoneStructure> LeftHandMiddle1 = MakeShared<FZBoneStructure>(TEXT("LeftHandMiddle1"));
+	TSharedPtr<FZBoneStructure> LeftHandMiddle2 = MakeShared<FZBoneStructure>(TEXT("LeftHandMiddle2"));
+	TSharedPtr<FZBoneStructure> LeftHandMiddle3 = MakeShared<FZBoneStructure>(TEXT("LeftHandMiddle3"));
+
+	TSharedPtr<FZBoneStructure> LeftHandPinky1 = MakeShared<FZBoneStructure>(TEXT("LeftHandPinky1"));
+	TSharedPtr<FZBoneStructure> LeftHandPinky2 = MakeShared<FZBoneStructure>(TEXT("LeftHandPinky2"));
+	TSharedPtr<FZBoneStructure> LeftHandPinky3 = MakeShared<FZBoneStructure>(TEXT("LeftHandPinky3"));
+
+	TSharedPtr<FZBoneStructure> LeftHandRing1 = MakeShared<FZBoneStructure>(TEXT("LeftHandRing1"));
+	TSharedPtr<FZBoneStructure> LeftHandRing2 = MakeShared<FZBoneStructure>(TEXT("LeftHandRing2"));
+	TSharedPtr<FZBoneStructure> LeftHandRing3 = MakeShared<FZBoneStructure>(TEXT("LeftHandRing3"));
+
+	TSharedPtr<FZBoneStructure> LeftHandThumb1 = MakeShared<FZBoneStructure>(TEXT("LeftHandThumb1"));
+	TSharedPtr<FZBoneStructure> LeftHandThumb2 = MakeShared<FZBoneStructure>(TEXT("LeftHandThumb2"));
+	TSharedPtr<FZBoneStructure> LeftHandThumb3 = MakeShared<FZBoneStructure>(TEXT("LeftHandThumb3"));
+
+	//Neck계열
+	TSharedPtr<FZBoneStructure> Neck = MakeShared<FZBoneStructure>(TEXT("Neck"));
+	TSharedPtr<FZBoneStructure> Head = MakeShared<FZBoneStructure>(TEXT("Head"));
+	TSharedPtr<FZBoneStructure> LeftEye = MakeShared<FZBoneStructure>(TEXT("LeftEye"));
+	TSharedPtr<FZBoneStructure> RightEye = MakeShared<FZBoneStructure>(TEXT("RightEye"));
+
+	// Right Arm 계열
+	TSharedPtr<FZBoneStructure> RightShoulder = MakeShared<FZBoneStructure>(TEXT("RightShoulder"));
+	TSharedPtr<FZBoneStructure> RightArm = MakeShared<FZBoneStructure>(TEXT("RightArm"));
+	TSharedPtr<FZBoneStructure> RightForeArm = MakeShared<FZBoneStructure>(TEXT("RightForeArm"));
+	TSharedPtr<FZBoneStructure> RightHand = MakeShared<FZBoneStructure>(TEXT("RightHand"));
+
+	TSharedPtr<FZBoneStructure> RightHandIndex1 = MakeShared<FZBoneStructure>(TEXT("RightHandIndex1"));
+	TSharedPtr<FZBoneStructure> RightHandIndex2 = MakeShared<FZBoneStructure>(TEXT("RightHandIndex2"));
+	TSharedPtr<FZBoneStructure> RightHandIndex3 = MakeShared<FZBoneStructure>(TEXT("RightHandIndex3"));
+								
+	TSharedPtr<FZBoneStructure> RightHandMiddle1 = MakeShared<FZBoneStructure>(TEXT("RightHandMiddle1"));
+	TSharedPtr<FZBoneStructure> RightHandMiddle2 = MakeShared<FZBoneStructure>(TEXT("RightHandMiddle2"));
+	TSharedPtr<FZBoneStructure> RightHandMiddle3 = MakeShared<FZBoneStructure>(TEXT("RightHandMiddle3"));
+								
+	TSharedPtr<FZBoneStructure> RightHandPinky1 = MakeShared<FZBoneStructure>(TEXT("RightHandPinky1"));
+	TSharedPtr<FZBoneStructure> RightHandPinky2 = MakeShared<FZBoneStructure>(TEXT("RightHandPinky2"));
+	TSharedPtr<FZBoneStructure> RightHandPinky3 = MakeShared<FZBoneStructure>(TEXT("RightHandPinky3"));
+								
+	TSharedPtr<FZBoneStructure> RightHandRing1 = MakeShared<FZBoneStructure>(TEXT("RightHandRing1"));
+	TSharedPtr<FZBoneStructure> RightHandRing2 = MakeShared<FZBoneStructure>(TEXT("RightHandRing2"));
+	TSharedPtr<FZBoneStructure> RightHandRing3 = MakeShared<FZBoneStructure>(TEXT("RightHandRing3"));
+								
+	TSharedPtr<FZBoneStructure> RightHandThumb1 = MakeShared<FZBoneStructure>(TEXT("RightHandThumb1"));
+	TSharedPtr<FZBoneStructure> RightHandThumb2 = MakeShared<FZBoneStructure>(TEXT("RightHandThumb2"));
+	TSharedPtr<FZBoneStructure> RightHandThumb3 = MakeShared<FZBoneStructure>(TEXT("RightHandThumb3"));
+
+
+	// 부모-자식 관계 설정 (여기서 직접 설정)
+	RootBone->Children = { Spine, LeftUpLeg, RightUpLeg};
+
+	Spine->Parent = RootBone;
+	LeftUpLeg->Parent = RootBone;
+	RightUpLeg->Parent = RootBone;
+
+
+	LeftUpLeg->Children = { LeftLeg };
+	LeftLeg->Parent = LeftUpLeg;
+
+	LeftLeg->Children = { LeftFoot };
+	LeftFoot->Parent = LeftLeg;
+
+	LeftFoot->Children = { LeftToeBase };
+	LeftToeBase->Parent = LeftFoot;
+
+
+	RightUpLeg->Children = { RightLeg };
+	RightLeg->Parent = RightUpLeg;
+	
+	RightLeg->Children = { RightFoot };
+	RightFoot->Parent = RightLeg;
+	
+	RightFoot->Children = { RightToeBase };
+	RightToeBase->Parent = RightFoot;
+
+	Spine->Children = { Spine1 };
+	Spine1->Parent = Spine;
+
+	Spine1->Children = { Spine2 };
+	Spine2->Parent = Spine1;
+
+	Spine2->Children = { LeftShoulder, Neck, RightShoulder };
+	LeftShoulder->Parent = Spine2;
+	Neck->Parent = Spine2;
+	RightShoulder->Parent = Spine2;
+
+	LeftShoulder->Children = { LeftArm };
+	LeftArm->Parent = LeftShoulder;
+
+	LeftArm->Children = { LeftForeArm };
+	LeftForeArm->Parent = LeftArm;
+
+	LeftForeArm->Children = { LeftHand };
+	LeftHand->Parent = LeftForeArm;
+
+	LeftHand->Children = { LeftHandIndex1, LeftHandMiddle1, LeftHandPinky1, LeftHandRing1, LeftHandThumb1};
+	LeftHandIndex1->Parent = LeftHand;
+	LeftHandMiddle1->Parent = LeftHand;
+	LeftHandPinky1->Parent = LeftHand;
+	LeftHandRing1->Parent = LeftHand;
+	LeftHandThumb1->Parent = LeftHand;
+
+	LeftHandIndex1->Children = { LeftHandIndex2 };
+	LeftHandIndex2->Parent = LeftHandIndex1;
+
+	LeftHandIndex2->Children = { LeftHandIndex3 };
+	LeftHandIndex3->Parent = LeftHandIndex2;
+
+
+	LeftHandMiddle1->Children = { LeftHandMiddle2 };
+	LeftHandMiddle2->Parent = LeftHandMiddle1;
+
+	LeftHandMiddle2->Children = { LeftHandMiddle3 };
+	LeftHandMiddle3->Parent = LeftHandMiddle2;
+
+
+	LeftHandPinky1->Children = { LeftHandPinky2 };
+	LeftHandPinky2->Parent = LeftHandPinky1;
+
+	LeftHandPinky2->Children = { LeftHandPinky3 };
+	LeftHandPinky3->Parent = LeftHandPinky2;
+
+
+	LeftHandRing1->Children = { LeftHandRing2 };
+	LeftHandRing2->Parent = LeftHandRing1;
+	
+	LeftHandRing2->Children = { LeftHandRing3 };
+	LeftHandRing3->Parent = LeftHandRing2;
+
+
+	LeftHandThumb1->Children = { LeftHandThumb2 };
+	LeftHandThumb2->Parent = LeftHandThumb1;
+	
+	LeftHandThumb2->Children = { LeftHandThumb3 };
+	LeftHandThumb3->Parent = LeftHandThumb2;
+
+
+	Neck->Children = { Head };
+	Head->Parent = Neck;
+	
+	Head->Children = { LeftEye, RightEye };
+	LeftEye->Parent = Head;
+	RightEye->Parent = Head;
+
+
+	RightShoulder->Children = { RightArm };
+	RightArm->Parent = RightShoulder;
+
+	RightArm->Children = { RightForeArm };
+	RightForeArm->Parent = RightArm;
+
+	RightForeArm->Children = { RightHand };
+	RightHand->Parent = RightForeArm;
+
+	RightHand->Children = { RightHandIndex1, RightHandMiddle1, RightHandPinky1, RightHandRing1, RightHandThumb1 };
+	RightHandIndex1->Parent = LeftHand;
+	RightHandMiddle1->Parent = LeftHand;
+	RightHandPinky1->Parent = LeftHand;
+	RightHandRing1->Parent = LeftHand;
+	RightHandThumb1->Parent = LeftHand;
+
+	RightHandIndex1->Children = { RightHandIndex2 };
+	RightHandIndex2->Parent = RightHandIndex1;
+
+	RightHandIndex2->Children = { RightHandIndex3 };
+	RightHandIndex3->Parent = RightHandIndex2;
+
+	RightHandMiddle1->Children = { RightHandMiddle2 };
+	RightHandMiddle2->Parent = RightHandMiddle1;
+
+	RightHandMiddle2->Children = { RightHandMiddle3 };
+	RightHandMiddle3->Parent = RightHandMiddle2;
+
+	RightHandPinky1->Children = { RightHandPinky2 };
+	RightHandPinky2->Parent = RightHandPinky1;
+
+	RightHandPinky2->Children = { RightHandPinky3 };
+	RightHandPinky3->Parent = RightHandPinky2;
+
+	RightHandRing1->Children = { RightHandRing2 };
+	RightHandRing2->Parent = RightHandRing1;
+
+	RightHandRing2->Children = { RightHandRing3 };
+	RightHandRing3->Parent = RightHandRing2;
+
+	RightHandThumb1->Children = { RightHandThumb2 };
+	RightHandThumb2->Parent = RightHandThumb1;
+
+	RightHandThumb2->Children = { RightHandThumb3 };
+	RightHandThumb3->Parent = RightHandThumb2;
+
+}
+
+void ABaseZombie::PrintBoneHierarchy(TSharedPtr<FZBoneStructure> Bone, int Depth)
+{
+	if (!Bone.IsValid()) return;
+
+	FString Indentation = FString::ChrN(Depth * 2, ' '); // 깊이에 따라 들여쓰기
+	UE_LOG(LogTemp, Warning, TEXT("%s%s"), *Indentation, *Bone->Name.ToString());
+
+	for (const TSharedPtr<FZBoneStructure>& Child : Bone->Children)
+	{
+		PrintBoneHierarchy(Child, Depth + 1);
+	}
+}
+
 // Called when the game starts or when spawned
 void ABaseZombie::BeginPlay()
 {
@@ -67,6 +306,9 @@ void ABaseZombie::BeginPlay()
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ABaseZombie::OnZombieHit);
+
+	InitializeBoneHierarchy();
+	PrintBoneHierarchy(RootBone);
 }
 
 // Called every frame
@@ -386,6 +628,8 @@ float ABaseZombie::SetImpulseByWeight(float targetWeight, float baseImpulse)
 
 	return targetImpulse;
 }
+
+
 
 // 좀비가 공격을 받았을 때
 float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
