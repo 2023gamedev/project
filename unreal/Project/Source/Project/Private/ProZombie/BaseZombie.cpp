@@ -936,6 +936,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				for (int32 i = 0; i < SectionVertices.Num(); i++)
 				{
 					int32 GlobalIndex = Vertices.Add(SectionVertices[i].Position);
+					
+					// 각 bone 저장
+					GetBoneNameForVertex(SectionVertices[i].Position);
 					UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->Vertex : X : %f, Y : %f, Z : %f "), SectionIndex, SectionVertices[i].Position.X, SectionVertices[i].Position.Y, SectionVertices[i].Position.Z);
 
 				}

@@ -16,6 +16,10 @@
 
 #include "BaseZombie.generated.h"
 
+// 구조체
+//#include "ProData/ZBoneStruct.h"
+
+
 
 DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
