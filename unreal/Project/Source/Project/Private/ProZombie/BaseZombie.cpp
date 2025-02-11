@@ -308,7 +308,7 @@ void ABaseZombie::BeginPlay()
 	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ABaseZombie::OnZombieHit);
 
 	InitializeBoneHierarchy();
-	PrintBoneHierarchy(RootBone);
+	//PrintBoneHierarchy(RootBone);
 }
 
 // Called every frame
@@ -1018,17 +1018,17 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		// test5
 		//TSet<FVector> CutSectionVertices;  // 절단된 단면 버텍스 저장
-		TArray<FVector> CutSectionVertices;  // 절단된 단면 버텍스 저장
+		//TArray<FVector> CutSectionVertices;  // 절단된 단면 버텍스 저장
 
-		TArray<FVector> Vertices;
-		TArray<int32> Triangles;
-		TArray<FVector> Normals;
-		TArray<FVector2D> UVs;
-		TArray<FColor> Colors;
-		TArray<FProcMeshTangent> Tangents;
+		//TArray<FVector> Vertices;
+		//TArray<int32> Triangles;
+		//TArray<FVector> Normals;
+		//TArray<FVector2D> UVs;
+		//TArray<FColor> Colors;
+		//TArray<FProcMeshTangent> Tangents;
 
-		TMap<int32, TSet<int32>> AdjacencyMap;
-		TMap<int32, int32> VertexToSectionMap;
+		//TMap<int32, TSet<int32>> AdjacencyMap;
+		//TMap<int32, int32> VertexToSectionMap;
 
 		// CutProceduralMesh_1은 두개로 잘릴 가능성 없음
 		//FProcMeshSection* CutSection = CutProceduralMesh_1->GetProcMeshSection(CutProceduralMesh_1->GetNumSections() - 1);
@@ -1139,6 +1139,20 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			CutProceduralMesh_2->SetCollisionProfileName(TEXT("Ragdoll"));
 			CutProceduralMesh_2->SetSimulatePhysics(true);
 
+			TArray<FVector> CutSectionVertices;  // 절단된 단면 버텍스 저장
+
+			TArray<FVector> Vertices;
+			TArray<int32> Triangles;
+			TArray<FVector> Normals;
+			TArray<FVector2D> UVs;
+			TArray<FColor> Colors;
+			TArray<FProcMeshTangent> Tangents;
+
+			TMap<int32, TSet<int32>> AdjacencyMap;
+			TMap<int32, int32> VertexToSectionMap;
+
+			// 섹션
+			TMap<int32, TMap<int32, FName>> SectionVertexBoneMap;
 
 			// Blood Effect rootcomponent(proc mesh) 설정 후 스폰
 			if (BloodFX.Num() >= 2) {
@@ -1155,7 +1169,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			}
 
 			TArray<FVector> CutSectionVertices2;
-			TArray<FVector> ClusterCenters;
+
 			FProcMeshSection* CutSection2 = CutProceduralMesh_2->GetProcMeshSection(CutProceduralMesh_2->GetNumSections() - 1);
 			if (CutSection2)
 			{
@@ -1182,7 +1196,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					int32 GlobalIndex = Vertices.Add(SectionVertices[i].Position);
 					
 					// 각 bone 저장
-					GetBoneNameForVertex(SectionVertices[i].Position);
+					FName BoneName = GetBoneNameForVertex(SectionVertices[i].Position);
+
+					// 맵에 저장 (섹션 인덱스 -> 버텍스 인덱스 -> 본 이름)
+					SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, BoneName);
+
 					UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->Vertex : X : %f, Y : %f, Z : %f "), SectionIndex, SectionVertices[i].Position.X, SectionVertices[i].Position.Y, SectionVertices[i].Position.Z);
 
 				}
@@ -1191,10 +1209,22 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			TArray<int> Labels2;
 			int MinPts2 = 3;     // 최소 점 개수
+			TMap<int, TArray<FVector>> ClusteredVertices;
+			TMap<int, FVector> ClusterCenters;
 
-
-			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2);
+			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices);
 			GetVerticesByCluster(CutSectionVertices2, Labels2, ClusterCenters);
+
+
+			if (ClusterCenters.Num() <= 1) {
+				return; // CutProceduralMesh_2 그대로 사용
+			}
+			else if (ClusterCenters.Num() > 1) { // CutProceduralMesh_2 분해
+				for (const TPair<int, FVector>& Cluster : ClusterCenters) {
+
+					FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value); // 이 bonename 이용해 해야 되는데 최적화 문제가 있긴 하다.
+				}
+			}
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
@@ -1210,6 +1240,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 	// 단면 - bone , 버텍스 - bone 을 이용하여 proceduralmesh 생성하는 작업 필요 -> 그거에 대한 convexmesh 수정 필요
 	// 생성 성공시 cutpromesh_2 삭제 및 zombie tick에서 하던 부분 수정 필요
 
+
+	// 문제 spine1, spine2에 절단 시 n개 절단을 어떻게 해줘야 할지 고민중 
 
 }
 
@@ -1252,7 +1284,19 @@ FName ABaseZombie::GetBoneNameForVertex(const FVector& TargetPosition)
 			// 그냥 좌표가 동일할 때 작동해야 하는 것 같아 사용
 			if (VertexPosition == TargetPosition) {
 				// 해당 버텍스의 Bone 인덱스를 가져옴
+				if (i >= (int32)(SkinWeights.GetNumVertices()))  //유효한 버텍스인지 확인
+				{
+					/*UE_LOG(LogTemp, Error, TEXT("SkinWeights: Invalid vertex index %d (Max: %d)"), i, SkinWeights.GetNumVertices() - 1);*/
+					continue;
+				}
 				int32 BoneIndex = SkinWeights.GetBoneIndex(i, 0);
+
+				if (BoneIndex >= DataArray.RenderSections[j].BoneMap.Num())  //BoneMap 배열 체크
+				{
+					/*UE_LOG(LogTemp, Error, TEXT("BoneIndex %d is out of range for BoneMap (Size: %d)"),
+						BoneIndex, DataArray.RenderSections[j].BoneMap.Num());*/
+					continue;
+				}
 				int32 ActualBone = DataArray.RenderSections[j].BoneMap[BoneIndex];
 
 				// Bone 이름을 가져옴
@@ -1350,7 +1394,7 @@ float ABaseZombie::CalculateAverageDistance(const TArray<FVector>& Vertices)
 	return TotalDistance / Count;
 }
 
-void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels)
+void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<FVector>>& ClusteredVertices)
 {
 	int ClusterId = 0;
 	Labels.SetNumUninitialized(Vertices.Num());
@@ -1362,15 +1406,12 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 
 	// 평균 거리 계산
 	float AvgDistance = CalculateAverageDistance(Vertices);
-	UE_LOG(LogTemp, Warning, TEXT("Average Distance: %f"), AvgDistance);
-
 	float Eps = AvgDistance * 0.2f;
-	UE_LOG(LogTemp, Warning, TEXT("Using Eps value: %f"), Eps);
 
 	// DBSCAN 알고리즘
 	for (int i = 0; i < Vertices.Num(); ++i)
 	{
-		if (Labels[i] != -1) continue; 
+		if (Labels[i] != -1) continue;
 
 		TArray<int> Neighbors;
 		for (int j = 0; j < Vertices.Num(); ++j)
@@ -1385,6 +1426,7 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 		{
 			ClusterId++;
 			Labels[i] = ClusterId;
+			ClusteredVertices.FindOrAdd(ClusterId).Add(Vertices[i]); // 클러스터에 추가
 
 			TArray<int> SeedSet = Neighbors;
 			int Index = 0;
@@ -1395,6 +1437,7 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 				if (Labels[CurrentIdx] == -1)
 				{
 					Labels[CurrentIdx] = ClusterId;
+					ClusteredVertices.FindOrAdd(ClusterId).Add(Vertices[CurrentIdx]); // 클러스터에 추가
 				}
 
 				TArray<int> NewNeighbors;
@@ -1422,22 +1465,23 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 		}
 	}
 
-	// 클러스터 개수 출력하는 함수
+	// 클러스터 개수 및 클러스터별 버텍스 출력
 	int ClusterCount = 0;
-	for (int Label : Labels)
+	for (const auto& Cluster : ClusteredVertices)
 	{
-		if (Label >= 0)
+		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, Cluster.Value.Num());
+		ClusterCount = FMath::Max(ClusterCount, Cluster.Key);
+
+		for (const FVector& Vertex : Cluster.Value)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Label: %d"), Label);
-			ClusterCount = FMath::Max(ClusterCount, Label);
-			//ClusterCount = FMath::Max(ClusterCount, Label + 1);
+			UE_LOG(LogTemp, Warning, TEXT("Vertex: %s"), *Vertex.ToString());
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Number of Clusters: %d"), ClusterCount);
 
+	UE_LOG(LogTemp, Warning, TEXT("Number of Clusters: %d"), ClusterCount);
 }
 
-void ABaseZombie::GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TArray<FVector>& ClusterCenters)
+void ABaseZombie::GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters)
 {
 	TMap<int, TArray<FVector>> ClusteredVertices;
 
@@ -1445,43 +1489,33 @@ void ABaseZombie::GetVerticesByCluster(const TArray<FVector>& Vertices, const TA
 	{
 		int ClusterId = Labels[i];
 
-		if (ClusterId != -1)  
+		if (ClusterId != -1)
 		{
 			ClusteredVertices.FindOrAdd(ClusterId).Add(Vertices[i]);
 		}
 	}
 
-	// 클러스터 개수만큼 배열 크기 설정
-	ClusterCenters.SetNum(ClusteredVertices.Num());
-
-	// 각 클러스터에 포함된 버텍스들 출력 및 평균 계산
+	// 각 클러스터의 중심 좌표 계산
 	for (const TPair<int, TArray<FVector>>& Cluster : ClusteredVertices)
 	{
 		const TArray<FVector>& VerticesInCluster = Cluster.Value;
 		FVector ClusterCenter(0, 0, 0);
 
-		// 클러스터 내 모든 버텍스의 합을 구함
 		for (const FVector& Vertex : VerticesInCluster)
 		{
 			ClusterCenter += Vertex;
 		}
 
-		// 평균 위치 계산 (버텍스 개수로 나눔)
 		if (VerticesInCluster.Num() > 0)
 		{
 			ClusterCenter /= VerticesInCluster.Num();
 		}
 
-		// 클러스터 ID에 맞게 평균값 저장
-		ClusterCenters[Cluster.Key] = ClusterCenter;
+		// 클러스터 ID를 키로 사용해 TMap에 저장
+		ClusterCenters.Add(Cluster.Key, ClusterCenter);
 
 		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, VerticesInCluster.Num());
 		UE_LOG(LogTemp, Warning, TEXT("Cluster %d Center: %s"), Cluster.Key, *ClusterCenter.ToString());
-
-		for (const FVector& Vertex : VerticesInCluster)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Vertex: %s"), *Vertex.ToString());
-		}
 	}
 }
 

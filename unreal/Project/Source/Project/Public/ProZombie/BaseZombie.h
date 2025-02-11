@@ -191,8 +191,8 @@ public:
 
 	float CalculateEuclideanDistance(const FVector& Point1, const FVector& Point2);
 	float CalculateAverageDistance(const TArray<FVector>& Vertices);
-	void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels);
-	void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TArray<FVector>& ClusterCenters);
+	void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<FVector>>& ClusteredVertices);
+	void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters);
 
 	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
 
