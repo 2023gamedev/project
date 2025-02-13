@@ -221,7 +221,18 @@ public:
 
 
 
+	TSharedPtr<FZBoneStructure> RootBone;  // **트리 루트 (최상위 본)**
+	TSharedPtr<FZBoneStructure> SpecialRootBone;  // **트리 루트 (최상위 본)**
 
+	UPROPERTY(EditAnywhere)
+	TArray<UProceduralMeshComponent*> ProceduralMeshes;
+
+	void InitializeBoneHierarchy();  // 본 트리 초기화
+	void InitializeSpecialBoneHierarchy();  // 몸통부분 절단 시 새로운 트리 구조
+	void PrintBoneHierarchy(TSharedPtr<FZBoneStructure> Bone, int Depth = 0);
+
+	bool InBone(FName BoneAName, FName BoneBName, TSharedPtr<FZBoneStructure> StartBone);
+	TSharedPtr<FZBoneStructure> FindBoneByName(TSharedPtr<FZBoneStructure> StartBone, FName BoneName);
 
 	float m_fHP_Prev = 0.f;
 
@@ -323,9 +334,5 @@ public:
 	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(0-NULL_TARGET,	1-PLAYER, 2-SHOUTING, 3-FOOTSOUND, 4-INVESTIGATED, 5-PATROL)
 
 
-	TSharedPtr<FZBoneStructure> RootBone;  // **트리 루트 (최상위 본)**
-
-	void InitializeBoneHierarchy();  // 본 트리 초기화
-	void PrintBoneHierarchy(TSharedPtr<FZBoneStructure> Bone, int Depth = 0);
 
 };

@@ -38,4 +38,11 @@ public:
     FZBoneStructure(const FName& InName)
         : Name(InName)
     {}
+
+    bool IsChildOf(const TSharedPtr<FZBoneStructure>& PotentialParent) const
+    {
+        // 부모가 유효한 경우
+        return Parent == PotentialParent;
+    }
+
 };

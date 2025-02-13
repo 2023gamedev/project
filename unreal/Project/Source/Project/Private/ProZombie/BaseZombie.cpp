@@ -283,6 +283,68 @@ void ABaseZombie::InitializeBoneHierarchy()
 
 }
 
+void ABaseZombie::InitializeSpecialBoneHierarchy()
+{
+	SpecialRootBone = MakeShared<FZBoneStructure>(TEXT("Head"));
+
+	// Left Leg 계열
+	TSharedPtr<FZBoneStructure> Neck = MakeShared<FZBoneStructure>(TEXT("Neck"));
+	TSharedPtr<FZBoneStructure> Spine2 = MakeShared<FZBoneStructure>(TEXT("Spine2"));
+	TSharedPtr<FZBoneStructure> Spine1 = MakeShared<FZBoneStructure>(TEXT("Spine1"));
+	TSharedPtr<FZBoneStructure> Spine = MakeShared<FZBoneStructure>(TEXT("Spine"));
+	TSharedPtr<FZBoneStructure> Hips = MakeShared<FZBoneStructure>(TEXT("Hips"));
+
+	// Left Leg 계열
+	TSharedPtr<FZBoneStructure> LeftUpLeg = MakeShared<FZBoneStructure>(TEXT("LeftUpLeg"));
+	TSharedPtr<FZBoneStructure> LeftLeg = MakeShared<FZBoneStructure>(TEXT("LeftLeg"));
+	TSharedPtr<FZBoneStructure> LeftFoot = MakeShared<FZBoneStructure>(TEXT("LeftFoot"));
+	TSharedPtr<FZBoneStructure> LeftToeBase = MakeShared<FZBoneStructure>(TEXT("LeftToeBase"));
+
+	TSharedPtr<FZBoneStructure> RightUpLeg = MakeShared<FZBoneStructure>(TEXT("RightUpReg"));
+	TSharedPtr<FZBoneStructure> RightLeg = MakeShared<FZBoneStructure>(TEXT("RightLeg"));
+	TSharedPtr<FZBoneStructure> RightFoot = MakeShared<FZBoneStructure>(TEXT("RightFoot"));
+	TSharedPtr<FZBoneStructure> RightToeBase = MakeShared<FZBoneStructure>(TEXT("RightToeBase"));
+
+	// 부모-자식 관계 설정 (여기서 직접 설정)
+	SpecialRootBone->Children = { Neck };
+	Neck->Parent = SpecialRootBone;
+
+	Neck->Children = { Spine2 };
+	Spine2->Parent = Neck;
+
+	Spine2->Children = { Spine1 };
+	Spine1->Parent = Spine2;
+
+	Spine1->Children = { Spine };
+	Spine->Parent = Spine1;
+
+	Spine->Children = { Hips };
+	Hips->Parent = Spine;
+
+	Hips->Children = { LeftUpLeg, RightLeg };
+	LeftUpLeg->Parent = Hips;
+	RightLeg->Parent = Hips;
+
+	LeftUpLeg->Children = { LeftLeg };
+	LeftLeg->Parent = LeftUpLeg;
+
+	LeftLeg->Children = { LeftFoot };
+	LeftFoot->Parent = LeftLeg;
+
+	LeftFoot->Children = { LeftToeBase };
+	LeftToeBase->Parent = LeftFoot;
+
+	RightUpLeg->Children = { RightLeg };
+	RightLeg->Parent = RightUpLeg;
+	
+	RightLeg->Children = { RightFoot };
+	RightFoot->Parent = RightLeg;
+	
+	RightFoot->Children = { RightToeBase };
+	RightToeBase->Parent = RightFoot;
+
+}
+
 void ABaseZombie::PrintBoneHierarchy(TSharedPtr<FZBoneStructure> Bone, int Depth)
 {
 	if (!Bone.IsValid()) return;
@@ -296,6 +358,46 @@ void ABaseZombie::PrintBoneHierarchy(TSharedPtr<FZBoneStructure> Bone, int Depth
 	}
 }
 
+bool ABaseZombie::InBone(FName BoneAName, FName BoneBName, TSharedPtr<FZBoneStructure> StartBone)
+{
+
+	TSharedPtr<FZBoneStructure> BoneA = FindBoneByName(StartBone, BoneAName);
+	TSharedPtr<FZBoneStructure> BoneB = FindBoneByName(StartBone, BoneBName);
+
+	if (!BoneA.IsValid() || !BoneB.IsValid())
+	{
+		return false; // 이름에 해당하는 뼈대가 존재하지 않으면 false 반환
+	}
+
+	return (BoneA->Name == BoneB->Name || BoneA->IsChildOf(BoneB));
+
+}
+
+TSharedPtr<FZBoneStructure> ABaseZombie::FindBoneByName(TSharedPtr<FZBoneStructure> StartBone, FName BoneName)
+{
+	if (!StartBone.IsValid())
+		return nullptr;
+
+	// 현재 뼈대가 이름과 일치하는지 확인
+	if (StartBone->Name == BoneName)
+	{
+		return StartBone;
+	}
+
+	// 자식 뼈대들 탐색
+	for (const TSharedPtr<FZBoneStructure>& Child : StartBone->Children)
+	{
+		TSharedPtr<FZBoneStructure> FoundBone = FindBoneByName(Child, BoneName);
+		if (FoundBone.IsValid())
+		{
+			return FoundBone;
+		}
+	}
+
+	return nullptr; // 찾지 못한 경우
+}
+
+
 // Called when the game starts or when spawned
 void ABaseZombie::BeginPlay()
 {
@@ -308,7 +410,8 @@ void ABaseZombie::BeginPlay()
 	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ABaseZombie::OnZombieHit);
 
 	InitializeBoneHierarchy();
-	//PrintBoneHierarchy(RootBone);
+	InitializeSpecialBoneHierarchy();
+	//PrintBoneHierarchy(SpecialRootBone);
 }
 
 // Called every frame
@@ -1030,104 +1133,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 		//TMap<int32, TSet<int32>> AdjacencyMap;
 		//TMap<int32, int32> VertexToSectionMap;
 
-		// CutProceduralMesh_1은 두개로 잘릴 가능성 없음
-		//FProcMeshSection* CutSection = CutProceduralMesh_1->GetProcMeshSection(CutProceduralMesh_1->GetNumSections() - 1);
-		//if (CutSection)
-		//{
-		//	for (const FProcMeshVertex& Vertex : CutSection->ProcVertexBuffer)
-		//	{
-		//		CutSectionVertices.Add(Vertex.Position);
-		//		UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_1->CutPlane : X : %f, Y : %f, Z : %f "), Vertex.Position.X, Vertex.Position.Y, Vertex.Position.Z);
-		//	}
-		//}
-		//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_1->CutPlaneNUM : %d "), CutSectionVertices.Num());
-
-		//for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_1->GetNumSections(); ++SectionIndex)
-		//{
-		//	FProcMeshSection* Section = CutProceduralMesh_1->GetProcMeshSection(SectionIndex);
-		//	if (!Section) continue;
-
-		//	TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
-		//	TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
-
-		//	TMap<int32, int32> LocalToGlobalVertexMap;
-
-		//	for (int32 i = 0; i < SectionVertices.Num(); i++)
-		//	{
-		//		int32 GlobalIndex = Vertices.Add(SectionVertices[i].Position);
-		//		UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_1->Vertex : X : %f, Y : %f, Z : %f "), SectionIndex, SectionVertices[i].Position.X, SectionVertices[i].Position.Y, SectionVertices[i].Position.Z);
-
-
-		//		/*Normals.Add(SectionVertices[i].Normal);
-		//		UVs.Add(SectionVertices[i].UV0);
-		//		Tangents.Add(SectionVertices[i].Tangent);
-		//		Colors.Add(FColor(0, 0, 0, 255));
-
-		//		LocalToGlobalVertexMap.Add(i, GlobalIndex);
-		//		VertexToSectionMap.Add(GlobalIndex, SectionIndex);*/
-		//	}
-		//	UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_1->VertexNum : %d "), SectionIndex, SectionVertices.Num());
-		//}
-
-
-		//TArray<int> Labels;
-		//int MinPts = 3;     // 최소 점 개수
-		//DBSCANWithAverageDistance(CutSectionVertices, MinPts, Labels);
-		//GetVerticesByCluster(CutSectionVertices, Labels);
-
-
-		//
-		//FSkeletalMeshLODRenderData& LODData = Skeleton->SkeletalMesh->GetResourceForRendering()->LODRenderData[0];
-		//FSkinWeightVertexBuffer* SkinWeightBuffer = &LODData.SkinWeightVertexBuffer;
-		//TArray <FSkinWeightInfo> SkinWeightInfo;
-		//SkinWeightBuffer->GetSkinWeights(SkinWeightInfo);
-
-
-		//for (int32 i = 0; i < LODData.RenderSections.Num(); i++)
-		//{
-		//	for (int32 j = 0; SkinWeightBuffer->GetNumVertices(); ++j) {
-
-
-
-		//		int32 BoneIndex = SkinWeightBuffer->GetBoneIndex(j, 0);
-		//		int32 ActualBone = LODData.RenderSections[i].BoneMap[BoneIndex];
-		//		FName BoneName = Skeleton->GetBoneName(ActualBone);
-		//	}
-		//}
-		//// 가장 가까운 버텍스와 그 버텍스의 거리
-		//float ClosestDistance = FLT_MAX;
-		//int32 ClosestVertexIndex = -1;
-
-		//// 모든 버텍스를 순회하여 주어진 좌표와 비교
-		//for (int32 i = 0; i < SkinWeightBuffer->GetNumVertices(); ++i)
-		//{
-		//	// 각 버텍스의 좌표를 가져옴
-		//	FVector VertexPosition = SkinWeightBuffer->;
-
-		//	// 주어진 좌표와의 거리 계산
-		//	float Distance = FVector::Dist(VertexPosition, TargetPosition);
-
-		//	// 가장 가까운 버텍스를 찾음
-		//	if (Distance < ClosestDistance)
-		//	{
-		//		ClosestDistance = Distance;
-		//		ClosestVertexIndex = i;
-		//	}
-		//}
-
-		//// 가장 가까운 버텍스가 영향을 받는 Bone 찾기
-		//if (ClosestVertexIndex != -1)
-		//{
-		//	// 해당 버텍스의 Bone 인덱스를 가져옴
-		//	int32 BoneIndex = SkinWeightBuffer->GetBoneIndex(ClosestVertexIndex, 0);
-		//	int32 ActualBone = LODData.RenderSections[0].BoneMap[BoneIndex];
-
-		//	// Bone 이름을 가져옴
-		//	FName BoneName = Skeleton->GetBoneName(ActualBone);
-		//}
-
-
-
 		if (CutProceduralMesh_2)
 		{
 			CutProceduralMesh_2->RegisterComponent(); // 컴포넌트 등록
@@ -1141,18 +1146,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			TArray<FVector> CutSectionVertices;  // 절단된 단면 버텍스 저장
 
-			TArray<FVector> Vertices;
-			TArray<int32> Triangles;
-			TArray<FVector> Normals;
-			TArray<FVector2D> UVs;
-			TArray<FColor> Colors;
-			TArray<FProcMeshTangent> Tangents;
-
-			TMap<int32, TSet<int32>> AdjacencyMap;
-			TMap<int32, int32> VertexToSectionMap;
-
-			// 섹션
-			TMap<int32, TMap<int32, FName>> SectionVertexBoneMap;
+			//TArray<FVector> Vertices;
+			//TArray<int32> Triangles;
+			//TArray<FVector> Normals;
+			//TArray<FVector2D> UVs;
+			//TArray<FColor> Colors;
+			//TArray<FProcMeshTangent> Tangents;
 
 			// Blood Effect rootcomponent(proc mesh) 설정 후 스폰
 			if (BloodFX.Num() >= 2) {
@@ -1181,31 +1180,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlaneNUM : %d "), CutSectionVertices2.Num());
 				
 			}
-			for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_2->GetNumSections(); ++SectionIndex)
-			{
-				FProcMeshSection* Section = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
-				if (!Section) continue;
-
-				TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
-				TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
-
-				TMap<int32, int32> LocalToGlobalVertexMap;
-
-				for (int32 i = 0; i < SectionVertices.Num(); i++)
-				{
-					int32 GlobalIndex = Vertices.Add(SectionVertices[i].Position);
-					
-					// 각 bone 저장
-					FName BoneName = GetBoneNameForVertex(SectionVertices[i].Position);
-
-					// 맵에 저장 (섹션 인덱스 -> 버텍스 인덱스 -> 본 이름)
-					SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, BoneName);
-
-					UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->Vertex : X : %f, Y : %f, Z : %f "), SectionIndex, SectionVertices[i].Position.X, SectionVertices[i].Position.Y, SectionVertices[i].Position.Z);
-
-				}
-				UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->VertexNum : %d "), SectionIndex, SectionVertices.Num());
-			}
 
 			TArray<int> Labels2;
 			int MinPts2 = 3;     // 최소 점 개수
@@ -1215,16 +1189,519 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices);
 			GetVerticesByCluster(CutSectionVertices2, Labels2, ClusterCenters);
 
+			// 지금 구한 것
+			// 버텍스들마다 가장 영향받는 bone O
+			// 잘린 단면과 영향받는 bone O
+			// bone 구조
+			// 구해야 하는 것
+			// 버텍스와 잘린 단면을 bone을 이용해서 분리해서 생성
+			// 필요
+			// 섹션별로 bone에 맞는 버텍스들만 뽑아내기, 문제는 인덱스 버퍼랑 트라이앵글은 어떻게 구하는데
+
+			// 문제
+			// 버텍스 인덱스 뽑아내서 create하기
+			// 이 부분이 너무 어렵다 진짜....
+
+			// 머터리얼 잘 들어감, 인덱스 문제가 맞는것 같은데
+
+			// 섹션
+			TMap<int32, TMap<int32, FName>> SectionVertexBoneMap;
 
 			if (ClusterCenters.Num() <= 1) {
 				return; // CutProceduralMesh_2 그대로 사용
 			}
-			else if (ClusterCenters.Num() > 1) { // CutProceduralMesh_2 분해
-				for (const TPair<int, FVector>& Cluster : ClusterCenters) {
 
-					FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value); // 이 bonename 이용해 해야 되는데 최적화 문제가 있긴 하다.
+			for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_2->GetNumSections() - 1; ++SectionIndex)
+			{
+				FProcMeshSection* Section = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
+				if (!Section) continue;
+
+				TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
+				TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
+
+				//TMap<int32, int32> LocalToGlobalVertexMap;
+
+				for (int32 i = 0; i < SectionVertices.Num(); i++)
+				{
+					//int32 GlobalIndex = Vertices.Add(SectionVertices[i].Position);
+					//LocalToGlobalVertexMap.Add(i, GlobalIndex);
+
+					//Normals.Add(SectionVertices[i].Normal);
+					//UVs.Add(SectionVertices[i].UV0);
+					//Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+					//Tangents.Add(SectionVertices[i].Tangent);
+
+					// 각 bone 저장
+					FName BoneName = GetBoneNameForVertex(SectionVertices[i].Position);
+
+					// 맵에 저장 (섹션 인덱스 -> 버텍스 인덱스 -> 본 이름)
+					SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, BoneName);
+
+					/*UE_LOG(LogTemp, Warning, TEXT("SectionIndex: %d, Vertex: X: %f, Y: %f, Z: %f, BoneName: %s"),
+						SectionIndex,
+						SectionVertices[i].Position.X,
+						SectionVertices[i].Position.Y,
+						SectionVertices[i].Position.Z,
+						*BoneName.ToString());*/
+				}
+
+				//// 삼각형 인덱스 변환
+				//for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
+				//{
+				//	if (LocalToGlobalVertexMap.Contains(SectionTriangles[i]) &&
+				//		LocalToGlobalVertexMap.Contains(SectionTriangles[i + 1]) &&
+				//		LocalToGlobalVertexMap.Contains(SectionTriangles[i + 2]))
+				//	{
+				//		int32 GlobalIdx0 = LocalToGlobalVertexMap[SectionTriangles[i]];
+				//		int32 GlobalIdx1 = LocalToGlobalVertexMap[SectionTriangles[i + 1]];
+				//		int32 GlobalIdx2 = LocalToGlobalVertexMap[SectionTriangles[i + 2]];
+
+				//		Triangles.Add(GlobalIdx0);
+				//		Triangles.Add(GlobalIdx1);
+				//		Triangles.Add(GlobalIdx2);
+				//	}
+				//}
+
+				//for (int n = 0; n < GetMesh()->GetNumMaterials(); n++) {
+				//	CutProceduralMesh_1->SetMaterial(n, GetMesh()->GetMaterial(n));
+				//}
+
+				UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->VertexNum : %d "), SectionIndex, SectionVertices.Num());
+			}
+
+
+
+			// 기존 ProceduralMesh가 있으면 삭제
+			for (UProceduralMeshComponent* MeshComp : ProceduralMeshes)
+			{
+				if (MeshComp)
+				{
+					MeshComp->DestroyComponent(); // 안전하게 제거
 				}
 			}
+			ProceduralMeshes.Empty(); // 배열 초기화
+
+			int32 CutPlaneIndex = 0;
+
+			int32 ProceduralMeshNewIndex = 2;
+
+			if (ClusterCenters.Num() > 1) { // CutProceduralMesh_2 분해
+				for (const TPair<int, FVector>& Cluster : ClusterCenters) {
+
+					TMap<FVector, int32> GlobalVertexMap;
+
+					TArray<FVector> Vertices;
+					TArray<int32> Triangles;
+					TArray<FVector> Normals;
+					TArray<FVector2D> UVs;
+					TArray<FColor> Colors;
+					TArray<FProcMeshTangent> Tangents;
+
+					FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value); // 이 bonename 이용해 해야 되는데 최적화 문제가 있긴 하다.
+
+					UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlaneBoneName : %s "), *CutPlaneBoneName.ToString());
+
+					// 새로운 ProceduralMeshComponent 생성
+					UProceduralMeshComponent* NewProcMesh = NewObject<UProceduralMeshComponent>(this);
+					CutProceduralMesh_1->bUseComplexAsSimpleCollision = false;
+
+					if (CutPlaneBoneName == "Head" ||
+						CutPlaneBoneName == "Neck" ||
+						CutPlaneBoneName == "Spine2" ||
+						CutPlaneBoneName == "Spine1" ||
+						CutPlaneBoneName == "Spine" ||
+						CutPlaneBoneName == "Hips") { // SpecialRootBone
+
+						// 잘린 단면 인덱스 에러 고쳐보고 그 다음 섹션별로 createmeshsection따로해보자
+						for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_2->GetNumSections(); ++SectionIndex)
+						{
+							FProcMeshSection* Section = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
+							if (!Section) continue;
+
+							TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
+							TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
+							
+
+							UE_LOG(LogTemp, Warning, TEXT("SectionVertices : %d "), SectionVertices.Num());
+							UE_LOG(LogTemp, Warning, TEXT("SectionTriangles: %d "), SectionTriangles.Num());
+
+							TMap<int32, int32> LocalToGlobalVertexMap; // 섹션 내 로컬 인덱스 → 글로벌 인덱스 매핑
+
+							if (SectionIndex == CutProceduralMesh_2->GetNumSections() - 1) {
+								int32 ClusterVerticesNum = 0;
+								if (ClusteredVertices.Contains(Cluster.Key))
+								{
+									TArray<FVector>& ClusterVertices = ClusteredVertices[Cluster.Key];
+
+									ClusterVerticesNum = ClusterVertices.Num();
+
+									UE_LOG(LogTemp, Warning, TEXT("Cluster.Key : %d, ClusterVerticesNum : %d "), Cluster.Key,  ClusterVertices.Num());
+									UE_LOG(LogTemp, Warning, TEXT("Cluster.Key : %d, SectionVertices.Num(): %d "), Cluster.Key, SectionVertices.Num());
+
+									for (int32 i = 0; i < ClusterVerticesNum; i++)
+									{
+										FVector VertexPos = SectionVertices[i + CutPlaneIndex].Position;
+
+										int32 GlobalIndex;
+										if (GlobalVertexMap.Contains(VertexPos))
+										{
+											GlobalIndex = GlobalVertexMap[VertexPos];
+										}
+										else
+										{
+											// 새로운 정점이면 추가 후 인덱스 저장
+											GlobalIndex = Vertices.Add(VertexPos);
+											GlobalVertexMap.Add(VertexPos, GlobalIndex);
+
+											// 나머지 속성도 추가
+											Normals.Add(SectionVertices[i + CutPlaneIndex].Normal);
+											UVs.Add(SectionVertices[i + CutPlaneIndex].UV0);
+											Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+											Tangents.Add(SectionVertices[i + CutPlaneIndex].Tangent);
+										}
+
+										LocalToGlobalVertexMap.Add(i, GlobalIndex);
+
+									}
+
+
+									// 삼각형 인덱스 변환
+									for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
+									{
+										if (LocalToGlobalVertexMap.Contains(SectionTriangles[i]) &&
+											LocalToGlobalVertexMap.Contains(SectionTriangles[i + 1]) &&
+											LocalToGlobalVertexMap.Contains(SectionTriangles[i + 2]))
+										{
+											int32 GlobalIdx0 = LocalToGlobalVertexMap[SectionTriangles[i]];
+											int32 GlobalIdx1 = LocalToGlobalVertexMap[SectionTriangles[i + 1]];
+											int32 GlobalIdx2 = LocalToGlobalVertexMap[SectionTriangles[i + 2]];
+
+											Triangles.Add(GlobalIdx0);
+											Triangles.Add(GlobalIdx1);
+											Triangles.Add(GlobalIdx2);
+										}
+									}
+
+
+									UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
+									for (int32 i = 0; i < Triangles.Num(); i += 3)
+									{
+										UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+									}
+
+									CutPlaneIndex += ClusterVerticesNum;
+									UE_LOG(LogTemp, Warning, TEXT("ClusterVerticesNum : %d "), CutPlaneIndex);
+
+
+									FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
+									NewProcMesh->SetWorldTransform(SkeletonTransform);
+									NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+									// 절단 부위 material 설정
+									NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+								}
+								else
+								{
+									UE_LOG(LogTemp, Warning, TEXT("Cluster %d has no associated vertices."), Cluster.Key);
+								}
+
+
+							}
+							else {
+
+								for (int32 i = 0; i < SectionVertices.Num(); i++)
+								{
+									FVector VertexPos = SectionVertices[i].Position;
+
+									// 해당 버텍스의 본 이름 가져오기
+									FName BoneName = SectionVertexBoneMap[SectionIndex][i];
+
+									// 특정 본(Bone)의 자식인지 확인
+									if (InBone(BoneName, CutPlaneBoneName, SpecialRootBone))
+									{
+										int32 GlobalIndex;
+										if (GlobalVertexMap.Contains(VertexPos))
+										{
+											GlobalIndex = GlobalVertexMap[VertexPos];
+										}
+										else
+										{
+											// 새로운 정점이면 추가 후 인덱스 저장
+											GlobalIndex = Vertices.Add(VertexPos);
+											GlobalVertexMap.Add(VertexPos, GlobalIndex);
+
+											// 나머지 속성도 추가
+											Normals.Add(SectionVertices[i].Normal);
+											UVs.Add(SectionVertices[i].UV0);
+											Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+											Tangents.Add(SectionVertices[i].Tangent);
+										}
+
+										LocalToGlobalVertexMap.Add(i, GlobalIndex);
+									}
+								}
+
+								// 삼각형 인덱스 변환
+								for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
+								{
+									if (LocalToGlobalVertexMap.Contains(SectionTriangles[i]) &&
+										LocalToGlobalVertexMap.Contains(SectionTriangles[i + 1]) &&
+										LocalToGlobalVertexMap.Contains(SectionTriangles[i + 2]))
+									{
+										int32 GlobalIdx0 = LocalToGlobalVertexMap[SectionTriangles[i]];
+										int32 GlobalIdx1 = LocalToGlobalVertexMap[SectionTriangles[i + 1]];
+										int32 GlobalIdx2 = LocalToGlobalVertexMap[SectionTriangles[i + 2]];
+
+										Triangles.Add(GlobalIdx0);
+										Triangles.Add(GlobalIdx1);
+										Triangles.Add(GlobalIdx2);
+									}
+								}
+
+								UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
+								for (int32 i = 0; i < Triangles.Num(); i += 3)
+								{
+									UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+								}
+
+
+								FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
+								NewProcMesh->SetWorldTransform(SkeletonTransform);
+								NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+								// 절단 부위 material 설정
+								for (int n = 0; n < CutProceduralMesh_2->GetNumMaterials(); n++) {
+									NewProcMesh->SetMaterial(n, CutProceduralMesh_2->GetMaterial(n));
+								}
+
+							}
+
+						}
+
+
+
+						//// 새로운 ProceduralMeshComponent 생성
+						//UProceduralMeshComponent* NewProcMesh = NewObject<UProceduralMeshComponent>(this);
+						//
+						//NewProcMesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+						//
+						NewProcMesh->RegisterComponent();
+
+						// 언리얼 에디터에서 보이게 설정
+						NewProcMesh->SetVisibility(true);
+						NewProcMesh->SetHiddenInGame(false);
+
+						//// 절단 부위 material 설정
+						//for (int n = 0; n < GetMesh()->GetNumMaterials(); n++) {
+						//	NewProcMesh->SetMaterial(n, GetMesh()->GetMaterial(n));
+						//}
+						//NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+
+						NewProcMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+						NewProcMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+						NewProcMesh->SetSimulatePhysics(true);
+
+						//FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
+						//NewProcMesh->SetWorldTransform(SkeletonTransform);
+						// 배열에 추가
+						ProceduralMeshes.Add(NewProcMesh);
+						ProceduralMeshNewIndex++;
+						UE_LOG(LogTemp, Warning, TEXT("ProceduralMeshNewIndex : %d"), ProceduralMeshNewIndex++);
+
+					}
+					else {  // RootBone
+
+						///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+						for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_2->GetNumSections(); ++SectionIndex)
+						{
+							FProcMeshSection* Section = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
+							if (!Section) continue;
+
+							TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
+							TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
+
+							UE_LOG(LogTemp, Warning, TEXT("SectionVertices : %d "), SectionVertices.Num());
+							UE_LOG(LogTemp, Warning, TEXT("SectionTriangles: %d "), SectionTriangles.Num());
+
+							TMap<int32, int32> LocalToGlobalVertexMap; // 섹션 내 로컬 인덱스 → 글로벌 인덱스 매핑
+
+							if (SectionIndex == CutProceduralMesh_2->GetNumSections() - 1) {
+								int32 ClusterVerticesNum = 0;
+								if (ClusteredVertices.Contains(Cluster.Key))
+								{
+									TArray<FVector>& ClusterVertices = ClusteredVertices[Cluster.Key];
+
+									ClusterVerticesNum = ClusterVertices.Num();
+
+									UE_LOG(LogTemp, Warning, TEXT("Cluster.Key : %d, ClusterVerticesNum : %d "), Cluster.Key, ClusterVertices.Num());
+									UE_LOG(LogTemp, Warning, TEXT("Cluster.Key : %d, SectionVertices.Num(): %d "), Cluster.Key, SectionVertices.Num());
+
+									for (int32 i = 0; i < ClusterVerticesNum; i++)
+									{
+										FVector VertexPos = SectionVertices[i + CutPlaneIndex].Position;
+
+										int32 GlobalIndex;
+										if (GlobalVertexMap.Contains(VertexPos))
+										{
+											GlobalIndex = GlobalVertexMap[VertexPos];
+										}
+										else
+										{
+											// 새로운 정점이면 추가 후 인덱스 저장
+											GlobalIndex = Vertices.Add(VertexPos);
+											GlobalVertexMap.Add(VertexPos, GlobalIndex);
+
+											// 나머지 속성도 추가
+											Normals.Add(SectionVertices[i + CutPlaneIndex].Normal);
+											UVs.Add(SectionVertices[i + CutPlaneIndex].UV0);
+											Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+											Tangents.Add(SectionVertices[i + CutPlaneIndex].Tangent);
+										}
+
+										LocalToGlobalVertexMap.Add(i, GlobalIndex);
+
+									}
+
+
+									// 삼각형 인덱스 변환
+									for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
+									{
+										if (LocalToGlobalVertexMap.Contains(SectionTriangles[i]) &&
+											LocalToGlobalVertexMap.Contains(SectionTriangles[i + 1]) &&
+											LocalToGlobalVertexMap.Contains(SectionTriangles[i + 2]))
+										{
+											int32 GlobalIdx0 = LocalToGlobalVertexMap[SectionTriangles[i]];
+											int32 GlobalIdx1 = LocalToGlobalVertexMap[SectionTriangles[i + 1]];
+											int32 GlobalIdx2 = LocalToGlobalVertexMap[SectionTriangles[i + 2]];
+
+											Triangles.Add(GlobalIdx0);
+											Triangles.Add(GlobalIdx1);
+											Triangles.Add(GlobalIdx2);
+										}
+									}
+
+									CutPlaneIndex += ClusterVerticesNum;
+									UE_LOG(LogTemp, Warning, TEXT("ClusterVerticesNum : %d "), CutPlaneIndex);
+
+
+									FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
+									NewProcMesh->SetWorldTransform(SkeletonTransform);
+									NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+									// 절단 부위 material 설정
+									NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+								}
+								else
+								{
+									UE_LOG(LogTemp, Warning, TEXT("Cluster %d has no associated vertices."), Cluster.Key);
+								}
+
+
+							}
+							else {
+
+								for (int32 i = 0; i < SectionVertices.Num(); i++)
+								{
+									FVector VertexPos = SectionVertices[i].Position;
+
+
+
+									// 해당 버텍스의 본 이름 가져오기
+									FName BoneName = SectionVertexBoneMap[SectionIndex][i];
+
+									// 특정 본(Bone)의 자식인지 확인
+									if (InBone(BoneName, CutPlaneBoneName, RootBone))
+									{
+										int32 GlobalIndex;
+										if (GlobalVertexMap.Contains(VertexPos))
+										{
+											GlobalIndex = GlobalVertexMap[VertexPos];
+										}
+										else
+										{
+											// 새로운 정점이면 추가 후 인덱스 저장
+											GlobalIndex = Vertices.Add(VertexPos);
+											GlobalVertexMap.Add(VertexPos, GlobalIndex);
+
+											// 나머지 속성도 추가
+											Normals.Add(SectionVertices[i].Normal);
+											UVs.Add(SectionVertices[i].UV0);
+											Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+											Tangents.Add(SectionVertices[i].Tangent);
+										}
+
+										LocalToGlobalVertexMap.Add(i, GlobalIndex);
+									}
+								}
+
+								// 삼각형 인덱스 변환
+								for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
+								{
+									if (LocalToGlobalVertexMap.Contains(SectionTriangles[i]) &&
+										LocalToGlobalVertexMap.Contains(SectionTriangles[i + 1]) &&
+										LocalToGlobalVertexMap.Contains(SectionTriangles[i + 2]))
+									{
+										int32 GlobalIdx0 = LocalToGlobalVertexMap[SectionTriangles[i]];
+										int32 GlobalIdx1 = LocalToGlobalVertexMap[SectionTriangles[i + 1]];
+										int32 GlobalIdx2 = LocalToGlobalVertexMap[SectionTriangles[i + 2]];
+
+										Triangles.Add(GlobalIdx0);
+										Triangles.Add(GlobalIdx1);
+										Triangles.Add(GlobalIdx2);
+									}
+								}
+
+								FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
+								NewProcMesh->SetWorldTransform(SkeletonTransform);
+								NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+								// 절단 부위 material 설정
+								for (int n = 0; n < CutProceduralMesh_2->GetNumMaterials(); n++) {
+									NewProcMesh->SetMaterial(n, CutProceduralMesh_2->GetMaterial(n));
+								}
+
+							}
+
+						}
+
+						UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
+						for (int32 i = 0; i < Triangles.Num(); i += 3)
+						{
+							UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+						}
+
+
+						// 새로운 ProceduralMeshComponent 생성
+						//UProceduralMeshComponent* NewProcMesh = NewObject<UProceduralMeshComponent>(this);
+
+						//NewProcMesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+
+						NewProcMesh->RegisterComponent();
+
+						// 언리얼 에디터에서 보이게 설정
+						NewProcMesh->SetVisibility(true);
+						NewProcMesh->SetHiddenInGame(false);
+
+						// 절단 부위 material 설정
+						//for (int n = 0; n < GetMesh()->GetNumMaterials(); n++) {
+						//	NewProcMesh->SetMaterial(n, GetMesh()->GetMaterial(n));
+						//}
+						//NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+
+						//NewProcMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+						//NewProcMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+						//NewProcMesh->SetSimulatePhysics(true);
+
+						//FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
+						//NewProcMesh->SetWorldTransform(SkeletonTransform);
+						// 배열에 추가
+						ProceduralMeshes.Add(NewProcMesh);
+
+						ProceduralMeshNewIndex++;
+						UE_LOG(LogTemp, Warning, TEXT("ProceduralMeshNewIndex : %d"), ProceduralMeshNewIndex);
+					}
+
+				}
+			}
+
+
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
@@ -1241,7 +1718,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 	// 생성 성공시 cutpromesh_2 삭제 및 zombie tick에서 하던 부분 수정 필요
 
 
-	// 문제 spine1, spine2에 절단 시 n개 절단을 어떻게 해줘야 할지 고민중 
+	// 전체 버텍스 bone들 받았고 버텍스 받았고 , 잘린 단면 bone 받았고, 버텍스 모아놨고
+
 
 }
 
@@ -1283,6 +1761,7 @@ FName ABaseZombie::GetBoneNameForVertex(const FVector& TargetPosition)
 
 			// 그냥 좌표가 동일할 때 작동해야 하는 것 같아 사용
 			if (VertexPosition == TargetPosition) {
+
 				// 해당 버텍스의 Bone 인덱스를 가져옴
 				if (i >= (int32)(SkinWeights.GetNumVertices()))  //유효한 버텍스인지 확인
 				{
@@ -1300,7 +1779,21 @@ FName ABaseZombie::GetBoneNameForVertex(const FVector& TargetPosition)
 				int32 ActualBone = DataArray.RenderSections[j].BoneMap[BoneIndex];
 
 				// Bone 이름을 가져옴
-				return Skeleton->GetBoneName(ActualBone);
+				FName BoneName = Skeleton->GetBoneName(ActualBone);
+
+				//if (BoneName == "None") {
+				//	// 없으면(none이면) 찾게
+				//	GetBoneNameForCutPlaneVertex(TargetPosition);
+				//	break;
+				//}
+				//else {
+
+
+
+				//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForVertex - BoneName: %s"), *BoneName.ToString());
+
+				return BoneName;
+				//}
 			}
 			
 		}
@@ -1318,7 +1811,11 @@ FName ABaseZombie::GetBoneNameForVertex(const FVector& TargetPosition)
 	//}
 
 	// 버텍스가 없으면 빈 이름을 반환
-	return FName();
+
+
+
+	return GetBoneNameForCutPlaneVertex(TargetPosition);
+	//return FName();
 }
 
 // 잘린 단면 부분은 가까운 버텍스 구하도록 함수 구현
@@ -1333,6 +1830,8 @@ FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
 	// 가장 가까운 버텍스와 그 버텍스의 거리
 	float ClosestDistance = FLT_MAX;
 	int32 ClosestVertexIndex = -1;
+
+	int32 RenderSectionNumber;
 
 	// 모든 버텍스를 순회하여 주어진 좌표와 비교
 	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
@@ -1354,6 +1853,7 @@ FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
 			{
 				ClosestDistance = Distance;
 				ClosestVertexIndex = VertexIndex;
+				RenderSectionNumber = j;
 			}
 
 		}
@@ -1364,10 +1864,17 @@ FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
 	{
 		// 해당 버텍스의 Bone 인덱스를 가져옴
 		int32 BoneIndex = SkinWeights.GetBoneIndex(ClosestVertexIndex, 0);
-		int32 ActualBone = DataArray.RenderSections[0].BoneMap[BoneIndex]; // 이걸 0~끝까지 다 계산할 필요 있을까 싶어서 0인덱스만 계산
+		int32 ActualBone = DataArray.RenderSections[RenderSectionNumber].BoneMap[BoneIndex]; // 이걸 0~끝까지 다 계산할 필요 있을까 싶어서 0인덱스만 계산
+
+
 
 		// Bone 이름을 가져옴
-		return Skeleton->GetBoneName(ActualBone);
+		FName BoneName = Skeleton->GetBoneName(ActualBone);
+
+		UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForVertex - BoneName: %s"), *BoneName.ToString());
+
+		// Bone 이름을 가져옴
+		return BoneName;
 	}
 
 	// 버텍스가 없으면 빈 이름을 반환
@@ -1406,7 +1913,7 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 
 	// 평균 거리 계산
 	float AvgDistance = CalculateAverageDistance(Vertices);
-	float Eps = AvgDistance * 0.2f;
+	float Eps = AvgDistance * 0.3f;
 
 	// DBSCAN 알고리즘
 	for (int i = 0; i < Vertices.Num(); ++i)
