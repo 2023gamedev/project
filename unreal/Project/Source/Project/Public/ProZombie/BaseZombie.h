@@ -191,10 +191,23 @@ public:
 
 	float CalculateEuclideanDistance(const FVector& Point1, const FVector& Point2);
 	float CalculateAverageDistance(const TArray<FVector>& Vertices);
+	float CalculateDynamicEps(const TArray<FVector>& Vertices, int K);
 	//void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<FVector>>& ClusteredVertices);
 	void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices);
 	//void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<FVector>>& ClusteredVertices, TMap<int, TPair<int32, int32>>& ClusterIndexRanges);
-	void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters);
+	
+	void CalculateClusterShape(const TArray<TPair<int, FVector>>& Cluster, FVector& OutCentroid, float& OutRadius);
+	bool ShouldSplitCluster(const TArray<TPair<int, FVector>>& Cluster);
+	void SplitCluster(TArray<TPair<int, FVector>>& Cluster, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, int& ClusterId);
+
+	void DBSCANWithRefinement(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices);
+	
+	void SplitClusterUsingGraph(const TArray<TPair<int, FVector>>& ClusterPoints, TArray<TArray<TPair<int, FVector>>>& SeparatedClusters);
+	void KMeansSplitCluster(TArray<TPair<int, FVector>>& ClusterPoints, TArray<TArray<TPair<int, FVector>>>& SeparatedClusters);
+
+	//void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters);
+	void GetVerticesByCluster(const TMap<int, TArray<TPair<int, FVector>>>& ClusteredVerticesMap, TMap<int, FVector>& ClusterCenters);
+	void MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters);
 
 	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
 
@@ -205,10 +218,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh") 
 	UProceduralMeshComponent* CutProceduralMesh_2;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
+	TMap<UProceduralMeshComponent*, bool> ProcMeshImpulseStates;
+
 	void CreativeProceduralMesh(FVector planeposition, FVector planenormal);
 
 	UPROPERTY(EditAnywhere, Category = "Materials")
 	UMaterialInterface* Material_Blood;
+
+	UPROPERTY(EditAnywhere, Category = "Materials")
+	UMaterialInterface* Material_ProcMeshBlood;
 
 	UPROPERTY(EditAnywhere)
 	TArray<ABloodNiagaEffect*> BloodFX;
