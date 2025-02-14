@@ -42,7 +42,16 @@ public:
     bool IsChildOf(const TSharedPtr<FZBoneStructure>& PotentialParent) const
     {
         // 부모가 유효한 경우
-        return Parent == PotentialParent;
+        TSharedPtr<FZBoneStructure> ParentPtr = Parent.Pin(); // TWeakPtr을 TSharedPtr로 변환
+
+        if (!ParentPtr.IsValid()) return false; // 부모가 없으면 false
+        if (ParentPtr == PotentialParent) return true; // 바로 부모면 true
+
+        if (ParentPtr == nullptr)
+            return false;
+
+
+        return ParentPtr->IsChildOf(PotentialParent); // 부모의 부모를 재귀적으로 확인
     }
 
 };

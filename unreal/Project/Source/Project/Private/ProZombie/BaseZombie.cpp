@@ -245,11 +245,11 @@ void ABaseZombie::InitializeBoneHierarchy()
 	RightHand->Parent = RightForeArm;
 
 	RightHand->Children = { RightHandIndex1, RightHandMiddle1, RightHandPinky1, RightHandRing1, RightHandThumb1 };
-	RightHandIndex1->Parent = LeftHand;
-	RightHandMiddle1->Parent = LeftHand;
-	RightHandPinky1->Parent = LeftHand;
-	RightHandRing1->Parent = LeftHand;
-	RightHandThumb1->Parent = LeftHand;
+	RightHandIndex1->Parent = RightHand;
+	RightHandMiddle1->Parent = RightHand;
+	RightHandPinky1->Parent = RightHand;
+	RightHandRing1->Parent = RightHand;
+	RightHandThumb1->Parent = RightHand;
 
 	RightHandIndex1->Children = { RightHandIndex2 };
 	RightHandIndex2->Parent = RightHandIndex1;
@@ -300,7 +300,7 @@ void ABaseZombie::InitializeSpecialBoneHierarchy()
 	TSharedPtr<FZBoneStructure> LeftFoot = MakeShared<FZBoneStructure>(TEXT("LeftFoot"));
 	TSharedPtr<FZBoneStructure> LeftToeBase = MakeShared<FZBoneStructure>(TEXT("LeftToeBase"));
 
-	TSharedPtr<FZBoneStructure> RightUpLeg = MakeShared<FZBoneStructure>(TEXT("RightUpReg"));
+	TSharedPtr<FZBoneStructure> RightUpLeg = MakeShared<FZBoneStructure>(TEXT("RightUpLeg"));
 	TSharedPtr<FZBoneStructure> RightLeg = MakeShared<FZBoneStructure>(TEXT("RightLeg"));
 	TSharedPtr<FZBoneStructure> RightFoot = MakeShared<FZBoneStructure>(TEXT("RightFoot"));
 	TSharedPtr<FZBoneStructure> RightToeBase = MakeShared<FZBoneStructure>(TEXT("RightToeBase"));
@@ -321,9 +321,9 @@ void ABaseZombie::InitializeSpecialBoneHierarchy()
 	Spine->Children = { Hips };
 	Hips->Parent = Spine;
 
-	Hips->Children = { LeftUpLeg, RightLeg };
+	Hips->Children = { LeftUpLeg, RightUpLeg };
 	LeftUpLeg->Parent = Hips;
-	RightLeg->Parent = Hips;
+	RightUpLeg->Parent = Hips;
 
 	LeftUpLeg->Children = { LeftLeg };
 	LeftLeg->Parent = LeftUpLeg;
@@ -411,7 +411,8 @@ void ABaseZombie::BeginPlay()
 
 	InitializeBoneHierarchy();
 	InitializeSpecialBoneHierarchy();
-	//PrintBoneHierarchy(SpecialRootBone);
+	//PrintBoneHierarchy(RootBone);
+	PrintBoneHierarchy(SpecialRootBone);
 }
 
 // Called every frame
@@ -1233,6 +1234,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 					// 각 bone 저장
 					FName BoneName = GetBoneNameForVertex(SectionVertices[i].Position);
+					
 
 					// 맵에 저장 (섹션 인덱스 -> 버텍스 인덱스 -> 본 이름)
 					SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, BoneName);
@@ -1291,7 +1293,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					TMap<FVector, int32> GlobalVertexMap;
 
 					TArray<FVector> Vertices;
-					TArray<int32> Triangles;
+					//TArray<int32> Triangles;
 					TArray<FVector> Normals;
 					TArray<FVector2D> UVs;
 					TArray<FColor> Colors;
@@ -1312,7 +1314,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 						CutPlaneBoneName == "Spine" ||
 						CutPlaneBoneName == "Hips") { // SpecialRootBone
 
-						// 잘린 단면 인덱스 에러 고쳐보고 그 다음 섹션별로 createmeshsection따로해보자
 						for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_2->GetNumSections(); ++SectionIndex)
 						{
 							FProcMeshSection* Section = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
@@ -1321,7 +1322,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 							TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
 							TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
 							
-
+							UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlaneBoneName : %s, SectionIndex : %d "), *CutPlaneBoneName.ToString(), SectionIndex);
 							UE_LOG(LogTemp, Warning, TEXT("SectionVertices : %d "), SectionVertices.Num());
 							UE_LOG(LogTemp, Warning, TEXT("SectionTriangles: %d "), SectionTriangles.Num());
 
@@ -1364,7 +1365,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 									}
 
-
+									TArray<int32> Triangles;
 									// 삼각형 인덱스 변환
 									for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
 									{
@@ -1398,6 +1399,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
 									// 절단 부위 material 설정
 									NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+
+									Vertices.Empty();
+									Normals.Empty();
+									UVs.Empty();
+									Colors.Empty();
+									Tangents.Empty();
 								}
 								else
 								{
@@ -1414,6 +1421,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 									// 해당 버텍스의 본 이름 가져오기
 									FName BoneName = SectionVertexBoneMap[SectionIndex][i];
+									UE_LOG(LogTemp, Warning, TEXT("BoneName ::: %s"), *BoneName.ToString());
+									UE_LOG(LogTemp, Warning, TEXT("InBone ::: %d"), InBone(BoneName, CutPlaneBoneName, SpecialRootBone));
 
 									// 특정 본(Bone)의 자식인지 확인
 									if (InBone(BoneName, CutPlaneBoneName, SpecialRootBone))
@@ -1439,7 +1448,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 										LocalToGlobalVertexMap.Add(i, GlobalIndex);
 									}
 								}
-
+								TArray<int32> Triangles;
 								// 삼각형 인덱스 변환
 								for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
 								{
@@ -1471,6 +1480,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								for (int n = 0; n < CutProceduralMesh_2->GetNumMaterials(); n++) {
 									NewProcMesh->SetMaterial(n, CutProceduralMesh_2->GetMaterial(n));
 								}
+
+								Vertices.Empty();
+								Normals.Empty();
+								UVs.Empty();
+								Colors.Empty();
+								Tangents.Empty();
 
 							}
 
@@ -1519,6 +1534,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 							TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
 							TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
 
+							UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlaneBoneName : %s, SectionIndex : %d "), *CutPlaneBoneName.ToString(), SectionIndex);
 							UE_LOG(LogTemp, Warning, TEXT("SectionVertices : %d "), SectionVertices.Num());
 							UE_LOG(LogTemp, Warning, TEXT("SectionTriangles: %d "), SectionTriangles.Num());
 
@@ -1561,7 +1577,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 									}
 
-
+									TArray<int32> Triangles;
 									// 삼각형 인덱스 변환
 									for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
 									{
@@ -1588,6 +1604,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
 									// 절단 부위 material 설정
 									NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+
+									Vertices.Empty();
+									Normals.Empty();
+									UVs.Empty();
+									Colors.Empty();
+									Tangents.Empty();
 								}
 								else
 								{
@@ -1606,6 +1628,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 									// 해당 버텍스의 본 이름 가져오기
 									FName BoneName = SectionVertexBoneMap[SectionIndex][i];
+
+									UE_LOG(LogTemp, Warning, TEXT("BoneName ::: %s"), *BoneName.ToString());
+									UE_LOG(LogTemp, Warning, TEXT("InBone ::: %d"), InBone(BoneName, CutPlaneBoneName, RootBone));
 
 									// 특정 본(Bone)의 자식인지 확인
 									if (InBone(BoneName, CutPlaneBoneName, RootBone))
@@ -1631,7 +1656,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 										LocalToGlobalVertexMap.Add(i, GlobalIndex);
 									}
 								}
-
+								TArray<int32> Triangles;
 								// 삼각형 인덱스 변환
 								for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
 								{
@@ -1649,6 +1674,14 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									}
 								}
 
+
+								UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
+								for (int32 i = 0; i < Triangles.Num(); i += 3)
+								{
+									UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+								}
+
+
 								FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
 								NewProcMesh->SetWorldTransform(SkeletonTransform);
 								NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
@@ -1656,15 +1689,13 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								for (int n = 0; n < CutProceduralMesh_2->GetNumMaterials(); n++) {
 									NewProcMesh->SetMaterial(n, CutProceduralMesh_2->GetMaterial(n));
 								}
-
+								Vertices.Empty();
+								Normals.Empty();
+								UVs.Empty();
+								Colors.Empty();
+								Tangents.Empty();
 							}
 
-						}
-
-						UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
-						for (int32 i = 0; i < Triangles.Num(); i += 3)
-						{
-							UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
 						}
 
 
@@ -1703,6 +1734,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 
 		}
+
+		CutProceduralMesh_2->SetVisibility(false);
+		//CutProceduralMesh_2->SetHiddenInGame(true);
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
@@ -1871,7 +1905,7 @@ FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
 		// Bone 이름을 가져옴
 		FName BoneName = Skeleton->GetBoneName(ActualBone);
 
-		UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForVertex - BoneName: %s"), *BoneName.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForVertex - BoneName: %s"), *BoneName.ToString());
 
 		// Bone 이름을 가져옴
 		return BoneName;
