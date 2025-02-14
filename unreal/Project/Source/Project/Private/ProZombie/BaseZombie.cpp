@@ -1184,10 +1184,13 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			TArray<int> Labels2;
 			int MinPts2 = 3;     // 최소 점 개수
-			TMap<int, TArray<FVector>> ClusteredVertices;
+			//TMap<int, TArray<FVector>> ClusteredVertices;
+			TMap<int, TArray<TPair<int, FVector>>> ClusteredVertices;
 			TMap<int, FVector> ClusterCenters;
+			//TMap<int, TPair<int, int>> ClusterIndexRanges;
 
 			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices);
+			//DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices, ClusterIndexRanges);
 			GetVerticesByCluster(CutSectionVertices2, Labels2, ClusterCenters);
 
 			// 지금 구한 것
@@ -1247,30 +1250,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 						*BoneName.ToString());*/
 				}
 
-				//// 삼각형 인덱스 변환
-				//for (int32 i = 0; i < SectionTriangles.Num(); i += 3)
-				//{
-				//	if (LocalToGlobalVertexMap.Contains(SectionTriangles[i]) &&
-				//		LocalToGlobalVertexMap.Contains(SectionTriangles[i + 1]) &&
-				//		LocalToGlobalVertexMap.Contains(SectionTriangles[i + 2]))
-				//	{
-				//		int32 GlobalIdx0 = LocalToGlobalVertexMap[SectionTriangles[i]];
-				//		int32 GlobalIdx1 = LocalToGlobalVertexMap[SectionTriangles[i + 1]];
-				//		int32 GlobalIdx2 = LocalToGlobalVertexMap[SectionTriangles[i + 2]];
-
-				//		Triangles.Add(GlobalIdx0);
-				//		Triangles.Add(GlobalIdx1);
-				//		Triangles.Add(GlobalIdx2);
-				//	}
-				//}
-
-				//for (int n = 0; n < GetMesh()->GetNumMaterials(); n++) {
-				//	CutProceduralMesh_1->SetMaterial(n, GetMesh()->GetMaterial(n));
-				//}
 
 				UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->VertexNum : %d "), SectionIndex, SectionVertices.Num());
 			}
 
+			// cluster 메쉬 거리 조절중 절단 후 log 확인해보기
 
 
 			// 기존 ProceduralMesh가 있으면 삭제
@@ -1332,37 +1316,63 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								int32 ClusterVerticesNum = 0;
 								if (ClusteredVertices.Contains(Cluster.Key))
 								{
-									TArray<FVector>& ClusterVertices = ClusteredVertices[Cluster.Key];
 
+									//TArray<FVector>& ClusterVertices = ClusteredVertices[Cluster.Key];
+									TArray<TPair<int, FVector>>& ClusterVertices = ClusteredVertices[Cluster.Key]; // TPair<int, FVector> 기반으로 수정
+						
 									ClusterVerticesNum = ClusterVertices.Num();
 
 									UE_LOG(LogTemp, Warning, TEXT("Cluster.Key : %d, ClusterVerticesNum : %d "), Cluster.Key,  ClusterVertices.Num());
 									UE_LOG(LogTemp, Warning, TEXT("Cluster.Key : %d, SectionVertices.Num(): %d "), Cluster.Key, SectionVertices.Num());
 
-									for (int32 i = 0; i < ClusterVerticesNum; i++)
-									{
-										FVector VertexPos = SectionVertices[i + CutPlaneIndex].Position;
+									//for (int32 i = 0; i < ClusterVerticesNum; i++)
+									//{
+									//	FVector VertexPos = SectionVertices[i + CutPlaneIndex].Position;
+
+									//	int32 GlobalIndex;
+									//	if (GlobalVertexMap.Contains(VertexPos))
+									//	{
+									//		GlobalIndex = GlobalVertexMap[VertexPos];
+									//	}
+									//	else
+									//	{
+									//		// 새로운 정점이면 추가 후 인덱스 저장
+									//		GlobalIndex = Vertices.Add(VertexPos);
+									//		GlobalVertexMap.Add(VertexPos, GlobalIndex);
+
+									//		// 나머지 속성도 추가
+									//		Normals.Add(SectionVertices[i + CutPlaneIndex].Normal);
+									//		UVs.Add(SectionVertices[i + CutPlaneIndex].UV0);
+									//		Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+									//		Tangents.Add(SectionVertices[i + CutPlaneIndex].Tangent);
+									//	}
+
+									//	LocalToGlobalVertexMap.Add(i, GlobalIndex);
+
+									//}
+
+									for (const TPair<int, FVector>& VertexData : ClusterVertices) {
+										int32 OriginalIndex = VertexData.Key;  // 원본 인덱스 가져오기
+										FVector VertexPos = SectionVertices[OriginalIndex].Position; // 기존 `i + CutPlaneIndex` 대신 원본 인덱스로 접근
 
 										int32 GlobalIndex;
-										if (GlobalVertexMap.Contains(VertexPos))
-										{
+										if (GlobalVertexMap.Contains(VertexPos)) {
 											GlobalIndex = GlobalVertexMap[VertexPos];
 										}
-										else
-										{
+										else {
 											// 새로운 정점이면 추가 후 인덱스 저장
 											GlobalIndex = Vertices.Add(VertexPos);
 											GlobalVertexMap.Add(VertexPos, GlobalIndex);
 
 											// 나머지 속성도 추가
-											Normals.Add(SectionVertices[i + CutPlaneIndex].Normal);
-											UVs.Add(SectionVertices[i + CutPlaneIndex].UV0);
+											Normals.Add(SectionVertices[OriginalIndex].Normal);
+											UVs.Add(SectionVertices[OriginalIndex].UV0);
 											Colors.Add(FColor(0.0, 0.0, 0.0, 255));
-											Tangents.Add(SectionVertices[i + CutPlaneIndex].Tangent);
+											Tangents.Add(SectionVertices[OriginalIndex].Tangent);
 										}
 
-										LocalToGlobalVertexMap.Add(i, GlobalIndex);
-
+										// 로컬 인덱스 -> 글로벌 인덱스 매핑
+										LocalToGlobalVertexMap.Add(OriginalIndex, GlobalIndex);
 									}
 
 									TArray<int32> Triangles;
@@ -1387,7 +1397,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
 									for (int32 i = 0; i < Triangles.Num(); i += 3)
 									{
-										UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+										//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
 									}
 
 									CutPlaneIndex += ClusterVerticesNum;
@@ -1398,7 +1408,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									NewProcMesh->SetWorldTransform(SkeletonTransform);
 									NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
 									// 절단 부위 material 설정
-									NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+									NewProcMesh->SetMaterial(CutProceduralMesh_2->GetNumMaterials() - 1, Material_Blood);
 
 									Vertices.Empty();
 									Normals.Empty();
@@ -1421,8 +1431,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 									// 해당 버텍스의 본 이름 가져오기
 									FName BoneName = SectionVertexBoneMap[SectionIndex][i];
-									UE_LOG(LogTemp, Warning, TEXT("BoneName ::: %s"), *BoneName.ToString());
-									UE_LOG(LogTemp, Warning, TEXT("InBone ::: %d"), InBone(BoneName, CutPlaneBoneName, SpecialRootBone));
+									//UE_LOG(LogTemp, Warning, TEXT("BoneName ::: %s"), *BoneName.ToString());
+									//UE_LOG(LogTemp, Warning, TEXT("InBone ::: %d"), InBone(BoneName, CutPlaneBoneName, SpecialRootBone));
 
 									// 특정 본(Bone)의 자식인지 확인
 									if (InBone(BoneName, CutPlaneBoneName, SpecialRootBone))
@@ -1469,7 +1479,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
 								for (int32 i = 0; i < Triangles.Num(); i += 3)
 								{
-									UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+									//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
 								}
 
 
@@ -1477,7 +1487,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								NewProcMesh->SetWorldTransform(SkeletonTransform);
 								NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
 								// 절단 부위 material 설정
-								for (int n = 0; n < CutProceduralMesh_2->GetNumMaterials(); n++) {
+								for (int n = 0; n < CutProceduralMesh_2->GetNumMaterials() - 1; n++) {
 									NewProcMesh->SetMaterial(n, CutProceduralMesh_2->GetMaterial(n));
 								}
 
@@ -1544,37 +1554,62 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								int32 ClusterVerticesNum = 0;
 								if (ClusteredVertices.Contains(Cluster.Key))
 								{
-									TArray<FVector>& ClusterVertices = ClusteredVertices[Cluster.Key];
+									//TArray<FVector>& ClusterVertices = ClusteredVertices[Cluster.Key];
+									TArray<TPair<int, FVector>>& ClusterVertices = ClusteredVertices[Cluster.Key]; // TPair<int, FVector> 기반으로 수정
 
 									ClusterVerticesNum = ClusterVertices.Num();
 
 									UE_LOG(LogTemp, Warning, TEXT("Cluster.Key : %d, ClusterVerticesNum : %d "), Cluster.Key, ClusterVertices.Num());
 									UE_LOG(LogTemp, Warning, TEXT("Cluster.Key : %d, SectionVertices.Num(): %d "), Cluster.Key, SectionVertices.Num());
 
-									for (int32 i = 0; i < ClusterVerticesNum; i++)
-									{
-										FVector VertexPos = SectionVertices[i + CutPlaneIndex].Position;
+									//for (int32 i = 0; i < ClusterVerticesNum; i++)
+									//{
+									//	FVector VertexPos = SectionVertices[i + CutPlaneIndex].Position;
+
+									//	int32 GlobalIndex;
+									//	if (GlobalVertexMap.Contains(VertexPos))
+									//	{
+									//		GlobalIndex = GlobalVertexMap[VertexPos];
+									//	}
+									//	else
+									//	{
+									//		// 새로운 정점이면 추가 후 인덱스 저장
+									//		GlobalIndex = Vertices.Add(VertexPos);
+									//		GlobalVertexMap.Add(VertexPos, GlobalIndex);
+
+									//		// 나머지 속성도 추가
+									//		Normals.Add(SectionVertices[i + CutPlaneIndex].Normal);
+									//		UVs.Add(SectionVertices[i + CutPlaneIndex].UV0);
+									//		Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+									//		Tangents.Add(SectionVertices[i + CutPlaneIndex].Tangent);
+									//	}
+
+									//	LocalToGlobalVertexMap.Add(i, GlobalIndex);
+
+									//}
+
+									for (const TPair<int, FVector>& VertexData : ClusterVertices) {
+										int32 OriginalIndex = VertexData.Key;  // 원본 인덱스 가져오기
+										FVector VertexPos = SectionVertices[OriginalIndex].Position; // 기존 `i + CutPlaneIndex` 대신 원본 인덱스로 접근
 
 										int32 GlobalIndex;
-										if (GlobalVertexMap.Contains(VertexPos))
-										{
+										if (GlobalVertexMap.Contains(VertexPos)) {
 											GlobalIndex = GlobalVertexMap[VertexPos];
 										}
-										else
-										{
+										else {
 											// 새로운 정점이면 추가 후 인덱스 저장
 											GlobalIndex = Vertices.Add(VertexPos);
 											GlobalVertexMap.Add(VertexPos, GlobalIndex);
 
 											// 나머지 속성도 추가
-											Normals.Add(SectionVertices[i + CutPlaneIndex].Normal);
-											UVs.Add(SectionVertices[i + CutPlaneIndex].UV0);
+											Normals.Add(SectionVertices[OriginalIndex].Normal);
+											UVs.Add(SectionVertices[OriginalIndex].UV0);
 											Colors.Add(FColor(0.0, 0.0, 0.0, 255));
-											Tangents.Add(SectionVertices[i + CutPlaneIndex].Tangent);
+											Tangents.Add(SectionVertices[OriginalIndex].Tangent);
 										}
 
-										LocalToGlobalVertexMap.Add(i, GlobalIndex);
-
+										// 로컬 인덱스 -> 글로벌 인덱스 매핑
+										LocalToGlobalVertexMap.Add(OriginalIndex, GlobalIndex);
 									}
 
 									TArray<int32> Triangles;
@@ -1595,6 +1630,13 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 										}
 									}
 
+									UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
+									for (int32 i = 0; i < Triangles.Num(); i += 3)
+									{
+										//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+									}
+
+
 									CutPlaneIndex += ClusterVerticesNum;
 									UE_LOG(LogTemp, Warning, TEXT("ClusterVerticesNum : %d "), CutPlaneIndex);
 
@@ -1603,7 +1645,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									NewProcMesh->SetWorldTransform(SkeletonTransform);
 									NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
 									// 절단 부위 material 설정
-									NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+									NewProcMesh->SetMaterial(CutProceduralMesh_2->GetNumMaterials() - 1, Material_Blood);
 
 									Vertices.Empty();
 									Normals.Empty();
@@ -1629,8 +1671,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									// 해당 버텍스의 본 이름 가져오기
 									FName BoneName = SectionVertexBoneMap[SectionIndex][i];
 
-									UE_LOG(LogTemp, Warning, TEXT("BoneName ::: %s"), *BoneName.ToString());
-									UE_LOG(LogTemp, Warning, TEXT("InBone ::: %d"), InBone(BoneName, CutPlaneBoneName, RootBone));
+									//UE_LOG(LogTemp, Warning, TEXT("BoneName ::: %s"), *BoneName.ToString());
+									//UE_LOG(LogTemp, Warning, TEXT("InBone ::: %d"), InBone(BoneName, CutPlaneBoneName, RootBone));
 
 									// 특정 본(Bone)의 자식인지 확인
 									if (InBone(BoneName, CutPlaneBoneName, RootBone))
@@ -1678,7 +1720,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
 								for (int32 i = 0; i < Triangles.Num(); i += 3)
 								{
-									UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+									//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
 								}
 
 
@@ -1686,7 +1728,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								NewProcMesh->SetWorldTransform(SkeletonTransform);
 								NewProcMesh->CreateMeshSection(SectionIndex, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
 								// 절단 부위 material 설정
-								for (int n = 0; n < CutProceduralMesh_2->GetNumMaterials(); n++) {
+								for (int n = 0; n < CutProceduralMesh_2->GetNumMaterials() - 1; n++) {
 									NewProcMesh->SetMaterial(n, CutProceduralMesh_2->GetMaterial(n));
 								}
 								Vertices.Empty();
@@ -1935,7 +1977,94 @@ float ABaseZombie::CalculateAverageDistance(const TArray<FVector>& Vertices)
 	return TotalDistance / Count;
 }
 
-void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<FVector>>& ClusteredVertices)
+//void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<FVector>>& ClusteredVertices)
+//{
+//	int ClusterId = 0;
+//	Labels.SetNumUninitialized(Vertices.Num());
+//
+//	for (int i = 0; i < Labels.Num(); ++i)
+//	{
+//		Labels[i] = -1;
+//	}
+//
+//	// 평균 거리 계산
+//	float AvgDistance = CalculateAverageDistance(Vertices);
+//	float Eps = AvgDistance * 0.3f;
+//
+//	// DBSCAN 알고리즘
+//	for (int i = 0; i < Vertices.Num(); ++i)
+//	{
+//		if (Labels[i] != -1) continue;
+//
+//		TArray<int> Neighbors;
+//		for (int j = 0; j < Vertices.Num(); ++j)
+//		{
+//			if (i != j && CalculateEuclideanDistance(Vertices[i], Vertices[j]) <= Eps)
+//			{
+//				Neighbors.Add(j);
+//			}
+//		}
+//
+//		if (Neighbors.Num() >= MinPts)
+//		{
+//			ClusterId++;
+//			Labels[i] = ClusterId;
+//			ClusteredVertices.FindOrAdd(ClusterId).Add(Vertices[i]); // 클러스터에 추가
+//
+//			TArray<int> SeedSet = Neighbors;
+//			int Index = 0;
+//
+//			while (Index < SeedSet.Num())
+//			{
+//				int CurrentIdx = SeedSet[Index];
+//				if (Labels[CurrentIdx] == -1)
+//				{
+//					Labels[CurrentIdx] = ClusterId;
+//					ClusteredVertices.FindOrAdd(ClusterId).Add(Vertices[CurrentIdx]); // 클러스터에 추가
+//				}
+//
+//				TArray<int> NewNeighbors;
+//				for (int j = 0; j < Vertices.Num(); ++j)
+//				{
+//					if (CurrentIdx != j && CalculateEuclideanDistance(Vertices[CurrentIdx], Vertices[j]) <= Eps)
+//					{
+//						NewNeighbors.Add(j);
+//					}
+//				}
+//
+//				if (NewNeighbors.Num() >= MinPts)
+//				{
+//					for (int NewIdx : NewNeighbors)
+//					{
+//						if (!SeedSet.Contains(NewIdx))
+//						{
+//							SeedSet.Add(NewIdx);
+//						}
+//					}
+//				}
+//
+//				Index++;
+//			}
+//		}
+//	}
+//
+//	// 클러스터 개수 및 클러스터별 버텍스 출력
+//	int ClusterCount = 0;
+//	for (const auto& Cluster : ClusteredVertices)
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, Cluster.Value.Num());
+//		ClusterCount = FMath::Max(ClusterCount, Cluster.Key);
+//
+//		for (const FVector& Vertex : Cluster.Value)
+//		{
+//			UE_LOG(LogTemp, Warning, TEXT("Vertex: %s"), *Vertex.ToString());
+//		}
+//	}
+//
+//	UE_LOG(LogTemp, Warning, TEXT("Number of Clusters: %d"), ClusterCount);
+//}
+
+void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices)
 {
 	int ClusterId = 0;
 	Labels.SetNumUninitialized(Vertices.Num());
@@ -1947,7 +2076,7 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 
 	// 평균 거리 계산
 	float AvgDistance = CalculateAverageDistance(Vertices);
-	float Eps = AvgDistance * 0.3f;
+	float Eps = AvgDistance * 0.18f;
 
 	// DBSCAN 알고리즘
 	for (int i = 0; i < Vertices.Num(); ++i)
@@ -1967,7 +2096,7 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 		{
 			ClusterId++;
 			Labels[i] = ClusterId;
-			ClusteredVertices.FindOrAdd(ClusterId).Add(Vertices[i]); // 클러스터에 추가
+			ClusteredVertices.FindOrAdd(ClusterId).Add(TPair<int, FVector>(i, Vertices[i])); // 인덱스 포함 추가
 
 			TArray<int> SeedSet = Neighbors;
 			int Index = 0;
@@ -1978,7 +2107,7 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 				if (Labels[CurrentIdx] == -1)
 				{
 					Labels[CurrentIdx] = ClusterId;
-					ClusteredVertices.FindOrAdd(ClusterId).Add(Vertices[CurrentIdx]); // 클러스터에 추가
+					ClusteredVertices.FindOrAdd(ClusterId).Add(TPair<int, FVector>(CurrentIdx, Vertices[CurrentIdx])); // 인덱스 포함 추가
 				}
 
 				TArray<int> NewNeighbors;
@@ -2013,14 +2142,15 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, Cluster.Value.Num());
 		ClusterCount = FMath::Max(ClusterCount, Cluster.Key);
 
-		for (const FVector& Vertex : Cluster.Value)
+		for (const TPair<int, FVector>& VertexData : Cluster.Value)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Vertex: %s"), *Vertex.ToString());
+			UE_LOG(LogTemp, Warning, TEXT("Index: %d, Vertex: %s"), VertexData.Key, *VertexData.Value.ToString());
 		}
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("Number of Clusters: %d"), ClusterCount);
 }
+
 
 void ABaseZombie::GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters)
 {
