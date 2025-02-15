@@ -929,14 +929,20 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 					if (root == 1) {
 						FString HowToEscape = " Escape::Car ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+						USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/CarEnding.CarEnding")); // 에셋 경로
+						PlaySoundForPlayer(Sound);
 					}
 					else if (root == 2) {
 						FString HowToEscape = " Escape::Roof ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+						USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/Leavehelicopter.Leavehelicopter")); // 에셋 경로
+						PlaySoundForPlayer(Sound);
 					}
 					else if (root == 0) {
 						FString HowToEscape = " Escape::Failed ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+						USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/GameOver.GameOver")); // 에셋 경로
+						PlaySoundForPlayer(Sound);
 					}
 
 					FString TimerString = FString::Printf(TEXT("%d:%d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
