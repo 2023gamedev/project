@@ -552,71 +552,74 @@ void ABaseZombie::Tick(float DeltaTime)
 				print_Velocity_2 = false;
 		}*/
 	}
-	//int32 i = 0;
-	//// for 루프에서 순회하면서 각 ProcMesh에 대해 처리
-	//for (UProceduralMeshComponent* ProcMesh : ProceduralMeshes) {
-	//	if (ProcMesh) {
-	//		
-	//		FVector WeaponForward;
-	//		float min_weight = 10.f;
+	int32 i = 0;
+	// for 루프에서 순회하면서 각 ProcMesh에 대해 처리
+	for (UProceduralMeshComponent* ProcMesh : ProceduralMeshes) {
+		if (ProcMesh) {
+			
+			FVector WeaponForward;
+			float min_weight = 10.f;
 
-	//		// 상태값을 TMap에서 가져옴
-	//		bool& bAddImpulse = ProcMeshImpulseStates.FindOrAdd(ProcMesh, false); // 기본값은 false
+			// 상태값을 TMap에서 가져옴
+			bool& bAddImpulse = ProcMeshImpulseStates.FindOrAdd(ProcMesh, false); // 기본값은 false
 
-	//		// 임펄스를 추가할 때, 이전에 추가하지 않았다면 추가
-	//		if (bAddImpulse == false) {
-	//			if (PlayerWeapon) {
-	//				WeaponForward = PlayerWeapon->GetActorRotation().Vector();
-	//			}
+			// 임펄스를 추가할 때, 이전에 추가하지 않았다면 추가
+			if (bAddImpulse == false) {
+				if (PlayerWeapon) {
+					WeaponForward = PlayerWeapon->GetActorRotation().Vector();
+				}
 
-	//			// 메시의 질량을 계산하고, 최소 값이 적용되도록 함
-	//			float weight = ProcMesh->CalculateMass();
-	//			if (weight < min_weight) {
-	//				weight = min_weight;
-	//				ProcMesh->SetMassOverrideInKg(NAME_None, weight, true);
-	//			}
-
-	//			// 너무 얇게 짤려서 컨벡스 메시가 생성되지 않은 경우 처리
-	//			int32 ConvexElementCount = ProcMesh->GetBodySetup()->AggGeom.ConvexElems.Num();
-	//			if (ConvexElementCount == 0) {
-	//				CreateAndApplyBoundingBox(ProcMesh);
-	//				ProcMesh->SetMassOverrideInKg(NAME_None, weight, true);
-	//			}
-
-	//			UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
-
-	//			// 임펄스를 설정
-	//			float x_baseImpulse = 10000.0f;
-	//			float x_impulse = SetImpulseByWeight(weight, x_baseImpulse);
-
-	//			float y_baseImpulse = 10000.0f;
-	//			float y_impulse = SetImpulseByWeight(weight, y_baseImpulse);
-
-	//			float z_baseImpulse = 3000.0f;
-	//			float z_impulse = SetImpulseByWeight(weight, z_baseImpulse);
-
-	//			// 임펄스를 추가할 때 실행 여부 결정
-	//			if (doAction_setIsCuttingDead_onTick == false) {
-	//				UE_LOG(LogTemp, Log, TEXT("[Add Impulse on Tick] Weapon Backward Vector: %s, ProcMeshIndex : %d"), *(-WeaponForward).ToString(), i);
-
-	//				ProcMesh->AddImpulseAtLocation(FVector(-WeaponForward.X * x_impulse, -WeaponForward.Y * y_impulse, z_impulse), ProcMesh->K2_GetComponentLocation());
+				// 메시의 질량을 계산하고, 최소 값이 적용되도록 함
+				float weight = ProcMesh->CalculateMass();
+				if (weight < min_weight) {
+					weight = min_weight;
+					ProcMesh->SetMassOverrideInKg(NAME_None, weight, true);
+				}
 
 
-	//				// 상태값을 true로 변경하여 다음에는 임펄스를 추가하지 않도록 설정
-	//				bAddImpulse = true;
-	//			}
-	//			else if (doAction_setIsCuttingDead_onTick == true) {
-	//				UE_LOG(LogTemp, Log, TEXT("[Add Impulse on Tick] Sync Impulse (Weapon) Backward Vector : % s, ProcMeshIndex : %d"), *(-sync_cutImpulse).ToString(), i);
+				//CreateAndApplyBoundingBox(ProcMesh);
+				CreateAndApplyBoundingBoxByNewProcMesh(ProcMesh);
+				ProcMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+				ProcMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+				ProcMesh->SetSimulatePhysics(true);
 
-	//				ProcMesh->AddImpulseAtLocation(FVector(-sync_cutImpulse.X * x_impulse, -sync_cutImpulse.Y * y_impulse, z_impulse), ProcMesh->K2_GetComponentLocation());
+				ProcMesh->SetMassOverrideInKg(NAME_None, weight, true);
 
-	//				// 상태값을 true로 변경하여 다음에는 임펄스를 추가하지 않도록 설정
-	//				bAddImpulse = true;
-	//			}
-	//		}
-	//		++i;
-	//	}
-	//}
+
+				UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
+
+				// 임펄스를 설정
+				float x_baseImpulse = 1000.0f;
+				float x_impulse = SetImpulseByWeight(weight, x_baseImpulse);
+
+				float y_baseImpulse = 1000.0f;
+				float y_impulse = SetImpulseByWeight(weight, y_baseImpulse);
+
+				float z_baseImpulse = 300.0f;
+				float z_impulse = SetImpulseByWeight(weight, z_baseImpulse);
+
+				// 임펄스를 추가할 때 실행 여부 결정
+				if (doAction_setIsCuttingDead_onTick == false) {
+					UE_LOG(LogTemp, Log, TEXT("[Add Impulse on Tick] Weapon Backward Vector: %s, ProcMeshIndex : %d"), *(-WeaponForward).ToString(), i);
+
+					ProcMesh->AddImpulseAtLocation(FVector(-WeaponForward.X * x_impulse, -WeaponForward.Y * y_impulse, z_impulse), ProcMesh->K2_GetComponentLocation());
+
+
+					// 상태값을 true로 변경하여 다음에는 임펄스를 추가하지 않도록 설정
+					bAddImpulse = true;
+				}
+				else if (doAction_setIsCuttingDead_onTick == true) {
+					UE_LOG(LogTemp, Log, TEXT("[Add Impulse on Tick] Sync Impulse (Weapon) Backward Vector : % s, ProcMeshIndex : %d"), *(-sync_cutImpulse).ToString(), i);
+
+					ProcMesh->AddImpulseAtLocation(FVector(-sync_cutImpulse.X * x_impulse, -sync_cutImpulse.Y * y_impulse, z_impulse), ProcMesh->K2_GetComponentLocation());
+
+					// 상태값을 true로 변경하여 다음에는 임펄스를 추가하지 않도록 설정
+					bAddImpulse = true;
+				}
+			}
+			++i;
+		}
+	}
 
 
 	// 클라 - 보이지 않는 좀비 최적화 작업
@@ -1226,9 +1229,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				for (const FProcMeshVertex& Vertex : CutSection2->ProcVertexBuffer)
 				{
 					CutSectionVertices2.Add(Vertex.Position);
-					UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlane : X : %f, Y : %f, Z : %f "), Vertex.Position.X, Vertex.Position.Y, Vertex.Position.Z);
+					//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlane : X : %f, Y : %f, Z : %f "), Vertex.Position.X, Vertex.Position.Y, Vertex.Position.Z);
 				}
-				UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlaneNUM : %d "), CutSectionVertices2.Num());
+				//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlaneNUM : %d "), CutSectionVertices2.Num());
 				
 			}
 
@@ -1239,47 +1242,95 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			TMap<int, FVector> ClusterCenters;
 
 			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices);
-			//DBSCANWithRefinement(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices);
 
-			//for (auto& Cluster : ClusteredVertices)
+			TArray<TArray<TPair<int, FVector>>> RefinedClusters;
+
+
+			for (TPair<int, TArray<TPair<int, FVector>>>& Cluster : ClusteredVertices)
+			{
+				TArray<TArray<TPair<int, FVector>>> SubClusters;
+
+				// 밀도 기반 그래프 분석 (연결 관계 확인)
+				RefineClusterUsingGraph(Cluster.Value, SubClusters);
+
+				// 만약 그래프 기반 분리로 충분하지 않다면, K-Means 시도
+				if (SubClusters.Num() == 1)
+				{
+					KMeansSplitCluster(Cluster.Value, SubClusters);
+				}
+
+				//KMeansSplitCluster(Cluster.Value, SubClusters);
+
+				// 분리된 클러스터를 최종 저장 (중복 클러스터 추가 방지)
+				for (const auto& SubCluster : SubClusters)
+				{
+					bool bAlreadyAdded = false;
+
+					// 중복된 클러스터가 있으면 추가하지 않음
+					for (const auto& ExistingCluster : RefinedClusters)
+					{
+						if (ExistingCluster == SubCluster)
+						{
+							bAlreadyAdded = true;
+							break;
+						}
+					}
+
+					if (!bAlreadyAdded)
+					{
+						RefinedClusters.Add(SubCluster);
+					}
+				}
+			}
+
+			//// 최종적으로 중복되지 않은 클러스터들로 ClusteredVertices 업데이트
+			ClusteredVertices.Empty();
+			int NewClusterId = 0;
+			for (const auto& SubCluster : RefinedClusters)
+			{
+				ClusteredVertices.Add(NewClusterId++, SubCluster);
+			}
+
+			//// 중복되지 않은 클러스터만 ClusteredVertices에 추가
+			//ClusteredVertices.Empty();
+			//int NewClusterId = 0;
+			//for (const auto& SubCluster : RefinedClusters)
 			//{
-			//	TArray<TArray<TPair<int, FVector>>> SubClusters;
+			//	// 클러스터 내의 각 점들이 고유한 int 값인지 확인
+			//	TSet<int> SeenInts;
 
-			//	// 그래프 기반 분리 먼저 실행
-			//	SplitClusterUsingGraph(Cluster.Value, SubClusters);
-
-			//	// 그래도 크면 K-means로 추가 분리
-			//	TArray<TArray<TPair<int, FVector>>> FinalClusters;
-			//	for (auto& SubCluster : SubClusters)
+			//	for (const auto& Point : SubCluster)
 			//	{
-			//		KMeansSplitCluster(SubCluster, FinalClusters);
+			//		if (SeenInts.Contains(Point.Key))
+			//		{
+			//			UE_LOG(LogTemp, Warning, TEXT("Duplicate int value %d found in SubCluster!"), Point.Key);
+			//			continue; // 중복된 int 값은 기록하지 않음
+			//		}
+
+			//		SeenInts.Add(Point.Key);
 			//	}
 
-			//	// 최종 결과 반영
-			//	ClusteredVertices.Remove(Cluster.Key);
-			//	for (const auto& NewCluster : FinalClusters)
-			//	{
-			//		ClusteredVertices.Add(ClusteredVertices.Num() + 1, NewCluster);
-			//	}
+			//	// 클러스터 ID를 새로 추가
+			//	ClusteredVertices.Add(NewClusterId++, SubCluster);
 			//}
 
 			//DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices, ClusterIndexRanges);
 
 			GetVerticesByCluster(ClusteredVertices, ClusterCenters);
-			for (const TPair<int, FVector>& Cluster : ClusterCenters) {
-				FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value);
-				UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex: %d, BoneName: %s"), Cluster.Key,*CutPlaneBoneName.ToString());
-			}
-			UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex ======================================================="));
+			//for (const TPair<int, FVector>& Cluster : ClusterCenters) {
+			//	FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value);
+			//	UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex: %d, BoneName: %s"), Cluster.Key,*CutPlaneBoneName.ToString());
+			//}
+			//UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex ======================================================="));
 
 			MergeClustersBasedOnBoneName(ClusteredVertices, ClusterCenters);
 
 			ClusterCenters.Empty();
 			GetVerticesByCluster(ClusteredVertices, ClusterCenters);
-			for (const TPair<int, FVector>& Cluster : ClusterCenters) {
-				FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value);
-				UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex: %d, BoneName: %s"), Cluster.Key, *CutPlaneBoneName.ToString());
-			}
+			//for (const TPair<int, FVector>& Cluster : ClusterCenters) {
+			//	FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value);
+			//	UE_LOG(LogTemp, Warning, TEXT("ttClusterCentersIndex: %d, BoneName: %s"), Cluster.Key, *CutPlaneBoneName.ToString());
+			//}
 
 			// 섹션
 			TMap<int32, TMap<int32, FName>> SectionVertexBoneMap;
@@ -1300,18 +1351,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 				for (int32 i = 0; i < SectionVertices.Num(); i++)
 				{
-					//int32 GlobalIndex = Vertices.Add(SectionVertices[i].Position);
-					//LocalToGlobalVertexMap.Add(i, GlobalIndex);
-
-					//Normals.Add(SectionVertices[i].Normal);
-					//UVs.Add(SectionVertices[i].UV0);
-					//Colors.Add(FColor(0.0, 0.0, 0.0, 255));
-					//Tangents.Add(SectionVertices[i].Tangent);
 
 					// 각 bone 저장
 					FName BoneName = GetBoneNameForVertex(SectionVertices[i].Position);
 					
-
 					// 맵에 저장 (섹션 인덱스 -> 버텍스 인덱스 -> 본 이름)
 					SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, BoneName);
 
@@ -1327,7 +1370,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->VertexNum : %d "), SectionIndex, SectionVertices.Num());
 			}
 
-			// cluster 메쉬 거리 조절중 절단 후 log 확인해보기
 
 
 			// 기존 ProceduralMesh가 있으면 삭제
@@ -1362,7 +1404,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 					// 새로운 ProceduralMeshComponent 생성
 					UProceduralMeshComponent* NewProcMesh = NewObject<UProceduralMeshComponent>(this);
-					//NewProcMesh->bUseComplexAsSimpleCollision = false;
+					NewProcMesh->bUseComplexAsSimpleCollision = false;
 
 					if (CutPlaneBoneName == "Head" ||
 						CutPlaneBoneName == "Neck" ||
@@ -1794,6 +1836,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		CutProceduralMesh_2->SetVisibility(false);
 		//CutProceduralMesh_2->SetHiddenInGame(true);
+		//CutProceduralMesh_2->bUseComplexAsSimpleCollision = false;
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 	}
@@ -1811,6 +1854,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 	// 전체 버텍스 bone들 받았고 버텍스 받았고 , 잘린 단면 bone 받았고, 버텍스 모아놨고
 
+	// 2/15
+	// 문제 3가지
+	// 2. impulse값이 안 주어짐 승원이형에게 물어봐야 할 듯
+	// 3. 중복되는 부분 중복 생성하거나 단면이 합침 판정이라 왼팔이나 오른팔 생성 안되는 문제
 
 }
 
@@ -2092,20 +2139,20 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 		}
 	}
 
-	// 클러스터 개수 및 클러스터별 버텍스 출력
-	int ClusterCount = 0;
-	for (const auto& Cluster : ClusteredVertices)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, Cluster.Value.Num());
-		ClusterCount = FMath::Max(ClusterCount, Cluster.Key);
+	//// 클러스터 개수 및 클러스터별 버텍스 출력
+	//int ClusterCount = 0;
+	//for (const auto& Cluster : ClusteredVertices)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, Cluster.Value.Num());
+	//	ClusterCount = FMath::Max(ClusterCount, Cluster.Key);
 
-		for (const TPair<int, FVector>& VertexData : Cluster.Value)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Index: %d, Vertex: %s"), VertexData.Key, *VertexData.Value.ToString());
-		}
-	}
+	//	for (const TPair<int, FVector>& VertexData : Cluster.Value)
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("Index: %d, Vertex: %s"), VertexData.Key, *VertexData.Value.ToString());
+	//	}
+	//}
 
-	UE_LOG(LogTemp, Warning, TEXT("Number of Clusters: %d"), ClusterCount);
+	//UE_LOG(LogTemp, Warning, TEXT("Number of Clusters: %d"), ClusterCount);
 }
 
 void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters)
@@ -2120,12 +2167,25 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 		ClusterBoneNames.Add(Cluster.Key, CutPlaneBoneName);
 	}
 
-	// 클러스터들을 BoneName으로 그룹화
 	TMap<FName, TArray<int>> BoneNameToClusterIds;
 
 	for (const TPair<int, FName>& Cluster : ClusterBoneNames)
 	{
-		BoneNameToClusterIds.FindOrAdd(Cluster.Value).Add(Cluster.Key);
+		if (Cluster.Value.IsNone())  // BoneName이 비어 있는 경우 방어 코드 추가
+		{
+			UE_LOG(LogTemp, Error, TEXT("ClusterBoneNames contains an empty BoneName for ClusterID: %d"), Cluster.Key);
+			continue;
+		}
+
+		if (!BoneNameToClusterIds.Contains(Cluster.Value))
+		{
+			BoneNameToClusterIds.Add(Cluster.Value, TArray<int>());
+		}
+
+		TArray<int>& ClusterList = BoneNameToClusterIds.FindOrAdd(Cluster.Value);
+		ClusterList.Add(Cluster.Key);
+
+		//UE_LOG(LogTemp, Warning, TEXT("Added ClusterID %d to BoneName %s"), Cluster.Key, *Cluster.Value.ToString());
 	}
 
 	// 동일한 FName을 가진 클러스터들끼리 합침 (우선순위 고려 X)
@@ -2170,6 +2230,12 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 				NewClusterCenter /= MergedVertices.Num();
 			}
 
+			// 클러스터 중심 정보 갱신
+			ClusterCenters[FirstClusterId] = NewClusterCenter;
+
+			// **병합된 클러스터의 새로운 BoneName을 계산하여 업데이트**
+			FName NewBoneName = GetBoneNameForCutPlaneVertex(NewClusterCenter);
+			ClusterBoneNames[FirstClusterId] = NewBoneName;
 		}
 	}
 
@@ -2183,323 +2249,235 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 		FName(TEXT("Hips"))
 	};
 
-	// MergeConditionBoneNames에 있는 조건에 맞는 FName을 가진 클러스터들을 우선순위대로 합침
-	for (const FName& ConditionBoneName : MergeConditionBoneNames)
-	{
-		// 해당 FName을 가진 클러스터들끼리 합침
-		TArray<int> ClustersToMerge;
+	FName HighestPriorityBoneName;
+	int HighestPriorityIndex = MergeConditionBoneNames.Num();
+	int TargetClusterId = -1;
 
-		// 조건에 해당하는 클러스터 ID를 찾음
+	for (const TPair<int, FName>& Cluster : ClusterBoneNames)
+	{
+		int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
+		if (Index != INDEX_NONE && Index < HighestPriorityIndex) // 더 높은 우선순위 발견
+		{
+			HighestPriorityBoneName = Cluster.Value;
+			HighestPriorityIndex = Index;
+			TargetClusterId = Cluster.Key;
+		}
+	}
+
+	if (!HighestPriorityBoneName.IsNone() && TargetClusterId != -1)
+	{
+		TArray<int> ClustersToMerge;
+		TArray<TPair<int, FVector>> MergedVertices;
+
 		for (const TPair<int, FName>& Cluster : ClusterBoneNames)
 		{
-			if (Cluster.Value == ConditionBoneName)
+			int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
+			if (Index != INDEX_NONE && Index >= HighestPriorityIndex) 
 			{
 				ClustersToMerge.Add(Cluster.Key);
 			}
 		}
 
-		if (ClustersToMerge.Num() > 1) // 두 개 이상의 클러스터가 조건에 맞으면 합침
+		for (int ClusterId : ClustersToMerge)
 		{
-			TArray<TPair<int, FVector>> MergedVertices;
-
-			// 클러스터들을 합침
-			for (int ClusterId : ClustersToMerge)
+			if (ClusteredVertices.Contains(ClusterId))
 			{
-				if (ClusteredVertices.Contains(ClusterId))
-				{
-					const TArray<TPair<int, FVector>>& VerticesInCluster = ClusteredVertices[ClusterId];
-					MergedVertices.Append(VerticesInCluster);
-				}
+				const TArray<TPair<int, FVector>>& VerticesInCluster = ClusteredVertices[ClusterId];
+				MergedVertices.Append(VerticesInCluster);
 			}
+		}
 
-			// 합쳐진 버텍스를 새 클러스터로 저장
-			int FirstClusterId = ClustersToMerge[0];
-			ClusteredVertices[FirstClusterId] = MergedVertices;
+		ClusteredVertices[TargetClusterId] = MergedVertices;
 
-			// 나머지 클러스터는 삭제
-			for (int i = 1; i < ClustersToMerge.Num(); ++i)
+		for (int ClusterId : ClustersToMerge)
+		{
+			if (ClusterId != TargetClusterId)
 			{
-				ClusteredVertices.Remove(ClustersToMerge[i]);
+				ClusteredVertices.Remove(ClusterId);
+				ClusterBoneNames.Remove(ClusterId);  
 			}
+		}
 
-			// 합쳐진 클러스터의 중심 재계산
-			FVector NewClusterCenter(0, 0, 0);
-			for (const TPair<int, FVector>& Vertex : MergedVertices)
-			{
-				NewClusterCenter += Vertex.Value;
-			}
-			if (MergedVertices.Num() > 0)
-			{
-				NewClusterCenter /= MergedVertices.Num();
-			}
+		FVector NewClusterCenter(0, 0, 0);
+		for (const TPair<int, FVector>& Vertex : MergedVertices)
+		{
+			NewClusterCenter += Vertex.Value;
+		}
+		if (MergedVertices.Num() > 0)
+		{
+			NewClusterCenter /= MergedVertices.Num();
+		}
 
+		ClusterCenters[TargetClusterId] = NewClusterCenter;
+	}
+}
+
+void ABaseZombie::RefineClusterUsingGraph(const TArray<TPair<int, FVector>>& ClusterPoints, TArray<TArray<TPair<int, FVector>>>& SeparatedClusters)
+{
+	TMap<int, TArray<int>> Graph;
+	TMap<int, int> GlobalToLocalIndexMap; // 전역 인덱스 → 로컬 인덱스 매핑
+	float Threshold = 2.0f; // 거리 임계값
+
+	// 전역 인덱스와 로컬 인덱스를 매핑
+	for (int i = 0; i < ClusterPoints.Num(); i++)
+	{
+		GlobalToLocalIndexMap.Add(ClusterPoints[i].Key, i);
+	}
+
+	// 그래프 생성 (전역 인덱스 사용)
+	for (int i = 0; i < ClusterPoints.Num(); i++)
+	{
+		for (int j = i + 1; j < ClusterPoints.Num(); j++)
+		{
+			if (FVector::Dist(ClusterPoints[i].Value, ClusterPoints[j].Value) < Threshold)
+			{
+				int GlobalKeyI = ClusterPoints[i].Key;
+				int GlobalKeyJ = ClusterPoints[j].Key;
+
+				Graph.FindOrAdd(GlobalKeyI).Add(GlobalKeyJ);
+				Graph.FindOrAdd(GlobalKeyJ).Add(GlobalKeyI);
+			}
 		}
 	}
 
+	TArray<TPair<int, FVector>> OrphanedVertices;
+	TSet<int> Visited;
 
-	//// ClusteredVertices 출력
-	//UE_LOG(LogTemp, Warning, TEXT("ClusteredVertices:"));
-	//for (const TPair<int, TArray<TPair<int, FVector>>>& ClusterPair : ClusteredVertices)
-	//{
-	//	int ClusterId = ClusterPair.Key;
-	//	const TArray<TPair<int, FVector>>& Vertices = ClusterPair.Value;
+	for (const auto& Point : ClusterPoints)
+	{
+		if (Visited.Contains(Point.Key)) continue;
 
-	//	UE_LOG(LogTemp, Warning, TEXT("ClusterId: %d, Number of Vertices: %d"), ClusterId, Vertices.Num());
+		TArray<TPair<int, FVector>> SubCluster;
+		TArray<int> Stack = { Point.Key };
 
-	//	// 각 버텍스 출력
-	//	for (const TPair<int, FVector>& Vertex : Vertices)
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("\tVertex Index: %d, Position: %s"), Vertex.Key, *Vertex.Value.ToString());
-	//	}
-	//}
+		while (Stack.Num() > 0)
+		{
+			int CurrentGlobalKey = Stack.Pop();
 
-	//// ClusterCenters 출력
-	//UE_LOG(LogTemp, Warning, TEXT("ClusterCenters:"));
-	//for (const TPair<int, FVector>& CenterPair : ClusterCenters)
-	//{
-	//	int ClusterId = CenterPair.Key;
-	//	const FVector& ClusterCenter = CenterPair.Value;
+			// 방문한 노드는 다시 추가하지 않음
+			if (Visited.Contains(CurrentGlobalKey)) continue;
+			Visited.Add(CurrentGlobalKey);
 
-	//	UE_LOG(LogTemp, Warning, TEXT("ClusterId: %d, Center: %s"), ClusterId, *ClusterCenter.ToString());
-	//}
+			// GlobalKey를 로컬 인덱스로 변환
+			int* LocalIndexPtr = GlobalToLocalIndexMap.Find(CurrentGlobalKey);
+			if (!LocalIndexPtr)
+			{
+				UE_LOG(LogTemp, Error, TEXT("Invalid GlobalKey access: %d"), CurrentGlobalKey);
+				continue;
+			}
+			int LocalIndex = *LocalIndexPtr;
+
+			// 중복 추가 방지
+			if (!SubCluster.ContainsByPredicate([&](const TPair<int, FVector>& Existing) {
+				return Existing.Key == CurrentGlobalKey;
+				}))
+			{
+				SubCluster.Add(TPair<int, FVector>(CurrentGlobalKey, ClusterPoints[LocalIndex].Value));
+			}
+
+			if (Graph.Contains(CurrentGlobalKey))
+			{
+				for (int Neighbor : Graph[CurrentGlobalKey])
+				{
+					if (!Visited.Contains(Neighbor))
+						Stack.Add(Neighbor);
+				}
+			}
+		}
+
+		if (SubCluster.Num() > 0)
+		{
+			SeparatedClusters.Add(SubCluster);
+		}
+		else
+		{
+			OrphanedVertices.Add(Point);
+		}
+	}
+
+	// OrphanedVertices 병합 (고립된 버텍스를 기존 클러스터에 추가)
+	for (auto& Orphaned : OrphanedVertices)
+	{
+		bool bAdded = false;
+
+		for (auto& ExistingCluster : SeparatedClusters)
+		{
+			if (FVector::Dist(ExistingCluster[0].Value, Orphaned.Value) < Threshold)
+			{
+				ExistingCluster.Add(Orphaned);
+				bAdded = true;
+				break;
+			}
+		}
+
+		// 가장 가까운 클러스터가 없다면 새로운 클러스터로 추가
+		if (!bAdded)
+		{
+			SeparatedClusters.Add({ Orphaned });
+		}
+	}
+
+	// 최종 클러스터 개수 출력
+	UE_LOG(LogTemp, Warning, TEXT("Total Clusters: %d"), SeparatedClusters.Num());
 }
 
+void ABaseZombie::KMeansSplitCluster(TArray<TPair<int, FVector>>& ClusterPoints,TArray<TArray<TPair<int, FVector>>>& SeparatedClusters)
+{
+	if (ClusterPoints.Num() < 5)
+	{
+		SeparatedClusters.Add(ClusterPoints);
+		return;
+	}
 
-//
-//void ABaseZombie::CalculateClusterShape(const TArray<TPair<int, FVector>>& Cluster, FVector& OutCentroid, float& OutRadius)
-//{
-//	FVector Sum(0, 0, 0);
-//	for (const auto& Point : Cluster)
-//	{
-//		Sum += Point.Value;
-//	}
-//
-//	OutCentroid = Sum / Cluster.Num(); // 중심 좌표
-//
-//	float MaxDistance = 0.0f;
-//	for (const auto& Point : Cluster)
-//	{
-//		float Distance = FVector::Dist(OutCentroid, Point.Value);
-//		MaxDistance = FMath::Max(MaxDistance, Distance);
-//	}
-//
-//	OutRadius = MaxDistance;
-//}
-//
-//bool ABaseZombie::ShouldSplitCluster(const TArray<TPair<int, FVector>>& Cluster)
-//{
-//	FVector Centroid;
-//	float Radius;
-//	CalculateClusterShape(Cluster, Centroid, Radius);
-//
-//	float Threshold = Radius * 0.5f; // 반지름의 절반을 기준으로 삼음
-//
-//	// 중심에서 가장 먼 두 점 찾기
-//	float MaxDist = 0.0f;
-//	FVector FarthestPointA, FarthestPointB;
-//
-//	for (const auto& PointA : Cluster)
-//	{
-//		for (const auto& PointB : Cluster)
-//		{
-//			float Distance = FVector::Dist(PointA.Value, PointB.Value);
-//			if (Distance > MaxDist)
-//			{
-//				MaxDist = Distance;
-//				FarthestPointA = PointA.Value;
-//				FarthestPointB = PointB.Value;
-//			}
-//		}
-//	}
-//
-//	// 가장 먼 두 점의 거리가 반지름의 1.5배 이상이면 분리
-//	return (MaxDist > Radius * 1.5f);
-//}
-//
-//void ABaseZombie::SplitCluster(TArray<TPair<int, FVector>>& Cluster, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, int& ClusterId)
-//{
-//	if (!ShouldSplitCluster(Cluster)) return; // 분리할 필요 없으면 그냥 둠
-//
-//	UE_LOG(LogTemp, Warning, TEXT("Splitting Cluster..."));
-//
-//	FVector A = Cluster[0].Value;
-//	FVector B = Cluster.Last().Value;
-//
-//	TArray<TPair<int, FVector>> ClusterA;
-//	TArray<TPair<int, FVector>> ClusterB;
-//
-//	for (const auto& Point : Cluster)
-//	{
-//		if (FVector::Dist(Point.Value, A) < FVector::Dist(Point.Value, B))
-//			ClusterA.Add(Point);
-//		else
-//			ClusterB.Add(Point);
-//	}
-//
-//	// 기존 클러스터 삭제 후 새 클러스터 추가
-//	ClusteredVertices.Remove(ClusterId);
-//	ClusteredVertices.Add(ClusterId, ClusterA);
-//	ClusteredVertices.Add(ClusterId + 1, ClusterB);
-//	ClusterId++;
-//}
-//
-//void ABaseZombie::DBSCANWithRefinement(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices)
-//{
-//	// 1️⃣ DBSCAN 실행
-//	DBSCANWithAverageDistance(Vertices, MinPts, Labels, ClusteredVertices);
-//
-//	// 2️⃣ 클러스터 내에서 원형 구조 확인 및 분리
-//	int ClusterId = ClusteredVertices.Num();
-//	for (auto& Cluster : ClusteredVertices)
-//	{
-//		SplitCluster(Cluster.Value, ClusteredVertices, ClusterId);
-//	}
-//}
-//
-//void ABaseZombie::SplitClusterUsingGraph(const TArray<TPair<int, FVector>>& ClusterPoints,TArray<TArray<TPair<int, FVector>>>& SeparatedClusters)
-//{
-//	TMap<int, TArray<int>> Graph;
-//
-//	// 그래프 구성 (일정 거리 이내 점끼리 연결)
-//	float Threshold = 10.0f; // 연결 기준 거리 조정
-//	for (int i = 0; i < ClusterPoints.Num(); i++)
-//	{
-//		for (int j = i + 1; j < ClusterPoints.Num(); j++)
-//		{
-//			if (CalculateEuclideanDistance(ClusterPoints[i].Value, ClusterPoints[j].Value) < Threshold)
-//			{
-//				Graph.FindOrAdd(ClusterPoints[i].Key).Add(ClusterPoints[j].Key);
-//				Graph.FindOrAdd(ClusterPoints[j].Key).Add(ClusterPoints[i].Key);
-//			}
-//		}
-//	}
-//
-//	// DFS를 이용한 서브 클러스터 분리
-//	TSet<int> Visited;
-//	for (const auto& Point : ClusterPoints)
-//	{
-//		if (Visited.Contains(Point.Key)) continue;
-//
-//		TArray<TPair<int, FVector>> SubCluster;
-//		TArray<int> Stack = { Point.Key };
-//
-//		while (Stack.Num() > 0)
-//		{
-//			int Current = Stack.Pop();
-//
-//			// 배열 범위 초과 체크
-//			if (Current < 0 || Current >= ClusterPoints.Num())
-//			{
-//				UE_LOG(LogTemp, Error, TEXT("Invalid index access: %d (Size: %d)"), Current, ClusterPoints.Num());
-//				continue;
-//			}
-//
-//			if (Visited.Contains(Current)) continue;
-//			Visited.Add(Current);
-//
-//			// 현재 점 추가 (범위 확인)
-//			SubCluster.Add(TPair<int, FVector>(Current, ClusterPoints[Current].Value));
-//
-//			// 연결된 점 탐색
-//			if (Graph.Contains(Current))
-//			{
-//				for (int Neighbor : Graph[Current])
-//				{
-//					if (Neighbor >= 0 && Neighbor < ClusterPoints.Num() && !Visited.Contains(Neighbor))
-//						Stack.Add(Neighbor);
-//				}
-//			}
-//		}
-//
-//		if (SubCluster.Num() > 0)
-//			SeparatedClusters.Add(SubCluster);
-//	}
-//}
-//
-//void ABaseZombie::KMeansSplitCluster(TArray<TPair<int, FVector>>& ClusterPoints,TArray<TArray<TPair<int, FVector>>>& SeparatedClusters)
-//{
-//	if (ClusterPoints.Num() < 5)
-//	{
-//		SeparatedClusters.Add(ClusterPoints);
-//		return;
-//	}
-//
-//	// K-Means를 2개 클러스터로 적용
-//	TArray<FVector> Centroids = { ClusterPoints[0].Value, ClusterPoints.Last().Value };
-//	TMap<int, TArray<TPair<int, FVector>>> NewClusters;
-//
-//	for (int Iter = 0; Iter < 5; Iter++)
-//	{
-//		NewClusters.Empty();
-//
-//		// 각 점을 가까운 중심에 할당
-//		for (const TPair<int, FVector>& Point : ClusterPoints)
-//		{
-//			float Dist0 = CalculateEuclideanDistance(Point.Value, Centroids[0]);
-//			float Dist1 = CalculateEuclideanDistance(Point.Value, Centroids[1]);
-//
-//			if (Dist0 < Dist1)
-//				NewClusters.FindOrAdd(0).Add(Point);
-//			else
-//				NewClusters.FindOrAdd(1).Add(Point);
-//		}
-//
-//		// 새 중심 계산
-//		for (int i = 0; i < 2; i++)
-//		{
-//			FVector NewCentroid(0, 0, 0);
-//			for (const auto& P : NewClusters[i])
-//				NewCentroid += P.Value;
-//
-//			if (NewClusters[i].Num() > 0)
-//				Centroids[i] = NewCentroid / NewClusters[i].Num();
-//		}
-//	}
-//
-//	// 분리된 클러스터 저장
-//	for (const auto& Cluster : NewClusters)
-//	{
-//		SeparatedClusters.Add(Cluster.Value);
-//	}
-//}
+	// K-Means를 2개 클러스터로 적용
+	TArray<FVector> Centroids = { ClusterPoints[0].Value, ClusterPoints.Last().Value };
+	TMap<int, TArray<TPair<int, FVector>>> NewClusters;
+	const float MinCentroidDistance = 1.0f;  // 센트로이드 최소 거리
 
-//void ABaseZombie::GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters)
-//{
-//	TMap<int, TArray<FVector>> ClusteredVertices;
-//
-//	for (int i = 0; i < Labels.Num(); ++i)
-//	{
-//		int ClusterId = Labels[i];
-//
-//		if (ClusterId != -1)
-//		{
-//			ClusteredVertices.FindOrAdd(ClusterId).Add(Vertices[i]);
-//		}
-//	}
-//
-//	// 각 클러스터의 중심 좌표 계산
-//	for (const TPair<int, TArray<FVector>>& Cluster : ClusteredVertices)
-//	{
-//		const TArray<FVector>& VerticesInCluster = Cluster.Value;
-//		FVector ClusterCenter(0, 0, 0);
-//
-//		for (const FVector& Vertex : VerticesInCluster)
-//		{
-//			ClusterCenter += Vertex;
-//		}
-//
-//		if (VerticesInCluster.Num() > 0)
-//		{
-//			ClusterCenter /= VerticesInCluster.Num();
-//		}
-//
-//		// 클러스터 ID를 키로 사용해 TMap에 저장
-//		ClusterCenters.Add(Cluster.Key, ClusterCenter);
-//
-//		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, VerticesInCluster.Num());
-//		UE_LOG(LogTemp, Warning, TEXT("Cluster %d Center: %s"), Cluster.Key, *ClusterCenter.ToString());
-//	}
-//}
+	for (int Iter = 0; Iter < 5; Iter++)
+	{
+		NewClusters.Empty();
+
+		// 각 점을 가까운 중심에 할당
+		for (const TPair<int, FVector>& Point : ClusterPoints)
+		{
+			float Dist0 = CalculateEuclideanDistance(Point.Value, Centroids[0]);
+			float Dist1 = CalculateEuclideanDistance(Point.Value, Centroids[1]);
+
+			if (Dist0 < Dist1)
+				NewClusters.FindOrAdd(0).Add(Point);
+			else
+				NewClusters.FindOrAdd(1).Add(Point);
+		}
+
+		// 새 중심 계산
+		for (int i = 0; i < 2; i++)
+		{
+			FVector NewCentroid(0, 0, 0);
+			for (const auto& P : NewClusters[i])
+				NewCentroid += P.Value;
+
+			if (NewClusters[i].Num() > 0)
+				NewCentroid /= NewClusters[i].Num();
+
+			// 두 센트로이드 간의 거리가 너무 가깝다면, 더 이상 분리하지 않음
+			if (CalculateEuclideanDistance(Centroids[i], NewCentroid) < MinCentroidDistance)
+			{
+				// 센트로이드가 너무 가까우면, 이 둘을 하나로 합침
+				SeparatedClusters.Add(NewClusters[i]);
+				return;
+			}
+
+			Centroids[i] = NewCentroid;
+		}
+	}
+
+	// 분리된 클러스터 저장
+	for (const auto& Cluster : NewClusters)
+	{
+		SeparatedClusters.Add(Cluster.Value);
+	}
+}
 
 void ABaseZombie::GetVerticesByCluster(const TMap<int, TArray<TPair<int, FVector>>>& ClusteredVerticesMap, TMap<int, FVector>& ClusterCenters)
 {
@@ -2520,8 +2498,8 @@ void ABaseZombie::GetVerticesByCluster(const TMap<int, TArray<TPair<int, FVector
 
 		ClusterCenters.Add(Cluster.Key, ClusterCenter);
 
-		UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, VerticesInCluster.Num());
-		UE_LOG(LogTemp, Warning, TEXT("Cluster %d Center: %s"), Cluster.Key, *ClusterCenter.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, VerticesInCluster.Num());
+		//UE_LOG(LogTemp, Warning, TEXT("Cluster %d Center: %s"), Cluster.Key, *ClusterCenter.ToString());
 	}
 }
 
@@ -2557,6 +2535,65 @@ void ABaseZombie::CreateAndApplyBoundingBox(UProceduralMeshComponent* Procedural
 	ConvexVerts.Add(FVector(BoundingBox.Max.X, BoundingBox.Min.Y, BoundingBox.Max.Z));
 	ConvexVerts.Add(FVector(BoundingBox.Min.X, BoundingBox.Max.Y, BoundingBox.Max.Z));
 	ConvexVerts.Add(BoundingBox.Max);
+
+	// 각 벡터 값 출력
+	for (int32 i = 0; i < ConvexVerts.Num(); ++i)
+	{
+		UE_LOG(LogTemp, Log, TEXT("ConvexMesh Convex Vert %d: %s"), i, *ConvexVerts[i].ToString());
+	}
+
+	// 새로운 Convex Mesh를 적용
+	ProceduralMesh->AddCollisionConvexMesh(ConvexVerts);
+
+	// 5. 충돌 다시 활성화
+	ProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	ProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+
+	// 6. 물리 시뮬레이션 활성화
+	ProceduralMesh->SetSimulatePhysics(true);
+}
+
+void ABaseZombie::CreateAndApplyBoundingBoxByNewProcMesh(UProceduralMeshComponent* ProceduralMesh)
+{
+	// 1. 메시의 바운딩 박스를 가져옴
+	FBox BoundingBox = ProceduralMesh->CalcBounds(ProceduralMesh->GetComponentTransform()).GetBox();
+
+	// 2. 바운딩 박스의 크기와 중심 계산
+	FVector BoxExtent = BoundingBox.GetExtent();  // 반경 (반쪽 크기)
+	FVector BoxCenter = BoundingBox.GetCenter(); // 중심 위치
+
+	/*UE_LOG(LogTemp, Log, TEXT("ProceduralMesh has NO ConvexMesh!! ====> BoundingBox Created!!!\nBoundingBox Extent: %s, Center: %s"),
+		*BoxExtent.ToString(), *BoxCenter.ToString());*/
+
+	// 3. 충돌 설정 - 기존 Convex Mesh를 대체
+	ProceduralMesh->ClearCollisionConvexMeshes(); // 기존 충돌 제거
+
+	// 4. 바운딩 박스 크기를 기반으로 충돌 형상 생성
+	TArray<FVector> ConvexVerts;
+
+	// 바운딩 박스의 8개 꼭짓점 계산
+	FVector Min = BoundingBox.Min;
+	FVector Max = BoundingBox.Max;
+
+	// 월드 좌표를 로컬 좌표로 변환
+	FVector LocalMin = ProceduralMesh->GetComponentTransform().Inverse().TransformPosition(Min);
+	FVector LocalMax = ProceduralMesh->GetComponentTransform().Inverse().TransformPosition(Max);
+
+	// 로컬 좌표 시스템에서 ConvexVerts 생성
+	ConvexVerts.Add(LocalMin);  // 0
+	ConvexVerts.Add(FVector(LocalMax.X, LocalMin.Y, LocalMin.Z));  // 1
+	ConvexVerts.Add(FVector(LocalMin.X, LocalMax.Y, LocalMin.Z));  // 2
+	ConvexVerts.Add(FVector(LocalMax.X, LocalMax.Y, LocalMin.Z));  // 3
+	ConvexVerts.Add(FVector(LocalMin.X, LocalMin.Y, LocalMax.Z));  // 4
+	ConvexVerts.Add(FVector(LocalMax.X, LocalMin.Y, LocalMax.Z));  // 5
+	ConvexVerts.Add(FVector(LocalMin.X, LocalMax.Y, LocalMax.Z));  // 6
+	ConvexVerts.Add(LocalMax);  // 7
+
+	//// 각 벡터 값 출력
+	//for (int32 i = 0; i < ConvexVerts.Num(); ++i)
+	//{
+	//	UE_LOG(LogTemp, Log, TEXT("ConvexMesh Convex Vert %d: %s"), i, *ConvexVerts[i].ToString());
+	//}
 
 	// 새로운 Convex Mesh를 적용
 	ProceduralMesh->AddCollisionConvexMesh(ConvexVerts);
