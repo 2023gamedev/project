@@ -14,7 +14,13 @@
 #include "ProCharacter/BaseCharacter.h"
 #include "ProItem/NormalWeaponActor.h"
 
+// 구조체
+#include "ProData/ZBoneStruct.h"
+
 #include "BaseZombie.generated.h"
+
+
+
 
 
 DECLARE_MULTICAST_DELEGATE(FAttackEndDelegate);
@@ -180,8 +186,24 @@ public:
 
 	void SliceProceduralmeshTest(FVector planeposition, FVector planenormal);
 
-	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
+	FName GetBoneNameForVertex(const FVector& TargetPosition);
+	FName GetBoneNameForCutPlaneVertex(const FVector& TargetPosition);
 
+	float CalculateEuclideanDistance(const FVector& Point1, const FVector& Point2);
+	float CalculateAverageDistance(const TArray<FVector>& Vertices);
+	float CalculateDynamicEps(const TArray<FVector>& Vertices, int K);
+	//void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<FVector>>& ClusteredVertices);
+	void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices);
+	//void DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<FVector>>& ClusteredVertices, TMap<int, TPair<int32, int32>>& ClusterIndexRanges);
+	void RefineClusterUsingGraph(const TArray<TPair<int, FVector>>& ClusterPoints, TArray<TArray<TPair<int, FVector>>>& SeparatedClusters);
+	void KMeansSplitCluster(TArray<TPair<int, FVector>>& ClusterPoints, TArray<TArray<TPair<int, FVector>>>& SeparatedClusters);
+
+	//void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters);
+	void GetVerticesByCluster(const TMap<int, TArray<TPair<int, FVector>>>& ClusteredVerticesMap, TMap<int, FVector>& ClusterCenters);
+	void MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters);
+
+	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
+	void CreateAndApplyBoundingBoxByNewProcMesh(UProceduralMeshComponent* ProceduralMesh);
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
 	UProceduralMeshComponent* CutProceduralMesh_1;
@@ -189,10 +211,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh") 
 	UProceduralMeshComponent* CutProceduralMesh_2;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
+	TMap<UProceduralMeshComponent*, bool> ProcMeshImpulseStates;
+
 	void CreativeProceduralMesh(FVector planeposition, FVector planenormal);
 
 	UPROPERTY(EditAnywhere, Category = "Materials")
 	UMaterialInterface* Material_Blood;
+
+	UPROPERTY(EditAnywhere, Category = "Materials")
+	UMaterialInterface* Material_ProcMeshBlood;
 
 	UPROPERTY(EditAnywhere)
 	TArray<ABloodNiagaEffect*> BloodFX;
@@ -205,6 +233,20 @@ public:
 	UPROPERTY(EditAnywhere)
 	ANormalWeaponActor* PlayerWeapon;
 
+
+
+	TSharedPtr<FZBoneStructure> RootBone;  // **트리 루트 (최상위 본)**
+	TSharedPtr<FZBoneStructure> SpecialRootBone;  // **트리 루트 (최상위 본)**
+
+	UPROPERTY(EditAnywhere)
+	TArray<UProceduralMeshComponent*> ProceduralMeshes;
+
+	void InitializeBoneHierarchy();  // 본 트리 초기화
+	void InitializeSpecialBoneHierarchy();  // 몸통부분 절단 시 새로운 트리 구조
+	void PrintBoneHierarchy(TSharedPtr<FZBoneStructure> Bone, int Depth = 0);
+
+	bool InBone(FName BoneAName, FName BoneBName, TSharedPtr<FZBoneStructure> StartBone);
+	TSharedPtr<FZBoneStructure> FindBoneByName(TSharedPtr<FZBoneStructure> StartBone, FName BoneName);
 
 	float m_fHP_Prev = 0.f;
 
@@ -303,5 +345,7 @@ public:
 	const float ZombieHeardFootSoundSpeed_Offset = -20.f;   // 발소리를 들었을 때는 뛰기 스피드에서 -20.f 스피드
 
 	
+
 	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL)
+
 };
