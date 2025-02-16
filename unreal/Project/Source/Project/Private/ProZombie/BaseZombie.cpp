@@ -2247,77 +2247,188 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 		}
 	}
 
-	// MergeConditionBoneNames 정의 (우선순위 순서대로 정의)
-	TArray<FName> MergeConditionBoneNames = {
-		FName(TEXT("Head")),
-		FName(TEXT("Neck")),
-		FName(TEXT("Spine2")),
-		FName(TEXT("Spine1")),
-		FName(TEXT("Spine")),
-		FName(TEXT("Hips"))
+	//// MergeConditionBoneNames 정의 (우선순위 순서대로 정의)
+	//TArray<FName> MergeConditionBoneNames = {
+	//	FName(TEXT("Head")),
+	//	FName(TEXT("Neck")),
+	//	FName(TEXT("Spine2")),
+	//	FName(TEXT("Spine1")),
+	//	FName(TEXT("Spine")),
+	//	FName(TEXT("Hips"))
+	//};
+
+	//FName HighestPriorityBoneName;
+	//int HighestPriorityIndex = MergeConditionBoneNames.Num();
+	//int TargetClusterId = -1;
+
+	//for (const TPair<int, FName>& Cluster : ClusterBoneNames)
+	//{
+	//	int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
+	//	if (Index != INDEX_NONE && Index < HighestPriorityIndex) // 더 높은 우선순위 발견
+	//	{
+	//		HighestPriorityBoneName = Cluster.Value;
+	//		HighestPriorityIndex = Index;
+	//		TargetClusterId = Cluster.Key;
+	//	}
+	//}
+
+	//if (!HighestPriorityBoneName.IsNone() && TargetClusterId != -1)
+	//{
+	//	TArray<int> ClustersToMerge;
+	//	TArray<TPair<int, FVector>> MergedVertices;
+
+	//	for (const TPair<int, FName>& Cluster : ClusterBoneNames)
+	//	{
+	//		int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
+	//		if (Index != INDEX_NONE && Index >= HighestPriorityIndex) 
+	//		{
+	//			ClustersToMerge.Add(Cluster.Key);
+	//		}
+	//	}
+
+	//	for (int ClusterId : ClustersToMerge)
+	//	{
+	//		if (ClusteredVertices.Contains(ClusterId))
+	//		{
+	//			const TArray<TPair<int, FVector>>& VerticesInCluster = ClusteredVertices[ClusterId];
+	//			MergedVertices.Append(VerticesInCluster);
+	//		}
+	//	}
+
+	//	// 병합된 클러스터 데이터 처리
+	//	if (TargetClusterId != -1 && MergedVertices.Num() > 0)
+	//	{
+	//		// TargetClusterId가 이미 존재하는지 확인
+	//		if (ClusteredVertices.Contains(TargetClusterId))
+	//		{
+	//			ClusteredVertices[TargetClusterId] = MergedVertices;
+
+	//			for (int ClusterId : ClustersToMerge)
+	//			{
+	//				if (ClusterId != TargetClusterId)
+	//				{
+	//					ClusteredVertices.Remove(ClusterId);
+	//					ClusterBoneNames.Remove(ClusterId);
+	//				}
+	//			}
+
+	//			FVector NewClusterCenter(0, 0, 0);
+	//			for (const TPair<int, FVector>& Vertex : MergedVertices)
+	//			{
+	//				NewClusterCenter += Vertex.Value;
+	//			}
+	//			if (MergedVertices.Num() > 0)
+	//			{
+	//				NewClusterCenter /= MergedVertices.Num();
+	//			}
+
+	//			ClusterCenters[TargetClusterId] = NewClusterCenter;
+	//		}
+	//		else
+	//		{
+	//			UE_LOG(LogTemp, Error, TEXT("TargetClusterId %d is invalid, unable to merge."), TargetClusterId);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		UE_LOG(LogTemp, Error, TEXT("No valid clusters to merge or invalid TargetClusterId"));
+	//	}
+
+	//}
+
+	// 병합 우선순위 그룹들 정의
+	TArray<TArray<FName>> MergeConditionBoneGroups = {
+		{ FName(TEXT("Head")), FName(TEXT("Neck")), FName(TEXT("Spine2")), FName(TEXT("Spine1")), FName(TEXT("Spine")), FName(TEXT("Hips")) },
+		{ FName(TEXT("LeftShoulder")), FName(TEXT("LeftArm")), FName(TEXT("LeftForeArm")), FName(TEXT("LeftHand")) },
+		{ FName(TEXT("RightShoulder")), FName(TEXT("RightArm")), FName(TEXT("RightForeArm")), FName(TEXT("RightHand")) },
+		{ FName(TEXT("LeftUpLeg")), FName(TEXT("LeftLeg")), FName(TEXT("LeftFoot")), FName(TEXT("LeftToeBase")) },
+		{ FName(TEXT("RightUpLeg")), FName(TEXT("RightLeg")), FName(TEXT("RightFoot")), FName(TEXT("RightToeBase")) }
 	};
 
-	FName HighestPriorityBoneName;
-	int HighestPriorityIndex = MergeConditionBoneNames.Num();
-	int TargetClusterId = -1;
-
-	for (const TPair<int, FName>& Cluster : ClusterBoneNames)
+	// 각 그룹별 병합 수행
+	for (const TArray<FName>& MergeConditionBoneNames : MergeConditionBoneGroups)
 	{
-		int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
-		if (Index != INDEX_NONE && Index < HighestPriorityIndex) // 더 높은 우선순위 발견
-		{
-			HighestPriorityBoneName = Cluster.Value;
-			HighestPriorityIndex = Index;
-			TargetClusterId = Cluster.Key;
-		}
-	}
+		FName HighestPriorityBoneName;
+		int HighestPriorityIndex = MergeConditionBoneNames.Num();
+		int TargetClusterId = -1;
 
-	if (!HighestPriorityBoneName.IsNone() && TargetClusterId != -1)
-	{
-		TArray<int> ClustersToMerge;
-		TArray<TPair<int, FVector>> MergedVertices;
-
+		// 가장 높은 우선순위를 가진 클러스터 찾기
 		for (const TPair<int, FName>& Cluster : ClusterBoneNames)
 		{
 			int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
-			if (Index != INDEX_NONE && Index >= HighestPriorityIndex) 
+			if (Index != INDEX_NONE && Index < HighestPriorityIndex) // 더 높은 우선순위 발견
 			{
-				ClustersToMerge.Add(Cluster.Key);
+				HighestPriorityBoneName = Cluster.Value;
+				HighestPriorityIndex = Index;
+				TargetClusterId = Cluster.Key;
 			}
 		}
 
-		for (int ClusterId : ClustersToMerge)
+		// 병합할 클러스터들을 찾기
+		if (!HighestPriorityBoneName.IsNone() && TargetClusterId != -1)
 		{
-			if (ClusteredVertices.Contains(ClusterId))
+			TArray<int> ClustersToMerge;
+			TArray<TPair<int, FVector>> MergedVertices;
+
+			for (const TPair<int, FName>& Cluster : ClusterBoneNames)
 			{
-				const TArray<TPair<int, FVector>>& VerticesInCluster = ClusteredVertices[ClusterId];
-				MergedVertices.Append(VerticesInCluster);
+				int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
+				if (Index != INDEX_NONE && Index >= HighestPriorityIndex)
+				{
+					ClustersToMerge.Add(Cluster.Key);
+				}
+			}
+
+			for (int ClusterId : ClustersToMerge)
+			{
+				if (ClusteredVertices.Contains(ClusterId))
+				{
+					const TArray<TPair<int, FVector>>& VerticesInCluster = ClusteredVertices[ClusterId];
+					MergedVertices.Append(VerticesInCluster);
+				}
+			}
+
+			// 병합된 클러스터 데이터 처리
+			if (TargetClusterId != -1 && MergedVertices.Num() > 0)
+			{
+				// TargetClusterId가 이미 존재하는지 확인
+				if (ClusteredVertices.Contains(TargetClusterId))
+				{
+					ClusteredVertices[TargetClusterId] = MergedVertices;
+
+					for (int ClusterId : ClustersToMerge)
+					{
+						if (ClusterId != TargetClusterId)
+						{
+							ClusteredVertices.Remove(ClusterId);
+							ClusterBoneNames.Remove(ClusterId);
+						}
+					}
+
+					FVector NewClusterCenter(0, 0, 0);
+					for (const TPair<int, FVector>& Vertex : MergedVertices)
+					{
+						NewClusterCenter += Vertex.Value;
+					}
+					if (MergedVertices.Num() > 0)
+					{
+						NewClusterCenter /= MergedVertices.Num();
+					}
+
+					ClusterCenters[TargetClusterId] = NewClusterCenter;
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("TargetClusterId %d is invalid, unable to merge."), TargetClusterId);
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("No valid clusters to merge or invalid TargetClusterId"));
 			}
 		}
-
-		ClusteredVertices[TargetClusterId] = MergedVertices;
-
-		for (int ClusterId : ClustersToMerge)
-		{
-			if (ClusterId != TargetClusterId)
-			{
-				ClusteredVertices.Remove(ClusterId);
-				ClusterBoneNames.Remove(ClusterId);  
-			}
-		}
-
-		FVector NewClusterCenter(0, 0, 0);
-		for (const TPair<int, FVector>& Vertex : MergedVertices)
-		{
-			NewClusterCenter += Vertex.Value;
-		}
-		if (MergedVertices.Num() > 0)
-		{
-			NewClusterCenter /= MergedVertices.Num();
-		}
-
-		ClusterCenters[TargetClusterId] = NewClusterCenter;
 	}
+
 }
 
 void ABaseZombie::RefineClusterUsingGraph(const TArray<TPair<int, FVector>>& ClusterPoints, TArray<TArray<TPair<int, FVector>>>& SeparatedClusters)
@@ -2461,6 +2572,13 @@ void ABaseZombie::KMeansSplitCluster(TArray<TPair<int, FVector>>& ClusterPoints,
 		// 새 중심 계산
 		for (int i = 0; i < 2; i++)
 		{
+			if (!NewClusters.Contains(i))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("NewClusters does not contain index %d"), i);
+				continue;
+			}
+
+
 			FVector NewCentroid(0, 0, 0);
 			for (const auto& P : NewClusters[i])
 				NewCentroid += P.Value;

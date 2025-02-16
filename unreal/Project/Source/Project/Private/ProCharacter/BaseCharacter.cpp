@@ -923,16 +923,18 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 				ProGameClearUIWidget = CreateWidget<UProGameClearUI>(PlayerController, ProGameClearUIClass);
 				if (ProGameClearUIWidget)
 				{
-					ProGameClearUIWidget->AddToViewport();
+					//ProGameClearUIWidget->AddToViewport();
 
 					// EndingUI
 					if (root == 1) {
+						ProGameClearUIWidget->AddToViewport();
 						FString HowToEscape = " Escape::Car ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
 						USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/CarEnding.CarEnding")); // 에셋 경로
 						PlaySoundForPlayer(Sound);
 					}
 					else if (root == 2) {
+						ProGameClearUIWidget->AddToViewport();
 						FString HowToEscape = " Escape::Roof ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
 						USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/Leavehelicopter.Leavehelicopter")); // 에셋 경로
@@ -941,8 +943,7 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 					else if (root == 0) {
 						FString HowToEscape = " Escape::Failed ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
-						USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/GameOver.GameOver")); // 에셋 경로
-						PlaySoundForPlayer(Sound);
+						GetWorld()->GetTimerManager().SetTimer(GameOverUIHandle, this, &ABaseCharacter::ProStartGameOverUI, 3.f, false);
 					}
 
 					FString TimerString = FString::Printf(TEXT("%d:%d"), GameTimerUIWidget->m_iMinites, GameTimerUIWidget->m_iSeconds);
@@ -1466,6 +1467,15 @@ void ABaseCharacter::OnPickUPUISlot()
 void ABaseCharacter::ProStartPickUpUI()
 {
 	PickUpUIWidget->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void ABaseCharacter::ProStartGameOverUI()
+{
+	if (ProGameClearUIWidget) {
+		ProGameClearUIWidget->AddToViewport();
+		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/GameOver.GameOver")); // 에셋 경로
+		PlaySoundForPlayer(Sound);
+	}
 }
 
 void ABaseCharacter::OtherGetItem()

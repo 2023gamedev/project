@@ -208,6 +208,8 @@ public:
 	FTimerHandle PickUpUIHandle;
 	void ProStartPickUpUI();
 
+	FTimerHandle GameOverUIHandle;
+	void ProStartGameOverUI();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UCircularPB_UI> CircularPB_Class;
