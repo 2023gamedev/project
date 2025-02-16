@@ -59,6 +59,11 @@ public:
 
 	void ChatToggle(const FInputActionValue& Value);
 
+	void UpSTR(const FInputActionValue& Value);
+	void DownSTR(const FInputActionValue& Value);
+	void UpSpeed(const FInputActionValue& Value);
+	void DownSpeed(const FInputActionValue& Value);
+
 	FTimerHandle InputCoolTimeHandle;
 	void InputCoolTime();
 	bool m_bIsInputEnabled = true;

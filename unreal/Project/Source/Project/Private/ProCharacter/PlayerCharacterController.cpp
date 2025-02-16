@@ -760,6 +760,11 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputQuickHItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickHItem);
 				PEI->BindAction(InputActions->InputQuickKeyItem, ETriggerEvent::Completed, this, &APlayerCharacterController::QuickKeyItem);
 				PEI->BindAction(InputActions->InputChatToggle, ETriggerEvent::Completed, this, &APlayerCharacterController::ChatToggle);
+
+				PEI->BindAction(InputActions->InputUpSTR, ETriggerEvent::Completed, this, &APlayerCharacterController::UpSTR);
+				PEI->BindAction(InputActions->InputDownSTR, ETriggerEvent::Completed, this, &APlayerCharacterController::DownSTR);
+				PEI->BindAction(InputActions->InputUpSpeed, ETriggerEvent::Completed, this, &APlayerCharacterController::UpSpeed);
+				PEI->BindAction(InputActions->InputDownSpeed, ETriggerEvent::Completed, this, &APlayerCharacterController::DownSpeed);
 				 
 			}
 			else
@@ -1074,6 +1079,42 @@ void APlayerCharacterController::ChatToggle(const FInputActionValue& Value)
 		SetInputMode(FInputModeGameOnly());
 		bShowMouseCursor = false;
 	}
+}
+
+void APlayerCharacterController::UpSTR(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Log, TEXT("UpSTR"));
+
+	basecharacter->UpSTR();
+}
+
+void APlayerCharacterController::DownSTR(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Log, TEXT("DownSTR"));
+
+	basecharacter->DownSTR();
+}
+
+void APlayerCharacterController::UpSpeed(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Log, TEXT("UpSpeed"));
+
+	basecharacter->UpSpeed();
+}
+
+void APlayerCharacterController::DownSpeed(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	UE_LOG(LogTemp, Log, TEXT("DownSpeed"));
+
+	basecharacter->DownSpeed();
 }
 
 

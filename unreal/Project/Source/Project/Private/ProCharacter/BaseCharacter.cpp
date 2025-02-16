@@ -2258,6 +2258,26 @@ void ABaseCharacter::QuickKeyItem()
 	}
 }
 
+void ABaseCharacter::UpSTR()
+{
+	SetSTR(GetSTR() + 1);
+}
+
+void ABaseCharacter::DownSTR()
+{
+	SetSTR(GetSTR() - 1);
+}
+
+void ABaseCharacter::UpSpeed()
+{
+	SetBasicSpeed(GetBasicSpeed() + 1);
+}
+
+void ABaseCharacter::DownSpeed()
+{
+	SetBasicSpeed(GetBasicSpeed() - 1);
+}
+
 
 bool ABaseCharacter::CanSetWeapon()
 {

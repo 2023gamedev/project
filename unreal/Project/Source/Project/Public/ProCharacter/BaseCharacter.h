@@ -270,6 +270,13 @@ public:
 	void QuickTWeapon();
 	void QuickKeyItem();
 
+
+	void UpSTR();
+	void DownSTR();
+	void UpSpeed();
+	void DownSpeed();
+
+
 	// 행동 확인 Get 함수 08/18
 	bool IsAttack() { return m_bIsAttacking; }
 	bool IsHealing() { return m_bIsHealingTime; }
