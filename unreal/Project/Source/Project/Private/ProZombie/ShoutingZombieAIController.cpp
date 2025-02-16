@@ -403,11 +403,6 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 					OwnerZombie->Shouting();
 					shoutingTo_PlayerId = myPlayerId;
 				}
-				else {	// 샤우팅이랑 소리 안 겹치게 ㅇㅇ
-					// 좀비 플레이어 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
-					//UGameplayStatics::PlaySoundAtLocation(this, OwnerZombie->GrowlSound, OwnerZombie->GetActorLocation(), 0.7333f);
-					OwnerZombie->bDoGrowl = true;
-				}
 			}
 		}
 		else {	// NearestPawn 존재 X -> 나를 못 봄

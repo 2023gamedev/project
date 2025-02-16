@@ -768,17 +768,17 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			if (result == "NO PLAYER")
 				break;
 
-//#ifdef	ENABLE_BT_LOG
+#ifdef	ENABLE_BT_LOG
 			if (zom->printLog == true) {
 				cout << endl;
 				cout << "//========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
 				cout << endl;
 			}
-//#endif
+#endif
 
 			// 좀비가 사망시 BT 중지
 			if (zom->zombieHP <= 0.f) {
-//#ifdef	ENABLE_BT_LOG
+#ifdef	ENABLE_BT_LOG
 				if (zom->printLog == true) {
 					cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 사망함." << endl << endl;
 					cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
@@ -786,7 +786,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 					zom->printLog = false;
 				}
-//#endif
+#endif
 				continue;
 			}
 
@@ -820,7 +820,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			//cout << endl;
 
 			if (same_floor == false) {
-//#ifdef	ENABLE_BT_LOG
+#ifdef	ENABLE_BT_LOG
 				if (zom->printLog == true) {
 					cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 플레이어들이 없는 층에 존재. -> BT 실행 잠시 중지" << endl << endl;
 					cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
@@ -828,10 +828,10 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 					zom->printLog = false;
 				}
-//#endif
+#endif
 				continue;	// 같은 층에 플레이어가 아무도 없으니 BT 스킵
 			}
-//#ifdef	ENABLE_BT_LOG
+#ifdef	ENABLE_BT_LOG
 			else if (same_floor == true) {
 				if (zom->printLog == false) {
 					cout << endl;
@@ -841,14 +841,14 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					zom->printLog = true;
 				}
 			}
-//#endif
+#endif
 
 
-//#ifdef	ENABLE_BT_LOG
+#ifdef	ENABLE_BT_LOG
 			float z_x = zom->ZombieData.x;					float z_y = zom->ZombieData.y;					float z_z = zom->ZombieData.z;
 			cout << "좀비 \'#" << zom->ZombieData.zombieID << "\' 의 현재 위치: ( " << z_x << ", " << z_y << ", " << z_z << " )" << endl;
 			cout << endl;
-//#endif
+#endif
 
 
 			//==== 실제 BT 실행 ====//

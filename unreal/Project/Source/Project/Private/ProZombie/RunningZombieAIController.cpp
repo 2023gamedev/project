@@ -353,10 +353,6 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 				Send_Detected(); // 플레이어 감지 메시지 전송
 				LastSeenPlayer = BaseCharacter;
 
-				// 좀비 플레이어 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
-				//UGameplayStatics::PlaySoundAtLocation(this, OwnerZombie->GrowlSound, OwnerZombie->GetActorLocation(), 0.7333f);
-				OwnerZombie->bDoGrowl = true;
-
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 			}
 		}

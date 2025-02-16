@@ -348,5 +348,4 @@ public:
 	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND)
 
 	USoundBase* GrowlSound;
-	bool bDoGrowl = false;
 };

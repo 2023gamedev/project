@@ -13,9 +13,9 @@ class T_MoveTo : public Task {
 public:
 
     bool CanNotAttack(Zombie& zom) override {
-//#ifdef ENABLE_BT_NODE_LOG
+#ifdef ENABLE_BT_NODE_LOG
         cout << "{CanNotAttack}의 [MoveTo Task] 호출" << endl;
-//#endif
+#endif
 
         if (d_result == true) {   // 이미 다른 move가 불렸다는 뜻
 #ifdef ENABLE_BT_NODE_LOG
@@ -76,14 +76,14 @@ public:
     }
 
     bool HordeAction(Zombie& zom) override {
-//#ifdef ENABLE_BT_NODE_LOG
+#ifdef ENABLE_BT_NODE_LOG
         cout << "{HordeAction}의 [MoveTo Task] 호출" << endl;
-//#endif
+#endif
 
         if (d_result == true) {   // 이미 다른 move가 불렸다는 뜻
-//#ifdef ENABLE_BT_NODE_LOG
+#ifdef ENABLE_BT_NODE_LOG
             cout << "이미 다른 task에서 moveto 실행함 => 실행 X 바로 종료" << endl;
-//#endif
+#endif
             d_result = true;
             return d_result;
         }
