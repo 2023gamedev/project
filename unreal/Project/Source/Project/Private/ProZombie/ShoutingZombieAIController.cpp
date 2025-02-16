@@ -399,7 +399,7 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 
 				// 샤우팅 실행
-				if (OwnerZombie->IsShouted() == false) {
+				if (OwnerZombie->IsShouted() == false) {	// 처음 플레이어를 발견하면 샤우팅! (그 후에는 없음)
 					OwnerZombie->Shouting();
 					shoutingTo_PlayerId = myPlayerId;
 				}

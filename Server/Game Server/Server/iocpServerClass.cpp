@@ -483,86 +483,6 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 	exit(-1);
 }
 
-//void IOCP_CORE::Zombie_BT_Initialize(int roomid)
-//{
-//	//======[좀비 BT 생성]======
-//	//======메모리 할당 -> 작업 할당======
-//
-//	//======[Task] 메모리 할당======
-//
-//	//<Selector>들
-//	zombie_bt_map[roomid].sel_detect = new Selector;
-//	zombie_bt_map[roomid].sel_canseeplayer = new Selector;
-//
-//	//<Selector Detact> 가 가지는 Task들
-//
-//	//[CanSeePlayer-Task]
-//	zombie_bt_map[roomid].t_canseeplayer = new TCanSeePlayer;
-//	//[HasShouting-Task]
-//	zombie_bt_map[roomid].t_hasshouting = new THasShouting;
-//	//[HasFootSound-Task]
-//	zombie_bt_map[roomid].t_hasfootsound = new THasFootSound;
-//	//[HasInvestigated-Task]
-//	zombie_bt_map[roomid].t_hasinvestigated = new THasInvestigated;
-//	//[NotHasLastKnownPlayerLocation-Task]
-//	zombie_bt_map[roomid].t_nothaslastknownplayerlocation = new TNotHasLastKnownPlayerLocation;
-//
-//	//<Selector CanSeePlayer> 가 가지는 Task들
-//
-//	//[CanNotAttack-Task]
-//	zombie_bt_map[roomid].t_cannotattack = new TCanNotAttack;
-//	//[CanAttack-Task]
-//	zombie_bt_map[roomid].t_canattack = new TCanAttack;
-//
-//	//{Sequence} 가 가지는 Task들
-//
-//	//[MoveTo-Task]
-//	zombie_bt_map[roomid].t_moveto = new TMoveTo;
-//	//[Attack-Task]
-//	zombie_bt_map[roomid].t_attack = new TAttack;
-//
-//	//======== 트리 작성 (작업 할당) ========
-//
-//	//<Selector-Detect> 할당
-//	//<Selector-Detect>에 해당 Task들 '순서대로' 삽입
-//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_canseeplayer);
-//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasshouting);
-//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasfootsound);
-//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_hasinvestigated);
-//	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].t_nothaslastknownplayerlocation);
-//
-//	//<Selector-CanSeePlayer> 할당
-//	//<Selector-CanSeePlayer>에 해당 Task들 '순서대로' 삽입
-//	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].t_canattack);
-//	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].t_cannotattack);
-//
-//	//{Sequence-CanAttack} 할당
-//	//{Sequence-CanAttack}에 해당 Task들 '순서대로' 삽입
-//	zombie_bt_map[roomid].seq_canattack.AddChild(zombie_bt_map[roomid].t_attack);
-//
-//	//{Sequence-CanNotAttack} 할당
-//	//{Sequence-CanNotAttack}에 해당 Task들 '순서대로' 삽입
-//	zombie_bt_map[roomid].seq_cannotattack.AddChild(zombie_bt_map[roomid].t_moveto);
-//
-//	//{Sequence-HasShouting} 할당
-//	//{Sequence-HasShouting}에 해당 Task들 '순서대로' 삽입
-//	zombie_bt_map[roomid].seq_hasshouting.AddChild(zombie_bt_map[roomid].t_moveto);
-//
-//	//{Sequence-HasFootSound} 할당
-//	//{Sequence-HasFootSound}에 해당 Task들 '순서대로' 삽입
-//	zombie_bt_map[roomid].seq_hasfootsound.AddChild(zombie_bt_map[roomid].t_moveto);
-//
-//	//{Sequence-HasInvestigated} 할당
-//	//{Sequence-HasInvestigated}에 해당 Task들 '순서대로' 삽입
-//	zombie_bt_map[roomid].seq_hasinvestigated.AddChild(zombie_bt_map[roomid].t_moveto);
-//
-//	//{Sequence-NotHasLastKnownPlayerLocation} 할당
-//	//{Sequence-NotHasLastKnownPlayerLocation}에 해당 Task들 '순서대로' 삽입
-//	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation.AddChild(zombie_bt_map[roomid].t_moveto);
-//
-//	//==========================
-//}
-
 // 본격적으로 BT 트리 구조 작성하는 함수
 void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 {
@@ -602,11 +522,11 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 
 	//<Selector-Detect> 할당 -> 필요 자식노드들 '순서대로' 삽입
 	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].sel_canseeplayer);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound); 
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound); 
 	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hordeaction);
 	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasinvestigated);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
 
 	//<Selector-CanSeePlayer> 할당 -> 필요 자식노드들 '순서대로' 삽입
 	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
@@ -619,19 +539,19 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 	zombie_bt_map[roomid].seq_cannotattack->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasShouting} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasshouting->AddChild(zombie_bt_map[roomid].t_moveto);
+	//zombie_bt_map[roomid].seq_hasshouting->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasFootSound} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasfootsound->AddChild(zombie_bt_map[roomid].t_moveto);
+	//zombie_bt_map[roomid].seq_hasfootsound->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HordeAction} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	//zombie_bt_map[roomid].seq_hordeaction->AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_hordeaction->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasInvestigated} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasinvestigated->AddChild(zombie_bt_map[roomid].t_moveto);
+	//zombie_bt_map[roomid].seq_hasinvestigated->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-NotHasLastKnownPlayerLocation} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation->AddChild(zombie_bt_map[roomid].t_moveto);
+	//zombie_bt_map[roomid].seq_nothaslastknownplayerlocation->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//==========================//
 }
@@ -818,6 +738,12 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 		}
 
+		if (zombieDB[roomid].front()->bIocpServer_initialized == false) {
+			for (auto& zom : zombieDB_BT[roomid]) {
+				zom->iocpServer = this;	// iocp 서버 초기화 (zombie 클래스에 MakeNoise 호출에서 iocp서버 클래스 내부변수 zombieDB 참조 필요해서, 좀 비효율적인 이유는 또 zombie 클래스에서 iocp.cpp의 전역변수 playerDB가 필요함;;) 
+				zom->bIocpServer_initialized = true;
+			}
+		}
 
 		currentTime = std::chrono::high_resolution_clock::now();
 		// 게임 10분 타이머 계산
@@ -927,7 +853,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 			//==== 실제 BT 실행 ====//
 			
-			zombie_bt_map[roomid].t_moveto->result = false;	// moveto task (실행여부)결과값 초기화 (나중에 moveto 우선순위 구현하면 지워야함)
+			zombie_bt_map[roomid].t_moveto->d_result = false;	// moveto task (실행여부)결과값 초기화 (나중에 moveto 우선순위 구현하면 지워야함)
 			zombie_bt_map[roomid].sel_detect->Detect(*zom);
 
 			//==== 실제 BT 종료 ====//

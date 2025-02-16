@@ -7,18 +7,25 @@
 //#include <mutex>
 
 #include "Task.h"
+
 //#include "Player.h"
+
 #include "ZombiePathfinder.h"
+
+//#include "iocpServerClass.h"
+
 
 using std::vector;
 using std::string;
 using std::tuple;
 using std::map;
 
+
 class Task;
 //class Player;
 class IOCP_CORE;           
 class ZombiePathfinder;     // 전방 선언 (순환 포함 문제를 피하기 위해)
+
 
 // 통신에서 주로 사용할 데이터 클래스
 class Zombie_Data {
@@ -58,7 +65,8 @@ public:
     };
 
 
-    IOCP_CORE* iocpServer;
+    IOCP_CORE* iocpServer = nullptr;
+    bool bIocpServer_initialized = false;
 
     //std::mutex zombieMutex;
 
@@ -75,7 +83,7 @@ public:
 
     const float CanHearShoutDistance = 2500.f;      // 샤우팅 소리 포착 가능 거리 2500.f
 
-    const float CanHearHordeSound = 400.0f;         // 
+    const float CanHearHordeSoundDistance = 400.0f;         // 호드 사운드 포착 가능 거리 400.f
 
     const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
 
@@ -158,7 +166,9 @@ public:
     float detectCanSeePlayerFail_delayTime = 0;
     float detectHasFootSoundFail_delayTime = 0;
 
-    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL)
+    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HordeSound)
+
+    bool CanSeePlayer_result = false;       // 호드 사운드 재생 시점에서 필요
 
     int ZombiePathIndex = 0;
 

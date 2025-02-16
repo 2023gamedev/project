@@ -41,7 +41,7 @@ class T_MoveTo;
 #undef ENABLE_BT_NODE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 #define ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 전처리기 디렉티브 활성화 (좀비 BT Detect RandomChance 관련 로그 cout 찍기 플래그)
-//#undef ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
+#undef ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 
 using OVLP_EX = struct Overlap_ex {
@@ -154,6 +154,12 @@ std::ostream& operator<<(std::ostream& os, FLOOR floor);
 class IOCP_CORE
 {
 public:
+	// 싱글톤 패턴 사용
+	/*static IOCP_CORE& GetInstance() {	
+		static IOCP_CORE instance;
+		return instance;
+	}*/
+
 	IOCP_CORE();
 	~IOCP_CORE();
 

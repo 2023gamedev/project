@@ -11,40 +11,40 @@ public:
         cout << "<Detect>의 (HordeAction Decorator) 호출" << endl;
 #endif
 
-        result = zom.HeardHordeSound;
+        d_result = zom.HeardHordeSound;
 
-        if (result == true) {
+        if (d_result == true) {
             zom.SetTargetLocation(Zombie::TARGET::HORDESOUND); 
         }
 
-//#ifdef ENABLE_BT_NODE_LOG
-        cout << "좀비 주위 다른 좀비의 소리 정보를 가지고 있는가?: " << boolalpha << result << endl;
-        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (HordeSound Decorator) 결과: \"" << boolalpha << result << "\"" << endl;
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "좀비 주위 다른 좀비의 소리 정보를 가지고 있는가?: " << boolalpha << d_result << endl;
+        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (HordeSound Decorator) 결과: \"" << boolalpha << d_result << "\"" << endl;
         cout << endl;
-//#endif
+#endif
 
-        if (result == true)
+        if (d_result == true)
             HordeAction(zom);
 
-        return result;
+        return d_result;
     }
 
     bool HordeAction(Zombie& zom) override {
-//#ifdef ENABLE_BT_NODE_LOG
+#ifdef ENABLE_BT_NODE_LOG
         cout << "Sequence {HordeAction} 호출" << endl;
         cout << endl;
-//#endif
+#endif
 
         for (const auto& child : seq_children) {
-            result = child->HordeAction(zom);
+            d_result = child->HordeAction(zom);
         }
 
-        if (result == false) {
+        if (d_result == false) {
             cout << "\"Sequence HordeAction [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
             cout << endl;
         }
 
-        return result;
+        return d_result;
     }
 
 };

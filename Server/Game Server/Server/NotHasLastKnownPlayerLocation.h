@@ -11,13 +11,13 @@ public:
         cout << "<Detect>의 (NotHasLastKnownPlayerLocation Decorator) 호출" << endl;
 #endif
 
-        result = !zom.KnewPlayerLocation;
+        d_result = !zom.KnewPlayerLocation;
 
 #ifdef ENABLE_BT_NODE_LOG
         cout << "좀비 플레이어의 이전 위치 정보를 가지고 있는가?: " << boolalpha << !result << endl;
 #endif
 
-        //if (!result) {
+        //if (!d_result) {
         //    cout << "좀비가 가진 플레이어 이전 위치: ( " << zom.PrevTargetLocation[0][0][0] << ", " << zom.PrevTargetLocation[0][0][1] << ", " << zom.PrevTargetLocation[0][0][2] << " )" << endl;
         //    cout << "근데, 사실상 이 코드는 실행되면 안됨!!!!!!!!! [ERROR]" << endl;
         //    // 만약, Detect Selector 를 병렬적으로 작동시키면 해당 에러 로그 필요 X
@@ -28,10 +28,10 @@ public:
         cout << endl;
 #endif
 
-        if (result == true)
+        if (d_result == true)
             NotHasLastKnownPlayerLocation(zom);
 
-        return result;
+        return d_result;
     }
 
     bool NotHasLastKnownPlayerLocation(Zombie& zom) {
@@ -41,15 +41,15 @@ public:
 #endif
 
         for (const auto& child : seq_children) {
-            result = child->NotHasLastKnownPlayerLocation(zom);
+            d_result = child->NotHasLastKnownPlayerLocation(zom);
         }
 
-        if (result == false) {
+        if (d_result == false) {
             cout << "\"Sequence NotHasLastKnownPlayerLocation [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
             cout << endl;
         }
 
-        return result;
+        return d_result;
     }
 
 };

@@ -11,7 +11,7 @@ public:
         cout << "<Detect>의 (HasInvestigated Decorator) 호출" << endl;
 #endif
 
-        result = zom.KnewPlayerLocation;
+        d_result = zom.KnewPlayerLocation;
 
 #ifdef ENABLE_BT_NODE_LOG
         cout << "좀비 플레이어의 이전 위치 정보를 가지고 있는가?: " << boolalpha << result << endl;
@@ -21,10 +21,10 @@ public:
         cout << endl;
 #endif
 
-        if (result == true)
+        if (d_result == true)
             HasInvestigated(zom);
 
-        return result;
+        return d_result;
     }
 
     bool HasInvestigated(Zombie& zom) {
@@ -34,15 +34,15 @@ public:
 #endif
 
         for (const auto& child : seq_children) {
-            result = child->HasInvestigated(zom);
+            d_result = child->HasInvestigated(zom);
         }
 
-        if (result == false) {
+        if (d_result == false) {
             cout << "\"Sequence HasInvestigated [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
             cout << endl;
         }
 
-        return result;
+        return d_result;
     }
 
 };

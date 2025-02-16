@@ -19,9 +19,9 @@ public:
         else
             zom.Wait();
 
-        //bool result = zom.Attack(); 
-        result = true;
-        return result;
+        //bool d_result = zom.Attack(); 
+        d_result = true;
+        return d_result;
     }
 
 };

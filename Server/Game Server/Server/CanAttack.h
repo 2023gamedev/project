@@ -11,7 +11,7 @@ public:
         cout << "<CanSeePlayer>의 (CanAttack Decorator) 호출" << endl;
 #endif
 
-        result = false;
+        d_result = false;
 
         for (auto player : playerDB_BT[zom.roomid]) {
             // 죽은 플레이어 무시
@@ -35,7 +35,7 @@ public:
                     cout << "플레이어\'#" << player.first << "\' 좀비 \'#" << zom.ZombieData.zombieID << "\' 의 공격 사거리 내에 있음!" << endl;
 #endif
 
-                    result = true;  // 한명이라도 공격 범위 들어오면 -> Attack 수행
+                    d_result = true;  // 한명이라도 공격 범위 들어오면 -> Attack 수행
                     //break;          // 각 플레이어 마다 쭉 모두 로그 찍고 싶으면 break 하면 안 됨 (대신 그럴게 아니라면 break 넣어서 최적화하기)
                 }
                 else {
@@ -68,10 +68,10 @@ public:
         cout << endl;
 #endif
 
-        if (result == true)
+        if (d_result == true)
             CanAttack(zom);
 
-        return result;
+        return d_result;
     }
 
     bool CanAttack(Zombie& zom) override {
@@ -81,15 +81,15 @@ public:
 #endif
 
         for (const auto& child : seq_children) {
-            result = child->CanAttack(zom);
+            d_result = child->CanAttack(zom);
         }
 
-        if (result == false) {
+        if (d_result == false) {
             cout << "\"Sequence CanAttack [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
             cout << endl;
         }
 
-        return result;      //이건 실패 할 수 있음 (여기가 공격을 실행하는 Task인데 좀비의 공격이 벽에 막히는 경우를 생각해본다면) 
+        return d_result;      //이건 실패 할 수 있음 (여기가 공격을 실행하는 Task인데 좀비의 공격이 벽에 막히는 경우를 생각해본다면) 
         // [x] -> 공격 명령만 주고 실제 충돌체크는 클라에서 체크하고 결과 보내줌 (그래서 지금 시퀀스 CanAttack의 유일한 Task인 Attack에서 무조건 성공 리턴하게 만들어 놓음)
     }
 

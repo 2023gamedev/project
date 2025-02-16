@@ -81,7 +81,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	TimeSinceLastSend += DeltaTime; // 시간 누적
 
 	if (TimeSinceLastSend >= 0.011f) // 0.011초마다 전송 실행 
-									 // (약 90분에 1초 => 최소 90 프레임이 방어되면 캐릭터 움직임 딜레이되는 일 없음 -> 딜레이 발생하더라도 아래에서 큐에 2개 이상 쌓이면 모두 빼도록 처리해둠)
+		// (약 90분에 1초 => 최소 90 프레임이 방어되면 캐릭터 움직임 딜레이되는 일 없음 -> 딜레이 발생하더라도 아래에서 큐에 2개 이상 쌓이면 모두 빼도록 처리해둠)
 	{
 		CheckAndSendMovement();
 		TimeSinceLastSend = 0.0f; // 초기화
@@ -447,6 +447,19 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			(*zombie)->targetType = (*zombie)->TARGET::NULL_TARGET;
 			break;
 		case 2:
+
+			//(*zombie)->targetType => prevTargetType
+			if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER) {	// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
+				UE_LOG(LogTemp, Log, TEXT("zombieType: %s"), (*zombie)->GetZombieName());
+
+				if ((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == false) {	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 ㅇㅇ
+					UGameplayStatics::PlaySoundAtLocation(this, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+				}
+				else if ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie")) {
+					UGameplayStatics::PlaySoundAtLocation(this, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+				}
+			}
+
 			(*zombie)->targetType = (*zombie)->TARGET::PLAYER;
 			break;
 		case 3:
@@ -456,10 +469,10 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			(*zombie)->targetType = (*zombie)->TARGET::FOOTSOUND;
 			break;
 		case 5:
-			(*zombie)->targetType = (*zombie)->TARGET::INVESTIGATED; 
+			(*zombie)->targetType = (*zombie)->TARGET::INVESTIGATED;
 			break;
 		case 6:
-			(*zombie)->targetType = (*zombie)->TARGET::PATROL; 
+			(*zombie)->targetType = (*zombie)->TARGET::PATROL;
 			break;
 		case 7:
 			(*zombie)->targetType = (*zombie)->TARGET::HORDESOUND;
@@ -490,7 +503,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				// 서버에서 해당 좀비 애니메이션 재생중이면 path1 에 { 9999.f, 9999.f, 9999.f } 담아서 보냄
 				if (*(tmp_path.Path1.begin()) == std::tuple{ 9999.f, 9999.f, 9999.f }) {
 					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID=%d (HaveToWait)"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId));
-					
+
 					// + MontageEnded 보다 먼저 실행되서 ZombieMoveTo 실행됨 => ZombieMoveTo 내에 path1 { 9999.f, 9999.f, 9999.f } 면 return하는 예외처리!
 					(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
 				}
@@ -502,7 +515,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 					(*zombie)->afterAnim_idleDuration = 0.f;	// 서버로부터 새로운 ZombiePath를 받으면 실행 => ZombieMoveTo idle 상태 초기화 => 다시 움직이게 함!
 				}
-				
+
 			}
 			else
 				(*zombie)->NextPath[0] = std::tuple<float, float, float>();
