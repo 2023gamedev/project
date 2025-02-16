@@ -33,6 +33,8 @@ Zombie::Zombie()
 
 	PrevTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
+	HordeLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+
 	PlayerInSight = false;
 
 	KnewPlayerLocation = false;
@@ -40,6 +42,8 @@ Zombie::Zombie()
 	HeardShouting = false;
 
 	HeardFootSound = false;
+
+	HeardHordeSound = false;
 
 	RandPatrolSet = false;
 
@@ -88,6 +92,8 @@ Zombie::Zombie(Zombie_Data z_d)
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	PrevTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+	
+	HordeLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	PlayerInSight = false;
 
@@ -96,6 +102,8 @@ Zombie::Zombie(Zombie_Data z_d)
 	HeardShouting = false;
 
 	HeardFootSound = false;
+
+	HeardHordeSound = false;
 
 	RandPatrolSet = false;
 
@@ -181,6 +189,13 @@ float Zombie::SetDistance(int playerid, int distanceType)
 	if (setMap->find(playerid) == setMap->end()) {		// map에 playerid가 없으면 -> 새로 생성
 		setMap->emplace(playerid, dist);
 
+		//if (distanceType == 1) {	// 플레이어를 처음 봤음 -> 호드 사운드 재생
+		//	MakeNoise(IOCP_CORE::GetInstance().zombieDB_BT[roomid]);	// 싱글톤 패턴 활용
+		//}
+		//if (distanceType == 1 && iocpServer != nullptr) {	// 플레이어를 처음 봤음 -> 호드 사운드 재생
+		//	MakeNoise(iocpServer->zombieDB_BT[roomid]);	// iocpServer nullptr 예외처리 꼭 필요! (크래시 생김!)
+		//}
+
 #ifdef	ENABLE_BT_LOG
 		if (distanceType == 1) {
 			cout << "PlayerInsight 맵에 새로운 데이터 삽입! playerid: " << playerid << " , distance: " << dist << endl;
@@ -194,6 +209,15 @@ float Zombie::SetDistance(int playerid, int distanceType)
 	else if (setMap->find(playerid) != setMap->end()) {		// map에 이미 playerid가 이미 있으면 -> 수정, 갱신
 		// PlayerInsight 업데이트
 		if (distanceType == 1) {
+
+			//if (setMap->at(playerid) == -1) {	// 플레이어를 놓쳤다가 다시 봤음 -> 호드 사운드 재생
+			//	MakeNoise(IOCP_CORE::GetInstance().zombieDB_BT[roomid]);	// 싱글톤 패턴 활용
+			//}
+			//if (setMap->at(playerid) == -1 && iocpServer != nullptr) {	// 플레이어를 놓쳤다가 다시 봤음 -> 호드 사운드 재생
+			//	MakeNoise(iocpServer->zombieDB_BT[roomid]);	// iocpServer nullptr 예외처리 꼭 필요! (크래시 생김!)
+			//}
+			
+
 			setMap->at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 위에서 미리 예외처리 꼭! 필요!
 			//(*setMap)[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
 												// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 
@@ -281,6 +305,7 @@ void Zombie::SetTargetLocation(TARGET t)
 	vector<vector<vector<float>>> closest_player_pos = {};
 
 	switch (targetType) {
+
 	case TARGET::PLAYER:
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '플레이어'" << endl;
@@ -297,6 +322,7 @@ void Zombie::SetTargetLocation(TARGET t)
 		}
 //#endif
 		break;
+
 	case TARGET::SHOUTING:
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '샤우팅'" << endl;
@@ -304,6 +330,7 @@ void Zombie::SetTargetLocation(TARGET t)
 		TargetLocation = ShoutingLocation;
 		UpdatePath();
 		break;
+
 	case TARGET::FOOTSOUND:
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '발소리'" << endl;
@@ -321,9 +348,6 @@ void Zombie::SetTargetLocation(TARGET t)
 //#endif
 		break;
 
-
-
-
 	case TARGET::HORDESOUND:
 //#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '호드'" << endl;
@@ -331,8 +355,6 @@ void Zombie::SetTargetLocation(TARGET t)
 		TargetLocation = HordeLocation;
 		UpdatePath();
 		break;
-
-
 
 	case TARGET::INVESTIGATED:
 #ifdef	ENABLE_BT_LOG
@@ -343,6 +365,7 @@ void Zombie::SetTargetLocation(TARGET t)
 			UpdatePath();
 		}
 		break;
+
 	case TARGET::PATROL:
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '랜덤 패트롤'" << endl;
@@ -399,10 +422,11 @@ void Zombie::SetTargetLocation(TARGET t)
 
 		}
 		break;
+
 	}
 
 #ifdef	ENABLE_BT_LOG
-	cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
+	cout << "TargetLocation: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " ) -> \'SetTargetLocation에서 호출\'" << endl;
 	cout << endl;
 #endif
 }
@@ -564,18 +588,18 @@ void Zombie::MoveTo(float deltasecond)
 {
 	bool spacing = false;
 
-	//cout << "ZombiePathIndex: " << ZombiePathIndex << " , path.size(): " << path.size() << endl;
-	//cout << endl;
+	cout << "ZombiePathIndex: " << ZombiePathIndex << " , path.size(): " << path.size() << endl;
+	cout << endl;
 
 	if (IsPathUpdated()) {
 		ZombiePathIndex = 1;
 	}
 
 	if (ZombiePathIndex >= path.size() || ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 경로의 끝 도착. (before move)" << endl;
 		cout << endl;
-#endif
+//#endif
 		ReachFinalDestination();
 		ZombiePathIndex = 1;
 		return;
@@ -586,16 +610,16 @@ void Zombie::MoveTo(float deltasecond)
 	float PathX = get<0>(TargetNode);
 	float PathY = get<1>(TargetNode);
 
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
 	spacing = true;
-#endif
+//#endif
 
 	if (PathX >= 2366.f) {	// 계단쪽 넘어로 이동하려하면
-#ifdef	ENABLE_BT_LOG
+//#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 계단 넘어로 이동 방지로 인해 정지" << endl;
 		//cout << endl;
-#endif
+//#endif
 		ReachFinalDestination();
 		ZombiePathIndex = 1;
 		return;
@@ -617,7 +641,7 @@ void Zombie::MoveTo(float deltasecond)
 		
 		switch (GetZombieType()) {
 		case ZOMBIE_TYPE::NULL_TYPE:
-			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정!!! ---> Speed = 0" << endl;
+			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정(NULL_TYPE)!!! ---> Speed = 0" << endl;
 			break;
 		case ZOMBIE_TYPE::NORMAL_ZOMBIE:
 			ZombieSpeed = NormalZombieWalkSpeed;
@@ -630,11 +654,11 @@ void Zombie::MoveTo(float deltasecond)
 			break;
 		}
 	}
-	else if (targetType == TARGET::PLAYER || targetType == TARGET::SHOUTING || targetType == TARGET::FOOTSOUND || targetType == TARGET::INVESTIGATED) {	// 뛰기
+	else if (targetType == TARGET::PLAYER || targetType == TARGET::SHOUTING || targetType == TARGET::FOOTSOUND || targetType == TARGET::HORDESOUND || targetType == TARGET::INVESTIGATED) {	// 뛰기
 
 		switch (GetZombieType()) {
 		case ZOMBIE_TYPE::NULL_TYPE:
-			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정!!! ---> Speed = 0" << endl;
+			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정(NULL_TYPE)!!! ---> Speed = 0" << endl;
 			break;
 		case ZOMBIE_TYPE::NORMAL_ZOMBIE:
 			ZombieSpeed = NormalZombieSpeed;
@@ -646,6 +670,9 @@ void Zombie::MoveTo(float deltasecond)
 			ZombieSpeed = ShoutingZombieSpeed;
 			break;
 		}
+	}
+	else {
+		cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " targetType 변수값 알 수 없는 값!!! ---> Speed = 0" << endl;
 	}
 
 	// 이동 거리 계산
@@ -779,6 +806,7 @@ void Zombie::ReachFinalDestination()
 	HeardShouting = false;
 	HeardFootSound = false;
 	KnewPlayerLocation = false;
+	HeardHordeSound = false;
 	RandPatrolSet = false;
 
 
@@ -802,6 +830,12 @@ void Zombie::ReachFinalDestination()
 		//HeardFootSound = false;
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '발소리'" << endl;
+#endif
+		break;
+	case TARGET::HORDESOUND:
+		//HeardHordeSound = false;
+#ifdef	ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '호드 사운드'" << endl;
 #endif
 		break;
 	case TARGET::INVESTIGATED:
@@ -1253,6 +1287,12 @@ bool Zombie::HasFootSoundRandomChance()
 
 void Zombie::MakeNoise(vector<Zombie*>& zombies)
 {
+//#ifdef	ENABLE_BT_LOG
+	cout << "좀비 '#" << ZombieData.zombieID << "' 플레이어 발견! 호드 사운드 발생!!!" << endl;
+	cout << endl;
+//#endif
+
+
 	// 다른 좀비들 플레이어 발견 소리 포착 체크 (호드 사운드 알리기)
 
 	for (auto& zom : zombies) {
@@ -1267,7 +1307,12 @@ void Zombie::MakeNoise(vector<Zombie*>& zombies)
 
 		float dist = sqrt(powf(hzl[0][0][0] - zl[0][0][0], 2) + powf(hzl[0][0][1] - zl[0][0][1], 2)/* + powf(hzl[0][0][2] - zl[0][0][2], 2)*/);	// x, y 좌표 거리만 검사
 
-		if (dist <= CanHearShoutDistance) {
+		if (dist <= CanHearHordeSoundDistance) {
+//#ifdef	ENABLE_BT_LOG
+			cout << "좀비 '#" << zom->ZombieData.zombieID << "' 가 좀비 '#" << ZombieData.zombieID << "' 의 호드 사운드 포착!!!" << endl;
+			cout << endl;
+//#endif
+
 			zom->HeardHordeSound = true;
 
 			zom->HordeLocation = hzl;

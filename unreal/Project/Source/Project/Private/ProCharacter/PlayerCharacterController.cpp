@@ -447,6 +447,14 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			(*zombie)->targetType = (*zombie)->TARGET::NULL_TARGET;
 			break;
 		case 2:
+			// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
+			//auto prevTargetType = (*zombie)->targetType;
+			if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER
+				&& (*zombie)->bDoGrowl == true) {
+				UGameplayStatics::PlaySoundAtLocation(this, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+				(*zombie)->bDoGrowl = false;
+			}
+
 			(*zombie)->targetType = (*zombie)->TARGET::PLAYER;
 			break;
 		case 3:

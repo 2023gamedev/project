@@ -11,9 +11,9 @@ public:
         cout << "<Detect>의 (HasShouting Decorator) 호출" << endl;
 #endif
 
-        result = zom.HeardShouting;
+        d_result = zom.HeardShouting;
 
-        if (result == true) {
+        if (d_result == true) {
             zom.SetTargetLocation(Zombie::TARGET::SHOUTING);
         }
 
@@ -23,10 +23,10 @@ public:
         cout << endl;
 #endif
 
-        if (result == true)
+        if (d_result == true)
             HasShouting(zom);
 
-        return result;
+        return d_result;
     }
 
     bool HasShouting(Zombie& zom) override {
@@ -36,15 +36,15 @@ public:
 #endif
 
         for (const auto& child : seq_children) {
-            result = child->HasShouting(zom);
+            d_result = child->HasShouting(zom);
         }
 
-        if (result == false) {
+        if (d_result == false) {
             cout << "\"Sequence HasShouting [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
             cout << endl;
         }
 
-        return result;
+        return d_result;
     }
 
 };

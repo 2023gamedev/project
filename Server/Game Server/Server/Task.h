@@ -15,8 +15,8 @@ class Zombie;
 class Task {
 public:
     string t_name = "";
-    //결과값 저장
-    bool result = false;
+    //Decorator(아님 걍 task) 결과값 저장
+    bool d_result = false;
 
 
     //다음으로 행동할 Task 감지 [Selector-Service]

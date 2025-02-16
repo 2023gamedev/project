@@ -62,6 +62,8 @@ ABaseZombie::ABaseZombie()
 	
 	NextPath[0] = { -100000.f, -100000.f, -100000.f };	// 더미값 지정
 	NextPath[1] = { -100000.f, -100000.f, -100000.f };
+
+
 }
 
 void ABaseZombie::InitializeBoneHierarchy()
@@ -420,6 +422,12 @@ void ABaseZombie::BeginPlay()
 	InitializeSpecialBoneHierarchy();
 	//PrintBoneHierarchy(RootBone);
 	//PrintBoneHierarchy(SpecialRootBone);
+
+	GrowlSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieGrowl.ZombieGrowl"));
+	if (!GrowlSound)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GrowlSound failed to load in BeginPlay!"));
+	}
 }
 
 // Called every frame

@@ -11,7 +11,7 @@ public:
         cout << "<CanSeePlayer>의 (CanNotAttack Decorator) 호출" << endl;
 #endif
 
-        result = true;
+        d_result = true;
 
         if (zom.DistanceTo_PlayerInsight.size() == 0) {
 #ifdef ENABLE_BT_NODE_LOG
@@ -23,8 +23,8 @@ public:
             cout << endl;
 #endif
 
-            result = false;
-            return result;
+            d_result = false;
+            return d_result;
         }
 
         for (auto player : playerDB_BT[zom.roomid]) {
@@ -41,13 +41,13 @@ public:
                 if (zom.DistanceTo_PlayerInsight.at(player.first) > zom.CanAttackDistance && zom.DistanceTo_PlayerInsight.at(player.first) > 0 || zom.DistanceTo_PlayerInsight.at(player.first) <= 0) 
                 {   }
                 else {  
-                    result = false;
+                    d_result = false;
                 }
             }
 
         }
 
-        if (result) {
+        if (d_result) {
 #ifdef ENABLE_BT_NODE_LOG
             cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << result << endl;
             cout << endl;
@@ -70,10 +70,10 @@ public:
 #endif
         }
 
-        if (result == true)
+        if (d_result == true)
             CanNotAttack(zom);
 
-        return result;
+        return d_result;
     }
 
     bool CanNotAttack(Zombie& zom) override {
@@ -83,15 +83,15 @@ public:
 #endif
 
         for (const auto& child : seq_children) {
-            result = child->CanNotAttack(zom);
+            d_result = child->CanNotAttack(zom);
         }
 
-        if (result == false) {
+        if (d_result == false) {
             cout << "\"Sequence CanNotAttack [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
             cout << endl;
         }
 
-        return result;
+        return d_result;
     }
 
 };

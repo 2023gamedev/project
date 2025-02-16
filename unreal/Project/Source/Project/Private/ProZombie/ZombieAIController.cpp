@@ -342,6 +342,10 @@ void AZombieAIController::Tick(float DeltaTime)
 				Send_Detected(); // 플레이어 감지 메시지 전송
 				LastSeenPlayer = BaseCharacter;
 
+				// 좀비 플레이어 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생 => 이렇게 하면 플레이어 포착 랜덤 확률을 무시하고, 걍 시야범위에 들어오면 무조건 소리냄
+				//UGameplayStatics::PlaySoundAtLocation(this, OwnerZombie->GrowlSound, OwnerZombie->GetActorLocation(), 0.7333f);
+				OwnerZombie->bDoGrowl = true;
+
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Zombie #%d Detected Player ID #%d"), OwnerZombie->GetZombieId(), myPlayerId));
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 			}
