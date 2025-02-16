@@ -437,7 +437,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		ABaseZombie** zombie = ZombieMap.Find(tmp_path.ZombieId);
 
 		if (zombie == nullptr || *zombie == nullptr) {
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("(Q_path) Could not find Zombie ID: %d"), tmp_path.ZombieId));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("(Q_path) Could not find Zombie ID: %d"), tmp_path.ZombieId));
 			UE_LOG(LogTemp, Warning, TEXT("(Q_path) Could not find Zombie ID: %d"), tmp_path.ZombieId);
 			continue;  // 좀비를 찾을 수 없으면 다음으로 넘어감
 		}
