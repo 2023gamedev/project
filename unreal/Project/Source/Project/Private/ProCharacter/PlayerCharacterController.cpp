@@ -461,6 +461,9 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 6:
 			(*zombie)->targetType = (*zombie)->TARGET::PATROL; 
 			break;
+		case 7:
+			(*zombie)->targetType = (*zombie)->TARGET::HORDESOUND;
+			break;
 		}
 
 		bool isAnimPlaying_besideWalking = false;	// 걷기 애니메이션 말고 다른 애니메이션 (공격, 피격, 샤우팅) 재생 중인지

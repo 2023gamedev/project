@@ -97,11 +97,17 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 		if (idleDuration >= 0.3f) {	// 만약 좀비가 제자리에 0.3초 이상 있을 시에
 			OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	// 애니메이션 idle로 전환
+
+			if (idleDuration >= 1.5f) {	// 만약 좀비가 제자리에 1.5초 이상 있을 시에
+				OwnerZombie->CachedAnimInstance->SetIsStandingStill(true);	// 애니메이션 standing still로 전환
+			}
 		}
+
 		return;
 	}
 	else {
 		idleDuration = 0;	// 다시 초기화
+		OwnerZombie->CachedAnimInstance->SetIsStandingStill(false);		// 다시 초기화
 	}
 
 
@@ -118,23 +124,19 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 	// 좀비 속도 지정 (걷기/뛰기)
 	float ZombieSpeed = 0.f;
-	if (OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED || OwnerZombie->targetType == OwnerZombie->TARGET::PATROL) {	// 걷기
-		float walk_speed_offset = 0.f;
-		if (OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED)	// 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +ZombieInvestigatedSpeed_Offset 만큼의 스피드
-			walk_speed_offset = OwnerZombie->ZombieInvestigatedSpeed_Offset;
-	
+	if (OwnerZombie->targetType == OwnerZombie->TARGET::PATROL) {	// 걷기
+
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieWalkSpeed);
-		ZombieSpeed = OwnerZombie->GetSpeed() + walk_speed_offset;
+		ZombieSpeed = OwnerZombie->GetSpeed();
 
 		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.7f);
 	}
-	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING || OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND) {	// 뛰기
-		float run_speed_offset = 0.f;
-		if (OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND)	// 발소리를 들었을 때는 뛰기 스피드에서 +ZombieHeardFootSoundSpeed_Offset 만큼의 스피드
-			run_speed_offset = OwnerZombie->ZombieHeardFootSoundSpeed_Offset;
+	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING 
+		|| OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND || OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED
+		|| OwnerZombie->targetType == OwnerZombie->TARGET::HORDESOUND) {	// 뛰기
 
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieSpeed);
-		ZombieSpeed = OwnerZombie->GetSpeed() + run_speed_offset;
+		ZombieSpeed = OwnerZombie->GetSpeed();
 
 		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(1.0f);
 	}
@@ -295,7 +297,7 @@ void AZombieAIController::Tick(float DeltaTime)
 	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
 	FVector ZombieLocation = OwnerZombie->GetActorLocation(); // 좀비의 위치
 
-	float MaxSightRange = 1000.f; // 최대 시야 범위
+	float MaxSightRange = 1200.f; // 최대 시야 범위
 
 	// 좀비 시야각 (전방 120도)
 	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(120.0f / 2.0f));

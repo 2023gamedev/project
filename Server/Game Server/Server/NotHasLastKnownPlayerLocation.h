@@ -1,38 +1,55 @@
 ﻿#pragma once
 
-#include "Task.h"
+#include "Sequence.h"
 
 
-class TNotHasLastKnownPlayerLocation : public Task {
+class Seq_NotHasLastKnownPlayerLocation : public Sequence {
 public:
 
-    string Detect(Zombie& zom) const override {
-        //cout << "<Detect>의 [NotHasLastKnownPlayerLocation Task] 호출" << endl;
+    bool Detect(Zombie& zom) override {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "<Detect>의 (NotHasLastKnownPlayerLocation Decorator) 호출" << endl;
+#endif
 
-        bool result = !zom.KnewPlayerLocation;
+        result = !zom.KnewPlayerLocation;
 
-        //cout << "좀비 플레이어의 최신 위치 정보를 가지고 있는가?: " << boolalpha << !result << endl;
-        if (!result) {
-            cout << "좀비가 가진 플레이어 최신 위치: ( " << zom.PrevTargetLocation[0][0][0] << ", " << zom.PrevTargetLocation[0][0][1] << ", " << zom.PrevTargetLocation[0][0][2] << " )" << endl;
-            cout << "근데, 사실상 이 코드는 실행되면 안됨!!!!!!!!! [ERROR]" << endl;
-        }
-        //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 [NotHasLastKnownPlayerLocation Task] 결과: \"" << boolalpha << result << "\"" << endl;
-        //cout << endl;
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "좀비 플레이어의 이전 위치 정보를 가지고 있는가?: " << boolalpha << !result << endl;
+#endif
 
-        if (result)
-            return "NotHasLastKnownPlayerLocation-Succeed";
-        else
-            return "Fail";
+        //if (!result) {
+        //    cout << "좀비가 가진 플레이어 이전 위치: ( " << zom.PrevTargetLocation[0][0][0] << ", " << zom.PrevTargetLocation[0][0][1] << ", " << zom.PrevTargetLocation[0][0][2] << " )" << endl;
+        //    cout << "근데, 사실상 이 코드는 실행되면 안됨!!!!!!!!! [ERROR]" << endl;
+        //    // 만약, Detect Selector 를 병렬적으로 작동시키면 해당 에러 로그 필요 X
+        //}
+
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (NotHasLastKnownPlayerLocation Decorator) 결과: \"" << boolalpha << result << "\"" << endl;
+        cout << endl;
+#endif
+
+        if (result == true)
+            NotHasLastKnownPlayerLocation(zom);
+
+        return result;
     }
 
-    //사실상 더미 함수들
-    //string Detect(Zombie& zom) const override { return "Fail"; };
-    string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
-    string CanAttack(Zombie& zom) const override { return "Fail"; };
-    string CanNotAttack(Zombie& zom) const override { return "Fail"; };
-    string HasShouting(Zombie& zom) const override { return "Fail"; };
-    string HasFootSound(Zombie& zom) const override { return "Fail"; };
-    string HasInvestigated(Zombie& zom) const override { return "Fail"; };
-    string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
+    bool NotHasLastKnownPlayerLocation(Zombie& zom) {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "Sequence {NotHasLastKnownPlayerLocation} 호출" << endl;
+        cout << endl;
+#endif
+
+        for (const auto& child : seq_children) {
+            result = child->NotHasLastKnownPlayerLocation(zom);
+        }
+
+        if (result == false) {
+            cout << "\"Sequence NotHasLastKnownPlayerLocation [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;
+    }
 
 };

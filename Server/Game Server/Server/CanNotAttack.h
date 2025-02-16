@@ -1,23 +1,30 @@
 ﻿#pragma once
 
-#include "Task.h"
-#include "iocpServerClass.h"
+#include "Sequence.h"
 
 
-class TCanNotAttack : public Task {
+class Seq_CanNotAttack : public Sequence {
 public:
 
-    string CanSeePlayer(Zombie& zom) const override {
-        //cout << "<CanSeePlayer>의 [CanNotAttack Task] 호출" << endl;
+    bool CanSeePlayer(Zombie& zom) override {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "<CanSeePlayer>의 (CanNotAttack Decorator) 호출" << endl;
+#endif
 
-        bool result = true;
+        result = true;
 
         if (zom.DistanceTo_PlayerInsight.size() == 0) {
-            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: \"false\"" << endl;
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: \"false\"" << endl;
+#endif
             cout << "Zombie #" << zom.ZombieData.zombieID;
-            cout << " DistanceTo_PlayerInsight Map ERROR!!! -> Detected is done [Player is in sight -> (PlayerInSight == true)] but DistanceTo_PlayerInsight Map is empty" << endl;
+            cout << " DistanceTo_PlayerInsight Map ERROR!!! -> Player is in sight (PlayerInSight == true) but DistanceTo_PlayerInsight Map is empty" << endl;
+#ifdef ENABLE_BT_NODE_LOG
+            cout << endl;
+#endif
 
-            return "Fail";
+            result = false;
+            return result;
         }
 
         for (auto player : playerDB_BT[zom.roomid]) {
@@ -33,7 +40,7 @@ public:
             if (zom.DistanceTo_PlayerInsight.find(player.first) != zom.DistanceTo_PlayerInsight.end()) {
                 if (zom.DistanceTo_PlayerInsight.at(player.first) > zom.CanAttackDistance && zom.DistanceTo_PlayerInsight.at(player.first) > 0 || zom.DistanceTo_PlayerInsight.at(player.first) <= 0) 
                 {   }
-                else {  // 사실상 여기에 걸리면 안됨!
+                else {  
                     result = false;
                 }
             }
@@ -41,34 +48,50 @@ public:
         }
 
         if (result) {
-            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
-
-            return "CanNotAttack-Succeed";
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << result << endl;
+            cout << endl;
+#endif
         }
-        else {  // 사실상 여기에 걸리면 안됨!
+        else {  // 사실상 여기에 걸리면 안됨! (CanNotAttack은 항상 CanAttack 검사가 실패할 경우에만 실행되므로 (CanSeePlayer 시퀀스로 직렬적, 순차적으로 작동))
             if (zom.PlayerInSight == false) {
                 cout << "Zombie #" << zom.ZombieData.zombieID;
-                cout << " PlayerInSight Data Race Occured ERROR!!!" << endl;
+                cout << " PlayerInSight Data Race Occured ERROR!!! -> CanSeePlayer Task is excecuted (PlayerInSight has to be true) but now PlayerInSight is false" << endl;
             }
             else {
-                cout << "Zombie #" << zom.ZombieData.zombieID;
-                cout << " got ERROR!!! And I dont know whhhhhyyyyy!!!" << endl;
+                //cout << "Zombie #" << zom.ZombieData.zombieID;
+                //cout << " got ERROR!!! And I dont know whhhhhyyyyy!!!" << endl;
+                // 만약, Detect Selector 를 병렬적으로 작동시키면 해당 에러 로그 필요 X
             }
 
-            //cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 [CanNotAttack Task] 결과: " << boolalpha << result << endl;
-
-            return "Fail";
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << result << endl;
+            cout << endl;
+#endif
         }
+
+        if (result == true)
+            CanNotAttack(zom);
+
+        return result;
     }
 
-    //사실상 더미 함수들
-    string Detect(Zombie& zom) const override { return "Fail"; };
-    //string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
-    string CanAttack(Zombie& zom) const override { return "Fail"; };
-    string CanNotAttack(Zombie& zom) const override { return "Fail"; };
-    string HasShouting(Zombie& zom) const override { return "Fail"; };
-    string HasFootSound(Zombie& zom) const override { return "Fail"; };
-    string HasInvestigated(Zombie& zom) const override { return "Fail"; };
-    string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
+    bool CanNotAttack(Zombie& zom) override {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "Sequence {CanNotAttack} 호출" << endl;
+        cout << endl;
+#endif
+
+        for (const auto& child : seq_children) {
+            result = child->CanNotAttack(zom);
+        }
+
+        if (result == false) {
+            cout << "\"Sequence CanNotAttack [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+            cout << endl;
+        }
+
+        return result;
+    }
 
 };

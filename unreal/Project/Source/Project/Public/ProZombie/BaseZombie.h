@@ -52,7 +52,8 @@ public:
 		SHOUTING,
 		FOOTSOUND,
 		INVESTIGATED,
-		PATROL
+		PATROL,
+		HORDESOUND
 	};
 
 
@@ -344,8 +345,6 @@ public:
 	const float ZombieInvestigatedSpeed_Offset = 40.f;     // 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +40.f 스피드
 	const float ZombieHeardFootSoundSpeed_Offset = -20.f;   // 발소리를 들었을 때는 뛰기 스피드에서 -20.f 스피드
 
-	
-
-	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL)
+	TARGET	targetType;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND)
 
 };

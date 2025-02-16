@@ -9,11 +9,21 @@ using std::cout;
 using std::endl;
 
 
-class TMoveTo : public Task {
+class T_MoveTo : public Task {
 public:
 
-    string CanNotAttack(Zombie& zom) const override {
-        //cout << "{CanNotAttack}의 [MoveTo Task] 호출" << endl;
+    bool CanNotAttack(Zombie& zom) override {
+//#ifdef ENABLE_BT_NODE_LOG
+        cout << "{CanNotAttack}의 [MoveTo Task] 호출" << endl;
+//#endif
+
+        if (result == true) {   // 이미 다른 move가 불렸다는 뜻
+//#ifdef ENABLE_BT_NODE_LOG
+            cout << "이미 다른 task에서 moveto 실행함 => 실행 X 바로 종료" << endl;
+//#endif
+            result = true;
+            return result;
+        }
 
         // 플레이어를 보고 있으니, 계속 따라오게 해야되니까 => 매 틱마다 위치 갱신
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);
@@ -22,59 +32,108 @@ public:
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
         
-        //bool result = zom.MoveTo(); 
-        //if (result)
-        //    return "MoveTo-Succeed";
-        //else
-        //    return "Fail";
-
-        return "MoveTo-Succeed";
+        //result = zom.MoveTo();
+        result = true;
+        return result;
     }
 
-    string HasShouting(Zombie& zom) const override {
-        //cout << "{HasShouting}의 [MoveTo Task] 호출" << endl;
+    bool HasShouting(Zombie& zom) override {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "{HasShouting}의 [MoveTo Task] 호출" << endl;
+#endif
+
+        if (result == true) {   // 이미 다른 move가 불렸다는 뜻
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "이미 다른 task에서 moveto 실행함 => 실행 X 바로 종료" << endl;
+#endif
+            result = true;
+            return result;
+        }
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        return "MoveTo-Succeed";
+        result = true;
+        return result;
     }
 
-    string HasFootSound(Zombie& zom) const override {
-        //cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
+    bool HasFootSound(Zombie& zom) override {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "{HasFootSound}의 [MoveTo Task] 호출" << endl;
+#endif
+
+        if (result == true) {   // 이미 다른 move가 불렸다는 뜻
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "이미 다른 task에서 moveto 실행함 => 실행 X 바로 종료" << endl;
+#endif
+            result = true;
+            return result;
+        }
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        return "MoveTo-Succeed";
+        result = true;
+        return result;
     }
 
-    string HasInvestigated(Zombie& zom) const override {
-        //cout << "{HasInvestigated}의 [MoveTo Task] 호출" << endl;
+    bool HordeAction(Zombie& zom) override {
+//#ifdef ENABLE_BT_NODE_LOG
+        cout << "{HordeAction}의 [MoveTo Task] 호출" << endl;
+//#endif
+
+        if (result == true) {   // 이미 다른 move가 불렸다는 뜻
+//#ifdef ENABLE_BT_NODE_LOG
+            cout << "이미 다른 task에서 moveto 실행함 => 실행 X 바로 종료" << endl;
+//#endif
+            result = true;
+            return result;
+        }
+
+        zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
+
+        result = true;
+        return result;
+    }
+
+    bool HasInvestigated(Zombie& zom) override {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "{HasInvestigated}의 [MoveTo Task] 호출" << endl;
+#endif
+
+        if (result == true) {   // 이미 다른 move가 불렸다는 뜻
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "이미 다른 task에서 moveto 실행함 => 실행 X 바로 종료" << endl;
+#endif
+            result = true;
+            return result;
+        }
 
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        return "MoveTo-Succeed";
+        result = true;
+        return result;
     }
 
-    string NotHasLastKnownPlayerLocation(Zombie& zom) const override {
-        //cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
+    bool NotHasLastKnownPlayerLocation(Zombie& zom) override {
+#ifdef ENABLE_BT_NODE_LOG
+        cout << "{NotHasLastKnownPlayerLocation}의 [MoveTo Task] 호출" << endl;
+#endif
+
+        if (result == true) {   // 이미 다른 move가 불렸다는 뜻
+#ifdef ENABLE_BT_NODE_LOG
+            cout << "이미 다른 task에서 moveto 실행함 => 실행 X 바로 종료" << endl;
+#endif
+            result = true;
+            return result;
+        }
 
         zom.SetTargetLocation(Zombie::TARGET::PATROL);
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
-        return "MoveTo-Succeed";
+        result = true;
+        return result;
     }
-
-    //사실상 더미 함수들
-    string Detect(Zombie& zom) const override { return "Fail"; };
-    string CanSeePlayer(Zombie& zom) const override { return "Fail"; };
-    string CanAttack(Zombie& zom) const override { return "Fail"; };
-    //string CanNotAttack(Zombie& zom) const override { return "Fail"; };
-    //string HasShouting(Zombie& zom) const override { return "Fail"; };
-    //string HasFootSound(Zombie& zom) const override { return "Fail"; };
-    //string HasInvestigated(Zombie& zom) const override { return "Fail"; };
-    //string NotHasLastKnownPlayerLocation(Zombie& zom) const override { return "Fail"; };
 
 };

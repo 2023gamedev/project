@@ -72,6 +72,9 @@
     <ClCompile Include="ShoutingZombie.cpp">
       <Filter>소스 파일\Zombie_BTClass</Filter>
     </ClCompile>
+    <ClCompile Include="ZombieBT.cpp">
+      <Filter>소스 파일\Zombie_BTClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="protocol.h">
@@ -153,6 +156,15 @@
       <Filter>헤더 파일\ServerHeader</Filter>
     </ClInclude>
     <ClInclude Include="ShoutingZombie.h">
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="ZombieBT.h">
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Detect.h">
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="HordeAction.h">
       <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
   </ItemGroup>
