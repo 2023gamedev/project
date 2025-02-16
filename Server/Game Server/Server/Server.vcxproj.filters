@@ -164,6 +164,9 @@
     <ClInclude Include="Detect.h">
       <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
+    <ClInclude Include="HordeAction.h">
+      <Filter>헤더 파일\Zombie_BTHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Gstruct.proto">

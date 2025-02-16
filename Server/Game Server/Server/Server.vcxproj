@@ -197,6 +197,7 @@
     <ClInclude Include="HasFootSound.h" />
     <ClInclude Include="HasInvestigated.h" />
     <ClInclude Include="HasShouting.h" />
+    <ClInclude Include="HordeAction.h" />
     <ClInclude Include="iocpServerClass.h" />
     <ClInclude Include="ItemController.h" />
     <ClInclude Include="MoveTo.h" />

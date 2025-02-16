@@ -126,7 +126,8 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.7f);
 	}
 	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING 
-		|| OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND || OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED) {	// 뛰기
+		|| OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND || OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED
+		|| OwnerZombie->targetType == OwnerZombie->TARGET::HORDESOUND) {	// 뛰기
 
 		OwnerZombie->SetSpeed(OwnerZombie->ShoutingZombieSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed();
@@ -337,7 +338,7 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
 	FVector ZombieLocation = OwnerZombie->GetActorLocation(); // 좀비의 위치
 
-	float MaxSightRange = 1000.f; // 최대 시야 범위
+	float MaxSightRange = 1200.f; // 최대 시야 범위
 
 	// 좀비 시야각 (전방 120도)
 	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(120.0f / 2.0f));

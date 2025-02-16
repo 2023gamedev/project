@@ -2,16 +2,19 @@
 
 #include <iostream>
 
+
 #include "Zombie.h"
 
 using std::cout;
 using std::endl;
+using std::string;
 
 
 class Zombie;
 
 class Task {
 public:
+    string t_name = "";
     //결과값 저장
     bool result = false;
 
@@ -33,6 +36,9 @@ public:
 
     //발소리 반경 내 검사 [Sequence-Decorator]
     virtual bool HasFootSound(Zombie& zom) { return false; };
+
+    //주위에 다른 좀비들이 소리를 내었는지 검사 [Sequence-Decorator]
+    virtual bool HordeAction(Zombie& zom) { return false; };
 
     //플레이어의 마지막 위치를 기억하는지 검사 [Sequence-Decorator]
     virtual bool HasInvestigated(Zombie& zom) { return false; };

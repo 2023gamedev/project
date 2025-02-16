@@ -24,7 +24,8 @@ class Sequence;
 class Sel_Detect;
 class Sel_CanSeePlayer;
 class Seq_HasShouting;
-class Seq_HasFootSound;
+class Seq_HasFootSound; 
+class Seq_HordeAction;
 class Seq_HasInvestigated;
 class Seq_NotHasLastKnownPlayerLocation;
 class Seq_CanAttack;
@@ -34,10 +35,13 @@ class T_MoveTo;
 
 
 #define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그) ==> "로그가 많아 끊김 현상이 심하니 필요할 때만 키도록;;"
-#undef ENABLE_BT_LOG	// 이거 주석 풀어서 -> 비활성화
+#undef ENABLE_BT_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 #define ENABLE_BT_NODE_LOG	// 전처리기 디렉티브 활성화 (좀비 BT Node 관련 로그 cout 찍기 플래그)
-//#undef ENABLE_BT_NODE_LOG	// 이거 주석 풀어서 -> 비활성화
+#undef ENABLE_BT_NODE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
+
+#define ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 전처리기 디렉티브 활성화 (좀비 BT Detect RandomChance 관련 로그 cout 찍기 플래그)
+//#undef ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 
 using OVLP_EX = struct Overlap_ex {
@@ -98,6 +102,7 @@ struct Zombie_BT_struct {
 	Sequence* seq_canattack;
 	Sequence* seq_hasshouting;
 	Sequence* seq_hasfootsound;
+	Sequence* seq_hordeaction;
 	Sequence* seq_hasinvestigated;
 	Sequence* seq_nothaslastknownplayerlocation;
 

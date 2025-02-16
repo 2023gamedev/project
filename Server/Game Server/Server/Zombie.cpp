@@ -161,7 +161,7 @@ void Zombie::DetermineFloor(float startZ)
 }
 
 // distanceType = 1: Detect / 2: FootSound
-void Zombie::SetDistance(int playerid, int distanceType)
+float Zombie::SetDistance(int playerid, int distanceType)
 {
 	map<int, float>* setMap = {};
 
@@ -208,6 +208,8 @@ void Zombie::SetDistance(int playerid, int distanceType)
 	if(spacing)
 		cout << endl;
 #endif
+
+	return dist;
 }
 
 bool Zombie::RandomPatrol()
@@ -318,6 +320,20 @@ void Zombie::SetTargetLocation(TARGET t)
 		}
 //#endif
 		break;
+
+
+
+
+	case TARGET::HORDESOUND:
+//#ifdef	ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '호드'" << endl;
+//#endif
+		TargetLocation = HordeLocation;
+		UpdatePath();
+		break;
+
+
+
 	case TARGET::INVESTIGATED:
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '이전 발견 위치'" << endl;
@@ -391,10 +407,10 @@ void Zombie::SetTargetLocation(TARGET t)
 #endif
 }
 
-// distanceType = 1: Detect / 2: FootSound
-void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType)
+// distanceType = 1: Detect(CanSeePlayer) / 2: FootSound
+float Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType)
 {
-	float min = FLT_MAX;	//float 최대값
+	float min_dist = FLT_MAX;	//float 최대값
 
 	map<int, float> searchMap = {};
 	if (distanceType == 1)
@@ -418,8 +434,8 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			}
 
 			if (searchMap.find(player.first) != searchMap.end()) {
-				if (min > searchMap.at(player.first) && searchMap.at(player.first) > 0) {
-					min = searchMap.at(player.first);
+				if (min_dist > searchMap.at(player.first) && searchMap.at(player.first) > 0) {
+					min_dist = searchMap.at(player.first);
 #ifdef	ENABLE_BT_LOG
 					if(distanceType == 1)
 						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에 존재함! --- 거리: " << searchMap.at(player.first) << endl;
@@ -427,7 +443,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 에게 발소리 들킴! --- 거리: " << searchMap.at(player.first) << endl;
 #endif
 				}
-				else if (min > searchMap.at(player.first) && searchMap.at(player.first) <= 0) {
+				else if (min_dist > searchMap.at(player.first) && searchMap.at(player.first) <= 0) {
 #ifdef	ENABLE_BT_LOG
 					if (distanceType == 1)
 						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
@@ -438,10 +454,10 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			}
 		}
 
-		if (distanceType == 1 && PlayerInSight == false && min == FLT_MAX) {
+		if (distanceType == 1 && PlayerInSight == false && min_dist == FLT_MAX) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
 			cout << "[ERROR] Data Race!!! -> PlayerInSight is false after CanSeePlayer Sequence check!" << endl;
-			return;
+			return min_dist;
 		}
 
 		// 혹시 같은 거리에 포착된 플레이어가 두명 이상일때, 그들중 랜덤한 플레이어 따라가게
@@ -456,7 +472,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			}
 
 			if (searchMap.find(player.first) != searchMap.end()) {
-				if (min == searchMap.at(player.first)) {
+				if (min_dist == searchMap.at(player.first)) {
 					closest_players.emplace_back(player.first);
 #ifdef	ENABLE_BT_LOG
 					cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 와 가장 가까움! --- 거리: " << searchMap.at(player.first) << endl;
@@ -476,7 +492,7 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 				cout << "[ERROR] closest_players.size() == 0 -> 가장 가까운 플레이어(발소리) 찾을 수 없음" << endl;
 			}
 
-			return;
+			return min_dist;
 		}
 
 		std::random_device rd;
@@ -511,6 +527,8 @@ void Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_p
 			cout << "DistanceTo_FootSound Map \"ERROR\"!!! -> Target is set to FootSound but DistanceTo_FootSound Map is empty" << endl;
 		}
 	}
+
+	return min_dist;
 }
 
 void Zombie::Attack(int roomid)
@@ -1134,6 +1152,128 @@ bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_
 	target_original_pos[0][0][1] = py;
 	
 	return true;
+}
+
+bool Zombie::CanSeePlayerRandomChance()
+{
+	vector<vector<vector<float>>> closest_player_pos = {};
+
+	float dist = SearchClosestPlayer(closest_player_pos, 1);
+
+	if (dist <= 500) {	// 바로 탐지 (100확률로)
+		detectCanSeePlayer_randomChance = true;
+		return true;
+	}
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+
+	std::uniform_int_distribution<int> random_chance(0, 100);		// 0~100
+	//std::uniform_int_distribution<int> fail_duration(5, 10);		// 5~10
+
+	if (dist <= 800) {
+		if (random_chance(mt) >= (100 - 50)) {	// 50퍼센트의 확률
+			detectCanSeePlayer_randomChance = true;
+			return true;
+		}
+		else {
+			detectCanSeePlayer_randomChance = false;
+			detectCanSeePlayerFail_delayTime = 1.0;
+			return false;
+		}
+	}
+	else if (dist <= 1000) {
+		if (random_chance(mt) >= (100 - 30)) {	// 30퍼센트의 확률
+			detectCanSeePlayer_randomChance = true;
+			return true;
+		}
+		else {
+			detectCanSeePlayer_randomChance = false;
+			detectCanSeePlayerFail_delayTime = 2.0;
+			return false;
+		}
+	}
+	else if (dist <= 1200) {
+		if (random_chance(mt) >= (100 - 10)) {	// 10퍼센트의 확률
+			detectCanSeePlayer_randomChance = true;
+			return true;
+		}
+		else {
+			detectCanSeePlayer_randomChance = false;
+			detectCanSeePlayerFail_delayTime = 3.0;
+			return false;
+		}
+	}
+
+	return false;
+}
+
+bool Zombie::HasFootSoundRandomChance()
+{
+	vector<vector<vector<float>>> closest_player_pos = {};
+
+	float dist = SearchClosestPlayer(closest_player_pos, 2);
+
+	if (dist <= 300) {	// 바로 탐지 (100확률로)
+		detectHasFootSound_randomChance = true;
+		return true;
+	}
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+
+	std::uniform_int_distribution<int> random_chance(0, 100);		// 0~100
+	//std::uniform_int_distribution<int> fail_duration(5, 10);		// 5~10
+
+	if (dist <= 500) {
+		if (random_chance(mt) >= (100 - 50)) {	// 50퍼센트의 확률
+			detectHasFootSound_randomChance = true;
+			return true;
+		}
+		else {
+			detectHasFootSound_randomChance = false;
+			detectHasFootSoundFail_delayTime = 2.0;
+			return false;
+		}
+	}
+	else if (dist <= 800) {
+		if (random_chance(mt) >= (100 - 30)) {	// 30퍼센트의 확률
+			detectHasFootSound_randomChance = true;
+			return true;
+		}
+		else {
+			detectHasFootSound_randomChance = false;
+			detectHasFootSoundFail_delayTime = 3.0;
+			return false;
+		}
+	}
+
+	return false;
+}
+
+void Zombie::MakeNoise(vector<Zombie*>& zombies)
+{
+	// 다른 좀비들 플레이어 발견 소리 포착 체크 (호드 사운드 알리기)
+
+	for (auto& zom : zombies) {
+		if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// 해당 좀비와 같은 층 좀비만 검사
+			continue;
+
+		if (zom->ZombieData.zombieID == ZombieData.zombieID)	// 나 자신은 넘어가기
+			continue;
+
+		vector<vector<vector<float>>> hzl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+		vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{zom->ZombieData.x, zom->ZombieData.y, zom->ZombieData.z}} };
+
+		float dist = sqrt(powf(hzl[0][0][0] - zl[0][0][0], 2) + powf(hzl[0][0][1] - zl[0][0][1], 2)/* + powf(hzl[0][0][2] - zl[0][0][2], 2)*/);	// x, y 좌표 거리만 검사
+
+		if (dist <= CanHearShoutDistance) {
+			zom->HeardHordeSound = true;
+
+			zom->HordeLocation = hzl;
+		}
+
+	}
 }
 
 // wait 실행 우선순위: 피격 > 공격 > 샤우팅

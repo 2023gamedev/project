@@ -46,7 +46,8 @@ public:
         SHOUTING,
         FOOTSOUND,
         INVESTIGATED,
-        PATROL
+        PATROL,
+        HORDESOUND
     };
 
     enum ZOMBIE_TYPE {
@@ -68,11 +69,13 @@ public:
 
     const float CanAttackDistance = 150.f;          // 공격 사정거리 150.f
 
-    // const float  CanSeePlayerDistance = 1000.0f; // 최대 시야거리 1000.0f
+    // const float  CanSeePlayerDistance = 1200.0f; // 최대 시야거리 1200.0f
 
     const float CanHearDistance = 800.f;            // 발소리 포착 가능거리 800.f
 
-    const float CanHearShoutDistance = 2000.f;      // 샤우팅 소리 포착 가능 거리 2000.f
+    const float CanHearShoutDistance = 2500.f;      // 샤우팅 소리 포착 가능 거리 2500.f
+
+    const float CanHearHordeSound = 400.0f;         // 
 
     const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
 
@@ -112,6 +115,8 @@ public:
 
     vector<vector<vector<float>>> ShoutingLocation;       // 샤우팅 좀비 위치
 
+    vector<vector<vector<float>>> HordeLocation;       // 호드 좀비 위치
+
     int ClosestPlayerID;
 
     bool PlayerInSight;
@@ -121,6 +126,8 @@ public:
     bool HeardShouting;
 
     bool HeardFootSound;
+
+    bool HeardHordeSound;
 
     bool RandPatrolSet;     // 랜덤 패트롤 지점이 set 되면 true
 
@@ -139,8 +146,17 @@ public:
 
     FLOOR z_floor;          // 좀비가 스폰 된 층
 
-    std::chrono::steady_clock::time_point waitAnimStartTime;      // 좀비 대기 시작 시간 (애니메이션을 맞춰 대기하기 위한 용도)
+    std::chrono::steady_clock::time_point waitAnimStartTime;            // 좀비 대기 시작 시간 (애니메이션을 맞춰 대기하기 위한 용도)
     std::chrono::steady_clock::time_point waitBrainlessStartTime;      // 좀비 대기 시작 시간 (숨고르기를 맞춰 대기하기 위한 용도)
+
+    bool detectCanSeePlayer_randomChance = false;
+    bool detectHasFootSound_randomChance = false;
+
+    std::chrono::steady_clock::time_point detectCanSeePlayerFail_StartTime;     // 좀비 탐지 확률 fail시에 지속해서 계속 fail 시켜주기 위한 용도 => 플레이어 시야에 포착
+    std::chrono::steady_clock::time_point detectHasFootSoundFail_StartTime;     // => 플레이어 발소리
+
+    float detectCanSeePlayerFail_delayTime = 0;
+    float detectHasFootSoundFail_delayTime = 0;
 
     TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL)
 
@@ -162,7 +178,7 @@ public:
 
     void DetermineFloor(float startZ);
 
-    void SetDistance(int playerid, int distanceType);    // distanceType = 1: Detect / 2: FootSound
+    float SetDistance(int playerid, int distanceType);    // distanceType = 1: Detect / 2: FootSound
 
     void SetTargetLocation(TARGET t);
 
@@ -190,7 +206,7 @@ public:
 
     bool CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
 
-    void SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType);
+    float SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType);
 
     // 발소리 포착시에 거리에 따라 탐지 실수하도록 하는 함수
     void SetRandomTargetLocation(vector<vector<vector<float>>>& target_original_pos);
@@ -205,5 +221,10 @@ public:
 
     ZOMBIE_TYPE GetZombieType() const { return ZombieType; }
     void SetZombieType(ZOMBIE_TYPE z_type) { ZombieType = z_type; }
+
+    bool CanSeePlayerRandomChance();
+    bool HasFootSoundRandomChance();
+
+    void MakeNoise(vector<Zombie*>& zombies);
 
 };

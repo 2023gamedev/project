@@ -46,7 +46,8 @@ public:
 		SHOUTING,
 		FOOTSOUND,
 		INVESTIGATED,
-		PATROL
+		PATROL,
+		HORDESOUND
 	};
 
 
