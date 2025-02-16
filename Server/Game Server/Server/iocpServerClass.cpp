@@ -619,19 +619,19 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 	zombie_bt_map[roomid].seq_cannotattack->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasShouting} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	//zombie_bt_map[roomid].seq_hasshouting->AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_hasshouting->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasFootSound} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	//zombie_bt_map[roomid].seq_hasfootsound->AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_hasfootsound->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HordeAction} 할당 -> 필요 자식노드들 '순서대로' 삽입
 	//zombie_bt_map[roomid].seq_hordeaction->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-HasInvestigated} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	//zombie_bt_map[roomid].seq_hasinvestigated->AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_hasinvestigated->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//{Sequence-NotHasLastKnownPlayerLocation} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	//zombie_bt_map[roomid].seq_nothaslastknownplayerlocation->AddChild(zombie_bt_map[roomid].t_moveto);
+	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation->AddChild(zombie_bt_map[roomid].t_moveto);
 
 	//==========================//
 }
