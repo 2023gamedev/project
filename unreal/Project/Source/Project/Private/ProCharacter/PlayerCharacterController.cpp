@@ -458,6 +458,12 @@ void APlayerCharacterController::Tick(float DeltaTime)
 						if (!controller) {
 							UGameplayStatics::PlaySoundAtLocation(controller, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
 						}
+						else {
+							UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] APlayerCharacterController* is nullptr!!!"));
+						}
+					}
+					else {
+						UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] (*zombie)->GrowlSound is nullptr!!!"));
 					}
 				}
 				else if ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie")) {
@@ -466,6 +472,12 @@ void APlayerCharacterController::Tick(float DeltaTime)
 						if (!controller) {
 							UGameplayStatics::PlaySoundAtLocation(controller, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
 						}
+						else {
+							UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] APlayerCharacterController* is nullptr!!!"));
+						}
+					}
+					else {
+						UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] (*zombie)->GrowlSound is nullptr!!!"));
 					}
 				}
 			}
