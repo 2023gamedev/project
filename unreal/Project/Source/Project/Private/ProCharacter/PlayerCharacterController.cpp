@@ -454,11 +454,13 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 				if ((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == true) {	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 ㅇㅇ
 					if ((*zombie)->GrowlSound != nullptr) {
+						//auto* uobj = GetWorld();
 						APlayerCharacterController* controller = Cast<APlayerCharacterController>(this);
-						if (!controller) {
+						if (controller) {
 							UGameplayStatics::PlaySoundAtLocation(controller, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
 						}
 						else {
+							//UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] UObject* is nullptr!!!"));
 							UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] APlayerCharacterController* is nullptr!!!"));
 						}
 					}
@@ -469,7 +471,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				else if ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie")) {
 					if ((*zombie)->GrowlSound != nullptr) {
 						APlayerCharacterController* controller = Cast<APlayerCharacterController>(this);
-						if (!controller) {
+						if (controller != nullptr) {
 							UGameplayStatics::PlaySoundAtLocation(controller, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
 						}
 						else {
