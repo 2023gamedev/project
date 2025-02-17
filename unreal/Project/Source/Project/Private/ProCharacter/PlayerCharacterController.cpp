@@ -453,12 +453,20 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				UE_LOG(LogTemp, Log, TEXT("zombieType: %s"), *(*zombie)->GetZombieName().ToString());
 
 				if ((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == true) {	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 ㅇㅇ
-					if((*zombie)->GrowlSound != nullptr)
-						UGameplayStatics::PlaySoundAtLocation(this, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+					if ((*zombie)->GrowlSound != nullptr) {
+						APlayerCharacterController* controller = Cast<APlayerCharacterController>(this);
+						if (!controller) {
+							UGameplayStatics::PlaySoundAtLocation(controller, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+						}
+					}
 				}
 				else if ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie")) {
-					if ((*zombie)->GrowlSound != nullptr)
-						UGameplayStatics::PlaySoundAtLocation(this, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+					if ((*zombie)->GrowlSound != nullptr) {
+						APlayerCharacterController* controller = Cast<APlayerCharacterController>(this);
+						if (!controller) {
+							UGameplayStatics::PlaySoundAtLocation(controller, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+						}
+					}
 				}
 			}
 
