@@ -449,38 +449,58 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 2:
 
 			//(*zombie)->targetType => prevTargetType
-			if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER) {	// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
-				UE_LOG(LogTemp, Log, TEXT("zombieType: %s"), *(*zombie)->GetZombieName().ToString());
+			//if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER) {	// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
+			//	UE_LOG(LogTemp, Log, TEXT("zombieType: %s"), *(*zombie)->GetZombieName().ToString());
+			//
+			//	if ((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == true) {	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 ㅇㅇ
+			//		if ((*zombie)->GrowlSound != nullptr && this != nullptr)	// 크래쉬 예외처리
+			//			UGameplayStatics::PlaySoundAtLocation(this, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+			//	}
+			//	else if ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie")) {
+			//		if ((*zombie)->GrowlSound && this)	// 크래쉬 예외처리
+			//			UGameplayStatics::PlaySoundAtLocation(this, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
+			//	}
+			//}
+			// ===> 위에 코드는 자꾸 메모리 엑세스 크래시 띄워서(패키징에서);;;
 
-				if ((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == true) {	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 ㅇㅇ
-					if ((*zombie)->GrowlSound != nullptr) {
-						//auto* uobj = GetWorld();
-						APlayerCharacterController* controller = Cast<APlayerCharacterController>(this);
-						if (controller) {
-							UGameplayStatics::PlaySoundAtLocation(controller, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
-						}
-						else {
-							//UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] UObject* is nullptr!!!"));
-							UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] APlayerCharacterController* is nullptr!!!"));
+			/*if (zombie && *zombie) // zombie와 (*zombie)가 null인지 체크
+			{
+				ABaseZombie* ValidZombie = *zombie;
+
+				if (IsValid(ValidZombie) && ValidZombie->GrowlSound != nullptr) // IsValid()로 액터의 유효성 검사
+				{
+					UWorld* World = GetWorld();
+					if (World)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("[PlaySoundLog] Playing Sound at Location"));
+						if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER) {	// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
+							if (((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == true)	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 
+								|| ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie"))) {
+								UGameplayStatics::PlaySoundAtLocation(World, ValidZombie->GrowlSound, ValidZombie->GetActorLocation(), 0.7333f);
+							}
 						}
 					}
-					else {
-						UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] (*zombie)->GrowlSound is nullptr!!!"));
+					else
+					{
+						UE_LOG(LogTemp, Error, TEXT("[PlaySoundLog] GetWorld() returned nullptr!"));
 					}
 				}
-				else if ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie")) {
-					if ((*zombie)->GrowlSound != nullptr) {
-						APlayerCharacterController* controller = Cast<APlayerCharacterController>(this);
-						if (controller != nullptr) {
-							UGameplayStatics::PlaySoundAtLocation(controller, (*zombie)->GrowlSound, (*zombie)->GetActorLocation(), 0.7333f);
-						}
-						else {
-							UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] APlayerCharacterController* is nullptr!!!"));
-						}
-					}
-					else {
-						UE_LOG(LogTemp, Warning, TEXT("[ERROR-PlaySound] (*zombie)->GrowlSound is nullptr!!!"));
-					}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("[PlaySoundLog] GrowlSound is nullptr or Zombie is invalid!"));
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("[PlaySoundLog] zombie is nullptr!"));
+			}*/
+			// 이래도 크래시;; 그냥 여기서 부르면 안 될 듯;;;
+
+
+			if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER) {	// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
+				if (((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == true)	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 
+					|| ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie"))) {
+					(*zombie)->PlayGrowlSound();
 				}
 			}
 

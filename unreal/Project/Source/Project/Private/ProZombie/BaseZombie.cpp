@@ -3128,4 +3128,21 @@ void ABaseZombie::WaittingTimerElapsed()
 	// 그래도 부활하는 걸 고려하면 여기에 설정하는 게 맞음
 }
 
+void ABaseZombie::PlayGrowlSound()
+{
+	/*AAIController* controller = Cast<AAIController>(this->GetController());
+	if (controller && controller->IsLocalController() && GrowlSound)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location"));
+		UGameplayStatics::PlaySoundAtLocation(controller, GrowlSound, GetActorLocation(), 0.6f);
+	}*/
+	// 컨트롤러에 붙이면 안 되는 거 같음 그냥;;
 
+	/*auto* world = GetWorld();
+	if (world && GrowlSound)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location"));
+		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound, GetActorLocation(), 0.6f);
+	}*/
+	// 걍 안해 ㅅㅂ
+}
