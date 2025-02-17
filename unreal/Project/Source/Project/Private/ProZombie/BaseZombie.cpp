@@ -27,6 +27,8 @@
 #include "PhysicsEngine/ConvexElem.h"
 #include "PhysicsEngine/PhysicsAsset.h"
 
+#include "HAL/PlatformTime.h"
+
 
 // Sets default values
 ABaseZombie::ABaseZombie()
@@ -1249,7 +1251,13 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			TMap<int, TArray<TPair<int, FVector>>> ClusteredVertices;
 			TMap<int, FVector> ClusterCenters;
 
+			//double StartTime = FPlatformTime::Seconds();
+
 			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices);
+
+			//double EndTime = FPlatformTime::Seconds();
+
+			//UE_LOG(LogTemp, Warning, TEXT("DBSCANWithAverageDistance took: %f seconds"), EndTime - StartTime);
 
 			TArray<TArray<TPair<int, FVector>>> RefinedClusters;
 
@@ -1257,17 +1265,27 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			for (TPair<int, TArray<TPair<int, FVector>>>& Cluster : ClusteredVertices)
 			{
 				TArray<TArray<TPair<int, FVector>>> SubClusters;
-
+				//StartTime = FPlatformTime::Seconds();
 				// 밀도 기반 그래프 분석 (연결 관계 확인)
 				RefineClusterUsingGraph(Cluster.Value, SubClusters);
+				//EndTime = FPlatformTime::Seconds();
 
+				//UE_LOG(LogTemp, Warning, TEXT("RefineClusterUsingGraph took: %f seconds"), EndTime - StartTime);
+
+				//StartTime = FPlatformTime::Seconds();
 				// 만약 그래프 기반 분리로 충분하지 않다면, K-Means 시도
 				if (SubClusters.Num() == 1)
 				{
 					KMeansSplitCluster(Cluster.Value, SubClusters);
 				}
+				//EndTime = FPlatformTime::Seconds();
+
+				//UE_LOG(LogTemp, Warning, TEXT("KMeansSplitCluster took: %f seconds"), EndTime - StartTime);
 
 				//KMeansSplitCluster(Cluster.Value, SubClusters);
+
+
+				//StartTime = FPlatformTime::Seconds();
 
 				// 분리된 클러스터를 최종 저장 (중복 클러스터 추가 방지)
 				for (const auto& SubCluster : SubClusters)
@@ -1289,6 +1307,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 						RefinedClusters.Add(SubCluster);
 					}
 				}
+
+
+				//EndTime = FPlatformTime::Seconds();
+
+				//UE_LOG(LogTemp, Warning, TEXT("bAlreadyAdded took: %f seconds"), EndTime - StartTime);
 			}
 
 			//// 최종적으로 중복되지 않은 클러스터들로 ClusteredVertices 업데이트
@@ -1324,14 +1347,32 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			//DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices, ClusterIndexRanges);
 
+
+
+			//StartTime = FPlatformTime::Seconds();
+
 			GetVerticesByCluster(ClusteredVertices, ClusterCenters);
+
+
+			//EndTime = FPlatformTime::Seconds();
+
+			//UE_LOG(LogTemp, Warning, TEXT("GetVerticesByCluster took: %f seconds"), EndTime - StartTime);
+
+
 			//for (const TPair<int, FVector>& Cluster : ClusterCenters) {
 			//	FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value);
 			//	UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex: %d, BoneName: %s"), Cluster.Key,*CutPlaneBoneName.ToString());
 			//}
 			//UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex ======================================================="));
 
+			//StartTime = FPlatformTime::Seconds();
+
 			MergeClustersBasedOnBoneName(ClusteredVertices, ClusterCenters);
+
+			//EndTime = FPlatformTime::Seconds();
+
+			//UE_LOG(LogTemp, Warning, TEXT("MergeClustersBasedOnBoneName took: %f seconds"), EndTime - StartTime);
+
 
 			ClusterCenters.Empty();
 			GetVerticesByCluster(ClusteredVertices, ClusterCenters);
@@ -1341,42 +1382,54 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			//}
 
 			// 섹션
+			TMap<FVector, FVertexBoneData> VertexBoneMap;
 			TMap<int32, TMap<int32, FName>> SectionVertexBoneMap;
 
 			if (ClusterCenters.Num() <= 1) {
 				return; // CutProceduralMesh_2 그대로 사용
 			}
 
-			for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_2->GetNumSections() - 1; ++SectionIndex)
-			{
-				FProcMeshSection* Section = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
-				if (!Section) continue;
+			//StartTime = FPlatformTime::Seconds();
+			InitVertexBoneMap(VertexBoneMap);
 
-				TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
-				TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
+			//EndTime = FPlatformTime::Seconds();
+			//UE_LOG(LogTemp, Warning, TEXT("InitVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
-				//TMap<int32, int32> LocalToGlobalVertexMap;
+			//StartTime = FPlatformTime::Seconds();
+			FillSectionVertexBoneMap(VertexBoneMap, SectionVertexBoneMap);
 
-				for (int32 i = 0; i < SectionVertices.Num(); i++)
-				{
+			//EndTime = FPlatformTime::Seconds();
+			//UE_LOG(LogTemp, Warning, TEXT("FillSectionVertexBoneMap took: %f seconds"), EndTime - StartTime);
+			//for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_2->GetNumSections() - 1; ++SectionIndex)
+			//{
+			//	FProcMeshSection* Section = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
+			//	if (!Section) continue;
 
-					// 각 bone 저장
-					FName BoneName = GetBoneNameForVertex(SectionVertices[i].Position);
-					
-					// 맵에 저장 (섹션 인덱스 -> 버텍스 인덱스 -> 본 이름)
-					SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, BoneName);
+			//	TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
+			//	TArray<uint32>& SectionTriangles = Section->ProcIndexBuffer;
 
-					/*UE_LOG(LogTemp, Warning, TEXT("SectionIndex: %d, Vertex: X: %f, Y: %f, Z: %f, BoneName: %s"),
-						SectionIndex,
-						SectionVertices[i].Position.X,
-						SectionVertices[i].Position.Y,
-						SectionVertices[i].Position.Z,
-						*BoneName.ToString());*/
-				}
+			//	//TMap<int32, int32> LocalToGlobalVertexMap;
+
+			//	for (int32 i = 0; i < SectionVertices.Num(); i++)
+			//	{
+
+			//		// 각 bone 저장
+			//		FName BoneName = GetBoneNameForVertex(SectionVertices[i].Position);
+			//		
+			//		// 맵에 저장 (섹션 인덱스 -> 버텍스 인덱스 -> 본 이름)
+			//		SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, BoneName);
+
+			//		/*UE_LOG(LogTemp, Warning, TEXT("SectionIndex: %d, Vertex: X: %f, Y: %f, Z: %f, BoneName: %s"),
+			//			SectionIndex,
+			//			SectionVertices[i].Position.X,
+			//			SectionVertices[i].Position.Y,
+			//			SectionVertices[i].Position.Z,
+			//			*BoneName.ToString());*/
+			//	}
 
 
-				UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->VertexNum : %d "), SectionIndex, SectionVertices.Num());
-			}
+			//	UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->VertexNum : %d "), SectionIndex, SectionVertices.Num());
+			//}
 
 
 
@@ -1439,7 +1492,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								int32 ClusterVerticesNum = 0;
 								if (ClusteredVertices.Contains(Cluster.Key))
 								{
-
+									//StartTime = FPlatformTime::Seconds();
 									//TArray<FVector>& ClusterVertices = ClusteredVertices[Cluster.Key];
 									TArray<TPair<int, FVector>>& ClusterVertices = ClusteredVertices[Cluster.Key]; // TPair<int, FVector> 기반으로 수정
 						
@@ -1492,10 +1545,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 
 									UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
-									for (int32 i = 0; i < Triangles.Num(); i += 3)
-									{
-										//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
-									}
+									//for (int32 i = 0; i < Triangles.Num(); i += 3)
+									//{
+									//	//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+									//}
 
 									CutPlaneIndex += ClusterVerticesNum;
 									UE_LOG(LogTemp, Warning, TEXT("ClusterVerticesNum : %d "), CutPlaneIndex);
@@ -1512,6 +1565,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									UVs.Empty();
 									Colors.Empty();
 									Tangents.Empty();
+
+									//EndTime = FPlatformTime::Seconds();
+									//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->GetNumSections() - 1 took: %f seconds"), EndTime - StartTime);
 								}
 								else
 								{
@@ -1521,7 +1577,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 							}
 							else {
-
+								//StartTime = FPlatformTime::Seconds();
 								for (int32 i = 0; i < SectionVertices.Num(); i++)
 								{
 									FVector VertexPos = SectionVertices[i].Position;
@@ -1574,11 +1630,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								}
 
 								UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
-								for (int32 i = 0; i < Triangles.Num(); i += 3)
-								{
-									//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
-								}
-
 
 								FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
 								NewProcMesh->SetWorldTransform(SkeletonTransform);
@@ -1594,6 +1645,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								Colors.Empty();
 								Tangents.Empty();
 
+								//EndTime = FPlatformTime::Seconds();
+								//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->GetNumSections() - 1 took: %f seconds"), EndTime - StartTime);
 							}
 
 						}
@@ -1703,11 +1756,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									}
 
 									UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
-									for (int32 i = 0; i < Triangles.Num(); i += 3)
-									{
-										//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
-									}
-
 
 									CutPlaneIndex += ClusterVerticesNum;
 									UE_LOG(LogTemp, Warning, TEXT("ClusterVerticesNum : %d "), CutPlaneIndex);
@@ -1790,10 +1838,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 
 								UE_LOG(LogTemp, Warning, TEXT("Triangles Count: %d"), Triangles.Num());
-								for (int32 i = 0; i < Triangles.Num(); i += 3)
-								{
-									//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
-								}
+								//for (int32 i = 0; i < Triangles.Num(); i += 3)
+								//{
+								//	//UE_LOG(LogTemp, Warning, TEXT("Triangle %d: %d, %d, %d"), i / 3, Triangles[i], Triangles[i + 1], Triangles[i + 2]);
+								//}
 
 
 								FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
@@ -1867,6 +1915,89 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 	// 2. impulse값이 안 주어짐 승원이형에게 물어봐야 할 듯
 	// 3. 중복되는 부분 중복 생성하거나 단면이 합침 판정이라 왼팔이나 오른팔 생성 안되는 문제
 
+}
+
+
+void ABaseZombie::InitVertexBoneMap(TMap<FVector, FVertexBoneData>& VertexBoneMap)
+{
+	VertexBoneMap.Empty(); // 기존 데이터 초기화
+
+	USkeletalMeshComponent* Skeleton = GetMesh();
+	if (!Skeleton) return;
+
+	FSkeletalMeshRenderData* SkMeshRenderData = Skeleton->GetSkeletalMeshRenderData();
+	if (!SkMeshRenderData || SkMeshRenderData->LODRenderData.Num() == 0) return;
+
+	const FSkeletalMeshLODRenderData& DataArray = SkMeshRenderData->LODRenderData[0]; // LOD 0 기준
+	FSkinWeightVertexBuffer& SkinWeights = *Skeleton->GetSkinWeightBuffer(0);
+
+	// 모든 섹션 순회
+	for (int32 SectionIndex = 0; SectionIndex < DataArray.RenderSections.Num(); SectionIndex++)
+	{
+		const FSkelMeshRenderSection& Section = DataArray.RenderSections[SectionIndex];
+		const int32 NumSourceVertices = Section.NumVertices;
+		const int32 BaseVertexIndex = Section.BaseVertexIndex;
+
+		for (int32 i = 0; i < NumSourceVertices; i++)
+		{
+			const int32 VertexIndex = i + BaseVertexIndex;
+			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
+			FVector VertexPosition = FVector(SkinnedVectorPos);
+
+			uint32 k = uint32(i);
+
+			// 본 인덱스 가져오기
+			if (k >= SkinWeights.GetNumVertices()) continue;
+			int32 BoneIndex = SkinWeights.GetBoneIndex(k, 0);
+
+			if (BoneIndex >= Section.BoneMap.Num()) continue;
+			int32 ActualBone = Section.BoneMap[BoneIndex];
+
+			// 본 이름 가져오기
+			FName BoneName = Skeleton->GetBoneName(ActualBone);
+
+			// 맵에 저장 (버텍스 위치 -> {섹션 인덱스, 버텍스 인덱스, 본 이름})
+			VertexBoneMap.Add(VertexPosition, FVertexBoneData(SectionIndex, i, BoneName));
+		}
+	}
+
+	//UE_LOG(LogTemp, Log, TEXT("VertexBoneMap initialized with %d vertices"), VertexBoneMap.Num());
+}
+
+void ABaseZombie::FillSectionVertexBoneMap(const TMap<FVector, FVertexBoneData>& VertexBoneMap,TMap<int32, TMap<int32, FName>>& SectionVertexBoneMap)
+{
+	SectionVertexBoneMap.Empty(); // 초기화
+
+	if (!CutProceduralMesh_2) return;
+
+	for (int32 SectionIndex = 0; SectionIndex < CutProceduralMesh_2->GetNumSections() - 1; ++SectionIndex)
+	{
+		FProcMeshSection* Section = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
+		if (!Section) continue;
+
+		TArray<FProcMeshVertex>& SectionVertices = Section->ProcVertexBuffer;
+
+		for (int32 i = 0; i < SectionVertices.Num(); i++)
+		{
+			// 버텍스 위치로 검색
+			if (const FVertexBoneData* BoneData = VertexBoneMap.Find(SectionVertices[i].Position))
+			{
+				// 맵에 저장 (섹션 인덱스 -> 버텍스 인덱스 -> 본 이름)
+				SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, BoneData->BoneName);
+
+				//UE_LOG(LogTemp, Warning, TEXT("Section: %d, Vertex: %d, Bone: %s"),
+				//	SectionIndex, i, *BoneData->BoneName.ToString());
+			}
+			else {
+
+				FName ClosestBoneName = GetBoneNameForCutPlaneVertex(SectionVertices[i].Position);
+
+				SectionVertexBoneMap.FindOrAdd(SectionIndex).Add(i, ClosestBoneName);
+			}
+		}
+
+		//UE_LOG(LogTemp, Warning, TEXT("SectionIndex : %d , CutProceduralMesh_2->VertexNum : %d "), SectionIndex, SectionVertices.Num());
+	}
 }
 
 // Vertex에 가장 큰 영향을 주는 bonename 찾기
@@ -1967,6 +2098,7 @@ FName ABaseZombie::GetBoneNameForVertex(const FVector& TargetPosition)
 // 잘린 단면 부분은 가까운 버텍스 구하도록 함수 구현
 FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
 {
+	//double StartTime = FPlatformTime::Seconds();
 	// SkeletalMeshComponent와 LODData 가져오기
 	USkeletalMeshComponent* Skeleton = GetMesh();
 	FSkeletalMeshRenderData* SkMeshRenderData = Skeleton->GetSkeletalMeshRenderData();
@@ -1979,12 +2111,15 @@ FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
 
 	int32 RenderSectionNumber;
 
+	double EndTime = FPlatformTime::Seconds();
+	//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForCutPlaneVertexStart took: %f seconds"), EndTime - StartTime);
+
 	// 모든 버텍스를 순회하여 주어진 좌표와 비교
 	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
 	{
 		const int32 NumSourceVertices = DataArray.RenderSections[j].NumVertices;
 		const int32 BaseVertexIndex = DataArray.RenderSections[j].BaseVertexIndex;
-
+		//StartTime = FPlatformTime::Seconds();
 		for (int32 i = 0; i < NumSourceVertices; i++)
 		{
 			const int32 VertexIndex = i + BaseVertexIndex;
@@ -2003,11 +2138,14 @@ FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
 			}
 
 		}
+		//EndTime = FPlatformTime::Seconds();
+		//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForCutPlaneVertex took: %f seconds"), EndTime - StartTime);
 	}
 
 	// 가장 가까운 버텍스가 영향을 받는 Bone 찾기
 	if (ClosestVertexIndex != -1)
 	{
+		//StartTime = FPlatformTime::Seconds();
 		// 해당 버텍스의 Bone 인덱스를 가져옴
 		int32 BoneIndex = SkinWeights.GetBoneIndex(ClosestVertexIndex, 0);
 		int32 ActualBone = DataArray.RenderSections[RenderSectionNumber].BoneMap[BoneIndex]; // 이걸 0~끝까지 다 계산할 필요 있을까 싶어서 0인덱스만 계산
@@ -2019,13 +2157,19 @@ FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
 
 		//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForVertex - BoneName: %s"), *BoneName.ToString());
 
+
+		//EndTime = FPlatformTime::Seconds();
+		//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForCutPlaneVertexEnd took: %f seconds"), EndTime - StartTime);
 		// Bone 이름을 가져옴
 		return BoneName;
 	}
 
+
+
 	// 버텍스가 없으면 빈 이름을 반환
 	return FName();
 }
+
 
 float ABaseZombie::CalculateEuclideanDistance(const FVector& Point1, const FVector& Point2)
 {

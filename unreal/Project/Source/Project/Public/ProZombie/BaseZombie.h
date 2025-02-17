@@ -16,6 +16,7 @@
 
 // 구조체
 #include "ProData/ZBoneStruct.h"
+#include "ProData/SkeletalMeshBondData.h"
 
 #include "BaseZombie.generated.h"
 
@@ -202,6 +203,9 @@ public:
 	//void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters);
 	void GetVerticesByCluster(const TMap<int, TArray<TPair<int, FVector>>>& ClusteredVerticesMap, TMap<int, FVector>& ClusterCenters);
 	void MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters);
+
+	void InitVertexBoneMap(TMap<FVector, FVertexBoneData>& VertexBoneMap);
+	void FillSectionVertexBoneMap(const TMap<FVector, FVertexBoneData>& VertexBoneMap, TMap<int32, TMap<int32, FName>>& SectionVertexBoneMap);
 
 	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
 	void CreateAndApplyBoundingBoxByNewProcMesh(UProceduralMeshComponent* ProceduralMesh);
