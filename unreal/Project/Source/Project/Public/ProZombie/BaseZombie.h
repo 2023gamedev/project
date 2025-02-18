@@ -202,11 +202,11 @@ public:
 
 	//void GetVerticesByCluster(const TArray<FVector>& Vertices, const TArray<int>& Labels, TMap<int, FVector>& ClusterCenters);
 	void GetVerticesByCluster(const TMap<int, TArray<TPair<int, FVector>>>& ClusteredVerticesMap, TMap<int, FVector>& ClusterCenters);
-	void MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters);
+	void MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters, TMap<FName, FVector>& BoneAveragePos);
 
-	void InitVertexBoneMap(TMap<FVector, FVertexBoneData>& VertexBoneMap);
-	void FillSectionVertexBoneMap(const TMap<FVector, FVertexBoneData>& VertexBoneMap, TMap<int32, TMap<int32, FName>>& SectionVertexBoneMap);
-
+	void InitVertexBoneMap(TMap<FVector, FVertexBoneData>& VertexBoneMap, TMap<FName, FVector>& BoneAveragePos);
+	void FillSectionVertexBoneMap(const TMap<FVector, FVertexBoneData>& VertexBoneMap, TMap<int32, TMap<int32, FName>>& SectionVertexBoneMap, TMap<FName, FVector>& BoneAveragePos);
+	FName FindNearstBoneName(TMap<FName, FVector>& BoneAveragePos, const FVector& TargetPosition);
 	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
 	void CreateAndApplyBoundingBoxByNewProcMesh(UProceduralMeshComponent* ProceduralMesh);
 	// Procedural mesh component for the cut part
