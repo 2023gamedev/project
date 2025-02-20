@@ -231,12 +231,14 @@ bool Zombie::RandomPatrol()
 
 	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 1500 +-
 
-	px = ZombieData.x + dist(mt);
-	py = ZombieData.y + dist(mt);
+	float the_dist = (float)dist(mt);
+
+	px = ZombieData.x + the_dist;
+	py = ZombieData.y + the_dist;
 	pz = ZombieData.z;
 
 	while (px >= 2366.f) {		// 좀비가 계단 쪽, 그리고 그쪽 벽 넘어로 자주 넘어가는 오류가 있어 이를 일단 방지하기 위해 (맵 수정 전까지는)
-		px = ZombieData.x + dist(mt);
+		px = ZombieData.x + the_dist;
 
 		if (ZombieData.x >= 2366.f) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -246,7 +248,7 @@ bool Zombie::RandomPatrol()
 	}
 
 	while (py <= -1200.f) {		// 좀비가 화장실 뒤쪽 너머 빈 공간으로 자주 넘어가서 일단 막음
-		py = ZombieData.y + dist(mt);
+		py = ZombieData.y + the_dist;
 
 		if (ZombieData.x <= -1200.f) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -325,10 +327,13 @@ void Zombie::SetTargetLocation(TARGET t)
 			UpdatePath();
 		}
 //#ifdef	ENABLE_BT_LOG
-		else {
-			cout << "좀비 #" << ZombieData.zombieID << " - ";
-			cout << "[Error] 좀비 따라갈 발소리를 찾지못함! (closest_player_pos.size() == 0)" << endl;
-		}
+		//else {
+		//	cout << "좀비 #" << ZombieData.zombieID << " - ";
+		//	cout << "[Error] 좀비 따라갈 발소리를 찾지못함! (closest_player_pos.size() == 0)" << endl;
+		//}
+		// 이제 zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND); 을 불러오는 타이밍이 달라져서 closest_player_pos.size() == 0 일때 발생함 
+		// -> FootSound_Update_Check() 에서 더이상 뛰고 있지 않는 플레이어는 -1을 해줘서 (근데 그래도 이전에 발소리를 들은게 있으니 여기는 계속 불림) 
+		// 그러니까 무시해도됨 이제 ㅇㅇ
 //#endif
 		break;
 
@@ -496,8 +501,10 @@ float Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_
 				cout << "[ERROR] closest_players.size() == 0 -> 가장 가까운 플레이어(좀비시야) 찾을 수 없음" << endl;
 			}
 			else if (distanceType == 2) {
+#ifdef ENABLE_BT_NODE_LOG
 				cout << "좀비 #" << ZombieData.zombieID << " - ";
-				cout << "[ERROR] closest_players.size() == 0 -> 가장 가까운 플레이어(발소리) 찾을 수 없음" << endl;
+				cout << "closest_players.size() == 0 -> 가장 가까운 플레이어(발소리) 찾을 수 없음" << endl;
+#endif
 			}
 
 			return min_dist;
@@ -508,7 +515,9 @@ float Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_
 
 		std::uniform_int_distribution<int> dist(0, closest_players.size() - 1);
 
-		ClosestPlayerID = closest_players[dist(mt)];		// 가장 가까운 플레이어 인덱스 저장
+		int the_dist = dist(mt);
+
+		ClosestPlayerID = closest_players[the_dist];		// 가장 가까운 플레이어 인덱스 저장
 		
 		if (distanceType == 1) {
 #ifdef	ENABLE_BT_LOG
@@ -841,11 +850,14 @@ void Zombie::ReachFinalDestination()
 		std::uniform_int_distribution<int> stand_still_chance(0, 100);		// 0~100
 		std::uniform_int_distribution<int> stand_still_duration(5, 10);		// 5~10
 
-		if (stand_still_chance(mt) >= (100 - 40) && IsStandingStill == false) {	// 40퍼센트의 확률
+		float the_chance = (float)stand_still_chance(mt);
+		float the_duration = (float)stand_still_duration(mt);
+
+		if (the_chance >= (100 - 40) && IsStandingStill == false) {	// 40퍼센트의 확률
 			//HaveToWait = true;
 			IsStandingStill = true;
 			waitBrainlessStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
-			ZombieStandingStillDuration = (float)stand_still_duration(mt);
+			ZombieStandingStillDuration = the_duration;
 
 #ifdef	ENABLE_BT_LOG
 			cout << "좀비 #" << ZombieData.zombieID << " 잠시 숨고르기 상태 발동 (" << ZombieStandingStillDuration << "초 동안)" << endl;
@@ -1013,8 +1025,11 @@ bool Zombie::FootSound_Update_Check()
 				SetDistance(player.first, 2);	// 갱신 (만약 없었을 시에는 새로 생성)
 			}
 		}
-		else {
-			// 굳이 뛰고 있는 상태가 아니라면 FootSound map 건드릴 필요 없음
+		else {	// 현재 뛰고 있지 않은 상태
+			// 근데 이미 맵에 저장되어 있다면 -1로 초기화 해주기 (더이상 탐지 불가)
+			if (DistanceTo_FootSound.find(player.first) != DistanceTo_FootSound.end()) {
+				DistanceTo_FootSound[player.first] = -1.0f;
+			}
 		}
 	}
 
@@ -1036,7 +1051,7 @@ bool Zombie::FootSound_Update_Check()
 
 
 		if (distTo_footSound.second <= CanHearDistance && distTo_footSound.second > 0) {	// 발소리 포착 거리 내라면
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << distTo_footSound.first << " 의 새로운 발소리 포착함! --- 거리: " << distTo_footSound.second << endl;
 			spacing = true;
 #endif
@@ -1044,7 +1059,7 @@ bool Zombie::FootSound_Update_Check()
 			result = true;
 		}
 		else {
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << distTo_footSound.first << " 의 새로운 발소리 포착 못함! --- 거리: " << distTo_footSound.second << endl;
 			spacing = true;
 #endif
@@ -1055,16 +1070,13 @@ bool Zombie::FootSound_Update_Check()
 
 
 	if (result == false) {
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 		cout << "좀비 #" << ZombieData.zombieID << " 가 그 어떤 새로운 발소리도 포착 못함! (FootSound_Update_Check() == false)" << endl;
 		spacing = true;
 #endif
 	}
-	else {
-		HeardFootSound = true;
-	}
 
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 	if (spacing)
 		cout << endl;
 #endif
@@ -1127,12 +1139,14 @@ bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_
 
 	std::uniform_int_distribution<int> dist(-search_radius, search_radius);		//현 위치에서 반경 search_radius +-
 
-	px = target_original_pos[0][0][0] + dist(mt);
-	py = target_original_pos[0][0][1] + dist(mt);
+	float rand_dist = (float)dist(mt);
+
+	px = target_original_pos[0][0][0] + rand_dist;
+	py = target_original_pos[0][0][1] + rand_dist;
 	pz = target_original_pos[0][0][2];
 
 	while (px >= 2366.f) {		
-		px =  + dist(mt);
+		//px = ? + rand_dist;
 
 		if (target_original_pos[0][0][0] >= 2366.f) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -1142,7 +1156,7 @@ bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_
 	}
 
 	while (py <= -1200.f) {		
-		py =  + dist(mt);
+		//py = ? + rand_dist;
 
 		if (target_original_pos[0][0][1] <= -1200.f) {	// 미리 footsound decorator(FootSound_Update_Check)에서 예외처리하긴함
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -1189,8 +1203,14 @@ bool Zombie::CanSeePlayerRandomChance()
 	std::uniform_int_distribution<int> random_chance(0, 100);		// 0~100
 	//std::uniform_int_distribution<int> fail_duration(5, 10);		// 5~10
 
+	float the_chance = (float)random_chance(mt);
+
+#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
+	cout << "CanSeePlayerRandomChance: " << the_chance << endl;
+#endif
+
 	if (dist <= 800) {
-		if (random_chance(mt) >= (100 - 50)) {	// 50퍼센트의 확률
+		if (the_chance >= (100 - 50)) {	// 50퍼센트의 확률
 			detectCanSeePlayer_randomChance = true;
 			return true;
 		}
@@ -1201,7 +1221,7 @@ bool Zombie::CanSeePlayerRandomChance()
 		}
 	}
 	else if (dist <= 1000) {
-		if (random_chance(mt) >= (100 - 30)) {	// 30퍼센트의 확률
+		if (the_chance >= (100 - 30)) {	// 30퍼센트의 확률
 			detectCanSeePlayer_randomChance = true;
 			return true;
 		}
@@ -1212,7 +1232,7 @@ bool Zombie::CanSeePlayerRandomChance()
 		}
 	}
 	else if (dist <= 1200) {
-		if (random_chance(mt) >= (100 - 10)) {	// 10퍼센트의 확률
+		if (the_chance >= (100 - 10)) {	// 10퍼센트의 확률
 			detectCanSeePlayer_randomChance = true;
 			return true;
 		}
@@ -1232,7 +1252,7 @@ bool Zombie::HasFootSoundRandomChance()
 
 	float dist = SearchClosestPlayer(closest_player_pos, 2);
 
-	if (dist <= 300) {	// 바로 탐지 (100확률로)
+	if (dist <= 300) {	// 바로 탐지 (100% 확률로)
 		detectHasFootSound_randomChance = true;
 		return true;
 	}
@@ -1243,8 +1263,14 @@ bool Zombie::HasFootSoundRandomChance()
 	std::uniform_int_distribution<int> random_chance(0, 100);		// 0~100
 	//std::uniform_int_distribution<int> fail_duration(5, 10);		// 5~10
 
+	float the_chance = (float)random_chance(mt);
+
+#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
+	cout << "FootSoundRandomChance: " << the_chance << endl;
+#endif
+
 	if (dist <= 500) {
-		if (random_chance(mt) >= (100 - 50)) {	// 50퍼센트의 확률
+		if (the_chance >= (100 - 50)) {	// 50퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
 		}
@@ -1255,7 +1281,7 @@ bool Zombie::HasFootSoundRandomChance()
 		}
 	}
 	else if (dist <= 800) {
-		if (random_chance(mt) >= (100 - 30)) {	// 30퍼센트의 확률
+		if (the_chance >= (100 - 30)) {	// 30퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
 		}

@@ -227,7 +227,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     case 2: {
         // 예전에 클라에서 좀비 움직이면 해당 패킷을 서버로 보냈음 -> 이제는 움직임을 서버에서 담당하니 사실상 사용 안 함
 
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] zombie Packet Received !!\n", id);
+#endif
         Protocol::Zombie Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
@@ -266,7 +268,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 4:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] character attack Packet Received !!\n", id);
+#endif
         Protocol::Character_Attack Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
@@ -287,7 +291,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 5:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] Equip Packet Received !!\n", id);
+#endif
         Protocol::Equip_Item Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
@@ -331,7 +337,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 7:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] Jump Packet Received !!\n", id);
+#endif
         Protocol::jump Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
@@ -352,7 +360,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 9:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] Detected Packet Received !!\n", id);
+#endif
         Protocol::Detected Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
 
@@ -369,9 +379,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     z->KnewPlayerLocation = true;
                     float dist = z->SetDistance(Packet.playerid(), 1);   // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 데이터 새로 추가하기 (생성)
 
-//#ifdef ENABLE_BT_LOG
+#if defined(ENABLE_PACKET_LOG) && defined(ENABLE_BT_NODE_LOG)
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!! - 거리: " << dist << endl;
-//#endif
+#endif
 
                     // 샤우팅 좀비일 경우에
                     if (z->ZombieData.zombietype == 1) {
@@ -393,9 +403,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     //z->PlayerInSight = false;
                     z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     // -1 => 이제 탐지 거리를 벗어남 표시
 
-//#ifdef ENABLE_BT_LOG
+#if defined(ENABLE_PACKET_LOG) && defined(ENABLE_BT_NODE_LOG)
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!" << endl;
-//#endif
+#endif
 
                     break;
                 }
@@ -425,8 +435,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     {
         Protocol::Zombie_hp Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
+#ifdef ENABLE_PACKET_LOG
         cout << "recv zombie #" << Packet.zombieid() << " HP Packet" << endl;
-
+#endif
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
@@ -452,17 +463,21 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
                     z->waitAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
 
+#ifdef ENABLE_BT_LOG
                     //cout << "================================================================================================================================================================================" << endl;
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
                     cout << endl;
                     //cout << "================================================================================================================================================================================" << endl;
+#endif
                 }
 
                 if (z->zombieHP <= 0) {
                     playerDB[roomId][id].killcount++;
 
+#ifdef ENABLE_BT_LOG
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
                     cout << endl;
+#endif
                 }
             }
         }
@@ -481,7 +496,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 17:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] Destroy Item Packet Received !!\n", id);
+#endif
         Protocol::destroy_item Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
@@ -502,14 +519,18 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 18:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] get key item !!\n", id);
+#endif
         Protocol::get_key Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
 
         int itemboxid = Packet.itemboxid();
         int playerid = Packet.playerid();
 
+#ifdef ENABLE_PACKET_LOG
         printf("%d item\n", Packet.itemid());
+#endif
 
         string serializedData;
         Packet.SerializeToString(&serializedData);
@@ -548,7 +569,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 19:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] escape root open !!\n", id);
+#endif
         Protocol::escape Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;
@@ -586,7 +609,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 21:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] recv send complete packet !!\n", id);
+#endif
         Protocol::send_complete Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
 
@@ -605,8 +630,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 22:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] recv item drop packet !!\n", id);
-
+#endif
         Protocol::drop_item Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
 
@@ -629,8 +655,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 23:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] recv item detach packet !!\n", id);
-
+#endif
         Protocol::detach_item Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
 
@@ -652,8 +679,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 24:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] slice vector packet !!\n", id);
-
+#endif
         Protocol::slice_vector Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
 
@@ -670,8 +698,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 z->zombieHP = 0;
                 playerDB[roomId][id].killcount++;
 
+#ifdef ENABLE_PACKET_LOG
                 cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
                 cout << endl;
+#endif
             }
         }
 
@@ -688,8 +718,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
     case 26:
     {
+#ifdef ENABLE_PACKET_LOG
         printf("\n[ No. %3u ] recv chatting packet !!\n", id);
-
+#endif
         Protocol::chatting Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
         string serializedData;

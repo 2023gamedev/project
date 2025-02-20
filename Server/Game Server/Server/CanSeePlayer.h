@@ -16,13 +16,13 @@ public:
         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시야에 플레이어가 있는가?: " << boolalpha << d_result << endl;
 #endif
 
+        if (d_result == true) {
 #ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
-        vector<vector<vector<float>>> closest_player_pos = {};
-        float dist = zom.SearchClosestPlayer(closest_player_pos, 1);
-        cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 와 가장 가까운 플레이어 사이의 거리: " << dist << endl;
+            vector<vector<vector<float>>> closest_player_pos = {};
+            float dist = zom.SearchClosestPlayer(closest_player_pos, 1);
+            cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 와 가장 가까운 플레이어 사이의 거리: " << dist << endl;
 #endif
 
-        if (d_result == true) {
             if (zom.detectCanSeePlayer_randomChance == false) {
 
                 auto delayAfterTime = std::chrono::high_resolution_clock::now();
@@ -30,7 +30,7 @@ public:
 
                 if (deltaTime.count() >= zom.detectCanSeePlayerFail_delayTime) {
 
-                    d_result = zom.CanSeePlayerRandomChance();
+                    d_result = zom.CanSeePlayerRandomChance();  // 포착 랜덤확률 부여
                     if (d_result == false) {
 #ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
                         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' Detect-CanSeePlayer(플레이어 포착) RandomChance 실패!!!!!!!" << endl;

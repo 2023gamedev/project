@@ -18,8 +18,8 @@ public:
         }
 
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "좀비 샤우팅 소리 정보를 가지고 있는가?: " << boolalpha << result << endl;
-        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (HasShouting Decorator) 결과: \"" << boolalpha << result << "\"" << endl;
+        cout << "좀비 샤우팅 소리 정보를 가지고 있는가?: " << boolalpha << d_result << endl;
+        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (HasShouting Decorator) 결과: \"" << boolalpha << d_result << "\"" << endl;
         cout << endl;
 #endif
 

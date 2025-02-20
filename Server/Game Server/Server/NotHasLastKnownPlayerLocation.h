@@ -14,7 +14,7 @@ public:
         d_result = !zom.KnewPlayerLocation;
 
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "좀비 플레이어의 이전 위치 정보를 가지고 있는가?: " << boolalpha << !result << endl;
+        cout << "좀비 플레이어의 이전 위치 정보를 가지고 있는가?: " << boolalpha << !d_result << endl;
 #endif
 
         //if (!d_result) {
@@ -24,7 +24,7 @@ public:
         //}
 
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (NotHasLastKnownPlayerLocation Decorator) 결과: \"" << boolalpha << result << "\"" << endl;
+        cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (NotHasLastKnownPlayerLocation Decorator) 결과: \"" << boolalpha << d_result << "\"" << endl;
         cout << endl;
 #endif
 

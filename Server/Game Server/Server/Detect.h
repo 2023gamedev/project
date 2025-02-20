@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Selector.h"
 
@@ -8,25 +8,30 @@ public:
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG
-        cout << "Selector <Detect> È£Ãâ" << endl;
+#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
+        cout << endl;
+#endif
+        cout << "=== Selector <Detect> í˜¸ì¶œ" << endl;
         cout << endl;
 #endif
 
         d_result = false;
         for (const auto& child : sel_children) {
-            bool task_result = child->Detect(zom);  // ´ÙÇü¼º ÀÌ¿ë (ÇÔ¼ö ¿À¹ö¶óÀÌµù)
+            bool task_result = child->Detect(zom);  // ë‹¤í˜•ì„± ì´ìš© (í•¨ìˆ˜ ì˜¤ë²„ë¼ì´ë”©)
+
+            d_results[child->t_name] = task_result; // Selectorì˜ ë°ì½”ë ˆì´í„° ê²°ê´´ê°’ë“¤ ì €ì¥ [ë°ì½”ë ˆì´í„° ì´ë¦„-ê²°ê³¼ê°’]
 
             if (d_result == false)
                 d_result = task_result;
 
             if (d_result == true)
-                break;  // SetTargetLocationÀÌ ¹®Á¦¶ó º´·Ä·Î µ¹¸®¸é ÇöÀç·Î½á´Â ¾È µÊ...;; (TargetLocation ÀÚ²Ù µ¤¾î¾º¿ì±âÇÔ)
+                break;  // SetTargetLocationì´ ë¬¸ì œë¼ ë³‘ë ¬ë¡œ ëŒë¦¬ë©´ í˜„ì¬ë¡œì¨ëŠ” ì•ˆ ë¨...;; (TargetLocation ìê¾¸ ë®ì–´ì”Œìš°ê¸°í•¨)
         }
 
-        if (d_result == false) {  // selectorÀÇ ¸ğµç decorator°¡ ½ÇÆĞ ÇÒ °æ¿ì(±×·² ÀÏÀº ¾ø¾î¾ß ÇÏÁö¸¸..)
+        if (d_result == false) {  // selectorì˜ ëª¨ë“  decoratorê°€ ì‹¤íŒ¨ í•  ê²½ìš°(ê·¸ëŸ´ ì¼ì€ ì—†ì–´ì•¼ í•˜ì§€ë§Œ..)
             //cout << "\"Selector Detect [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
             //cout << endl;
-            // ********************************************************* ¿©±â ³ªÁß¿¡ ÁÖ¼® Ç®±â (Á»ºñ BT ¼öÁ¤ ´Ù ÇÏ°í) ******************************************************************
+            // ********************************************************* ì—¬ê¸° ë‚˜ì¤‘ì— ì£¼ì„ í’€ê¸° (ì¢€ë¹„ BT ìˆ˜ì • ë‹¤ í•˜ê³ ) ******************************************************************
         }
 
         return d_result;

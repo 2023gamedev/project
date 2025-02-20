@@ -49,7 +49,7 @@ public:
 
         if (d_result) {
 #ifdef ENABLE_BT_NODE_LOG
-            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << result << endl;
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << d_result << endl;
             cout << endl;
 #endif
         }
@@ -65,7 +65,7 @@ public:
             }
 
 #ifdef ENABLE_BT_NODE_LOG
-            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << result << endl;
+            cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanNotAttack Decorator) 결과: " << boolalpha << d_result << endl;
             cout << endl;
 #endif
         }

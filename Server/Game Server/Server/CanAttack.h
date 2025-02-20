@@ -59,7 +59,7 @@ public:
         }
 
 #ifdef ENABLE_BT_NODE_LOG
-        if (result) {
+        if (d_result) {
             cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <CanSeePlayer>의 (CanAttack Decorator) 결과: \"true\"" << endl;
         }
         else {

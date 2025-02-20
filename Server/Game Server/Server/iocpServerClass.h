@@ -34,14 +34,17 @@ class T_Attack;
 class T_MoveTo;
 
 
-#define ENABLE_BT_LOG	// 전처리기 디렉티브 활성화 (좀비 BT 관련 로그 cout 찍기 플래그) ==> "로그가 많아 끊김 현상이 심하니 필요할 때만 키도록;;"
+#define ENABLE_BT_LOG	// 전처리기 디렉티브 (좀비 BT 관련 로그 cout 찍기 플래그) ==> "로그가 많아 끊김 현상이 심하니 필요할 때만 키도록;;"
 #undef ENABLE_BT_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
-#define ENABLE_BT_NODE_LOG	// 전처리기 디렉티브 활성화 (좀비 BT Node 관련 로그 cout 찍기 플래그)
-#undef ENABLE_BT_NODE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
+#define ENABLE_BT_NODE_LOG	// 전처리기 디렉티브 (좀비 BT Node 관련 로그 cout 찍기 플래그)
+//#undef ENABLE_BT_NODE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
-#define ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 전처리기 디렉티브 활성화 (좀비 BT Detect RandomChance 관련 로그 cout 찍기 플래그)
-#undef ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
+#define ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 전처리기 디렉티브 (좀비 BT Detect RandomChance 관련 로그 cout 찍기 플래그)
+//#undef ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
+
+#define ENABLE_PACKET_LOG		// 전처리기 디렉티브 활성화 (패킷 송수신 관련 로그 찍기 플래그)
+#undef ENABLE_PACKET_LOG		// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 
 using OVLP_EX = struct Overlap_ex {

@@ -72,7 +72,7 @@ public:
 
 
     vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
-    vector<tuple<float, float, float>> beforepath;  //PathFinder로부터 받은 이전 경로 저장
+    vector<tuple<float, float, float>> beforepath;  //PathFinder로부터 받은 이전 경로 저장 (비교용)
 
 
     const float CanAttackDistance = 150.f;          // 공격 사정거리 150.f
@@ -157,8 +157,8 @@ public:
     std::chrono::steady_clock::time_point waitAnimStartTime;            // 좀비 대기 시작 시간 (애니메이션을 맞춰 대기하기 위한 용도)
     std::chrono::steady_clock::time_point waitBrainlessStartTime;      // 좀비 대기 시작 시간 (숨고르기를 맞춰 대기하기 위한 용도)
 
-    bool detectCanSeePlayer_randomChance = false;
-    bool detectHasFootSound_randomChance = false;
+    bool detectCanSeePlayer_randomChance = false;   // 포착 한번 성공하면 계속 포착하도록 도와주는 플래그 (다시 포착 성공 확률 안 돌아가도록)  
+    bool detectHasFootSound_randomChance = false;   // 포착 한번 성공하면 계속 포착하도록 도와주는 플래그 (다시 포착 성공 확률 안 돌아가도록) 
 
     std::chrono::steady_clock::time_point detectCanSeePlayerFail_StartTime;     // 좀비 탐지 확률 fail시에 지속해서 계속 fail 시켜주기 위한 용도 => 플레이어 시야에 포착
     std::chrono::steady_clock::time_point detectHasFootSoundFail_StartTime;     // => 플레이어 발소리

@@ -16,7 +16,7 @@ public:
 
 
     void AddChild(Task* child) {
-        seq_children.emplace_back(move(child));
+        seq_children.emplace_back(std::move(child));
     }
 
 };

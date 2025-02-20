@@ -521,12 +521,12 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 	//======== 트리 작성 (작업 할당) ========//
 
 	//<Selector-Detect> 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].sel_canseeplayer);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].sel_canseeplayer);
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
 	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound); 
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hordeaction);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasinvestigated);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hordeaction);
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasinvestigated);
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
 
 	//<Selector-CanSeePlayer> 할당 -> 필요 자식노드들 '순서대로' 삽입
 	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
@@ -592,6 +592,7 @@ void IOCP_CORE::ServerOn()
 
 	cout << std::setfill(' ') << std::showpoint << std::fixed << std::setprecision(2);		// 출력 칸 맞추기 (소수점 2자리까지)
 
+
 #ifdef	ENABLE_BT_LOG
 	cout << "<< 좀비 BT 관련 로그 출력 ON >>" << endl;
 #endif
@@ -603,6 +604,11 @@ void IOCP_CORE::ServerOn()
 #ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
 	cout << "<< 좀비 BT Detect RandomChance 관련 로그 출력 ON >>" << endl;
 #endif
+
+#ifdef ENABLE_PACKET_LOG
+	cout << "<< Packet 송수신 관련 로그 출력 ON >>" << endl;
+#endif
+
 
 	//for (const auto player : playerDB) {
 	//	float p_x = player.second.x;
@@ -724,9 +730,10 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					cout << "방-" << roomid << " 좀비 BT 종료..." << endl;
 					cout << endl;
 
-					//std::cout << "Press Enter to exit...";
-					//std::cin.get(); // 사용자가 Enter를 입력할 때까지 대기 (콘솔 애플리케이션이 실행 후 바로 종료되면서 콘솔 창이 닫히는거 방지) 
+					std::cout << "Press Enter to exit...";
+					std::cin.get(); // 사용자가 Enter를 입력할 때까지 대기 (콘솔 애플리케이션이 실행 후 바로 종료되면서 콘솔 창이 닫히는거 방지) 
 					//-> 이제 필요 없음 (로비서버처럼 모든 플레이어가 접속을 끊어도 계속 돌아감)
+					//-> 근데 갑자기 바로 꺼질때 도 있음;;;
 
 					result = "NO PLAYER";
 					break;			// 완전히 BT 쓰레드 종료시킴
