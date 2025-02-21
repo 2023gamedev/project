@@ -75,13 +75,13 @@ public:
     vector<tuple<float, float, float>> beforepath;  //PathFinder로부터 받은 이전 경로 저장 (비교용)
 
 
-    const float CanAttackDistance = 150.f;          // 공격 사정거리 150cm
+    const float CanAttackDistance = 150.f;          // 공격 사정거리 150cm (언리얼 단위로는 => 150UU)
 
-    const float  CanSeePlayerDistance = 1200.0f; // 최대 시야거리 1200cm
+    const float  CanSeePlayerDistance = 2500.0f;    // 최대 시야거리 2500cm
 
     const float CanHearDistance = 1000.f;            // 발소리 포착 최대 가능거리 1000cm
 
-    const float CanHearShoutDistance = 2500.f;      // 샤우팅 소리 포착 가능 거리 2500cm
+    const float CanHearShoutDistance = 3000.f;      // 샤우팅 소리 포착 가능 거리 3000cm
 
     const float CanHearHordeSoundDistance = 600.0f;         // 호드 사운드 포착 가능 거리 600cm
 

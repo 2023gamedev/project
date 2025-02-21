@@ -521,9 +521,9 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 	//======== 트리 작성 (작업 할당) ========//
 
 	//<Selector-Detect> 할당 -> 필요 자식노드들 '순서대로' 삽입
-	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].sel_canseeplayer);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].sel_canseeplayer);
 	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound); 
+	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound); 
 	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hordeaction);
 	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasinvestigated);
 	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);

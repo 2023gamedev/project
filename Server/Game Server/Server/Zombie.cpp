@@ -1151,14 +1151,14 @@ bool Zombie::CanSeePlayerRandomChance()
 	std::uniform_int_distribution<int> random_chance(0, 100);		// 0~100
 	//std::uniform_int_distribution<int> fail_duration(5, 10);		// 5~10
 
-	float the_chance = (float)random_chance(mt);
+	float the_chance = (float)random_chance(mt);	// random_chance(mt)는 부르는 매 순간 바뀌어서 이렇게 변수에 미리 넣고 사용
 
 #ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
 	cout << "CanSeePlayerRandomChance: " << the_chance << endl;
 #endif
 
 	if (dist <= 800) {
-		if (the_chance >= (100 - 50)) {	// 50퍼센트의 확률
+		if (the_chance >= (100 - 80)) {	// 80퍼센트의 확률
 			detectCanSeePlayer_randomChance = true;
 			return true;
 		}
@@ -1169,13 +1169,24 @@ bool Zombie::CanSeePlayerRandomChance()
 		}
 	}
 	else if (dist <= 1000) {
-		if (the_chance >= (100 - 30)) {	// 30퍼센트의 확률
+		if (the_chance >= (100 - 50)) {	// 50퍼센트의 확률
 			detectCanSeePlayer_randomChance = true;
 			return true;
 		}
 		else {
 			detectCanSeePlayer_randomChance = false;
 			detectCanSeePlayerFail_delayTime = 2.0;
+			return false;
+		}
+	}
+	else if (dist <= 2000) {
+		if (the_chance >= (100 - 30)) {	// 30퍼센트의 확률
+			detectCanSeePlayer_randomChance = true;
+			return true;
+		}
+		else {
+			detectCanSeePlayer_randomChance = false;
+			detectCanSeePlayerFail_delayTime = 3.0;
 			return false;
 		}
 	}
@@ -1186,7 +1197,7 @@ bool Zombie::CanSeePlayerRandomChance()
 		}
 		else {
 			detectCanSeePlayer_randomChance = false;
-			detectCanSeePlayerFail_delayTime = 3.0;
+			detectCanSeePlayerFail_delayTime = 4.0;
 			return false;
 		}
 	}
@@ -1206,7 +1217,7 @@ bool Zombie::HasFootSoundRandomChance()
 	std::uniform_int_distribution<int> random_chance(0, 100);		// 0~100
 	//std::uniform_int_distribution<int> fail_duration(5, 10);		// 5~10
 
-	float the_chance = (float)random_chance(mt);
+	float the_chance = (float)random_chance(mt);		// random_chance(mt)는 부르는 매 순간 바뀌어서 이렇게 변수에 미리 넣고 사용
 
 #ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
 	cout << "FootSoundRandomChance: " << the_chance << endl;

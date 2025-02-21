@@ -297,8 +297,6 @@ void AZombieAIController::Tick(float DeltaTime)
 	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
 	FVector ZombieLocation = OwnerZombie->GetActorLocation(); // 좀비의 위치
 
-	float MaxSightRange = 1200.f; // 최대 시야 범위
-
 	// 좀비 시야각 (전방 120도)
 	float FieldOfView = FMath::Cos(FMath::DegreesToRadians(120.0f / 2.0f));
 
@@ -323,7 +321,7 @@ void AZombieAIController::Tick(float DeltaTime)
 		float Distance = FVector::Dist(PlayerLocation, ZombieLocation);
 		bool InZombieSight = FieldOfView <= DotProduct ? true : false;
 
-		if (PlayerPawn && Distance <= MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
+		if (PlayerPawn && Distance <= OwnerZombie->MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
 		{
 			NearestPawn = PlayerPawn;
 

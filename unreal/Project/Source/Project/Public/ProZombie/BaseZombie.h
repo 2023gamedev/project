@@ -263,6 +263,8 @@ public:
 	FVector sync_cutNormal;
 	FVector sync_cutImpulse;
 
+	const float MaxSightRange = 2500.f;	 // 최대 시야 범위
+
 private:
 
 	UPROPERTY(EditAnywhere)

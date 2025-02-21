@@ -41,13 +41,13 @@ class T_MoveTo;
 //#undef ENABLE_BT_NODE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 #define ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 전처리기 디렉티브 (좀비 BT Detect RandomChance 관련 로그 cout 찍기 플래그)
-#undef ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
+//#undef ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 #define ENABLE_PACKET_LOG		// 전처리기 디렉티브 활성화 (패킷 송수신 관련 로그 찍기 플래그)
 #undef ENABLE_PACKET_LOG		// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 #define ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG	// 전처리기 디렉티브 활성화 (발소리 탐지 랜덤 위치 관련 로그 찍기 플래그)
-//#undef ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
+#undef ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 
 using OVLP_EX = struct Overlap_ex {
