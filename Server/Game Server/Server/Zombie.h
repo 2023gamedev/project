@@ -75,15 +75,15 @@ public:
     vector<tuple<float, float, float>> beforepath;  //PathFinder로부터 받은 이전 경로 저장 (비교용)
 
 
-    const float CanAttackDistance = 150.f;          // 공격 사정거리 150.f
+    const float CanAttackDistance = 150.f;          // 공격 사정거리 150cm
 
-    // const float  CanSeePlayerDistance = 1200.0f; // 최대 시야거리 1200.0f
+    const float  CanSeePlayerDistance = 1200.0f; // 최대 시야거리 1200cm
 
-    const float CanHearDistance = 800.f;            // 발소리 포착 가능거리 800.f
+    const float CanHearDistance = 1000.f;            // 발소리 포착 최대 가능거리 1000cm
 
-    const float CanHearShoutDistance = 2500.f;      // 샤우팅 소리 포착 가능 거리 2500.f
+    const float CanHearShoutDistance = 2500.f;      // 샤우팅 소리 포착 가능 거리 2500cm
 
-    const float CanHearHordeSoundDistance = 400.0f;         // 호드 사운드 포착 가능 거리 400.f
+    const float CanHearHordeSoundDistance = 600.0f;         // 호드 사운드 포착 가능 거리 600cm
 
     const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
 

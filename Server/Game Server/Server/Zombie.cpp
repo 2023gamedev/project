@@ -257,7 +257,7 @@ bool Zombie::RandomPatrol()
 
 	vector<tuple<float, float, float>> dest_test;
 
-	// 랜덤 패트롤 지점이 갈 수 있는 지 검사
+	// 랜덤 패트롤 지점이 갈 수 있는 곳 인지 검사
 	if (CheckPath(dest_test, px, py, pz) == false) {
 //#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 지정 실패! (CheckPath 실패) 다시 검색!!!" << endl;
@@ -321,27 +321,10 @@ void Zombie::SetTargetLocation(TARGET t)
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '발소리'" << endl;
 #endif
-		//SearchClosestPlayer(closest_player_pos, 2);
-		//if (closest_player_pos.size() != 0) {
-		//	TargetLocation = closest_player_pos;
-		//	UpdatePath();
-		//}
-		// 예전 방식
-
 		SearchClosestPlayer(closest_player_pos, 2);
 		if (closest_player_pos.size() != 0) {
 			SetRandomTargetLocation(closest_player_pos);	// 발소리 거리에 따른 탐지 랜덤위치 설정 (탐지 실수)
 		}
-
-//#ifdef	ENABLE_BT_LOG
-		//else {
-		//	cout << "좀비 #" << ZombieData.zombieID << " - ";
-		//	cout << "[Error] 좀비 따라갈 발소리를 찾지못함! (closest_player_pos.size() == 0)" << endl;
-		//}
-		// 이제 zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND); 을 불러오는 타이밍이 달라져서 closest_player_pos.size() == 0 일때 발생함 
-		// -> FootSound_Update_Check() 에서 더이상 뛰고 있지 않는 플레이어는 -1을 해줘서 (근데 그래도 이전에 발소리를 들은게 있으니 여기는 계속 불림) 
-		// 그러니까 무시해도됨 이제 ㅇㅇ
-//#endif
 		break;
 
 	case TARGET::HORDESOUND:
@@ -1051,19 +1034,19 @@ void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>> target_origin
 	// 랜덤 탐색 범위 설정 (좀비와 발소리간의 거리에 따라, 멀면 멀수록 랜덤 탐색 범위도 커짐)
 	float radius = 0.f;
 
-	if (distance > CanHearDistance) {	// ~800
+	if (distance > CanHearDistance) {	// ~1000
 		cout << "[Error]  좀비 #" << ZombieData.zombieID << " 's distance to FootSound is out of range already. (SetRandomTargetLocation -> over CanHearDistance)" << endl;
 		// 사실 뜨면 안되는 에러로그
 		return;
 	}
-	else if (distance >= CanHearDistance - 300.f) { //800 ~ 500
-		radius = 500.f;
+	else if (distance >= 800.f) { //1000 ~ 800
+		radius = 600.f;
 	}
-	else if (distance >= CanHearDistance - 500.f) {	//500 ~ 300
+	else if (distance >= 500.f) {	//800 ~ 500
 		radius = 300.f;
 	}
-	else if (distance >= CanHearDistance - 800.f) {	//300 ~ 0
-		radius = 0.f;
+	else if (distance >= 0.f) {	//500 ~ 0
+		radius = 0.f;	// 사실 여기 들어가면 SearchRandomWalkableLocation 안 하는 게 좋음... (최적화)
 	}
 	else {	//0~
 		cout << "[Error]  좀비 #" << ZombieData.zombieID << " 's distance to FootSound is out of range already. (SetRandomTargetLocation -> under Zero)" << endl;
@@ -1126,7 +1109,7 @@ bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>> target_o
 
 	vector<tuple<float, float, float>> dest_test;
 
-	// 랜덤한 지점이 갈 수 있는 지 검사
+	// 랜덤한 지점이 갈 수 있는 곳 인지 검사
 	if (CheckPath(dest_test, rx, ry, rz) == false) {
 //#ifdef	ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " SearchRandomWalkableLocation 찾기 실패! (CheckPath 실패) 다시 검색!!!" << endl;
@@ -1196,7 +1179,7 @@ bool Zombie::CanSeePlayerRandomChance()
 			return false;
 		}
 	}
-	else if (dist <= 1200) {
+	else if (dist <= CanSeePlayerDistance) {
 		if (the_chance >= (100 - 10)) {	// 10퍼센트의 확률
 			detectCanSeePlayer_randomChance = true;
 			return true;
@@ -1217,11 +1200,6 @@ bool Zombie::HasFootSoundRandomChance()
 
 	float dist = SearchClosestPlayer(closest_player_pos, 2);
 
-	if (dist <= 300) {	// 바로 탐지 (100% 확률로)
-		detectHasFootSound_randomChance = true;
-		return true;
-	}
-
 	std::random_device rd;
 	std::mt19937 mt(rd());
 
@@ -1234,7 +1212,18 @@ bool Zombie::HasFootSoundRandomChance()
 	cout << "FootSoundRandomChance: " << the_chance << endl;
 #endif
 
-	if (dist <= 500) {
+	if (dist <= 500) {	
+		if (the_chance >= (100 - 100/*70*/)) {	// 70퍼센트의 확률
+			detectHasFootSound_randomChance = true;
+			return true;
+		}
+		else {
+			detectHasFootSound_randomChance = false;
+			detectHasFootSoundFail_delayTime = 1.0;
+			return false;
+		}
+	}
+	else if (dist <= 800) {
 		if (the_chance >= (100 - 100/*50*/)) {	// 50퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
@@ -1245,7 +1234,7 @@ bool Zombie::HasFootSoundRandomChance()
 			return false;
 		}
 	}
-	else if (dist <= 800) {
+	else if (dist <= CanHearDistance) {
 		if (the_chance >= (100 - 100/*30*/)) {	// 30퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
