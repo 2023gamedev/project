@@ -1046,7 +1046,7 @@ void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>> target_origin
 		radius = 300.f;
 	}
 	else if (distance >= 0.f) {	//500 ~ 0
-		radius = 0.f;	// 사실 여기 들어가면 SearchRandomWalkableLocation 안 하는 게 좋음... (최적화)
+		radius = 0.f;	// 사실 여기 들어가면 SearchRandomWalkableLocation 안 하는 게 좋음... -> path 체크를 하기 떄문에 시간 걸림;; (최적화)
 	}
 	else {	//0~
 		cout << "[Error]  좀비 #" << ZombieData.zombieID << " 's distance to FootSound is out of range already. (SetRandomTargetLocation -> under Zero)" << endl;
@@ -1213,7 +1213,7 @@ bool Zombie::HasFootSoundRandomChance()
 #endif
 
 	if (dist <= 500) {	
-		if (the_chance >= (100 - 100/*70*/)) {	// 70퍼센트의 확률
+		if (the_chance >= (100 - 70)) {	// 70퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
 		}
@@ -1224,7 +1224,7 @@ bool Zombie::HasFootSoundRandomChance()
 		}
 	}
 	else if (dist <= 800) {
-		if (the_chance >= (100 - 100/*50*/)) {	// 50퍼센트의 확률
+		if (the_chance >= (100 - 50)) {	// 50퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
 		}
@@ -1235,7 +1235,7 @@ bool Zombie::HasFootSoundRandomChance()
 		}
 	}
 	else if (dist <= CanHearDistance) {
-		if (the_chance >= (100 - 100/*30*/)) {	// 30퍼센트의 확률
+		if (the_chance >= (100 - 30)) {	// 30퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
 		}

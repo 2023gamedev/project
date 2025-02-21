@@ -209,7 +209,7 @@ public:
     void ReachFinalDestination();
 
     void UpdatePath();
-    // 얜 패트롤용 - 함수 오버로딩
+    // 얜 랜덤 패트롤, 랜덤 발소리 위치용 - 함수 오버로딩
     void UpdatePath(vector<tuple<float, float, float>> newPatrol_path);
 
     bool CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
