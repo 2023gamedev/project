@@ -231,14 +231,12 @@ bool Zombie::RandomPatrol()
 
 	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 1500 +-
 
-	float the_dist = (float)dist(mt);
-
-	px = ZombieData.x + the_dist;
-	py = ZombieData.y + the_dist;
+	px = ZombieData.x + dist(mt);
+	py = ZombieData.y + dist(mt);
 	pz = ZombieData.z;
 
 	while (px >= 2366.f) {		// 좀비가 계단 쪽, 그리고 그쪽 벽 넘어로 자주 넘어가는 오류가 있어 이를 일단 방지하기 위해 (맵 수정 전까지는)
-		px = ZombieData.x + the_dist;
+		px = ZombieData.x + dist(mt);
 
 		if (ZombieData.x >= 2366.f) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -248,7 +246,7 @@ bool Zombie::RandomPatrol()
 	}
 
 	while (py <= -1200.f) {		// 좀비가 화장실 뒤쪽 너머 빈 공간으로 자주 넘어가서 일단 막음
-		py = ZombieData.y + the_dist;
+		py = ZombieData.y + dist(mt);
 
 		if (ZombieData.x <= -1200.f) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -268,7 +266,9 @@ bool Zombie::RandomPatrol()
 	}
 
 	if (dest_test.size() < 3) {
-		//cout << "좀비 #" << ZombieData.zombieID << " 새로운 패트롤 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
+//#ifdef	ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 새로운 패트롤 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
+//#endif		
 		return false;
 	}
 
@@ -321,11 +321,18 @@ void Zombie::SetTargetLocation(TARGET t)
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '발소리'" << endl;
 #endif
+		//SearchClosestPlayer(closest_player_pos, 2);
+		//if (closest_player_pos.size() != 0) {
+		//	TargetLocation = closest_player_pos;
+		//	UpdatePath();
+		//}
+		// 예전 방식
+
 		SearchClosestPlayer(closest_player_pos, 2);
 		if (closest_player_pos.size() != 0) {
-			TargetLocation = closest_player_pos;
-			UpdatePath();
+			SetRandomTargetLocation(closest_player_pos);	// 발소리 거리에 따른 탐지 랜덤위치 설정 (탐지 실수)
 		}
+
 //#ifdef	ENABLE_BT_LOG
 		//else {
 		//	cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -401,7 +408,7 @@ void Zombie::SetTargetLocation(TARGET t)
 
 				if (try_cnt >= 5) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
 //#ifdef	ENABLE_BT_LOG
-					cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...) => 좀비 해당 한 틱동안 멍때림" << endl;
+					cout << "좀비 #" << ZombieData.zombieID << " 랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...) => 좀비 해당 한 틱동안 멍때림!!" << endl;
 //#endif
 					break;
 				}
@@ -773,6 +780,7 @@ bool Zombie::CheckPath(vector<tuple<float, float, float>>& goalTest_path, float 
 	return true;
 }
 
+// 얜 랜덤 패트롤, 랜덤 발소리 위치용 - 함수 오버로딩
 void Zombie::UpdatePath(vector<tuple<float, float, float>> newPatrol_path)
 {
 	tuple<float, float, float> dest;
@@ -843,26 +851,8 @@ void Zombie::ReachFinalDestination()
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '랜덤 패트롤'" << endl;
 #endif
 
-		// 일정 확률로 좀비 잠시 멍때리기 (숨고르기) 상태 만들기
-		std::random_device rd;
-		std::mt19937 mt(rd());
-
-		std::uniform_int_distribution<int> stand_still_chance(0, 100);		// 0~100
-		std::uniform_int_distribution<int> stand_still_duration(5, 10);		// 5~10
-
-		float the_chance = (float)stand_still_chance(mt);
-		float the_duration = (float)stand_still_duration(mt);
-
-		if (the_chance >= (100 - 40) && IsStandingStill == false) {	// 40퍼센트의 확률
-			//HaveToWait = true;
-			IsStandingStill = true;
-			waitBrainlessStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
-			ZombieStandingStillDuration = the_duration;
-
-#ifdef	ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " 잠시 숨고르기 상태 발동 (" << ZombieStandingStillDuration << "초 동안)" << endl;
-#endif
-		}
+		// 일정 확률로 좀비 잠시 멍때리기/휴식 (숨고르기) 상태 만들기
+		TakeABreak();
 
 		break;
 	}
@@ -872,61 +862,27 @@ void Zombie::ReachFinalDestination()
 #endif
 }
 
-// 이제 더이상 사용 X
-void Zombie::SendPath()
+void Zombie::TakeABreak()
 {
+	std::random_device rd;
+	std::mt19937 mt(rd());
 
-	if (path.empty() || ZombiePathIndex >= path.size() || ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
-		return;
+	std::uniform_int_distribution<int> stand_still_chance(0, 100);		// 0~100
+	std::uniform_int_distribution<int> stand_still_duration(5, 10);		// 5~10
+
+	float the_chance = (float)stand_still_chance(mt);
+	float the_duration = (float)stand_still_duration(mt);
+
+	if (the_chance >= (100 - 40) && IsStandingStill == false) {	// 40퍼센트의 확률
+		//HaveToWait = true;
+		IsStandingStill = true;
+		waitBrainlessStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
+		ZombieStandingStillDuration = the_duration;
+
+#ifdef	ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 잠시 휴식(숨고르기) 상태 발동 (" << ZombieStandingStillDuration << "초 동안)" << endl;
+#endif
 	}
-	else {
-		// path값 전송
-		Protocol::ZombiePath zPath;
-		zPath.set_zombieid(ZombieData.zombieID);
-		zPath.set_packet_type(10);
-
-		Protocol::Vector3* Destination1 = zPath.mutable_path1();
-		Destination1->set_x(get<0>(path[ZombiePathIndex]));
-		Destination1->set_y(get<1>(path[ZombiePathIndex]));
-		Destination1->set_z(get<2>(path[ZombiePathIndex]));
-
-		if ((ZombiePathIndex + 1) < path.size()) {
-			Protocol::Vector3* Destination2 = zPath.mutable_path2();
-			Destination2->set_x(get<0>(path[ZombiePathIndex + 1]));
-			Destination2->set_y(get<1>(path[ZombiePathIndex + 1]));
-			Destination2->set_z(get<2>(path[ZombiePathIndex + 1]));
-		}
-
-
-		Protocol::Vector3* currentLocation = zPath.mutable_location();
-		currentLocation->set_x(ZombieData.x);
-		currentLocation->set_y(ZombieData.y);
-		currentLocation->set_z(ZombieData.z);
-
-		string serializedData;
-		zPath.SerializeToString(&serializedData);
-
-
-		//cout << "좀비 #" << ZombieData.zombieID << " 의 z_floor: " << z_floor << endl;
-		
-		for (const auto& player : playerDB_BT[roomid]) {
-			//cout << "playerDB_BT key: " << player.first << " 의 floor: " << player.second.floor << endl;
-		
-			if (z_floor == player.second.floor) {	// 클라 자기 층에 있는 좀비 정보만 받기 - 최적화 
-				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-		
-				//cout << "(playerDB_BT key:)플레이어 #" << player.first << " SendPath 전송 완료 - 좀비 #" << ZombieData.zombieID << endl;
-			}
-		}
-	}
-
-	//if (targetType == TARGET::PLAYER) {
-	//	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 바로 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
-	//}
-
-	/*cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 타겟 좌표[최종 목표 지점]: ( " << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ", " << TargetLocation[0][0][2] << " )" << endl;
-	cout << endl;*/
-
 }
 
 bool Zombie::PlayerInSight_Update_Check()
@@ -1084,7 +1040,7 @@ bool Zombie::FootSound_Update_Check()
 	return result;
 }
 
-void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>>& target_original_pos)
+void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>> target_original_pos)
 {
 	float dx = target_original_pos[0][0][0] - ZombieData.x;
 	float dy = target_original_pos[0][0][1] - ZombieData.y;
@@ -1097,13 +1053,14 @@ void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>>& target_origi
 
 	if (distance > CanHearDistance) {	// ~800
 		cout << "[Error]  좀비 #" << ZombieData.zombieID << " 's distance to FootSound is out of range already. (SetRandomTargetLocation -> over CanHearDistance)" << endl;
+		// 사실 뜨면 안되는 에러로그
 		return;
 	}
 	else if (distance >= CanHearDistance - 300.f) { //800 ~ 500
-		radius = 100.f;
+		radius = 500.f;
 	}
 	else if (distance >= CanHearDistance - 500.f) {	//500 ~ 300
-		radius = 50.f;
+		radius = 300.f;
 	}
 	else if (distance >= CanHearDistance - 800.f) {	//300 ~ 0
 		radius = 0.f;
@@ -1113,14 +1070,18 @@ void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>>& target_origi
 		return;
 	}
 
+#ifdef	ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG
+	cout << "distance: " << distance << ", radius: " << radius << "@=@=@=@=@=@=" << endl;
+#endif
+
 	// 랜덤 탐색 지점(걸을 수 있는) 검색
 	bool result = false;
 	int try_cnt = 0;
 	while (result == false) {
 		try_cnt++;
 		if (try_cnt >= 5) {
-//#ifdef	ENABLE_BT_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " SetRandomTargetLocation 결국 실패!!! (연속 5번 실패...) => 그냥 해당 지점으로 바로 감" << endl;
+//#ifdef	ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG
+			cout << "좀비 #" << ZombieData.zombieID << " SetRandomTargetLocation 결국 실패!!! (연속 5번 실패...) => 그냥 해당 지점으로 바로 감!!" << endl;
 //#endif
 			break;
 		}
@@ -1130,23 +1091,21 @@ void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>>& target_origi
 
 }
 
-bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_original_pos, int search_radius)
+bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>> target_original_pos, int search_radius)
 {
-	float px, py, pz;
+	float rx, ry, rz;
 
 	std::random_device rd;
 	std::mt19937 mt(rd());
 
 	std::uniform_int_distribution<int> dist(-search_radius, search_radius);		//현 위치에서 반경 search_radius +-
 
-	float rand_dist = (float)dist(mt);
+	rx = target_original_pos[0][0][0] + dist(mt);
+	ry = target_original_pos[0][0][1] + dist(mt);
+	rz = target_original_pos[0][0][2];
 
-	px = target_original_pos[0][0][0] + rand_dist;
-	py = target_original_pos[0][0][1] + rand_dist;
-	pz = target_original_pos[0][0][2];
-
-	while (px >= 2366.f) {		
-		//px = ? + rand_dist;
+	while (rx >= 2366.f) {		
+		rx = target_original_pos[0][0][0] + dist(mt);
 
 		if (target_original_pos[0][0][0] >= 2366.f) {
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -1155,8 +1114,8 @@ bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_
 		}
 	}
 
-	while (py <= -1200.f) {		
-		//py = ? + rand_dist;
+	while (ry <= -1200.f) {		
+		ry = target_original_pos[0][0][1] + dist(mt);
 
 		if (target_original_pos[0][0][1] <= -1200.f) {	// 미리 footsound decorator(FootSound_Update_Check)에서 예외처리하긴함
 			cout << "좀비 #" << ZombieData.zombieID << " - ";
@@ -1168,20 +1127,26 @@ bool Zombie::SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_
 	vector<tuple<float, float, float>> dest_test;
 
 	// 랜덤한 지점이 갈 수 있는 지 검사
-	if (CheckPath(dest_test, px, py, pz) == false) {
-//#ifdef	ENABLE_BT_LOG
+	if (CheckPath(dest_test, rx, ry, rz) == false) {
+//#ifdef	ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " SearchRandomWalkableLocation 찾기 실패! (CheckPath 실패) 다시 검색!!!" << endl;
 //#endif
 		return false;
 	}
 
 	if (dest_test.size() < 3) {
-		//cout << "좀비 #" << ZombieData.zombieID << " SearchRandomWalkableLocation 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
+//#ifdef	ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " SearchRandomWalkableLocation 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
+//#endif
 		return false;
 	}
 
-	target_original_pos[0][0][0] = px;
-	target_original_pos[0][0][1] = py;
+	UpdatePath(dest_test);
+
+#ifdef	ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG
+	cout << "발소리 탐지 랜덤 위치 설정 완료!" << endl;
+	cout << "TargetLocation[FootSound Random Location]: ( " << TargetLocation[0][0][0] << " , " << TargetLocation[0][0][1] << " , " << TargetLocation[0][0][2] << " )" << endl;
+#endif
 	
 	return true;
 }
@@ -1270,7 +1235,7 @@ bool Zombie::HasFootSoundRandomChance()
 #endif
 
 	if (dist <= 500) {
-		if (the_chance >= (100 - 50)) {	// 50퍼센트의 확률
+		if (the_chance >= (100 - 100/*50*/)) {	// 50퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
 		}
@@ -1281,7 +1246,7 @@ bool Zombie::HasFootSoundRandomChance()
 		}
 	}
 	else if (dist <= 800) {
-		if (the_chance >= (100 - 30)) {	// 30퍼센트의 확률
+		if (the_chance >= (100 - 100/*30*/)) {	// 30퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
 		}

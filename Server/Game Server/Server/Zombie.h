@@ -198,8 +198,6 @@ public:
 
     bool FootSound_Update_Check();
 
-    void SendPath();
-
     void Wait();
 
     void MoveTo(float deltasecond);
@@ -211,7 +209,7 @@ public:
     void ReachFinalDestination();
 
     void UpdatePath();
-    // 얜 패트롤용
+    // 얜 패트롤용 - 함수 오버로딩
     void UpdatePath(vector<tuple<float, float, float>> newPatrol_path);
 
     bool CheckPath(vector<tuple<float, float, float>>& goalTest_path, float goalTestX, float goalTestY, float goalTestZ);
@@ -219,9 +217,9 @@ public:
     float SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_pos, int distanceType);
 
     // 발소리 포착시에 거리에 따라 탐지 실수하도록 하는 함수
-    void SetRandomTargetLocation(vector<vector<vector<float>>>& target_original_pos);
+    void SetRandomTargetLocation(vector<vector<vector<float>>> target_original_pos);
 
-    bool SearchRandomWalkableLocation(vector<vector<vector<float>>>& target_original_pos, int search_radius);
+    bool SearchRandomWalkableLocation(vector<vector<vector<float>>> target_original_pos, int search_radius);
 
     float GetHP() const { return zombieHP; }
     void SetHP(float hp) { zombieHP = hp; }
@@ -236,5 +234,7 @@ public:
     bool HasFootSoundRandomChance();
 
     void MakeNoise(vector<Zombie*>& zombies);
+
+    void TakeABreak();
 
 };

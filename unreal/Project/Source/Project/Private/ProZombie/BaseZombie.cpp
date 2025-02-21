@@ -1259,7 +1259,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			TMap<int, FVector> ClusterCenters;
 
 
-			//double ALLStartTime = FPlatformTime::Seconds();
+			double ALLStartTime = FPlatformTime::Seconds();
 			//StartTime = FPlatformTime::Seconds();
 
 			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices);
@@ -1847,8 +1847,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 
-			//double AllEndTime = FPlatformTime::Seconds();
-			//UE_LOG(LogTemp, Warning, TEXT("NSlice took: %f seconds"), AllEndTime - ALLStartTime);
+			double AllEndTime = FPlatformTime::Seconds();
+			UE_LOG(LogTemp, Warning, TEXT("NSlice took: %f seconds"), AllEndTime - ALLStartTime);
 		}
 	}
 }

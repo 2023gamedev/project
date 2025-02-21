@@ -4,10 +4,11 @@
   -cannotattack 
  -hasshout
  -hasfootsound
+ -hordeaction
  -hasinvestigated
  -hasnotthing
 
-
+(단위 cm - Unreal unit(UU))			// ******* 나중에 m단위로 표기하는 걸로 바꾸기
 //좀비 시야거리: 1000 => 1200
 //   발소리 탐지: 500 => 800
 *    ===> 800~500 정확한 위치에서 반경 100 이내 랜덤지점 탐색

@@ -609,6 +609,9 @@ void IOCP_CORE::ServerOn()
 	cout << "<< Packet 송수신 관련 로그 출력 ON >>" << endl;
 #endif
 
+#ifdef 	ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG
+	cout << "<< 발소리 탐지 랜덤 위치 관련 로그 츨력 ON >>" << endl;
+#endif
 
 	//for (const auto player : playerDB) {
 	//	float p_x = player.second.x;
