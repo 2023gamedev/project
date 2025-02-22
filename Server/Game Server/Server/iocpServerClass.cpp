@@ -522,11 +522,11 @@ void IOCP_CORE::Zombie_BT_Initialize(int roomid)
 
 	//<Selector-Detect> 할당 -> 필요 자식노드들 '순서대로' 삽입
 	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].sel_canseeplayer);
-	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
-	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound); 
-	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hordeaction);
-	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasinvestigated);
-	//zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound); 
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hordeaction);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasinvestigated);
+	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
 
 	//<Selector-CanSeePlayer> 할당 -> 필요 자식노드들 '순서대로' 삽입
 	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
@@ -729,11 +729,11 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 				// 접속이 끊긴 것도 검사
 				if (room_players[roomid].size() == 0) {
-					cout << "연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
+					cout << "방-" << roomid << " 에 연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
 					cout << "방-" << roomid << " 좀비 BT 종료..." << endl;
 					cout << endl;
 
-					std::cout << "Press Enter to exit...";
+					std::cout << "Press Enter to proceed...";
 					std::cin.get(); // 사용자가 Enter를 입력할 때까지 대기 (콘솔 애플리케이션이 실행 후 바로 종료되면서 콘솔 창이 닫히는거 방지) 
 					//-> 이제 필요 없음 (로비서버처럼 모든 플레이어가 접속을 끊어도 계속 돌아감)
 					//-> 근데 갑자기 바로 꺼질때 도 있음;;;

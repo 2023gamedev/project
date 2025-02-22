@@ -71,8 +71,8 @@ public:
     //std::mutex zombieMutex;
 
 
-    vector<tuple<float, float, float>> path;        //PathFinder로부터 받을 경로 좌표값들 저장
-    vector<tuple<float, float, float>> beforepath;  //PathFinder로부터 받은 이전 경로 저장 (비교용)
+    vector<tuple<float, float, float>> path;        // PathFinder로부터 받을 경로 좌표값들 저장
+    vector<tuple<float, float, float>> beforepath;  // PathFinder로부터 받은 이전 경로 저장 (비교용)
 
 
     const float CanAttackDistance = 150.f;          // 공격 사정거리 150cm (언리얼 단위로는 => 150UU)

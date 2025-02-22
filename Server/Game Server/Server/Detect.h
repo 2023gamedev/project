@@ -25,7 +25,7 @@ public:
                 d_result = task_result;
 
             if (d_result == true)
-                break;  // SetTargetLocation이 문제라 병렬로 돌리면 현재로써는 안 됨...;; (TargetLocation 자꾸 덮어씌우기함)
+                break;  // SetTargetLocation이 문제라 병렬로 돌리면 현재로써는 안 됨...;; (TargetLocation 자꾸 덮어씌우기함) -> (깊이 우선 탐색 => 너비 우선 탐색) 바꿔야함!
         }
 
         if (d_result == false) {  // selector의 모든 decorator가 실패 할 경우(그럴 일은 없어야 하지만..)
