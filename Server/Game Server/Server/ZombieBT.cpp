@@ -94,18 +94,50 @@ void ZombieBT::MakeZombieBT()
 
 ZombieBT::~ZombieBT()
 {
-	delete(sel_detect);
-	delete(sel_canseeplayer);
+	if (sel_detect) {	// 이미 해제된 메모리 다시 delete하지 않도록 예외처리
+		delete(sel_detect);
+		sel_detect = nullptr;	// nullptr로 초기화 (나중에 new로 다시 사용 가능)
+	}
+	if (sel_canseeplayer) {
+		delete(sel_canseeplayer);
+		sel_canseeplayer = nullptr;
+	}
+	if (seq_hasshouting) {
+		delete(seq_hasshouting);
+		seq_hasshouting = nullptr;
+	}
+	if (seq_hasfootsound) {
+		delete(seq_hasfootsound);
+		seq_hasfootsound = nullptr;
+	}
+	if (seq_hordeaction) {
+		delete(seq_hordeaction);
+		seq_hordeaction = nullptr;
+	}
+	if (seq_hasinvestigated) {
+		delete(seq_hasinvestigated);
+		seq_hasinvestigated = nullptr;
+	}
+	if (seq_nothaslastknownplayerlocation) {
+		delete(seq_nothaslastknownplayerlocation);
+		seq_nothaslastknownplayerlocation = nullptr;
+	}
 
-	delete(seq_hasshouting);
-	delete(seq_hasfootsound);
-	delete(seq_hordeaction);
-	delete(seq_hasinvestigated);
-	delete(seq_nothaslastknownplayerlocation);
+	if (seq_cannotattack) {
+		delete(seq_cannotattack);
+		seq_cannotattack = nullptr;
+	}
+	if (seq_canattack) {
+		delete(seq_canattack);
+		seq_canattack = nullptr;
+	}
 
-	delete(seq_cannotattack);
-	delete(seq_canattack);
-
-	delete(t_attack);
-	delete(t_moveto);
+	if (t_attack) {
+		delete(t_attack);
+		t_attack = nullptr;
+	}
+	if (t_moveto) {
+		delete(t_moveto);
+		t_moveto = nullptr;
+	}
 }

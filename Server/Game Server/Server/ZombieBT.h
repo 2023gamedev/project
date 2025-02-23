@@ -17,17 +17,18 @@ public:
 	void MakeZombieBT();
 
 
-	Selector* sel_detect;
-	Selector* sel_canseeplayer;
+	Selector* sel_detect = nullptr;
+	Selector* sel_canseeplayer = nullptr;
 
-	Sequence* seq_cannotattack;
-	Sequence* seq_canattack;
-	Sequence* seq_hasshouting;
-	Sequence* seq_hasfootsound;
-	Sequence* seq_hordeaction;
-	Sequence* seq_hasinvestigated;
-	Sequence* seq_nothaslastknownplayerlocation;
+	Sequence* seq_cannotattack = nullptr;
+	Sequence* seq_canattack = nullptr;
+	Sequence* seq_hasshouting = nullptr;
+	Sequence* seq_hasfootsound = nullptr;
+	Sequence* seq_hordeaction = nullptr;
+	Sequence* seq_hasinvestigated = nullptr;
+	Sequence* seq_nothaslastknownplayerlocation = nullptr;
 
-	Task* t_moveto;
-	Task* t_attack;
+	Task* t_moveto = nullptr;
+	Task* t_attack = nullptr;
+
 };
