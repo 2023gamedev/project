@@ -65,8 +65,7 @@ public:
 
         bool Prev_CanSeePlayer_result = zom.CanSeePlayer_result;
         if (Prev_CanSeePlayer_result == false && d_result) {    // 플레이어를 처음 발견했거나 플레이어를 놓쳤다가 다시 발견했다면 -> 호드 사운드 재생
-            if (zom.iocpServer != nullptr)
-                zom.MakeNoise(zom.iocpServer->zombieDB_BT[zom.roomid]); // iocpServer 포인터 nullptr 예외처리 꼭 필요! (크래시 생김!)
+            zom.MakeNoise();    // 싱글톤 패턴 활용
         }
 
         zom.CanSeePlayer_result = d_result;

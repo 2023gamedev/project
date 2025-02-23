@@ -12,7 +12,7 @@
 
 #include "ZombiePathfinder.h"
 
-//#include "iocpServerClass.h"
+#include "iocpServerClass.h"
 
 
 using std::vector;
@@ -21,10 +21,11 @@ using std::tuple;
 using std::map;
 
 
+// 전방 선언 (순환 포함 문제를 피하기 위해)
 class Task;
 //class Player;
-class IOCP_CORE;           
-class ZombiePathfinder;     // 전방 선언 (순환 포함 문제를 피하기 위해)
+//class IOCP_CORE;           
+class ZombiePathfinder; 
 
 
 // 통신에서 주로 사용할 데이터 클래스
@@ -64,9 +65,6 @@ public:
         SHOUTING_ZOMBIE
     };
 
-
-    IOCP_CORE* iocpServer = nullptr;
-    bool bIocpServer_initialized = false;
 
     //std::mutex zombieMutex;
 
@@ -176,7 +174,8 @@ public:
 
     bool printLog = true;
 
-    int roomid = 0;
+    int roomid = 0;     // 사실 ZombieData에 roomID라고 따로 이미 가지고 있긴한데(맨첨에 초기화도 이값을 통해서 함) 부를 때마다 ZombieData.roomID하기에 넘 귀찮아서 사용... 
+    // 참고로 생성자에서 초기화해줌 (ZombieData.roomID로)
 
 
     Zombie();
@@ -233,7 +232,7 @@ public:
     bool CanSeePlayerRandomChance();
     bool HasFootSoundRandomChance();
 
-    void MakeNoise(vector<Zombie*>& zombies);
+    void MakeNoise();
 
     void TakeABreak();
 

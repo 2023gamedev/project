@@ -72,7 +72,7 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid, int roomid)
 
 		for (const auto& player : playerDB[roomid]) {
 			if (player.first != playerid) {
-				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+				IOCP_CORE::GetInstance().IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());	// 싱글톤 패턴 활용
 			}
 		}
 		

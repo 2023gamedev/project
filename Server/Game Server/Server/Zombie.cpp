@@ -6,7 +6,7 @@
 
 #include "Zombie.h"
 //#include "ZombiePathfinder.h"
-#include "iocpServerClass.h"		// 전역변수 playerDB_BT 사용하려구
+//#include "iocpServerClass.h"		// 전역변수 playerDB_BT 사용하려구
 
 using std::cout;
 using std::endl;
@@ -179,7 +179,7 @@ float Zombie::SetDistance(int playerid, int distanceType)
 		setMap = &DistanceTo_PlayerInsight;
 	else if (distanceType == 2)
 		setMap = &DistanceTo_FootSound;
-
+	
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB_BT[roomid][playerid].x, playerDB_BT[roomid][playerid].y, playerDB_BT[roomid][playerid].z}} };
 
@@ -556,8 +556,8 @@ void Zombie::Attack(int roomid)
 	string serializedData;
 	attackpacket.SerializeToString(&serializedData);
 
-	for (const auto& player : playerDB[roomid]) {
-		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+	for (const auto& player : playerDB_BT[roomid]) {
+		IOCP_CORE::GetInstance().IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());	// 싱글톤 패턴 활용
 	}
 
 	IsAttacking = true;	// 좀비 공격중으로 변경
@@ -1260,7 +1260,7 @@ bool Zombie::HasFootSoundRandomChance()
 	return false;
 }
 
-void Zombie::MakeNoise(vector<Zombie*>& zombies)
+void Zombie::MakeNoise()
 {
 #ifdef	ENABLE_BT_LOG
 	cout << "좀비 '#" << ZombieData.zombieID << "' 플레이어 발견! 호드 사운드 발생!!!" << endl;
@@ -1269,6 +1269,7 @@ void Zombie::MakeNoise(vector<Zombie*>& zombies)
 
 
 	// 다른 좀비들 플레이어 발견 소리 포착 체크 (호드 사운드 알리기)
+	vector<Zombie*> zombies = IOCP_CORE::GetInstance().zombieDB_BT[roomid];	// 싱글톤 패턴 활용
 
 	for (auto& zom : zombies) {
 		if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// 해당 좀비와 같은 층 좀비만 검사

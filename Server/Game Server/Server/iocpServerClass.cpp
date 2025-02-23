@@ -78,16 +78,6 @@ IOCP_CORE::IOCP_CORE()
 	filePath = "EdgesF2.txt";
 	UpdateEdgesMap(unrealFilePath + filePath, filePath);
 	LoadEdgesMap(filePath, g_valispositionsF2, g_EdgesMapF2);
-	
-	//==========Zombie_BT 초기화
-	//Zombie_BT_Initialize();
-	//==========Zombie_BT 쓰레드 시작 (Zombie BT 실행 시작)
-	//zombie_thread = thread(&IOCP_CORE::Zombie_BT_Thread, this);
-
-	//Nodes = nodeclass->LoadNodesFromFile();
-
-	//======좀비 스폰 & 초기화======
-	//zombieclass = new ZombieController(*this);
 
 	itemclass = new ItemController(*this);
 
@@ -746,13 +736,6 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 				}
 			}
 
-		}
-
-		if (zombieDB[roomid].front()->bIocpServer_initialized == false) {
-			for (auto& zom : zombieDB_BT[roomid]) {
-				zom->iocpServer = this;	// iocp 서버 초기화 (zombie 클래스에 MakeNoise 호출에서 iocp서버 클래스 내부변수 zombieDB 참조 필요해서, 좀 비효율적인 이유는 또 zombie 클래스에서 iocp.cpp의 전역변수 playerDB가 필요함;;) 
-				zom->bIocpServer_initialized = true;
-			}
 		}
 
 		currentTime = std::chrono::high_resolution_clock::now();

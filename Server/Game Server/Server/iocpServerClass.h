@@ -161,10 +161,10 @@ class IOCP_CORE
 {
 public:
 	// 싱글톤 패턴 사용
-	/*static IOCP_CORE& GetInstance() {	
-		static IOCP_CORE instance;
+	static IOCP_CORE& GetInstance() {	
+		static IOCP_CORE instance;	// C++11부터 thread-safe 보장됨
 		return instance;
-	}*/
+	}
 
 	IOCP_CORE();
 	~IOCP_CORE();

@@ -5,10 +5,10 @@
 #include "ShoutingZombie.h"
 
 
-ZombieController::ZombieController(IOCP_CORE* mainServer, int roomid)
+ZombieController::ZombieController(/*IOCP_CORE* mainServer, */int roomid)
 {
     // 서버 설정
-    iocpServer = mainServer;
+    //iocpServer = mainServer;
     zombie_roomid = roomid;
 
     SpawnZombies(2, 0, Vector3(1000.f, 600.f, 1040.275f), Rotator(0.f, 0.f, 0.f), 2, 1200.f);
@@ -112,16 +112,16 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
         new_zombie = new RunningZombie(new_zombie_data);
 
     // zombiedata 벡터에 추가
-    iocpServer->zombieDB[zombie_roomid].emplace_back(new_zombie);
-
-    //cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << iocpServer->zombie.size() << endl;
+    IOCP_CORE::GetInstance().zombieDB[zombie_roomid].emplace_back(new_zombie);  // 싱글톤 패턴 활용
+    
+    cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " << IOCP_CORE::GetInstance().zombieDB[zombie_roomid].size() << endl;
 }
 
 void ZombieController::SendZombieData(int id)
 {
     Protocol::ZombieDataList zombieDataList;
 
-    for (const auto& z : iocpServer->zombieDB[zombie_roomid]) {
+    for (const auto& z : IOCP_CORE::GetInstance().zombieDB[zombie_roomid]) {
         Protocol::Zombie* zombie = zombieDataList.add_zombies();
         zombie->set_zombieid(z->ZombieData.zombieID);
         zombie->set_x(z->ZombieData.x);
@@ -140,7 +140,7 @@ void ZombieController::SendZombieData(int id)
     std::string serializedData;
     zombieDataList.SerializeToString(&serializedData);
 
-    iocpServer->IOCP_SendPacket(id, serializedData.data(), serializedData.size());
+    IOCP_CORE::GetInstance().IOCP_SendPacket(id, serializedData.data(), serializedData.size());
 
     cout << "SendZombieData Player #" << id << " - Serialized data size: " << serializedData.size() << endl;
 }
@@ -165,7 +165,7 @@ void ZombieController::SendZombieUpdate(const Zombie_Data& z)
     // 직렬화된 데이터를 클라이언트로 전송
     for (const auto& player : g_players) {
         if (player.second->isInGame) {
-            iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+            IOCP_CORE::GetInstance().IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
         }
     }
 }
