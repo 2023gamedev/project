@@ -10,8 +10,8 @@ NormalZombie::NormalZombie()
 
 }
 
-NormalZombie::NormalZombie(Zombie_Data z_d)
-	: Zombie(z_d)
+NormalZombie::NormalZombie(IOCP_CORE* mainServer, Zombie_Data z_d)
+	: Zombie(mainServer, z_d)
 {
 	SetHP(NormalZombieStartHP);
 

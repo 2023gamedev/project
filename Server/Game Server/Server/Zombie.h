@@ -24,7 +24,7 @@ using std::map;
 // 전방 선언 (순환 포함 문제를 피하기 위해)
 class Task;
 //class Player;
-//class IOCP_CORE;           
+class IOCP_CORE;           
 class ZombiePathfinder; 
 
 
@@ -66,6 +66,12 @@ public:
     };
 
 
+    Zombie();
+    Zombie(IOCP_CORE* mainServer, Zombie_Data zd);
+    virtual ~Zombie();
+
+
+    IOCP_CORE* iocpServer;
     //std::mutex zombieMutex;
 
 
@@ -176,13 +182,6 @@ public:
 
     int roomid = 0;     // 사실 ZombieData에 roomID라고 따로 이미 가지고 있긴한데(맨첨에 초기화도 이값을 통해서 함) 부를 때마다 ZombieData.roomID하기에 넘 귀찮아서 사용... 
     // 참고로 생성자에서 초기화해줌 (ZombieData.roomID로)
-
-
-    Zombie();
-
-    Zombie(Zombie_Data zd);
-
-    virtual ~Zombie();
 
 
     void DetermineFloor(float startZ);

@@ -11,8 +11,8 @@ ShoutingZombie::ShoutingZombie()
 
 }
 
-ShoutingZombie::ShoutingZombie(Zombie_Data z_d)
-	: Zombie(z_d)
+ShoutingZombie::ShoutingZombie(IOCP_CORE* mainServer, Zombie_Data z_d)
+	: Zombie(mainServer, z_d)
 {
 	SetHP(ShoutingZombieStartHP);
 
@@ -72,7 +72,7 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid, int roomid)
 
 		for (const auto& player : playerDB[roomid]) {
 			if (player.first != playerid) {
-				IOCP_CORE::GetInstance().IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());	// 싱글톤 패턴 활용
+				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 			}
 		}
 		

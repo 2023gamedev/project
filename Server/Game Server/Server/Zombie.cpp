@@ -6,7 +6,6 @@
 
 #include "Zombie.h"
 //#include "ZombiePathfinder.h"
-//#include "iocpServerClass.h"		// 전역변수 playerDB_BT 사용하려구
 
 using std::cout;
 using std::endl;
@@ -15,6 +14,8 @@ using std::endl;
 Zombie::Zombie()
 	: pathfinder(0,0,0,1,1,1)
 {
+	iocpServer = nullptr;
+
 	SetHP(0);
 
 	SetSpeed(0);
@@ -72,9 +73,11 @@ Zombie::Zombie()
 	SetZombieType(ZOMBIE_TYPE::NULL_TYPE);
 }
 
-Zombie::Zombie(Zombie_Data z_d)
+Zombie::Zombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 	: pathfinder(0, 0, 0, 1, 1, 1)
 {
+	iocpServer = mainServer;
+
 	SetHP(0);
 
 	SetSpeed(0);
@@ -557,7 +560,7 @@ void Zombie::Attack(int roomid)
 	attackpacket.SerializeToString(&serializedData);
 
 	for (const auto& player : playerDB_BT[roomid]) {
-		IOCP_CORE::GetInstance().IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());	// 싱글톤 패턴 활용
+		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());	// 싱글톤 패턴 활용
 	}
 
 	IsAttacking = true;	// 좀비 공격중으로 변경
@@ -1269,7 +1272,7 @@ void Zombie::MakeNoise()
 
 
 	// 다른 좀비들 플레이어 발견 소리 포착 체크 (호드 사운드 알리기)
-	vector<Zombie*> zombies = IOCP_CORE::GetInstance().zombieDB_BT[roomid];	// 싱글톤 패턴 활용
+	vector<Zombie*> zombies = iocpServer->zombieDB_BT[roomid];	
 
 	for (auto& zom : zombies) {
 		if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// 해당 좀비와 같은 층 좀비만 검사

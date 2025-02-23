@@ -10,8 +10,8 @@ RunningZombie::RunningZombie()
 	
 }
 
-RunningZombie::RunningZombie(Zombie_Data z_d)
-	: Zombie(z_d)
+RunningZombie::RunningZombie(IOCP_CORE* mainServer, Zombie_Data z_d)
+	: Zombie(mainServer, z_d)
 {
 	SetHP(RunningZombieStartHP);
 	

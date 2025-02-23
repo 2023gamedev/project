@@ -7,8 +7,9 @@
 #include "Zombie.h"
 
 // 전방 선언
-//class IOCP_CORE;	
+class IOCP_CORE;	
 class Zombie_Data;
+
 
 struct Vector3 {
 	float X;
@@ -42,13 +43,14 @@ enum class EZombiePatrol
 	PATROLY,
 };
 
+
 class ZombieController
 {
 public:
-	ZombieController(/*IOCP_CORE* mainServer, */int roomid);
+	ZombieController(IOCP_CORE* mainServer, int roomid);
 	~ZombieController();
 
-	//IOCP_CORE* iocpServer;
+	IOCP_CORE* iocpServer;
 	void SpawnZombies(int zombieID, int zombieType, Vector3 position, Rotator rotation, int patrolType, float patrolRange);
 
 	void SendZombieData(int id);

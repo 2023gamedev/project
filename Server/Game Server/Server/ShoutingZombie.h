@@ -10,7 +10,7 @@ public:
 
 	ShoutingZombie();
 
-	ShoutingZombie(Zombie_Data zd);
+	ShoutingZombie(IOCP_CORE* mainServer, Zombie_Data zd);
 
 	void Shout(vector<Zombie*>& zombies, int playerid, int roomid);
 

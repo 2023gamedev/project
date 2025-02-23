@@ -12,5 +12,5 @@ int main() {
 	_wsetlocale(LC_ALL, L"korean");
 
 	// IOCP ¼­¹ö class
-	IOCP_CORE* iocpServer = &IOCP_CORE::GetInstance();
+	IOCP_CORE iocpServer;
 }
