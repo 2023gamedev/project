@@ -1,12 +1,20 @@
 #pragma once
 
-#include "Selector.h"
-#include "Sequence.h"
+// 전방선언 - 순환 참조 발생해서
+// BT
+class Task;
+class Selector;
+class Sequence;
+
+
 
 class ZombieBT
 {
 public:
-	void Zombie_BT_Initialize(int roomid);
+	ZombieBT();
+	~ZombieBT();
+
+	void MakeZombieBT();
 
 
 	Selector* sel_detect;
@@ -16,6 +24,7 @@ public:
 	Sequence* seq_canattack;
 	Sequence* seq_hasshouting;
 	Sequence* seq_hasfootsound;
+	Sequence* seq_hordeaction;
 	Sequence* seq_hasinvestigated;
 	Sequence* seq_nothaslastknownplayerlocation;
 

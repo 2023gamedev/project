@@ -777,7 +777,8 @@ void IOCP_CORE::AddPlayerToRoom(int roomId, PLAYER_INFO* clientInfo) {
     // 해당 roomId가 존재하지 않으면 방 생성
     if (room_players.find(roomId) == room_players.end()) {
         room_players[roomId] = std::unordered_map<int, PLAYER_INFO*>();
-        Zombie_BT_Initialize(roomId);
+        ZombieBT* tmp_zbt = new ZombieBT();
+        zombie_bt_map[roomId] = *tmp_zbt;
         zombie_threads.emplace_back(&IOCP_CORE::Zombie_BT_Thread, this, roomId);
         zombieControllers[roomId] = new ZombieController(this, roomId);
         std::cout << "Room " << roomId << " created." << std::endl;

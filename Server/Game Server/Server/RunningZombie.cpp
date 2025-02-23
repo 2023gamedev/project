@@ -2,7 +2,9 @@
 
 #include "ZombiePathfinder.h"
 
+
 class ZombiePathfinder;
+
 
 RunningZombie::RunningZombie()
 	: Zombie()

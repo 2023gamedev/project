@@ -8,6 +8,7 @@
 
 #include "ZombiePathfinder.h"
 
+//BT
 #include "Task.h"
 #include "Selector.h"
 #include "Sequence.h"
@@ -25,7 +26,7 @@
 #include "MoveTo.h"
 
 
-std::unordered_map<int, Zombie_BT_struct> zombie_bt_map;
+std::unordered_map<int, ZombieBT> zombie_bt_map;
 std::unordered_map<int, RoomState> room_states;
 std::unordered_map<unsigned int, PLAYER_INFO*> g_players;
 std::unordered_map<int, std::unordered_map<int, PLAYER_INFO*>> room_players;
@@ -354,7 +355,7 @@ void IOCP_CORE::IOCP_AcceptThread()
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(client_sock), g_hIocp, playerIndex, 0);
 
-		PLAYER_INFO *user = new PLAYER_INFO;
+		PLAYER_INFO* user = new PLAYER_INFO;
 
 		user->s = client_sock;
 		user->connected = true;
@@ -471,95 +472,6 @@ void IOCP_CORE::IOCP_ErrorQuit(const wchar_t *msg, int err_no)
 	MessageBox(NULL, (LPCTSTR)lpMsgBuf, (LPCTSTR)msg, MB_ICONERROR);
 	LocalFree(lpMsgBuf);
 	exit(-1);
-}
-
-// 본격적으로 BT 트리 구조 작성하는 함수
-void IOCP_CORE::Zombie_BT_Initialize(int roomid)
-{
-	//======[[좀비 BT 생성]]======//
-
-	//======[Task] 메모리 할당======//
-
-	//<Selector>들
-
-	//<Detect-Selector>
-	zombie_bt_map[roomid].sel_detect = new Sel_Detect;
-	//<CanSeePlayer-Selector>
-	zombie_bt_map[roomid].sel_canseeplayer = new Sel_CanSeePlayer;
-
-	//{HasShouting-Sequence}
-	zombie_bt_map[roomid].seq_hasshouting = new Seq_HasShouting;
-	//{HasFootSound-Sequence}
-	zombie_bt_map[roomid].seq_hasfootsound = new Seq_HasFootSound;
-	//{HordeAction-Sequence}
-	zombie_bt_map[roomid].seq_hordeaction = new Seq_HordeAction;
-	//{HasInvestigated-Sequence}
-	zombie_bt_map[roomid].seq_hasinvestigated = new Seq_HasInvestigated;
-	//{NotHasLastKnownPlayerLocation-Sequence}
-	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation = new Seq_NotHasLastKnownPlayerLocation;
-
-	//{CanNotAttack-Sequence}
-	zombie_bt_map[roomid].seq_cannotattack = new Seq_CanNotAttack;
-	//{CanAttack-Sequence}
-	zombie_bt_map[roomid].seq_canattack = new Seq_CanAttack;
-
-	//[MoveTo-Task]
-	zombie_bt_map[roomid].t_moveto = new T_MoveTo;
-	//[Attack-Task]
-	zombie_bt_map[roomid].t_attack = new T_Attack;
-
-	//======== 트리 작성 (작업 할당) ========//
-
-	//<Selector-Detect> 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].sel_canseeplayer);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasshouting);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasfootsound); 
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hordeaction);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_hasinvestigated);
-	zombie_bt_map[roomid].sel_detect->AddChild(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
-
-	//<Selector-CanSeePlayer> 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_canattack);
-	zombie_bt_map[roomid].sel_canseeplayer->AddChild(zombie_bt_map[roomid].seq_cannotattack);
-
-	//{Sequence-CanAttack} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_canattack->AddChild(zombie_bt_map[roomid].t_attack);
-
-	//{Sequence-CanNotAttack} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_cannotattack->AddChild(zombie_bt_map[roomid].t_moveto);
-
-	//{Sequence-HasShouting} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasshouting->AddChild(zombie_bt_map[roomid].t_moveto);
-
-	//{Sequence-HasFootSound} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasfootsound->AddChild(zombie_bt_map[roomid].t_moveto);
-
-	//{Sequence-HordeAction} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hordeaction->AddChild(zombie_bt_map[roomid].t_moveto);
-
-	//{Sequence-HasInvestigated} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_hasinvestigated->AddChild(zombie_bt_map[roomid].t_moveto);
-
-	//{Sequence-NotHasLastKnownPlayerLocation} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	zombie_bt_map[roomid].seq_nothaslastknownplayerlocation->AddChild(zombie_bt_map[roomid].t_moveto);
-
-	//==========================//
-}
-
-void IOCP_CORE::Zombie_BT_Delete(int roomid)
-{
-	delete(zombie_bt_map[roomid].sel_detect);
-	delete(zombie_bt_map[roomid].sel_canseeplayer);
-
-	delete(zombie_bt_map[roomid].seq_cannotattack);
-	delete(zombie_bt_map[roomid].seq_canattack);
-	delete(zombie_bt_map[roomid].seq_hasshouting);
-	delete(zombie_bt_map[roomid].seq_hasfootsound);
-	delete(zombie_bt_map[roomid].seq_hasinvestigated);
-	delete(zombie_bt_map[roomid].seq_nothaslastknownplayerlocation);
-
-	delete(zombie_bt_map[roomid].t_attack);
-	delete(zombie_bt_map[roomid].t_moveto);
 }
 
 // ostream 연산자 오버로딩 - FLOOR cout 출력용
@@ -719,14 +631,8 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 				// 접속이 끊긴 것도 검사
 				if (room_players[roomid].size() == 0) {
-					cout << "방-" << roomid << " 에 연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
-					cout << "방-" << roomid << " 좀비 BT 종료..." << endl;
+					cout << "방-" << roomid << " 에 더이상 연결된 플레이어가 없습니다... => (g_players.size() == 0)" << endl;
 					cout << endl;
-
-					std::cout << "Press Enter to proceed...";
-					std::cin.get(); // 사용자가 Enter를 입력할 때까지 대기 (콘솔 애플리케이션이 실행 후 바로 종료되면서 콘솔 창이 닫히는거 방지) 
-					//-> 이제 필요 없음 (로비서버처럼 모든 플레이어가 접속을 끊어도 계속 돌아감)
-					//-> 근데 갑자기 바로 꺼질때 도 있음;;;
 
 					result = "NO PLAYER";
 					break;			// 완전히 BT 쓰레드 종료시킴
@@ -933,9 +839,15 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 
 	//==========================
 
+	cout << "방-" << roomid << " 좀비 BT 종료" << endl;
+
+	//std::cout << "Press Enter to close this room's zombieBT...";
+	//std::cin.get(); // 사용자가 Enter를 입력할 때까지 대기 (콘솔 애플리케이션이 실행 후 바로 종료되면서 콘솔 창이 닫히는거 방지) 
+	//-> 이제 필요 없음 (로비서버처럼 모든 플레이어가 접속을 끊어도 계속 돌아감)
+	//-> 근데 갑자기 바로 꺼질때 도 있음;;; => 밑에 메모리 해제 때문이였음
 
 	//========할당한 메모리 해제========
-	Zombie_BT_Delete(roomid);
+	//zombie_bt_map[roomid].~ZombieBT();		// ************************* 왜인지는 모르겠는데 이거 키면 겜서버 같이 꺼짐...;;
 
 }
 

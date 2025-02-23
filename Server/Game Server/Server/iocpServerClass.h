@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include <concurrent_queue.h>
+#include <atomic>
+
 #include "Common.h"
 
 #include "ZombieController.h"
@@ -7,15 +10,18 @@
 
 #include "Player.h"
 
-#include <concurrent_queue.h>
-#include <atomic>
+#include "ZombieBT.h"
+
 
 
 // 전방 선언 -> 순환 포함 문제를 피하기 위해 (ex: static 변수 BT_INTERVAL 을 MoveTo 클래스에서 사용하기 위해)  [+] 해당 클래스 변수 여기서 사용하려면 포인터로 선언해서 사용
 class Zombie;
+
 class ZombiePathFinder;
+
 class ZombieController;
 class ItemController;
+
 // BT
 class Task;
 class Selector;
@@ -24,7 +30,7 @@ class Sequence;
 class Sel_Detect;
 class Sel_CanSeePlayer;
 class Seq_HasShouting;
-class Seq_HasFootSound; 
+class Seq_HasFootSound;
 class Seq_HordeAction;
 class Seq_HasInvestigated;
 class Seq_NotHasLastKnownPlayerLocation;
@@ -100,23 +106,8 @@ struct RoomState {
 	int Escape_Root{};
 };
 
-struct Zombie_BT_struct {
-	Selector* sel_detect;
-	Selector* sel_canseeplayer;
 
-	Sequence* seq_cannotattack;
-	Sequence* seq_canattack;
-	Sequence* seq_hasshouting;
-	Sequence* seq_hasfootsound;
-	Sequence* seq_hordeaction;
-	Sequence* seq_hasinvestigated;
-	Sequence* seq_nothaslastknownplayerlocation;
-
-	Task* t_moveto;
-	Task* t_attack;
-};
-
-extern std::unordered_map<int, Zombie_BT_struct> room_data_map;
+extern std::unordered_map<int, ZombieBT> zombie_bt_map; 
 extern std::unordered_map<int, RoomState> room_states; // 방 ID -> RoomState
 
 
@@ -195,9 +186,6 @@ public:
 	unsigned int CreateSession();
 	void DeleteSession(unsigned int sessionID);
 
-	void Zombie_BT_Initialize(int roomid);
-	void Zombie_BT_Delete(int roomid);
-
 	void Zombie_BT_Thread(int roomid);
 
 	void GameTimerEndCheck(int roomid, float& GameTime, std::chrono::steady_clock::time_point currentTime, std::chrono::steady_clock::time_point& lastGTTime);
@@ -207,19 +195,19 @@ public:
 	//서버가 먼저 켜지고 좀비 BT가 실행되도록 하기위해 사용 
 	bool bServerOn;
 
+	//======Zombie_BT ======
+	
 	//좀비 벡터
 	std::unordered_map<int, vector<Zombie*>> zombieDB;
 	std::unordered_map<int, vector<Zombie*>> zombieDB_BT;
 
-	//======Zombie_BT 선언======
-	
 	static float BT_INTERVAL;		// BT 작동 인터벌 설정
 	static float GAME_TIMER_INTERVAL;	// 게임 타이머 시간 누적 인터벌 설정
 
 	static std::chrono::duration<float> BT_deltaTime;
 	static std::chrono::duration<float> GT_deltaTime;
 
-	//==========================
+	//======================
 
 
 
