@@ -1233,7 +1233,7 @@ bool Zombie::HasFootSoundRandomChance()
 		}
 		else {
 			detectHasFootSound_randomChance = false;
-			detectHasFootSoundFail_delayTime = 1.0;
+			detectHasFootSoundFail_delayTime = 0.5;
 			return false;
 		}
 	}
@@ -1244,7 +1244,7 @@ bool Zombie::HasFootSoundRandomChance()
 		}
 		else {
 			detectHasFootSound_randomChance = false;
-			detectHasFootSoundFail_delayTime = 2.0;
+			detectHasFootSoundFail_delayTime = 1.0;
 			return false;
 		}
 	}
@@ -1255,7 +1255,7 @@ bool Zombie::HasFootSoundRandomChance()
 		}
 		else {
 			detectHasFootSound_randomChance = false;
-			detectHasFootSoundFail_delayTime = 3.0;
+			detectHasFootSoundFail_delayTime = 2.0;
 			return false;
 		}
 	}
