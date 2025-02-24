@@ -112,7 +112,7 @@ void ZombieController::SpawnZombies(int zombieID, int zombieType, Vector3 positi
         new_zombie = new RunningZombie(iocpServer, new_zombie_data);
 
     // zombiedata 벡터에 추가
-    iocpServer->zombieDB[zombie_roomid].emplace_back(new_zombie);  // 싱글톤 패턴 활용
+    iocpServer->zombieDB[zombie_roomid].emplace_back(new_zombie);  
     
     //cout << "Spawned Zombie ID: " << zombieID << ", zombiedata size: " <<   iocpServer->zombieDB[zombie_roomid].size() << endl;
 }

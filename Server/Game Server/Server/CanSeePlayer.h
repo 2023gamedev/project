@@ -67,7 +67,7 @@ public:
 
         bool Prev_CanSeePlayer_result = zom.CanSeePlayer_result;
         if (Prev_CanSeePlayer_result == false && d_result) {    // 플레이어를 처음 발견했거나 플레이어를 놓쳤다가 다시 발견했다면 -> 호드 사운드 재생
-            zom.MakeNoise();    // 싱글톤 패턴 활용
+            zom.MakeNoise();   
         }
 
         zom.CanSeePlayer_result = d_result;

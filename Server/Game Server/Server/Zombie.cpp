@@ -560,7 +560,7 @@ void Zombie::Attack(int roomid)
 	attackpacket.SerializeToString(&serializedData);
 
 	for (const auto& player : playerDB_BT[roomid]) {
-		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());	// 싱글톤 패턴 활용
+		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());	
 	}
 
 	IsAttacking = true;	// 좀비 공격중으로 변경
@@ -1057,7 +1057,7 @@ void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>> target_origin
 	}
 
 #ifdef	ENABLE_BT_FOOTSOUND_SEARCHRANDOMLOCATION_LOG
-	cout << "distance: " << distance << ", radius: " << radius << "@=@=@=@=@=@=" << endl;
+	cout << "distance: " << distance << ", radius: " << radius << "=@=@=@=@=@=@=" << endl;
 #endif
 
 	// 랜덤 탐색 지점(걸을 수 있는) 검색
@@ -1157,7 +1157,7 @@ bool Zombie::CanSeePlayerRandomChance()
 	float the_chance = (float)random_chance(mt);	// random_chance(mt)는 부르는 매 순간 바뀌어서 이렇게 변수에 미리 넣고 사용
 
 #ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
-	cout << "CanSeePlayerRandomChance: " << the_chance << endl;
+	cout << "CanSeePlayerRandomChance: " << the_chance << ", dist: " << dist << endl;
 #endif
 
 	if (dist <= 800) {
@@ -1223,7 +1223,7 @@ bool Zombie::HasFootSoundRandomChance()
 	float the_chance = (float)random_chance(mt);		// random_chance(mt)는 부르는 매 순간 바뀌어서 이렇게 변수에 미리 넣고 사용
 
 #ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
-	cout << "FootSoundRandomChance: " << the_chance << endl;
+	cout << "FootSoundRandomChance: " << the_chance << ", dist: " << dist << endl;
 #endif
 
 	if (dist <= 500) {	
@@ -1272,7 +1272,7 @@ void Zombie::MakeNoise()
 
 
 	// 다른 좀비들 플레이어 발견 소리 포착 체크 (호드 사운드 알리기)
-	vector<Zombie*> zombies = iocpServer->zombieDB_BT[roomid];	
+	vector<Zombie*> zombies = iocpServer->zombieDB_BT[roomid];
 
 	for (auto& zom : zombies) {
 		if (abs(ZombieData.z - zom->ZombieData.z) > 500.f)	// 해당 좀비와 같은 층 좀비만 검사
@@ -1286,7 +1286,37 @@ void Zombie::MakeNoise()
 
 		float dist = sqrt(powf(hzl[0][0][0] - zl[0][0][0], 2) + powf(hzl[0][0][1] - zl[0][0][1], 2)/* + powf(hzl[0][0][2] - zl[0][0][2], 2)*/);	// x, y 좌표 거리만 검사
 
-		if (dist <= CanHearHordeSoundDistance) {
+		bool bHear = false;
+
+		std::random_device rd;
+		std::mt19937 mt(rd());
+
+		std::uniform_int_distribution<int> random_chance(0, 100);		// 0~100
+
+		float the_chance = (float)random_chance(mt);		// random_chance(mt)는 부르는 매 순간 바뀌어서 이렇게 변수에 미리 넣고 사용
+
+#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
+		cout << "HearGrowlSoundRandomChance: " << the_chance << ", dist: " << dist << endl;
+#endif
+
+		if (dist <= 300.f) {
+			// 100퍼센트의 확률
+			bHear = true;
+		}
+		else if (dist <= 500.f) {
+			if (the_chance >= (100 - 80)) 	// 80퍼센트의 확률
+				bHear = true;
+		}
+		else if (dist <= 800.f) {
+			if (the_chance >= (100 - 60)) 	// 60퍼센트의 확률
+				bHear = true;
+		}
+		else if (dist <= CanHearHordeSoundDistance) {
+			if (the_chance >= (100 - 40)) 	// 40퍼센트의 확률
+				bHear = true;
+		}
+
+		if (bHear == true) {
 #ifdef	ENABLE_BT_LOG
 			cout << "좀비 '#" << zom->ZombieData.zombieID << "' 가 좀비 '#" << ZombieData.zombieID << "' 의 호드 사운드 포착!!!" << endl;
 			cout << endl;

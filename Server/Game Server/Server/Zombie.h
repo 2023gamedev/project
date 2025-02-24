@@ -87,7 +87,7 @@ public:
 
     const float CanHearShoutDistance = 3000.f;      // 샤우팅 소리 포착 가능 거리 3000cm
 
-    const float CanHearHordeSoundDistance = 600.0f;         // 호드 사운드 포착 가능 거리 600cm
+    const float CanHearHordeSoundDistance = 1000.0f;         // 호드 사운드 포착 가능 거리 1000cm
 
     const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
 
