@@ -5,6 +5,8 @@
 
 class Sel_CanSeePlayer : public Selector {
 public:
+    Sel_CanSeePlayer() { t_name = "CanSeePlayer"; }
+
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG

@@ -5,6 +5,8 @@
 
 class Seq_HordeAction : public Sequence {
 public:
+    Seq_HordeAction() { t_name = "HordeAction"; }
+
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG

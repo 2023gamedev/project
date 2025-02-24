@@ -5,6 +5,8 @@
 
 class Seq_HasShouting : public Sequence {
 public:
+    Seq_HasShouting() { t_name = "HasShouting"; }
+
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG

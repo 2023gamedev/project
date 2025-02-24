@@ -5,6 +5,8 @@
 
 class Seq_HasFootSound : public Sequence {
 public:
+    Seq_HasFootSound() { t_name = "HasFootSound"; }
+
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG

@@ -5,6 +5,8 @@
 
 class Seq_HasInvestigated : public Sequence {
 public:
+    Seq_HasInvestigated() { t_name = "HasInvestigated"; }
+
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG

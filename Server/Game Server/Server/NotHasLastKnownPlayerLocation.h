@@ -5,6 +5,8 @@
 
 class Seq_NotHasLastKnownPlayerLocation : public Sequence {
 public:
+    Seq_NotHasLastKnownPlayerLocation() { t_name = "NotHasLastKnownPlayerLocation"; }
+
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG
