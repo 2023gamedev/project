@@ -307,7 +307,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 				}
 
 				MyGameMode->TurnOnCarHeadlights(recvEscapeRoot.carid);
-				UE_LOG(LogNet, Display, TEXT("tur on headlight: carid = %d"), recvEscapeRoot.carid);
+				UE_LOG(LogNet, Display, TEXT("turn on headlight: carid = %d"), recvEscapeRoot.carid);
 			}
 		}
 

@@ -776,9 +776,9 @@ void AOneGameModeBase::SpawnInterItem(int32 InterActorindex, FName InterName, FV
         SpawnedCarActor->CarKeyName = CarKey;
         SpawnedCarActor->CarID = InterActorindex;
         
-        if (InterActorindex == 2 || InterActorindex == 3) { // 지상 2층 빨간키에 맞는 차량들
+        if (carkeyname == "CarKey3" || carkeyname == "CarKey4") { // 지상 2층 빨간키에 맞는 차량들
             //GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("CarID is #%d! Have to change color to RED!!!"), InterActorindex));
-            UE_LOG(LogTemp, Log, TEXT("CarID is #%d! Have to change color to RED!!!"), InterActorindex);
+            UE_LOG(LogTemp, Log, TEXT("CarKey is \'%s\'! Have to change color to RED!!!"), *carkeyname.ToString());
 
             SpawnedCarActor->ChangeColorToRed();
         }
