@@ -44,7 +44,7 @@ class T_MoveTo;
 #undef ENABLE_BT_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 #define ENABLE_BT_NODE_LOG	// 전처리기 디렉티브 (좀비 BT Node 관련 로그 cout 찍기 플래그)
-#undef ENABLE_BT_NODE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
+//#undef ENABLE_BT_NODE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화
 
 #define ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 전처리기 디렉티브 (좀비 BT Detect RandomChance 관련 로그 cout 찍기 플래그)
 #undef ENABLE_BT_DETECT_RANDOMCHANCE_LOG	// 여기 주석처리 하면 -> 활성화 / 주석 있으면 -> 비활성화

@@ -133,6 +133,8 @@ Zombie::Zombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 	roomid = z_d.roomID;
 
 	SetZombieType(ZOMBIE_TYPE::NULL_TYPE);
+
+	makeHordeSound_StartTime = std::chrono::steady_clock::now();
 }
 
 Zombie::~Zombie()
@@ -789,7 +791,8 @@ void Zombie::ReachFinalDestination()
 #endif
 
 
-	// BT 플래그 값 전체 초기화 -> 만약! 병렬 구조로 만들 생각이라면 이렇게 전체 초기화 하지 말고 이미 순회한 플래그 값만 초기화 해야함
+	// BT 플래그 값 전체 초기화 -> 만약! 병렬 구조로 만들 생각이라면 이렇게 전체 초기화 하지 말고 이미 순회한 플래그 값만 초기화 해야함 ===> X
+	//							=> 그냥 좀비는 멍청하게 만들어야 하니까 도착지점에 어디라도 도착하면 전부 잊는 방향으로
 	HeardShouting = false;
 	HeardFootSound = false;
 	KnewPlayerLocation = false;
@@ -1265,6 +1268,21 @@ bool Zombie::HasFootSoundRandomChance()
 
 void Zombie::MakeNoise()
 {
+	auto waitAfterTime = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> deltaTime = waitAfterTime - makeHordeSound_StartTime;
+
+	if (deltaTime.count() >= ZombieMakeHordeNoiseDelay) {
+		makeHordeSound_StartTime = std::chrono::high_resolution_clock::now();
+	}
+	else {
+#ifdef	ENABLE_BT_LOG
+		cout << "좀비 '#" << ZombieData.zombieID << "' 호드 사운드 연속 재생 방지 (이번에 호드 사운드 재생 X)" << endl;
+		cout << endl;
+#endif
+		return;
+	}
+
+
 #ifdef	ENABLE_BT_LOG
 	cout << "좀비 '#" << ZombieData.zombieID << "' 플레이어 발견! 호드 사운드 발생!!!" << endl;
 	cout << endl;

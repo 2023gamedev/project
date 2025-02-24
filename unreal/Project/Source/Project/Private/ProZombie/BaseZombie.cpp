@@ -3115,19 +3115,24 @@ void ABaseZombie::WaittingTimerElapsed()
 
 void ABaseZombie::PlayGrowlSound()
 {
-	/*AAIController* controller = Cast<AAIController>(this->GetController());
-	if (controller && controller->IsLocalController() && GrowlSound)
+	auto* world = GetWorld();
+	if (IsValid(world) && GrowlSound && !IsGrowlSoundPlaying)
 	{
-		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location"));
-		UGameplayStatics::PlaySoundAtLocation(controller, GrowlSound, GetActorLocation(), 0.6f);
-	}*/
-	// 컨트롤러에 붙이면 안 되는 거 같음 그냥;;
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location!"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing GrowlSound at Location!")));
+		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.4f);
 
-	/*auto* world = GetWorld();
-	if (world && GrowlSound)
-	{
-		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location"));
-		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound, GetActorLocation(), 0.6f);
-	}*/
-	// 걍 안해 ㅅㅂ
+		IsGrowlSoundPlaying = true;
+
+		// 일정 시간이 지나면 다시 재생 가능하도록 설정 (10초 후) => 연속 재생 방지
+		GetWorld()->GetTimerManager().SetTimer(GrowlSoundTimerHandle, [this]()
+			{
+				IsGrowlSoundPlaying = false;
+			}, 10.0f, false);
+	}
+
+	else if (IsGrowlSoundPlaying) {
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] GrowlSound is still on play!"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[PlaySoundLog] GrowlSound is still on play!")));
+	}
 }

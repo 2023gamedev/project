@@ -97,6 +97,8 @@ public:
 
     float ZombieStandingStillDuration = 0.f;    // 좀비 숨고르기 (멍때리기) 지속 시간 (5~10초)
 
+    const float ZombieMakeHordeNoiseDelay = 10.0f;   // 호드 사운드 재생 딜레이 (10초)
+
     const float NormalZombieStartHP = 20.0f;        // 20.0f
     const float NormalZombieSpeed = 200.0f;         // 200.0f (뛰기 스피드)
     const float NormalZombieWalkSpeed = 100.0f;     // 100.0f (걷기 스피드)
@@ -169,6 +171,8 @@ public:
 
     float detectCanSeePlayerFail_delayTime = 0;
     float detectHasFootSoundFail_delayTime = 0;
+
+    std::chrono::steady_clock::time_point makeHordeSound_StartTime;     // 호드 사운드 재생 시작 시간
 
     TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HordeSound)
 
