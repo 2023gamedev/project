@@ -196,7 +196,8 @@ float Zombie::SetDistance(int playerid, int distanceType)
 
 //#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 		if (distanceType == 1) {
-			cout << "PlayerInsight 맵에 새로운 데이터 삽입!(생성) playerid: " << playerid << " , distance: " << dist << endl;
+			//************ 밑에 주석 나중에 풀기
+			//cout << "PlayerInsight 맵에 새로운 데이터 삽입!(생성) playerid: " << playerid << " , distance: " << dist << endl;
 		}
 		else {
 			cout << "FootSound 맵에 새로운 데이터 삽입!(생성) playerid: " << playerid << " , distance: " << dist << endl;
@@ -895,7 +896,6 @@ void Zombie::ClearDistance(int playerid, int distanceType)
 	else if (distanceType == 2)
 		setMap = &DistanceTo_FootSound;
 
-
 	if (setMap->find(playerid) == setMap->end()) {		// map에 playerid가 없으면 -> 스킵
 
 	}
@@ -905,11 +905,6 @@ void Zombie::ClearDistance(int playerid, int distanceType)
 		if(distanceType == 2)
 			setMap->at(playerid) = CanHearFootSoundDistance + 6969.f;		// 탐지 거리 밖 표시
 	}
-
-#ifdef	ENABLE_BT_LOG
-	if (spacing)
-		cout << endl;
-#endif
 
 	return;
 }
@@ -965,13 +960,13 @@ void Zombie::ClearBlackBoard(bool clear_flag[6])
 	if (clear_flag[5])
 		RandPatrolSet = false;
 
-//#ifdef ENABLE_BT_LOG
+#ifdef ENABLE_BT_LOG
 	printf("[ClearBlackBoard] Cleared flags (All Reset) \n"); 
 	printf(" PlayerInSight: %s, HeardShouting : %s, HeardFootSound : %s, HeardHordeSound : %s, KnewPlayerLocation : %s, RandPatrolSet : %s\n"
 		, clear_flag[0] ? "cleared" : "stay", clear_flag[1] ? "cleared" : "stay", clear_flag[2] ? "cleared" : "stay", clear_flag[3] ? "cleared" : "stay", clear_flag[4] ? "cleared" : "stay", clear_flag[5] ? "cleared" : "stay");
 	printf(" PlayerInSight: %s, HeardShouting: %s, HeardFootSound: %s, HeardHordeSound: %s, KnewPlayerLocation: %s, RandPatrolSet: %s\n"
 		, PlayerInSight ? "true" : "false", HeardShouting ? "true" : "false", HeardFootSound ? "true" : "false", HeardHordeSound ? "true" : "false", KnewPlayerLocation ? "true" : "false", RandPatrolSet ? "true" : "false");
-//#endif
+#endif
 #if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 	cout << endl;
 #endif

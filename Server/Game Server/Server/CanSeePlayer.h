@@ -14,16 +14,16 @@ public:
 #endif
 
         d_result = zom.PlayerInSight_Update_Check();
-//#ifdef ENABLE_BT_NODE_LOG
+#ifdef ENABLE_BT_NODE_LOG
         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시야에 플레이어가 있는가?: " << boolalpha << d_result << endl;
-//#endif
+#endif
 
         if (d_result == true) {
             vector<vector<vector<float>>> closest_player_pos = {};
             float dist = zom.SearchClosestPlayer(closest_player_pos, 1);
-//#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
+#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
             cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 와 가장 가까운 플레이어 사이의 거리: " << dist << endl;
-//#endif
+#endif
 
             if (zom.detectCanSeePlayer_randomChance == false) {
 
@@ -34,22 +34,22 @@ public:
 
                     d_result = zom.CanSeePlayerRandomChance();  // 포착 랜덤확률 부여
                     if (d_result == false) {
-//#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
+#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
                         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' Detect-CanSeePlayer(플레이어 포착) RandomChance 실패!!!!!!!" << endl;
-//#endif
+#endif
                         zom.detectCanSeePlayerFail_StartTime = std::chrono::high_resolution_clock::now();
                     }
                     else if(d_result == true) {
-//#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
+#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
                         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' Detect-CanSeePlayer(플레이어 포착) RandomChance 성공!" << endl;
-//#endif
+#endif
                     }
                 }
                 else {
-//#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
+#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
                     cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' Detect-CanSeePlayer(플레이어 포착) RandomChance 실패 상태" << endl;
                     cout << "남은 시간: " << zom.detectCanSeePlayerFail_delayTime - deltaTime.count() << "s" << endl;
-//#endif
+#endif
                     d_result = false; // 남은 딜레이 시간 동안 실패 상태 유지
                 }
 
@@ -60,10 +60,10 @@ public:
             zom.detectCanSeePlayer_randomChance = false;    // 다시 초기화
         }
 
-//#ifdef ENABLE_BT_NODE_LOG
+#ifdef ENABLE_BT_NODE_LOG
         cout << "따라서, 좀비 \'#" << zom.ZombieData.zombieID << "\' 에 <Detect>의 (CanSeePlayer Decorator) 결과: \"" << boolalpha << d_result << "\"" << endl;
         cout << endl;
-//#endif
+#endif
 
         bool Prev_CanSeePlayer_result = zom.CanSeePlayer_result;
         if (Prev_CanSeePlayer_result == false && d_result) {    // 플레이어를 처음 발견했거나 플레이어를 놓쳤다가 다시 발견했다면 -> 호드 사운드 재생
