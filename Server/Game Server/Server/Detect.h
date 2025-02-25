@@ -8,9 +8,6 @@ public:
 
     bool Detect(Zombie& zom) override {
 #ifdef ENABLE_BT_NODE_LOG
-#ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
-        cout << endl;
-#endif
         cout << "=== Selector <Detect> 호출" << endl;
         cout << endl;
 #endif

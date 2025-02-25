@@ -68,18 +68,16 @@ private:
 public:
 	UPROPERTY(EditAnywhere)
 	bool m_bFootSound;
-
+	
 	UPROPERTY(EditAnywhere)
 	FVector m_vFootCharacterPos;
-
+	
 	UPROPERTY(EditAnywhere)
 	FVector m_vShoutingPos;
-
+	
 	UPROPERTY(EditAnywhere)
 	bool m_bShoutingSound;
 
-	UPROPERTY(EditAnywhere)
-	bool m_bPlayerInSight;
 
 	//ZombieData recvZombieData;
 	//ZombiePath recvZombiePath;

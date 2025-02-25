@@ -361,4 +361,11 @@ public:
 	bool IsGrowlSoundPlaying = false;   // 사운드 중복 재생 방지용 플래그
 	FTimerHandle GrowlSoundTimerHandle;     
 
+	UPROPERTY(EditAnywhere)
+	bool m_bPlayerInSight;
+
+	FTimerHandle PlayerInSightResetTimerHandle;
+
+	bool bCanDetectPlayer = false;  // 초기에는 탐지 불가능
+	FTimerHandle DetectionTimerHandle;
 };

@@ -294,6 +294,11 @@ void AZombieAIController::Tick(float DeltaTime)
 	ZombieTurn(DeltaTime, indx);
 
 
+	// 초기에는 Detect하지 않도록 => 맵 로딩 전에 벽 뚫고 Detect하는 거 방지
+	if (OwnerZombie->bCanDetectPlayer == false)
+		return;
+
+
 	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
 	FVector ZombieLocation = OwnerZombie->GetActorLocation(); // 좀비의 위치
 
@@ -333,8 +338,8 @@ void AZombieAIController::Tick(float DeltaTime)
 
 		// NearestPawn에 따라 상태 변경
 		if (NearestPawn) {	// NearestPawn 존재 O -> 나를 포착함
-			if (m_bPlayerInSight == false) {
-				m_bPlayerInSight = true;
+			if (OwnerZombie->m_bPlayerInSight == false) {
+				OwnerZombie->m_bPlayerInSight = true;
 
 				ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(NearestPawn);
 				Send_Detected(); // 플레이어 감지 메시지 전송
@@ -345,8 +350,8 @@ void AZombieAIController::Tick(float DeltaTime)
 			}
 		}
 		else {	// NearestPawn 존재 X -> 나를 못 봄
-			if (m_bPlayerInSight == true) {
-				m_bPlayerInSight = false;
+			if (OwnerZombie->m_bPlayerInSight == true) {
+				OwnerZombie->m_bPlayerInSight = false;
 
 				Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
 
@@ -356,8 +361,8 @@ void AZombieAIController::Tick(float DeltaTime)
 		}
 	}
 	// 좀비가 플레이어를 죽였는데 마지막 동기화 작업에서 m_bPlayerInSight가 true여서, 서버에서 PlayerInsight가 계속 true인 걸 방지하는 코드 (즉, 좀비가 플레이어를 죽이고 그자리에 가만히 서있는 버그 방지)
-	else if(OwnerZombie->MyChar->GetHP() <= 0 && m_bPlayerInSight == true) {
-		m_bPlayerInSight = false;
+	else if(OwnerZombie->MyChar->GetHP() <= 0 && OwnerZombie->m_bPlayerInSight == true) {
+		OwnerZombie->m_bPlayerInSight = false;
 		Send_PlayerLost(); // 플레이어를 놓쳤을 때 메시지 전송
 	}
 }

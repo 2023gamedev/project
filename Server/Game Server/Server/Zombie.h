@@ -83,7 +83,7 @@ public:
 
     const float  CanSeePlayerDistance = 2500.0f;    // 최대 시야거리 2500cm
 
-    const float CanHearDistance = 1000.f;            // 발소리 포착 최대 가능거리 1000cm
+    const float CanHearFootSoundDistance = 1000.f;            // 발소리 포착 최대 가능거리 1000cm
 
     const float CanHearShoutDistance = 3000.f;      // 샤우팅 소리 포착 가능 거리 3000cm
 
@@ -191,6 +191,9 @@ public:
     void DetermineFloor(float startZ);
 
     float SetDistance(int playerid, int distanceType);    // distanceType = 1: Detect / 2: FootSound
+    
+    void ClearDistance(int playerid, int distanceType); // distanceType = 1: Detect / 2: FootSound
+    //원래 float SetDistance(int playerid, int distanceType, bool b_clear); 이런식으로 함수 오버로딩을 하려 했는데, 그럼 SetDistance(1,3)으로 불러도 SetDistance(1,3,true)로 3을 암시적 변환을 해버림;;
 
     void SetTargetLocation(TARGET t);
 
@@ -209,6 +212,9 @@ public:
     bool RandomPatrol();
 
     void ReachFinalDestination();
+
+    // void ClearALLBlackBoard();
+    void ClearBlackBoard(bool clear_flag[6]);       // 0-PlayerInsight, 1-HeardShouting, 2-FootSound, 3-HordeSound, 4-KnewPlayerLocation, 5-RandPatrolSet
 
     void UpdatePath();
     // 얜 랜덤 패트롤, 랜덤 발소리 위치용 - 함수 오버로딩

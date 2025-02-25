@@ -376,10 +376,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                         break;
 
                     //z->PlayerInSight = true;
-                    z->KnewPlayerLocation = true;
-                    float dist = z->SetDistance(Packet.playerid(), 1);   // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 데이터 새로 추가하기 (생성)
+                    //z->KnewPlayerLocation = true;
+                    float dist = z->SetDistance(Packet.playerid(), 1);   // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 데이터 새로 추가하기 (생성) / 이미 있었다면 갱신하기
 
-#if defined(ENABLE_PACKET_LOG) && defined(ENABLE_BT_NODE_LOG)
+#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_NODE_LOG)
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!! - 거리: " << dist << endl;
 #endif
 
@@ -401,9 +401,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                         break;
 
                     //z->PlayerInSight = false;
-                    z->DistanceTo_PlayerInsight[Packet.playerid()] = -1.0f;     // -1 => 이제 탐지 거리를 벗어남 표시
+                    z->DistanceTo_PlayerInsight[Packet.playerid()] = z->CanSeePlayerDistance + 6969.f;     // 탐지 거리 밖 표시
 
-#if defined(ENABLE_PACKET_LOG) && defined(ENABLE_BT_NODE_LOG)
+#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_NODE_LOG)
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!" << endl;
 #endif
 

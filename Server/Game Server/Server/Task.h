@@ -4,6 +4,8 @@
 
 #include "Zombie.h"
 
+#include "iocpServerClass.h"
+
 
 using std::cout;
 using std::endl;

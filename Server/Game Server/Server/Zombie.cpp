@@ -184,7 +184,7 @@ float Zombie::SetDistance(int playerid, int distanceType)
 		setMap = &DistanceTo_PlayerInsight;
 	else if (distanceType == 2)
 		setMap = &DistanceTo_FootSound;
-	
+
 	vector<vector<vector<float>>> zl = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 	vector<vector<vector<float>>> pl = vector<vector<vector<float>>>{ {{playerDB_BT[roomid][playerid].x, playerDB_BT[roomid][playerid].y, playerDB_BT[roomid][playerid].z}} };
 
@@ -194,31 +194,51 @@ float Zombie::SetDistance(int playerid, int distanceType)
 	if (setMap->find(playerid) == setMap->end()) {		// map에 playerid가 없으면 -> 새로 생성
 		setMap->emplace(playerid, dist);
 
-#ifdef	ENABLE_BT_LOG
+//#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 		if (distanceType == 1) {
-			cout << "PlayerInsight 맵에 새로운 데이터 삽입! playerid: " << playerid << " , distance: " << dist << endl;
+			cout << "PlayerInsight 맵에 새로운 데이터 삽입!(생성) playerid: " << playerid << " , distance: " << dist << endl;
 		}
 		else {
-			cout << "FootSound 맵에 새로운 데이터 삽입! playerid: " << playerid << " , distance: " << dist << endl;
+			cout << "FootSound 맵에 새로운 데이터 삽입!(생성) playerid: " << playerid << " , distance: " << dist << endl;
 		}
 		spacing = true;
-#endif
+//#endif
 	}
 	else if (setMap->find(playerid) != setMap->end()) {		// map에 이미 playerid가 이미 있으면 -> 수정, 갱신
 		// PlayerInsight 업데이트
 		if (distanceType == 1) {
-			setMap->at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 위에서 미리 예외처리 꼭! 필요!
-			//(*setMap)[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
-												// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 
+			if (setMap->at(playerid) < 0) {	// 죽거나 연결 끊긴 플레이어
+//#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+				cout << "이미 포착 불가능한 (죽음/연결 끊김) 플레이어의 PlayerInsight 맵에 접근;;" << endl;
+//#endif
+			}
+			else {
+				setMap->at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 위에서 미리 예외처리 꼭! 필요!
+				//(*setMap)[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
+													// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 
+//#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+				cout << "PlayerInsight 맵에 이미 있던 데이터 갱신! playerid: " << playerid << " , distance: " << dist << endl;
+//#endif
+			}
 		}
 		// FootSound 업데이트
 		else if (distanceType == 2) {
-			setMap->at(playerid) = dist;
+			if ((*setMap)[playerid] < 0) {	// 죽거나 연결 끊긴 플레이어
+//#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+				cout << "이미 포착 불가능한 (죽음/연결 끊김) 플레이어의 FootSound 맵에 접근;;" << endl;
+//#endif
+			}
+			else {
+				(*setMap)[playerid] = dist;
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+				cout << "FootSound 맵에 이미 있던 데이터 갱신! playerid: " << playerid << " , distance: " << dist << endl;
+#endif
+			}
 		}
 	}
 
 #ifdef	ENABLE_BT_LOG
-	if(spacing)
+	if (spacing)
 		cout << endl;
 #endif
 
@@ -584,12 +604,15 @@ void Zombie::MoveTo(float deltasecond)
 	}
 
 	if (ZombiePathIndex >= path.size() || ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/) {
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 		cout << "좀비 #" << ZombieData.zombieID << " 경로의 끝 도착. (before move)" << endl;
+#endif
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 		cout << endl;
 #endif
 		ReachFinalDestination();
 		ZombiePathIndex = 1;
+
 		return;
 	}
 
@@ -600,16 +623,21 @@ void Zombie::MoveTo(float deltasecond)
 
 #ifdef	ENABLE_BT_LOG
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 가 이동 해야할 현재 경로의 다음 좌표: ( " << get<0>(path[ZombiePathIndex]) << ", " << get<1>(path[ZombiePathIndex]) << ", " << get<2>(path[ZombiePathIndex]) << " )" << endl;
+#endif
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 	spacing = true;
 #endif
 
 	if (PathX >= 2366.f) {	// 계단쪽 넘어로 이동하려하면
 //#ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 계단 넘어로 이동 방지로 인해 정지" << endl;
-		//cout << endl;
 //#endif
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+		cout << endl;
+#endif
 		ReachFinalDestination();
 		ZombiePathIndex = 1;
+
 		return;
 	}
 
@@ -683,7 +711,7 @@ void Zombie::MoveTo(float deltasecond)
 
 		// 경로의 끝에 도착 = 최종 목표지점에 도착
 		if (ZombiePathIndex >= path.size() || ZombieData.x == TargetLocation[0][0][0] && ZombieData.y == TargetLocation[0][0][1]) {
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 			cout << "좀비 #" << ZombieData.zombieID << " 경로의 끝 도착." << endl;
 #endif
 			ReachFinalDestination();
@@ -706,7 +734,7 @@ void Zombie::MoveTo(float deltasecond)
 		ZombieData.y += moveY;
 	}
 
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 	if (spacing)
 		cout << endl;
 #endif
@@ -793,10 +821,14 @@ void Zombie::ReachFinalDestination()
 
 	// BT 플래그 값 전체 초기화 -> 만약! 병렬 구조로 만들 생각이라면 이렇게 전체 초기화 하지 말고 이미 순회한 플래그 값만 초기화 해야함 ===> X
 	//							=> 그냥 좀비는 멍청하게 만들어야 하니까 도착지점에 어디라도 도착하면 전부 잊는 방향으로
+	//bool clear_flag[6] = { true, true, true, true, true, true };
+	//ClearBlackBoard(clear_flag);
+	// ===> 이렇게 하면 좀비가 플레이어를 계속 쫒아가기만 하게됨
+	//PlayerInSight = false;	// 굳이 할필요는 없음
 	HeardShouting = false;
 	HeardFootSound = false;
-	KnewPlayerLocation = false;
 	HeardHordeSound = false;
+	KnewPlayerLocation = false;
 	RandPatrolSet = false;
 
 
@@ -851,6 +883,100 @@ void Zombie::ReachFinalDestination()
 #endif
 }
 
+// 블랙보드 클리어 용 (distanceType = 1: Detect / 2: FootSound)
+void Zombie::ClearDistance(int playerid, int distanceType)
+{
+	map<int, float>* setMap = {};
+
+	bool spacing = false;
+
+	if (distanceType == 1)
+		setMap = &DistanceTo_PlayerInsight;
+	else if (distanceType == 2)
+		setMap = &DistanceTo_FootSound;
+
+
+	if (setMap->find(playerid) == setMap->end()) {		// map에 playerid가 없으면 -> 스킵
+
+	}
+	else if (setMap->find(playerid) != setMap->end()) {		// map에 이미 playerid가 이미 있으면 -> 리셋
+		if(distanceType == 1)
+			setMap->at(playerid) = CanSeePlayerDistance + 6969.f;		// 탐지 거리 밖 표시
+		if(distanceType == 2)
+			setMap->at(playerid) = CanHearFootSoundDistance + 6969.f;		// 탐지 거리 밖 표시
+	}
+
+#ifdef	ENABLE_BT_LOG
+	if (spacing)
+		cout << endl;
+#endif
+
+	return;
+}
+
+// 0-PlayerInsight, 1-HeardShouting, 2-HeardFootSound, 3-HeardHordeSound, 4-KnewPlayerLocation, 5-RandPatrolSet
+void Zombie::ClearBlackBoard(bool clear_flag[6])
+{
+	if (clear_flag[0]) {
+		PlayerInSight = false;
+		// 맵도 초기화
+		for (auto player : playerDB_BT[roomid]) {
+			// 죽은 플레이어 무시
+			if (player.second.health <= 0) {
+				continue;
+			}
+			// 연결 끊긴 플레이어 무시
+			if (g_players.find(player.first) == g_players.end()) {
+				continue;
+			}
+
+			ClearDistance(player.first, 1);
+		}
+		detectCanSeePlayer_randomChance = false;
+	}
+
+	if (clear_flag[1])
+		HeardShouting = false;
+
+	if (clear_flag[2]) {
+		HeardFootSound = false;
+		// 맵도 초기화
+		for (auto player : playerDB_BT[roomid]) {
+			// 죽은 플레이어 무시
+			if (player.second.health <= 0) {
+				continue;
+			}
+			// 연결 끊긴 플레이어 무시
+			if (g_players.find(player.first) == g_players.end()) {
+				continue;
+			}
+
+			ClearDistance(player.first, 2);
+		}
+		detectHasFootSound_randomChance = false;
+	}
+
+	if (clear_flag[3])
+		HeardHordeSound = false;
+
+	if (clear_flag[4])
+		KnewPlayerLocation = false;
+
+	if (clear_flag[5])
+		RandPatrolSet = false;
+
+//#ifdef ENABLE_BT_LOG
+	printf("[ClearBlackBoard] Cleared flags (All Reset) \n"); 
+	printf(" PlayerInSight: %s, HeardShouting : %s, HeardFootSound : %s, HeardHordeSound : %s, KnewPlayerLocation : %s, RandPatrolSet : %s\n"
+		, clear_flag[0] ? "cleared" : "stay", clear_flag[1] ? "cleared" : "stay", clear_flag[2] ? "cleared" : "stay", clear_flag[3] ? "cleared" : "stay", clear_flag[4] ? "cleared" : "stay", clear_flag[5] ? "cleared" : "stay");
+	printf(" PlayerInSight: %s, HeardShouting: %s, HeardFootSound: %s, HeardHordeSound: %s, KnewPlayerLocation: %s, RandPatrolSet: %s\n"
+		, PlayerInSight ? "true" : "false", HeardShouting ? "true" : "false", HeardFootSound ? "true" : "false", HeardHordeSound ? "true" : "false", KnewPlayerLocation ? "true" : "false", RandPatrolSet ? "true" : "false");
+//#endif
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+	cout << endl;
+#endif
+}
+
 void Zombie::TakeABreak()
 {
 	std::random_device rd;
@@ -885,24 +1011,32 @@ bool Zombie::PlayerInSight_Update_Check()
 	for (auto player : playerDB_BT[roomid]) {
 		// 죽은 플레이어 무시
 		if (player.second.health <= 0) {
+			if (DistanceTo_PlayerInsight.find(player.first) != DistanceTo_PlayerInsight.end()) {	// 이미 DistanceTo_PlayerInsight에 저장된 값이 있다면
+			}
 			continue;
 		}
 		// 연결 끊긴 플레이어 무시
 		if (g_players.find(player.first) == g_players.end()) {
 			continue;
 		}
-
+	
 		if (DistanceTo_PlayerInsight.find(player.first) != DistanceTo_PlayerInsight.end()) {	// 이미 DistanceTo_PlayerInsight에 저장된 값이 있다면
-			if (DistanceTo_PlayerInsight.at(player.first) >= 0) {	// 그리고 포착 가능한 거리일 때
-				SetDistance(player.first, 1);	// 거리 갱신하기
+			if (DistanceTo_PlayerInsight.at(player.first) >= 0 && // 죽거나 연결 끊긴 플레이어 아님
+				DistanceTo_PlayerInsight.at(player.first) <= CanSeePlayerDistance) {	// 그리고 포착 가능한 거리일 때
+				SetDistance(player.first, 1);	//-> 거리 갱신하기
 			}
 		}
+		else {
+			SetDistance(player.first, 1);	//-> 처음이라면 새로 생성
+		}
 	}
-
+	// ===> 진짜 굳이 할 필요 없었음;;;; [X] ===> 이거 안하니까 패킷이 늦게오는 경우에는 BT돌아가는 속도를 못 쫓아서 플레이어를 자꾸 놓침
+	
 
 	// 시야에 최소 한명이라도 플레이어가 있나 체크
 	for (auto& distTo_playerinsight : DistanceTo_PlayerInsight) {
-		if (distTo_playerinsight.second >= 0) {
+		if (distTo_playerinsight.second >= 0 &&
+			distTo_playerinsight.second <= CanSeePlayerDistance) {
 			bool really_detected = true;
 
 			if (playerDB_BT[roomid].find(distTo_playerinsight.first) != playerDB_BT[roomid].end()) {	// 아래 at 사용시에 혹시 모를 abort에러 방지용
@@ -966,15 +1100,35 @@ bool Zombie::FootSound_Update_Check()
 		}
 
 		if (player.second.IsRunning) {	// 일단 플레이어가 (거리 상관없이) 뛰었다면 
-			if (player.second.x < 2366.f) {	// 그리고, 계단 넘어가 아니라면 FootSound map 접근
-				SetDistance(player.first, 2);	// 갱신 (만약 없었을 시에는 새로 생성)
+			if (player.second.x < 2366.f) {	// 그리고, 계단 넘어가 아니라면 
+
+				// 거리 계산
+				float dx = player.second.x - ZombieData.x;
+				float dy = player.second.y - ZombieData.y;
+
+				float distance = sqrt(dx * dx + dy * dy);
+
+				if (distance > CanHearFootSoundDistance) {	// 포착 거리 밖이라면
+					continue;	//-> 무시
+				}
+
+				if (DistanceTo_FootSound.find(player.first) != DistanceTo_FootSound.end()) {	// 기존에 존재 
+					if (DistanceTo_FootSound.at(player.first) >= 0) { // 죽거나 연결 끊긴 플레이어 아님
+						// FootSound map 접근
+						SetDistance(player.first, 2);	//-> 갱신
+					}
+				}
+				else {	// 없었음 
+					// FootSound map 접근
+					SetDistance(player.first, 2);	//-> 새로 생성
+				}
 			}
 		}
 		else {	// 현재 뛰고 있지 않은 상태
-			// 근데 이미 맵에 저장되어 있다면 -1로 초기화 해주기 (더이상 탐지 불가)
-			if (DistanceTo_FootSound.find(player.first) != DistanceTo_FootSound.end()) {
-				DistanceTo_FootSound[player.first] = -1.0f;
-			}
+			// 근데 이미 맵에 저장되어 있다면 초기화 해주기 (더이상 탐지 불가)
+			//if (DistanceTo_FootSound.find(player.first) != DistanceTo_FootSound.end()) {
+			//	DistanceTo_FootSound[player.first] = CanHearFootSoundDistance + 6969.f;		// 탐지 거리 밖 표시
+			//}
 		}
 	}
 
@@ -995,7 +1149,7 @@ bool Zombie::FootSound_Update_Check()
 		}
 
 
-		if (distTo_footSound.second <= CanHearDistance && distTo_footSound.second > 0) {	// 발소리 포착 거리 내라면
+		if (distTo_footSound.second <= CanHearFootSoundDistance && distTo_footSound.second > 0) {	// 발소리 포착 거리 내라면
 #if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 			cout << "좀비 #" << ZombieData.zombieID << " 가 플레이어 #" << distTo_footSound.first << " 의 새로운 발소리 포착함! --- 거리: " << distTo_footSound.second << endl;
 			spacing = true;
@@ -1009,7 +1163,7 @@ bool Zombie::FootSound_Update_Check()
 			spacing = true;
 #endif
 
-			distTo_footSound.second = -1.0f;		//  발소리 탐지 거리 밖이면 -1 넣기
+			distTo_footSound.second = CanHearFootSoundDistance + 6969.f;		// 탐지 거리 밖 표시
 		}
 	}
 
@@ -1040,8 +1194,8 @@ void Zombie::SetRandomTargetLocation(vector<vector<vector<float>>> target_origin
 	// 랜덤 탐색 범위 설정 (좀비와 발소리간의 거리에 따라, 멀면 멀수록 랜덤 탐색 범위도 커짐)
 	float radius = 0.f;
 
-	if (distance > CanHearDistance) {	// ~1000
-		cout << "[Error]  좀비 #" << ZombieData.zombieID << " 's distance to FootSound is out of range already. (SetRandomTargetLocation -> over CanHearDistance)" << endl;
+	if (distance > CanHearFootSoundDistance) {	// ~1000
+		cout << "[Error]  좀비 #" << ZombieData.zombieID << " 's distance to FootSound is out of range already. (SetRandomTargetLocation -> over CanHearFootSoundDistance)" << endl;
 		// 사실 뜨면 안되는 에러로그
 		return;
 	}
@@ -1144,7 +1298,11 @@ bool Zombie::CanSeePlayerRandomChance()
 {
 	vector<vector<vector<float>>> closest_player_pos = {};
 
-	float dist = SearchClosestPlayer(closest_player_pos, 1);
+	float dx = ZombieData.x - playerDB_BT[roomid][ClosestPlayerID].x;
+	float dy = ZombieData.y - playerDB_BT[roomid][ClosestPlayerID].y;
+
+	// 거리를 계산
+	float dist = sqrt(dx * dx + dy * dy);
 
 	if (dist <= 500) {	// 바로 탐지 (100확률로)
 		detectCanSeePlayer_randomChance = true;
@@ -1251,7 +1409,7 @@ bool Zombie::HasFootSoundRandomChance()
 			return false;
 		}
 	}
-	else if (dist <= CanHearDistance) {
+	else if (dist <= CanHearFootSoundDistance) {
 		if (the_chance >= (100 - 30)) {	// 30퍼센트의 확률
 			detectHasFootSound_randomChance = true;
 			return true;
@@ -1348,7 +1506,7 @@ void Zombie::MakeNoise()
 	}
 }
 
-// wait 실행 우선순위: 피격 > 공격 > 샤우팅
+// wait(애니메이션) 실행 우선순위: 피격 > 공격 > 샤우팅
 void Zombie::Wait()
 {
 	//cout << "좀비 '#" << ZombieData.zombieID << "' BT 잠시 대기." << endl;
@@ -1376,6 +1534,11 @@ void Zombie::Wait()
 
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
 			IsShouting = false;		
+
+
+			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
+			bool clear_flag[6] = { true, true, true, true, true, true };
+			ClearBlackBoard(clear_flag);
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1402,6 +1565,11 @@ void Zombie::Wait()
 			WaitOneTick_SendPath = true;
 
 			IsShouting = false;		
+
+
+			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
+			bool clear_flag[6] = { true, true, true, true, true, true };
+			ClearBlackBoard(clear_flag);
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1426,6 +1594,11 @@ void Zombie::Wait()
 			IsShouting = false;
 			HaveToWait = false;
 			WaitOneTick_SendPath = true;
+
+
+			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
+			bool clear_flag[6] = { true, true, true, true, true, true };
+			ClearBlackBoard(clear_flag);
 		}
 		else {
 #ifdef ENABLE_BT_LOG
@@ -1433,7 +1606,7 @@ void Zombie::Wait()
 #endif
 		}
 	}
-	
+
 
 #ifdef ENABLE_BT_LOG
 	cout << endl;
