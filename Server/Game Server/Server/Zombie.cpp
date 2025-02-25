@@ -1026,11 +1026,8 @@ bool Zombie::PlayerInSight_Update_Check()
 				SetDistance(player.first, 1);	//-> 거리 갱신하기
 			}
 		}
-		else {
-			SetDistance(player.first, 1);	//-> 처음이라면 새로 생성
-		}
+		// 새로 생성은 ProcessPacket에서 처음으로 Detect 패킷이 왔을때 생성함
 	}
-	// ===> 진짜 굳이 할 필요 없었음;;;; [X] ===> 이거 안하니까 패킷이 늦게오는 경우에는 BT돌아가는 속도를 못 쫓아서 플레이어를 자꾸 놓침
 	
 
 	// 시야에 최소 한명이라도 플레이어가 있나 체크

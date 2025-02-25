@@ -431,10 +431,11 @@ void ABaseZombie::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("GrowlSound failed to load in BeginPlay!"));
 	}
 
-	// 7초 후에 EnablePlayerDetection() 호출
+	// 5초 후에 EnablePlayerDetection() 호출
 	GetWorld()->GetTimerManager().SetTimer(DetectionTimerHandle, [this]() {
+		//UE_LOG(LogTemp, Log, TEXT("5초 지남, 탐지 활성화"));
 		bCanDetectPlayer = true;  // 플레이어 탐지 가능 상태로 변경
-		} , 7.0f, false);
+		} , 5.0f, false);
 }
 
 // Called every frame
