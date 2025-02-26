@@ -1295,7 +1295,7 @@ bool Zombie::CanSeePlayerRandomChance()
 	// 거리를 계산
 	float dist = sqrt(dx * dx + dy * dy);
 
-	if (dist <= 500) {	// 바로 탐지 (100확률로)
+	if (dist <= 800) {	// 바로 탐지 (100확률로)
 		detectCanSeePlayer_randomChance = true;
 		return true;
 	}
@@ -1312,7 +1312,7 @@ bool Zombie::CanSeePlayerRandomChance()
 	cout << "CanSeePlayerRandomChance: " << the_chance << ", dist: " << dist << endl;
 #endif
 
-	if (dist <= 800) {
+	if (dist <= 1000) {
 		if (the_chance >= (100 - 80)) {	// 80퍼센트의 확률
 			detectCanSeePlayer_randomChance = true;
 			return true;
@@ -1323,8 +1323,8 @@ bool Zombie::CanSeePlayerRandomChance()
 			return false;
 		}
 	}
-	else if (dist <= 1000) {
-		if (the_chance >= (100 - 50)) {	// 50퍼센트의 확률
+	else if (dist <= 1500) {
+		if (the_chance >= (100 - 60)) {	// 60퍼센트의 확률
 			detectCanSeePlayer_randomChance = true;
 			return true;
 		}
