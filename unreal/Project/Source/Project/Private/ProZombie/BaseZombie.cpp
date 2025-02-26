@@ -3143,7 +3143,7 @@ void ABaseZombie::PlayGrowlSound()
 	if (IsValid(world) && GrowlSound && !IsGrowlSoundPlaying)
 	{
 		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location!"));
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing GrowlSound at Location!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing GrowlSound at Location!")));
 		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.4f);
 
 		IsGrowlSoundPlaying = true;

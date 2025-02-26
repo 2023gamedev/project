@@ -194,40 +194,39 @@ float Zombie::SetDistance(int playerid, int distanceType)
 	if (setMap->find(playerid) == setMap->end()) {		// map에 playerid가 없으면 -> 새로 생성
 		setMap->emplace(playerid, dist);
 
-//#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 		if (distanceType == 1) {
-			//************ 밑에 주석 나중에 풀기
-			//cout << "PlayerInsight 맵에 새로운 데이터 삽입!(생성) playerid: " << playerid << " , distance: " << dist << endl;
+			cout << "PlayerInsight 맵에 새로운 데이터 삽입!(생성) playerid: " << playerid << " a, distance: " << dist << endl;
 		}
 		else {
 			cout << "FootSound 맵에 새로운 데이터 삽입!(생성) playerid: " << playerid << " , distance: " << dist << endl;
 		}
 		spacing = true;
-//#endif
+#endif
 	}
 	else if (setMap->find(playerid) != setMap->end()) {		// map에 이미 playerid가 이미 있으면 -> 수정, 갱신
 		// PlayerInsight 업데이트
 		if (distanceType == 1) {
 			if (setMap->at(playerid) < 0) {	// 죽거나 연결 끊긴 플레이어
-//#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 				cout << "이미 포착 불가능한 (죽음/연결 끊김) 플레이어의 PlayerInsight 맵에 접근;;" << endl;
-//#endif
+#endif
 			}
 			else {
 				setMap->at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 위에서 미리 예외처리 꼭! 필요!
 				//(*setMap)[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
 													// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 
-//#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 				cout << "PlayerInsight 맵에 이미 있던 데이터 갱신! playerid: " << playerid << " , distance: " << dist << endl;
-//#endif
+#endif
 			}
 		}
 		// FootSound 업데이트
 		else if (distanceType == 2) {
 			if ((*setMap)[playerid] < 0) {	// 죽거나 연결 끊긴 플레이어
-//#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 				cout << "이미 포착 불가능한 (죽음/연결 끊김) 플레이어의 FootSound 맵에 접근;;" << endl;
-//#endif
+#endif
 			}
 			else {
 				(*setMap)[playerid] = dist;
@@ -1118,9 +1117,9 @@ bool Zombie::FootSound_Update_Check()
 		}
 		else {	// 현재 뛰고 있지 않은 상태
 			// 근데 이미 맵에 저장되어 있다면 초기화 해주기 (더이상 탐지 불가)
-			//if (DistanceTo_FootSound.find(player.first) != DistanceTo_FootSound.end()) {
-			//	DistanceTo_FootSound[player.first] = CanHearFootSoundDistance + 6969.f;		// 탐지 거리 밖 표시
-			//}
+			if (DistanceTo_FootSound.find(player.first) != DistanceTo_FootSound.end()) {
+				DistanceTo_FootSound[player.first] = CanHearFootSoundDistance + 6969.f;		// 탐지 거리 밖 표시
+			}
 		}
 	}
 

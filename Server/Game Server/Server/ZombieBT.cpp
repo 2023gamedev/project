@@ -89,7 +89,7 @@ void ZombieBT::MakeZombieBT()
 	seq_hasinvestigated->AddChild(t_moveto);
 
 	//{Sequence-NotHasLastKnownPlayerLocation} 할당 -> 필요 자식노드들 '순서대로' 삽입
-	//seq_nothaslastknownplayerlocation->AddChild(t_moveto);
+	seq_nothaslastknownplayerlocation->AddChild(t_moveto);
 }
 
 ZombieBT::~ZombieBT()
