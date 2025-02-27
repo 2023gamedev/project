@@ -1233,11 +1233,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			TMap<FVector, FVertexBoneData> VertexBoneMap;
 			TMap<FName, FVector> BoneAveragePos;
-			//double StartTime = FPlatformTime::Seconds();
+			double StartTime = FPlatformTime::Seconds();
 			InitVertexBoneMap(VertexBoneMap, BoneAveragePos);
 
-			//double EndTime = FPlatformTime::Seconds();
-			//UE_LOG(LogTemp, Warning, TEXT("InitVertexBoneMap took: %f seconds"), EndTime - StartTime);
+			double EndTime = FPlatformTime::Seconds();
+			UE_LOG(LogTemp, Warning, TEXT("InitVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
 			TArray<FVector> CutSectionVertices2;
 
@@ -1259,14 +1259,14 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			TMap<int, FVector> ClusterCenters;
 
 
-			//double ALLStartTime = FPlatformTime::Seconds();
-			//StartTime = FPlatformTime::Seconds();
+			double ALLStartTime = FPlatformTime::Seconds();
+			StartTime = FPlatformTime::Seconds();
 
 			DBSCANWithAverageDistance(CutSectionVertices2, MinPts2, Labels2, ClusteredVertices);
 
-			//EndTime = FPlatformTime::Seconds();
+			EndTime = FPlatformTime::Seconds();
 
-			//UE_LOG(LogTemp, Warning, TEXT("DBSCANWithAverageDistance took: %f seconds"), EndTime - StartTime);
+			UE_LOG(LogTemp, Warning, TEXT("DBSCANWithAverageDistance took: %f seconds"), EndTime - StartTime);
 
 			TArray<TArray<TPair<int, FVector>>> RefinedClusters;
 
@@ -1274,24 +1274,24 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			for (TPair<int, TArray<TPair<int, FVector>>>& Cluster : ClusteredVertices)
 			{
 				TArray<TArray<TPair<int, FVector>>> SubClusters;
-				//StartTime = FPlatformTime::Seconds();
+				StartTime = FPlatformTime::Seconds();
 				// 밀도 기반 그래프 분석 (연결 관계 확인)
 				RefineClusterUsingGraph(Cluster.Value, SubClusters);
-				//EndTime = FPlatformTime::Seconds();
+				EndTime = FPlatformTime::Seconds();
 
-				//UE_LOG(LogTemp, Warning, TEXT("RefineClusterUsingGraph took: %f seconds"), EndTime - StartTime);
+				UE_LOG(LogTemp, Warning, TEXT("RefineClusterUsingGraph took: %f seconds"), EndTime - StartTime);
 
 			
 				// 만약 그래프 기반 분리로 충분하지 않다면, K-Means 시도
 				if (SubClusters.Num() == 1)
 				{
-					//StartTime = FPlatformTime::Seconds();
+					StartTime = FPlatformTime::Seconds();
 					KMeansSplitCluster(Cluster.Value, SubClusters);
-					//EndTime = FPlatformTime::Seconds();
-					//UE_LOG(LogTemp, Warning, TEXT("KMeansSplitCluster took: %f seconds"), EndTime - StartTime);
+					EndTime = FPlatformTime::Seconds();
+					UE_LOG(LogTemp, Warning, TEXT("KMeansSplitCluster took: %f seconds"), EndTime - StartTime);
 				}
 
-				//StartTime = FPlatformTime::Seconds();
+				StartTime = FPlatformTime::Seconds();
 
 				// 분리된 클러스터를 최종 저장 (중복 클러스터 추가 방지)
 				for (const auto& SubCluster : SubClusters)
@@ -1315,11 +1315,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				}
 
 
-				//EndTime = FPlatformTime::Seconds();
-				//UE_LOG(LogTemp, Warning, TEXT("bAlreadyAdded took: %f seconds"), EndTime - StartTime);
+				EndTime = FPlatformTime::Seconds();
+				UE_LOG(LogTemp, Warning, TEXT("bAlreadyAdded took: %f seconds"), EndTime - StartTime);
 			}
 
-			//// 최종적으로 중복되지 않은 클러스터들로 ClusteredVertices 업데이트
+			// 최종적으로 중복되지 않은 클러스터들로 ClusteredVertices 업데이트
 			ClusteredVertices.Empty();
 			int NewClusterId = 0;
 			for (const auto& SubCluster : RefinedClusters)
@@ -1328,14 +1328,14 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			}
 
 
-			//StartTime = FPlatformTime::Seconds();
+			StartTime = FPlatformTime::Seconds();
 
 			GetVerticesByCluster(ClusteredVertices, ClusterCenters);
 
 
-			//EndTime = FPlatformTime::Seconds();
+			EndTime = FPlatformTime::Seconds();
 
-			//UE_LOG(LogTemp, Warning, TEXT("GetVerticesByCluster took: %f seconds"), EndTime - StartTime);
+			UE_LOG(LogTemp, Warning, TEXT("GetVerticesByCluster took: %f seconds"), EndTime - StartTime);
 
 
 			//for (const TPair<int, FVector>& Cluster : ClusterCenters) {
@@ -1344,13 +1344,13 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			//}
 			//UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex ======================================================="));
 
-			//StartTime = FPlatformTime::Seconds();
+			StartTime = FPlatformTime::Seconds();
 
 			MergeClustersBasedOnBoneName(ClusteredVertices, ClusterCenters, BoneAveragePos);
 
-			//EndTime = FPlatformTime::Seconds();
+			EndTime = FPlatformTime::Seconds();
 
-			//UE_LOG(LogTemp, Warning, TEXT("MergeClustersBasedOnBoneName took: %f seconds"), EndTime - StartTime);
+			UE_LOG(LogTemp, Warning, TEXT("MergeClustersBasedOnBoneName took: %f seconds"), EndTime - StartTime);
 
 
 			ClusterCenters.Empty();
@@ -1375,11 +1375,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			//EndTime = FPlatformTime::Seconds();
 			//UE_LOG(LogTemp, Warning, TEXT("InitVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
-			//StartTime = FPlatformTime::Seconds();
+			StartTime = FPlatformTime::Seconds();
 			FillSectionVertexBoneMap(VertexBoneMap, SectionVertexBoneMap, BoneAveragePos);
 
-			//EndTime = FPlatformTime::Seconds();
-			//UE_LOG(LogTemp, Warning, TEXT("FillSectionVertexBoneMap took: %f seconds"), EndTime - StartTime);
+			EndTime = FPlatformTime::Seconds();
+			UE_LOG(LogTemp, Warning, TEXT("FillSectionVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
 
 			// 기존 ProceduralMesh가 있으면 삭제
@@ -1396,6 +1396,82 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			int32 ProceduralMeshNewIndex = 2;
 
+
+			// ? 00000초 걸리네
+			//StartTime = FPlatformTime::Seconds();
+
+			//int strestest = 0;
+			//for (int i = 0; i < 6000; ++i) {
+			//	if (i % 2 == 0) {
+			//		strestest += 2;
+
+			//	}
+			//	else {
+			//		strestest += 1;
+			//	}
+
+			//}
+
+
+			//// 6000개의 랜덤 버텍스 A와 B
+			//TArray<FVector> VertexArrayA;
+			//TArray<FVector> VertexArrayB;
+			//TArray<FVector> InterpolatedVertices; // 보간된 위치
+
+			//// 6000개 랜덤 버텍스 초기화
+			//int32 NumVertices = 6000;
+			//VertexArrayA.SetNum(NumVertices);
+			//VertexArrayB.SetNum(NumVertices);
+			//InterpolatedVertices.SetNum(NumVertices);
+
+			//for (int32 i = 0; i < NumVertices; ++i)
+			//{
+			//	// A: 초기 랜덤 위치 (-100 ~ 100)
+			//	VertexArrayA[i] = FVector(
+			//		FMath::RandRange(-100.0f, 100.0f),
+			//		FMath::RandRange(-100.0f, 100.0f),
+			//		FMath::RandRange(-100.0f, 100.0f)
+			//	);
+
+			//	// B: 목표 랜덤 위치 (300 ~ 500)
+			//	VertexArrayB[i] = FVector(
+			//		FMath::RandRange(300.0f, 500.0f),
+			//		FMath::RandRange(300.0f, 500.0f),
+			//		FMath::RandRange(300.0f, 500.0f)
+			//	);
+
+			//	// 초기 보간 버텍스 = A (시작점)
+			//	InterpolatedVertices[i] = VertexArrayA[i];
+			//}
+
+			//// 보간 관련 변수
+			//float LerpAlpha = 0.0f; // 보간 비율 (0.0 ~ 1.0)
+			//float LerpSpeed = 0.5f;  // 이동 속도 (조절 가능)
+			//StartTime = FPlatformTime::Seconds();
+
+			//// 보간 비율 증가 (프레임마다 보간 비율 갱신)
+			//LerpAlpha = FMath::Clamp(LerpAlpha + (0.5f * LerpSpeed), 0.0f, 1.0f);
+
+			//// A → B 보간
+			//for (int32 i = 0; i < VertexArrayA.Num(); ++i)
+			//{
+			//	InterpolatedVertices[i] = FMath::Lerp(VertexArrayA[i], VertexArrayB[i], LerpAlpha);
+			//}
+
+			//EndTime = FPlatformTime::Seconds();
+			//UE_LOG(LogTemp, Warning, TEXT("6000 버텍스 보간 시간: %f 초"), EndTime - StartTime);
+
+			//// 보간 완료 체크
+			//if (LerpAlpha >= 1.0f)
+			//{
+			//	UE_LOG(LogTemp, Warning, TEXT("A → B 보간 완료"));
+			//}
+
+
+			//EndTime = FPlatformTime::Seconds();
+			//UE_LOG(LogTemp, Warning, TEXT("strestest 6000 took: %f seconds"), EndTime - StartTime);
+
+
 			if (ClusterCenters.Num() > 1) { // CutProceduralMesh_2 분해
 				for (const TPair<int, FVector>& Cluster : ClusterCenters) {
 
@@ -1408,12 +1484,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					TArray<FColor> Colors;
 					TArray<FProcMeshTangent> Tangents;
 
-					//StartTime = FPlatformTime::Seconds();
-					//FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value); // 이 bonename 이용해 해야 되는데 최적화 문제가 있긴 하다.
+					StartTime = FPlatformTime::Seconds();
 					FName CutPlaneBoneName = FindNearstBoneName(BoneAveragePos ,Cluster.Value);
 
-					//EndTime = FPlatformTime::Seconds();
-					//UE_LOG(LogTemp, Warning, TEXT("CutPlaneBoneName GetBoneNameForCutPlaneVertex took: %f seconds"), EndTime - StartTime);
+					EndTime = FPlatformTime::Seconds();
+					UE_LOG(LogTemp, Warning, TEXT("CutPlaneBoneName GetBoneNameForCutPlaneVertex took: %f seconds"), EndTime - StartTime);
 
 					//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlaneBoneName : %s "), *CutPlaneBoneName.ToString());
 
@@ -1446,8 +1521,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								int32 ClusterVerticesNum = 0;
 								if (ClusteredVertices.Contains(Cluster.Key))
 								{
-									//StartTime = FPlatformTime::Seconds();
-									//TArray<FVector>& ClusterVertices = ClusteredVertices[Cluster.Key];
+									StartTime = FPlatformTime::Seconds();
 									TArray<TPair<int, FVector>>& ClusterVertices = ClusteredVertices[Cluster.Key]; // TPair<int, FVector> 기반으로 수정
 						
 									ClusterVerticesNum = ClusterVertices.Num();
@@ -1520,8 +1594,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 									Colors.Empty();
 									Tangents.Empty();
 
-									//EndTime = FPlatformTime::Seconds();
-									//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->GetNumSections() - 1 took: %f seconds"), EndTime - StartTime);
+									EndTime = FPlatformTime::Seconds();
+									UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->GetNumSections() - 1 took: %f seconds"), EndTime - StartTime);
 								}
 								else
 								{
@@ -1531,7 +1605,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 							}
 							else {
-								//StartTime = FPlatformTime::Seconds();
+								StartTime = FPlatformTime::Seconds();
 								for (int32 i = 0; i < SectionVertices.Num(); i++)
 								{
 									FVector VertexPos = SectionVertices[i].Position;
@@ -1599,8 +1673,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 								Colors.Empty();
 								Tangents.Empty();
 
-								//EndTime = FPlatformTime::Seconds();
-								//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->GetNumSections() took: %f seconds"), EndTime - StartTime);
+								EndTime = FPlatformTime::Seconds();
+								UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->GetNumSections() took: %f seconds"), EndTime - StartTime);
 							}
 
 						}
@@ -1847,10 +1921,25 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 
-			//double AllEndTime = FPlatformTime::Seconds();
-			//UE_LOG(LogTemp, Warning, TEXT("NSlice took: %f seconds"), AllEndTime - ALLStartTime);
+			double AllEndTime = FPlatformTime::Seconds();
+			UE_LOG(LogTemp, Warning, TEXT("NSlice took: %f seconds"), AllEndTime - ALLStartTime);
 		}
 	}
+
+
+	// 메쉬 병합 방법 정리1
+	// 절단 시 8초간 기다리기
+	// 프로시저럴 메쉬 섹션인덱스 버텍스 인덱스 맵으로 기록해두기
+	// 스켈레탈 메쉬 섹션인덱스 버텍스 인덱스 맵으로 기록하고 프로시저럴 메쉬 버텍스랑 스켈레탈 메쉬 버텍스 둘이 거리 기록
+	// 문제는 단면 버텍스랑 똑같은 위치가 없는 버텍스가 문제이긴 한데 이 부분 해결 필요
+	// 거리 시간에 따라 다가오게 한 다음 시간 다 되면 프로시저럴 메쉬 전체 삭제 후 스켈레탈 메쉬 보이게 하기
+	// 초기화 필요한 부분들 초기화 하기
+
+
+	// 메쉬 병합 방법 정리2
+	// 프로시저럴 메쉬 bonename 저장 해놓기
+	// bonename 저장해놓은 것을 이용해서 bone 월드 좌표랑 회전 좌표 계산
+	// 도착하면 프로시저럴 메쉬 없애고 스켈레탈 메쉬 부활 시키기
 }
 
 
@@ -2370,100 +2459,10 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 			ClusterCenters[FirstClusterId] = NewClusterCenter;
 
 			// **병합된 클러스터의 새로운 BoneName을 계산하여 업데이트**
-			//FName NewBoneName = GetBoneNameForCutPlaneVertex(NewClusterCenter);
 			FName NewBoneName = FindNearstBoneName(BoneAveragePos, NewClusterCenter);
 			ClusterBoneNames[FirstClusterId] = NewBoneName;
 		}
 	}
-
-	//// MergeConditionBoneNames 정의 (우선순위 순서대로 정의)
-	//TArray<FName> MergeConditionBoneNames = {
-	//	FName(TEXT("Head")),
-	//	FName(TEXT("Neck")),
-	//	FName(TEXT("Spine2")),
-	//	FName(TEXT("Spine1")),
-	//	FName(TEXT("Spine")),
-	//	FName(TEXT("Hips"))
-	//};
-
-	//FName HighestPriorityBoneName;
-	//int HighestPriorityIndex = MergeConditionBoneNames.Num();
-	//int TargetClusterId = -1;
-
-	//for (const TPair<int, FName>& Cluster : ClusterBoneNames)
-	//{
-	//	int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
-	//	if (Index != INDEX_NONE && Index < HighestPriorityIndex) // 더 높은 우선순위 발견
-	//	{
-	//		HighestPriorityBoneName = Cluster.Value;
-	//		HighestPriorityIndex = Index;
-	//		TargetClusterId = Cluster.Key;
-	//	}
-	//}
-
-	//if (!HighestPriorityBoneName.IsNone() && TargetClusterId != -1)
-	//{
-	//	TArray<int> ClustersToMerge;
-	//	TArray<TPair<int, FVector>> MergedVertices;
-
-	//	for (const TPair<int, FName>& Cluster : ClusterBoneNames)
-	//	{
-	//		int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
-	//		if (Index != INDEX_NONE && Index >= HighestPriorityIndex) 
-	//		{
-	//			ClustersToMerge.Add(Cluster.Key);
-	//		}
-	//	}
-
-	//	for (int ClusterId : ClustersToMerge)
-	//	{
-	//		if (ClusteredVertices.Contains(ClusterId))
-	//		{
-	//			const TArray<TPair<int, FVector>>& VerticesInCluster = ClusteredVertices[ClusterId];
-	//			MergedVertices.Append(VerticesInCluster);
-	//		}
-	//	}
-
-	//	// 병합된 클러스터 데이터 처리
-	//	if (TargetClusterId != -1 && MergedVertices.Num() > 0)
-	//	{
-	//		// TargetClusterId가 이미 존재하는지 확인
-	//		if (ClusteredVertices.Contains(TargetClusterId))
-	//		{
-	//			ClusteredVertices[TargetClusterId] = MergedVertices;
-
-	//			for (int ClusterId : ClustersToMerge)
-	//			{
-	//				if (ClusterId != TargetClusterId)
-	//				{
-	//					ClusteredVertices.Remove(ClusterId);
-	//					ClusterBoneNames.Remove(ClusterId);
-	//				}
-	//			}
-
-	//			FVector NewClusterCenter(0, 0, 0);
-	//			for (const TPair<int, FVector>& Vertex : MergedVertices)
-	//			{
-	//				NewClusterCenter += Vertex.Value;
-	//			}
-	//			if (MergedVertices.Num() > 0)
-	//			{
-	//				NewClusterCenter /= MergedVertices.Num();
-	//			}
-
-	//			ClusterCenters[TargetClusterId] = NewClusterCenter;
-	//		}
-	//		else
-	//		{
-	//			UE_LOG(LogTemp, Error, TEXT("TargetClusterId %d is invalid, unable to merge."), TargetClusterId);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		UE_LOG(LogTemp, Error, TEXT("No valid clusters to merge or invalid TargetClusterId"));
-	//	}
-
-	//}
 
 	// 병합 우선순위 그룹들 정의
 	TArray<TArray<FName>> MergeConditionBoneGroups = {
@@ -2474,7 +2473,7 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 		{ FName(TEXT("RightUpLeg")), FName(TEXT("RightLeg")), FName(TEXT("RightFoot")), FName(TEXT("RightToeBase")) }
 	};
 
-	// 각 그룹별 병합 수행
+	// === 1차 병합 ===
 	for (const TArray<FName>& MergeConditionBoneNames : MergeConditionBoneGroups)
 	{
 		FName HighestPriorityBoneName;
@@ -2485,7 +2484,7 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 		for (const TPair<int, FName>& Cluster : ClusterBoneNames)
 		{
 			int Index = MergeConditionBoneNames.IndexOfByKey(Cluster.Value);
-			if (Index != INDEX_NONE && Index < HighestPriorityIndex) // 더 높은 우선순위 발견
+			if (Index != INDEX_NONE && Index < HighestPriorityIndex)
 			{
 				HighestPriorityBoneName = Cluster.Value;
 				HighestPriorityIndex = Index;
@@ -2493,7 +2492,7 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 			}
 		}
 
-		// 병합할 클러스터들을 찾기
+		// 병합 대상 확인
 		if (!HighestPriorityBoneName.IsNone() && TargetClusterId != -1)
 		{
 			TArray<int> ClustersToMerge;
@@ -2508,6 +2507,7 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 				}
 			}
 
+			// 병합 수행
 			for (int ClusterId : ClustersToMerge)
 			{
 				if (ClusteredVertices.Contains(ClusterId))
@@ -2517,10 +2517,9 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 				}
 			}
 
-			// 병합된 클러스터 데이터 처리
+			// 병합 결과 반영
 			if (TargetClusterId != -1 && MergedVertices.Num() > 0)
 			{
-				// TargetClusterId가 이미 존재하는지 확인
 				if (ClusteredVertices.Contains(TargetClusterId))
 				{
 					ClusteredVertices[TargetClusterId] = MergedVertices;
@@ -2539,25 +2538,110 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 					{
 						NewClusterCenter += Vertex.Value;
 					}
-					if (MergedVertices.Num() > 0)
-					{
-						NewClusterCenter /= MergedVertices.Num();
-					}
-
-					ClusterCenters[TargetClusterId] = NewClusterCenter;
+					ClusterCenters[TargetClusterId] = NewClusterCenter / MergedVertices.Num();
 				}
 				else
 				{
-					UE_LOG(LogTemp, Error, TEXT("TargetClusterId %d is invalid, unable to merge."), TargetClusterId);
+					UE_LOG(LogTemp, Error, TEXT("Invalid TargetClusterId %d"), TargetClusterId);
 				}
-			}
-			else
-			{
-				UE_LOG(LogTemp, Error, TEXT("No valid clusters to merge or invalid TargetClusterId"));
 			}
 		}
 	}
 
+	//UE_LOG(LogTemp, Log, TEXT("==== Cluster Bone Names After Merge ===="));
+	//for (const TPair<int, FName>& Cluster : ClusterBoneNames)
+	//{
+	//	UE_LOG(LogTemp, Log, TEXT("Cluster ID1: %d, Bone Name: %s"), Cluster.Key, *Cluster.Value.ToString());
+	//}
+
+	// === 2차 병합 (Hips 기준 추가 병합) ===
+	TArray<int> ClustersToMerge2;
+
+	for (const TPair<int, FName>& Cluster : ClusterBoneNames)
+	{
+		FName ClBoneName = Cluster.Value;
+		if (ClBoneName == FName(TEXT("LeftUpLeg")) || ClBoneName == FName(TEXT("RightUpLeg")))
+		{
+			int LegClusterId = Cluster.Key;
+
+			// 병합할 Hips와 Spine1, Spine 클러스터 찾기
+			TArray<int> PotentialHipsSpineClusterIds;
+
+			for (const TPair<int, FName>& InnerCluster : ClusterBoneNames)
+			{
+				FName InnerClBoneName = InnerCluster.Value;
+				if (InnerClBoneName == FName(TEXT("Spine1")) || InnerClBoneName == FName(TEXT("Spine")) || InnerClBoneName == FName(TEXT("Hips")))
+				{
+					PotentialHipsSpineClusterIds.Add(InnerCluster.Key);
+				}
+			}
+
+			// 병합할 준비가 되었는지 확인
+			for (int HipsSpineClusterId : PotentialHipsSpineClusterIds)
+			{
+				if (ClusteredVertices.Contains(LegClusterId) && ClusteredVertices.Contains(HipsSpineClusterId))
+				{
+					// 병합할 클러스터들 기록
+					ClustersToMerge2.Add(HipsSpineClusterId);
+				}
+			}
+		}
+	}
+
+	// 병합할 클러스터들 처리
+	for (int HipsSpineClusterId : ClustersToMerge2)
+	{
+		int LegClusterId = -1;
+
+		// Leg 클러스터 찾기 (Hips/Spine과 병합)
+		for (const TPair<int, FName>& Cluster : ClusterBoneNames)
+		{
+			if (Cluster.Value == FName(TEXT("LeftUpLeg")) || Cluster.Value == FName(TEXT("RightUpLeg")))
+			{
+				LegClusterId = Cluster.Key;
+				break;
+			}
+		}
+
+		// 병합 작업 수행
+		if (LegClusterId != -1 && ClusteredVertices.Contains(LegClusterId) && ClusteredVertices.Contains(HipsSpineClusterId))
+		{
+			// Hips 또는 Spine 클러스터에 Leg 클러스터의 버텍스 추가
+			TArray<TPair<int, FVector>>& TargetVertices = ClusteredVertices[HipsSpineClusterId];
+			const TArray<TPair<int, FVector>>& LegVertices = ClusteredVertices[LegClusterId];
+
+			// Leg 클러스터의 모든 버텍스를 Target(Hips/Spine) 클러스터에 추가
+			TargetVertices.Append(LegVertices);
+
+			// 병합된 Leg 클러스터 삭제
+			ClusteredVertices.Remove(LegClusterId);
+			ClusterBoneNames.Remove(LegClusterId);
+
+			// 새로운 중심점 계산
+			FVector NewCenter(0, 0, 0);
+			for (const TPair<int, FVector>& Vertex : TargetVertices)
+			{
+				NewCenter += Vertex.Value;
+			}
+
+			// 새로운 중심점 재계산 (버텍스 개수로 나눠서 평균 계산)
+			if (TargetVertices.Num() > 0)
+			{
+				NewCenter /= TargetVertices.Num();
+			}
+
+			// 새로운 중심점 저장
+			ClusterCenters[HipsSpineClusterId] = NewCenter;
+
+			//UE_LOG(LogTemp, Log, TEXT("Merged Leg Cluster %d into Cluster %d (Hips/Spine)"), LegClusterId, HipsSpineClusterId);
+		}
+	}
+
+	//UE_LOG(LogTemp, Log, TEXT("==== Cluster Bone Names After Merge ===="));
+	//for (const TPair<int, FName>& Cluster : ClusterBoneNames)
+	//{
+	//	UE_LOG(LogTemp, Log, TEXT("Cluster ID2: %d, Bone Name: %s"), Cluster.Key, *Cluster.Value.ToString());
+	//}
 }
 
 void ABaseZombie::RefineClusterUsingGraph(const TArray<TPair<int, FVector>>& ClusterPoints, TArray<TArray<TPair<int, FVector>>>& SeparatedClusters)
@@ -2643,19 +2727,24 @@ void ABaseZombie::RefineClusterUsingGraph(const TArray<TPair<int, FVector>>& Clu
 		}
 	}
 
-	// OrphanedVertices 병합 (고립된 버텍스를 기존 클러스터에 추가)
+	// OrphanedVertices 병합 (고립된 버텍스를 모든 클러스터의 버텍스와 비교)
 	for (auto& Orphaned : OrphanedVertices)
 	{
 		bool bAdded = false;
 
 		for (auto& ExistingCluster : SeparatedClusters)
 		{
-			if (FVector::Dist(ExistingCluster[0].Value, Orphaned.Value) < Threshold)
+			for (const auto& Vertex : ExistingCluster)
 			{
-				ExistingCluster.Add(Orphaned);
-				bAdded = true;
-				break;
+				if (FVector::Dist(Vertex.Value, Orphaned.Value) < Threshold)
+				{
+					ExistingCluster.Add(Orphaned);
+					bAdded = true;
+					break; // 버텍스를 추가했으면 해당 클러스터 검사는 종료
+				}
 			}
+
+			if (bAdded) break; // 이미 병합된 경우, 다음 클러스터 검사 생략
 		}
 
 		// 가장 가까운 클러스터가 없다면 새로운 클러스터로 추가
@@ -2664,6 +2753,29 @@ void ABaseZombie::RefineClusterUsingGraph(const TArray<TPair<int, FVector>>& Clu
 			SeparatedClusters.Add({ Orphaned });
 		}
 	}
+
+	//// OrphanedVertices 병합 (고립된 버텍스를 기존 클러스터에 추가)
+	//for (auto& Orphaned : OrphanedVertices)
+	//{
+	//	bool bAdded = false;
+
+	//	for (auto& ExistingCluster : SeparatedClusters)
+	//	{
+
+	//		if (FVector::Dist(ExistingCluster[0].Value, Orphaned.Value) < Threshold)
+	//		{
+	//			ExistingCluster.Add(Orphaned);
+	//			bAdded = true;
+	//			break;
+	//		}
+	//	}
+
+	//	// 가장 가까운 클러스터가 없다면 새로운 클러스터로 추가
+	//	if (!bAdded)
+	//	{
+	//		SeparatedClusters.Add({ Orphaned });
+	//	}
+	//}
 
 	// 최종 클러스터 개수 출력
 	UE_LOG(LogTemp, Warning, TEXT("Total Clusters: %d"), SeparatedClusters.Num());
