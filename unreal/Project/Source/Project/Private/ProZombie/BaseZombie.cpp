@@ -586,14 +586,16 @@ void ABaseZombie::Tick(float DeltaTime)
 					ProcMesh->SetMassOverrideInKg(NAME_None, weight, true);
 				}
 
+				// 너무 얇게 짤려 컨벡스 메시 자체가 생성 안되었을 경우!
+				int32 ConvexElementCount = ProcMesh->GetBodySetup()->AggGeom.ConvexElems.Num();
+				if (ConvexElementCount == 0) {
+					CreateAndApplyBoundingBoxByNewProcMesh(ProcMesh);
+					ProcMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+					ProcMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+					ProcMesh->SetSimulatePhysics(true);
 
-				//CreateAndApplyBoundingBox(ProcMesh);
-				CreateAndApplyBoundingBoxByNewProcMesh(ProcMesh);
-				ProcMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-				ProcMesh->SetCollisionProfileName(TEXT("Ragdoll"));
-				ProcMesh->SetSimulatePhysics(true);
-
-				ProcMesh->SetMassOverrideInKg(NAME_None, weight, true);
+					ProcMesh->SetMassOverrideInKg(NAME_None, weight, true);
+				}
 
 
 				UE_LOG(LogTemp, Log, TEXT("Weight: %f"), weight);
@@ -1338,11 +1340,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			UE_LOG(LogTemp, Warning, TEXT("GetVerticesByCluster took: %f seconds"), EndTime - StartTime);
 
 
-			//for (const TPair<int, FVector>& Cluster : ClusterCenters) {
-			//	FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value);
-			//	UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex: %d, BoneName: %s"), Cluster.Key,*CutPlaneBoneName.ToString());
-			//}
-			//UE_LOG(LogTemp, Warning, TEXT("ClusterCentersIndex ======================================================="));
 
 			StartTime = FPlatformTime::Seconds();
 
@@ -1355,10 +1352,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			ClusterCenters.Empty();
 			GetVerticesByCluster(ClusteredVertices, ClusterCenters);
-			//for (const TPair<int, FVector>& Cluster : ClusterCenters) {
-			//	FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value);
-			//	UE_LOG(LogTemp, Warning, TEXT("ttClusterCentersIndex: %d, BoneName: %s"), Cluster.Key, *CutPlaneBoneName.ToString());
-			//}
 
 			// 섹션
 			//TMap<FVector, FVertexBoneData> VertexBoneMap;
@@ -1488,7 +1481,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					FName CutPlaneBoneName = FindNearstBoneName(BoneAveragePos ,Cluster.Value);
 
 					EndTime = FPlatformTime::Seconds();
-					UE_LOG(LogTemp, Warning, TEXT("CutPlaneBoneName GetBoneNameForCutPlaneVertex took: %f seconds"), EndTime - StartTime);
+					UE_LOG(LogTemp, Warning, TEXT("CutPlaneBoneName FindNearstBoneName took: %f seconds"), EndTime - StartTime);
 
 					//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->CutPlaneBoneName : %s "), *CutPlaneBoneName.ToString());
 
@@ -1496,6 +1489,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					UProceduralMeshComponent* NewProcMesh = NewObject<UProceduralMeshComponent>(this);
 					NewProcMesh->bUseComplexAsSimpleCollision = false;
 
+					TArray<FVector> Vertices_Convex;
+					int interval_Convex = 10;
+					int interval_index = 0;
 					if (CutPlaneBoneName == "Head" ||
 						CutPlaneBoneName == "Neck" ||
 						CutPlaneBoneName == "Spine2" ||
@@ -1519,6 +1515,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 							if (SectionIndex == CutProceduralMesh_2->GetNumSections() - 1) {
 								int32 ClusterVerticesNum = 0;
+								
 								if (ClusteredVertices.Contains(Cluster.Key))
 								{
 									StartTime = FPlatformTime::Seconds();
@@ -1541,6 +1538,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 											// 새로운 정점이면 추가 후 인덱스 저장
 											GlobalIndex = Vertices.Add(VertexPos);
 											GlobalVertexMap.Add(VertexPos, GlobalIndex);
+
+											if (interval_index % interval_Convex == 0) {
+												Vertices_Convex.Add(VertexPos);
+											}	
+											++interval_index;
 
 											// 나머지 속성도 추가
 											Normals.Add(SectionVertices[OriginalIndex].Normal);
@@ -1629,6 +1631,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 											GlobalIndex = Vertices.Add(VertexPos);
 											GlobalVertexMap.Add(VertexPos, GlobalIndex);
 
+											if (interval_index % interval_Convex == 0) {
+												Vertices_Convex.Add(VertexPos);
+											}
+											++interval_index;
+
 											// 나머지 속성도 추가
 											Normals.Add(SectionVertices[i].Normal);
 											UVs.Add(SectionVertices[i].UV0);
@@ -1681,30 +1688,21 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 
 
-						//// 새로운 ProceduralMeshComponent 생성
-						//UProceduralMeshComponent* NewProcMesh = NewObject<UProceduralMeshComponent>(this);
-						//
-						//NewProcMesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
-						//
 						NewProcMesh->RegisterComponent();
 
 						// 언리얼 에디터에서 보이게 설정
 						NewProcMesh->SetVisibility(true);
 						NewProcMesh->SetHiddenInGame(false);
 
-						//// 절단 부위 material 설정
-						//for (int n = 0; n < GetMesh()->GetNumMaterials(); n++) {
-						//	NewProcMesh->SetMaterial(n, GetMesh()->GetMaterial(n));
-						//}
-						//NewProcMesh->SetMaterial(NewProcMesh->GetNumMaterials() - 1, Material_Blood);
+
+						NewProcMesh->AddCollisionConvexMesh(Vertices_Convex);
+						Vertices_Convex.Empty();
+						interval_index = 0;
 
 						NewProcMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 						NewProcMesh->SetCollisionProfileName(TEXT("Ragdoll"));
 						NewProcMesh->SetSimulatePhysics(true);
 
-
-						//FTransform SkeletonTransform = CutProceduralMesh_2->GetComponentTransform();
-						//NewProcMesh->SetWorldTransform(SkeletonTransform);
 						// 배열에 추가
 						ProceduralMeshes.Add(NewProcMesh);
 						ProcMeshImpulseStates.Add(NewProcMesh, false);
@@ -1753,6 +1751,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 											// 새로운 정점이면 추가 후 인덱스 저장
 											GlobalIndex = Vertices.Add(VertexPos);
 											GlobalVertexMap.Add(VertexPos, GlobalIndex);
+
+											if (interval_index % interval_Convex == 0) {
+												Vertices_Convex.Add(VertexPos);
+											}
+											++interval_index;
 
 											// 나머지 속성도 추가
 											Normals.Add(SectionVertices[OriginalIndex].Normal);
@@ -1836,6 +1839,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 											GlobalIndex = Vertices.Add(VertexPos);
 											GlobalVertexMap.Add(VertexPos, GlobalIndex);
 
+											if (interval_index % interval_Convex == 0) {
+												Vertices_Convex.Add(VertexPos);
+											}
+											++interval_index;
+
 											// 나머지 속성도 추가
 											Normals.Add(SectionVertices[i].Normal);
 											UVs.Add(SectionVertices[i].UV0);
@@ -1895,6 +1903,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 						//NewProcMesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
 
 						NewProcMesh->RegisterComponent();
+
+						NewProcMesh->AddCollisionConvexMesh(Vertices_Convex);
+						Vertices_Convex.Empty();
+						interval_index = 0;
 
 						NewProcMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 						NewProcMesh->SetCollisionProfileName(TEXT("Ragdoll"));
@@ -2072,176 +2084,6 @@ FName ABaseZombie::FindNearstBoneName(TMap<FName, FVector>& BoneAveragePos, cons
 	return ClosestBoneName;
 }
 
-// Vertex에 가장 큰 영향을 주는 bonename 찾기
-FName ABaseZombie::GetBoneNameForVertex(const FVector& TargetPosition)
-{
-	// SkeletalMeshComponent와 LODData 가져오기
-	USkeletalMeshComponent* Skeleton = GetMesh();
-	FSkeletalMeshRenderData* SkMeshRenderData = Skeleton->GetSkeletalMeshRenderData();
-	const FSkeletalMeshLODRenderData& DataArray = SkMeshRenderData->LODRenderData[0];
-	FSkinWeightVertexBuffer& SkinWeights = *Skeleton->GetSkinWeightBuffer(0);
-
-	// 가장 가까운 버텍스와 그 버텍스의 거리
-	float ClosestDistance = FLT_MAX;
-	int32 ClosestVertexIndex = -1;
-
-	// 모든 버텍스를 순회하여 주어진 좌표와 비교
-	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
-	{
-		const int32 NumSourceVertices = DataArray.RenderSections[j].NumVertices;
-		const int32 BaseVertexIndex = DataArray.RenderSections[j].BaseVertexIndex;
-
-		for (int32 i = 0; i < NumSourceVertices; i++)
-		{
-			const int32 VertexIndex = i + BaseVertexIndex;
-			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
-			FVector VertexPosition = FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z);
-
-			//// 주어진 좌표와의 거리 계산
-			//float Distance = FVector::Dist(VertexPosition, TargetPosition);
-
-			//// 가장 가까운 버텍스 찾기
-			//if (Distance < ClosestDistance)
-			//{
-			//	ClosestDistance = Distance;
-			//	ClosestVertexIndex = VertexIndex;
-			//}
-
-
-			// 그냥 좌표가 동일할 때 작동해야 하는 것 같아 사용
-			if (VertexPosition == TargetPosition) {
-
-				// 해당 버텍스의 Bone 인덱스를 가져옴
-				if (i >= (int32)(SkinWeights.GetNumVertices()))  //유효한 버텍스인지 확인
-				{
-					/*UE_LOG(LogTemp, Error, TEXT("SkinWeights: Invalid vertex index %d (Max: %d)"), i, SkinWeights.GetNumVertices() - 1);*/
-					continue;
-				}
-				int32 BoneIndex = SkinWeights.GetBoneIndex(i, 0);
-
-				if (BoneIndex >= DataArray.RenderSections[j].BoneMap.Num())  //BoneMap 배열 체크
-				{
-					/*UE_LOG(LogTemp, Error, TEXT("BoneIndex %d is out of range for BoneMap (Size: %d)"),
-						BoneIndex, DataArray.RenderSections[j].BoneMap.Num());*/
-					continue;
-				}
-				int32 ActualBone = DataArray.RenderSections[j].BoneMap[BoneIndex];
-
-				// Bone 이름을 가져옴
-				FName BoneName = Skeleton->GetBoneName(ActualBone);
-
-				//if (BoneName == "None") {
-				//	// 없으면(none이면) 찾게
-				//	GetBoneNameForCutPlaneVertex(TargetPosition);
-				//	break;
-				//}
-				//else {
-
-
-
-				//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForVertex - BoneName: %s"), *BoneName.ToString());
-
-				return BoneName;
-				//}
-			}
-			
-		}
-	}
-
-	//// 가장 가까운 버텍스가 영향을 받는 Bone 찾기
-	//if (ClosestVertexIndex != -1)
-	//{
-	//	// 해당 버텍스의 Bone 인덱스를 가져옴
-	//	int32 BoneIndex = SkinWeights.GetBoneIndex(ClosestVertexIndex, 0);
-	//	int32 ActualBone = DataArray.RenderSections[0].BoneMap[BoneIndex];
-
-	//	// Bone 이름을 가져옴
-	//	return Skeleton->GetBoneName(ActualBone);
-	//}
-
-	// 버텍스가 없으면 빈 이름을 반환
-
-
-
-	return GetBoneNameForCutPlaneVertex(TargetPosition);
-	//return FName();
-}
-
-// 잘린 단면 부분은 가까운 버텍스 구하도록 함수 구현
-FName ABaseZombie::GetBoneNameForCutPlaneVertex(const FVector& TargetPosition)
-{
-	//double StartTime = FPlatformTime::Seconds();
-	// SkeletalMeshComponent와 LODData 가져오기
-	USkeletalMeshComponent* Skeleton = GetMesh();
-	FSkeletalMeshRenderData* SkMeshRenderData = Skeleton->GetSkeletalMeshRenderData();
-	const FSkeletalMeshLODRenderData& DataArray = SkMeshRenderData->LODRenderData[0];
-	FSkinWeightVertexBuffer& SkinWeights = *Skeleton->GetSkinWeightBuffer(0);
-
-	// 가장 가까운 버텍스와 그 버텍스의 거리
-	float ClosestDistance = FLT_MAX;
-	int32 ClosestVertexIndex = -1;
-
-	int32 RenderSectionNumber;
-
-	double EndTime = FPlatformTime::Seconds();
-	//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForCutPlaneVertexStart took: %f seconds"), EndTime - StartTime);
-
-	// 모든 버텍스를 순회하여 주어진 좌표와 비교
-	for (int32 j = 0; j < DataArray.RenderSections.Num(); j++)
-	{
-		const int32 NumSourceVertices = DataArray.RenderSections[j].NumVertices;
-		const int32 BaseVertexIndex = DataArray.RenderSections[j].BaseVertexIndex;
-		//StartTime = FPlatformTime::Seconds();
-		for (int32 i = 0; i < NumSourceVertices; i++)
-		{
-			const int32 VertexIndex = i + BaseVertexIndex;
-			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
-			FVector VertexPosition = FVector(SkinnedVectorPos.X, SkinnedVectorPos.Y, SkinnedVectorPos.Z);
-
-			// 주어진 좌표와의 거리 계산
-			float Distance = FVector::Dist(VertexPosition, TargetPosition);
-
-			// 가장 가까운 버텍스 찾기
-			if (Distance < ClosestDistance)
-			{
-				ClosestDistance = Distance;
-				ClosestVertexIndex = VertexIndex;
-				RenderSectionNumber = j;
-			}
-
-		}
-		//EndTime = FPlatformTime::Seconds();
-		//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForCutPlaneVertex took: %f seconds"), EndTime - StartTime);
-	}
-
-	// 가장 가까운 버텍스가 영향을 받는 Bone 찾기
-	if (ClosestVertexIndex != -1)
-	{
-		//StartTime = FPlatformTime::Seconds();
-		// 해당 버텍스의 Bone 인덱스를 가져옴
-		int32 BoneIndex = SkinWeights.GetBoneIndex(ClosestVertexIndex, 0);
-		int32 ActualBone = DataArray.RenderSections[RenderSectionNumber].BoneMap[BoneIndex]; // 이걸 0~끝까지 다 계산할 필요 있을까 싶어서 0인덱스만 계산
-
-
-
-		// Bone 이름을 가져옴
-		FName BoneName = Skeleton->GetBoneName(ActualBone);
-
-		//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForVertex - BoneName: %s"), *BoneName.ToString());
-
-
-		//EndTime = FPlatformTime::Seconds();
-		//UE_LOG(LogTemp, Warning, TEXT("GetBoneNameForCutPlaneVertexEnd took: %f seconds"), EndTime - StartTime);
-		// Bone 이름을 가져옴
-		return BoneName;
-	}
-
-
-
-	// 버텍스가 없으면 빈 이름을 반환
-	return FName();
-}
-
 
 float ABaseZombie::CalculateEuclideanDistance(const FVector& Point1, const FVector& Point2)
 {
@@ -2387,7 +2229,6 @@ void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVect
 	// 각 클러스터의 중심을 기준으로 CutPlane의 BoneName을 구하고 저장
 	for (const TPair<int, FVector>& Cluster : ClusterCenters)
 	{
-		//FName CutPlaneBoneName = GetBoneNameForCutPlaneVertex(Cluster.Value);
 		FName CutPlaneBoneName = FindNearstBoneName(BoneAveragePos, Cluster.Value);
 		ClusterBoneNames.Add(Cluster.Key, CutPlaneBoneName);
 	}

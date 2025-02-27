@@ -188,8 +188,6 @@ public:
 
 	void SliceProceduralmeshTest(FVector planeposition, FVector planenormal);
 
-	FName GetBoneNameForVertex(const FVector& TargetPosition);
-	FName GetBoneNameForCutPlaneVertex(const FVector& TargetPosition);
 
 	float CalculateEuclideanDistance(const FVector& Point1, const FVector& Point2);
 	float CalculateAverageDistance(const TArray<FVector>& Vertices);
