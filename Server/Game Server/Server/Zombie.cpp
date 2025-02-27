@@ -796,7 +796,7 @@ bool Zombie::CheckPath(vector<tuple<float, float, float>>& goalTest_path, float 
 	return true;
 }
 
-// 얜 랜덤 패트롤, 랜덤 발소리 위치용 - 함수 오버로딩
+// 얜 랜덤 패트롤, 랜덤 발소리 위치용 - 함수 오버로딩 & TargetLocation 설정
 void Zombie::UpdatePath(vector<tuple<float, float, float>> newPatrol_path)
 {
 	tuple<float, float, float> dest;

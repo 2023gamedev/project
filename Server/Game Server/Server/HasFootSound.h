@@ -63,7 +63,7 @@ public:
 
         if (d_result == true) {
             zom.HeardFootSound = true;
-            zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);   // 가장 가까운 플레이어의 발소리를 목표지점으로
+            zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);   // 가장 가까운 플레이어의 발소리를 목표지점으로 (TargetLocation 설정)
         }
 
         if (zom.HeardFootSound == true) { // FootSound_Update_Check 결과 상관없이 이미 근처 발소리를 들은 경우에는(이전에 들은 발소리를 아직 기억하는 경우) -> 계속 실행
