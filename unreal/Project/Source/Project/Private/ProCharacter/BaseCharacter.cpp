@@ -523,16 +523,12 @@ void ABaseCharacter::BeginPlay()
 
 	if (AnimInstance->FootstepRunSoundCue)
 	{
-		AnimInstance->FootstepRunAudioComponent = UGameplayStatics::SpawnSoundAttached(
-			AnimInstance->FootstepRunSoundCue, 
-			GetMesh(),
-			TEXT("FootSocket"), 
-			FVector::ZeroVector,
-			EAttachLocation::SnapToTarget);
+		AnimInstance->FootstepRunAudioComponent = NewObject<UAudioComponent>(this);
 
-		if (AnimInstance->FootstepRunAudioComponent)
-		{
-			AnimInstance->FootstepRunAudioComponent->Stop();  // 시작할 때 바로 재생되지 않도록 정지해둠
+		if (AnimInstance->FootstepRunAudioComponent) {
+			AnimInstance->FootstepRunAudioComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("FootSocket"));
+			AnimInstance->FootstepRunAudioComponent->SetSound(AnimInstance->FootstepRunSoundCue);
+			AnimInstance->FootstepRunAudioComponent->Stop(); // 시작할 때 바로 재생되지 않도록 정지해둠
 		}
 	}
 
@@ -544,16 +540,12 @@ void ABaseCharacter::BeginPlay()
 
 	if (AnimInstance->FootstepWalkSoundCue)
 	{
-		AnimInstance->FootstepWalkAudioComponent = UGameplayStatics::SpawnSoundAttached(
-			AnimInstance->FootstepWalkSoundCue, 
-			GetMesh(),
-			TEXT("FootSocket"),
-			FVector::ZeroVector,
-			EAttachLocation::SnapToTarget);
+		AnimInstance->FootstepWalkAudioComponent = NewObject<UAudioComponent>(this);
 
-		if (AnimInstance->FootstepWalkAudioComponent)
-		{
-			AnimInstance->FootstepWalkAudioComponent->Stop();  // 시작할 때 바로 재생되지 않도록 정지해둠
+		if (AnimInstance->FootstepWalkAudioComponent) {
+			AnimInstance->FootstepWalkAudioComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("FootSocket"));
+			AnimInstance->FootstepWalkAudioComponent->SetSound(AnimInstance->FootstepWalkSoundCue);
+			AnimInstance->FootstepWalkAudioComponent->Stop(); // 시작할 때 바로 재생되지 않도록 정지해둠
 		}
 	}
 	

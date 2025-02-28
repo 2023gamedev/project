@@ -191,12 +191,7 @@ void UPlayerCharacterAnimInstance::PlayFootstepRunSound()
 	if (OwnerCharacter) {
 		if (!FootstepRunAudioComponent)
 		{
-			FootstepRunAudioComponent = UGameplayStatics::SpawnSoundAttached(
-				FootstepRunSoundCue, 
-				OwnerCharacter->GetMesh(),
-				TEXT("FootHandSocket"),
-				FVector::ZeroVector,
-				EAttachLocation::SnapToTarget);
+			UE_LOG(LogTemp, Error, TEXT("FootstepRunAudioComponent is not here!"));
 		}
 
 		if (FootstepRunAudioComponent && !FootstepRunAudioComponent->IsPlaying())
@@ -219,12 +214,7 @@ void UPlayerCharacterAnimInstance::PlayFootstepWalkSound()
 	if (OwnerCharacter) {
 		if (!FootstepWalkAudioComponent)
 		{
-			FootstepWalkAudioComponent = UGameplayStatics::SpawnSoundAttached(
-				FootstepWalkSoundCue, 
-				OwnerCharacter->GetMesh(),
-				TEXT("FootSocket"),
-				FVector::ZeroVector,
-				EAttachLocation::SnapToTarget);
+			UE_LOG(LogTemp, Error, TEXT("FootstepWalkAudioComponent is not here!"));
 		}
 
 		if (FootstepWalkAudioComponent && !FootstepWalkAudioComponent->IsPlaying())
