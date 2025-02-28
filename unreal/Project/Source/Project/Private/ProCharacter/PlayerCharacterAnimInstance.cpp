@@ -5,11 +5,14 @@
 #include "GameFramework/Character.h"
 #include "ProCharacter/BaseCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+
 
 #define default_healing_anim_playtime 4.57f
 #define pb_anim_4_sec 4.f
 #define pb_anim_3_5_sec 3.5f
 #define pb_anim_3_sec 3.f
+
 
 UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 {
@@ -64,13 +67,17 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	auto pawn = TryGetPawnOwner();
+	if (OwnerCharacter) {
+		m_bIsInAir = OwnerCharacter->GetMovementComponent()->IsFalling();
+		m_bIsHandInWeapon = OwnerCharacter->IsNWHandIn();
+		
+		UpdateFootstepSound();
+	}
+	else {
+		auto pawn = TryGetPawnOwner();
 
-	if (::IsValid(pawn)) {
-		auto character = Cast<ABaseCharacter>(pawn);
-		if (character) {
-			m_bIsInAir = character->GetMovementComponent()->IsFalling();
-			m_bIsHandInWeapon = character->IsNWHandIn();
+		if (::IsValid(pawn)) {
+			OwnerCharacter = Cast<ABaseCharacter>(pawn);
 		}
 	}
 }
@@ -178,6 +185,98 @@ void UPlayerCharacterAnimInstance::AnimNotify_FootSound2()
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("AnimNotify_FootSound2"));
 	OnFootSoundCheck.Broadcast();
 }
+
+void UPlayerCharacterAnimInstance::PlayFootstepRunSound()
+{
+	if (OwnerCharacter) {
+		if (!FootstepRunAudioComponent)
+		{
+			FootstepRunAudioComponent = UGameplayStatics::SpawnSoundAttached(
+				FootstepRunSoundCue, 
+				OwnerCharacter->GetMesh(),
+				TEXT("FootHandSocket"),
+				FVector::ZeroVector,
+				EAttachLocation::SnapToTarget);
+		}
+
+		if (FootstepRunAudioComponent && !FootstepRunAudioComponent->IsPlaying())
+		{
+			FootstepRunAudioComponent->Play();
+		}
+	}
+}
+
+void UPlayerCharacterAnimInstance::StopFootstepRunSound()
+{
+	if (FootstepRunAudioComponent && FootstepRunAudioComponent->IsPlaying())
+	{
+		FootstepRunAudioComponent->Stop();
+	}
+}
+
+void UPlayerCharacterAnimInstance::PlayFootstepWalkSound()
+{
+	if (OwnerCharacter) {
+		if (!FootstepWalkAudioComponent)
+		{
+			FootstepWalkAudioComponent = UGameplayStatics::SpawnSoundAttached(
+				FootstepWalkSoundCue, 
+				OwnerCharacter->GetMesh(),
+				TEXT("FootSocket"),
+				FVector::ZeroVector,
+				EAttachLocation::SnapToTarget);
+		}
+
+		if (FootstepWalkAudioComponent && !FootstepWalkAudioComponent->IsPlaying())
+		{
+			FootstepWalkAudioComponent->Play();
+		}
+	}
+}
+
+void UPlayerCharacterAnimInstance::StopFootstepWalkSound()
+{
+	if (FootstepWalkAudioComponent && FootstepWalkAudioComponent->IsPlaying())
+	{
+		FootstepWalkAudioComponent->Stop();
+	}
+}
+
+void UPlayerCharacterAnimInstance::UpdateFootstepSound()
+{
+	if (OwnerCharacter) {
+
+		if (OwnerCharacter->IsRun() == true) {
+			if (OwnerCharacter->GetVelocity().Size() > 0)
+			{
+				PlayFootstepRunSound();  // 이동 중이면 소리 재생
+			}
+			else
+			{
+				StopFootstepRunSound();  // 멈추면 소리 정지
+			}
+
+			StopFootstepWalkSound();  // 멈추면 소리 정지
+		}
+		else {
+			if (OwnerCharacter->GetVelocity().Size() > 0)
+			{
+				PlayFootstepWalkSound();  // 이동 중이면 소리 재생
+			}
+			else
+			{
+				StopFootstepWalkSound();  // 멈추면 소리 정지
+			}
+
+			StopFootstepRunSound();  // 멈추면 소리 정지
+		}
+	}
+}
+
+//void UPlayerCharacterAnimInstance::AnimNotify_OnFootstep()
+//{
+//	PlayFootstepRunSound();
+//}
 
 UAnimMontage* UPlayerCharacterAnimInstance:: GetAttackMontage()
 {

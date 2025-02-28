@@ -514,6 +514,48 @@ void ABaseCharacter::BeginPlay()
 		FootSound();
 		});
 
+
+	AnimInstance->FootstepRunSoundCue = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/run_Cue.run_Cue"));
+	if (!AnimInstance->FootstepRunSoundCue)
+	{
+		UE_LOG(LogTemp, Error, TEXT("FootstepRunSoundCue failed to load in BeginPlay!"));
+	}
+
+	if (AnimInstance->FootstepRunSoundCue)
+	{
+		AnimInstance->FootstepRunAudioComponent = UGameplayStatics::SpawnSoundAttached(
+			AnimInstance->FootstepRunSoundCue, 
+			GetMesh(),
+			TEXT("FootSocket"), 
+			FVector::ZeroVector,
+			EAttachLocation::SnapToTarget);
+
+		if (AnimInstance->FootstepRunAudioComponent)
+		{
+			AnimInstance->FootstepRunAudioComponent->Stop();  // 시작할 때 바로 재생되지 않도록 정지해둠
+		}
+	}
+
+	AnimInstance->FootstepWalkSoundCue = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/walk_Cue.walk_Cue"));
+	if (!AnimInstance->FootstepWalkSoundCue)
+	{
+		UE_LOG(LogTemp, Error, TEXT("FootstepWalkSoundCue failed to load in BeginPlay!"));
+	}
+
+	if (AnimInstance->FootstepWalkSoundCue)
+	{
+		AnimInstance->FootstepWalkAudioComponent = UGameplayStatics::SpawnSoundAttached(
+			AnimInstance->FootstepWalkSoundCue, 
+			GetMesh(),
+			TEXT("FootSocket"),
+			FVector::ZeroVector,
+			EAttachLocation::SnapToTarget);
+
+		if (AnimInstance->FootstepWalkAudioComponent)
+		{
+			AnimInstance->FootstepWalkAudioComponent->Stop();  // 시작할 때 바로 재생되지 않도록 정지해둠
+		}
+	}
 	
 
 //// Slice 용 Weapon - TEST

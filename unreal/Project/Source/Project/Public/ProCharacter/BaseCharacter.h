@@ -18,6 +18,7 @@
 
 #include "BaseCharacter.generated.h"
 
+
 class UGamePlayerUI;
 class UConditionUI;
 class UProGameClearUI;
@@ -41,6 +42,7 @@ DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int)
 DECLARE_MULTICAST_DELEGATE(FAttackEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FPickUpEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FBleedHealingEndPlayerDelegate);
+
 
 // 플레이어 캐릭터들의 부모클래스
 UCLASS()

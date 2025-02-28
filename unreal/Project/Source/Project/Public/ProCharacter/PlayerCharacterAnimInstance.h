@@ -4,7 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Components/AudioComponent.h"
+
 #include "PlayerCharacterAnimInstance.generated.h"
+
+
+// 전방선언
+class ABaseCharacter;
+
 
 /**
  * 
@@ -15,10 +22,12 @@ DECLARE_MULTICAST_DELEGATE(FOnAttackStartCheckDelegate)
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndCheckDelegate)
 DECLARE_MULTICAST_DELEGATE(FOnFootSoundCheckDelegate)
 
+
 UCLASS()
 class PROJECT_API UPlayerCharacterAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
+
 public:
 	UPlayerCharacterAnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -51,6 +60,39 @@ public:
 	UAnimMontage* GetHealingMontage();
 	UAnimMontage* GetBleedingMontage();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootstepRunAudio", Transient)
+	UAudioComponent* FootstepRunAudioComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootstepRunSound", Transient)
+	TObjectPtr<USoundBase> FootstepRunSoundCue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootstepWalkAudio", Transient)
+	UAudioComponent* FootstepWalkAudioComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootstepWalkSound", Transient)
+	TObjectPtr<USoundBase> FootstepWalkSoundCue;
+
+	UFUNCTION()
+	void PlayFootstepRunSound();
+
+	UFUNCTION()
+	void StopFootstepRunSound();
+
+	UFUNCTION()
+	void PlayFootstepWalkSound();
+
+	UFUNCTION()
+	void StopFootstepWalkSound();
+
+	UFUNCTION()
+	void UpdateFootstepSound();
+
+	//UFUNCTION()
+	//void AnimNotify_OnFootstep();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Transient)
+	ABaseCharacter* OwnerCharacter;
+
 
 private:
 	UFUNCTION()
@@ -66,10 +108,10 @@ private:
 	void AnimNotify_FootSound2();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-		float m_fCurrentPawnSpeed;
+	float m_fCurrentPawnSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-		bool m_bPawnRun;
+	bool m_bPawnRun;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool m_bIsInAir;
@@ -111,4 +153,5 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* JumpMontage;
+
 };
