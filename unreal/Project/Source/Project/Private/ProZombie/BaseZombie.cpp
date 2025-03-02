@@ -1935,12 +1935,23 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			double AllEndTime = FPlatformTime::Seconds();
 			UE_LOG(LogTemp, Warning, TEXT("NSlice took: %f seconds"), AllEndTime - ALLStartTime);
+
+
+			StartTime = FPlatformTime::Seconds();
+			// vertexpos - sectionindex, vertexindex    promesh들 for문 돌면서 TArray<TMap<ZombieMeshData(SectionIndex,Vertexindex), VertexIndex>>에 기록 
+			// Cut1도 해줘야 한다.
+			ReportProVertexMap(VertexBoneMap); 
+
+			EndTime = FPlatformTime::Seconds();
+			UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->ReportProVertexMap took: %f seconds"), EndTime - StartTime);
+			// 좀비 머지 5초후 시작
+			GetWorld()->GetTimerManager().SetTimer(ZombieMergeWattingHandle, this, &ABaseZombie::StartMergiingTimer, 5.f, false);
 		}
 	}
 
 
 	// 메쉬 병합 방법 정리1
-	// 절단 시 8초간 기다리기
+	// 절단 시 5초간 기다리기 합칠 때 10초 시간
 	// 프로시저럴 메쉬 섹션인덱스 버텍스 인덱스 맵으로 기록해두기
 	// 스켈레탈 메쉬 섹션인덱스 버텍스 인덱스 맵으로 기록하고 프로시저럴 메쉬 버텍스랑 스켈레탈 메쉬 버텍스 둘이 거리 기록
 	// 문제는 단면 버텍스랑 똑같은 위치가 없는 버텍스가 문제이긴 한데 이 부분 해결 필요
@@ -2026,6 +2037,52 @@ void ABaseZombie::InitVertexBoneMap(TMap<FVector, FVertexBoneData>& VertexBoneMa
 			BoneAveragePos.Add(BoneName, PositionSum / Count);
 		}
 	}
+
+
+	//UE_LOG(LogTemp, Log, TEXT("VertexBoneMap initialized with %d vertices"), VertexBoneMap.Num());
+}
+
+void ABaseZombie::InitVertexIndexPosMapForMerge(TMap<FZombieMeshData, FVector>& VertexIndexPosMap)
+{
+	VertexIndexPosMap.Empty(); // 기존 데이터 초기화
+
+	USkeletalMeshComponent* Skeleton = GetMesh();
+	if (!Skeleton) return;
+
+	FSkeletalMeshRenderData* SkMeshRenderData = Skeleton->GetSkeletalMeshRenderData();
+	if (!SkMeshRenderData || SkMeshRenderData->LODRenderData.Num() == 0) return;
+
+	const FSkeletalMeshLODRenderData& DataArray = SkMeshRenderData->LODRenderData[0]; // LOD 0 기준
+	FSkinWeightVertexBuffer& SkinWeights = *Skeleton->GetSkinWeightBuffer(0);
+
+	TMap<FName, FVector> BonePositionSum;
+	TMap<FName, int32> BoneVertexCount;
+
+	// 모든 섹션 순회
+	for (int32 SectionIndex = 0; SectionIndex < DataArray.RenderSections.Num(); SectionIndex++)
+	{
+		const FSkelMeshRenderSection& Section = DataArray.RenderSections[SectionIndex];
+		const int32 NumSourceVertices = Section.NumVertices;
+		const int32 BaseVertexIndex = Section.BaseVertexIndex;
+
+		for (int32 i = 0; i < NumSourceVertices; i++)
+		{
+			const int32 VertexIndex = i + BaseVertexIndex;
+			const FVector3f SkinnedVectorPos = USkeletalMeshComponent::GetSkinnedVertexPosition(Skeleton, VertexIndex, DataArray, SkinWeights);
+			FVector VertexPosition = FVector(SkinnedVectorPos);
+
+			uint32 k = uint32(i);
+
+			// 본 인덱스 가져오기
+			if (k >= SkinWeights.GetNumVertices()) continue;
+
+
+			// 맵에 저장 (버텍스 위치 -> {섹션 인덱스, 버텍스 인덱스, 본 이름})
+			VertexIndexPosMap.Add(FZombieMeshData(SectionIndex, i), VertexPosition);
+
+		}
+	}
+
 
 
 	//UE_LOG(LogTemp, Log, TEXT("VertexBoneMap initialized with %d vertices"), VertexBoneMap.Num());
@@ -2812,6 +2869,62 @@ void ABaseZombie::CreateAndApplyBoundingBoxByNewProcMesh(UProceduralMeshComponen
 
 	// 6. 물리 시뮬레이션 활성화
 	ProceduralMesh->SetSimulatePhysics(true);
+}
+
+// vertexpos - sectionindex, vertexindex    promesh들 for문 돌면서 TArray<TMap<ZombieMeshData(SectionIndex,Vertexindex), VertexIndex>>에 기록 
+void ABaseZombie::ReportProVertexMap(TMap<FVector, FVertexBoneData>& VertexBoneMap)
+{
+	ProMeshIndexArray.Empty();
+
+	for (UProceduralMeshComponent* ProcMesh : ProceduralMeshes)
+	{
+		TMap<FZombieMeshData, int32> SectionVertexMap;
+
+		// 각 섹션별 버텍스 가져오기
+		int32 NumSections = ProcMesh->GetNumSections();
+		for (int32 SectionIndex = 0; SectionIndex < NumSections - 1; ++SectionIndex)
+		{
+			FProcMeshSection* MeshSection = ProcMesh->GetProcMeshSection(SectionIndex);
+			if (!MeshSection) continue;
+
+			TArray<FProcMeshVertex>& SectionVertices = MeshSection->ProcVertexBuffer;
+
+			// 버텍스 순회
+			for (int32 VertexIndex = 0; VertexIndex < SectionVertices.Num(); ++VertexIndex)
+			{
+				const FVector& VertexPos = SectionVertices[VertexIndex].Position;
+
+				// VertexBoneMap에 해당 버텍스가 존재하면 저장
+				if (FVertexBoneData* BoneData = VertexBoneMap.Find(VertexPos))
+				{
+					// SectionIndex와 VertexIndex를 Key로 사용
+					FZombieMeshData SectionVertexKey(SectionIndex, VertexIndex);
+					SectionVertexMap.Add(SectionVertexKey, VertexIndex);
+				}
+				else { // 존재안할때 여기서 뭔가를 해줘야 하는가 아니면 5초뒤에 할때 해줘야 하는가..
+					
+				}
+			}
+		}
+
+		// 이 메쉬의 결과 추가
+		ProMeshIndexArray.Add(SectionVertexMap);
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Processed %d Procedural Meshes"), ProceduralMeshes.Num());
+}
+
+void ABaseZombie::StartMergiingTimer()
+{
+	// 좀비 머지 시작 좀비 버텍스들 기록하고 10초동안 deltasecond만큼 움직이도록 세팅 tick에서 할지 어떻게 할지 고민중
+	TMap<FZombieMeshData, FVector> VertexIndexPosMap;
+	InitVertexIndexPosMapForMerge(VertexIndexPosMap);
+
+	// 이제 VertexIndexPosMap 와 ProMeshIndexArray 같은 key를 가지고 있으면 vindex를 가지고 있으면 그 위치를 기록
+}
+
+void ABaseZombie::MergingTimerElapsed()
+{
 }
 
 void ABaseZombie::SetCuttingDeadWithAnim()

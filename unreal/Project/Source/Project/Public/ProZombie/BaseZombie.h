@@ -17,6 +17,7 @@
 // 구조체
 #include "ProData/ZBoneStruct.h"
 #include "ProData/SkeletalMeshBondData.h"
+#include "ProData/ZombieMeshData.h"
 
 #include "BaseZombie.generated.h"
 
@@ -203,10 +204,30 @@ public:
 	void MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters, TMap<FName, FVector>& BoneAveragePos);
 
 	void InitVertexBoneMap(TMap<FVector, FVertexBoneData>& VertexBoneMap, TMap<FName, FVector>& BoneAveragePos);
+	void InitVertexIndexPosMapForMerge(TMap<FZombieMeshData, FVector>& VertexIndexPosMap);
+
 	void FillSectionVertexBoneMap(const TMap<FVector, FVertexBoneData>& VertexBoneMap, TMap<int32, TMap<int32, FName>>& SectionVertexBoneMap, TMap<FName, FVector>& BoneAveragePos);
 	FName FindNearstBoneName(TMap<FName, FVector>& BoneAveragePos, const FVector& TargetPosition);
 	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
 	void CreateAndApplyBoundingBoxByNewProcMesh(UProceduralMeshComponent* ProceduralMesh);
+
+	void ReportProVertexMap(TMap<FVector, FVertexBoneData>& VertexBoneMap);
+
+	FTimerHandle ZombieMergeWattingHandle;
+
+	void StartMergiingTimer();
+
+	FTimerHandle ZombieMergingHandle;
+
+	void MergingTimerElapsed();
+
+
+	// ZombieMeshData : [스켈레탈 섹션인덱스, 버텍스 인덱스]  , int32 : 프로시저럴메쉬의 버텍스인덱스 -> 섹션인덱스는 어차피 같을것이니까  
+	TArray<TMap<FZombieMeshData, int32>> ProMeshIndexArray; // 병합하기 전 프로시저럴 메쉬들이 기존 스켈레탈 메쉬의 어떤 섹션인덱스와 버텍스 인덱스를 가지고 있는지 저장하는 변수
+
+
+
+
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
 	UProceduralMeshComponent* CutProceduralMesh_1;
