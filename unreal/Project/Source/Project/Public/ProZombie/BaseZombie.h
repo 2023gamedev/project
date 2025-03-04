@@ -222,10 +222,12 @@ public:
 	void MergingTimerElapsed();
 
 
-	// ZombieMeshData : [스켈레탈 섹션인덱스, 버텍스 인덱스]  , int32 : 프로시저럴메쉬의 버텍스인덱스 -> 섹션인덱스는 어차피 같을것이니까  
-	TArray<TMap<FZombieMeshData, int32>> ProMeshIndexArray; // 병합하기 전 프로시저럴 메쉬들이 기존 스켈레탈 메쉬의 어떤 섹션인덱스와 버텍스 인덱스를 가지고 있는지 저장하는 변수
+	// ZombieMeshData : [스켈레탈 섹션인덱스, 버텍스 인덱스]  , FZombieMeshData : 몇번 프로시저럴메쉬인지 , 버텍스인덱스 -> 섹션인덱스는 어차피 같을것이니까  
+	TArray<TMap<FZombieMeshData, FZombieMeshData>> ProMeshIndexArray; // 병합하기 전 프로시저럴 메쉬들이 기존 스켈레탈 메쉬의 어떤 섹션인덱스와 버텍스 인덱스를 가지고 있는지 저장하는 변수
 
 
+	TArray<FVector> resultDistanceAvg;  // 각 섹션에 대해 계산된 평균값을 저장하는 TArray
+	//TArray<TMap<FZombieMeshData, FVector>> DistanceResultArray;
 
 
 	// Procedural mesh component for the cut part
@@ -262,8 +264,28 @@ public:
 	TSharedPtr<FZBoneStructure> RootBone;  // **트리 루트 (최상위 본)**
 	TSharedPtr<FZBoneStructure> SpecialRootBone;  // **트리 루트 (최상위 본)**
 
+
+
+
+
 	UPROPERTY(EditAnywhere)
 	TArray<UProceduralMeshComponent*> ProceduralMeshes;
+	
+	UPROPERTY(EditAnywhere)
+	double TotalTimeToMove = 5.0; // 5초 동안 이동
+
+	UPROPERTY(EditAnywhere)
+	double ElapsedTime = 0.0; // 경과 시간
+
+	UPROPERTY(EditAnywhere)
+	bool bIsMergingInProgress = false; // 머지 중 상태
+
+	UPROPERTY(EditAnywhere)
+	int m_iMergeFlag = 0; // 머지 중 상태
+
+	UPROPERTY(EditAnywhere)
+	TArray<FVector> MergeStartLocation; // 머지 중 상태
+
 
 	void InitializeBoneHierarchy();  // 본 트리 초기화
 	void InitializeSpecialBoneHierarchy();  // 몸통부분 절단 시 새로운 트리 구조
