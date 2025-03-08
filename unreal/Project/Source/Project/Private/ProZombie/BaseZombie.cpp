@@ -768,101 +768,136 @@ void ABaseZombie::Tick(float DeltaTime)
 
 	//병합부분! ----------------------------------
 
-	if (bIsMergingInProgress)
-	{
-		double StartTime = FPlatformTime::Seconds();
+	//if (bIsMergingInProgress)
+	//{
+	//	double StartTime = FPlatformTime::Seconds();
 
 
-		ElapsedTime += DeltaTime;
+	//	ElapsedTime += DeltaTime;
 
-		// 10초 동안 이동
-		float TimeRatio = FMath::Clamp(ElapsedTime / TotalTimeToMove, 0.0f, 1.0f); // 0~1 사이로 고정
-
-
-		if (m_iMergeFlag == 0) {
-			MergeStartLocation.SetNum(ProceduralMeshes.Num());
-		}
-
-		if (CutProceduralMesh_1) {
-			//CutPro_1을 이동
-			FVector CutPro_1TargetLocation = CutPro_1StartLocation + (CutPro_1Distance * TimeRatio);
-			CutProceduralMesh_1->SetWorldLocation(CutPro_1TargetLocation);
-		}
+	//	// 10초 동안 이동
+	//	float TimeRatio = FMath::Clamp(ElapsedTime / TotalTimeToMove, 0.0f, 1.0f); // 0~1 사이로 고정
 
 
-		if (CutProceduralMesh_2) {
-			//CutPro_1을 이동
-			FVector CutPro_2TargetLocation = CutPro_2StartLocation + (CutPro_2Distance * TimeRatio);
-			CutProceduralMesh_2->SetWorldLocation(CutPro_2TargetLocation);
-		}
+	//	if (m_iMergeFlag == 0) {
+	//		MergeStartLocation.SetNum(ProceduralMeshes.Num());
+	//	}
+
+	//	if (CutProceduralMesh_1) {
+	//		//CutPro_1을 이동
+	//		FVector CutPro_1TargetLocation = CutPro_1StartLocation + (CutPro_1Distance * TimeRatio);
+	//		CutProceduralMesh_1->SetWorldLocation(CutPro_1TargetLocation);
+	//	}
 
 
-		// 10초 동안 이동
-		for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
-		{
-			UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
-			if (!ProcMesh) continue;
+	//	if (CutProceduralMesh_2) {
+	//		//CutPro_1을 이동
+	//		FVector CutPro_2TargetLocation = CutPro_2StartLocation + (CutPro_2Distance * TimeRatio);
+	//		CutProceduralMesh_2->SetWorldLocation(CutPro_2TargetLocation);
+	//	}
+
+	//	if (m_bIsCutProceduralMesh_2Visibility) {
+
+	//		// 10초 동안 이동한 후, 완료되었으면 머지 진행을 종료
+	//		if (ElapsedTime >= TotalTimeToMove)
+	//		{
+	//			bIsMergingInProgress = false;
+	//			UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
+	//			GetMesh()->SetVisibility(true); // 2초뒤에 부활 이렇게 해야하나
+	//			//GetMesh()->SetHiddenInGame(false);
+
+	//			if (CutProceduralMesh_1) {
+	//				CutProceduralMesh_1->DestroyComponent();
+	//				CutProceduralMesh_1 = nullptr;
+	//			}
+	//			if (CutProceduralMesh_2) {
+	//				CutProceduralMesh_2->DestroyComponent();
+	//				CutProceduralMesh_2 = nullptr;
+	//			}
+	//		}
+	//	}
+	//	else {
+	//		// 10초 동안 이동
+	//		for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
+	//		{
+	//			UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
+	//			if (!ProcMesh) continue;
 
 
-			// 각 메쉬의 현재 위치를 가져옴
-			FVector CurrentLocation = ProcMesh->GetComponentLocation();
+	//			// 각 메쉬의 현재 위치를 가져옴
+	//			FVector CurrentLocation = ProcMesh->GetComponentLocation();
 
-			if (m_iMergeFlag == 0) {
-				MergeStartLocation[MeshIndex] = CurrentLocation;
-			}
+	//			if (m_iMergeFlag == 0) {
+	//				MergeStartLocation[MeshIndex] = CurrentLocation;
+	//			}
 
-			// 초기 위치 저장 (메쉬의 원래 위치)
-			FVector StartLocation = MergeStartLocation[MeshIndex];
+	//			// 초기 위치 저장 (메쉬의 원래 위치)
+	//			FVector StartLocation = MergeStartLocation[MeshIndex];
 
-			// resultDistanceAvg에서 해당 메쉬의 평균 벡터를 가져옴 (MeshIndex에 해당하는 평균 벡터)
-			if (MeshIndex < resultDistanceAvg.Num())
-			{
+	//			// resultDistanceAvg에서 해당 메쉬의 평균 벡터를 가져옴 (MeshIndex에 해당하는 평균 벡터)
+	//			if (MeshIndex < resultDistanceAvg.Num())
+	//			{
 
-				// 이동해야 할 총 거리
-				FVector TotalMoveDistance = resultDistanceAvg[MeshIndex];
+	//				// 이동해야 할 총 거리
+	//				FVector TotalMoveDistance = resultDistanceAvg[MeshIndex];
 
-				// 이동할 거리 계산 (ElapsedTime을 통해 이동 비율을 구함)
-				//FVector MoveDelta = TotalMoveDistance * (ElapsedTime / TotalTimeToMove);
-				
-
-				//resultDistanceAvg[MeshIndex] -= MoveDelta;
-
-				// 목표 위치 계산
-				//FVector TargetLo = CurrentLocation + MoveDelta;
-				
-				FVector TargetLo = StartLocation + (TotalMoveDistance * TimeRatio);
+	//				// 이동할 거리 계산 (ElapsedTime을 통해 이동 비율을 구함)
+	//				//FVector MoveDelta = TotalMoveDistance * (ElapsedTime / TotalTimeToMove);
 
 
-				// 10초 동안 이동 (프로시저 메쉬 자체를 이동)
-				ProcMesh->SetWorldLocation(TargetLo);
-			}
+	//				//resultDistanceAvg[MeshIndex] -= MoveDelta;
 
-			// 10초 동안 이동한 후, 완료되었으면 머지 진행을 종료
-			if (ElapsedTime >= TotalTimeToMove)
-			{
-				bIsMergingInProgress = false;
-				UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
-				GetMesh()->SetVisibility(true); // 2초뒤에 부활 이렇게 해야하나
-				//GetMesh()->SetHiddenInGame(false);
+	//				// 목표 위치 계산
+	//				//FVector TargetLo = CurrentLocation + MoveDelta;
+
+	//				FVector TargetLo = StartLocation + (TotalMoveDistance * TimeRatio);
 
 
-				// 필요한 부분
-				// 각 프로시저럴 메쉬 삭제
-				// 맨 처음에 bone을 통해 rotation 맞추기
-				// 5초뒤 다 다가오면 바로 부활할 시 늦출 시 고민중
-
-			}
-
-		}
-
-		//UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
-		//UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
-		++m_iMergeFlag;
+	//				// 10초 동안 이동 (프로시저 메쉬 자체를 이동)
+	//				ProcMesh->SetWorldLocation(TargetLo);
+	//			}
 
 
-		double EndTime = FPlatformTime::Seconds();
-		//UE_LOG(LogTemp, Warning, TEXT("bIsMergingInProgressMesh took: %f seconds"), EndTime - StartTime);
-	}
+	//		}
+
+	//		// 10초 동안 이동한 후, 완료되었으면 머지 진행을 종료
+	//		if (ElapsedTime >= TotalTimeToMove)
+	//		{
+	//			bIsMergingInProgress = false;
+	//			UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
+	//			GetMesh()->SetVisibility(true); // 2초뒤에 부활 이렇게 해야하나
+	//			//GetMesh()->SetHiddenInGame(false);
+	//						// 10초 동안 이동
+	//			for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
+	//			{
+	//				UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
+	//				if (!ProcMesh) continue;
+	//				ProcMesh->DestroyComponent();
+	//			}
+
+	//			if (CutProceduralMesh_1) {
+	//				CutProceduralMesh_1->DestroyComponent();
+	//				CutProceduralMesh_1 = nullptr;
+	//			}
+
+	//			if (CutProceduralMesh_2) {
+	//				CutProceduralMesh_2->DestroyComponent();
+	//				CutProceduralMesh_2 = nullptr;
+	//			}
+
+	//			ProceduralMeshes.Empty();
+	//		}
+	//	}
+	//	
+
+	//	//UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
+	//	//UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
+	//	++m_iMergeFlag;
+
+
+	//	double EndTime = FPlatformTime::Seconds();
+	//	//UE_LOG(LogTemp, Warning, TEXT("bIsMergingInProgressMesh took: %f seconds"), EndTime - StartTime);
+	//}
 
 	//  ----------------------------------
 
@@ -1452,19 +1487,19 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			//CutPro1 단면 bone 구하는 부분
 			//FVector CutPro_1ClusterCenter(0, 0, 0);
 
-			FProcMeshSection* CutSection1 = CutProceduralMesh_1->GetProcMeshSection(CutProceduralMesh_1->GetNumSections() - 1);
-			if (CutSection1)
-			{
-				CutPro_1ClusterCenter = FVector(0, 0, 0);
-				for (const FProcMeshVertex& Vertex : CutSection1->ProcVertexBuffer)
-				{
-					CutPro_1ClusterCenter += Vertex.Position;
-				}
+			//FProcMeshSection* CutSection1 = CutProceduralMesh_1->GetProcMeshSection(CutProceduralMesh_1->GetNumSections() - 1);
+			//if (CutSection1)
+			//{
+			//	CutPro_1ClusterCenter = FVector(0, 0, 0);
+			//	for (const FProcMeshVertex& Vertex : CutSection1->ProcVertexBuffer)
+			//	{
+			//		CutPro_1ClusterCenter += Vertex.Position;
+			//	}
 
-				CutPro_1ClusterCenter /= CutSection1->ProcVertexBuffer.Num();
+			//	CutPro_1ClusterCenter /= CutSection1->ProcVertexBuffer.Num();
 
-				UE_LOG(LogTemp, Warning, TEXT("CutPro_1ClusterCenter : X : %f, Y : %f, Z : %f "), CutPro_1ClusterCenter.X, CutPro_1ClusterCenter.Y, CutPro_1ClusterCenter.Z);
-			}
+			//	UE_LOG(LogTemp, Warning, TEXT("CutPro_1ClusterCenter : X : %f, Y : %f, Z : %f "), CutPro_1ClusterCenter.X, CutPro_1ClusterCenter.Y, CutPro_1ClusterCenter.Z);
+			//}
 
 			//  ----------------------------------
 			TMap<FVector, FVertexBoneData> VertexBoneMap;
@@ -1594,7 +1629,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			if (ClusterCenters.Num() <= 1) {
 				//병합부분!
-				m_bIsCutProceduralMesh_2Visibility = true;
+				/*m_bIsCutProceduralMesh_2Visibility = true;
 				FVector CutPro_2ClusterCenter(0, 0, 0);
 				FProcMeshSection* CutSectionPro2 = CutProceduralMesh_2->GetProcMeshSection(CutProceduralMesh_2->GetNumSections() - 1);
 				if (CutSectionPro2)
@@ -1606,7 +1641,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					CutPro_2ClusterCenter /= CutSectionPro2->ProcVertexBuffer.Num();
 					CutPro_2PlaneBoneName = FindNearstBoneName(BoneAveragePos, CutPro_2ClusterCenter);
 					GetWorld()->GetTimerManager().SetTimer(ZombieMergeWattingHandle, this, &ABaseZombie::StartMergiingTimer, 5.f, false);
-				}
+				}*/
 				//  ----------------------------------
 				
 				return; // CutProceduralMesh_2 그대로 사용
@@ -1626,7 +1661,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			//병합부분! ----------------------------------
 
-			CutPro_1PlaneBoneName = FindNearstBoneName(BoneAveragePos, CutPro_1ClusterCenter);
+			//CutPro_1PlaneBoneName = FindNearstBoneName(BoneAveragePos, CutPro_1ClusterCenter);
 
 			//  ----------------------------------
 
@@ -1662,7 +1697,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					
 					//병합부분! ----------------------------------
 
-					ProcMeshBone.Add(CutPlaneBoneName);
+					//ProcMeshBone.Add(CutPlaneBoneName);
 
 					//  ----------------------------------
 
@@ -2124,20 +2159,20 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			//병합부분! ----------------------------------
 
-			m_bIsCutProceduralMesh_2Visibility = false;
-			StartTime = FPlatformTime::Seconds();
+			//m_bIsCutProceduralMesh_2Visibility = false;
+			//StartTime = FPlatformTime::Seconds();
 		
 
-			// vertexpos - sectionindex, vertexindex    promesh들 for문 돌면서 TArray<TMap<ZombieMeshData(SectionIndex,Vertexindex), VertexIndex>>에 기록 
-			// Cut1도 해줘야 한다.
-			ReportProVertexMap(VertexBoneMap); 
+			//// vertexpos - sectionindex, vertexindex    promesh들 for문 돌면서 TArray<TMap<ZombieMeshData(SectionIndex,Vertexindex), VertexIndex>>에 기록 
+			//// Cut1도 해줘야 한다.
+			//ReportProVertexMap(VertexBoneMap); 
 
-			EndTime = FPlatformTime::Seconds();
-			UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->ReportProVertexMap took: %f seconds"), EndTime - StartTime);
+			//EndTime = FPlatformTime::Seconds();
+			//UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->ReportProVertexMap took: %f seconds"), EndTime - StartTime);
 
 
-			// 좀비 머지 5초후 시작
-			GetWorld()->GetTimerManager().SetTimer(ZombieMergeWattingHandle, this, &ABaseZombie::StartMergiingTimer, 5.f, false);
+			//// 좀비 머지 5초후 시작
+			//GetWorld()->GetTimerManager().SetTimer(ZombieMergeWattingHandle, this, &ABaseZombie::StartMergiingTimer, 5.f, false);
 
 			//  ----------------------------------
 		}
