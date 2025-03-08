@@ -138,11 +138,11 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed();
 
-		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(1.0f);
+		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.8f);
 	}
 
 	if (ZombieSpeed == 0.f) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId));
 		UE_LOG(LogTemp, Error, TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId);
 	}
 	
@@ -313,8 +313,11 @@ void AZombieAIController::Tick(float DeltaTime)
 	// 좀비들의 시야 검사 "나 자신"에 대해서만 실시==========================
 	PlayerPawn = Cast<APawn>(OwnerZombie->MyChar);
 
-	if (PlayerPawn == nullptr)
+	if (PlayerPawn == nullptr) {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] Zombie #%d's PlayerPawn is NULL!!! (from AI Controller)"), OwnerZombie->ZombieId));
+		UE_LOG(LogTemp, Error, TEXT("[Error] Zombie #%d's PlayerPawn is NULL!!! (from AI Controller)"), OwnerZombie->ZombieId);
 		return;
+	}
 
 	if (OwnerZombie->MyChar->GetHP() > 0) {	// 살아 있을 때만 좀비시야 검사
 

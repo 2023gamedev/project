@@ -24,15 +24,17 @@ ShoutingZombie::ShoutingZombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 
 }
 
-void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid, int roomid)
+void ShoutingZombie::Shout(int playerid, int roomid)
 {
 	if (bShouted == false) {
 		bShouted = true;
 
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 		cout << "샤우팅 좀비 '#" << ZombieData.zombieID << "' 샤우팅!!!" << endl;
 		cout << endl;
 #endif
+
+		vector<Zombie*> zombies = iocpServer->zombieDB_BT[roomid];
 
 		// 다른 좀비들 샤우팅 소리 포착 체크 (샤우팅 알리기)
 		for (auto& zom : zombies) {
@@ -71,9 +73,9 @@ void ShoutingZombie::Shout(vector<Zombie*>& zombies, int playerid, int roomid)
 		shoutingpacket.SerializeToString(&serializedData);
 
 		for (const auto& player : playerDB[roomid]) {
-			if (player.first != playerid) {
+			//if (player.first != playerid) {	//=> 샤우팅 방식이 바껴서 이제 자신한테도 알려줘야 함 (애니메이션 재생)
 				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-			}
+			//}
 		}
 		
 	}

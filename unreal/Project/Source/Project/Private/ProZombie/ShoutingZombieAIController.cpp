@@ -123,7 +123,7 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		OwnerZombie->SetSpeed(OwnerZombie->ShoutingZombieWalkSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed();
 
-		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.7f);
+		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.75f);
 	}
 	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING 
 		|| OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND || OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED
@@ -132,11 +132,11 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		OwnerZombie->SetSpeed(OwnerZombie->ShoutingZombieSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed();
 
-		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(1.0f);
+		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.83f);
 	}
 
 	if (ZombieSpeed == 0.f) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId));
 		UE_LOG(LogTemp, Error, TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId);
 	}
 
@@ -355,7 +355,8 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 	PlayerPawn = Cast<APawn>(OwnerZombie->MyChar);
 
 	if (PlayerPawn == nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] PlayerPawn is NULL!!! (from AI Controller)")));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] Zombie #%d's PlayerPawn is NULL!!! (from AI Controller)"), OwnerZombie->ZombieId));
+		UE_LOG(LogTemp, Error, TEXT("[Error] Zombie #%d's PlayerPawn is NULL!!! (from AI Controller)"), OwnerZombie->ZombieId);
 		return;
 	}
 
@@ -402,10 +403,11 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 				UE_LOG(LogNet, Display, TEXT("Zombie #%d Detected Player #%d"), OwnerZombie->GetZombieId(), myPlayerId);
 
 				// 샤우팅 실행
-				if (OwnerZombie->IsShouted() == false) {	// 처음 플레이어를 발견하면 샤우팅! (그 후에는 없음)
-					OwnerZombie->Shouting();
-					shoutingTo_PlayerId = myPlayerId;
-				}
+				//if (OwnerZombie->IsShouted() == false) {	// 처음 플레이어를 발견하면 샤우팅! (그 후에는 없음)
+				//	OwnerZombie->Shouting();
+				//	shoutingTo_PlayerId = myPlayerId;
+				//}
+				// 시야 포착 확률 넣어서 이제는 이렇게 작동하면 X
 			}
 		}
 		else {	// NearestPawn 존재 X -> 나를 못 봄

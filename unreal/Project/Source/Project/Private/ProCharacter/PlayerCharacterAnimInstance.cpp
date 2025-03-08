@@ -236,29 +236,35 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 {
 	if (OwnerCharacter) {
 
-		if (OwnerCharacter->IsRun() == true) {
-			if (OwnerCharacter->GetVelocity().Size() > 0)
-			{
-				PlayFootstepRunSound();  // 이동 중이면 소리 재생
-			}
-			else
-			{
-				StopFootstepRunSound();  // 멈추면 소리 정지
-			}
+		if (OwnerCharacter->GetHP() > 0) {	// 살아 있을때만
+			if (OwnerCharacter->IsRun() == true) {		// 뛰는 중
+				if (OwnerCharacter->GetVelocity().Size() > 0)
+				{
+					PlayFootstepRunSound();  // 이동 중이면 뛰기소리 재생
+				}
+				else
+				{
+					StopFootstepRunSound();  // 멈추면 뛰기소리 정지
+				}
 
-			StopFootstepWalkSound();  // 멈추면 소리 정지
+				StopFootstepWalkSound();  // 걷기소리는 정지
+			}
+			else {	// 걷는 중
+				if (OwnerCharacter->GetVelocity().Size() > 0)
+				{
+					PlayFootstepWalkSound();  // 이동 중이면 걷기소리 재생
+				}
+				else
+				{
+					StopFootstepWalkSound();  // 멈추면 걷기소리 정지
+				}
+
+				StopFootstepRunSound();  // 뛰기소리는 정지
+			}
 		}
-		else {
-			if (OwnerCharacter->GetVelocity().Size() > 0)
-			{
-				PlayFootstepWalkSound();  // 이동 중이면 소리 재생
-			}
-			else
-			{
-				StopFootstepWalkSound();  // 멈추면 소리 정지
-			}
-
-			StopFootstepRunSound();  // 멈추면 소리 정지
+		else {	// 만약 죽었다면
+			StopFootstepWalkSound();  // 걷기소리는 정지
+			StopFootstepRunSound();  // 뛰기소리는 정지
 		}
 	}
 }

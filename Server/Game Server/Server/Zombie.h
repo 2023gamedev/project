@@ -93,16 +93,16 @@ public:
 
     const float ZombieBeAttackedAnimDuration = 2.0f;    // 좀비 피격 애니메이션 재생 시간 (* 정확히는 2.00초)
 
-    const float ZombieShoutingAnimDuration = 4.3f;    // 좀비 샤우팅 애니메이션 재생 시간 (* 정확히는 4.30초)
+    const float ZombieShoutingAnimDuration = 2.8f;    // 좀비 샤우팅 애니메이션 재생 시간 (* 정확히는 2.80초)
 
     float ZombieStandingStillDuration = 0.f;    // 좀비 숨고르기 (멍때리기) 지속 시간 (5~10초)
 
-    const float ZombieMakeHordeNoiseDelay = 10.0f;   // 호드 사운드 재생 딜레이 (10초)
+    const float ZombieMakeHordeNoiseDelay = 20.0f;   // 호드 사운드 재생 딜레이 (20초)
 
     const float NormalZombieStartHP = 20.0f;        // 20.0f
     const float NormalZombieSpeed = 200.0f;         // 200.0f (뛰기 스피드)
     const float NormalZombieWalkSpeed = 100.0f;     // 100.0f (걷기 스피드)
-
+     
     const float RunningZombieStartHP = 20.0f;        // 20.0f
     const float RunningZombieSpeed = 300.0f;         // 300.0f (뛰기 스피드)
     const float RunningZombieWalkSpeed = 200.0f;     // 200.0f (걷기 스피드)
@@ -173,6 +173,11 @@ public:
     float detectHasFootSoundFail_delayTime = 0;
 
     std::chrono::steady_clock::time_point makeHordeSound_StartTime;     // 호드 사운드 재생 시작 시간
+
+    float RandomChanceBuff_CanSeePlayer = 0;    // 애니메이션 재생 후 또는 한번 포착후 금방 놓쳤을 때, 다시 포착 검사 할때 조금의 버프를 주어 플레이어를 더욱 쉽게 다시 찾도록 하기위해 사용
+    const float RandomChanceBuff_CanSeePlayer_const = 50.0f;    // +50.f
+    std::chrono::steady_clock::time_point RandomChanceBuff_CanSeePlayer_StartTime;
+    const float RandomChanceBuff_CanSeePlayer_Duration = 5.0f;  // 5초
 
     TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HordeSound)
 

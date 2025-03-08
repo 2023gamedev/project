@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Selector.h"
-
+#include "ShoutingZombie.h"
 
 class Sel_CanSeePlayer : public Selector {
 public:
@@ -18,6 +18,14 @@ public:
         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시야에 플레이어가 있는가?: " << boolalpha << d_result << endl;
 #endif
 
+        bool Prev_CanSeePlayer_result = zom.CanSeePlayer_result;
+        bool Current_CanSeePlayer_result = d_result;
+
+        if (Prev_CanSeePlayer_result == true && Current_CanSeePlayer_result == false) { // 플레이어를 놓쳤을때
+            zom.RandomChanceBuff_CanSeePlayer = zom.RandomChanceBuff_CanSeePlayer_const;	// 다시 검사 할 때 일시적 확률 버프 -> 다시 더 잘 쫒아오도록 하기 위해
+            zom.RandomChanceBuff_CanSeePlayer_StartTime = std::chrono::high_resolution_clock::now();
+        }
+
         if (d_result == true) {
             vector<vector<vector<float>>> closest_player_pos = {};
             float dist = zom.SearchClosestPlayer(closest_player_pos, 1);
@@ -30,7 +38,8 @@ public:
                 auto delayAfterTime = std::chrono::high_resolution_clock::now();
                 std::chrono::duration<float> deltaTime = delayAfterTime - zom.detectCanSeePlayerFail_StartTime;
 
-                if (deltaTime.count() >= zom.detectCanSeePlayerFail_delayTime) {
+                if (deltaTime.count() >= zom.detectCanSeePlayerFail_delayTime 
+                    || dist <= 800.f) { // 탐지 확률 100% 거리일 때는 detectCanSeePlayerFail_delayTime 무시하고 바로 포착가능 하도록
 
                     d_result = zom.CanSeePlayerRandomChance();  // 포착 랜덤확률 부여
                     if (d_result == false) {
@@ -39,7 +48,7 @@ public:
 #endif
                         zom.detectCanSeePlayerFail_StartTime = std::chrono::high_resolution_clock::now();
                     }
-                    else if(d_result == true) {
+                    else if (d_result == true) {
 #ifdef ENABLE_BT_DETECT_RANDOMCHANCE_LOG
                         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' Detect-CanSeePlayer(플레이어 포착) RandomChance 성공!" << endl;
 #endif
@@ -65,9 +74,16 @@ public:
         cout << endl;
 #endif
 
-        bool Prev_CanSeePlayer_result = zom.CanSeePlayer_result;
-        if (Prev_CanSeePlayer_result == false && d_result) {    // 플레이어를 처음 발견했거나 플레이어를 놓쳤다가 다시 발견했다면 -> 호드 사운드 재생
-            zom.MakeNoise();   
+        Current_CanSeePlayer_result = d_result; // 확률 검사 까지 통과 했을때
+
+        if (Prev_CanSeePlayer_result == false && Current_CanSeePlayer_result == true) {    // 플레이어를 처음 발견했거나 플레이어를 놓쳤다가 다시 발견했다면 -> 호드 사운드 재생
+            zom.MakeNoise();
+
+            // 샤우팅 좀비일 경우에는 샤우팅 실행
+            if (zom.ZombieData.zombietype == 1) {
+                ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(&zom);  // 다운 캐스팅 사용!
+                sz->Shout(zom.ClosestPlayerID, zom.roomid); // ClosestPlayerID 지정은 위에서 미리 진행
+            }
         }
 
         zom.CanSeePlayer_result = d_result;

@@ -964,6 +964,7 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 						ProGameClearUIWidget->AddToViewport();
 						FString HowToEscape = " Escape::Car ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+						ProGameClearUIWidget->OneAnswer->SetColorAndOpacity(FLinearColor(0.0f, 0.0f, 0.8f));
 						USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/CarEnding.CarEnding")); // 에셋 경로
 						PlaySoundForPlayer(Sound);
 					}
@@ -971,12 +972,14 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 						ProGameClearUIWidget->AddToViewport();
 						FString HowToEscape = " Escape::Roof ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+						ProGameClearUIWidget->OneAnswer->SetColorAndOpacity(FLinearColor(0.0f, 0.0f, 0.8f));
 						USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/Leavehelicopter.Leavehelicopter")); // 에셋 경로
 						PlaySoundForPlayer(Sound);
 					}
 					else if (root == 0) {
 						FString HowToEscape = " Escape::Failed ";
 						ProGameClearUIWidget->SetMessage(1, HowToEscape);
+						ProGameClearUIWidget->OneAnswer->SetColorAndOpacity(FLinearColor(0.8f, 0.0f, 0.0f));
 						GetWorld()->GetTimerManager().SetTimer(GameOverUIHandle, this, &ABaseCharacter::ProStartGameOverUI, 3.f, false);
 					}
 
@@ -995,7 +998,7 @@ void ABaseCharacter::ProGameClear(uint32 root, uint32 alive_players, uint32 dead
 					ProGameClearUIWidget->SetMessage(5, MyKillCountString);
 
 					// 합친 문자열 생성
-					FString BestKillString = FString::Printf(TEXT("%d kills by %s"), best_kill_count, *best_kill_player);
+					FString BestKillString = FString::Printf(TEXT(" %d kills by %s"), best_kill_count, *best_kill_player);
 					ProGameClearUIWidget->SetMessage(52, BestKillString);
 
 					++GameClearFlag;
@@ -1599,7 +1602,7 @@ void ABaseCharacter::InventoryOnOff()
 
 void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
-	UE_LOG(LogTemp, Log, TEXT("GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
+	//UE_LOG(LogTemp, Log, TEXT("Attack() - GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 	
 	if (m_bIsAttacking) {
 		return;
@@ -1617,7 +1620,7 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 			FVector2D(-30, 30), // 출력 범위 (-30 ~ 30)
 			m_fPitch // 현재 Pitch 값
 		);
-		UE_LOG(LogTemp, Warning, TEXT("m_fPitch: %.2f"), m_fPitch);
+		UE_LOG(LogTemp, Log, TEXT("m_fPitch: %.2f"), m_fPitch);
 		AnimInstance->SetPitch(m_fPitch);
 	}
 
@@ -1629,8 +1632,6 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 	//	m_bIsAttacking = false;
 	//	//UE_LOG(LogTemp, Display, TEXT("AttackEnd: %d"), PlayerId);
 	//	});
-
-	m_bIsAttacking = false;
 }
 
 void ABaseCharacter::Healing()

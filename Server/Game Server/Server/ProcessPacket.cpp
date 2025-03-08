@@ -5,7 +5,7 @@
 #include "ZombieController.h"
 #include "ItemController.h"
 #include "Zombie.h"
-#include "ShoutingZombie.h"
+//#include "ShoutingZombie.h"
 
 std::mutex roomPlayersMutex;
 
@@ -384,10 +384,11 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 #endif
 
                     // 샤우팅 좀비일 경우에
-                    if (z->ZombieData.zombietype == 1) {
-                        ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);  // 다운 캐스팅 사용!
-                        sz->Shout(zombieDB[roomId], id, roomId);
-                    }
+                    //if (z->ZombieData.zombietype == 1) {
+                    //    ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);  // 다운 캐스팅 사용!
+                    //    sz->Shout(zombieDB[roomId], id, roomId);
+                    //}
+                    // 시야 포착 확률 넣어서 이제는 이렇게 작동하면 X
 
                     break;
                 }

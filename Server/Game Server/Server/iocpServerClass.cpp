@@ -46,7 +46,7 @@ std::vector<tuple<float, float, float>> g_valispositionsF1;
 std::vector<tuple<float, float, float>> g_valispositionsF2;
 
 
-float IOCP_CORE::BT_INTERVAL = 0.1f;	// BT 작동 인터벌 설정 (0.1초)
+float IOCP_CORE::BT_INTERVAL = 0.05f;	// BT 작동 인터벌 설정 (0.05초) => 참고로 이거 바꾸면 클라도 detect 패킷 리셋 딜레이 시간도 맞춰서 바꿔줘야함 (ex: BT가 0.1초면 패킷 리셋은 0.15초, BT가 0.05초면 리셋은 0.07초 이런식으로)
 float IOCP_CORE::GAME_TIMER_INTERVAL = 0.005f;	// 게임 타이머 시간 누적 인터벌 설정 (0.005초 - 5ms)
 
 std::chrono::duration<float> IOCP_CORE::BT_deltaTime;	// BT 작동 인터벌 체크 & MoveTo에서 계산용으로 사용
@@ -546,7 +546,7 @@ void IOCP_CORE::GameTimerEndCheck(int roomid, float& GameTime, std::chrono::stea
 	GT_deltaTime = currentTime - lastGTTime;
 
 	// 게임 타이머 계산 
-	if (GT_deltaTime.count() > 0.005f) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
+	if (GT_deltaTime.count() > GAME_TIMER_INTERVAL) {	// 5ms 이상 경과 시만 시간 누적 => 이 설정 없으면 시간이 훨어얼씬 더 빨리 측정됨
 		// deltaTime을 누적하여 GameTime에 더함
 		GameTime += GT_deltaTime.count();  // 초 단위 (* -> 그냥 이렇게 부동소수점 누적하면, 나중에 시간 지날 수록 정확도 떨어짐)
 		lastGTTime = currentTime;

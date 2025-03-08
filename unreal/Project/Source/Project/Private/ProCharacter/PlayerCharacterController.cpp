@@ -446,7 +446,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 1:
 			if ((*zombie)->targetType != (*zombie)->TARGET::NULL_TARGET) {	
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %d -> 1(NULL)"), tmp_path.ZombieId, (*zombie)->targetType);
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 1(NULL)"), tmp_path.ZombieId, (*zombie)->targetType));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 1(NULL)"), tmp_path.ZombieId, (*zombie)->targetType));
 			}
 
 			(*zombie)->targetType = (*zombie)->TARGET::NULL_TARGET;
@@ -456,7 +456,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER) {	// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
 
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %d -> 2(Player)"), tmp_path.ZombieId, (*zombie)->targetType);
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 2(Player)"), tmp_path.ZombieId, (*zombie)->targetType));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 2(Player)"), tmp_path.ZombieId, (*zombie)->targetType));
 
 				if (((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == true)	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 
 					|| ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie"))) {
@@ -469,7 +469,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 3:
 			if ((*zombie)->targetType != (*zombie)->TARGET::SHOUTING) {
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %d -> 3(SHOUTING)"), tmp_path.ZombieId, (*zombie)->targetType);
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 3(SHOUTING)"), tmp_path.ZombieId, (*zombie)->targetType));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 3(SHOUTING)"), tmp_path.ZombieId, (*zombie)->targetType));
 			}
 
 			(*zombie)->targetType = (*zombie)->TARGET::SHOUTING;
@@ -477,7 +477,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 4:
 			if ((*zombie)->targetType != (*zombie)->TARGET::FOOTSOUND) {
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %d -> 4(FOOTSOUND)"), (*zombie)->targetType);
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 4(FOOTSOUND)"), tmp_path.ZombieId, (*zombie)->targetType));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 4(FOOTSOUND)"), tmp_path.ZombieId, (*zombie)->targetType));
 			}
 
 			(*zombie)->targetType = (*zombie)->TARGET::FOOTSOUND;
@@ -485,7 +485,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 5:
 			if ((*zombie)->targetType != (*zombie)->TARGET::INVESTIGATED) {
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %d -> 5(INVESTIGATED)"), tmp_path.ZombieId, (*zombie)->targetType);
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 5(INVESTIGATED)"), tmp_path.ZombieId, (*zombie)->targetType));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 5(INVESTIGATED)"), tmp_path.ZombieId, (*zombie)->targetType));
 			}
 
 			(*zombie)->targetType = (*zombie)->TARGET::INVESTIGATED;
@@ -493,7 +493,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 6:
 			if ((*zombie)->targetType != (*zombie)->TARGET::PATROL) {
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %d -> 6(PATROL)"), tmp_path.ZombieId, (*zombie)->targetType);
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 6(PATROL)"), tmp_path.ZombieId, (*zombie)->targetType));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 6(PATROL)"), tmp_path.ZombieId, (*zombie)->targetType));
 			}
 
 			(*zombie)->targetType = (*zombie)->TARGET::PATROL;
@@ -501,7 +501,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 7:
 			if ((*zombie)->targetType != (*zombie)->TARGET::HORDESOUND) {
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %d -> 7(HORDESOUND)"), tmp_path.ZombieId, (*zombie)->targetType);
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 7(HORDESOUND)"), tmp_path.ZombieId, (*zombie)->targetType));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> 7(HORDESOUND)"), tmp_path.ZombieId, (*zombie)->targetType));
 			}
 
 			(*zombie)->targetType = (*zombie)->TARGET::HORDESOUND;
