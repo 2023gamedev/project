@@ -17,6 +17,7 @@
 // 구조체
 #include "ProData/ZBoneStruct.h"
 #include "ProData/SkeletalMeshBondData.h"
+#include "ProData/ZombieMeshData.h"
 
 #include "BaseZombie.generated.h"
 
@@ -188,8 +189,6 @@ public:
 
 	void SliceProceduralmeshTest(FVector planeposition, FVector planenormal);
 
-	FName GetBoneNameForVertex(const FVector& TargetPosition);
-	FName GetBoneNameForCutPlaneVertex(const FVector& TargetPosition);
 
 	float CalculateEuclideanDistance(const FVector& Point1, const FVector& Point2);
 	float CalculateAverageDistance(const TArray<FVector>& Vertices);
@@ -205,10 +204,42 @@ public:
 	void MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters, TMap<FName, FVector>& BoneAveragePos);
 
 	void InitVertexBoneMap(TMap<FVector, FVertexBoneData>& VertexBoneMap, TMap<FName, FVector>& BoneAveragePos);
+	void InitVertexIndexPosMapForMerge(TMap<FZombieMeshData, FVector>& VertexIndexPosMap);
+
 	void FillSectionVertexBoneMap(const TMap<FVector, FVertexBoneData>& VertexBoneMap, TMap<int32, TMap<int32, FName>>& SectionVertexBoneMap, TMap<FName, FVector>& BoneAveragePos);
 	FName FindNearstBoneName(TMap<FName, FVector>& BoneAveragePos, const FVector& TargetPosition);
 	void CreateAndApplyBoundingBox(UProceduralMeshComponent* ProceduralMesh);
 	void CreateAndApplyBoundingBoxByNewProcMesh(UProceduralMeshComponent* ProceduralMesh);
+
+	void ReportProVertexMap(TMap<FVector, FVertexBoneData>& VertexBoneMap);
+
+	void RotateFromCutProc1MeshToSkelBone();
+	void RotateFromCutProc2MeshToSkelBone();
+	void RotateFromProcMeshToSkelBone();
+
+	void SetCutProc1MeshPivotToCenter();
+	void SetCutProc2MeshPivotToCenter();
+	void SetProceduralMeshPivotToCenter();
+
+
+	FTimerHandle ZombieMergeWattingHandle;
+
+	void StartMergiingTimer();
+
+	FTimerHandle ZombieMergingHandle;
+
+	void MergingTimerElapsed();
+
+
+	// ZombieMeshData : [스켈레탈 섹션인덱스, 버텍스 인덱스]  , FZombieMeshData : 몇번 프로시저럴메쉬인지 , 버텍스인덱스 -> 섹션인덱스는 어차피 같을것이니까  
+	TArray<TMap<FZombieMeshData, FZombieMeshData>> ProMeshIndexArray; // 병합하기 전 프로시저럴 메쉬들이 기존 스켈레탈 메쉬의 어떤 섹션인덱스와 버텍스 인덱스를 가지고 있는지 저장하는 변수
+
+	FVector CutPro_1Distance;
+	FVector CutPro_2Distance;
+	TArray<FVector> resultDistanceAvg;  // 각 섹션에 대해 계산된 평균값을 저장하는 TArray
+	//TArray<TMap<FZombieMeshData, FVector>> DistanceResultArray;
+	TArray<FName> ProcMeshBone;
+
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
 	UProceduralMeshComponent* CutProceduralMesh_1;
@@ -243,8 +274,32 @@ public:
 	TSharedPtr<FZBoneStructure> RootBone;  // **트리 루트 (최상위 본)**
 	TSharedPtr<FZBoneStructure> SpecialRootBone;  // **트리 루트 (최상위 본)**
 
+	FVector CutPro_1ClusterCenter;
+	FVector CutPro_1StartLocation;
+	FVector CutPro_2StartLocation;
+	FName CutPro_1PlaneBoneName;
+	FName CutPro_2PlaneBoneName;
+	bool m_bIsCutProceduralMesh_2Visibility = true;
+
+
 	UPROPERTY(EditAnywhere)
 	TArray<UProceduralMeshComponent*> ProceduralMeshes;
+	
+	UPROPERTY(EditAnywhere)
+	double TotalTimeToMove = 5.0; // 5초 동안 이동
+
+	UPROPERTY(EditAnywhere)
+	double ElapsedTime = 0.0; // 경과 시간
+
+	UPROPERTY(EditAnywhere)
+	bool bIsMergingInProgress = false; // 머지 중 상태
+
+	UPROPERTY(EditAnywhere)
+	int m_iMergeFlag = 0; // 머지 중 상태
+
+	UPROPERTY(EditAnywhere)
+	TArray<FVector> MergeStartLocation; // 머지 중 상태
+
 
 	void InitializeBoneHierarchy();  // 본 트리 초기화
 	void InitializeSpecialBoneHierarchy();  // 몸통부분 절단 시 새로운 트리 구조
