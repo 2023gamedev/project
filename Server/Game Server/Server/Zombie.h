@@ -131,6 +131,12 @@ public:
 
     vector<vector<vector<float>>> HordeLocation;       // 호드 좀비 위치
 
+    vector<vector<vector<float>>> PrevLocation;
+
+    std::chrono::steady_clock::time_point WalkingSamePosition_StartTime;
+    bool IsWalkingSamePosition = false;
+    const float Reset_WalkingSamePosition_Duration = 2.0f;  // 2초
+
     int ClosestPlayerID;
 
     bool PlayerInSight;

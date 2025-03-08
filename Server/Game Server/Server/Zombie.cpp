@@ -36,6 +36,8 @@ Zombie::Zombie()
 
 	HordeLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
+	PrevLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+
 	PlayerInSight = false;
 
 	KnewPlayerLocation = false;
@@ -97,6 +99,8 @@ Zombie::Zombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 	PrevTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 	
 	HordeLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+
+	PrevLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	PlayerInSight = false;
 
@@ -654,7 +658,7 @@ void Zombie::MoveTo(float deltasecond)
 
 	// 좀비 속도 지정 (걷기/뛰기)
 	if (targetType == TARGET::PATROL) {	// 걷기
-		
+
 		switch (GetZombieType()) {
 		case ZOMBIE_TYPE::NULL_TYPE:
 			cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " ZombieType 변수값 미지정(NULL_TYPE)!!! ---> Speed = 0" << endl;
@@ -716,7 +720,7 @@ void Zombie::MoveTo(float deltasecond)
 #endif
 			ReachFinalDestination();
 			ZombiePathIndex = 1;
-		
+
 			spacing = false;
 		}
 		else {	// 꼭지점을 넘어 갈 때
@@ -733,6 +737,34 @@ void Zombie::MoveTo(float deltasecond)
 		ZombieData.x += moveX;
 		ZombieData.y += moveY;
 	}
+
+	// 제자리 걸음 방지 코드
+	//if (PrevLocation[0][0][0] == ZombieData.x && PrevLocation[0][0][1] == ZombieData.y && PrevLocation[0][0][2] == ZombieData.z) {	
+	//	if (IsWalkingSamePosition == false) {
+	//		IsWalkingSamePosition = true;
+
+	//		WalkingSamePosition_StartTime = std::chrono::high_resolution_clock::now();
+	//	}
+	//}
+	//else {
+	//	IsWalkingSamePosition == false;
+	//}
+
+	//auto waitAfterTime = std::chrono::high_resolution_clock::now();
+	//std::chrono::duration<float> deltaTime = waitAfterTime - WalkingSamePosition_StartTime;
+
+	//if (IsWalkingSamePosition == true && deltaTime.count() >= Reset_WalkingSamePosition_Duration) {
+	//	IsWalkingSamePosition = false;
+
+	//	ReachFinalDestination();	// 블랙 보드 강제 초기화
+	//	ZombiePathIndex = 1;
+
+	//	return;
+	//}
+
+	//PrevLocation[0][0][0] = ZombieData.x;
+	//PrevLocation[0][0][1] = ZombieData.y;
+	//PrevLocation[0][0][2] = ZombieData.z;
 
 #if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 	if (spacing)
