@@ -766,43 +766,13 @@ void ABaseZombie::Tick(float DeltaTime)
 		CutZombie(sync_cutPlane, sync_cutNormal, false);
 	}
 
-	//if (bIsMergingInProgress)
-	//{
-	//	ElapsedTime += DeltaTime;
-	//	// 이동 비율 계산 (10초 동안 이동하도록 설정)
-	//	float MoveRatio = FMath::Clamp(ElapsedTime / TotalTimeToMove, 0.0f, 1.0f);
-
-	//	// 이동할 거리 설정 (예: X, Y, Z 방향으로 이동)
-	//	FVector MoveDelta(100.0f, 100.0f, 100.0f);
-
-	//	//	// 10초 동안 이동
-	//	for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
-	//	{
-	//		UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
-	//		if (!ProcMesh) continue;
-
-
-	//		FVector CurrentLocation = ProcMesh->GetComponentLocation();  // 또는 ProcMesh->GetComponentLocation();
-	//		FVector TargetL = CurrentLocation + (MoveDelta * MoveRatio);
-
-	//		// 10초 동안 이동 (프로시저 메쉬 자체를 이동)
-	//		ProcMesh->SetWorldLocation(TargetL); // 또는 ProcMesh->SetWorldLocation(TargetLocation);
-
-	//		// 로그 출력
-	//		UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
-	//		UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
-
-	//		// 10초 동안 이동한 후, 완료되었으면 머지 진행을 종료
-	//		if (ElapsedTime >= TotalTimeToMove)
-	//		{
-	//			bIsMergingInProgress = false;
-	//			UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
-	//		}
-	//	}
-	//}
+	//병합부분! ----------------------------------
 
 	if (bIsMergingInProgress)
 	{
+		double StartTime = FPlatformTime::Seconds();
+
+
 		ElapsedTime += DeltaTime;
 
 		// 10초 동안 이동
@@ -812,6 +782,20 @@ void ABaseZombie::Tick(float DeltaTime)
 		if (m_iMergeFlag == 0) {
 			MergeStartLocation.SetNum(ProceduralMeshes.Num());
 		}
+
+		if (CutProceduralMesh_1) {
+			//CutPro_1을 이동
+			FVector CutPro_1TargetLocation = CutPro_1StartLocation + (CutPro_1Distance * TimeRatio);
+			CutProceduralMesh_1->SetWorldLocation(CutPro_1TargetLocation);
+		}
+
+
+		if (CutProceduralMesh_2) {
+			//CutPro_1을 이동
+			FVector CutPro_2TargetLocation = CutPro_2StartLocation + (CutPro_2Distance * TimeRatio);
+			CutProceduralMesh_2->SetWorldLocation(CutPro_2TargetLocation);
+		}
+
 
 		// 10초 동안 이동
 		for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
@@ -870,11 +854,36 @@ void ABaseZombie::Tick(float DeltaTime)
 			}
 
 		}
+
+		//UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
+		//UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
 		++m_iMergeFlag;
+
+
+		double EndTime = FPlatformTime::Seconds();
+		//UE_LOG(LogTemp, Warning, TEXT("bIsMergingInProgressMesh took: %f seconds"), EndTime - StartTime);
 	}
+
+	//  ----------------------------------
 
 	//if (bIsMergingInProgress)
 	//{
+	//	double StartTime = FPlatformTime::Seconds();
+
+
+	//	TArray<FVector> Vertices;
+	//	//TArray<int32> Triangles;
+	//	TArray<FVector> Normals;
+	//	TArray<FVector2D> UVs;
+	//	TArray<FColor> Colors;
+	//	TArray<FProcMeshTangent> Tangents;
+
+	//	FVector BeforeVertices;
+	//	FVector BeforeNormals;
+	//	FVector2D BeforeUVs;
+	//	FColor BeforeColors;
+	//	FProcMeshTangent BeforeTangents;
+
 	//	ElapsedTime += DeltaTime;
 	//	// 이동 비율 계산 (10초 동안 이동하도록 설정)
 	//	float MoveRatio = FMath::Clamp(ElapsedTime / TotalTimeToMove, 0.0f, 1.0f);
@@ -903,28 +912,58 @@ void ABaseZombie::Tick(float DeltaTime)
 	//				FVector* Distance = DistanceResultMap.Find(FZombieMeshData(SectionIndex, VertexIndex));
 	//				if (Distance)
 	//				{
-	//					// 이동할 거리 계산
+	//					//// 이동할 거리 계산
+	//					//FVector TargetPosition = MeshVertexPos + *Distance;
+
+	//					//// 목표 위치까지 이동
+	//					//FVector NewPosition = FMath::Lerp(MeshVertexPos, TargetPosition, MoveRatio);
+
+	//					// Distance: 최종 목표 위치까지의 거리
 	//					FVector TargetPosition = MeshVertexPos + *Distance;
 
-	//					// 목표 위치까지 이동
-	//					FVector NewPosition = FMath::Lerp(MeshVertexPos, TargetPosition, MoveRatio);
+	//					// 정확히 TotalTimeToMove 시간 동안 이동하도록 등속 이동 거리 계산
+	//					FVector NewPosition = MeshVertexPos + (*Distance * (DeltaTime / TotalTimeToMove));
 
 	//					// 프로시저럴 메쉬의 버텍스를 새로운 위치로 업데이트
-	//					MeshSection->ProcVertexBuffer[VertexIndex].Position = NewPosition;
+	//					//MeshSection->ProcVertexBuffer[VertexIndex].Position = NewPosition;
+
+
+	//					Vertices.Add(NewPosition);
+	//					// 나머지 속성도 추가
+	//					Normals.Add(SectionVertices[VertexIndex].Normal);
+	//					UVs.Add(SectionVertices[VertexIndex].UV0);
+	//					Colors.Add(FColor(0.0, 0.0, 0.0, 255));
+	//					Tangents.Add(SectionVertices[VertexIndex].Tangent);
+
+	//					BeforeVertices = SectionVertices[VertexIndex].Position;
+	//					BeforeNormals = SectionVertices[VertexIndex].Normal;
+	//					BeforeUVs = SectionVertices[VertexIndex].UV0;
+	//					BeforeColors = FColor(0.0, 0.0, 0.0, 255);
+	//					BeforeTangents = SectionVertices[VertexIndex].Tangent;
 
 	//				}
 	//				else
 	//				{
-	//					UE_LOG(LogTemp, Warning, TEXT("No distance found for Section %d, Vertex %d"), SectionIndex, VertexIndex);
+	//					Vertices.Add(BeforeVertices);
+	//					// 나머지 속성도 추가
+	//					Normals.Add(BeforeNormals);
+	//					UVs.Add(BeforeUVs);
+	//					Colors.Add(BeforeColors);
+	//					Tangents.Add(BeforeTangents);
 	//				}
 	//			}
-	//			ProcMesh->UpdateMeshSection()
-	//			//ProcMesh->UpdateMeshSection(SectionIndex, SectionVertices);
+	//			ProcMesh->UpdateMeshSection(SectionIndex, Vertices, Normals, UVs, Colors, Tangents);
+
+	//			Vertices.Empty();
+	//			Normals.Empty();
+	//			UVs.Empty();
+	//			Colors.Empty();
+	//			Tangents.Empty();
 	//		}
 	//	}
 
-	//	UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
-	//	UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
+	//	//UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
+	//	//UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
 
 	//	// 10초 동안 이동한 후, 완료되었으면 머지 진행을 종료
 	//	if (ElapsedTime >= TotalTimeToMove)
@@ -932,6 +971,9 @@ void ABaseZombie::Tick(float DeltaTime)
 	//		bIsMergingInProgress = false;
 	//		UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
 	//	}
+
+	//	double EndTime = FPlatformTime::Seconds();
+	//	UE_LOG(LogTemp, Warning, TEXT("bIsMergingInProgressVertex took: %f seconds"), EndTime - StartTime);
 	//}
 
 	Super::Tick(DeltaTime);
@@ -1376,6 +1418,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			Material_Blood
 		);
 
+
+
+
+
 		if (CutProceduralMesh_2)
 		{
 			CutProceduralMesh_2->RegisterComponent(); // 컴포넌트 등록
@@ -1402,6 +1448,25 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX.Num() < 2 => BloodFX spawn failed!!!"));
 			}
 
+			//병합부분! ----------------------------------
+			//CutPro1 단면 bone 구하는 부분
+			//FVector CutPro_1ClusterCenter(0, 0, 0);
+
+			FProcMeshSection* CutSection1 = CutProceduralMesh_1->GetProcMeshSection(CutProceduralMesh_1->GetNumSections() - 1);
+			if (CutSection1)
+			{
+				CutPro_1ClusterCenter = FVector(0, 0, 0);
+				for (const FProcMeshVertex& Vertex : CutSection1->ProcVertexBuffer)
+				{
+					CutPro_1ClusterCenter += Vertex.Position;
+				}
+
+				CutPro_1ClusterCenter /= CutSection1->ProcVertexBuffer.Num();
+
+				UE_LOG(LogTemp, Warning, TEXT("CutPro_1ClusterCenter : X : %f, Y : %f, Z : %f "), CutPro_1ClusterCenter.X, CutPro_1ClusterCenter.Y, CutPro_1ClusterCenter.Z);
+			}
+
+			//  ----------------------------------
 			TMap<FVector, FVertexBoneData> VertexBoneMap;
 			TMap<FName, FVector> BoneAveragePos;
 			double StartTime = FPlatformTime::Seconds();
@@ -1528,6 +1593,22 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			TMap<int32, TMap<int32, FName>> SectionVertexBoneMap;
 
 			if (ClusterCenters.Num() <= 1) {
+				//병합부분!
+				m_bIsCutProceduralMesh_2Visibility = true;
+				FVector CutPro_2ClusterCenter(0, 0, 0);
+				FProcMeshSection* CutSectionPro2 = CutProceduralMesh_2->GetProcMeshSection(CutProceduralMesh_2->GetNumSections() - 1);
+				if (CutSectionPro2)
+				{
+					for (const FProcMeshVertex& Vertex : CutSectionPro2->ProcVertexBuffer)
+					{
+						CutPro_2ClusterCenter += Vertex.Position;
+					}
+					CutPro_2ClusterCenter /= CutSectionPro2->ProcVertexBuffer.Num();
+					CutPro_2PlaneBoneName = FindNearstBoneName(BoneAveragePos, CutPro_2ClusterCenter);
+					GetWorld()->GetTimerManager().SetTimer(ZombieMergeWattingHandle, this, &ABaseZombie::StartMergiingTimer, 5.f, false);
+				}
+				//  ----------------------------------
+				
 				return; // CutProceduralMesh_2 그대로 사용
 			}
 
@@ -1543,6 +1624,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			EndTime = FPlatformTime::Seconds();
 			UE_LOG(LogTemp, Warning, TEXT("FillSectionVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
+			//병합부분! ----------------------------------
+
+			CutPro_1PlaneBoneName = FindNearstBoneName(BoneAveragePos, CutPro_1ClusterCenter);
+
+			//  ----------------------------------
 
 			// 기존 ProceduralMesh가 있으면 삭제
 			for (UProceduralMeshComponent* MeshComp : ProceduralMeshes)
@@ -1559,81 +1645,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			int32 ProceduralMeshNewIndex = 2;
 
 
-			// ? 00000초 걸리네
-			//StartTime = FPlatformTime::Seconds();
-
-			//int strestest = 0;
-			//for (int i = 0; i < 6000; ++i) {
-			//	if (i % 2 == 0) {
-			//		strestest += 2;
-
-			//	}
-			//	else {
-			//		strestest += 1;
-			//	}
-
-			//}
-
-
-			//// 6000개의 랜덤 버텍스 A와 B
-			//TArray<FVector> VertexArrayA;
-			//TArray<FVector> VertexArrayB;
-			//TArray<FVector> InterpolatedVertices; // 보간된 위치
-
-			//// 6000개 랜덤 버텍스 초기화
-			//int32 NumVertices = 6000;
-			//VertexArrayA.SetNum(NumVertices);
-			//VertexArrayB.SetNum(NumVertices);
-			//InterpolatedVertices.SetNum(NumVertices);
-
-			//for (int32 i = 0; i < NumVertices; ++i)
-			//{
-			//	// A: 초기 랜덤 위치 (-100 ~ 100)
-			//	VertexArrayA[i] = FVector(
-			//		FMath::RandRange(-100.0f, 100.0f),
-			//		FMath::RandRange(-100.0f, 100.0f),
-			//		FMath::RandRange(-100.0f, 100.0f)
-			//	);
-
-			//	// B: 목표 랜덤 위치 (300 ~ 500)
-			//	VertexArrayB[i] = FVector(
-			//		FMath::RandRange(300.0f, 500.0f),
-			//		FMath::RandRange(300.0f, 500.0f),
-			//		FMath::RandRange(300.0f, 500.0f)
-			//	);
-
-			//	// 초기 보간 버텍스 = A (시작점)
-			//	InterpolatedVertices[i] = VertexArrayA[i];
-			//}
-
-			//// 보간 관련 변수
-			//float LerpAlpha = 0.0f; // 보간 비율 (0.0 ~ 1.0)
-			//float LerpSpeed = 0.5f;  // 이동 속도 (조절 가능)
-			//StartTime = FPlatformTime::Seconds();
-
-			//// 보간 비율 증가 (프레임마다 보간 비율 갱신)
-			//LerpAlpha = FMath::Clamp(LerpAlpha + (0.5f * LerpSpeed), 0.0f, 1.0f);
-
-			//// A → B 보간
-			//for (int32 i = 0; i < VertexArrayA.Num(); ++i)
-			//{
-			//	InterpolatedVertices[i] = FMath::Lerp(VertexArrayA[i], VertexArrayB[i], LerpAlpha);
-			//}
-
-			//EndTime = FPlatformTime::Seconds();
-			//UE_LOG(LogTemp, Warning, TEXT("6000 버텍스 보간 시간: %f 초"), EndTime - StartTime);
-
-			//// 보간 완료 체크
-			//if (LerpAlpha >= 1.0f)
-			//{
-			//	UE_LOG(LogTemp, Warning, TEXT("A → B 보간 완료"));
-			//}
-
-
-			//EndTime = FPlatformTime::Seconds();
-			//UE_LOG(LogTemp, Warning, TEXT("strestest 6000 took: %f seconds"), EndTime - StartTime);
-
-
 			if (ClusterCenters.Num() > 1) { // CutProceduralMesh_2 분해
 				for (const TPair<int, FVector>& Cluster : ClusterCenters) {
 
@@ -1648,6 +1659,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 					StartTime = FPlatformTime::Seconds();
 					FName CutPlaneBoneName = FindNearstBoneName(BoneAveragePos ,Cluster.Value);
+					
+					//병합부분! ----------------------------------
+
+					ProcMeshBone.Add(CutPlaneBoneName);
+
+					//  ----------------------------------
 
 					EndTime = FPlatformTime::Seconds();
 					UE_LOG(LogTemp, Warning, TEXT("CutPlaneBoneName FindNearstBoneName took: %f seconds"), EndTime - StartTime);
@@ -2095,8 +2112,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 				}
 			}
-
 			CutProceduralMesh_2->SetVisibility(false);
+			
 			//CutProceduralMesh_2->SetHiddenInGame(true);
 			//CutProceduralMesh_2->bUseComplexAsSimpleCollision = false;
 
@@ -2105,8 +2122,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			double AllEndTime = FPlatformTime::Seconds();
 			UE_LOG(LogTemp, Warning, TEXT("NSlice took: %f seconds"), AllEndTime - ALLStartTime);
 
+			//병합부분! ----------------------------------
 
+			m_bIsCutProceduralMesh_2Visibility = false;
 			StartTime = FPlatformTime::Seconds();
+		
+
 			// vertexpos - sectionindex, vertexindex    promesh들 for문 돌면서 TArray<TMap<ZombieMeshData(SectionIndex,Vertexindex), VertexIndex>>에 기록 
 			// Cut1도 해줘야 한다.
 			ReportProVertexMap(VertexBoneMap); 
@@ -2114,13 +2135,15 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			EndTime = FPlatformTime::Seconds();
 			UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->ReportProVertexMap took: %f seconds"), EndTime - StartTime);
 
-			StartTime = FPlatformTime::Seconds();
+
 			// 좀비 머지 5초후 시작
 			GetWorld()->GetTimerManager().SetTimer(ZombieMergeWattingHandle, this, &ABaseZombie::StartMergiingTimer, 5.f, false);
 
-			EndTime = FPlatformTime::Seconds();
-			UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->StartMergiingTimer took: %f seconds"), EndTime - StartTime);
+			//  ----------------------------------
 		}
+
+
+
 	}
 
 	// 생각해보니까 CutPro2가 있을때는 다른 FTimer와 함수를 사용해야 할 것 같다
@@ -3091,214 +3114,514 @@ void ABaseZombie::ReportProVertexMap(TMap<FVector, FVertexBoneData>& VertexBoneM
 	UE_LOG(LogTemp, Log, TEXT("Processed %d Procedural Meshes"), ProceduralMeshes.Num());
 }
 
+void ABaseZombie::RotateFromCutProc1MeshToSkelBone()
+{
+	if (!CutProceduralMesh_1) 
+	{
+		return;
+	}
+
+	CutProceduralMesh_1->SetSimulatePhysics(false);
+
+	USkeletalMeshComponent* SkeletalMeshComp = GetMesh();
+	if (!SkeletalMeshComp) return;
+
+	// 본의 월드 트랜스폼(위치, 회전, 스케일) 가져오기
+	FTransform BoneTransform = SkeletalMeshComp->GetBoneTransform(SkeletalMeshComp->GetBoneIndex(CutPro_1PlaneBoneName));
+
+
+	// 컴포넌트 트랜스폼 가져오기 (스켈레탈 메쉬의 월드 트랜스폼)
+	//FTransform ComponentTransform = SkeletalMeshComp->GetComponentTransform();
+
+	// 월드 트랜스폼 계산
+	//FTransform BoneWorldTransform = BoneTransform * ComponentTransform;
+
+	// 본의 월드 회전값
+	FRotator BoneWorldRotation = BoneTransform.GetRotation().Rotator();
+	//FRotator BoneWorldRotation = BoneWorldTransform.GetRotation().Rotator();
+
+	// Roll(roll) 값 100도 추가
+	BoneWorldRotation.Roll += 280.0f;
+
+	CutProceduralMesh_1->SetWorldRotation(BoneWorldRotation);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Bone %s World Rotation: %s"), *(ProcMeshBone[MeshIndex]).ToString(), *BoneWorldRotation1.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Bone %s World Rotation: %s"), *(CutPro_1PlaneBoneName).ToString(), *BoneWorldRotation.ToString());
+
+	// 본의 월드 위치 구하기
+	FVector BoneWorldLocation = SkeletalMeshComp->GetBoneLocation(CutPro_1PlaneBoneName, EBoneSpaces::WorldSpace);
+	CutPro_1StartLocation = CutProceduralMesh_1->GetComponentLocation();
+	CutPro_1Distance = BoneWorldLocation - CutPro_1StartLocation;
+}
+
+void ABaseZombie::RotateFromCutProc2MeshToSkelBone()
+{
+
+	if (!CutProceduralMesh_2)
+	{
+		return;
+	}
+
+	CutProceduralMesh_2->SetSimulatePhysics(false);
+
+	USkeletalMeshComponent* SkeletalMeshComp = GetMesh();
+	if (!SkeletalMeshComp) return;
+
+	// 본의 월드 트랜스폼(위치, 회전, 스케일) 가져오기
+	FTransform BoneTransform = SkeletalMeshComp->GetBoneTransform(SkeletalMeshComp->GetBoneIndex(CutPro_2PlaneBoneName));
+
+
+	// 컴포넌트 트랜스폼 가져오기 (스켈레탈 메쉬의 월드 트랜스폼)
+	//FTransform ComponentTransform = SkeletalMeshComp->GetComponentTransform();
+
+	// 월드 트랜스폼 계산
+	//FTransform BoneWorldTransform = BoneTransform * ComponentTransform;
+
+	// 본의 월드 회전값
+	FRotator BoneWorldRotation = BoneTransform.GetRotation().Rotator();
+	//FRotator BoneWorldRotation = BoneWorldTransform.GetRotation().Rotator();
+
+	// Roll(roll) 값 100도 추가
+	BoneWorldRotation.Roll += 280.0f;
+
+	CutProceduralMesh_2->SetWorldRotation(BoneWorldRotation);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Bone %s World Rotation: %s"), *(ProcMeshBone[MeshIndex]).ToString(), *BoneWorldRotation1.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Bone %s World Rotation: %s"), *(CutPro_2PlaneBoneName).ToString(), *BoneWorldRotation.ToString());
+
+	// 본의 월드 위치 구하기
+	FVector BoneWorldLocation = SkeletalMeshComp->GetBoneLocation(CutPro_2PlaneBoneName, EBoneSpaces::WorldSpace);
+	CutPro_2StartLocation = CutProceduralMesh_2->GetComponentLocation();
+	CutPro_2Distance = BoneWorldLocation - CutPro_2StartLocation;
+}
+
+void ABaseZombie::RotateFromProcMeshToSkelBone()
+{
+	for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
+	{
+		UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
+		if (!ProcMesh) continue;
+
+		USkeletalMeshComponent* SkeletalMeshComp = GetMesh();
+		if (!SkeletalMeshComp) return;
+
+		// 본의 월드 트랜스폼(위치, 회전, 스케일) 가져오기
+		FTransform BoneTransform = SkeletalMeshComp->GetBoneTransform(SkeletalMeshComp->GetBoneIndex(ProcMeshBone[MeshIndex]));
+		
+		
+		// 컴포넌트 트랜스폼 가져오기 (스켈레탈 메쉬의 월드 트랜스폼)
+		//FTransform ComponentTransform = SkeletalMeshComp->GetComponentTransform();
+
+		// 월드 트랜스폼 계산
+		//FTransform BoneWorldTransform = BoneTransform * ComponentTransform;
+		
+		// 본의 월드 회전값
+		FRotator BoneWorldRotation = BoneTransform.GetRotation().Rotator();
+		//FRotator BoneWorldRotation = BoneWorldTransform.GetRotation().Rotator();
+
+		// Roll(roll) 값 100도 추가
+		BoneWorldRotation.Roll += 280.0f;
+
+		ProcMesh->SetWorldRotation(BoneWorldRotation);
+
+		//UE_LOG(LogTemp, Warning, TEXT("Bone %s World Rotation: %s"), *(ProcMeshBone[MeshIndex]).ToString(), *BoneWorldRotation1.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("Bone %s World Rotation: %s"), *(ProcMeshBone[MeshIndex]).ToString(), *BoneWorldRotation.ToString());
+	}
+}
+
+void ABaseZombie::SetCutProc1MeshPivotToCenter()
+{
+
+	if (!CutProceduralMesh_1) return;
+
+	int32 NumSections = CutProceduralMesh_1->GetNumSections();
+	if (NumSections == 0) return;
+
+	// 마지막 섹션 가져오기
+	FProcMeshSection* LastSection = CutProceduralMesh_1->GetProcMeshSection(NumSections - 1);
+	if (!LastSection) return;
+
+	FVector Center = FVector::ZeroVector;
+	int32 VertexCount = 0;
+
+	// 마지막 섹션의 버텍스 평균 계산
+	for (const FProcMeshVertex& Vertex : LastSection->ProcVertexBuffer)
+	{
+		Center += Vertex.Position;
+		VertexCount++;
+	}
+
+	// 버텍스의 평균 = 중심점
+	if (VertexCount > 0)
+	{
+		Center /= VertexCount;
+
+		// 각 섹션 버텍스들을 중심점 기준으로 이동
+		for (int32 SectionIndex = 0; SectionIndex < NumSections; ++SectionIndex)
+		{
+			FProcMeshSection* MeshSection = CutProceduralMesh_1->GetProcMeshSection(SectionIndex);
+			if (!MeshSection) continue;
+
+			TArray<FVector> AdjustedVertices;
+			TArray<FVector> Normals;
+			TArray<FVector2D> UVs;
+			TArray<FColor> Colors;
+			TArray<FProcMeshTangent> Tangents;
+
+			for (const FProcMeshVertex& Vertex : MeshSection->ProcVertexBuffer)
+			{
+				AdjustedVertices.Add(Vertex.Position - Center); // 피봇 보정
+				Normals.Add(Vertex.Normal);
+				UVs.Add(Vertex.UV0);
+				Colors.Add(Vertex.Color);
+				Tangents.Add(Vertex.Tangent);
+			}
+
+			// 이동된 버텍스로 메쉬 갱신
+			CutProceduralMesh_1->UpdateMeshSection(SectionIndex, AdjustedVertices, Normals, UVs, Colors, Tangents);
+		}
+
+		// 컴포넌트 자체를 중심점으로 이동 (피봇 보정)
+		CutProceduralMesh_1->SetWorldLocation(CutProceduralMesh_1->GetComponentLocation() + Center);
+	}
+}
+
+void ABaseZombie::SetCutProc2MeshPivotToCenter()
+{
+	if (!CutProceduralMesh_2) return;
+
+	int32 NumSections = CutProceduralMesh_2->GetNumSections();
+	if (NumSections == 0) return;
+
+	// 마지막 섹션 가져오기
+	FProcMeshSection* LastSection = CutProceduralMesh_2->GetProcMeshSection(NumSections - 1);
+	if (!LastSection) return;
+
+	FVector Center = FVector::ZeroVector;
+	int32 VertexCount = 0;
+
+	// 마지막 섹션의 버텍스 평균 계산
+	for (const FProcMeshVertex& Vertex : LastSection->ProcVertexBuffer)
+	{
+		Center += Vertex.Position;
+		VertexCount++;
+	}
+
+	// 버텍스의 평균 = 중심점
+	if (VertexCount > 0)
+	{
+		Center /= VertexCount;
+
+		// 각 섹션 버텍스들을 중심점 기준으로 이동
+		for (int32 SectionIndex = 0; SectionIndex < NumSections; ++SectionIndex)
+		{
+			FProcMeshSection* MeshSection = CutProceduralMesh_2->GetProcMeshSection(SectionIndex);
+			if (!MeshSection) continue;
+
+			TArray<FVector> AdjustedVertices;
+			TArray<FVector> Normals;
+			TArray<FVector2D> UVs;
+			TArray<FColor> Colors;
+			TArray<FProcMeshTangent> Tangents;
+
+			for (const FProcMeshVertex& Vertex : MeshSection->ProcVertexBuffer)
+			{
+				AdjustedVertices.Add(Vertex.Position - Center); // 피봇 보정
+				Normals.Add(Vertex.Normal);
+				UVs.Add(Vertex.UV0);
+				Colors.Add(Vertex.Color);
+				Tangents.Add(Vertex.Tangent);
+			}
+
+			// 이동된 버텍스로 메쉬 갱신
+			CutProceduralMesh_2->UpdateMeshSection(SectionIndex, AdjustedVertices, Normals, UVs, Colors, Tangents);
+		}
+
+		// 컴포넌트 자체를 중심점으로 이동 (피봇 보정)
+		CutProceduralMesh_2->SetWorldLocation(CutProceduralMesh_2->GetComponentLocation() + Center);
+	}
+}
+
+void ABaseZombie::SetProceduralMeshPivotToCenter() // 피봇을 절단 부분으로 옮기는데는 성공했으나 여전히 회전이 이상, 그리고 충돌박스도 옮겨지지 않음(이건 옮겨야하나 고민) 
+{
+	for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
+	{
+		UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
+		if (!ProcMesh) return;
+
+		int32 NumSections = ProcMesh->GetNumSections();
+		if (NumSections == 0) return;
+
+		// 마지막 섹션 가져오기
+		FProcMeshSection* LastSection = ProcMesh->GetProcMeshSection(NumSections - 1);
+		if (!LastSection) return;
+
+		FVector Center = FVector::ZeroVector;
+		int32 VertexCount = 0;
+
+		// 마지막 섹션의 버텍스 평균 계산
+		for (const FProcMeshVertex& Vertex : LastSection->ProcVertexBuffer)
+		{
+			Center += Vertex.Position;
+			VertexCount++;
+		}
+
+		// 버텍스의 평균 = 중심점
+		if (VertexCount > 0)
+		{
+			Center /= VertexCount;
+
+			// 각 섹션 버텍스들을 중심점 기준으로 이동
+			for (int32 SectionIndex = 0; SectionIndex < NumSections; ++SectionIndex)
+			{
+				FProcMeshSection* MeshSection = ProcMesh->GetProcMeshSection(SectionIndex);
+				if (!MeshSection) continue;
+
+				TArray<FVector> AdjustedVertices;
+				TArray<FVector> Normals;
+				TArray<FVector2D> UVs;
+				TArray<FColor> Colors;
+				TArray<FProcMeshTangent> Tangents;
+
+				for (const FProcMeshVertex& Vertex : MeshSection->ProcVertexBuffer)
+				{
+					AdjustedVertices.Add(Vertex.Position - Center); // 피봇 보정
+					Normals.Add(Vertex.Normal);
+					UVs.Add(Vertex.UV0);
+					Colors.Add(Vertex.Color);
+					Tangents.Add(Vertex.Tangent);
+				}
+
+				// 이동된 버텍스로 메쉬 갱신
+				ProcMesh->UpdateMeshSection(SectionIndex, AdjustedVertices, Normals, UVs, Colors, Tangents);
+			}
+
+			// 컴포넌트 자체를 중심점으로 이동 (피봇 보정)
+			ProcMesh->SetWorldLocation(ProcMesh->GetComponentLocation() + Center);
+		}
+	}
+}
+
 void ABaseZombie::StartMergiingTimer()
 {
 	double StartTime = FPlatformTime::Seconds();
 
+	if (m_bIsCutProceduralMesh_2Visibility) {
+		SetCutProc1MeshPivotToCenter();
+		SetCutProc2MeshPivotToCenter();
 
-	// 좀비 머지 시작 좀비 버텍스들 기록하고 10초동안 deltasecond만큼 움직이도록 세팅 tick에서 할지 어떻게 할지 고민중
-	TMap<FZombieMeshData, FVector> VertexIndexPosMap;
-	InitVertexIndexPosMapForMerge(VertexIndexPosMap);
-
-	TArray<TMap<FZombieMeshData, FVector>> ResultArray;
-	ResultArray.SetNum(ProceduralMeshes.Num());
-
-	// ProMeshIndexArray 순회하여 ResultArray 생성
-	for (const TMap<FZombieMeshData, FZombieMeshData>& ProMeshMap : ProMeshIndexArray)
-	{
-		for (const TPair<FZombieMeshData, FZombieMeshData>& Pair : ProMeshMap)
-		{
-			const FZombieMeshData& Key = Pair.Key;          // ProMeshIndexArray의 Key
-			const FZombieMeshData& Value = Pair.Value;       // ProMeshIndexArray의 Value
-
-			// SectionIndex에 맞는 TMap을 찾거나 새로 생성
-			int32 ProcIndex = Value.SectionIndex;
-			if (ResultArray.Num() <= ProcIndex)
-			{
-				// SectionIndex에 맞는 공간이 없다면 크기 확장
-				ResultArray.SetNum(ProcIndex + 1);
-			}
-
-			// 각 SectionIndex에 해당하는 TMap을 가져옴
-			TMap<FZombieMeshData, FVector>& ResultMap = ResultArray[ProcIndex];
-
-			// VertexPos를 VertexIndexPosMap에서 찾아서 추가
-			if (const FVector* VertexPos = VertexIndexPosMap.Find(Key))
-			{
-				FZombieMeshData ResultKey(Key.SectionIndex, Value.VertexIndex);
-				ResultMap.Add(ResultKey, *VertexPos);
-			}
-		}
+		RotateFromCutProc1MeshToSkelBone();
+		RotateFromCutProc2MeshToSkelBone();
 	}
+	else {
+		// 좀비 머지 시작 좀비 버텍스들 기록하고 10초동안 deltasecond만큼 움직이도록 세팅 tick에서 할지 어떻게 할지 고민중
+		TMap<FZombieMeshData, FVector> VertexIndexPosMap;
+		InitVertexIndexPosMapForMerge(VertexIndexPosMap);
 
-	TMap<int, TArray<FVector>> resultDistance;  // 섹션 인덱스를 key로 하고, 차이 벡터들을 저장하는 TMap
-	//TArray<FVector> resultDistanceAvg;  // 각 섹션에 대해 계산된 평균값을 저장하는 TArray
+		TArray<TMap<FZombieMeshData, FVector>> ResultArray;
+		ResultArray.SetNum(ProceduralMeshes.Num());
 
-	int32 FailCount = 0;
+		SetProceduralMeshPivotToCenter();
+		SetCutProc1MeshPivotToCenter();
+		RotateFromCutProc1MeshToSkelBone();
+		RotateFromProcMeshToSkelBone();
 
-	for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
-	{
-
-		UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
-		if (!ProcMesh) continue;
-		ProcMesh->SetSimulatePhysics(false);
-
-		int32 NumSections = ProcMesh->GetNumSections();
-
-		for (int32 SectionIndex = 0; SectionIndex < NumSections; ++SectionIndex)
+		// ProMeshIndexArray 순회하여 ResultArray 생성
+		for (const TMap<FZombieMeshData, FZombieMeshData>& ProMeshMap : ProMeshIndexArray)
 		{
-			FProcMeshSection* MeshSection = ProcMesh->GetProcMeshSection(SectionIndex);
-			if (!MeshSection) continue;
-
-			const TArray<FProcMeshVertex>& SectionVertices = MeshSection->ProcVertexBuffer;
-
-			// 섹션별로 차이 값을 저장할 TArray 생성 (섹션에 해당하는 key로 접근)
-			TArray<FVector>& DistanceArray = resultDistance.FindOrAdd(MeshIndex);
-
-			for (int32 VertexIndex = 0; VertexIndex < SectionVertices.Num(); ++VertexIndex)
+			for (const TPair<FZombieMeshData, FZombieMeshData>& Pair : ProMeshMap)
 			{
-				const FVector& MeshVertexPos = SectionVertices[VertexIndex].Position;
-				const FVector WorldVertexPos = ProcMesh->GetComponentTransform().TransformPosition(MeshVertexPos);
+				const FZombieMeshData& Key = Pair.Key;          // ProMeshIndexArray의 Key
+				const FZombieMeshData& Value = Pair.Value;       // ProMeshIndexArray의 Value
 
-				// ResultArray에서 해당 VertexIndex에 해당하는 값을 찾음
-				const TMap<FZombieMeshData, FVector>& ResultMap = ResultArray[MeshIndex];
-
-				if (const FVector* VertexPos = ResultMap.Find(FZombieMeshData(SectionIndex, VertexIndex)))
+				// SectionIndex에 맞는 TMap을 찾거나 새로 생성
+				int32 ProcIndex = Value.SectionIndex;
+				if (ResultArray.Num() <= ProcIndex)
 				{
-					// 차이 계산
-					//FVector Distance = (*VertexPos) - MeshVertexPos;
-					FVector Distance = (*VertexPos) - WorldVertexPos;
-
-					// 해당 섹션에 차이 값 추가
-					DistanceArray.Add(Distance);
+					// SectionIndex에 맞는 공간이 없다면 크기 확장
+					ResultArray.SetNum(ProcIndex + 1);
 				}
-				else
+
+				// 각 SectionIndex에 해당하는 TMap을 가져옴
+				TMap<FZombieMeshData, FVector>& ResultMap = ResultArray[ProcIndex];
+
+				// VertexPos를 VertexIndexPosMap에서 찾아서 추가
+				if (const FVector* VertexPos = VertexIndexPosMap.Find(Key))
 				{
-					++FailCount;
+					FZombieMeshData ResultKey(Key.SectionIndex, Value.VertexIndex);
+					ResultMap.Add(ResultKey, *VertexPos);
 				}
 			}
 		}
-	}
 
-	// 평균값 계산
-	for (const TPair<int, TArray<FVector>>& Pair : resultDistance)
-	{
-		const TArray<FVector>& Distances = Pair.Value;
+		TMap<int, TArray<FVector>> resultDistance;  // 섹션 인덱스를 key로 하고, 차이 벡터들을 저장하는 TMap
+		//TArray<FVector> resultDistanceAvg;  // 각 섹션에 대해 계산된 평균값을 저장하는 TArray
 
-		if (Distances.Num() > 0)
+		int32 FailCount = 0;
+
+		for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
 		{
-			FVector Sum = FVector::ZeroVector;
 
-			// 모든 차이 벡터를 더함
-			for (const FVector& Dist : Distances)
+			UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
+			if (!ProcMesh) continue;
+			ProcMesh->SetSimulatePhysics(false);
+
+			int32 NumSections = ProcMesh->GetNumSections();
+
+			for (int32 SectionIndex = 0; SectionIndex < NumSections; ++SectionIndex)
 			{
-				Sum += Dist;
+				FProcMeshSection* MeshSection = ProcMesh->GetProcMeshSection(SectionIndex);
+				if (!MeshSection) continue;
+
+				const TArray<FProcMeshVertex>& SectionVertices = MeshSection->ProcVertexBuffer;
+
+				// 섹션별로 차이 값을 저장할 TArray 생성 (섹션에 해당하는 key로 접근)
+				TArray<FVector>& DistanceArray = resultDistance.FindOrAdd(MeshIndex);
+
+				for (int32 VertexIndex = 0; VertexIndex < SectionVertices.Num(); ++VertexIndex)
+				{
+					const FVector& MeshVertexPos = SectionVertices[VertexIndex].Position;
+					const FVector WorldVertexPos = ProcMesh->GetComponentTransform().TransformPosition(MeshVertexPos);
+
+					// ResultArray에서 해당 VertexIndex에 해당하는 값을 찾음
+					const TMap<FZombieMeshData, FVector>& ResultMap = ResultArray[MeshIndex];
+
+					if (const FVector* VertexPos = ResultMap.Find(FZombieMeshData(SectionIndex, VertexIndex)))
+					{
+						// 차이 계산
+						//FVector Distance = (*VertexPos) - MeshVertexPos;
+						FVector Distance = (*VertexPos) - WorldVertexPos;
+
+						// 해당 섹션에 차이 값 추가
+						DistanceArray.Add(Distance);
+					}
+					else
+					{
+						++FailCount;
+					}
+				}
 			}
-
-			// 평균값 계산
-			FVector Avg = Sum / Distances.Num();
-
-			// 평균값을 resultDistanceAvg에 저장
-			resultDistanceAvg.Add(Avg);
 		}
-		else
+
+		// 평균값 계산
+		for (const TPair<int, TArray<FVector>>& Pair : resultDistance)
 		{
-			// 섹션에 벡터가 없다면, 0으로 채우거나 별도 처리
-			resultDistanceAvg.Add(FVector::ZeroVector);
+			const TArray<FVector>& Distances = Pair.Value;
+
+			if (Distances.Num() > 0)
+			{
+				FVector Sum = FVector::ZeroVector;
+
+				// 모든 차이 벡터를 더함
+				for (const FVector& Dist : Distances)
+				{
+					Sum += Dist;
+				}
+
+				// 평균값 계산
+				FVector Avg = Sum / Distances.Num();
+
+				// 평균값을 resultDistanceAvg에 저장
+				resultDistanceAvg.Add(Avg);
+			}
+			else
+			{
+				// 섹션에 벡터가 없다면, 0으로 채우거나 별도 처리
+				resultDistanceAvg.Add(FVector::ZeroVector);
+			}
 		}
-	}
 
 
-	// resultDistance TMap의 내용을 출력
-	for (const TPair<int, TArray<FVector>>& Pair : resultDistance)
-	{
-		int SectionIndex = Pair.Key;
-		const TArray<FVector>& DistanceArray = Pair.Value;
-
-		// 섹션 인덱스와 그에 해당하는 벡터들 출력
-		FString DistanceString = TEXT("[ ");
-		for (const FVector& Distance : DistanceArray)
+		// resultDistance TMap의 내용을 출력
+		for (const TPair<int, TArray<FVector>>& Pair : resultDistance)
 		{
-			DistanceString += Distance.ToString() + TEXT(" ");
+			int SectionIndex = Pair.Key;
+			const TArray<FVector>& DistanceArray = Pair.Value;
+
+			// 섹션 인덱스와 그에 해당하는 벡터들 출력
+			FString DistanceString = TEXT("[ ");
+			for (const FVector& Distance : DistanceArray)
+			{
+				DistanceString += Distance.ToString() + TEXT(" ");
+			}
+			DistanceString += TEXT("]");
+
+			// 로그 출력
+			//UE_LOG(LogTemp, Log, TEXT("Section %d Distance Array: %s"), SectionIndex, *DistanceString);
 		}
-		DistanceString += TEXT("]");
 
-		// 로그 출력
-		UE_LOG(LogTemp, Log, TEXT("Section %d Distance Array: %s"), SectionIndex, *DistanceString);
+		//// resultDistanceAvg TArray의 내용을 출력
+		//FString AvgDistanceString = TEXT("[ ");
+		//for (const FVector& AvgDistance : resultDistanceAvg)
+		//{
+		//	AvgDistanceString += AvgDistance.ToString() + TEXT(" ");
+		//}
+		//AvgDistanceString += TEXT("]");
+
+		//UE_LOG(LogTemp, Log, TEXT("Average Distances: %s"), *AvgDistanceString);
+
+
+		UE_LOG(LogTemp, Log, TEXT("Processed %d Failures"), FailCount);
+		UE_LOG(LogTemp, Log, TEXT("Result Distances have been stored in resultDistance"));
+
+
+		// DistanceResultArray 계산
+		//DistanceResultArray.Empty();
+		//DistanceResultArray.SetNum(ProceduralMeshes.Num());
+
+		//int32 FailCount = 0;
+
+		//for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
+		//{
+		//	UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
+		//	if (!ProcMesh) continue;
+
+		//	int32 NumSections = ProcMesh->GetNumSections();
+
+		//	for (int32 SectionIndex = 0; SectionIndex < NumSections; ++SectionIndex)
+		//	{
+		//		
+		//		FProcMeshSection* MeshSection = ProcMesh->GetProcMeshSection(SectionIndex);
+		//		if (!MeshSection) continue;
+		//		const TArray<FProcMeshVertex>& SectionVertices = MeshSection->ProcVertexBuffer;
+		//		
+		//		TMap<FZombieMeshData, FVector>& DistanceResultMap = DistanceResultArray[MeshIndex];
+
+		//		for (int32 VertexIndex = 0; VertexIndex < SectionVertices.Num(); ++VertexIndex)
+		//		{
+		//			const FVector& MeshVertexPos = SectionVertices[VertexIndex].Position;
+		//			const FVector WorldVertexPos = ProcMesh->GetComponentTransform().TransformPosition(MeshVertexPos);
+
+
+		//			// ResultArray의 SectionIndex에 해당하는 TMap을 사용
+		//			const TMap<FZombieMeshData, FVector>& ResultMap = ResultArray[MeshIndex];
+
+
+		//			// VertexPos를 VertexIndexPosMap에서 찾아서 추가
+		//			if (const FVector* VertexPos = ResultMap.Find(FZombieMeshData(SectionIndex, VertexIndex)))
+		//			{
+		//				FZombieMeshData ResultKey(SectionIndex, VertexIndex);
+
+
+		//				//FVector Distance = (*VertexPos) - MeshVertexPos;
+		//				FVector Distance = (*VertexPos) - WorldVertexPos;
+
+		//				DistanceResultMap.Add(ResultKey, Distance);
+		//			}
+		//			else {
+		//				++FailCount;
+		//			}
+
+		//		}
+
+		//	}
+		//}
+
+		//UE_LOG(LogTemp, Log, TEXT("Processed %d ProMeshes FailCount"), FailCount);
+		//UE_LOG(LogTemp, Log, TEXT("Processed %d ProMeshes into DistanceResultArray"), DistanceResultArray.Num());
 	}
 
-	// resultDistanceAvg TArray의 내용을 출력
-	FString AvgDistanceString = TEXT("[ ");
-	for (const FVector& AvgDistance : resultDistanceAvg)
-	{
-		AvgDistanceString += AvgDistance.ToString() + TEXT(" ");
-	}
-	AvgDistanceString += TEXT("]");
-
-	UE_LOG(LogTemp, Log, TEXT("Average Distances: %s"), *AvgDistanceString);
-
-
-	UE_LOG(LogTemp, Log, TEXT("Processed %d Failures"), FailCount);
-	UE_LOG(LogTemp, Log, TEXT("Result Distances have been stored in resultDistance"));
-
-
-	//// DistanceResultArray 계산
-	//DistanceResultArray.Empty();
-	//DistanceResultArray.SetNum(ProceduralMeshes.Num());
-
-	//int32 FailCount = 0;
-
-	//for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
-	//{
-	//	UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
-	//	if (!ProcMesh) continue;
-
-	//	int32 NumSections = ProcMesh->GetNumSections();
-
-	//	for (int32 SectionIndex = 0; SectionIndex < NumSections; ++SectionIndex)
-	//	{
-	//		
-	//		FProcMeshSection* MeshSection = ProcMesh->GetProcMeshSection(SectionIndex);
-	//		if (!MeshSection) continue;
-	//		const TArray<FProcMeshVertex>& SectionVertices = MeshSection->ProcVertexBuffer;
-	//		
-
-	//		TMap<FZombieMeshData, FVector>& DistanceResultMap = DistanceResultArray[MeshIndex];
-
-	//		for (int32 VertexIndex = 0; VertexIndex < SectionVertices.Num(); ++VertexIndex)
-	//		{
-	//			const FVector& MeshVertexPos = SectionVertices[VertexIndex].Position;
-
-
-	//			// ResultArray의 SectionIndex에 해당하는 TMap을 사용
-	//			const TMap<FZombieMeshData, FVector>& ResultMap = ResultArray[MeshIndex];
-
-
-	//			// VertexPos를 VertexIndexPosMap에서 찾아서 추가
-	//			if (const FVector* VertexPos = ResultMap.Find(FZombieMeshData(SectionIndex, VertexIndex)))
-	//			{
-	//				FZombieMeshData ResultKey(SectionIndex, VertexIndex);
-
-
-	//				FVector Distance = (*VertexPos) - MeshVertexPos;
-
-	//				DistanceResultMap.Add(ResultKey, Distance);
-	//			}
-	//			else {
-	//				++FailCount;
-	//			}
-
-	//		}
-
-	//	}
-	//}
-
-	//UE_LOG(LogTemp, Log, TEXT("Processed %d ProMeshes FailCount"), FailCount);
-	//UE_LOG(LogTemp, Log, TEXT("Processed %d ProMeshes into DistanceResultArray"), DistanceResultArray.Num());
-
-
-
-
+	
 	bIsMergingInProgress = true;
 	ElapsedTime = 0.0; // 시간 초기화
 

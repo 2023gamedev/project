@@ -213,6 +213,15 @@ public:
 
 	void ReportProVertexMap(TMap<FVector, FVertexBoneData>& VertexBoneMap);
 
+	void RotateFromCutProc1MeshToSkelBone();
+	void RotateFromCutProc2MeshToSkelBone();
+	void RotateFromProcMeshToSkelBone();
+
+	void SetCutProc1MeshPivotToCenter();
+	void SetCutProc2MeshPivotToCenter();
+	void SetProceduralMeshPivotToCenter();
+
+
 	FTimerHandle ZombieMergeWattingHandle;
 
 	void StartMergiingTimer();
@@ -225,10 +234,11 @@ public:
 	// ZombieMeshData : [스켈레탈 섹션인덱스, 버텍스 인덱스]  , FZombieMeshData : 몇번 프로시저럴메쉬인지 , 버텍스인덱스 -> 섹션인덱스는 어차피 같을것이니까  
 	TArray<TMap<FZombieMeshData, FZombieMeshData>> ProMeshIndexArray; // 병합하기 전 프로시저럴 메쉬들이 기존 스켈레탈 메쉬의 어떤 섹션인덱스와 버텍스 인덱스를 가지고 있는지 저장하는 변수
 
-
+	FVector CutPro_1Distance;
+	FVector CutPro_2Distance;
 	TArray<FVector> resultDistanceAvg;  // 각 섹션에 대해 계산된 평균값을 저장하는 TArray
 	//TArray<TMap<FZombieMeshData, FVector>> DistanceResultArray;
-
+	TArray<FName> ProcMeshBone;
 
 	// Procedural mesh component for the cut part
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProcMesh")
@@ -264,8 +274,12 @@ public:
 	TSharedPtr<FZBoneStructure> RootBone;  // **트리 루트 (최상위 본)**
 	TSharedPtr<FZBoneStructure> SpecialRootBone;  // **트리 루트 (최상위 본)**
 
-
-
+	FVector CutPro_1ClusterCenter;
+	FVector CutPro_1StartLocation;
+	FVector CutPro_2StartLocation;
+	FName CutPro_1PlaneBoneName;
+	FName CutPro_2PlaneBoneName;
+	bool m_bIsCutProceduralMesh_2Visibility = true;
 
 
 	UPROPERTY(EditAnywhere)
