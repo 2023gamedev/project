@@ -2446,10 +2446,12 @@ void ABaseCharacter::SpawnNormalWeapon()
 
 		else if (QuickSlot[4].Name == "SashimiKnife") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWSashimiKnife>(ANWSashimiKnife::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-			CurrentWeapon->ItemHandPos = FVector(-6.766818f, 5.129228f, -0.58278f);
-			CurrentWeapon->ItemHandRot = FRotator(15.53382f, -60.800216f, 184.87332f);
-		}
+			//CurrentWeapon->ItemHandPos = FVector(-6.766818f, 5.129228f, -0.58278f);
+			//CurrentWeapon->ItemHandRot = FRotator(15.53382f, -60.800216f, 184.87332f);
 
+			CurrentWeapon->ItemHandPos = FVector(-3.927433, 1.412734, 3.958169);
+			CurrentWeapon->ItemHandRot = FRotator(-8.822493, -65.812953, -159.249327);
+		}
 
 		else if (QuickSlot[4].Name == "Scissors") { //**
 			CurrentWeapon = GetWorld()->SpawnActor<ANWScissors>(ANWScissors::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
@@ -2457,7 +2459,6 @@ void ABaseCharacter::SpawnNormalWeapon()
 			CurrentWeapon->ItemHandRot = FRotator(20.000335f, -90.000792f, -9.999781f);
 
 		}
-
 
 		else if (QuickSlot[4].Name == "Shovels") {
 			CurrentWeapon = GetWorld()->SpawnActor<ANWShovels>(ANWShovels::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
