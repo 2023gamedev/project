@@ -900,7 +900,7 @@ void AOneGameModeBase::UpdatePlayerAttack(uint32 PlayerID, bool battack)
         if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
         {
             BasePlayer->SetAttack(battack);
-            UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %s"), PlayerID, battack ? TEXT("true") : TEXT("false"));
+            //UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %s"), PlayerID, battack ? TEXT("true") : TEXT("false"));
 
             return;
         }
