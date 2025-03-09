@@ -3726,13 +3726,6 @@ void ABaseZombie::Attack(uint32 PlayerId)
 
 void ABaseZombie::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {
-	// 일정 시간이 지나면 다시 Detect 패킷 보내도록 (0.07초 후) -> 리셋 개념 (딜레이 주는 이유는 바로 보낼시에 서버에서는 아직 wait 상태라서 먼저 패킷을 보내게 되면 서버 wait 끝나고 blackboard 리셋이 있어서 무효가 됨)
-	GetWorld()->GetTimerManager().SetTimer(PlayerInSightResetTimerHandle, [this]()
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Detect 패킷 리셋!(m_bPlayerInSight = false;)"));
-			m_bPlayerInSight = false;
-		}, 0.07f, false);
-
 	m_bIsAttacking = false;
 
 	afterAnim_idleDuration = afterAnim_idleInterpol;
@@ -3812,13 +3805,6 @@ void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 {
 	//if (m_bIsShouting)
 	//	UE_LOG(LogTemp, Log, TEXT("bIsShouted true"));
-
-	// 일정 시간이 지나면 다시 Detect 패킷 보내도록 (0.07초 후)
-	GetWorld()->GetTimerManager().SetTimer(PlayerInSightResetTimerHandle, [this]()
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Detect 패킷 리셋!(m_bPlayerInSight = false;)"));
-			m_bPlayerInSight = false;
-		}, 0.07f, false);
 	
 	m_bIsShouting = false;
 	SetShouted(true);
@@ -3852,13 +3838,6 @@ void ABaseZombie::BeAttacked()
 
 void ABaseZombie::BeAttackedMontageEnded(UAnimMontage* Montage, bool interrup)
 {
-	// 일정 시간이 지나면 다시 Detect 패킷 보내도록 (0.07초 후)
-	GetWorld()->GetTimerManager().SetTimer(PlayerInSightResetTimerHandle, [this]()
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Detect 패킷 리셋!(m_bPlayerInSight = false;)"));
-			m_bPlayerInSight = false;
-		}, 0.07f, false);
-
 	m_bBeAttacked = false;
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 

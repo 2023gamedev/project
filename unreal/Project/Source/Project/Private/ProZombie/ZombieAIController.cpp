@@ -140,6 +140,9 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 
 		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.8f);
 	}
+	else if (OwnerZombie->targetType == OwnerZombie->TARGET::BLACKBOARDCLEARED) {
+		return;
+	}
 
 	if (ZombieSpeed == 0.f) {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[ERROR] Zombie #%d's speed is ZERO!!!!!"), OwnerZombie->ZombieId));

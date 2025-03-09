@@ -506,6 +506,15 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 			(*zombie)->targetType = (*zombie)->TARGET::HORDESOUND;
 			break;
+
+		case 69:	// 서버에서 블랙보드가 클리어 됨을 알려줬을때 (애니메이션 재생 끝난 후)
+			UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %d -> [BLACKBOARDCLEARED]"), tmp_path.ZombieId, (*zombie)->targetType);
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %d -> [BLACKBOARDCLEARED]"), tmp_path.ZombieId, (*zombie)->targetType));
+
+			(*zombie)->targetType = (*zombie)->TARGET::BLACKBOARDCLEARED;
+			UE_LOG(LogTemp, Warning, TEXT("Detect 패킷 리셋!(m_bPlayerInSight = false;)"));
+			(*zombie)->m_bPlayerInSight = false;
+			break;
 		}
 
 		bool isAnimPlaying_besideWalking = false;	// 걷기 애니메이션 말고 다른 애니메이션 (공격, 피격, 샤우팅) 재생 중인지

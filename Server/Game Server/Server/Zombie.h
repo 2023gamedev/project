@@ -55,7 +55,9 @@ public:
         FOOTSOUND,
         INVESTIGATED,
         PATROL,
-        HORDESOUND
+        HORDESOUND,
+
+        BLACKBOARDCLEARED = 69
     };
 
     enum ZOMBIE_TYPE {
@@ -130,8 +132,6 @@ public:
     vector<vector<vector<float>>> ShoutingLocation;       // 샤우팅 좀비 위치
 
     vector<vector<vector<float>>> HordeLocation;       // 호드 좀비 위치
-
-    vector<vector<vector<float>>> PrevLocation;
 
     std::chrono::steady_clock::time_point WalkingSamePosition_StartTime;
     bool IsWalkingSamePosition = false;

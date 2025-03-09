@@ -36,8 +36,6 @@ Zombie::Zombie()
 
 	HordeLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
-	PrevLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-
 	PlayerInSight = false;
 
 	KnewPlayerLocation = false;
@@ -100,8 +98,6 @@ Zombie::Zombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 	
 	HordeLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
-	PrevLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
-
 	PlayerInSight = false;
 
 	KnewPlayerLocation = false;
@@ -130,7 +126,7 @@ Zombie::Zombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 
 	//speed = 0.f;
 
-	targetType = Zombie::TARGET::PATROL;
+	targetType = Zombie::TARGET::NULL_TARGET;
 
 	ClosestPlayerID = 0;
 
@@ -692,7 +688,7 @@ void Zombie::MoveTo(float deltasecond)
 		}
 	}
 	else {
-		cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " targetType 변수값 알 수 없는 값!!! ---> Speed = 0" << endl;
+		cout << "[ERROR] 좀비 #" << ZombieData.zombieID << " targetType 변수값(" << targetType << ") 알 수 없는 값!!! ---> Speed = 0" << endl;
 	}
 
 	// 이동 거리 계산
@@ -737,34 +733,6 @@ void Zombie::MoveTo(float deltasecond)
 		ZombieData.x += moveX;
 		ZombieData.y += moveY;
 	}
-
-	// 제자리 걸음 방지 코드
-	//if (PrevLocation[0][0][0] == ZombieData.x && PrevLocation[0][0][1] == ZombieData.y && PrevLocation[0][0][2] == ZombieData.z) {	
-	//	if (IsWalkingSamePosition == false) {
-	//		IsWalkingSamePosition = true;
-
-	//		WalkingSamePosition_StartTime = std::chrono::high_resolution_clock::now();
-	//	}
-	//}
-	//else {
-	//	IsWalkingSamePosition == false;
-	//}
-
-	//auto waitAfterTime = std::chrono::high_resolution_clock::now();
-	//std::chrono::duration<float> deltaTime = waitAfterTime - WalkingSamePosition_StartTime;
-
-	//if (IsWalkingSamePosition == true && deltaTime.count() >= Reset_WalkingSamePosition_Duration) {
-	//	IsWalkingSamePosition = false;
-
-	//	ReachFinalDestination();	// 블랙 보드 강제 초기화
-	//	ZombiePathIndex = 1;
-
-	//	return;
-	//}
-
-	//PrevLocation[0][0][0] = ZombieData.x;
-	//PrevLocation[0][0][1] = ZombieData.y;
-	//PrevLocation[0][0][2] = ZombieData.z;
 
 #if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 	if (spacing)
@@ -1569,7 +1537,8 @@ void Zombie::Wait()
 
 			IsBeingAttacked = false;
 			HaveToWait = false;
-			WaitOneTick_SendPath = true;
+			//WaitOneTick_SendPath = true;
+			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
 			IsShouting = false;		
@@ -1604,7 +1573,8 @@ void Zombie::Wait()
 
 			IsAttacking = false;
 			HaveToWait = false;
-			WaitOneTick_SendPath = true;
+			//WaitOneTick_SendPath = true;
+			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
 			IsShouting = false;		
 
@@ -1638,7 +1608,8 @@ void Zombie::Wait()
 
 			IsShouting = false;
 			HaveToWait = false;
-			WaitOneTick_SendPath = true;
+			//WaitOneTick_SendPath = true;
+			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
 
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
