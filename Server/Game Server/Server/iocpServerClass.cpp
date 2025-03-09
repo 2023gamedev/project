@@ -700,9 +700,9 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			}
 
 			// WaitOneTick_SendPath 다시 초기화
-			if (zom->HaveToWait == false && zom->WaitOneTick_SendPath == true) {
-				zom->WaitOneTick_SendPath = false;
-			}
+			//if (zom->HaveToWait == false && zom->WaitOneTick_SendPath == true) {
+			//	zom->WaitOneTick_SendPath = false;
+			//}
 
 			// 좀비가 플레이어들이 없는 층에 있다면 좀비 BT 실행 멈추고 있기
 			bool same_floor = false;
@@ -785,7 +785,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 						|| zom->path.empty() 
 						|| zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/
 						//|| zom->HaveToWait == true	/* 이러면, 다른 층에서 있던 플레이어 애니메이션 재생 중이던 좀비 위치를 갱신 못 받아서 이상함 */
-						|| zom->WaitOneTick_SendPath == true) {
+						/*|| zom->WaitOneTick_SendPath == true*/) {
 						continue;
 					}
 

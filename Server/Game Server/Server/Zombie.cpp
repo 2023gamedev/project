@@ -58,7 +58,7 @@ Zombie::Zombie()
 
 	HaveToWait = false;
 
-	WaitOneTick_SendPath = false;
+	//WaitOneTick_SendPath = false;
 
 	DetermineFloor(ZombieData.z);
 
@@ -120,7 +120,7 @@ Zombie::Zombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 
 	HaveToWait = false;
 
-	WaitOneTick_SendPath = false;
+	//WaitOneTick_SendPath = false;
 
 	DetermineFloor(ZombieData.z);
 
@@ -400,7 +400,7 @@ void Zombie::SetTargetLocation(TARGET t)
 #endif
 				}
 				
-				WaitOneTick_SendPath = true;	// SendPath 를 궂이 할 필요가 없으므로
+				//WaitOneTick_SendPath = true;	// SendPath 를 궂이 할 필요가 없으므로
 
 				return;	// 아래, 새로운 랜덤 패트롤 지점 찾기 안하고 넘어감
 			}
