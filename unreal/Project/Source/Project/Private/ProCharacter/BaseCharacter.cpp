@@ -1242,6 +1242,8 @@ void ABaseCharacter::SpawnAllOnGround()
 
 void ABaseCharacter::AttackMontageEnded(UAnimMontage* Montage, bool interrup)
 {
+	UE_LOG(LogTemp, Warning, TEXT("AttackMontageEnded Called - PlayerId: %d"), PlayerId);
+
 	m_bIsAttacking = false;
 	//m_DAttackEnd.Broadcast();
 
@@ -1602,7 +1604,7 @@ void ABaseCharacter::InventoryOnOff()
 
 void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
-	//UE_LOG(LogTemp, Log, TEXT("Attack() - GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
+	UE_LOG(LogTemp, Log, TEXT("Attack() - GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 	
 	if (m_bIsAttacking) {
 		return;
@@ -1632,6 +1634,9 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 	//	m_bIsAttacking = false;
 	//	//UE_LOG(LogTemp, Display, TEXT("AttackEnd: %d"), PlayerId);
 	//	});
+
+	if (PlayerId != 99)
+		m_bIsAttacking = false;
 }
 
 void ABaseCharacter::Healing()
@@ -3142,8 +3147,9 @@ void ABaseCharacter::UpdatePlayerData(FVector Location)
 
 void ABaseCharacter::SetAttack(bool bAttack)
 {
+	UE_LOG(LogTemp, Warning, TEXT("SetAttack from %s to %s"), b_attack ? TEXT("true") : TEXT("false"), bAttack ? TEXT("true") : TEXT("false"));
 	b_attack = bAttack;
-	//UE_LOG(LogTemp, Warning, TEXT("SetAttack from %d to %d"), b_attack, bAttack);
+	
 	if (b_attack)
 	{
 		Attack();
