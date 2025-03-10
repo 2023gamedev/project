@@ -36,6 +36,8 @@ public:
 
 	void UpdateSelectImage(CharacterSelect recvSelect);
 
+	void PreventMultipleCharacter();
+
 	void UpdatePlayerReadyState(uint32 player_num, bool ready);
 
 	UProGameInstance* GameInstance;

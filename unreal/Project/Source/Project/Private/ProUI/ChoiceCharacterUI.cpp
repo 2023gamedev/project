@@ -170,6 +170,8 @@ void UChoiceCharacterUI::OnClickedReadyButton()
         if (IdolButton) IdolButton->SetIsEnabled(true);
         if (FireFighterButton) FireFighterButton->SetIsEnabled(true);
 
+        PreventMultipleCharacter(); // 캐릭 중복 선택 방지 버튼 상태 갱신
+
         Ready_TextBlock->SetText(FText::FromString("Ready"));
     }
 
@@ -223,44 +225,45 @@ void UChoiceCharacterUI::UpdateSelectImage(CharacterSelect recvSelect)
             Fourth_Image->SetBrush(Brush);
         }
 
-        // 다른 사람이 선택한 캐릭 중복선택 X
+        // 다른 사람이 선택한 캐릭 중복선택 X 하기 위해 맵에 저장
         PlayersCharacter.Add(recvSelect.PlayerId, recvSelect.Character_type);
 
         if (b_ready == true)
             return; // 이미 레디 누른 상태면 아래 작업 필요 X
 
-        GirlButton->SetIsEnabled(true);
-        EmployeeButton->SetIsEnabled(true);
-        IdolButton->SetIsEnabled(true);
-        FireFighterButton->SetIsEnabled(true);
+        PreventMultipleCharacter(); // 캐릭 중복 선택 방지 버튼 상태 갱신
+    }
+}
 
-        uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
-        for (uint32 playerID = 1; playerID <= (uint32)PlayersCharacter.Num(); playerID++) {
-            if (MyPlayerId == playerID)
-                continue;
+void UChoiceCharacterUI::PreventMultipleCharacter()
+{
+    GirlButton->SetIsEnabled(true);
+    EmployeeButton->SetIsEnabled(true);
+    IdolButton->SetIsEnabled(true);
+    FireFighterButton->SetIsEnabled(true);
 
-            if (PlayersCharacter.Contains(playerID) == true) {
-                uint32* playerCharType = PlayersCharacter.Find(playerID);
-                if (*playerCharType == 0) continue;  // 초기화값임
-                //UE_LOG(LogTemp, Log, TEXT("PlayerID: %d, CharacterType: %d"), playerID, *playerCharType); 
-                switch (*playerCharType) {
-                case 1:
-                    if (GirlButton)
-                        GirlButton->SetIsEnabled(false);
-                    break;
-                case 2:
-                    if (EmployeeButton)
-                        EmployeeButton->SetIsEnabled(false);
-                    break;
-                case 3:
-                    if (IdolButton)
-                        IdolButton->SetIsEnabled(false);
-                    break;
-                case 4:
-                    if (FireFighterButton)
-                        FireFighterButton->SetIsEnabled(false);
-                    break;
-                }
+    uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
+    for (uint32 playerID = 1; playerID <= (uint32)PlayersCharacter.Num(); playerID++) {
+        if (MyPlayerId == playerID)
+            continue;
+
+        if (PlayersCharacter.Contains(playerID) == true) {
+            uint32* playerCharType = PlayersCharacter.Find(playerID);
+            if (*playerCharType == 0) continue;  // 초기화값임
+            UE_LOG(LogTemp, Log, TEXT("[PreventMultipleCharacter] PlayerID: %d, CharacterType: %d"), playerID, *playerCharType);
+            switch (*playerCharType) {
+            case 1:
+                GirlButton->SetIsEnabled(false);
+                break;
+            case 2:
+                EmployeeButton->SetIsEnabled(false);
+                break;
+            case 3:
+                IdolButton->SetIsEnabled(false);
+                break;
+            case 4:
+                FireFighterButton->SetIsEnabled(false);
+                break;
             }
         }
     }
