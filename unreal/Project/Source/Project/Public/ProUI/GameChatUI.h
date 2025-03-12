@@ -8,7 +8,6 @@
 #include "Components/EditableTextBox.h"
 #include "Components/TextBlock.h"
 #include "ProGamemode/ProGameInstance.h"
-#include "ProUI/SEditableTextBox_IgnoreEnter.h"
 #include "GameChatUI.generated.h"
 
 /**
@@ -45,6 +44,4 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	void OnSendButtonEntered(const FText& Text, ETextCommit::Type CommitMethod);
-
-	//TSharedPtr<SEditableTextBox_IgnoreEnter> ChatText_IE;
 };

@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "LStruct.pb.h"
 
+
 void UGameChatUI::Init()
 {
     GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
