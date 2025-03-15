@@ -113,8 +113,8 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	}
 
 	if (PathX == 9999.f && PathY == 9999.f) {	// 서버 좀비 HaveToWait 상태일때 (애니메이션 재생 중일 떄)
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Zombie #%d HaveToWait!"), OwnerZombie->ZombieId));
-		UE_LOG(LogTemp, Log, TEXT("Zombie #%d HaveToWait!"), OwnerZombie->ZombieId);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Zombie #%d HaveToWait!"), OwnerZombie->ZombieId));
+		//UE_LOG(LogTemp, Log, TEXT("Zombie #%d HaveToWait!"), OwnerZombie->ZombieId);
 
 		return;	//애니메이션 바꾸는 거 밑에 있어야 제자리 걸음 X
 	}
@@ -345,14 +345,12 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 		if (PlayerPawn && Distance <= OwnerZombie->MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
 		{
-
 			NearestPawn = PlayerPawn;
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
 			//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
-
 		}
 
 		// NearestPawn에 따라 상태 변경

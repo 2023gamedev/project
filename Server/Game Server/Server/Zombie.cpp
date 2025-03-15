@@ -1028,7 +1028,7 @@ void Zombie::TakeABreak()
 	float the_chance = (float)stand_still_chance(mt);
 	float the_duration = (float)stand_still_duration(mt);
 
-	if (the_chance >= (100 - 100) && IsStandingStill == false) {	// 100퍼센트의 확률
+	if (the_chance >= (100 - 60) && IsStandingStill == false) {	// 60퍼센트의 확률
 		//HaveToWait = true;
 		IsStandingStill = true;
 		waitBrainlessStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
