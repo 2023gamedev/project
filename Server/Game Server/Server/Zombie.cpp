@@ -1026,9 +1026,8 @@ bool Zombie::PlayerInSight_Update_Check()
 		}
 	
 		if (DistanceTo_PlayerInsight.find(player.first) != DistanceTo_PlayerInsight.end()) {	// 이미 DistanceTo_PlayerInsight에 저장된 값이 있다면
-			if (DistanceTo_PlayerInsight.at(player.first) >= 0  // 죽거나 연결 끊긴 플레이어 아님
-				/*&& DistanceTo_PlayerInsight.at(player.first) <= CanSeePlayerDistance*/) {	// 그리고 포착 가능한 거리일 때 -> 검사하면 [x]: 그럼 애매하게(일단, 왜 보내는지조차 모르겠지만;;) 2500.1 같은 값이 들어오면 새로운 데이터 생성/갱신을 못함 
-				//==> 어차피 CanSeePlayerRandomChance에서 최대거리 거리 검사 다시 실시하니까 거기서 걸러질꺼임
+			if (DistanceTo_PlayerInsight.at(player.first) >= 0 &&	// 죽거나 연결 끊긴 플레이어 아님
+				DistanceTo_PlayerInsight.at(player.first) <= CanSeePlayerDistance) {	// 그리고 포착 가능한 거리일 때 (원래 2500이지만 실제 검사에서는 2500보다 약간 크게 잡혀도 통신보내서 +50까지 봐줌;;)
 				SetDistance(player.first, 1);	//-> 거리 갱신하기
 			}
 		}
@@ -1038,8 +1037,8 @@ bool Zombie::PlayerInSight_Update_Check()
 
 	// 시야에 최소 한명이라도 플레이어가 있나 체크
 	for (auto& distTo_playerinsight : DistanceTo_PlayerInsight) {
-		if (distTo_playerinsight.second >= 0 /*&&
-			distTo_playerinsight.second <= CanSeePlayerDistance*/) {
+		if (distTo_playerinsight.second >= 0 &&
+			distTo_playerinsight.second <= CanSeePlayerDistance) {
 			bool really_detected = true;
 
 			if (playerDB_BT[roomid].find(distTo_playerinsight.first) != playerDB_BT[roomid].end()) {	// 아래 at 사용시에 혹시 모를 abort에러 방지용

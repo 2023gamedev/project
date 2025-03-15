@@ -83,7 +83,7 @@ public:
 
     const float CanAttackDistance = 150.f;          // 공격 사정거리 150cm (언리얼 단위로는 => 150UU)
 
-    const float  CanSeePlayerDistance = 2500.0f;    // 최대 시야거리 2500cm
+    const float  CanSeePlayerDistance = 2500.0f + 50.f;    // 최대 시야거리 2500cm + 50cm (원래 2500이지만 실제 검사에서는 2500보다 약간 크게 잡혀도 통신보내서 +50까지 봐줌;;)
 
     const float CanHearFootSoundDistance = 1000.f;            // 발소리 포착 최대 가능거리 1000cm
 
