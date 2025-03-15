@@ -3947,7 +3947,7 @@ void ABaseZombie::PlayGrowlSound()
 	}
 
 	else if (IsGrowlSoundPlaying) {
-		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] GrowlSound is still on play! - ZombieID: %d"), ZombieId);
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[PlaySoundLog] GrowlSound is still on play! - ZombieID: %d"), ZombieId));
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] GrowlSound is on cooldown! - ZombieID: %d"), ZombieId);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[PlaySoundLog] GrowlSound is on cooldown! - ZombieID: %d"), ZombieId));
 	}
 }
