@@ -594,6 +594,14 @@ void Zombie::Attack(int roomid)
 
 void Zombie::MoveTo(float deltasecond)
 {
+	if (IsStandingStill == true) {	// 숨고르기 상태라면 MoveTo 바로 종료 => ReachFinalDestionation 들어가서 ClearBlackBoard 하는거 방지해야함 (숨고르기 할때 계속 초기화해주니까 플레이어를 못 볼 수 있음)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+		cout << "좀비 #" << ZombieData.zombieID << " 숨고르기 상태. (MoveTo 바로 종료)" << endl;
+		cout << endl;
+#endif
+		return;
+	}
+
 	bool spacing = false;
 
 	//cout << "ZombiePathIndex: " << ZombiePathIndex << " , path.size(): " << path.size() << endl;
@@ -957,11 +965,13 @@ void Zombie::ClearBlackBoard(bool clear_flag[6])
 	if (clear_flag[4])
 		KnewPlayerLocation = false;
 
-	if (clear_flag[5])
+	if (clear_flag[5]) {
 		RandPatrolSet = false;
+		IsStandingStill = false;
+	}
 
 #ifdef ENABLE_BT_LOG
-	printf("[ClearBlackBoard] Cleared flags (All Reset) \n"); 
+	printf("[ClearBlackBoard] Cleared flags\n"); 
 	printf(" PlayerInSight: %s, HeardShouting : %s, HeardFootSound : %s, HeardHordeSound : %s, KnewPlayerLocation : %s, RandPatrolSet : %s\n"
 		, clear_flag[0] ? "cleared" : "stay", clear_flag[1] ? "cleared" : "stay", clear_flag[2] ? "cleared" : "stay", clear_flag[3] ? "cleared" : "stay", clear_flag[4] ? "cleared" : "stay", clear_flag[5] ? "cleared" : "stay");
 	printf(" PlayerInSight: %s, HeardShouting: %s, HeardFootSound: %s, HeardHordeSound: %s, KnewPlayerLocation: %s, RandPatrolSet: %s\n"
@@ -983,7 +993,7 @@ void Zombie::TakeABreak()
 	float the_chance = (float)stand_still_chance(mt);
 	float the_duration = (float)stand_still_duration(mt);
 
-	if (the_chance >= (100 - 60) && IsStandingStill == false) {	// 60퍼센트의 확률
+	if (the_chance >= (100 - 100) && IsStandingStill == false) {	// 100퍼센트의 확률
 		//HaveToWait = true;
 		IsStandingStill = true;
 		waitBrainlessStartTime = std::chrono::high_resolution_clock::now();	// 가만히 서있기 시작 시간
@@ -1016,8 +1026,9 @@ bool Zombie::PlayerInSight_Update_Check()
 		}
 	
 		if (DistanceTo_PlayerInsight.find(player.first) != DistanceTo_PlayerInsight.end()) {	// 이미 DistanceTo_PlayerInsight에 저장된 값이 있다면
-			if (DistanceTo_PlayerInsight.at(player.first) >= 0 && // 죽거나 연결 끊긴 플레이어 아님
-				DistanceTo_PlayerInsight.at(player.first) <= CanSeePlayerDistance) {	// 그리고 포착 가능한 거리일 때
+			if (DistanceTo_PlayerInsight.at(player.first) >= 0  // 죽거나 연결 끊긴 플레이어 아님
+				/*&& DistanceTo_PlayerInsight.at(player.first) <= CanSeePlayerDistance*/) {	// 그리고 포착 가능한 거리일 때 -> 검사하면 [x]: 그럼 애매하게(일단, 왜 보내는지조차 모르겠지만;;) 2500.1 같은 값이 들어오면 새로운 데이터 생성/갱신을 못함 
+				//==> 어차피 CanSeePlayerRandomChance에서 최대거리 거리 검사 다시 실시하니까 거기서 걸러질꺼임
 				SetDistance(player.first, 1);	//-> 거리 갱신하기
 			}
 		}
@@ -1027,8 +1038,8 @@ bool Zombie::PlayerInSight_Update_Check()
 
 	// 시야에 최소 한명이라도 플레이어가 있나 체크
 	for (auto& distTo_playerinsight : DistanceTo_PlayerInsight) {
-		if (distTo_playerinsight.second >= 0 &&
-			distTo_playerinsight.second <= CanSeePlayerDistance) {
+		if (distTo_playerinsight.second >= 0 /*&&
+			distTo_playerinsight.second <= CanSeePlayerDistance*/) {
 			bool really_detected = true;
 
 			if (playerDB_BT[roomid].find(distTo_playerinsight.first) != playerDB_BT[roomid].end()) {	// 아래 at 사용시에 혹시 모를 abort에러 방지용

@@ -8,27 +8,6 @@
 #include "Widgets/Input/SEditableTextBox.h"
 
 
-void UWaitingRoomUI::NativeConstruct()
-{
-    Super::NativeConstruct();
-
-    if (!ChatText_IE.IsValid())
-    {
-        // SEditableTextBox_IgnoreEnter 초기화
-        //ChatText_IE = SNew(SEditableTextBox_IgnoreEnter);
-
-        // 방법1
-        // Slate 위젯을 Overlay에 추가
-        //TSharedRef<SWidget> SlateWidgetRef = ChatText_IE.ToSharedRef();
-        //ChatOverlay->AddChild(Cast<UWidget>(SlateWidgetRef));
-
-        // 방법2
-        // 기존 컨테이너에서 사용할 수 있도록 추가하는 래퍼 생성
-        //UWidget* WrappedWidget = WidgetTree->ConstructWidget<UWidget>(UUserWidget::StaticClass());
-        //WidgetTree->RootWidget->AddChild(WrappedWidget);
-    }
-}
-
 void UWaitingRoomUI::Init()
 {
     GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
@@ -61,17 +40,9 @@ void UWaitingRoomUI::Init()
         SendButton->SetIsEnabled(true);
     }
 
-    //if (!ChatText_IE.IsValid())
-    //{
-    //    ChatText_IE = SNew(SEditableTextBox_IgnoreEnter);
-    //
-    //    // Slate 위젯을 UWidget으로 감싸서 ChatTextWidget에 할당
-    //    //ChatTextWidget->SetWidget(SNew(SEditableTextBox_IgnoreEnter));
-    //}
-
     if (ChatText) 
     {
-        ChatText->OnTextCommitted.AddDynamic(this, &UWaitingRoomUI::OnSendButtonEntered);
+        ChatText->OnTextCommitted.AddDynamic(this, &UWaitingRoomUI::HandleTextCommitted);
         ChatText->SetIsEnabled(true);
     }
 
@@ -174,13 +145,10 @@ void UWaitingRoomUI::OnSendButtonClicked()
     FSlateApplication::Get().SetKeyboardFocus(ChatText->TakeWidget());
 }
 
-void UWaitingRoomUI::OnSendButtonEntered(const FText& Text, ETextCommit::Type CommitMethod)
+void UWaitingRoomUI::HandleTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
-    if (CommitMethod == ETextCommit::OnEnter)
+    if (CommitMethod == ETextCommit::OnEnter && ChatText)
     {
-        // 포커스를 계속 유지하기 위한 코드
-        ChatText->SetFocus();   // 작동안됨 -> EditableTextBox 자체가 엔터를 입력받으면 (OnTextCommitted 실행되면) 포커스를 자동으로 잃는 특성이 있음
-
         if (!ChatText || ChatText->GetText().IsEmpty() || Text.IsEmpty())
         {
             return;
@@ -192,6 +160,20 @@ void UWaitingRoomUI::OnSendButtonEntered(const FText& Text, ETextCommit::Type Co
         SendChat(FormattedMessage);
 
         ChatText->SetText(FText::GetEmpty());
+
+        // 다음 틱에서 포커스를 다시 설정
+        FTimerHandle TimerHandle;
+        GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UWaitingRoomUI::RestoreFocus, 0.01f, false);
+    }
+}
+
+void UWaitingRoomUI::RestoreFocus()
+{
+    if (ChatText)
+    {
+        FSlateApplication::Get().SetKeyboardFocus(ChatText->TakeWidget());
+
+        //UE_LOG(LogTemp, Log, TEXT("포커스를 다시 채팅창으로..."));
     }
 }
 

@@ -74,10 +74,11 @@ public:
         cout << endl;
 #endif
 
-        Current_CanSeePlayer_result = d_result; // 확률 검사 까지 통과 했을때
-
+        Current_CanSeePlayer_result = d_result; // 확률 검사 까지 수행한 결과
+        
         if (Prev_CanSeePlayer_result == false && Current_CanSeePlayer_result == true) {    // 플레이어를 처음 발견했거나 플레이어를 놓쳤다가 다시 발견했다면 -> 호드 사운드 재생
             zom.MakeNoise();
+            zom.IsStandingStill = false;    // (만약 이전에 숨고르기 상태였으면) MoveTo 다시 작동하도록
 
             // 샤우팅 좀비일 경우에는 샤우팅 실행
             if (zom.ZombieData.zombietype == 1) {

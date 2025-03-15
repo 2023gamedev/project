@@ -163,7 +163,7 @@ public:
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
     
     //bool WaitOneTick_SendPath;  // 애니메이션 재생 끝난직후 HaveToWait이 바로 false가 되며 SendPath가 보내져, 클라의 ZombieMoveTo가 실행되어 살짝 움직이게 되는 걸 막기위한 부울변수 (그리고 애니메이션 끝난 직후에는 path 보낼 필요도 사실상 없음)
-                                //=> 이것도 이제 방지 방식을 바꿔서 안 해줌
+                                //=> 이것도 이제 방지 방식을 바꿔서 안 해줌 (더이상 사용X)
 
     FLOOR z_floor;          // 좀비가 스폰 된 층
 

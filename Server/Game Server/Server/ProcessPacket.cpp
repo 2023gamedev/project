@@ -361,7 +361,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     case 9:
     {
 #ifdef ENABLE_PACKET_LOG
-        printf("\n[ No. %3u ] Detected Packet Received !!\n", id);
+        printf("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [ No. %3u ] Detected Packet Received !!\n", id);
 #endif
         Protocol::Detected Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
@@ -380,7 +380,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     float dist = z->SetDistance(Packet.playerid(), 1);   // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 데이터 새로 추가하기 (생성) / 이미 있었다면 갱신하기
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_NODE_LOG)
-                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!! - 거리: " << dist << endl;
+                    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!! - 거리: " << dist << endl;
 #endif
 
                     // 샤우팅 좀비일 경우에
@@ -405,7 +405,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     z->DistanceTo_PlayerInsight[Packet.playerid()] = z->CanSeePlayerDistance + 6969.f;     // 탐지 거리 밖 표시
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_NODE_LOG)
-                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!" << endl;
+                    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!" << endl;
 #endif
 
                     break;
