@@ -835,10 +835,13 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
             FVector OldLocation = BasePlayer->GetActorLocation();
 
             // 기존 캐릭터 위치 업데이트
-            BasePlayer->SetActorLocation(NewLocation);
-            BasePlayer->SetActorRotation(NewRotation);
+            FVector SmoothedLocation = FMath::VInterpTo(BasePlayer->GetActorLocation(), NewLocation, GetWorld()->GetDeltaSeconds(), 10.0f);
+            FRotator SmoothedRotation = FMath::RInterpTo(BasePlayer->GetActorRotation(), NewRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
 
-            BasePlayer->UpdatePlayerData(NewLocation);
+            BasePlayer->SetActorLocation(SmoothedLocation);
+            BasePlayer->SetActorRotation(SmoothedRotation);
+
+            BasePlayer->UpdatePlayerData(SmoothedLocation);
 
             BasePlayer->SetHP(hp);
 

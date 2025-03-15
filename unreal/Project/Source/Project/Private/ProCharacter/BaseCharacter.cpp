@@ -1312,6 +1312,7 @@ void ABaseCharacter::Other_Run(bool mbrun)
 {
 	if(m_bRun != mbrun){
 	m_bRun = mbrun;
+	b_run = mbrun;
 	}
 }
 
