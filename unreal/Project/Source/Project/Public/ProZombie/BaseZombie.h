@@ -215,6 +215,11 @@ public:
 
 	void ReportProVertexMap(TMap<FVector, FVertexBoneData>& VertexBoneMap);
 
+
+	void RotateFromCutProc1MeshToSkel();
+	void RotateFromCutProc2MeshToSkel();
+	void RotateFromProcMeshToSkel();
+
 	void RotateFromCutProc1MeshToSkelBone();
 	void RotateFromCutProc2MeshToSkelBone();
 	void RotateFromProcMeshToSkelBone();
@@ -227,6 +232,7 @@ public:
 	FTimerHandle ZombieMergeWattingHandle;
 
 	void StartMergiingTimer();
+	void StartMergiingTimerNew();
 
 	FTimerHandle ZombieMergingHandle;
 
@@ -277,8 +283,16 @@ public:
 	TSharedPtr<FZBoneStructure> SpecialRootBone;  // **트리 루트 (최상위 본)**
 
 	FVector CutPro_1ClusterCenter;
+
 	FVector CutPro_1StartLocation;
+	FVector CutPro_1TargetLocation;
+	FRotator CutPro_1TargetRotation;
+
 	FVector CutPro_2StartLocation;
+	FVector CutPro_2TargetLocation;
+	FRotator CutPro_2TargetRotation;
+
+
 	FName CutPro_1PlaneBoneName;
 	FName CutPro_2PlaneBoneName;
 	bool m_bIsCutProceduralMesh_2Visibility = true;
@@ -286,6 +300,13 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<UProceduralMeshComponent*> ProceduralMeshes;
+
+	TArray<FVector> ProcMeshMergeTargetLocation;
+	TArray<FVector> ProcMeshMergeStartLocation;
+
+	TArray<FRotator> ProcMeshMergeTargetRotation;
+
+	TArray<FVector> ProcMeshDistance;
 	
 	UPROPERTY(EditAnywhere)
 	double TotalTimeToMove = 5.0; // 5초 동안 이동

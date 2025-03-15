@@ -36,6 +36,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 {
 	ABaseZombie* Zombie = Cast<ABaseZombie>(OtherActor);
 	if (Zombie) { 
+		UE_LOG(LogTemp, Log, TEXT("HIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Zombie Damaged!"));
 
@@ -73,7 +74,6 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 				return;
 			}
 		}
-
 
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
