@@ -31,6 +31,8 @@ public:
 
         zom.UpdatePath();
 
+        zom.IsStandingStill = false;    // (만약 이전에 숨고르기 상태였으면) MoveTo 다시 작동하도록
+
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
         
         //d_result = zom.MoveTo();
@@ -51,6 +53,8 @@ public:
             return d_result;
         }
 
+        zom.IsStandingStill = false;    // (만약 이전에 숨고르기 상태였으면) MoveTo 다시 작동하도록
+
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
         d_result = true;
@@ -70,6 +74,8 @@ public:
             return d_result;
         }
 
+        zom.IsStandingStill = false;    // (만약 이전에 숨고르기 상태였으면) MoveTo 다시 작동하도록
+
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
         d_result = true;
@@ -88,6 +94,8 @@ public:
             d_result = true;
             return d_result;
         }
+
+        zom.IsStandingStill = false;    // (만약 이전에 숨고르기 상태였으면) MoveTo 다시 작동하도록
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 
@@ -109,6 +117,8 @@ public:
         }
 
         zom.SetTargetLocation(Zombie::TARGET::INVESTIGATED);
+
+        zom.IsStandingStill = false;    // (만약 이전에 숨고르기 상태였으면) MoveTo 다시 작동하도록
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());
 

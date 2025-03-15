@@ -188,7 +188,7 @@ public:
 
     TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HordeSound)
 
-    bool CanSeePlayer_result = false;       // 호드 사운드 재생 시점에서 필요
+    bool CanSeePlayer_result = false;       // 호드 사운드 재생 시점 & 플레이어 시야에서 잠시 놓쳤을떄 다시 검사에서 일시적 버프 주는 곳에서 필요
 
     int ZombiePathIndex = 0;
 

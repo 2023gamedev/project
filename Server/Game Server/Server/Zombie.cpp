@@ -208,7 +208,7 @@ float Zombie::SetDistance(int playerid, int distanceType)
 		// PlayerInsight 업데이트
 		if (distanceType == 1) {
 			if (setMap->at(playerid) < 0) {	// 죽거나 연결 끊긴 플레이어
-#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG)
 				cout << "이미 포착 불가능한 (죽음/연결 끊김) 플레이어의 PlayerInsight 맵에 접근;;" << endl;
 #endif
 			}
@@ -216,7 +216,7 @@ float Zombie::SetDistance(int playerid, int distanceType)
 				setMap->at(playerid) = dist;		// {주의} at은 해당 키값 없으면 abort() 에러 띄움 - 위에서 미리 예외처리 꼭! 필요!
 				//(*setMap)[playerid] = dist;		// operator[] 이용해서 수정하기도 가능 
 													// {주의} 이거 해당 키값이 없으면 자동으로 추가해주니까 조심해야함 
-#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)|| defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG)
 				cout << "PlayerInsight 맵에 이미 있던 데이터 갱신! playerid: " << playerid << " , distance: " << dist << endl;
 #endif
 			}
@@ -829,10 +829,12 @@ void Zombie::ReachFinalDestination()
 
 	// BT 플래그 값 전체 초기화 -> 만약! 병렬 구조로 만들 생각이라면 이렇게 전체 초기화 하지 말고 이미 순회한 플래그 값만 초기화 해야함 ===> X
 	//							=> 그냥 좀비는 멍청하게 만들어야 하니까 도착지점에 어디라도 도착하면 전부 잊는 방향으로
-	bool clear_flag[6] = { true, true, true, true, true, true };
-	ClearBlackBoard(clear_flag);
+	//bool clear_flag[6] = { true, true, true, true, true, true };
+	//ClearBlackBoard(clear_flag);
 	// ===> 이렇게 하면 좀비가 플레이어를 따라 갈때 계속 쫒아가기만 하게됨 (공격을 못함 - 또는 공격에 딜레이(플레이어를 잠시 밀치다가 공격함;;))
-	// -> 딜레이가 0.1초일땐 이런데 0.05초로 줄이면 발생 X
+	// [괜춘] -> 딜레이가 0.1초일땐 이런데 0.05초로 줄이면 발생 X
+	// [X] ==> 패트롤에서 연속 숨고르기를 하게 될경우 블랙보드를 모두 초기화 하면 X (연속으로 숨고르는 상황이 나오면 다시 숨고르기 하는 순간에 초기화를 하면 플레이어가 코앞에 있어도 계속 무시하게 되서;; (다시 시야에 나갔다가 들어 오지 않는 이상))
+
 	//PlayerInSight = false;	// 굳이 할필요는 없음
 	//HeardShouting = false;
 	//HeardFootSound = false;
@@ -841,49 +843,79 @@ void Zombie::ReachFinalDestination()
 	//RandPatrolSet = false;
 
 
+	bool clear_flag[6] = {};
+
 	//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
 	switch (targetType) {
 	case TARGET::PLAYER:
 		// 사실상 실행될 일 없음
 		// 딱히 뭐 할 것도 없고;;
 
+		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+		ClearBlackBoard(clear_flag);
+
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '플레이어'" << endl;
 #endif
 		break;
+
 	case TARGET::SHOUTING:
 		//HeardShouting = false;
+
+		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+		ClearBlackBoard(clear_flag);
+
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '샤우팅'" << endl;
 #endif
 		break;
+
 	case TARGET::FOOTSOUND:
 		//HeardFootSound = false;
+
+		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+		ClearBlackBoard(clear_flag);
+
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '발소리'" << endl;
 #endif
 		break;
+
 	case TARGET::HORDESOUND:
 		//HeardHordeSound = false;
+
+		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+		ClearBlackBoard(clear_flag);
+
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '호드 사운드'" << endl;
 #endif
 		break;
+
 	case TARGET::INVESTIGATED:
 		//KnewPlayerLocation = false;
+
+		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+		ClearBlackBoard(clear_flag);
+
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '이전 발견 위치'" << endl;
 #endif
 		break;
+
 	case TARGET::PATROL:
 		//RandPatrolSet = false;
-#ifdef	ENABLE_BT_LOG
-		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '랜덤 패트롤'" << endl;
-#endif
+
+		clear_flag[0] = false; clear_flag[1] = false; clear_flag[2] = false; clear_flag[3] = false; clear_flag[4] = false; clear_flag[5] = true;
+		ClearBlackBoard(clear_flag);
+		//==> 패트롤에서 연속 숨고르기를 하게 될경우 블랙보드를 모두 초기화 하면 X (연속으로 숨고르는 상황이 나오면 다시 숨고르기 하는 순간에 초기화를 하면 플레이어가 코앞에 있어도 계속 무시하게 되서;; (다시 시야에 나갔다가 들어 오지 않는 이상))
 
 		// 일정 확률로 좀비 잠시 멍때리기/휴식 (숨고르기) 상태 만들기
 		TakeABreak();
 
+#ifdef	ENABLE_BT_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '랜덤 패트롤'" << endl;
+#endif
 		break;
 	}
 
@@ -909,9 +941,9 @@ void Zombie::ClearDistance(int playerid, int distanceType)
 	}
 	else if (setMap->find(playerid) != setMap->end()) {		// map에 이미 playerid가 이미 있으면 -> 리셋
 		if(distanceType == 1)
-			setMap->at(playerid) = CanSeePlayerDistance + 6969.f;		// 탐지 거리 밖 표시
+			setMap->at(playerid) = CanSeePlayerDistance + 6969.f;		// 탐지 거리 밖 표시 (초기화)
 		if(distanceType == 2)
-			setMap->at(playerid) = CanHearFootSoundDistance + 6969.f;		// 탐지 거리 밖 표시
+			setMap->at(playerid) = CanHearFootSoundDistance + 6969.f;		// 탐지 거리 밖 표시 (초기화)
 	}
 
 	return;
@@ -920,6 +952,10 @@ void Zombie::ClearDistance(int playerid, int distanceType)
 // 0-PlayerInsight, 1-HeardShouting, 2-HeardFootSound, 3-HeardHordeSound, 4-KnewPlayerLocation, 5-RandPatrolSet
 void Zombie::ClearBlackBoard(bool clear_flag[6])
 {
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG)
+	printf("[ClearBlackBoard] Cleared flags\n");
+#endif
+
 	if (clear_flag[0]) {
 		PlayerInSight = false;
 		// 맵도 초기화
@@ -971,7 +1007,6 @@ void Zombie::ClearBlackBoard(bool clear_flag[6])
 	}
 
 #ifdef ENABLE_BT_LOG
-	printf("[ClearBlackBoard] Cleared flags\n"); 
 	printf(" PlayerInSight: %s, HeardShouting : %s, HeardFootSound : %s, HeardHordeSound : %s, KnewPlayerLocation : %s, RandPatrolSet : %s\n"
 		, clear_flag[0] ? "cleared" : "stay", clear_flag[1] ? "cleared" : "stay", clear_flag[2] ? "cleared" : "stay", clear_flag[3] ? "cleared" : "stay", clear_flag[4] ? "cleared" : "stay", clear_flag[5] ? "cleared" : "stay");
 	printf(" PlayerInSight: %s, HeardShouting: %s, HeardFootSound: %s, HeardHordeSound: %s, KnewPlayerLocation: %s, RandPatrolSet: %s\n"
@@ -1055,7 +1090,7 @@ bool Zombie::PlayerInSight_Update_Check()
 
 
 			if (really_detected) {
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG)
 				cout << "좀비 #" << ZombieData.zombieID << " 시야에 플레이어 #" << distTo_playerinsight.first << " 를 확인! --- 거리: " << distTo_playerinsight.second << endl;
 				spacing = true;
 #endif
@@ -1066,7 +1101,7 @@ bool Zombie::PlayerInSight_Update_Check()
 	}
 
 
-#ifdef	ENABLE_BT_LOG
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG)
 	if (result == false) {
 		cout << "좀비 #" << ZombieData.zombieID << " 가 그 어떤 새로운 플레이어도 포착 못함! (PlayerInSight_Update_Check() == false)" << endl;
 		spacing = true;

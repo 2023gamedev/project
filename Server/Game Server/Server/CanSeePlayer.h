@@ -14,14 +14,14 @@ public:
 #endif
 
         d_result = zom.PlayerInSight_Update_Check();
-#ifdef ENABLE_BT_NODE_LOG
+#if defined(ENABLE_BT_NODE_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG)
         cout << "좀비 \'#" << zom.ZombieData.zombieID << "\' 의 시야에 플레이어가 있는가?: " << boolalpha << d_result << endl;
 #endif
 
         bool Prev_CanSeePlayer_result = zom.CanSeePlayer_result;
         bool Current_CanSeePlayer_result = d_result;
 
-        if (Prev_CanSeePlayer_result == true && Current_CanSeePlayer_result == false) { // 플레이어를 놓쳤을때
+        if (Prev_CanSeePlayer_result == true && Current_CanSeePlayer_result == false) { // 플레이어를 잠시 놓쳤을때
             zom.RandomChanceBuff_CanSeePlayer = zom.RandomChanceBuff_CanSeePlayer_const;	// 다시 검사 할 때 일시적 확률 버프 -> 다시 더 잘 쫒아오도록 하기 위해
             zom.RandomChanceBuff_CanSeePlayer_StartTime = std::chrono::high_resolution_clock::now();
         }
@@ -78,7 +78,6 @@ public:
         
         if (Prev_CanSeePlayer_result == false && Current_CanSeePlayer_result == true) {    // 플레이어를 처음 발견했거나 플레이어를 놓쳤다가 다시 발견했다면 -> 호드 사운드 재생
             zom.MakeNoise();
-            zom.IsStandingStill = false;    // (만약 이전에 숨고르기 상태였으면) MoveTo 다시 작동하도록
 
             // 샤우팅 좀비일 경우에는 샤우팅 실행
             if (zom.ZombieData.zombietype == 1) {
@@ -109,7 +108,10 @@ public:
             bool task_result = child->CanSeePlayer(zom);    // 다형성 이용 (함수 오버라이딩)
 
             if (d_result == false)
-                d_result = task_result;
+                d_result = task_result; // 어느 하나라도 결과값이 true이면 true
+
+            if (d_result == true)   // <= 나중에 병렬로 돌리려면 지워야함
+                break;
         }
 
         if (d_result == false) {  // selector의 모든 task가 실패 할 경우(그럴 일은 없어야 하지만..)

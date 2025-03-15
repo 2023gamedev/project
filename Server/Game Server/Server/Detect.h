@@ -19,9 +19,9 @@ public:
             d_results[child->t_name] = task_result; // Selector의 데코레이터 결괴값들 저장 [데코레이터 이름-결과값]
 
             if (d_result == false)
-                d_result = task_result;
+                d_result = task_result; // 어느 하나라도 결과값이 true이면 true
 
-            if (d_result == true)
+            if (d_result == true) // <= 나중에 병렬로 돌리려면 지워야함
                 break;  // SetTargetLocation이 문제라 병렬로 돌리면 현재로써는 안 됨...;; (TargetLocation 자꾸 덮어씌우기함) -> (깊이 우선 탐색 => 너비 우선 탐색) 바꿔야함!
         }
 

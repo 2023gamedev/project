@@ -80,8 +80,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	// 캐릭터 움직임 통신 작업
 	TimeSinceLastSend += DeltaTime; // 시간 누적
 
-	if (TimeSinceLastSend >= 0.011f) // 0.011초마다 전송 실행 
-		// (약 90분에 1초 => 최소 90 프레임이 방어되면 캐릭터 움직임 딜레이되는 일 없음 -> 딜레이 발생하더라도 아래에서 큐에 2개 이상 쌓이면 모두 빼도록 처리해둠)
+	if (TimeSinceLastSend >= 0.016f) // 0.016초마다 전송 실행 
+		// (약 60분에 1초 => 최소 60 프레임이 방어되면 캐릭터 움직임 딜레이되는 일 없음 -> 딜레이 발생하더라도 아래에서 큐에 2개 이상 쌓이면 모두 빼도록 처리해둠)
 	{
 		CheckAndSendMovement();
 		TimeSinceLastSend = 0.0f; // 초기화
