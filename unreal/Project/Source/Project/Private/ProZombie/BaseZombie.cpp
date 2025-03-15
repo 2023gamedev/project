@@ -805,14 +805,14 @@ void ABaseZombie::Tick(float DeltaTime)
 				GetMesh()->SetVisibility(true); // 2초뒤에 부활 이렇게 해야하나
 				//GetMesh()->SetHiddenInGame(false);
 
-				//if (CutProceduralMesh_1) {
-				//	CutProceduralMesh_1->DestroyComponent();
-				//	CutProceduralMesh_1 = nullptr;
-				//}
-				//if (CutProceduralMesh_2) {
-				//	CutProceduralMesh_2->DestroyComponent();
-				//	CutProceduralMesh_2 = nullptr;
-				//}
+				if (CutProceduralMesh_1) {
+					CutProceduralMesh_1->DestroyComponent();
+					CutProceduralMesh_1 = nullptr;
+				}
+				if (CutProceduralMesh_2) {
+					CutProceduralMesh_2->DestroyComponent();
+					CutProceduralMesh_2 = nullptr;
+				}
 			}
 		}
 		else {
@@ -847,24 +847,24 @@ void ABaseZombie::Tick(float DeltaTime)
 				GetMesh()->SetVisibility(true); // 2초뒤에 부활 이렇게 해야하나
 				//GetMesh()->SetHiddenInGame(false);
 							// 10초 동안 이동
-				//for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
-				//{
-				//	UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
-				//	if (!ProcMesh) continue;
-				//	ProcMesh->DestroyComponent();
-				//}
+				for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
+				{
+					UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
+					if (!ProcMesh) continue;
+					ProcMesh->DestroyComponent();
+				}
 
-				//if (CutProceduralMesh_1) {
-				//	CutProceduralMesh_1->DestroyComponent();
-				//	CutProceduralMesh_1 = nullptr;
-				//}
+				if (CutProceduralMesh_1) {
+					CutProceduralMesh_1->DestroyComponent();
+					CutProceduralMesh_1 = nullptr;
+				}
 
-				//if (CutProceduralMesh_2) {
-				//	CutProceduralMesh_2->DestroyComponent();
-				//	CutProceduralMesh_2 = nullptr;
-				//}
+				if (CutProceduralMesh_2) {
+					CutProceduralMesh_2->DestroyComponent();
+					CutProceduralMesh_2 = nullptr;
+				}
 
-				//ProceduralMeshes.Empty();
+				ProceduralMeshes.Empty();
 			}
 		}
 		
@@ -1293,7 +1293,7 @@ void ABaseZombie::SetNormalDeadWithAnim()
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-	//StartResurrectionTimer();
+	StartResurrectionTimer();
 
 }
 
@@ -3901,7 +3901,7 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-	//StartResurrectionTimer();
+	StartResurrectionTimer();
 }
 
 void ABaseZombie::Attack(uint32 PlayerId)
@@ -4083,10 +4083,17 @@ void ABaseZombie::StartResurrectionTimer()
 {
 
 	if (m_bIsNormalDead) {
-		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 30.0f, false);		// 30초 후 다시 일어나기 시작
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 30초 후 다시 일어나기 시작
+		//ResurrectionTimerElapsed();
+
+		GetMesh()->SetCollisionProfileName("NoCollision");		
+		GetMesh()->SetGenerateOverlapEvents(false);
 	}
 	else if (m_bIsCuttingDead) {
-		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 60.0f, false);		// 60초 후 다시 일어나기 시작
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 60초 후 다시 일어나기 시작
+
+		GetMesh()->SetCollisionProfileName("NoCollision");		
+		GetMesh()->SetGenerateOverlapEvents(false);
 	}
 
 }
@@ -4095,16 +4102,6 @@ void ABaseZombie::ResurrectionTimerElapsed()
 {
 	m_bIsCuttingDead = false;
 	m_bIsNormalDead = false;
-
-	USkeletalMeshComponent* Skeleton = GetMesh();
-	TArray<FName> AllBoneNames;
-	Skeleton->GetBoneNames(AllBoneNames);
-
-	// 본의 경로에서 숨김을 해제함
-	for (const FName& PathBoneName : AllBoneNames)
-	{
-		Skeleton->UnHideBoneByName(PathBoneName);
-	}
 
 	m_bIsStanding = true;
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
@@ -4129,8 +4126,12 @@ void ABaseZombie::WaittingTimerElapsed()
 		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
 	}
-	GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
+	GetCharacterMovement()->MaxWalkSpeed = GetSpeed();
+
+	//GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
 	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
+	GetMesh()->SetCollisionProfileName("Zombie");
+	GetMesh()->SetGenerateOverlapEvents(true);
 	SetHP(GetStartHP());
 
 	SetDie(false);
@@ -4138,6 +4139,8 @@ void ABaseZombie::WaittingTimerElapsed()
 	doAction_takeDamage_onTick = false;
 	doAction_setIsNormalDead_onTick = false;		// 이거 지금 ResurrectionTimerElapsed를 모두 주석해놔서 불릴 일이 없긴함 (즉, 해당 클라가 좀비 직접 죽이면 doAction_setIsNormalDead_onTick 값 영원히 false임)
 	doAction_setIsCuttingDead_onTick = false;
+	procMesh_AddImpulse_1 = false;
+	procMesh_AddImpulse_2 = false;
 	// 그래도 부활하는 걸 고려하면 여기에 설정하는 게 맞음
 }
 
