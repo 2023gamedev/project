@@ -79,7 +79,8 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		if (::IsValid(pawn)) {
 			OwnerCharacter = Cast<ABaseCharacter>(pawn);
 		
-			if (OwnerCharacter) {	// 다른 클라도 해당 animinstance를 생성하는 지 확인용 로그 -> 생성함 (근데 id가 모두 99) ---> 해당 Animstance 의 진짜 주인을 따로 설정해줘야함!
+			if (OwnerCharacter) {	// 다른 클라도 해당 animinstance를 생성하는 지 확인용 로그 -> 생성함 (근데 id가 모두 99) ---> 해당 AnimInstance 의 진짜 주인을 따로 설정해줘야함!
+				//=====> OneGameModeBase에서 UpdateOtherPlayer에서 새로 다른 클라 캐릭 생성하고 AnimInstance 설정을 다시 맞춰줌 (덮어씌움)
 				UE_LOG(LogTemp, Log, TEXT("[PlayerCharacterAnimInstance 초기화 완료] OwnerCharacter 설정: %d"), OwnerCharacter->GetPlayerId());
 			}
 		}
