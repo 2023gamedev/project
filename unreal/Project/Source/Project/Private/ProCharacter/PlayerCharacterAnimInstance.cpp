@@ -245,12 +245,11 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 	if (OwnerCharacter) {
 
 		if (OwnerCharacter->GetPlayerId() != 99) {
-			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] OwnerCharacter: %d"), OwnerCharacter->GetPlayerId());
-			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] GetHP: %f"), OwnerCharacter->GetHP());
-			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] IsRun: %s"), OwnerCharacter->IsRun() ? TEXT("true") : TEXT("false"));
-			//UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] GetVelocity().Size(): %f"), OwnerCharacter->GetVelocity().Size());
-			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] OldLocation: (%f, %f, %f)"), OwnerCharacter->OldLocation.X, OwnerCharacter->OldLocation.Y, OwnerCharacter->OldLocation.Z);
-			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] NewLocation: (%f, %f, %f)"), OwnerCharacter->NewLocation.X, OwnerCharacter->NewLocation.Y, OwnerCharacter->NewLocation.Z);
+			//UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] OwnerCharacter: %d"), OwnerCharacter->GetPlayerId());
+			//UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] GetHP: %f"), OwnerCharacter->GetHP());
+			//UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] IsRun: %s"), OwnerCharacter->IsRun() ? TEXT("true") : TEXT("false"));
+			//UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] OldLocation: (%f, %f, %f)"), OwnerCharacter->OldLocation.X, OwnerCharacter->OldLocation.Y, OwnerCharacter->OldLocation.Z);
+			//UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] NewLocation: (%f, %f, %f)"), OwnerCharacter->NewLocation.X, OwnerCharacter->NewLocation.Y, OwnerCharacter->NewLocation.Z);
 		}
 
 		if (OwnerCharacter->GetHP() > 0) {	// 살아 있을때만
