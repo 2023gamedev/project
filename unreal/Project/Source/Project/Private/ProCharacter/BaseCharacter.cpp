@@ -2318,7 +2318,10 @@ void ABaseCharacter::UpSTR()
 
 void ABaseCharacter::DownSTR()
 {
-	SetSTR(GetSTR() - 1);
+	float str = GetSTR() - 1;
+	if (str <= 0)	// 마이너스 값이 되서 좀비 체력을 회복 시키지 않도록
+		str = 0;
+	SetSTR(str);
 }
 
 void ABaseCharacter::UpSpeed()
@@ -2328,7 +2331,10 @@ void ABaseCharacter::UpSpeed()
 
 void ABaseCharacter::DownSpeed()
 {
-	SetBasicSpeed(GetBasicSpeed() - 1);
+	float speed = GetBasicSpeed() - 1;
+	if (speed <= 0)	// 마이너스 값이 되지 않도록
+		speed = 0;
+	SetBasicSpeed(speed);
 }
 
 
