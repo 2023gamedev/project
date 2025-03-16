@@ -114,7 +114,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 			for (pop_cnt = 0; pop_cnt < loop; pop_cnt++) {
 
-				//UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+				//UE_LOG(LogNet, Display, TEXT("[Update Other Player]: PlayerId=%d"), recvPlayerData.PlayerId);
 
 				// 현재 GameMode 인스턴스를 얻기
 				if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
@@ -126,9 +126,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 					// 현재 컨트롤러가 빙의한 Pawn 가져오기
 					APawn* ControlledPawn = GetPawn();
 
-					//UE_LOG(LogNet, Display, TEXT("Update Other Player12432543543535: PlayerId=%d"), recvPlayerData.PlayerId);
-					//UE_LOG(LogNet, Display, TEXT("Update Other Player234234324324er: hp=%f"), recvPlayerData.hp);
-					//UE_LOG(LogNet, Display, TEXT("Update Other Player        : hp=%f"), recvPlayerData.hp);
+					//UE_LOG(LogNet, Display, TEXT("[Update Other Player]: hp=%f"), recvPlayerData.hp);
 
 					// 빙의된 Pawn이 ACharacter라면 캐스팅
 					if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))

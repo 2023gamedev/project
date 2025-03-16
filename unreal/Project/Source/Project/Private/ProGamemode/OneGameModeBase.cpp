@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ProGamemode/OneGameModeBase.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "ProCharacter/BaseCharacter.h"
 #include "ProCharacter/EmployeeCharacter.h"
@@ -30,6 +31,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "NavigationSystem.h"
 #include "GStruct.pb.h"
+#include "ProCharacter/PlayerCharacterAnimInstance.h"
 
 #include "NavMesh/RecastNavMesh.h"
 
@@ -882,6 +884,9 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
             NewCharacter->SetPlayerId(PlayerID);
             NewCharacter->SetPlayerName(username);
             NewCharacter->SetHP(hp);  // 초기 HP 설정
+            auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(NewCharacter->GetMesh()->GetAnimInstance());
+            AnimInstance->OwnerCharacter = NewCharacter;    // 새캐릭의 AnimInstance 연결 설정
+            UE_LOG(LogTemp, Log, TEXT("[PlayerCharacterAnimInstance 다른 클라 재설정 완료] OwnerCharacter 설정: %d"), AnimInstance->OwnerCharacter->GetPlayerId());
         }
     }
 }
@@ -892,7 +897,7 @@ void AOneGameModeBase::UpdatePlayerAttack(uint32 PlayerID, bool battack)
 
     if (!World)
     {
-        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        UE_LOG(LogTemp, Warning, TEXT("UpdatePlayerAttack: GetWorld() returned nullptr"));
         return;
     }
 
@@ -916,7 +921,7 @@ void AOneGameModeBase::UpdateEquipItem(uint32 PlayerID, const FString& Itemname,
 
     if (!World)
     {
-        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        UE_LOG(LogTemp, Warning, TEXT("UpdateEquipItem: GetWorld() returned nullptr"));
         return;
     }
 
@@ -956,7 +961,7 @@ void AOneGameModeBase::UpdateUnEquipItem(uint32 PlayerID, uint32 itemtype)
 
     if (!World)
     {
-        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        UE_LOG(LogTemp, Warning, TEXT("UpdateUnEquipItem: GetWorld() returned nullptr"));
         return;
     }
 
@@ -979,7 +984,7 @@ void AOneGameModeBase::UpdatePlayerRun(uint32 PlayerID, bool b_run)
 
     if (!World)
     {
-        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        UE_LOG(LogTemp, Warning, TEXT("UpdatePlayerRun: GetWorld() returned nullptr"));
         return;
     }
 
@@ -1003,7 +1008,7 @@ void AOneGameModeBase::UpdatePlayerJump(uint32 PlayerID)
 
     if (!World)
     {
-        UE_LOG(LogTemp, Warning, TEXT("UpdateOtherPlayer: GetWorld() returned nullptr"));
+        UE_LOG(LogTemp, Warning, TEXT("UpdatePlayerJump: GetWorld() returned nullptr"));
         return;
     }
 

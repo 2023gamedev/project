@@ -248,6 +248,63 @@ void ABaseCharacter::BeginPlay()
 
 	GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
+	// 발소리 큐 설정 때문에 밑에 return 문 있는 거 보다 앞에 있어야함 (다른 클라 발소리 나게)
+	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (AnimInstance) {
+		AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
+
+		AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
+			if (CurrentWeapon != nullptr) {
+				CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
+			}
+			});
+
+		AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
+			if (CurrentWeapon != nullptr) {
+				CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
+			}
+			});
+
+		AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
+			FootSound();
+			});
+
+
+		AnimInstance->FootstepRunSoundCue = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/run_Cue.run_Cue"));
+		if (!AnimInstance->FootstepRunSoundCue)
+		{
+			UE_LOG(LogTemp, Error, TEXT("FootstepRunSoundCue failed to load in BeginPlay!"));
+		}
+
+		if (AnimInstance->FootstepRunSoundCue)
+		{
+			AnimInstance->FootstepRunAudioComponent = NewObject<UAudioComponent>(this);
+
+			if (AnimInstance->FootstepRunAudioComponent) {
+				AnimInstance->FootstepRunAudioComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("FootSocket"));
+				AnimInstance->FootstepRunAudioComponent->SetSound(AnimInstance->FootstepRunSoundCue);
+				AnimInstance->FootstepRunAudioComponent->Stop(); // 시작할 때 바로 재생되지 않도록 정지해둠
+			}
+		}
+
+		AnimInstance->FootstepWalkSoundCue = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/walk_Cue.walk_Cue"));
+		if (!AnimInstance->FootstepWalkSoundCue)
+		{
+			UE_LOG(LogTemp, Error, TEXT("FootstepWalkSoundCue failed to load in BeginPlay!"));
+		}
+
+		if (AnimInstance->FootstepWalkSoundCue)
+		{
+			AnimInstance->FootstepWalkAudioComponent = NewObject<UAudioComponent>(this);
+
+			if (AnimInstance->FootstepWalkAudioComponent) {
+				AnimInstance->FootstepWalkAudioComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("FootSocket"));
+				AnimInstance->FootstepWalkAudioComponent->SetSound(AnimInstance->FootstepWalkSoundCue);
+				AnimInstance->FootstepWalkAudioComponent->Stop(); // 시작할 때 바로 재생되지 않도록 정지해둠
+			}
+		}
+	}
+
 
 	if (TextMissionUIClass != nullptr) {
 
@@ -494,61 +551,6 @@ void ABaseCharacter::BeginPlay()
 	}
 
 
-	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
-
-	AnimInstance->OnMontageEnded.AddDynamic(this, &ABaseCharacter::AttackMontageEnded);
-
-	AnimInstance->OnAttackStartCheck.AddLambda([this]() -> void {
-		if (CurrentWeapon != nullptr) {
-			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("WeaponItem"));
-		}
-		});
-
-	AnimInstance->OnAttackEndCheck.AddLambda([this]() -> void {
-		if (CurrentWeapon != nullptr) {
-			CurrentWeapon->BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
-		}
-		});
-
-	AnimInstance->OnFootSoundCheck.AddLambda([this]() -> void {
-		FootSound();
-		});
-
-
-	AnimInstance->FootstepRunSoundCue = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/run_Cue.run_Cue"));
-	if (!AnimInstance->FootstepRunSoundCue)
-	{
-		UE_LOG(LogTemp, Error, TEXT("FootstepRunSoundCue failed to load in BeginPlay!"));
-	}
-
-	if (AnimInstance->FootstepRunSoundCue)
-	{
-		AnimInstance->FootstepRunAudioComponent = NewObject<UAudioComponent>(this);
-
-		if (AnimInstance->FootstepRunAudioComponent) {
-			AnimInstance->FootstepRunAudioComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("FootSocket"));
-			AnimInstance->FootstepRunAudioComponent->SetSound(AnimInstance->FootstepRunSoundCue);
-			AnimInstance->FootstepRunAudioComponent->Stop(); // 시작할 때 바로 재생되지 않도록 정지해둠
-		}
-	}
-
-	AnimInstance->FootstepWalkSoundCue = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/walk_Cue.walk_Cue"));
-	if (!AnimInstance->FootstepWalkSoundCue)
-	{
-		UE_LOG(LogTemp, Error, TEXT("FootstepWalkSoundCue failed to load in BeginPlay!"));
-	}
-
-	if (AnimInstance->FootstepWalkSoundCue)
-	{
-		AnimInstance->FootstepWalkAudioComponent = NewObject<UAudioComponent>(this);
-
-		if (AnimInstance->FootstepWalkAudioComponent) {
-			AnimInstance->FootstepWalkAudioComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("FootSocket"));
-			AnimInstance->FootstepWalkAudioComponent->SetSound(AnimInstance->FootstepWalkSoundCue);
-			AnimInstance->FootstepWalkAudioComponent->Stop(); // 시작할 때 바로 재생되지 않도록 정지해둠
-		}
-	}
-	
 
 //// Slice 용 Weapon - TEST
 //if (CurrentWeapon == nullptr) { 
@@ -1310,9 +1312,9 @@ void ABaseCharacter::Run()
 
 void ABaseCharacter::Other_Run(bool mbrun)
 {
-	if(m_bRun != mbrun){
-	m_bRun = mbrun;
-	b_run = mbrun;
+	if (m_bRun != mbrun) {
+		m_bRun = mbrun;
+		b_run = mbrun;
 	}
 }
 

@@ -78,6 +78,10 @@ void UPlayerCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		if (::IsValid(pawn)) {
 			OwnerCharacter = Cast<ABaseCharacter>(pawn);
+		
+			if (OwnerCharacter) {	// 다른 클라도 해당 animinstance를 생성하는 지 확인용 로그 -> 생성함 (근데 id가 모두 99) ---> 해당 Animstance 의 진짜 주인을 따로 설정해줘야함!
+				UE_LOG(LogTemp, Log, TEXT("[PlayerCharacterAnimInstance 초기화 완료] OwnerCharacter 설정: %d"), OwnerCharacter->GetPlayerId());
+			}
 		}
 	}
 }
@@ -197,6 +201,8 @@ void UPlayerCharacterAnimInstance::PlayFootstepRunSound()
 		if (FootstepRunAudioComponent && !FootstepRunAudioComponent->IsPlaying())
 		{
 			FootstepRunAudioComponent->Play();
+
+			UE_LOG(LogTemp, Log, TEXT("[FootstepRun play]: player %d"), OwnerCharacter->GetPlayerId());
 		}
 	}
 }
@@ -220,6 +226,8 @@ void UPlayerCharacterAnimInstance::PlayFootstepWalkSound()
 		if (FootstepWalkAudioComponent && !FootstepWalkAudioComponent->IsPlaying())
 		{
 			FootstepWalkAudioComponent->Play();
+
+			UE_LOG(LogTemp, Log, TEXT("[FootstepWalk play]: player %d"), OwnerCharacter->GetPlayerId());
 		}
 	}
 }
@@ -236,27 +244,62 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 {
 	if (OwnerCharacter) {
 
+		if (OwnerCharacter->GetPlayerId() != 99) {
+			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] OwnerCharacter: %d"), OwnerCharacter->GetPlayerId());
+			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] GetHP: %f"), OwnerCharacter->GetHP());
+			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] IsRun: %s"), OwnerCharacter->IsRun() ? TEXT("true") : TEXT("false"));
+			//UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] GetVelocity().Size(): %f"), OwnerCharacter->GetVelocity().Size());
+			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] OldLocation: (%f, %f, %f)"), OwnerCharacter->OldLocation.X, OwnerCharacter->OldLocation.Y, OwnerCharacter->OldLocation.Z);
+			UE_LOG(LogTemp, Log, TEXT("[UpdateFootstepSound] NewLocation: (%f, %f, %f)"), OwnerCharacter->NewLocation.X, OwnerCharacter->NewLocation.Y, OwnerCharacter->NewLocation.Z);
+		}
+
 		if (OwnerCharacter->GetHP() > 0) {	// 살아 있을때만
 			if (OwnerCharacter->IsRun() == true) {		// 뛰는 중
-				if (OwnerCharacter->GetVelocity().Size() > 0)
-				{
-					PlayFootstepRunSound();  // 이동 중이면 뛰기소리 재생
+
+				if (OwnerCharacter->GetPlayerId() == 99) {	// 로컬의 경우
+					if (OwnerCharacter->GetVelocity().Size() > 0)
+					{
+						PlayFootstepRunSound();  // 이동 중이면 뛰기소리 재생
+					}
+					else
+					{
+						StopFootstepRunSound();  // 멈추면 뛰기소리 정지
+					}
 				}
-				else
-				{
-					StopFootstepRunSound();  // 멈추면 뛰기소리 정지
+				else {	// 다른 클라의 경우
+					if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
+					{
+						PlayFootstepRunSound();  // 이동 중이면 뛰기소리 재생
+					}
+					else
+					{
+						StopFootstepRunSound();  // 멈추면 뛰기소리 정지
+					}
 				}
 
 				StopFootstepWalkSound();  // 걷기소리는 정지
 			}
 			else {	// 걷는 중
-				if (OwnerCharacter->GetVelocity().Size() > 0)
-				{
-					PlayFootstepWalkSound();  // 이동 중이면 걷기소리 재생
+
+				if (OwnerCharacter->GetPlayerId() == 99) {	// 로컬의 경우
+					if (OwnerCharacter->GetVelocity().Size() > 0)
+					{
+						PlayFootstepWalkSound();  // 이동 중이면 걷기소리 재생
+					}
+					else
+					{
+						StopFootstepWalkSound();  // 멈추면 걷기소리 정지
+					}
 				}
-				else
-				{
-					StopFootstepWalkSound();  // 멈추면 걷기소리 정지
+				else {	// 다른 클라의 경우
+					if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
+					{
+						PlayFootstepWalkSound();  // 이동 중이면 뛰기소리 재생
+					}
+					else
+					{
+						StopFootstepWalkSound();  // 멈추면 뛰기소리 정지
+					}
 				}
 
 				StopFootstepRunSound();  // 뛰기소리는 정지
