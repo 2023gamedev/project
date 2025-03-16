@@ -135,7 +135,7 @@ public:
 	uint32 ZombieId;
 	uint32 MyCharacterNumber;
 	uint32 OtherCharacterNumber;
-	FVector NewLocation;
+	//FVector NewLocation;
 	//std::atomic <bool> b_attack{ false };
 	bool b_attack = false;
 	std::atomic <bool> b_GetItem{ false };

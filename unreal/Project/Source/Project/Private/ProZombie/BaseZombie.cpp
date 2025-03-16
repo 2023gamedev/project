@@ -1188,7 +1188,10 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	doAction_setIsNormalDead_onTick = false;
 	doAction_setIsCuttingDead_onTick = false;
 
-	SetHP(GetHP() - Damage);
+	float hp = GetHP() - Damage;
+	if (hp <= 0)	// 체력이 음수가 되지는 않도록
+		hp = 0;
+	SetHP(hp);
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
 
 	m_fHP_Prev = m_fHP;
@@ -1294,7 +1297,6 @@ void ABaseZombie::SetNormalDeadWithAnim()
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
 	StartResurrectionTimer();
-
 }
 
 void ABaseZombie::CutZombie(FVector planeposition, FVector planenormal, bool do_self)
@@ -4083,14 +4085,14 @@ void ABaseZombie::StartResurrectionTimer()
 {
 
 	if (m_bIsNormalDead) {
-		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 30초 후 다시 일어나기 시작
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 10초 후 다시 일어나기 시작	(기존에는 30초)
 		//ResurrectionTimerElapsed();
 
 		GetMesh()->SetCollisionProfileName("NoCollision");		
 		GetMesh()->SetGenerateOverlapEvents(false);
 	}
 	else if (m_bIsCuttingDead) {
-		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 60초 후 다시 일어나기 시작
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 10초 후 다시 일어나기 시작 (기존에는 60초)
 
 		GetMesh()->SetCollisionProfileName("NoCollision");		
 		GetMesh()->SetGenerateOverlapEvents(false);
@@ -4114,7 +4116,7 @@ void ABaseZombie::ResurrectionTimerElapsed()
 // 되살아나기 애니메이션 워이팅 타이머
 void ABaseZombie::StartWatiingTimer()
 {
-	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);	// 5초 이후 완전히 다시 살아남
+	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);	// 5초 이후 완전히 다시 살아남 => 좀비 부활 관련 초기화 작업
 }
 
 void ABaseZombie::WaittingTimerElapsed()
@@ -4126,21 +4128,36 @@ void ABaseZombie::WaittingTimerElapsed()
 		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
 	}
-	GetCharacterMovement()->MaxWalkSpeed = GetSpeed();
+	//GetCharacterMovement()->MaxWalkSpeed = GetSpeed();
 
-	//GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
-	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
-	GetMesh()->SetCollisionProfileName("Zombie");
-	GetMesh()->SetGenerateOverlapEvents(true);
-	SetHP(GetStartHP());
+	////GetCharacterMovement()->MaxWalkSpeed = GetSpeed() * 100.f;
+	//GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
+	//GetMesh()->SetCollisionProfileName("Zombie");
+	//GetMesh()->SetGenerateOverlapEvents(true);
+	//SetHP(GetStartHP());
 
-	SetDie(false);
+	//// 좀비 hp 동기화 (다시 부활 시키기)
+	///*int ZombieId = GetZombieId();
 
-	doAction_takeDamage_onTick = false;
-	doAction_setIsNormalDead_onTick = false;		// 이거 지금 ResurrectionTimerElapsed를 모두 주석해놔서 불릴 일이 없긴함 (즉, 해당 클라가 좀비 직접 죽이면 doAction_setIsNormalDead_onTick 값 영원히 false임)
-	doAction_setIsCuttingDead_onTick = false;
-	procMesh_AddImpulse_1 = false;
-	procMesh_AddImpulse_2 = false;
+	//Protocol::Zombie_hp packet;
+	//packet.set_zombieid(ZombieId);
+	//packet.set_damage(GetStartHP() * (-1.f));
+	//packet.set_packet_type(12);
+
+	//std::string serializedData;
+	//packet.SerializeToString(&serializedData);
+
+	//bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());*/
+	//// 이 방식이 사용하기 어려운게 이전 HP 값이 음수 일 경우도 있어서, 이런식이면 원하는 대로 초기 HP로 돌리지 않을 때도 있음 ==> 따로 부활 패킷 만드는 게 좋을 듯
+	//// 그렇고 그것보다도 여러 클라에서 같이 여러번 전송시켜서 좀비 체력이 너무 많아짐 ===> 서버에서 타이머 돌리고 여러 클라에 전송해서 같은 시각에 같이 살려야 할 듯
+
+	//SetDie(false);
+
+	//doAction_takeDamage_onTick = false;
+	//doAction_setIsNormalDead_onTick = false;		// 이거 지금 ResurrectionTimerElapsed를 모두 주석해놔서 불릴 일이 없긴함 (즉, 해당 클라가 좀비 직접 죽이면 doAction_setIsNormalDead_onTick 값 영원히 false임)
+	//doAction_setIsCuttingDead_onTick = false;
+	//procMesh_AddImpulse_1 = false;
+	//procMesh_AddImpulse_2 = false;
 	// 그래도 부활하는 걸 고려하면 여기에 설정하는 게 맞음
 }
 

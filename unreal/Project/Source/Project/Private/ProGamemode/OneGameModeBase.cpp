@@ -837,8 +837,8 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
             FVector OldLocation = BasePlayer->GetActorLocation();
 
             // 기존 캐릭터 위치 업데이트
-            FVector SmoothedLocation = FMath::VInterpTo(BasePlayer->GetActorLocation(), NewLocation, GetWorld()->GetDeltaSeconds(), 10.0f);
-            FRotator SmoothedRotation = FMath::RInterpTo(BasePlayer->GetActorRotation(), NewRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
+            FVector SmoothedLocation = FMath::VInterpTo(BasePlayer->GetActorLocation(), NewLocation, GetWorld()->GetDeltaSeconds(), 10.0f);     // 보간 (부드럽게 보이게)
+            FRotator SmoothedRotation = FMath::RInterpTo(BasePlayer->GetActorRotation(), NewRotation, GetWorld()->GetDeltaSeconds(), 10.0f);    // 보간 (부드럽게 보이게)
 
             BasePlayer->SetActorLocation(SmoothedLocation);
             BasePlayer->SetActorRotation(SmoothedRotation);
@@ -1260,12 +1260,12 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
             if (NewHP <= 0) {
                 BaseZombie->doAction_setIsNormalDead_onTick = true;
             }
-            UE_LOG(LogTemp, Warning, TEXT("Updated Zombie ID: %d HP state to: %f"), ZombieId, NewHP);
+            UE_LOG(LogTemp, Log, TEXT("[UpdateZombieHP] Updated Zombie ID: %d HP state to: %f"), ZombieId, NewHP);
         }
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("No zombie found with ID: %d"), ZombieId);
+        UE_LOG(LogTemp, Warning, TEXT("[UpdateZombieHP] No zombie found with ID: %d"), ZombieId);
     }
 }
 

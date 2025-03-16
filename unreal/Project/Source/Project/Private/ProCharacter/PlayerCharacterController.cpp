@@ -574,8 +574,11 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			//UE_LOG(LogNet, Display, TEXT("Update Zombie path: ZombieID=%d, PlayerID = %d"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId);
 
 			// 좀비 위치 서버에서 받은 위치로 갱신
-			if (tmp_path.Location.IsZero() == false)
-				(*zombie)->SetActorLocation(tmp_path.Location);
+			if (tmp_path.Location.IsZero() == false) {
+				FVector SmoothedLocation = FMath::VInterpTo((*zombie)->GetActorLocation(), tmp_path.Location, GetWorld()->GetDeltaSeconds(), 10.0f);     // 보간 (부드럽게 보이게)
+
+				(*zombie)->SetActorLocation(SmoothedLocation);
+			}
 
 			// 좀비 목적지 설정
 			if (tmp_path.Path1.empty() == false) {
