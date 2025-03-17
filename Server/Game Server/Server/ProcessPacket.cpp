@@ -477,7 +477,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG)
-                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
+                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!! - (Normal Dead)" << endl;
                     cout << endl;
 #endif
                 }
@@ -704,7 +704,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG)
-                cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
+                cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!! - (Cut Dead)" << endl;
                 cout << endl;
 #endif
             }

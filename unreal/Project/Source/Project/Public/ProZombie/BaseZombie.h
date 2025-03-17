@@ -169,7 +169,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	FName m_sZombieName;
 
-	// TimerHandle 30초 뒤에 부활하기 위해
+	// TimerHandle 지정된 몇초 뒤에 부활하기 위해 사용하는 핸들러
 	FTimerHandle ResurrectionHandle;
 
 	void StartResurrectionTimer();
