@@ -1255,6 +1255,8 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
         {
             float PrevHP = zombie->GetHP();
             float NewHP = zombie->GetHP() - Damage;
+            if (NewHP <= 0.f)   // 체력이 음수가 되지는 않도록
+                NewHP = 0.f;
 
             if (PrevHP == 0 && NewHP == zombie->GetStartHP()) {
                 // 좀비 부활시키기

@@ -444,6 +444,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         int roomId = clientInfo->roomid;
 
+        // 바로 다른 클라들에게도 좀비 HP 동기화 작업 실행
         if (room_players.find(roomId) != room_players.end()) {
             for (const auto& [playerId, playerInfo] : room_players[roomId]) {
                 if (playerInfo != nullptr && playerId != id) {

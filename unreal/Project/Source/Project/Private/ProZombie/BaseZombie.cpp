@@ -709,6 +709,8 @@ void ABaseZombie::Tick(float DeltaTime)
 		}
 		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
+		doAction_setIsNormalDead_onTick = false;	// 딱 한번만 실행 시키도록
+
 		StartResurrectionTimer();
 
 		BloodFX.Empty();
@@ -742,6 +744,8 @@ void ABaseZombie::Tick(float DeltaTime)
 			CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 		}
 		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+
+		doAction_setIsCuttingDead_onTick = false;	// 딱 한번만 실행 시키도록
 
 		StartResurrectionTimer();
 
@@ -1191,11 +1195,13 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	doAction_setIsNormalDead_onTick = false;
 	doAction_setIsCuttingDead_onTick = false;
 
+	m_fHP_Prev = GetHP();	// 동기화 될 경우 이거는 업데이트를 따로 안 해줘서
 	float hp = GetHP() - Damage;
 	if (hp <= 0)	// 체력이 음수가 되지는 않도록
 		hp = 0;
 	SetHP(hp);
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+	UE_LOG(LogTemp, Log, TEXT("[Zombie#%u] TakeDamage - HP: %f -> %f"), GetZombieId(), m_fHP_Prev, hp);
 
 	m_fHP_Prev = m_fHP;
 

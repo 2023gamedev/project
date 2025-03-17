@@ -685,7 +685,7 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (PlayerId != 99) {
-		UE_LOG(LogTemp, Log, TEXT("TakeDamage를 로컬이 아닌 플레이어가 호출됨! (실행 X)"));
+		UE_LOG(LogTemp, Log, TEXT("[Player] TakeDamage를 로컬이 아닌 플레이어가 호출됨! (실행 X) - PlayerId: %u"), PlayerId);
 		return 0;
 	}
 
@@ -697,7 +697,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		SetHP(GetHP() - Damage);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("new HP %f"), GetHP() - Damage));
-		UE_LOG(LogTemp, Log, TEXT("TakeDamage - new HP: %f"), GetHP() - Damage);
+		UE_LOG(LogTemp, Log, TEXT("[Player#%u] TakeDamage - HP: %f -> %f"), GetPlayerId(), GetHP(), GetHP() - Damage);
 	}
 	else if (GetHP() <= 0 && !IsDeadPlay()) {
 		SetDeadPlay(true);
@@ -1609,8 +1609,9 @@ void ABaseCharacter::InventoryOnOff()
 
 void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
-	UE_LOG(LogTemp, Log, TEXT("Attack() - GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
-	
+	//UE_LOG(LogTemp, Log, TEXT("Attack() - GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
+	UE_LOG(LogTemp, Log, TEXT("Attack() - PlayerId: %u"), GetPlayerId());
+
 	if (m_bIsAttacking) {
 		return;
 	}

@@ -134,7 +134,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 		memcpy(&MyPlayerId, buffer.data(), sizeof(MyPlayerId));
 
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MyPlayerId: %d"), MyPlayerId));
-		UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId);
+		UE_LOG(LogNet, Display, TEXT("Received MyPlayerId: %d"), MyPlayerId); //=> 여러개 받을때 마지막으로 받는게 진짜 MyId임
 
 		return;
 	}
