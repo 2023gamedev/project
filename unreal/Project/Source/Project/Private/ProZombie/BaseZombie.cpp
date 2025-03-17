@@ -4089,6 +4089,8 @@ void ABaseZombie::UpdateZombieData(FVector Location)
 // 사망 후 되살아나기 딜레이 타이머
 void ABaseZombie::StartResurrectionTimer()
 {
+	// 타이머 중복 방지 (기존 타이머 제거) => 두번째 부활때 바로 일어나는 애니메이션 재생되는 거 방지
+	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
 
 	if (m_bIsNormalDead) {
 		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 10초 후 다시 일어나기 애니메이션 재생 시작 (기존에는 30초)
@@ -4102,11 +4104,15 @@ void ABaseZombie::StartResurrectionTimer()
 		GetMesh()->SetCollisionProfileName("NoCollision");		
 		GetMesh()->SetGenerateOverlapEvents(false);
 	}
-
 }
 
 void ABaseZombie::ResurrectionTimerElapsed()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("ResurrectionTimerElapsed 실행됨"));
+
+	// 혹시 남아 있는 타이머가 있으면 제거
+	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
+
 	m_bIsCuttingDead = false;
 	m_bIsNormalDead = false;
 
@@ -4121,18 +4127,28 @@ void ABaseZombie::ResurrectionTimerElapsed()
 // 되살아나기 애니메이션 워이팅 타이머
 void ABaseZombie::StartWatiingTimer()
 {
+	// 기존 타이머가 남아 있을 경우 초기화
+	GetWorld()->GetTimerManager().ClearTimer(WattingHandle);
+
 	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);	// 5초(다시 일어나기 애니메이션 재생 시간) 이후 완전히 다시 살아남 => * 좀비 부활 관련 초기화 작업은 서버에서 부활 동기화 통신 받으면 따로 진행 
 }
 
 void ABaseZombie::WaittingTimerElapsed()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("WaittingTimerElapsed 실행됨"));
+
+	// 혹시 남아 있는 타이머가 있으면 제거
+	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
+
 	// 애니메이션 관련 플래그 값들 모두 다시 초기화 ===> 일단 다시 부활하면 기본 서있는 자세에서 시작하도록
 	m_bIsAttacking = false;
 	m_bBeAttacked = false;
 	m_bIsShouting = false;
+	
 	m_bIsNormalDead = false;
 	//m_bIsCuttingOverlapOn = false;
 	m_bIsCuttingDead = false;
+	m_bIsStanding = false;
 
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {

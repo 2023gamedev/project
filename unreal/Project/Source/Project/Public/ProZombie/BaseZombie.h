@@ -169,14 +169,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	FName m_sZombieName;
 
-	// TimerHandle 지정된 몇초 뒤에 부활하기 위해 사용하는 핸들러
+	// TimerHandle 지정된 몇초 뒤에 부활하기 위해 사용하는 핸들러 (애니메이션 재생)
 	FTimerHandle ResurrectionHandle;
 
 	void StartResurrectionTimer();
 
 	void ResurrectionTimerElapsed();
 
-
+	// TimerHandle 지정된 몇초 뒤에 부활하기 위해 사용하는 핸들러 (애니메이션 재생 후 딜레이 기다리고 관련 플래그 값들 초기화)
 	FTimerHandle WattingHandle;
 
 	void StartWatiingTimer();
