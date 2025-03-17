@@ -709,6 +709,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		}
 		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
+		StartResurrectionTimer();
 
 		BloodFX.Empty();
 
@@ -742,6 +743,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		}
 		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
+		StartResurrectionTimer();
 
 		BloodFX.Empty();
 
@@ -4170,18 +4172,6 @@ void ABaseZombie::Ressurect()
 	GetCharacterMovement()->MaxWalkSpeed = GetSpeed();
 	SetHP(GetStartHP());
 	SetDie(false);
-
-	/*Protocol::Zombie_hp zombiehp;
-
-	zombiehp.set_damage(100);
-	zombiehp.set_packet_type(12);
-	zombiehp.set_zombieid(GetZombieId());
-
-	std::string serializedData;
-	zombiehp.SerializeToString(&serializedData);
-
-	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());*/
-
 
 	doAction_takeDamage_onTick = false;
 	doAction_setIsNormalDead_onTick = false;	
