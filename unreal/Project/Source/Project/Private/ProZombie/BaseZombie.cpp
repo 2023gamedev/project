@@ -640,7 +640,7 @@ void ABaseZombie::Tick(float DeltaTime)
 	}
 
 
-	// 클라 - 보이지 않는 좀비 최적화 작업
+	// 클라 - 로컬 클라에게 보이지 않는 좀비 최적화 작업
 	if (MyChar == nullptr)
 		return;
 
@@ -670,7 +670,8 @@ void ABaseZombie::Tick(float DeltaTime)
 	// 좀비 피격시 클라 동기화
 	if (m_fHP_Prev != m_fHP && GetHP() > 0 && m_bBeAttacked == false && doAction_takeDamage_onTick == true) {
 
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 피격 클라 동기화 작업실행!")));	// 직접 때리는 클라에서는 해당 메세지 보이면 안 됨1
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 피격 클라 동기화 작업실행!")));	// 직접 때리는 클라에서는 해당 메세지 보이면 안 됨!
+		UE_LOG(LogTemp, Log, TEXT("좀비 피격 동기화 작업실행! - 좀비 아이디: %d"), ZombieId);
 
 		BeAttacked();
 		m_fHP_Prev = m_fHP;
@@ -1277,6 +1278,9 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 			BloodFX.Add(NewBloodFX);
 		}
 
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 피격 클라 직접 실행!")));
+		UE_LOG(LogTemp, Log, TEXT("좀비 피격 직접 실행! - 좀비 아이디: %d"), ZombieId);
+
 		BeAttacked();
 	}
 
@@ -1293,6 +1297,21 @@ void ABaseZombie::SetNormalDeadWithAnim()
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {
 		CharacterAnimInstance->SetIsNormalDead(m_bIsNormalDead);
+	}
+	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+
+	StartResurrectionTimer();
+}
+
+void ABaseZombie::SetCuttingDeadWithAnim()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("좀비 사망 직접 실행! - cut dead")));
+	UE_LOG(LogTemp, Log, TEXT("좀비 사망 직접 실행! - (cut dead) 좀비 아이디: %d"), ZombieId);
+
+	m_bIsCuttingDead = true;
+	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr != CharacterAnimInstance) {
+		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
@@ -3891,21 +3910,6 @@ void ABaseZombie::MergingTimerElapsed()
 {
 }
 
-void ABaseZombie::SetCuttingDeadWithAnim()
-{
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("좀비 사망 직접 실행! - cut dead")));
-	UE_LOG(LogTemp, Log, TEXT("좀비 사망 직접 실행! - (cut dead) 좀비 아이디: %d"), ZombieId);
-
-	m_bIsCuttingDead = true;
-	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr != CharacterAnimInstance) {
-		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
-	}
-	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
-
-	StartResurrectionTimer();
-}
-
 void ABaseZombie::Attack(uint32 PlayerId)
 {
 	if (m_bIsAttacking) {
@@ -3968,7 +3972,7 @@ void ABaseZombie::AttackCheck()
 	);
 
 	// debug 용(충돌 범위 확인 용)
-	FVector TraceVec = GetActorForwardVector() * m_fAttackRange;
+	/*FVector TraceVec = GetActorForwardVector() * m_fAttackRange;
 	FVector Center = GetActorLocation() + TraceVec * 0.5f;
 	float HalfHeight = m_fAttackRange * 0.5f + 50.f;
 	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
@@ -3982,7 +3986,7 @@ void ABaseZombie::AttackCheck()
 		CapsuleRot,
 		DrawColor,
 		false,
-		DebugLifeTime);
+		DebugLifeTime);*/
 
 	if (bResult) {
 		ABaseCharacter* player = Cast<ABaseCharacter>(HitResult.GetActor());
@@ -4037,13 +4041,14 @@ void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 
 void ABaseZombie::BeAttacked()
 {
-	if (m_bBeAttacked) {
+	if (m_bBeAttacked || GetHP() <= 0) {
 		return;
 	}
+
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
-	if (m_bIsAttacking) {
-		AnimInstance->Montage_Stop(0.5f);
+	if (m_bIsAttacking || m_bIsShouting) {	// 다른 애니메이션 재생 중이였다면 멈추기
+		AnimInstance->Montage_Stop(0.5f);	// 0.5초의 애니메이션 blend time
 	}
 
 	AnimInstance->PlayBeAttackedMontage();
@@ -4084,10 +4089,11 @@ void ABaseZombie::UpdateZombieData(FVector Location)
 // 사망 후 되살아나기 딜레이 타이머
 void ABaseZombie::StartResurrectionTimer()
 {
+	// 타이머 중복 방지 (기존 타이머 제거) => 두번째 부활때 바로 일어나는 애니메이션 재생되는 거 방지
+	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
 
 	if (m_bIsNormalDead) {
-		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 10초 후 다시 일어나기 애니메이션 재생 시작	(기존에는 30초)
-		//ResurrectionTimerElapsed();
+		GetWorld()->GetTimerManager().SetTimer(ResurrectionHandle, this, &ABaseZombie::ResurrectionTimerElapsed, 10.0f, false);		// 10초 후 다시 일어나기 애니메이션 재생 시작 (기존에는 30초)
 
 		GetMesh()->SetCollisionProfileName("NoCollision");		
 		GetMesh()->SetGenerateOverlapEvents(false);
@@ -4098,11 +4104,15 @@ void ABaseZombie::StartResurrectionTimer()
 		GetMesh()->SetCollisionProfileName("NoCollision");		
 		GetMesh()->SetGenerateOverlapEvents(false);
 	}
-
 }
 
 void ABaseZombie::ResurrectionTimerElapsed()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("ResurrectionTimerElapsed 실행됨"));
+
+	// 혹시 남아 있는 타이머가 있으면 제거
+	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
+
 	m_bIsCuttingDead = false;
 	m_bIsNormalDead = false;
 
@@ -4117,18 +4127,36 @@ void ABaseZombie::ResurrectionTimerElapsed()
 // 되살아나기 애니메이션 워이팅 타이머
 void ABaseZombie::StartWatiingTimer()
 {
+	// 기존 타이머가 남아 있을 경우 초기화
+	GetWorld()->GetTimerManager().ClearTimer(WattingHandle);
+
 	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);	// 5초(다시 일어나기 애니메이션 재생 시간) 이후 완전히 다시 살아남 => * 좀비 부활 관련 초기화 작업은 서버에서 부활 동기화 통신 받으면 따로 진행 
 }
 
 void ABaseZombie::WaittingTimerElapsed()
 {
-	// 일단 일어서있는 기본 애니메이션으로 전환
+	//UE_LOG(LogTemp, Warning, TEXT("WaittingTimerElapsed 실행됨"));
+
+	// 혹시 남아 있는 타이머가 있으면 제거
+	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
+
+	// 애니메이션 관련 플래그 값들 모두 다시 초기화 ===> 일단 다시 부활하면 기본 서있는 자세에서 시작하도록
+	m_bIsAttacking = false;
+	m_bBeAttacked = false;
+	m_bIsShouting = false;
+	
+	m_bIsNormalDead = false;
+	//m_bIsCuttingOverlapOn = false;
+	m_bIsCuttingDead = false;
 	m_bIsStanding = false;
+
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {
 		CharacterAnimInstance->SetIsNormalDead(m_bIsNormalDead);
 		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
+
+		CharacterAnimInstance->Montage_Stop(0.1f);  // 혹시 남아 있을 피격 애니메이션 정지
 	}
 }
 
@@ -4158,6 +4186,11 @@ void ABaseZombie::Ressurect()
 	doAction_takeDamage_onTick = false;
 	doAction_setIsNormalDead_onTick = false;	
 	doAction_setIsCuttingDead_onTick = false;
+	procMesh_AddImpulse_1 = false;
+	procMesh_AddImpulse_2 = false;
+
+	m_bIsShouted = false;	// 소리쳤는지
+
 	procMesh_AddImpulse_1 = false;
 	procMesh_AddImpulse_2 = false;
 

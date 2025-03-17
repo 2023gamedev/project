@@ -1670,11 +1670,11 @@ void Zombie::Wait()
 
 void Zombie::Resurrect()
 {
-//#ifdef	ENABLE_BT_LOG
+#ifdef	ENABLE_BT_LOG
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 부활함!" << endl << endl;
-	//cout << "==========좀비 \'#" << ZombieData.zombieID << "\' BT 종료========//" << endl;
-	//cout << endl;
-//#endif
+	cout << "==========좀비 \'#" << ZombieData.zombieID << "\' BT 종료========//" << endl;
+	cout << endl;
+#endif
 
 
 	// 부활 통신 작업
