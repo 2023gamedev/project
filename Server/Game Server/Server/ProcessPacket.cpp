@@ -464,24 +464,24 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
                     z->waitAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
 
-#ifdef ENABLE_BT_LOG
-                    //cout << "================================================================================================================================================================================" << endl;
+#ifdef ENABLE_PACKET_LOG
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
                     cout << endl;
-                    //cout << "================================================================================================================================================================================" << endl;
 #endif
                 }
 
+                // 좀비 사망시에
                 if (z->zombieHP <= 0) {
                     playerDB[roomId][id].killcount++;
 
                     z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
 
-#ifdef ENABLE_BT_LOG
+#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG)
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
                     cout << endl;
 #endif
                 }
+                break;
             }
         }
 
@@ -701,7 +701,9 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 z->zombieHP = 0;
                 playerDB[roomId][id].killcount++;
 
-#ifdef ENABLE_PACKET_LOG
+                z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
+
+#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG)
                 cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
                 cout << endl;
 #endif

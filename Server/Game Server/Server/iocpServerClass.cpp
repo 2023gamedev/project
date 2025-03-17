@@ -685,6 +685,11 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					zom->Resurrect();
 					continue;
 				}
+				else {
+//#ifdef ENABLE_BT_LOG
+					cout << "부활 남은 시간: " << zom->resurrectionTimer - deltaTime.count() << "s" << endl;
+//#endif
+				}
 
 
 #ifdef	ENABLE_BT_LOG
