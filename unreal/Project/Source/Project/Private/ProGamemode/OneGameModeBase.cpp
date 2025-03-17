@@ -35,7 +35,9 @@
 
 #include "NavMesh/RecastNavMesh.h"
 
+
 TMap<uint32, ABaseZombie*> ZombieMap;
+
 
 AOneGameModeBase::AOneGameModeBase()
 {
@@ -69,13 +71,19 @@ void AOneGameModeBase::BeginPlay()
     if (GameInstance == nullptr) {
         GameInstance = Cast<UProGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
     }
+
     ZombieMap.Empty(); // ZombieMap 초기화
 
-    //ABaseCharacter* DefaultPawn = nullptr;
+    if (GEngine)
+    {
+        GEngine->Exec(GetWorld(), TEXT("DisableAllScreenMessages"));    // 게임 시작시에 인게임 화면 위 모든 로그 출력 일단 disable (콘솔창 따로 열어서 다시 킬 수 있음)
+    }
 
+    //ABaseCharacter* DefaultPawn = nullptr;
+    //
     //UWorld* World = GetWorld();
     //if (World) {
-
+    //
     //    for (TActorIterator<ABaseCharacter> ActorItr(World); ActorItr; ++ActorItr) {
     //        UE_LOG(LogTemp, Log, TEXT("DefaultPawn Complete"));
     //        DefaultPawn = *ActorItr;
@@ -83,7 +91,7 @@ void AOneGameModeBase::BeginPlay()
     //            break;
     //        }
     //    }
-
+    //
     //    DefaultPawn->ThrowOnGround.BindUObject(this, &AOneGameModeBase::SpawnOnGroundItem);
     //}
 
