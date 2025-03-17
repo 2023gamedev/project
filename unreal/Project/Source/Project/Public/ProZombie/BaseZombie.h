@@ -183,6 +183,8 @@ public:
 
 	void WaittingTimerElapsed();
 
+	void Ressurect();
+
 	UPROPERTY(EditAnywhere)
 	bool m_bIsStanding = false;
 

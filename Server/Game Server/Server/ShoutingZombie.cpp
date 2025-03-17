@@ -14,7 +14,8 @@ ShoutingZombie::ShoutingZombie()
 ShoutingZombie::ShoutingZombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 	: Zombie(mainServer, z_d)
 {
-	SetHP(ShoutingZombieStartHP);
+	ZombieStartHP = ShoutingZombieStartHP;
+	SetHP(ZombieStartHP);
 
 	//SetSpeed(ShoutingZombieSpeed);
 

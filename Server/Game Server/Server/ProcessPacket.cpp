@@ -475,6 +475,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 if (z->zombieHP <= 0) {
                     playerDB[roomId][id].killcount++;
 
+                    z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
+
 #ifdef ENABLE_BT_LOG
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!!" << endl;
                     cout << endl;

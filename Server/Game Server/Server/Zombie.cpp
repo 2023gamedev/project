@@ -32,7 +32,7 @@ Zombie::Zombie()
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
-	PrevTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+	LastKnownTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
 	HordeLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
@@ -57,8 +57,6 @@ Zombie::Zombie()
 	IsStandingStill = false;
 
 	HaveToWait = false;
-
-	//WaitOneTick_SendPath = false;
 
 	DetermineFloor(ZombieData.z);
 
@@ -94,7 +92,7 @@ Zombie::Zombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 
 	TargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
-	PrevTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
+	LastKnownTargetLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 	
 	HordeLocation = vector<vector<vector<float>>>{ {{ZombieData.x, ZombieData.y, ZombieData.z}} };
 
@@ -119,8 +117,6 @@ Zombie::Zombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 	IsStandingStill = false;
 
 	HaveToWait = false;
-
-	//WaitOneTick_SendPath = false;
 
 	DetermineFloor(ZombieData.z);
 
@@ -324,7 +320,7 @@ void Zombie::SetTargetLocation(TARGET t)
 		SearchClosestPlayer(closest_player_pos, 1);
 		if (closest_player_pos.size() != 0) {
 			TargetLocation = closest_player_pos;
-			PrevTargetLocation = TargetLocation;
+			LastKnownTargetLocation = TargetLocation;
 		}
 //#ifdef	ENABLE_BT_LOG
 		else {
@@ -364,8 +360,8 @@ void Zombie::SetTargetLocation(TARGET t)
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 목표 타겟: '이전 발견 위치'" << endl;
 #endif
-		if (TargetLocation != PrevTargetLocation && PrevTargetLocation.size() != 0) {	// 타겟위치가 재설정되지 않았다면, -> 반복 UpdatePath 하지 않도록
-			TargetLocation = PrevTargetLocation;
+		if (TargetLocation != LastKnownTargetLocation && LastKnownTargetLocation.size() != 0) {	// 타겟위치가 재설정되지 않았다면, -> 반복 UpdatePath 하지 않도록
+			TargetLocation = LastKnownTargetLocation;
 			UpdatePath();
 		}
 		break;
@@ -399,8 +395,6 @@ void Zombie::SetTargetLocation(TARGET t)
 					cout << "숨고르기 남은 시간: " << ZombieStandingStillDuration - deltaTime.count() << "s" << endl;
 #endif
 				}
-				
-				//WaitOneTick_SendPath = true;	// SendPath 를 궂이 할 필요가 없으므로
 
 				return;	// 아래, 새로운 랜덤 패트롤 지점 찾기 안하고 넘어감
 			}
@@ -1582,8 +1576,6 @@ void Zombie::Wait()
 
 			IsBeingAttacked = false;
 			HaveToWait = false;
-			//WaitOneTick_SendPath = true;
-			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
 			IsShouting = false;		
@@ -1592,6 +1584,7 @@ void Zombie::Wait()
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
 			bool clear_flag[6] = { true, true, true, true, true, true };
 			ClearBlackBoard(clear_flag);
+			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
 			RandomChanceBuff_CanSeePlayer = RandomChanceBuff_CanSeePlayer_const;	// 다시 검사 할 때 일시적 확률 버프 -> 다시 더 잘 쫒아오도록 하기 위해
 			RandomChanceBuff_CanSeePlayer_StartTime = std::chrono::high_resolution_clock::now();
@@ -1618,8 +1611,6 @@ void Zombie::Wait()
 
 			IsAttacking = false;
 			HaveToWait = false;
-			//WaitOneTick_SendPath = true;
-			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
 			IsShouting = false;		
 
@@ -1627,6 +1618,7 @@ void Zombie::Wait()
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
 			bool clear_flag[6] = { true, true, true, true, true, true };
 			ClearBlackBoard(clear_flag);
+			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
 			RandomChanceBuff_CanSeePlayer = RandomChanceBuff_CanSeePlayer_const;	// 다시 검사 할 때 일시적 확률 버프 -> 다시 더 잘 쫒아오도록 하기 위해
 			RandomChanceBuff_CanSeePlayer_StartTime = std::chrono::high_resolution_clock::now();
@@ -1653,13 +1645,12 @@ void Zombie::Wait()
 
 			IsShouting = false;
 			HaveToWait = false;
-			//WaitOneTick_SendPath = true;
-			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
 
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
 			bool clear_flag[6] = { true, true, true, true, true, true };
 			ClearBlackBoard(clear_flag);
+			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 		
 			RandomChanceBuff_CanSeePlayer = RandomChanceBuff_CanSeePlayer_const;	// 다시 검사 할 때 일시적 확률 버프 -> 다시 더 잘 쫒아오도록 하기 위해
 			RandomChanceBuff_CanSeePlayer_StartTime = std::chrono::high_resolution_clock::now();
@@ -1675,4 +1666,50 @@ void Zombie::Wait()
 #ifdef ENABLE_BT_LOG
 	cout << endl;
 #endif
+}
+
+void Zombie::Resurrect()
+{
+//#ifdef	ENABLE_BT_LOG
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 부활함!" << endl << endl;
+	//cout << "==========좀비 \'#" << ZombieData.zombieID << "\' BT 종료========//" << endl;
+	//cout << endl;
+//#endif
+
+
+	// 부활 통신 작업
+	int ZombieId = ZombieData.zombieID;
+
+	Protocol::Zombie_hp packet;
+	packet.set_zombieid(ZombieId);
+	packet.set_damage(ZombieStartHP * (-1.f));		// 계산은 '원래HP - 데미지' 이런식이니까, -StartHP 이렇게 넘겨줘서 오히려 체력이 원상복구되는 효과를 봄
+	packet.set_packet_type(12);
+
+	std::string serializedData;
+	packet.SerializeToString(&serializedData);
+
+	for (const auto& player : playerDB_BT[roomid]) {
+		iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+	}
+
+
+	// 좀비 체력 원상복구
+	SetHP(ZombieStartHP);
+
+
+	// 플래그 값들 초기화
+	bool clear_flag[6] = { true, true, true, true, true, true };
+	ClearBlackBoard(clear_flag);
+	targetType = BLACKBOARDCLEARED;
+
+	HaveToWait = false;
+
+	IsBeingAttacked = false;
+	IsAttacking = false;
+	IsShouting = false;
+
+	CanSeePlayer_result = false;
+	detectCanSeePlayer_randomChance = false;
+	detectHasFootSound_randomChance = false;
+	RandomChanceBuff_CanSeePlayer = 0.f;
 }

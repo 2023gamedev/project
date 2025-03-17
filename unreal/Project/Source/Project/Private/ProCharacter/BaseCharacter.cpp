@@ -685,6 +685,7 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (PlayerId != 99) {
+		UE_LOG(LogTemp, Log, TEXT("TakeDamage를 로컬이 아닌 플레이어가 호출됨! (실행 X)"));
 		return 0;
 	}
 
@@ -695,7 +696,8 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 		SetHP(GetHP() - Damage);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("HP %f"), GetHP()));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("new HP %f"), GetHP() - Damage));
+		UE_LOG(LogTemp, Log, TEXT("TakeDamage - new HP: %f"), GetHP() - Damage);
 	}
 	else if (GetHP() <= 0 && !IsDeadPlay()) {
 		SetDeadPlay(true);
@@ -704,7 +706,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 	if (IsDeadPlay() && !IsDead()) {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("TakeDamage -> PlayDead!")));
-		//UE_LOG(LogTemp, Log, TEXT("TakeDamage -> PlayDead!"));
+		UE_LOG(LogTemp, Log, TEXT("TakeDamage -> PlayDead!"));
 
 		PlayDead();
 	}
@@ -1618,7 +1620,7 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 		// 1️⃣ 카메라의 현재 회전값 가져오기
 		FRotator CameraRot = Camera->GetComponentRotation();
 
-
+		// 공격 각도 설정
 		SetSpringArmPitch( -(FMath::Clamp(CameraRot.Pitch, -30.0f, 10.0f)));
 		m_fPitch = FMath::GetMappedRangeValueClamped(
 			FVector2D(-10, 30), // 입력 범위 (-10 ~ 30)

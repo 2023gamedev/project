@@ -20,7 +20,7 @@ public:
 #endif
 
         //if (!d_result) {
-        //    cout << "좀비가 가진 플레이어 이전 위치: ( " << zom.PrevTargetLocation[0][0][0] << ", " << zom.PrevTargetLocation[0][0][1] << ", " << zom.PrevTargetLocation[0][0][2] << " )" << endl;
+        //    cout << "좀비가 가진 플레이어 이전 위치: ( " << zom.LastKnownTargetLocation[0][0][0] << ", " << zom.LastKnownTargetLocation[0][0][1] << ", " << zom.LastKnownTargetLocation[0][0][2] << " )" << endl;
         //    cout << "근데, 사실상 이 코드는 실행되면 안됨!!!!!!!!! [ERROR]" << endl;
         //    // 만약, Detect Selector 를 병렬적으로 작동시키면 해당 에러 로그 필요 X
         //}

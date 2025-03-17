@@ -15,7 +15,8 @@ NormalZombie::NormalZombie()
 NormalZombie::NormalZombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 	: Zombie(mainServer, z_d)
 {
-	SetHP(NormalZombieStartHP);
+	ZombieStartHP = NormalZombieStartHP;
+	SetHP(ZombieStartHP);
 
 	//SetSpeed(NormalZombieSpeed);
 

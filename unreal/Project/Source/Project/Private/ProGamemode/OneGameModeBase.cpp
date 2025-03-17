@@ -1250,17 +1250,24 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
     ABaseZombie** ZombiePtr = ZombieMap.Find(ZombieId);
     if (ZombiePtr && *ZombiePtr)
     {
-        ABaseZombie* BaseZombie = *ZombiePtr;
-        if (BaseZombie)
+        ABaseZombie* zombie = *ZombiePtr;
+        if (zombie)
         {
-            //좀비의 체력상태 업데이트
-            float NewHP = BaseZombie->GetHP() - Damage;
-            BaseZombie->SetHP(NewHP);
-            BaseZombie->doAction_takeDamage_onTick = true;
-            if (NewHP <= 0) {
-                BaseZombie->doAction_setIsNormalDead_onTick = true;
+            float PrevHP = zombie->GetHP();
+            float NewHP = zombie->GetHP() - Damage;
+
+            if (PrevHP == 0 && NewHP == zombie->GetStartHP()) {
+                // 좀비 부활시키기
+                zombie->Ressurect();
             }
-            UE_LOG(LogTemp, Log, TEXT("[UpdateZombieHP] Updated Zombie ID: %d HP state to: %f"), ZombieId, NewHP);
+
+            //좀비의 체력상태 업데이트
+            zombie->SetHP(NewHP);
+            zombie->doAction_takeDamage_onTick = true;
+            if (NewHP <= 0) {
+                zombie->doAction_setIsNormalDead_onTick = true;
+            }
+            UE_LOG(LogTemp, Log, TEXT("[UpdateZombieHP] Updated Zombie ID: %d, HP: %f -> %f"), ZombieId, PrevHP, NewHP);
         }
     }
     else

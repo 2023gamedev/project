@@ -37,13 +37,13 @@ public:
     int zombietype;             // 0 - 일반 좀비, 1 - 샤우팅 좀비, 2 - 뛰는 좀비
     int roomID;
 
-    // 사실상 밑에 두개는 사용 X (현재는)
-    int patroltype;
-    float patrolrange;
+    // 사실상 밑에 두개는 사용 X
+    //int patroltype;
+    //float patrolrange;
 
     Zombie_Data() = default;
-    Zombie_Data(int zid, float x, float y, float z, float pitch, float yaw, float roll, int ztype, int pattype, float patrange) 
-        : zombieID(zid), x(x), y(y), z(z), pitch(pitch), yaw(yaw), roll(roll), zombietype(ztype), patroltype(pattype), patrolrange(patrange) {} //초기화 리스트
+    Zombie_Data(int zid, float x, float y, float z, float pitch, float yaw, float roll, int ztype) 
+        : zombieID(zid), x(x), y(y), z(z), pitch(pitch), yaw(yaw), roll(roll), zombietype(ztype) {} //초기화 리스트
 };
 
 class Zombie {
@@ -82,23 +82,16 @@ public:
 
 
     const float CanAttackDistance = 150.f;          // 공격 사정거리 150cm (언리얼 단위로는 => 150UU)
-
-    const float  CanSeePlayerDistance = 2500.0f + 50.f;    // 최대 시야거리 2500cm + 50cm (원래 2500이지만 실제 검사에서는 2500보다 약간 크게 잡혀도 통신보내서 +50까지 봐줌;;)
-
+    const float CanSeePlayerDistance = 2500.0f + 50.f;    // 최대 시야거리 2500cm + 50cm (원래 2500이지만 실제 검사에서는 2500보다 약간 크게 잡혀도 통신보내서 +50까지 봐줌;;)
     const float CanHearFootSoundDistance = 1000.f;            // 발소리 포착 최대 가능거리 1000cm
-
     const float CanHearShoutDistance = 3000.f;      // 샤우팅 소리 포착 가능 거리 3000cm
-
     const float CanHearHordeSoundDistance = 1000.0f;         // 호드 사운드 포착 가능 거리 1000cm
 
     const float ZombieAttackAnimDuration = 2.63f;    // 좀비 공격 애니메이션 재생 시간 (* 정확히는 2.63초)
-
     const float ZombieBeAttackedAnimDuration = 2.0f;    // 좀비 피격 애니메이션 재생 시간 (* 정확히는 2.00초)
-
     const float ZombieShoutingAnimDuration = 2.8f;    // 좀비 샤우팅 애니메이션 재생 시간 (* 정확히는 2.80초)
 
     float ZombieStandingStillDuration = 0.f;    // 좀비 숨고르기 (멍때리기) 지속 시간 (5~10초)
-
     const float ZombieMakeHordeNoiseDelay = 20.0f;   // 호드 사운드 재생 딜레이 (20초)
 
     const float NormalZombieStartHP = 20.0f;        // 20.0f
@@ -113,6 +106,7 @@ public:
     const float ShoutingZombieSpeed = 230.0f;         // 230.0f (뛰기 스피드)
     const float ShoutingZombieWalkSpeed = 150.0f;     // 150.0f (걷기 스피드)
 
+    float ZombieStartHP = 0.f;
     float ZombieSpeed;
 
     ZOMBIE_TYPE ZombieType;
@@ -127,7 +121,7 @@ public:
 
     vector<vector<vector<float>>> TargetLocation;
 
-    vector<vector<vector<float>>> PrevTargetLocation;       // 플레이어를 마지막으로 본 위치
+    vector<vector<vector<float>>> LastKnownTargetLocation;       // 플레이어를 마지막으로 본 위치
 
     vector<vector<vector<float>>> ShoutingLocation;       // 샤우팅 좀비 위치
 
@@ -140,35 +134,28 @@ public:
     int ClosestPlayerID;
 
     bool PlayerInSight;
-
     bool KnewPlayerLocation;
-
     bool HeardShouting;
-
     bool HeardFootSound;
-
     bool HeardHordeSound;
 
     bool RandPatrolSet;     // 랜덤 패트롤 지점이 set 되면 true
 
     bool IsAttacking;       // 해당 좀비 지금 공격 중인가? (애니메이션 재생 중인가?)
-
     bool IsBeingAttacked;   // 해당 좀비 지금 피격 당하는 중인가? (애니메이션 재생 중인가?)
-
     bool IsShouting;        // 해당 '샤우팅' 좀비 지금 샤우팅 중인가? (애니메이션 재생 중인가?) 
                             //-> 샤우팅 좀비만을 위한 변수지만, shouting zombie(하위-자식 클래스)에 만들면 zombie(상위-부모 클래스)에서 shouting zombie의 멤버 변수에 접근 못해서 그냥 여기에;;
 
     bool IsStandingStill;   // 해당 좀비가 잠시 가만히 서있는 상태인가? (숨고르기)
 
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
-    
-    //bool WaitOneTick_SendPath;  // 애니메이션 재생 끝난직후 HaveToWait이 바로 false가 되며 SendPath가 보내져, 클라의 ZombieMoveTo가 실행되어 살짝 움직이게 되는 걸 막기위한 부울변수 (그리고 애니메이션 끝난 직후에는 path 보낼 필요도 사실상 없음)
-                                //=> 이것도 이제 방지 방식을 바꿔서 안 해줌 (더이상 사용X)
 
     FLOOR z_floor;          // 좀비가 스폰 된 층
 
     std::chrono::steady_clock::time_point waitAnimStartTime;            // 좀비 대기 시작 시간 (애니메이션을 맞춰 대기하기 위한 용도)
     std::chrono::steady_clock::time_point waitBrainlessStartTime;      // 좀비 대기 시작 시간 (숨고르기를 맞춰 대기하기 위한 용도)
+
+    bool CanSeePlayer_result = false;       // 호드 사운드 재생 시점 & 플레이어 시야에서 잠시 놓쳤을떄 다시 검사에서 일시적 버프 주는 곳에서 필요
 
     bool detectCanSeePlayer_randomChance = false;   // 포착 한번 성공하면 계속 포착하도록 도와주는 플래그 (다시 포착 성공 확률 안 돌아가도록)  
     bool detectHasFootSound_randomChance = false;   // 포착 한번 성공하면 계속 포착하도록 도와주는 플래그 (다시 포착 성공 확률 안 돌아가도록) 
@@ -186,9 +173,10 @@ public:
     std::chrono::steady_clock::time_point RandomChanceBuff_CanSeePlayer_StartTime;
     const float RandomChanceBuff_CanSeePlayer_Duration = 5.0f;  // 5초
 
-    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HordeSound)
+    std::chrono::steady_clock::time_point resurrectionStartTime;    // 좀비 부활 타이머 시작 시간
+    const float resurrectionTimer = 15.f + 0.5f; // 좀비 부활 타이머 세팅 (15.5초 - 원래는 15초인데 +0.5초 해서 네트워크 딜레이까지 고려)
 
-    bool CanSeePlayer_result = false;       // 호드 사운드 재생 시점 & 플레이어 시야에서 잠시 놓쳤을떄 다시 검사에서 일시적 버프 주는 곳에서 필요
+    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HordeSound)
 
     int ZombiePathIndex = 0;
 
@@ -256,5 +244,7 @@ public:
     void MakeNoise();
 
     void TakeABreak();
+
+    void Resurrect();
 
 };
