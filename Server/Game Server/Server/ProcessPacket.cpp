@@ -457,12 +457,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
         for (auto& z : zombieDB[roomId]) {
             if (z->ZombieData.zombieID == recvzombieid) {
-                if (Packet.damage() == 100){
-                    z->zombieHP = z->NormalZombieStartHP;
-                }
-                else {
-                    z->zombieHP = max(0, z->zombieHP - Packet.damage());
-                }
+                
+                z->zombieHP = max(0, z->zombieHP - Packet.damage());
 
                 if (z->zombieHP < z->NormalZombieStartHP) {
                     z->IsBeingAttacked = true;  // 좀비 피격중으로 변경

@@ -4171,7 +4171,7 @@ void ABaseZombie::Ressurect()
 	SetHP(GetStartHP());
 	SetDie(false);
 
-	Protocol::Zombie_hp zombiehp;
+	/*Protocol::Zombie_hp zombiehp;
 
 	zombiehp.set_damage(100);
 	zombiehp.set_packet_type(12);
@@ -4180,7 +4180,7 @@ void ABaseZombie::Ressurect()
 	std::string serializedData;
 	zombiehp.SerializeToString(&serializedData);
 
-	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());*/
 
 
 	doAction_takeDamage_onTick = false;
