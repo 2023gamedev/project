@@ -97,6 +97,9 @@ public:
 	bool IsSpecialAbility() { return m_bSpecialAbility; }
 	void SetSpecialAbility(bool specialability) { m_bSpecialAbility = specialability; }
 		 
+	bool IsShouted() { return m_bIsShouted; }
+	void SetShouted(bool shouted) { m_bIsShouted = shouted; }
+
 
 	void Attack(uint32 PlayerId);
 
