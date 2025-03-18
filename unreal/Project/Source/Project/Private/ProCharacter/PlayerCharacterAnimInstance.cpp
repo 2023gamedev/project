@@ -269,11 +269,25 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 				else {	// 다른 클라의 경우
 					if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
 					{
+						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Run Play} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+
 						PlayFootstepRunSound();  // 이동 중이면 뛰기소리 재생
+
+						float currentTime = GetWorld()->GetTimeSeconds();
+						LastStopRunTime = currentTime; // 시간 다시 갱신 시켜 놓기
 					}
 					else
 					{
-						StopFootstepRunSound();  // 멈추면 뛰기소리 정지
+						// 사운드 전환 딜레이 적용 (0.1초) -> 발소리를 부드럽게 보간작업!
+						float currentTime = GetWorld()->GetTimeSeconds();
+						if (currentTime - LastStopRunTime > 0.1f) {
+							PlayFootstepRunSound();	// 최소 0.1초 동안은 발소리 재생시키기
+						}
+						else {
+							//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Run Stop} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+
+							StopFootstepRunSound();  // 멈추면 뛰기소리 정지
+						}
 					}
 				}
 
@@ -294,11 +308,25 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 				else {	// 다른 클라의 경우
 					if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
 					{
-						PlayFootstepWalkSound();  // 이동 중이면 뛰기소리 재생
+						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Walk Play} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+
+						PlayFootstepWalkSound();  // 이동 중이면 걷기소리 재생
+
+						float currentTime = GetWorld()->GetTimeSeconds();
+						LastStopWalkTime = currentTime; // 시간 다시 갱신 시켜 놓기
 					}
 					else
 					{
-						StopFootstepWalkSound();  // 멈추면 뛰기소리 정지
+						// 사운드 전환 딜레이 적용 (0.1초) -> 발소리를 부드럽게 보간작업!
+						float currentTime = GetWorld()->GetTimeSeconds();
+						if (currentTime - LastStopWalkTime > 0.1f) {
+							PlayFootstepWalkSound();	// 최소 0.1초 동안은 발소리 재생시키기
+						}
+						else {
+							//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Walk Stop} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+
+							StopFootstepWalkSound();  // 멈추면 걷기소리 정지
+						}
 					}
 				}
 

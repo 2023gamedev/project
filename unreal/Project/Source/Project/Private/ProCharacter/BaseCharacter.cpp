@@ -616,7 +616,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 		// 애니메이션 인스턴스에 속도 파라미터 설정
 		if ((Speed == 0 && PreviousSpeed != 0) || (Speed == 0 && PreviousSpeed == 0))	// 정지 애니메이션 전환 => 얘만 0.3초 쿨다운 적용 
 		{
-			// 애니메이션 전환 쿨타임 적용 (0.3초)
+			// 애니메이션 전환 쿨타임 적용 (0.3초) -> 걷기-뛰기 애니메이션 부드럽게 보간작업!
 			float currentTime = GetWorld()->GetTimeSeconds();
 
 			if (currentTime - LastStopAnimTime > 0.3f) {
@@ -1267,7 +1267,6 @@ void ABaseCharacter::MoveForward(FVector RotateYaw, float NewAxisValue)
 {
 	if (m_bRun) {
 		SetSpeed(GetBasicSpeed() * 100.f);
-
 	}
 	else {
 		SetSpeed(GetBasicSpeed() / 2 * 100.f);

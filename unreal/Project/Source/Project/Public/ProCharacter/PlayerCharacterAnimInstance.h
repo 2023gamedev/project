@@ -93,6 +93,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Transient)
 	ABaseCharacter* OwnerCharacter;
 
+	float LastStopRunTime;
+	float LastStopWalkTime;
+
 
 private:
 	UFUNCTION()
