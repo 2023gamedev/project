@@ -278,10 +278,10 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 					}
 					else
 					{
-						// 사운드 전환 딜레이 적용 (0.1초) -> 발소리를 부드럽게 보간작업!
+						// 사운드 전환 딜레이 적용 (0.5초) -> 발소리를 부드럽게 보간작업!
 						float currentTime = GetWorld()->GetTimeSeconds();
-						if (currentTime - LastStopRunTime > 0.1f) {
-							PlayFootstepRunSound();	// 최소 0.1초 동안은 발소리 재생시키기
+						if (currentTime - LastStopRunTime > 0.5f) {
+							PlayFootstepRunSound();	// 최소 0.5초 동안은 발소리 재생시키기
 						}
 						else {
 							//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Run Stop} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
@@ -317,10 +317,10 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 					}
 					else
 					{
-						// 사운드 전환 딜레이 적용 (0.1초) -> 발소리를 부드럽게 보간작업!
+						// 사운드 전환 딜레이 적용 (0.5초) -> 발소리를 부드럽게 보간작업!
 						float currentTime = GetWorld()->GetTimeSeconds();
-						if (currentTime - LastStopWalkTime > 0.1f) {
-							PlayFootstepWalkSound();	// 최소 0.1초 동안은 발소리 재생시키기
+						if (currentTime - LastStopWalkTime > 0.5f) {
+							PlayFootstepWalkSound();	// 최소 0.5초 동안은 발소리 재생시키기
 						}
 						else {
 							//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Walk Stop} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
