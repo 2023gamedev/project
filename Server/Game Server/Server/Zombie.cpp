@@ -6,6 +6,7 @@
 
 #include "Zombie.h"
 //#include "ZombiePathfinder.h"
+#include "ShoutingZombie.h"
 
 using std::cout;
 using std::endl;
@@ -1712,4 +1713,10 @@ void Zombie::Resurrect()
 	detectCanSeePlayer_randomChance = false;
 	detectHasFootSound_randomChance = false;
 	RandomChanceBuff_CanSeePlayer = 0.f;
+
+	// 샤우팅 좀비일 경우에
+	if (ZombieData.zombietype == 1) {
+		ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(this);  // 다운 캐스팅 사용!
+		sz->bShouted = false;
+	}
 }

@@ -4009,6 +4009,13 @@ void ABaseZombie::AttackCheck()
 void ABaseZombie::Shouting()
 {
 	if (m_bIsShouting) {
+		UE_LOG(LogTemp, Error, TEXT("[Shouting] 실행X -> 이미 샤우팅 중입니다!"));
+
+		return;
+	}
+	if(m_bIsShouted){ 
+		UE_LOG(LogTemp, Error, TEXT("[Shouting] 실행X -> 이미 샤우팅 했습니다!"));
+
 		return;
 	}
 
@@ -4025,8 +4032,8 @@ void ABaseZombie::Shouting()
 	m_bIsShouting = true;
 
 
-	UE_LOG(LogTemp, Log, TEXT("IsShouted: %s"), IsShouted() ? TEXT("true") : TEXT("false"));
-	UE_LOG(LogTemp, Warning, TEXT("PLAYSHOUTINHGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
+	UE_LOG(LogTemp, Log, TEXT("IsShouted?: %s"), m_bIsShouted ? TEXT("true") : TEXT("false"));
+	UE_LOG(LogTemp, Warning, TEXT("PLAY SHOUTINHGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
 }
 
 void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
@@ -4035,7 +4042,7 @@ void ABaseZombie::ShoutingMontageEnded(UAnimMontage* Montage, bool interrup)
 	//	UE_LOG(LogTemp, Log, TEXT("bIsShouted true"));
 	
 	m_bIsShouting = false;
-	SetShouted(true);
+	m_bIsShouted = true;
 
 	afterAnim_idleDuration = afterAnim_idleInterpol;
 
@@ -4164,7 +4171,7 @@ void ABaseZombie::WaittingTimerElapsed()
 		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
 
-		CharacterAnimInstance->Montage_Stop(0.1f);  // 혹시 남아 있을 피격 애니메이션 정지
+		CharacterAnimInstance->Montage_Stop(0.1f);  // 혹시 남아 있을 (피격) 애니메이션 정지
 	}
 }
 
@@ -4185,6 +4192,7 @@ void ABaseZombie::Ressurect()
 	procMesh_AddImpulse_1 = false;
 	procMesh_AddImpulse_2 = false;
 
+	m_bIsShouting = false;
 	m_bIsShouted = false;	// 소리쳤는지
 
 	procMesh_AddImpulse_1 = false;

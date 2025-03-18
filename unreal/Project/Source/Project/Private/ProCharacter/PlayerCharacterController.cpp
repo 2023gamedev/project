@@ -485,7 +485,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 		case 2:
 			if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER) {	// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
-				if (((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->IsShouted() == true)	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 
+				if (((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->m_bIsShouted == true)	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 
 					|| ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie"))) {
 					(*zombie)->PlayGrowlSound();
 				}

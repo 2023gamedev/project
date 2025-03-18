@@ -96,9 +96,6 @@ public:
 
 	bool IsSpecialAbility() { return m_bSpecialAbility; }
 	void SetSpecialAbility(bool specialability) { m_bSpecialAbility = specialability; }
-
-	bool IsShouted() { return m_bIsShouted; }
-	void SetShouted(bool shouted) { m_bIsShouted = shouted; }
 		 
 
 	void Attack(uint32 PlayerId);
@@ -140,11 +137,12 @@ public:
 	void UpdateZombieData(FVector Location);
 
 
+	// 소리치는 중인지
 	UPROPERTY(EditAnywhere)
 	bool m_bIsShouting = false;
-
+	// 소리쳤는지
 	UPROPERTY(EditAnywhere)
-	bool m_bIsShouted = false; // 소리쳤는지
+	bool m_bIsShouted = false; 
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsNormalDead = false;

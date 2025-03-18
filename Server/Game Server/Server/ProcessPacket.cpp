@@ -386,7 +386,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     // 샤우팅 좀비일 경우에
                     //if (z->ZombieData.zombietype == 1) {
                     //    ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(z);  // 다운 캐스팅 사용!
-                    //    sz->Shout(zombieDB[roomId], id, roomId);
+                    //    sz->Shout(id, roomId);
                     //}
                     // 시야 포착 확률 넣어서 이제는 이렇게 작동하면 X
 
