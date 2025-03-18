@@ -1251,29 +1251,31 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 			}
 		}
 
-		USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieBeAttacked.ZombieBeAttacked")); // 에셋 경로
-
-		if (GetZombieName() == "NormalZombie") {
-			AZombieAIController* NormalZombieController = Cast<AZombieAIController>(this->GetController());
-			if (NormalZombieController && NormalZombieController->IsLocalController() && Sound)
-			{
-				UGameplayStatics::PlaySound2D(NormalZombieController, Sound);
-			}
-		}
-		else if (GetZombieName() == "RunningZombie") {
-			ARunningZombieAIController* RunningZombieController = Cast<ARunningZombieAIController>(this->GetController());
-			if (RunningZombieController && RunningZombieController->IsLocalController() && Sound)
-			{
-				UGameplayStatics::PlaySound2D(RunningZombieController, Sound);
-			}
-		}
-		else if (GetZombieName() == "ShoutingZombie") {
-			AShoutingZombieAIController* ShoutingZombieController = Cast<AShoutingZombieAIController>(this->GetController());
-			if (ShoutingZombieController && ShoutingZombieController->IsLocalController() && Sound)
-			{
-				UGameplayStatics::PlaySound2D(ShoutingZombieController, Sound);
-			}
-		}
+		// 죽을 때는 소리 재생 따로 해줘야 함 (죽는 애니메이션이 재생이 되어서 피격 사운드(= 죽는 사운드) 재생 X)
+		// 필요 [X] ==> 그냥 죽는 애니메이션에 피격 애니메이션과 같이 사운드 붙여줌 (자동 재생)
+		//USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieBeAttacked.ZombieBeAttacked")); // 에셋 경로
+		//
+		//if (GetZombieName() == "NormalZombie") {
+		//	AZombieAIController* NormalZombieController = Cast<AZombieAIController>(this->GetController());
+		//	if (NormalZombieController && NormalZombieController->IsLocalController() && Sound)
+		//	{
+		//		UGameplayStatics::PlaySound2D(NormalZombieController, Sound);
+		//	}
+		//}
+		//else if (GetZombieName() == "RunningZombie") {
+		//	ARunningZombieAIController* RunningZombieController = Cast<ARunningZombieAIController>(this->GetController());
+		//	if (RunningZombieController && RunningZombieController->IsLocalController() && Sound)
+		//	{
+		//		UGameplayStatics::PlaySound2D(RunningZombieController, Sound);
+		//	}
+		//}
+		//else if (GetZombieName() == "ShoutingZombie") {
+		//	AShoutingZombieAIController* ShoutingZombieController = Cast<AShoutingZombieAIController>(this->GetController());
+		//	if (ShoutingZombieController && ShoutingZombieController->IsLocalController() && Sound)
+		//	{
+		//		UGameplayStatics::PlaySound2D(ShoutingZombieController, Sound);
+		//	}
+		//}
 
 	}
 	else {
@@ -4208,6 +4210,7 @@ void ABaseZombie::PlayGrowlSound()
 	{
 		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId));
+
 		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.4f);
 
 		IsGrowlSoundPlaying = true;
