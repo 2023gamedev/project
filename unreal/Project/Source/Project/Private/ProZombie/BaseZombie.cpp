@@ -793,6 +793,9 @@ void ABaseZombie::Tick(float DeltaTime)
 			//CutPro_1을 이동
 			FVector CutPro_1Location = CutPro_1StartLocation + (CutPro_1Distance * TimeRatio);
 			CutProceduralMesh_1->SetWorldLocation(CutPro_1Location);
+
+			FRotator NewRotation = FMath::Lerp(CutPro_1StartRotation, CutPro_1TargetRotation, TimeRatio);
+			CutProceduralMesh_1->SetWorldRotation(NewRotation);
 		}
 
 
@@ -800,6 +803,9 @@ void ABaseZombie::Tick(float DeltaTime)
 			//CutPro_2을 이동
 			FVector CutPro_2Location = CutPro_2StartLocation + (CutPro_2Distance * TimeRatio);
 			CutProceduralMesh_2->SetWorldLocation(CutPro_2Location);
+
+			FRotator NewRotation = FMath::Lerp(CutPro_2StartRotation, CutPro_2TargetRotation, TimeRatio);
+			CutProceduralMesh_2->SetWorldRotation(NewRotation);
 		}
 
 		if (m_bIsCutProceduralMesh_2Visibility) {
@@ -844,6 +850,10 @@ void ABaseZombie::Tick(float DeltaTime)
 
 					// 10초 동안 이동 (프로시저 메쉬 자체를 이동)
 					ProcMesh->SetWorldLocation(TargetLo);
+
+					FRotator NewRotation = FMath::Lerp(ProcMeshMergeStartRotation[MeshIndex], ProcMeshMergeTargetRotation[MeshIndex], TimeRatio);
+
+					ProcMesh->SetWorldRotation(NewRotation);
 				}
 
 			}
@@ -1662,7 +1672,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				CutPro_1TargetRotation = NewRotation;
 
 				CutPro_1TargetLocation += ForwardVector * 50.f;
-				CutPro_1TargetLocation.Z += 10.f;
+				CutPro_1TargetLocation.Z += 20.f;
 
 				FVector MeshForwardVector = GetActorForwardVector();
 				FVector MeshForwardVectorCut1 = CutProceduralMesh_1->GetForwardVector();
@@ -1820,7 +1830,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					FVector MeshForwardVectorCut2 = CutProceduralMesh_2->GetForwardVector();
 
 					CutPro_2TargetLocation += ForwardVector * 50.f;
-					CutPro_2TargetLocation.Z += 10.f;
+					CutPro_2TargetLocation.Z += 20.f;
 
 					UE_LOG(LogTemp, Warning, TEXT("MeshForwardVector Cut_2: X: %f , Y : %f, Z: %f"), MeshForwardVector.X, MeshForwardVector.Y, MeshForwardVector.Z);
 					UE_LOG(LogTemp, Warning, TEXT("MeshForwardVectorCut2 Cut_2: X: %f , Y : %f, Z: %f"), MeshForwardVectorCut2.X, MeshForwardVectorCut2.Y, MeshForwardVectorCut2.Z);
@@ -2384,7 +2394,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				//ProcMeshMergeTargetRotation[MeshIndex] = ProcMesh->GetComponentRotation() + NewRotation;
 
 				ProcMeshMergeTargetLocation[MeshIndex] += ForwardVector * 50.f;
-				ProcMeshMergeTargetLocation[MeshIndex].Z += 10.f;
+				ProcMeshMergeTargetLocation[MeshIndex].Z += 20.f;
 
 			}
 			//StartTime = FPlatformTime::Seconds();
@@ -3389,11 +3399,16 @@ void ABaseZombie::RotateFromCutProc1MeshToSkel()
 	USkeletalMeshComponent* SkeletalMeshComp = GetMesh();
 	if (!SkeletalMeshComp) return;
 
+	CutPro_1StartRotation = CutProceduralMesh_1->GetComponentRotation();
+
 	CutProceduralMesh_1->SetWorldRotation(CutPro_1TargetRotation);
 
 
 	CutPro_1StartLocation = CutProceduralMesh_1->GetComponentLocation();
 	CutPro_1Distance = CutPro_1TargetLocation - CutPro_1StartLocation;
+
+
+	CutProceduralMesh_1->SetWorldRotation(CutPro_1StartRotation);
 }
 
 void ABaseZombie::RotateFromCutProc2MeshToSkel()
@@ -3408,6 +3423,8 @@ void ABaseZombie::RotateFromCutProc2MeshToSkel()
 	USkeletalMeshComponent* SkeletalMeshComp = GetMesh();
 	if (!SkeletalMeshComp) return;
 
+	CutPro_2StartRotation = CutProceduralMesh_2->GetComponentRotation();
+
 	CutProceduralMesh_2->SetWorldRotation(CutPro_2TargetRotation);
 
 
@@ -3419,11 +3436,14 @@ void ABaseZombie::RotateFromProcMeshToSkel()
 {
 	ProcMeshMergeStartLocation.SetNum(ProceduralMeshes.Num());
 	ProcMeshDistance.SetNum(ProceduralMeshes.Num());
+	ProcMeshMergeStartRotation.SetNum(ProceduralMeshes.Num());
 
 	for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
 	{
 		UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
 		if (!ProcMesh) continue;
+
+		ProcMeshMergeStartRotation[MeshIndex] = ProcMesh->GetComponentRotation();
 
 		ProcMesh->SetWorldRotation(ProcMeshMergeTargetRotation[MeshIndex]);
 		//ProcMesh->ClearCollisionConvexMeshes();
