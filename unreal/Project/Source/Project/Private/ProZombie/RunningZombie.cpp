@@ -41,6 +41,15 @@ ARunningZombie::ARunningZombie()
 	SetZombieName("RunningZombie");
 	SetTurningSpeed(GetTurningSpeed());
 	targetType = TARGET::PATROL;
+
+	// 좀비 크기(scale) 재설정
+	float zombieScale = 1.02f;
+	SetActorScale3D(FVector(zombieScale, zombieScale, zombieScale));
+	// 기존 캡슐 크기를 가져오기
+	float CurrentRadius = GetCapsuleComponent()->GetUnscaledCapsuleRadius();
+	float CurrentHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+	//  캡슐 크기도 동일한 비율로 변경
+	GetCapsuleComponent()->SetCapsuleSize(CurrentRadius * zombieScale, CurrentHalfHeight * zombieScale);
 }
 
 void ARunningZombie::BeginPlay()

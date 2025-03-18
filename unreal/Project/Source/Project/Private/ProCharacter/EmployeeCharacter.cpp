@@ -32,7 +32,7 @@ AEmployeeCharacter::AEmployeeCharacter()
 	SetCharacterName("EmployeeCharacter");
 
 	// 캐릭터마다 크기(scale) 재설정
-	float characterScale = 1.08f;
+	float characterScale = 1.065f;
 	SetActorScale3D(FVector(characterScale, characterScale, characterScale));
 	// 기존 캡슐 크기를 가져오기
 	float CurrentRadius = GetCapsuleComponent()->GetUnscaledCapsuleRadius();
