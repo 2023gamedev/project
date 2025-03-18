@@ -132,7 +132,6 @@ void APlayerCharacterController::Tick(float DeltaTime)
 					if (ABaseCharacter* ControlledCharacter = Cast<ABaseCharacter>(ControlledPawn))
 					{
 						if (ControlledCharacter) {
-
 							ControlledCharacter->UpdateOtherPlayerUI(recvPlayerData.PlayerId, recvPlayerData.hp, recvPlayerData.charactertype, recvPlayerData.username);
 						}
 					}

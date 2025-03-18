@@ -30,6 +30,15 @@ AEmployeeCharacter::AEmployeeCharacter()
 	SetMaxStamina(100 + 30);
 	SetStaminaHealing(5);
 	SetCharacterName("EmployeeCharacter");
+
+	// 캐릭터마다 크기(scale) 재설정
+	float characterScale = 1.08f;
+	SetActorScale3D(FVector(characterScale, characterScale, characterScale));
+	// 기존 캡슐 크기를 가져오기
+	float CurrentRadius = GetCapsuleComponent()->GetUnscaledCapsuleRadius();
+	float CurrentHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+	//  캡슐 크기도 동일한 비율로 변경
+	GetCapsuleComponent()->SetCapsuleSize(CurrentRadius * characterScale, CurrentHalfHeight * characterScale);
 }
 
 void AEmployeeCharacter::BeginPlay()

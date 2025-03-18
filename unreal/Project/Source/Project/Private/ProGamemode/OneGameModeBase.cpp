@@ -275,9 +275,8 @@ void AOneGameModeBase::ChoiceCharacter()
 
     DefaultPawnClass = PlayerCharacterClasses[0];
     PlayerControllerClass = PlayerCharacterControllerClasses[0];
-
 }
-//
+
 //AActor* AOneGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
 //{
 //    // 선택된 캐릭터 타입에 따라 태그 설정
@@ -894,6 +893,7 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
             NewCharacter->SetHP(hp);  // 초기 HP 설정
             auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(NewCharacter->GetMesh()->GetAnimInstance());
             AnimInstance->OwnerCharacter = NewCharacter;    // 새캐릭의 AnimInstance 연결 설정
+
             UE_LOG(LogTemp, Log, TEXT("[PlayerCharacterAnimInstance 다른 클라 재설정 완료] OwnerCharacter 설정: %d"), AnimInstance->OwnerCharacter->GetPlayerId());
         }
     }

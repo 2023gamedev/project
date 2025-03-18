@@ -19,8 +19,6 @@ ALobbyGameMode::ALobbyGameMode()
 {
 	DefaultPawnClass = ALobbyPlayer::StaticClass();
 	PlayerControllerClass = ALobbyPlayerController::StaticClass();
-
-	
 }
 
 void ALobbyGameMode::BeginPlay()

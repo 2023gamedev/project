@@ -308,7 +308,6 @@ void UProGameInstance::LoadLevelWithLoadingScreen(FName LevelName)
     UWorld* World = GetWorld();
     if (World)
     {
-
         UGameplayStatics::OpenLevel(World, LevelName, true, "GameMode=ProGamemode/OneGameModeBase");
     }
 

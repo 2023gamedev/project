@@ -34,6 +34,15 @@ AFireFighterCharacter::AFireFighterCharacter()
 	SetMaxStamina(100);
 	SetStaminaHealing(5);
 	SetCharacterName("FireFighterCharacter");
+
+	// 캐릭터마다 크기(scale) 재설정
+	float characterScale = 1.1f;
+	SetActorScale3D(FVector(characterScale, characterScale, characterScale + 0.025f));	// 키만 좀 길쭉하게
+	// 기존 캡슐 크기를 가져오기
+	float CurrentRadius = GetCapsuleComponent()->GetUnscaledCapsuleRadius();
+	float CurrentHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+	//  캡슐 크기도 동일한 비율로 변경
+	GetCapsuleComponent()->SetCapsuleSize(CurrentRadius * characterScale, CurrentHalfHeight * (characterScale + 0.05f));
 }
 
 void AFireFighterCharacter::BeginPlay()

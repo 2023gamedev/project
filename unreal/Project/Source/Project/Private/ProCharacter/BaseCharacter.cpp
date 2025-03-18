@@ -541,7 +541,6 @@ void ABaseCharacter::BeginPlay()
 			}
 			else if (playerlocationid == 3) {
 				SetActorLocation(FVector(500.f, -790.f, 1037.000268f));
-
 			}
 			else if (playerlocationid == 4) {
 				SetActorLocation(FVector(690.f, -660.f, 1037.0001f));

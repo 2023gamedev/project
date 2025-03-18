@@ -30,6 +30,15 @@ AGirlCharacter::AGirlCharacter()
 	SetMaxStamina(100 + 40);
 	SetStaminaHealing(5 + 0.5f);	// 여학생 캐릭 특성
 	SetCharacterName("GirlCharacter");
+
+	//// 캐릭터마다 크기(scale) 재설정
+	//float characterScale = 1.0f;
+	//SetActorScale3D(FVector(characterScale, characterScale, characterScale));
+	//// 기존 캡슐 크기를 가져오기
+	//float CurrentRadius = GetCapsuleComponent()->GetUnscaledCapsuleRadius();
+	//float CurrentHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+	////  캡슐 크기도 동일한 비율로 변경
+	//GetCapsuleComponent()->SetCapsuleSize(CurrentRadius * characterScale, CurrentHalfHeight * characterScale);
 }
 
 void AGirlCharacter::BeginPlay()
