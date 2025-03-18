@@ -1661,6 +1661,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				//CutPro_1TargetRotation = CutProceduralMesh_1->GetComponentRotation() + NewRotation;
 				CutPro_1TargetRotation = NewRotation;
 
+				CutPro_1TargetLocation += ForwardVector * 50.f;
+				CutPro_1TargetLocation.Z += 10.f;
+
 				FVector MeshForwardVector = GetActorForwardVector();
 				FVector MeshForwardVectorCut1 = CutProceduralMesh_1->GetForwardVector();
 				UE_LOG(LogTemp, Warning, TEXT("MeshForwardVector Cut_1: X: %f , Y : %f, Z: %f"), MeshForwardVector.X, MeshForwardVector.Y, MeshForwardVector.Z);
@@ -1815,6 +1818,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 					FVector MeshForwardVector = GetActorForwardVector();
 					FVector MeshForwardVectorCut2 = CutProceduralMesh_2->GetForwardVector();
+
+					CutPro_2TargetLocation += ForwardVector * 50.f;
+					CutPro_2TargetLocation.Z += 10.f;
 
 					UE_LOG(LogTemp, Warning, TEXT("MeshForwardVector Cut_2: X: %f , Y : %f, Z: %f"), MeshForwardVector.X, MeshForwardVector.Y, MeshForwardVector.Z);
 					UE_LOG(LogTemp, Warning, TEXT("MeshForwardVectorCut2 Cut_2: X: %f , Y : %f, Z: %f"), MeshForwardVectorCut2.X, MeshForwardVectorCut2.Y, MeshForwardVectorCut2.Z);
@@ -2376,6 +2382,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				NewRotation.Yaw += 180.0f;
 				ProcMeshMergeTargetRotation[MeshIndex] = NewRotation;
 				//ProcMeshMergeTargetRotation[MeshIndex] = ProcMesh->GetComponentRotation() + NewRotation;
+
+				ProcMeshMergeTargetLocation[MeshIndex] += ForwardVector * 50.f;
+				ProcMeshMergeTargetLocation[MeshIndex].Z += 10.f;
 
 			}
 			//StartTime = FPlatformTime::Seconds();
