@@ -68,9 +68,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fWeaponRange;
 
-	// 무기의 스탯들
-	UPROPERTY(EditAnywhere, Category = "ItemStat")
-	float m_fCharacterSTR;
 
 public:
 	UProGameInstance* GameInstance;

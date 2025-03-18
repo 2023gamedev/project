@@ -74,9 +74,16 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 				return;
 			}
 		}
+		else {
+			UE_LOG(LogTemp, Error, TEXT("OwnerCharacter is nullptr!! PlayerId = %d"), OwnerCharacter->GetPlayerId());
+		}
+
+		float characterSTR = OwnerCharacter->GetSTR();
+
+		UE_LOG(LogTemp, Log, TEXT("[Weapon Hit] 캐릭터 기본 공격력: %f, 무기 기본 공격력: %f, 최종 데미지: %f"), characterSTR, m_fWeaponSTR, characterSTR * m_fWeaponSTR);
 
 		FDamageEvent DamageEvent;
-		Zombie->TakeDamage(m_fCharacterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
+		Zombie->TakeDamage(characterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
 
 		bool hp_packet_send = true;
 
@@ -172,7 +179,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 			Protocol::Zombie_hp packet;
 			packet.set_zombieid(ZombieId);
-			packet.set_damage(m_fCharacterSTR * m_fWeaponSTR);
+			packet.set_damage(characterSTR * m_fWeaponSTR);
 			packet.set_packet_type(12);
 
 			std::string serializedData;

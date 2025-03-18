@@ -1613,8 +1613,12 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 	UE_LOG(LogTemp, Log, TEXT("Attack() - PlayerId: %u"), GetPlayerId());
 
 	if (m_bIsAttacking) {
+		UE_LOG(LogTemp, Log, TEXT("Attack() 실행X (아직 공격 실행중) - PlayerId: %u"), GetPlayerId());
 		return;
 	}
+
+	if (CurrentWeapon)
+		UE_LOG(LogTemp, Log, TEXT("[Player Attack] 캐릭터 기본 공격력: %f, 무기 기본 공격력: %f, 최종 데미지: %f"), GetSTR(), CurrentWeapon->m_fWeaponSTR, GetSTR() * CurrentWeapon->m_fWeaponSTR);
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	if (Camera) {
@@ -2317,6 +2321,7 @@ void ABaseCharacter::QuickKeyItem()
 void ABaseCharacter::UpSTR()
 {
 	SetSTR(GetSTR() + 1);
+	UE_LOG(LogTemp, Log, TEXT("[치트키] 현재 캐릭터 공격력: %f"), GetSTR());
 }
 
 void ABaseCharacter::DownSTR()
@@ -2325,11 +2330,13 @@ void ABaseCharacter::DownSTR()
 	if (str <= 0)	// 마이너스 값이 되서 좀비 체력을 회복 시키지 않도록
 		str = 0;
 	SetSTR(str);
+	UE_LOG(LogTemp, Log, TEXT("[치트키] 현재 캐릭터 공격력: %f"), GetSTR());
 }
 
 void ABaseCharacter::UpSpeed()
 {
 	SetBasicSpeed(GetBasicSpeed() + 1);
+	UE_LOG(LogTemp, Log, TEXT("[치트키] 현재 캐릭터 스피드: %f"), GetBasicSpeed());
 }
 
 void ABaseCharacter::DownSpeed()
@@ -2338,6 +2345,7 @@ void ABaseCharacter::DownSpeed()
 	if (speed <= 0)	// 마이너스 값이 되지 않도록
 		speed = 0;
 	SetBasicSpeed(speed);
+	UE_LOG(LogTemp, Log, TEXT("[치트키] 현재 캐릭터 스피드: %f"), GetBasicSpeed());
 }
 
 
@@ -2365,6 +2373,7 @@ void ABaseCharacter::GameUIUpdate()
 	GameUIWidget->Update();
 }
 
+// 무기 장착시 오른손에 무기 스폰
 void ABaseCharacter::SpawnNormalWeapon()
 {
 	if (CurrentWeapon != nullptr) {
@@ -2501,7 +2510,7 @@ void ABaseCharacter::SpawnNormalWeapon()
 		}
 
 		CurrentWeapon->OwnerCharacter = this;
-		CurrentWeapon->m_fCharacterSTR = m_fSTR;
+		UE_LOG(LogTemp, Log, TEXT("[SpawnNormalWeapon] 무기 기본 공격력: %f, 내구도: %f, 사거리: %f"), CurrentWeapon->m_fWeaponSTR, CurrentWeapon->m_fWeaponDurability, CurrentWeapon->m_fWeaponRange);
 	}
 
 	SetBringCurrentWeapon(true);
@@ -3207,6 +3216,7 @@ void ABaseCharacter::OtherSpawnItemBefore()
 
 }
 
+// 무기 장착시 오른손에 무기 스폰 (다른 클라 동기화)
 void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 {
 	OtherSpawnItemBefore();
@@ -3343,7 +3353,8 @@ void ABaseCharacter::OtherSpawnNormalWeapon(const FString& WeaponName)
 		//UE_LOG(LogTemp, Log, TEXT("Weapon Rotation: %s"), *CurrentWeapon->ItemHandRot.ToString());
 
 		CurrentWeapon->OwnerCharacter = this;
-		CurrentWeapon->m_fCharacterSTR = m_fSTR;
+		UE_LOG(LogTemp, Log, TEXT("[OtherSpawnNormalWeapon] 무기 기본 공격력: %f, 내구도: %f, 사거리: %f"), CurrentWeapon->m_fWeaponSTR, CurrentWeapon->m_fWeaponDurability, CurrentWeapon->m_fWeaponRange);
+
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("OtherSpawnNormalWeapon"));
 
 		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
