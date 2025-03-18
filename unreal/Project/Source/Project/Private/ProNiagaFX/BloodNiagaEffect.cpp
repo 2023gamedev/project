@@ -59,7 +59,7 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 		GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ABloodNiagaEffect::SpawnBloodEffect, spawn_inteval, blood_spawnloop, 0.0f);
 		// spawn_duration 동안 스폰
 		GetWorld()->GetTimerManager().SetTimer(StopSpawnTimerHandle, this, &ABloodNiagaEffect::StopSpawnBloodEffect, 1.0f, false, spawn_duration);
-		// destory_time 후에 액터 삭제
+		// destory_time 후에 액터까지 삭제
 		GetWorld()->GetTimerManager().SetTimer(EndTimerHandle, this, &ABloodNiagaEffect::EndBloodEffect, 1.0f, false, destory_time);
 
 		spawn_flag = false;
@@ -125,6 +125,10 @@ void ABloodNiagaEffect::SpawnBloodEffect()
 
 	if (NewBloodFX)
 	{
+		if (blood_spawncount <= 0) {
+			return;
+		}
+
 		NewBloodFX->SetNiagaraVariableInt(FString("User.Blood_SpawnCount"), blood_spawncount);
 
 		BloodFXComponents.Add(NewBloodFX);
@@ -134,7 +138,7 @@ void ABloodNiagaEffect::SpawnBloodEffect()
 		const int decrease_count = 20;
 
 		blood_spawncount -= decrease_count;	// 시간이 지날 수록 생성되는 피 파티클 수 줄임
-
+		
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
 	}
 }
