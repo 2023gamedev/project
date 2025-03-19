@@ -815,6 +815,9 @@ void ABaseZombie::Tick(float DeltaTime)
 			//CutPro_1을 이동
 			FVector CutPro_1Location = CutPro_1StartLocation + (CutPro_1Distance * TimeRatio);
 			CutProceduralMesh_1->SetWorldLocation(CutPro_1Location);
+
+			FRotator NewRotation = FMath::Lerp(CutPro_1StartRotation, CutPro_1TargetRotation, TimeRatio);
+			CutProceduralMesh_1->SetWorldRotation(NewRotation);
 		}
 
 
@@ -822,6 +825,9 @@ void ABaseZombie::Tick(float DeltaTime)
 			//CutPro_2을 이동
 			FVector CutPro_2Location = CutPro_2StartLocation + (CutPro_2Distance * TimeRatio);
 			CutProceduralMesh_2->SetWorldLocation(CutPro_2Location);
+
+			FRotator NewRotation = FMath::Lerp(CutPro_2StartRotation, CutPro_2TargetRotation, TimeRatio);
+			CutProceduralMesh_2->SetWorldRotation(NewRotation);
 		}
 
 		if (m_bIsCutProceduralMesh_2Visibility) {
@@ -831,7 +837,6 @@ void ABaseZombie::Tick(float DeltaTime)
 			{
 				bIsMergingInProgress = false;
 				UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
-				GetMesh()->SetVisibility(true); // 2초뒤에 부활 이렇게 해야하나
 				//GetMesh()->SetHiddenInGame(false);
 
 				if (CutProceduralMesh_1) {
@@ -842,6 +847,9 @@ void ABaseZombie::Tick(float DeltaTime)
 					CutProceduralMesh_2->DestroyComponent();
 					CutProceduralMesh_2 = nullptr;
 				}
+
+
+				GetMesh()->SetVisibility(true);
 			}
 		}
 		else {
@@ -864,6 +872,10 @@ void ABaseZombie::Tick(float DeltaTime)
 
 					// 10초 동안 이동 (프로시저 메쉬 자체를 이동)
 					ProcMesh->SetWorldLocation(TargetLo);
+
+					FRotator NewRotation = FMath::Lerp(ProcMeshMergeStartRotation[MeshIndex], ProcMeshMergeTargetRotation[MeshIndex], TimeRatio);
+
+					ProcMesh->SetWorldRotation(NewRotation);
 				}
 
 			}
@@ -873,7 +885,7 @@ void ABaseZombie::Tick(float DeltaTime)
 			{
 				bIsMergingInProgress = false;
 				UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
-				GetMesh()->SetVisibility(true); // 2초뒤에 부활 이렇게 해야하나
+
 				//GetMesh()->SetHiddenInGame(false);
 							// 10초 동안 이동
 				for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
@@ -894,6 +906,8 @@ void ABaseZombie::Tick(float DeltaTime)
 				}
 
 				ProceduralMeshes.Empty();
+
+				GetMesh()->SetVisibility(true); 
 			}
 		}
 		
@@ -1604,7 +1618,6 @@ void ABaseZombie::CreativeProceduralMesh(FVector planeposition, FVector planenor
 	//UE_LOG(LogTemp, Log, TEXT("ShouldCreatePhysicsState: %s"), CutProceduralMesh_1->ShouldCreatePhysicsState() ? TEXT("true") : TEXT("false"));
 	//UE_LOG(LogTemp, Log, TEXT("IsSimulatingPhysics: %s"), CutProceduralMesh_1->IsSimulatingPhysics() ? TEXT("true") : TEXT("false"));
 
-
 	GetMesh()->SetCollisionProfileName("NoCollision");		// 생각해보니 이거 궂이 필요한...가? (+ 초기값은 "Zombie")
 															// 어차피 플레이어는 콜리전 프리셋 설정이 메시는 NoCollision, 캡슐은 Pawn 이라서 좀비 메시랑은 항상 충돌 무시되어 왔음 (초기값 Zombie가 Pawn을 무시함)
 	GetMesh()->SetGenerateOverlapEvents(false);
@@ -1688,7 +1701,25 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			if (CutProceduralMesh_1) {
 				CutPro_1TargetLocation = CutProceduralMesh_1->GetComponentLocation();
-				CutPro_1TargetRotation = CutProceduralMesh_1->GetComponentRotation();
+				//CutPro_1TargetRotation = CutProceduralMesh_1->GetComponentRotation();
+
+				//FVector ForwardVector = CutProceduralMesh_1->GetForwardVector();  // 현재 바라보는 방향
+				FVector ForwardVector = GetActorForwardVector();  // 현재 바라보는 방향
+				FVector UpVector = FVector::UpVector;             // 목표 방향 (0,0,1)
+
+				// 현재 바라보는 방향(ForwardVector)을 (0,0,1)로 만들기 위한 회전값 계산
+				FRotator NewRotation = FRotationMatrix::MakeFromXZ(-UpVector, ForwardVector).Rotator();
+				NewRotation.Yaw += 180.0f;
+				//CutPro_1TargetRotation = CutProceduralMesh_1->GetComponentRotation() + NewRotation;
+				CutPro_1TargetRotation = NewRotation;
+
+				CutPro_1TargetLocation += ForwardVector * 50.f;
+				CutPro_1TargetLocation.Z += 20.f;
+
+				FVector MeshForwardVector = GetActorForwardVector();
+				FVector MeshForwardVectorCut1 = CutProceduralMesh_1->GetForwardVector();
+				UE_LOG(LogTemp, Warning, TEXT("MeshForwardVector Cut_1: X: %f , Y : %f, Z: %f"), MeshForwardVector.X, MeshForwardVector.Y, MeshForwardVector.Z);
+				UE_LOG(LogTemp, Warning, TEXT("MeshForwardVectorCut1 Cut_1: X: %f , Y : %f, Z: %f"), MeshForwardVectorCut1.X, MeshForwardVectorCut1.Y, MeshForwardVectorCut1.Z);
 			}
 
 			TMap<FVector, FVertexBoneData> VertexBoneMap;
@@ -1823,7 +1854,28 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 				if (CutProceduralMesh_2) {
 					CutPro_2TargetLocation = CutProceduralMesh_2->GetComponentLocation();
-					CutPro_2TargetRotation = CutProceduralMesh_2->GetComponentRotation();
+					//CutPro_2TargetRotation = CutProceduralMesh_2->GetComponentRotation();
+
+
+
+					////FVector ForwardVector = CutProceduralMesh_2->GetForwardVector();  // 현재 바라보는 방향
+					FVector ForwardVector = GetActorForwardVector();  // 현재 바라보는 방향
+					FVector UpVector = FVector::UpVector;             // 목표 방향 (0,0,1)
+
+					// 현재 바라보는 방향(ForwardVector)을 (0,0,1)로 만들기 위한 회전값 계산
+					FRotator NewRotation = FRotationMatrix::MakeFromXZ(-UpVector, ForwardVector).Rotator();
+					NewRotation.Yaw += 180.0f;
+					CutPro_2TargetRotation = NewRotation;
+					//CutPro_2TargetRotation = CutProceduralMesh_2->GetComponentRotation() + NewRotation;
+
+					FVector MeshForwardVector = GetActorForwardVector();
+					FVector MeshForwardVectorCut2 = CutProceduralMesh_2->GetForwardVector();
+
+					CutPro_2TargetLocation += ForwardVector * 50.f;
+					CutPro_2TargetLocation.Z += 20.f;
+
+					UE_LOG(LogTemp, Warning, TEXT("MeshForwardVector Cut_2: X: %f , Y : %f, Z: %f"), MeshForwardVector.X, MeshForwardVector.Y, MeshForwardVector.Z);
+					UE_LOG(LogTemp, Warning, TEXT("MeshForwardVectorCut2 Cut_2: X: %f , Y : %f, Z: %f"), MeshForwardVectorCut2.X, MeshForwardVectorCut2.Y, MeshForwardVectorCut2.Z);
 				}
 
 				GetWorld()->GetTimerManager().SetTimer(ZombieMergeWattingHandle, this, &ABaseZombie::StartMergiingTimerNew, 5.f, false);
@@ -2345,7 +2397,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				}
 			}
 			CutProceduralMesh_2->SetVisibility(false);
-			
+			CutProceduralMesh_2->DestroyComponent();
+			CutProceduralMesh_2 = nullptr;
 			//CutProceduralMesh_2->SetHiddenInGame(true);
 			//CutProceduralMesh_2->bUseComplexAsSimpleCollision = false;
 
@@ -2365,10 +2418,25 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			{
 				UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
 				if (!ProcMesh) continue;
-
+				FVector ProcForard = ProcMesh->GetForwardVector();
+				UE_LOG(LogTemp, Warning, TEXT("ProcForardVector : X: %f , Y : %f, Z: %f"), ProcForard.X, ProcForard.Y, ProcForard.Z);
 
 				ProcMeshMergeTargetLocation[MeshIndex] = ProcMesh->GetComponentLocation();
-				ProcMeshMergeTargetRotation[MeshIndex] = ProcMesh->GetComponentRotation();
+				//ProcMeshMergeTargetRotation[MeshIndex] = ProcMesh->GetComponentRotation();
+
+
+				////FVector ForwardVector = ProcMesh->GetForwardVector();  // 현재 바라보는 방향
+				FVector ForwardVector = GetActorForwardVector();  // 현재 바라보는 방향
+				FVector UpVector = FVector::UpVector;             // 목표 방향 (0,0,1)
+
+				// 현재 바라보는 방향(ForwardVector)을 (0,0,1)로 만들기 위한 회전값 계산
+				FRotator NewRotation = FRotationMatrix::MakeFromXZ(-UpVector, ForwardVector).Rotator();
+				NewRotation.Yaw += 180.0f;
+				ProcMeshMergeTargetRotation[MeshIndex] = NewRotation;
+				//ProcMeshMergeTargetRotation[MeshIndex] = ProcMesh->GetComponentRotation() + NewRotation;
+
+				ProcMeshMergeTargetLocation[MeshIndex] += ForwardVector * 50.f;
+				ProcMeshMergeTargetLocation[MeshIndex].Z += 20.f;
 
 			}
 			//StartTime = FPlatformTime::Seconds();
@@ -3373,11 +3441,16 @@ void ABaseZombie::RotateFromCutProc1MeshToSkel()
 	USkeletalMeshComponent* SkeletalMeshComp = GetMesh();
 	if (!SkeletalMeshComp) return;
 
+	CutPro_1StartRotation = CutProceduralMesh_1->GetComponentRotation();
+
 	CutProceduralMesh_1->SetWorldRotation(CutPro_1TargetRotation);
 
 
 	CutPro_1StartLocation = CutProceduralMesh_1->GetComponentLocation();
 	CutPro_1Distance = CutPro_1TargetLocation - CutPro_1StartLocation;
+
+
+	CutProceduralMesh_1->SetWorldRotation(CutPro_1StartRotation);
 }
 
 void ABaseZombie::RotateFromCutProc2MeshToSkel()
@@ -3392,6 +3465,8 @@ void ABaseZombie::RotateFromCutProc2MeshToSkel()
 	USkeletalMeshComponent* SkeletalMeshComp = GetMesh();
 	if (!SkeletalMeshComp) return;
 
+	CutPro_2StartRotation = CutProceduralMesh_2->GetComponentRotation();
+
 	CutProceduralMesh_2->SetWorldRotation(CutPro_2TargetRotation);
 
 
@@ -3403,11 +3478,14 @@ void ABaseZombie::RotateFromProcMeshToSkel()
 {
 	ProcMeshMergeStartLocation.SetNum(ProceduralMeshes.Num());
 	ProcMeshDistance.SetNum(ProceduralMeshes.Num());
+	ProcMeshMergeStartRotation.SetNum(ProceduralMeshes.Num());
 
 	for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
 	{
 		UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
 		if (!ProcMesh) continue;
+
+		ProcMeshMergeStartRotation[MeshIndex] = ProcMesh->GetComponentRotation();
 
 		ProcMesh->SetWorldRotation(ProcMeshMergeTargetRotation[MeshIndex]);
 		//ProcMesh->ClearCollisionConvexMeshes();

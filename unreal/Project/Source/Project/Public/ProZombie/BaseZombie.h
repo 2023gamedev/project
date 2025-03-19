@@ -289,11 +289,17 @@ public:
 
 	FVector CutPro_1StartLocation;
 	FVector CutPro_1TargetLocation;
+
+	FRotator CutPro_1StartRotation;
 	FRotator CutPro_1TargetRotation;
+
 
 	FVector CutPro_2StartLocation;
 	FVector CutPro_2TargetLocation;
+	
+	FRotator CutPro_2StartRotation;
 	FRotator CutPro_2TargetRotation;
+
 
 
 	FName CutPro_1PlaneBoneName;
@@ -307,6 +313,7 @@ public:
 	TArray<FVector> ProcMeshMergeTargetLocation;
 	TArray<FVector> ProcMeshMergeStartLocation;
 
+	TArray<FRotator> ProcMeshMergeStartRotation;
 	TArray<FRotator> ProcMeshMergeTargetRotation;
 
 	TArray<FVector> ProcMeshDistance;
