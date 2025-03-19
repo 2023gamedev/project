@@ -3459,7 +3459,7 @@ void ABaseZombie::RotateFromCutProc1MeshToSkel()
 
 	CutPro_1StartRotation = CutProceduralMesh_1->GetComponentRotation();
 
-	CutProceduralMesh_1->SetWorldRotation(CutPro_1TargetRotation);
+	//CutProceduralMesh_1->SetWorldRotation(CutPro_1TargetRotation);
 
 
 	CutPro_1StartLocation = CutProceduralMesh_1->GetComponentLocation();
@@ -3483,7 +3483,7 @@ void ABaseZombie::RotateFromCutProc2MeshToSkel()
 
 	CutPro_2StartRotation = CutProceduralMesh_2->GetComponentRotation();
 
-	CutProceduralMesh_2->SetWorldRotation(CutPro_2TargetRotation);
+	//CutProceduralMesh_2->SetWorldRotation(CutPro_2TargetRotation);
 
 
 	CutPro_2StartLocation = CutProceduralMesh_2->GetComponentLocation();
@@ -3503,7 +3503,7 @@ void ABaseZombie::RotateFromProcMeshToSkel()
 
 		ProcMeshMergeStartRotation[MeshIndex] = ProcMesh->GetComponentRotation();
 
-		ProcMesh->SetWorldRotation(ProcMeshMergeTargetRotation[MeshIndex]);
+		//ProcMesh->SetWorldRotation(ProcMeshMergeTargetRotation[MeshIndex]);
 		//ProcMesh->ClearCollisionConvexMeshes();
 		ProcMesh->SetSimulatePhysics(false);
 
