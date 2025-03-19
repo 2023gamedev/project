@@ -448,7 +448,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GrowlSound", Transient)
 	TObjectPtr<USoundBase> GrowlSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeAttackedSound", Transient)
+	TObjectPtr<USoundBase> BeAttackedSound;
+
 	void PlayGrowlSound();
+
+	void PlayBeAttackedSound();
 
 	bool IsGrowlSoundPlaying = false;   // 사운드 중복 재생 방지용 플래그
 	FTimerHandle GrowlSoundTimerHandle;     

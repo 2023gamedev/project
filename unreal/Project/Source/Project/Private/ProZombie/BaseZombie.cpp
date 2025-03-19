@@ -433,6 +433,12 @@ void ABaseZombie::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("GrowlSound failed to load in BeginPlay!"));
 	}
 
+	BeAttackedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieBeAttacked.ZombieBeAttacked"));
+	if (!BeAttackedSound)
+	{
+		UE_LOG(LogTemp, Error, TEXT("BeAttackedSound failed to load in BeginPlay!"));
+	}
+
 	// 5초 후에 EnablePlayerDetection() 호출
 	GetWorld()->GetTimerManager().SetTimer(DetectionTimerHandle, [this]() {
 		//UE_LOG(LogTemp, Log, TEXT("5초 지남, 탐지 활성화"));
@@ -1386,6 +1392,8 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 		// 0.08초가 딱임 => 초반 애니메이션 강제 전환시에 깜빡임을 넘겨주고 동시에 보이지 않는 상태에서 쓰러지는 애니메이션 느리게 재생되면서 딱 누워 있는 상태일때가 10초후! 그럼 이제 다시 보이게 하면 딱 맞음
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+
+	PlayBeAttackedSound();
 
 	StartResurrectionTimer();
 }
@@ -4394,5 +4402,17 @@ void ABaseZombie::PlayGrowlSound()
 	else if (IsGrowlSoundPlaying) {
 		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] GrowlSound is on cooldown! - ZombieID: %d"), ZombieId);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[PlaySoundLog] GrowlSound is on cooldown! - ZombieID: %d"), ZombieId));
+	}
+}
+
+void ABaseZombie::PlayBeAttackedSound()
+{
+	auto* world = GetWorld();
+	if (IsValid(world) && BeAttackedSound)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing BeAttackedSound at Location! - ZombieID: %d"), ZombieId);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing BeAttackedSound at Location! - ZombieID: %d"), ZombieId));
+
+		UGameplayStatics::PlaySoundAtLocation(world, BeAttackedSound.Get(), GetActorLocation(), GetActorRotation(), 0.75f);
 	}
 }
