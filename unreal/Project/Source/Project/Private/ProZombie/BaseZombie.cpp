@@ -574,7 +574,7 @@ void ABaseZombie::Tick(float DeltaTime)
 	// for 루프에서 순회하면서 각 ProcMesh에 대해 처리
 	for (UProceduralMeshComponent* ProcMesh : ProceduralMeshes) {
 		if (ProcMesh) {
-			
+
 			FVector WeaponForward;
 			float min_weight = 10.f;
 
@@ -675,6 +675,8 @@ void ABaseZombie::Tick(float DeltaTime)
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 피격 클라 동기화 작업실행!")));	// 직접 때리는 클라에서는 해당 메세지 보이면 안 됨!
 		UE_LOG(LogTemp, Log, TEXT("좀비 피격 동기화 작업실행! - 좀비 아이디: %d"), ZombieId);
 
+		doAction_takeDamage_onTick = false;	// 딱 한번만 실행 시키도록
+
 		BeAttacked();
 		m_fHP_Prev = m_fHP;
 
@@ -740,10 +742,10 @@ void ABaseZombie::Tick(float DeltaTime)
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
 		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
-		
+
 		int bmin = NewBloodFX->blood_spawncount_normaldead_min;
 		int bmax = NewBloodFX->blood_spawncount_normaldead_max;
-		
+
 		if (NewBloodFX) {
 			NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
 			//NewBloodFX->blood_spawnloop = true;
@@ -779,7 +781,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
 		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
-		
+
 		int min = NewBloodFX_0->blood_spawncount_cutdead_min;
 		int max = NewBloodFX_0->blood_spawncount_cutdead_max;
 
@@ -851,7 +853,7 @@ void ABaseZombie::Tick(float DeltaTime)
 				}
 
 
-				GetMesh()->SetVisibility(true);
+				//GetMesh()->SetVisibility(true);
 			}
 		}
 		else {
@@ -909,10 +911,10 @@ void ABaseZombie::Tick(float DeltaTime)
 
 				ProceduralMeshes.Empty();
 
-				GetMesh()->SetVisibility(true); 
+				//GetMesh()->SetVisibility(true); 
 			}
 		}
-		
+
 
 		//UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
 		//UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
@@ -924,37 +926,37 @@ void ABaseZombie::Tick(float DeltaTime)
 	}
 
 	//병합부분! ----------------------------------
-
+	//
 	//if (bIsMergingInProgress)
 	//{
 	//	double StartTime = FPlatformTime::Seconds();
-
-
+	//
+	//
 	//	ElapsedTime += DeltaTime;
-
+	//
 	//	// 10초 동안 이동
 	//	float TimeRatio = FMath::Clamp(ElapsedTime / TotalTimeToMove, 0.0f, 1.0f); // 0~1 사이로 고정
-
-
+	//
+	//
 	//	if (m_iMergeFlag == 0) {
 	//		MergeStartLocation.SetNum(ProceduralMeshes.Num());
 	//	}
-
+	//
 	//	if (CutProceduralMesh_1) {
 	//		//CutPro_1을 이동
 	//		FVector CutPro_1TargetLocation = CutPro_1StartLocation + (CutPro_1Distance * TimeRatio);
 	//		CutProceduralMesh_1->SetWorldLocation(CutPro_1TargetLocation);
 	//	}
-
-
+	//
+	//
 	//	if (CutProceduralMesh_2) {
 	//		//CutPro_1을 이동
 	//		FVector CutPro_2TargetLocation = CutPro_2StartLocation + (CutPro_2Distance * TimeRatio);
 	//		CutProceduralMesh_2->SetWorldLocation(CutPro_2TargetLocation);
 	//	}
-
+	//
 	//	if (m_bIsCutProceduralMesh_2Visibility) {
-
+	//
 	//		// 10초 동안 이동한 후, 완료되었으면 머지 진행을 종료
 	//		if (ElapsedTime >= TotalTimeToMove)
 	//		{
@@ -962,7 +964,7 @@ void ABaseZombie::Tick(float DeltaTime)
 	//			UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
 	//			GetMesh()->SetVisibility(true); // 2초뒤에 부활 이렇게 해야하나
 	//			//GetMesh()->SetHiddenInGame(false);
-
+	//
 	//			if (CutProceduralMesh_1) {
 	//				CutProceduralMesh_1->DestroyComponent();
 	//				CutProceduralMesh_1 = nullptr;
@@ -979,44 +981,44 @@ void ABaseZombie::Tick(float DeltaTime)
 	//		{
 	//			UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
 	//			if (!ProcMesh) continue;
-
-
+	//
+	//
 	//			// 각 메쉬의 현재 위치를 가져옴
 	//			FVector CurrentLocation = ProcMesh->GetComponentLocation();
-
+	//
 	//			if (m_iMergeFlag == 0) {
 	//				MergeStartLocation[MeshIndex] = CurrentLocation;
 	//			}
-
+	//
 	//			// 초기 위치 저장 (메쉬의 원래 위치)
 	//			FVector StartLocation = MergeStartLocation[MeshIndex];
-
+	//
 	//			// resultDistanceAvg에서 해당 메쉬의 평균 벡터를 가져옴 (MeshIndex에 해당하는 평균 벡터)
 	//			if (MeshIndex < resultDistanceAvg.Num())
 	//			{
-
+	//
 	//				// 이동해야 할 총 거리
 	//				FVector TotalMoveDistance = resultDistanceAvg[MeshIndex];
-
+	//
 	//				// 이동할 거리 계산 (ElapsedTime을 통해 이동 비율을 구함)
 	//				//FVector MoveDelta = TotalMoveDistance * (ElapsedTime / TotalTimeToMove);
-
-
+	//
+	//
 	//				//resultDistanceAvg[MeshIndex] -= MoveDelta;
-
+	//
 	//				// 목표 위치 계산
 	//				//FVector TargetLo = CurrentLocation + MoveDelta;
-
+	//
 	//				FVector TargetLo = StartLocation + (TotalMoveDistance * TimeRatio);
-
-
+	//
+	//
 	//				// 10초 동안 이동 (프로시저 메쉬 자체를 이동)
 	//				ProcMesh->SetWorldLocation(TargetLo);
 	//			}
-
-
+	//
+	//
 	//		}
-
+	//
 	//		// 10초 동안 이동한 후, 완료되었으면 머지 진행을 종료
 	//		if (ElapsedTime >= TotalTimeToMove)
 	//		{
@@ -1031,108 +1033,108 @@ void ABaseZombie::Tick(float DeltaTime)
 	//				if (!ProcMesh) continue;
 	//				ProcMesh->DestroyComponent();
 	//			}
-
+	//
 	//			if (CutProceduralMesh_1) {
 	//				CutProceduralMesh_1->DestroyComponent();
 	//				CutProceduralMesh_1 = nullptr;
 	//			}
-
+	//
 	//			if (CutProceduralMesh_2) {
 	//				CutProceduralMesh_2->DestroyComponent();
 	//				CutProceduralMesh_2 = nullptr;
 	//			}
-
+	//
 	//			ProceduralMeshes.Empty();
 	//		}
 	//	}
-	//	
-
+	//
+	//
 	//	//UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
 	//	//UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
 	//	++m_iMergeFlag;
-
-
+	//
+	//
 	//	double EndTime = FPlatformTime::Seconds();
 	//	//UE_LOG(LogTemp, Warning, TEXT("bIsMergingInProgressMesh took: %f seconds"), EndTime - StartTime);
 	//}
-
-	//  ----------------------------------
-
+	//
+	////----------------------------------
+	//
 	//if (bIsMergingInProgress)
 	//{
 	//	double StartTime = FPlatformTime::Seconds();
-
-
+	//
+	//
 	//	TArray<FVector> Vertices;
 	//	//TArray<int32> Triangles;
 	//	TArray<FVector> Normals;
 	//	TArray<FVector2D> UVs;
 	//	TArray<FColor> Colors;
 	//	TArray<FProcMeshTangent> Tangents;
-
+	//
 	//	FVector BeforeVertices;
 	//	FVector BeforeNormals;
 	//	FVector2D BeforeUVs;
 	//	FColor BeforeColors;
 	//	FProcMeshTangent BeforeTangents;
-
+	//
 	//	ElapsedTime += DeltaTime;
 	//	// 이동 비율 계산 (10초 동안 이동하도록 설정)
 	//	float MoveRatio = FMath::Clamp(ElapsedTime / TotalTimeToMove, 0.0f, 1.0f);
-
+	//
 	//	// 10초 동안 이동
 	//	for (int32 MeshIndex = 0; MeshIndex < ProceduralMeshes.Num(); ++MeshIndex)
 	//	{
 	//		UProceduralMeshComponent* ProcMesh = ProceduralMeshes[MeshIndex];
 	//		if (!ProcMesh) continue;
-
+	//
 	//		int32 NumSections = ProcMesh->GetNumSections();
-
+	//
 	//		for (int32 SectionIndex = 0; SectionIndex < NumSections; ++SectionIndex)
 	//		{
 	//			FProcMeshSection* MeshSection = ProcMesh->GetProcMeshSection(SectionIndex);
 	//			if (!MeshSection) continue;
-
-
+	//
+	//
 	//			const TArray<FProcMeshVertex>& SectionVertices = MeshSection->ProcVertexBuffer;
 	//			TMap<FZombieMeshData, FVector>& DistanceResultMap = DistanceResultArray[MeshIndex];
-
+	//
 	//			for (int32 VertexIndex = 0; VertexIndex < SectionVertices.Num(); ++VertexIndex)
 	//			{
 	//				const FVector& MeshVertexPos = SectionVertices[VertexIndex].Position;
-
+	//
 	//				FVector* Distance = DistanceResultMap.Find(FZombieMeshData(SectionIndex, VertexIndex));
 	//				if (Distance)
 	//				{
 	//					//// 이동할 거리 계산
 	//					//FVector TargetPosition = MeshVertexPos + *Distance;
-
+	//
 	//					//// 목표 위치까지 이동
 	//					//FVector NewPosition = FMath::Lerp(MeshVertexPos, TargetPosition, MoveRatio);
-
+	//
 	//					// Distance: 최종 목표 위치까지의 거리
 	//					FVector TargetPosition = MeshVertexPos + *Distance;
-
+	//
 	//					// 정확히 TotalTimeToMove 시간 동안 이동하도록 등속 이동 거리 계산
 	//					FVector NewPosition = MeshVertexPos + (*Distance * (DeltaTime / TotalTimeToMove));
-
+	//
 	//					// 프로시저럴 메쉬의 버텍스를 새로운 위치로 업데이트
 	//					//MeshSection->ProcVertexBuffer[VertexIndex].Position = NewPosition;
-
-
+	//
+	//
 	//					Vertices.Add(NewPosition);
 	//					// 나머지 속성도 추가
 	//					Normals.Add(SectionVertices[VertexIndex].Normal);
 	//					UVs.Add(SectionVertices[VertexIndex].UV0);
 	//					Colors.Add(FColor(0.0, 0.0, 0.0, 255));
 	//					Tangents.Add(SectionVertices[VertexIndex].Tangent);
-
+	//
 	//					BeforeVertices = SectionVertices[VertexIndex].Position;
 	//					BeforeNormals = SectionVertices[VertexIndex].Normal;
 	//					BeforeUVs = SectionVertices[VertexIndex].UV0;
 	//					BeforeColors = FColor(0.0, 0.0, 0.0, 255);
 	//					BeforeTangents = SectionVertices[VertexIndex].Tangent;
-
+	//
 	//				}
 	//				else
 	//				{
@@ -1145,7 +1147,7 @@ void ABaseZombie::Tick(float DeltaTime)
 	//				}
 	//			}
 	//			ProcMesh->UpdateMeshSection(SectionIndex, Vertices, Normals, UVs, Colors, Tangents);
-
+	//
 	//			Vertices.Empty();
 	//			Normals.Empty();
 	//			UVs.Empty();
@@ -1153,17 +1155,17 @@ void ABaseZombie::Tick(float DeltaTime)
 	//			Tangents.Empty();
 	//		}
 	//	}
-
+	//
 	//	//UE_LOG(LogTemp, Warning, TEXT("Merged DeltaTime %f "), DeltaTime);
 	//	//UE_LOG(LogTemp, Warning, TEXT("Merging!!!!!!!!!!"));
-
+	//
 	//	// 10초 동안 이동한 후, 완료되었으면 머지 진행을 종료
 	//	if (ElapsedTime >= TotalTimeToMove)
 	//	{
 	//		bIsMergingInProgress = false;
 	//		UE_LOG(LogTemp, Log, TEXT("Merging Completed!"));
 	//	}
-
+	//
 	//	double EndTime = FPlatformTime::Seconds();
 	//	UE_LOG(LogTemp, Warning, TEXT("bIsMergingInProgressVertex took: %f seconds"), EndTime - StartTime);
 	//}
@@ -1375,9 +1377,13 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	UE_LOG(LogTemp, Log, TEXT("좀비 사망 직접 실행! - (cut dead) 좀비 아이디: %d"), ZombieId);
 
 	m_bIsCuttingDead = true;
+	m_bIsStanding = true;
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {
 		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
+		CharacterAnimInstance->SetIsStanding(m_bIsStanding);	// 누운 상태로 시작하도록 (결합 후 부활때 한틱 죽는 애니메이션 재생 안되도록)
+		GetMesh()->GlobalAnimRateScale = 0.08f;	// 일단 전체 애니메이션 정지 시켜 놓기 (배속을 느리게해서 정지와 비슷하게 -> 완전 정지시켜 놓으면 어차피 다시 키면서 순간 강제 전환 때문에 깜빡임)
+		// 0.08초가 딱임 => 초반 애니메이션 강제 전환시에 깜빡임을 넘겨주고 동시에 보이지 않는 상태에서 쓰러지는 애니메이션 느리게 재생되면서 딱 누워 있는 상태일때가 10초후! 그럼 이제 다시 보이게 하면 딱 맞음
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
@@ -4261,6 +4267,7 @@ void ABaseZombie::StartResurrectionTimer()
 	}
 }
 
+// 다시 일어나기 애니메이션 재생
 void ABaseZombie::ResurrectionTimerElapsed()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("ResurrectionTimerElapsed 실행됨"));
@@ -4268,14 +4275,20 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	// 혹시 남아 있는 타이머가 있으면 제거
 	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
 
-	m_bIsCuttingDead = false;
-	m_bIsNormalDead = false;
+	//m_bIsCuttingDead = false;
+	//m_bIsNormalDead = false;
+	//m_bIsStanding = true;
+	//
+	//auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	//if (nullptr != CharacterAnimInstance) {
+	//	CharacterAnimInstance->SetIsStanding(m_bIsStanding);
+	//}
 
-	m_bIsStanding = true;
-	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr != CharacterAnimInstance) {
-		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
-	}
+	// 다시 기존 SkeletalMesh 보이도록 설정
+	GetMesh()->SetVisibility(true);
+
+	GetMesh()->GlobalAnimRateScale = 1.0f;	// 정지 시켜놨던 애니메이션 다시 재생 시작
+
 	StartWatiingTimer();
 
 	// 부활 이펙트 생성
@@ -4307,6 +4320,7 @@ void ABaseZombie::StartWatiingTimer()
 	GetWorld()->GetTimerManager().SetTimer(WattingHandle, this, &ABaseZombie::WaittingTimerElapsed, 5.f, false);	// 5초(다시 일어나기 애니메이션 재생 시간) 이후 완전히 다시 살아남 => * 좀비 부활 관련 초기화 작업은 서버에서 부활 동기화 통신 받으면 따로 진행 
 }
 
+// 일어나는 애니메이션 waiting 
 void ABaseZombie::WaittingTimerElapsed()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("WaittingTimerElapsed 실행됨"));
@@ -4329,8 +4343,6 @@ void ABaseZombie::WaittingTimerElapsed()
 		CharacterAnimInstance->SetIsNormalDead(m_bIsNormalDead);
 		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
-
-		CharacterAnimInstance->Montage_Stop(0.1f);  // 혹시 남아 있을 (피격) 애니메이션 정지
 	}
 }
 

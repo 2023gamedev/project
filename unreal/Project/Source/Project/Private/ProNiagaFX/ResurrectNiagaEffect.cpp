@@ -92,7 +92,7 @@ void AResurrectNiagaEffect::SpawnResurrectEffect()
 	//);
 
 	if (ResurrectFXSystem) {
-		float SpawnOffset_Z = -50.0f;
+		float SpawnOffset_Z = -60.0f;
 		ResurrectFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ResurrectFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + SpawnOffset_Z));
 	}
 	else {
