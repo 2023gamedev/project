@@ -37,7 +37,7 @@ public:
 	void SetIsDead(bool dead) { m_bIsDead = dead; }
 	void SetPitch(float pitch) { m_fPitch = pitch; }
 
-	void PlayAttackMontage();
+	void PlayAttackMontage(int attack_type);	// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
 	void PlayPickUpMontage();
 	void PlayKeyMontage(float PlaySpeed);
 	void PlayHealingMontage(float PlaySpeed);
@@ -54,7 +54,7 @@ public:
 	FOnAttackEndCheckDelegate OnAttackEndCheck;
 	FOnFootSoundCheckDelegate OnFootSoundCheck;
 
-	UAnimMontage* GetAttackMontage();
+	UAnimMontage* GetAttackMontage(int attack_type);	// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
 	UAnimMontage* GetPickupMontage();
 	UAnimMontage* GetOpenKeyMontage();
 	UAnimMontage* GetHealingMontage();
@@ -135,22 +135,24 @@ private:
 	float m_fPitch;
 
 	// 애니메이션 몽타주
+ 
+	// 공격 1 (세로-대각선 베기)
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-	UAnimMontage* AttackMontage;
+	UAnimMontage* AttackMontage_1;
 
-	// 애니메이션 몽타주
+	// 공격 2 (가로 베기)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackMontage_2;
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* PickUpMontage;
 
-	// 애니메이션 몽타주
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* HealingMontage;
 
-	// 애니메이션 몽타주
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* BleedHealingMontage;
 
-	// 애니메이션 몽타주
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = PickUp, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* OpenKeyMontage;
 

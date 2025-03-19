@@ -1635,7 +1635,7 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 	}
 
 	AnimInstance->AttackStart();
-	AnimInstance->PlayAttackMontage();
+	AnimInstance->PlayAttackMontage(1);
 	m_bIsAttacking = true;
 
 	//m_DAttackEnd.AddLambda([this]() -> void {

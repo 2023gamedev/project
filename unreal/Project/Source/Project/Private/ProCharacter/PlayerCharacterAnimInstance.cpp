@@ -26,9 +26,13 @@ UPlayerCharacterAnimInstance::UPlayerCharacterAnimInstance()
 
 	// 위에 FObjectFinder는 기존것 밑에는 새롭게 애니메이션한 부분
 	//static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployee.BP_AMEmployee"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeeJ.BP_AMEmployeeJ"));
-	if (ATTACK_MONTAGE.Succeeded()) {
-		AttackMontage = ATTACK_MONTAGE.Object;
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE_1(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeeAttack_1J.BP_AMEmployeeAttack_1J"));
+	if (ATTACK_MONTAGE_1.Succeeded()) {
+		AttackMontage_1 = ATTACK_MONTAGE_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE_2(TEXT("/Game/CharacterAsset/JAnimation/BP_AMEmployeeAttack_2J.BP_AMEmployeeAttack_2J"));
+	if (ATTACK_MONTAGE_2.Succeeded()) {
+		AttackMontage_2 = ATTACK_MONTAGE_2.Object;
 	}
 	
 	//static ConstructorHelpers::FObjectFinder<UAnimMontage> PICKUP_MONTAGE(TEXT("/Game/CharacterAsset/Animation/BP_AMEmployeePickup.BP_AMEmployeePickup"));
@@ -106,11 +110,20 @@ void UPlayerCharacterAnimInstance::AttackEnd()
 	m_bIsAttacking = false;
 }
 
-void UPlayerCharacterAnimInstance::PlayAttackMontage()
+// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
+void UPlayerCharacterAnimInstance::PlayAttackMontage(int attack_type)
 {
-	if (!Montage_IsPlaying(AttackMontage)) {
-		//m_bIsAttacking = true;
-		Montage_Play(AttackMontage, 1.f);
+	if (attack_type == 1) {
+		if (!Montage_IsPlaying(AttackMontage_1)) {
+			//m_bIsAttacking = true;
+			Montage_Play(AttackMontage_1, 1.f);
+		}
+	}
+	else if (attack_type == 2) {
+		if (!Montage_IsPlaying(AttackMontage_2)) {
+			//m_bIsAttacking = true;
+			Montage_Play(AttackMontage_2, 1.f);
+		}
 	}
 }
 
@@ -345,11 +358,20 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 //	PlayFootstepRunSound();
 //}
 
-UAnimMontage* UPlayerCharacterAnimInstance:: GetAttackMontage()
+// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
+UAnimMontage* UPlayerCharacterAnimInstance:: GetAttackMontage(int attack_type)
 {
-	if (AttackMontage) {
-		return AttackMontage;
+	if (attack_type == 1) {
+		if (AttackMontage_1) {
+			return AttackMontage_1;
+		}
 	}
+	else if (attack_type == 2) {
+		if (AttackMontage_2) {
+			return AttackMontage_2;
+		}
+	}
+
 	return nullptr;
 }
 
