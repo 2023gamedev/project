@@ -4275,14 +4275,14 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	// 혹시 남아 있는 타이머가 있으면 제거
 	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
 
-	//m_bIsCuttingDead = false;
-	//m_bIsNormalDead = false;
-	//m_bIsStanding = true;
-	//
-	//auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
-	//if (nullptr != CharacterAnimInstance) {
-	//	CharacterAnimInstance->SetIsStanding(m_bIsStanding);
-	//}
+	m_bIsCuttingDead = false;
+	m_bIsNormalDead = false;
+	m_bIsStanding = true;
+	
+	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr != CharacterAnimInstance) {
+		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
+	}
 
 	// 다시 기존 SkeletalMesh 보이도록 설정
 	GetMesh()->SetVisibility(true);
