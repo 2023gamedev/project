@@ -30,6 +30,7 @@ DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
 
 class ABloodNiagaEffect;
 class AShoutingNiagaEffect;
+class AResurrectNiagaEffect;
 
 // Zombie 클래스의 부모 클래스
 UCLASS()
@@ -274,6 +275,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AShoutingNiagaEffect* ShoutingFX;
+
+	UPROPERTY(EditAnywhere)
+	AResurrectNiagaEffect* ResurrectFX;
 
 	float SetImpulseByWeight(float targetWeight, float baseImpulse);
 

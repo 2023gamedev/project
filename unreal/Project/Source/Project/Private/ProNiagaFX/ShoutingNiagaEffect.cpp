@@ -24,8 +24,8 @@ AShoutingNiagaEffect::AShoutingNiagaEffect()
 	if (NE.Succeeded())
 	{
 		ShoutingFXSystem = NE.Object;
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Shouting FX System found");
-		//UE_LOG(LogTemp, Log, TEXT("Shouting FX System found"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Shouting FX!");
+		//UE_LOG(LogTemp, Log, TEXT("Found Shouting FX!"));
 	}
 }
 
@@ -34,7 +34,15 @@ void AShoutingNiagaEffect::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ShoutingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShoutingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
+	if (ShoutingFXSystem) {
+		float SpawnOffset_Z = 5.0f;
+		ShoutingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShoutingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + SpawnOffset_Z));
+	}
+	else {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Shouting FX System is nullptr!");
+		UE_LOG(LogTemp, Error, TEXT("Shouting FX System is nullptr!"));
+	}
+
 	if (ShoutingFXComponent)
 	{
 		ShoutingFXComponent->Activate();
@@ -52,11 +60,18 @@ void AShoutingNiagaEffect::Tick(float DeltaTime)
 
 void AShoutingNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
-	if (ShoutingFXComponent)
-		ShoutingFXComponent->Deactivate();
+	if (ShoutingFXComponent) {
+		ShoutingFXComponent->Deactivate(); // 비활성화
+		ShoutingFXComponent->DestroyComponent();  // 컴포넌트 제거
+	}
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Shouting FX ended");
 
-	//Destroy();
+	// 액터 삭제
+	if (!IsPendingKillPending())	// 이미 삭제가 예약된 경우 중복 호출 방지
+	{
+		Destroy();
+	}
+
 	Super::EndPlay(type);	// 안 부르면 엔진이 정상적인 정리 작업을 수행하지 못해, 리소스가 제대로 해제되지 않거나(메모리 누수) 레벨 언로드가 지연되어 프레임 드랍과 같은 문제가 발생한다
 }

@@ -76,6 +76,8 @@ void AOneGameModeBase::BeginPlay()
 
     if (GEngine)
     {
+        UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("stat FPS"));  // fps 카운터 ON
+
         GEngine->Exec(GetWorld(), TEXT("DisableAllScreenMessages"));    // 게임 시작시에 인게임 화면 위 모든 로그 출력 일단 disable (콘솔창 따로 열어서 다시 킬 수 있음)
     }
 

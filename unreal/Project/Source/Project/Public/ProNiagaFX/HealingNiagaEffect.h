@@ -25,6 +25,7 @@ public:
 
 	virtual void EndPlay(EEndPlayReason::Type type) override;
 
+
 	UPROPERTY()
 	UStaticMeshComponent* Mesh;
 
@@ -39,4 +40,5 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	FVector spawn_offset = FVector(0, 0, 20.f);
+
 };

@@ -11,9 +11,11 @@
 #include "ProZombie/RunningZombieAIController.h"
 #include "ProZombie/ShoutingZombieAIController.h"
 #include "Engine/SkeletalMesh.h"
+//#include "ProItem/NormalWeaponActor.h"
+
 #include "ProNiagaFX/BloodNiagaEffect.h"
 #include "ProNiagaFX/ShoutingNiagaEffect.h"
-//#include "ProItem/NormalWeaponActor.h"
+#include "ProNiagaFX/ResurrectNiagaEffect.h"
 
 #include "Rendering/SkeletalMeshRenderData.h"
 #include "Rendering/SkeletalMeshLODRenderData.h"
@@ -4032,6 +4034,25 @@ void ABaseZombie::StartMergiingTimerNew()
 	}
 	bIsMergingInProgress = true;
 	ElapsedTime = 0.0; // 시간 초기화
+
+	// 부활 이펙트 생성
+	UNiagaraSystem* NiagaraSystem = LoadObject<UNiagaraSystem>(nullptr, TEXT("/Script/Niagara.NiagaraSystem'/Game/Basic_VFX/Niagara/NS_Basic_5.NS_Basic_5'"));
+	if (NiagaraSystem)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Resurrect FX!");
+		UE_LOG(LogTemp, Log, TEXT("Found Resurrect FX!"));
+
+		ResurrectFX = GetWorld()->SpawnActor<AResurrectNiagaEffect>(AResurrectNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
+
+		ResurrectFX->ResurrectFXSystem = NiagaraSystem;
+
+		ResurrectFX->spawn_flag = true;
+	}
+	else {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Couldn't Find Resurrect FX!");
+		UE_LOG(LogTemp, Error, TEXT("Couldn't Find Resurrect FX!"));
+	}
+
 }
 
 void ABaseZombie::MergingTimerElapsed()
@@ -4139,9 +4160,8 @@ void ABaseZombie::Shouting()
 		return;
 	}
 
-	FVector SpawnOffset = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 5.0f);
-
-	ShoutingFX = GetWorld()->SpawnActor<AShoutingNiagaEffect>(AShoutingNiagaEffect::StaticClass(), SpawnOffset, FRotator::ZeroRotator);
+	// 샤우팅 이펙트 생성
+	ShoutingFX = GetWorld()->SpawnActor<AShoutingNiagaEffect>(AShoutingNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
 
 	auto AnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -4257,6 +4277,25 @@ void ABaseZombie::ResurrectionTimerElapsed()
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
 	}
 	StartWatiingTimer();
+
+	// 부활 이펙트 생성
+	UNiagaraSystem* NiagaraSystem = LoadObject<UNiagaraSystem>(nullptr, TEXT("/Script/Niagara.NiagaraSystem'/Game/Basic_VFX/Niagara/NS_Basic_4.NS_Basic_4'"));
+	if (NiagaraSystem)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Resurrect FX!");
+		UE_LOG(LogTemp, Log, TEXT("Found Resurrect FX!"));
+
+		ResurrectFX = GetWorld()->SpawnActor<AResurrectNiagaEffect>(AResurrectNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
+
+		ResurrectFX->ResurrectFXSystem = NiagaraSystem;
+
+		ResurrectFX->spawn_flag = true;
+	}
+	else {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Couldn't Find Resurrect FX!");
+		UE_LOG(LogTemp, Error, TEXT("Couldn't Find Resurrect FX!"));
+	}
+
 }
 
 // 되살아나기 애니메이션 워이팅 타이머

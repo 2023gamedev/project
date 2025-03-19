@@ -17,7 +17,6 @@ class PROJECT_API ABloodNiagaEffect : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ABloodNiagaEffect(); 
 
 	virtual void BeginPlay() override;
@@ -66,11 +65,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool spawn_flag = false;
 
+
 	FTimerHandle SpawnTimerHandle;
 
 	FTimerHandle StopSpawnTimerHandle;
 
 	FTimerHandle EndTimerHandle;
+
 
 	UPROPERTY(EditAnywhere)
 	bool blood_spawnloop = false;

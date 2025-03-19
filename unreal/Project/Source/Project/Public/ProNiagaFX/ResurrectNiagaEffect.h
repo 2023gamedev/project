@@ -6,18 +6,19 @@
 #include "GameFramework/Actor.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
-#include "ShoutingNiagaEffect.generated.h"
+#include "ResurrectNiagaEffect.generated.h"
 
-class ABaseZombie;
+/**
+ * 
+ */
 
 UCLASS()
-class PROJECT_API AShoutingNiagaEffect : public AActor
+class PROJECT_API AResurrectNiagaEffect : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AShoutingNiagaEffect();
+
+public:
+	AResurrectNiagaEffect();
 
 	virtual void BeginPlay() override;
 
@@ -25,14 +26,24 @@ public:
 
 	virtual void EndPlay(EEndPlayReason::Type type) override;
 
+	void SpawnResurrectEffect();
 
-	UPROPERTY()
+	void EndResurrectEffect();
+
+
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "FX")
-	UNiagaraSystem* ShoutingFXSystem;
+	UNiagaraSystem* ResurrectFXSystem;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "FX")
-	UNiagaraComponent* ShoutingFXComponent;
+	UNiagaraComponent* ResurrectFXComponent;
+
+	UPROPERTY(EditAnywhere)
+	bool spawn_flag = false;
+
+
+	FTimerHandle EndTimerHandle;
 
 };

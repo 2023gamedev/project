@@ -24,7 +24,7 @@ AHealingNiagaEffect::AHealingNiagaEffect()
 	if (NE.Succeeded())
 	{
 		HealingFXSystem = NE.Object;
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX System found");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Healing FX!");
 	}
 }
 
@@ -33,7 +33,14 @@ void AHealingNiagaEffect::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	HealingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HealingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z) + spawn_offset);
+	if (HealingFXSystem) {
+		HealingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HealingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z) + spawn_offset);
+	}
+	else {
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Healing FX System is nullptr!");
+		UE_LOG(LogTemp, Error, TEXT("Healing FX System is nullptr!"));
+	}
+
 	if (HealingFXComponent)
 	{
 		HealingFXComponent->Activate();
@@ -55,12 +62,19 @@ void AHealingNiagaEffect::Tick(float DeltaTime)
 
 void AHealingNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
-	if(HealingFXComponent)
-		HealingFXComponent->Deactivate();
+	if(HealingFXComponent) {
+		HealingFXComponent->Deactivate(); // 비활성화
+		HealingFXComponent->DestroyComponent();  // 컴포넌트 제거
+	}
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX ended");
 
-	//Destroy();
+	// 액터 삭제
+	if (!IsPendingKillPending())	// 이미 삭제가 예약된 경우 중복 호출 방지
+	{
+		Destroy();
+	}
+
 	Super::EndPlay(type);	// 안 부르면 엔진이 정상적인 정리 작업을 수행하지 못해, 리소스가 제대로 해제되지 않거나(메모리 누수) 레벨 언로드가 지연되어 프레임 드랍과 같은 문제가 발생한다
 }
 
