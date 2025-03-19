@@ -687,7 +687,23 @@ void ABaseZombie::Tick(float DeltaTime)
 		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
 
 		if (NewBloodFX) {
-			NewBloodFX->blood_spawncount = FMath::RandRange(80, 100);
+			//int32 bmin = 0;
+			//int32 bmax = 0;
+			//
+			//if (Weapon->WeaponName == "ButchersKnife" || Weapon->WeaponName == "FireAxe" || Weapon->WeaponName == "SashimiKnife") {	// 날붙이 무기
+			//	bmin = NewBloodFX->blood_spawncount_cuthit_min;
+			//	bmax = NewBloodFX->blood_spawncount_cuthit_max;
+			//}
+			//else {	// 그 외 타격무기 (둔기)
+			//	bmin = NewBloodFX->blood_spawncount_normalhit_min;
+			//	bmax = NewBloodFX->blood_spawncount_normalhit_max;
+			//}	
+			// ===> 동기화에서는 피격 당시에 좀비를 때린 무기를 알수가 없네;;
+
+			int32 bmin = 25;
+			int32 bmax = 50;
+
+			NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
 			NewBloodFX->spawn_flag = true;
 
 			BloodFX.Add(NewBloodFX);
@@ -722,9 +738,12 @@ void ABaseZombie::Tick(float DeltaTime)
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
 		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation() + FVector(0, 0, bloodspawn_z_offset), RandRotate);
-
+		
+		int bmin = NewBloodFX->blood_spawncount_normaldead_min;
+		int bmax = NewBloodFX->blood_spawncount_normaldead_max;
+		
 		if (NewBloodFX) {
-			NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
+			NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
 			//NewBloodFX->blood_spawnloop = true;
 			NewBloodFX->spawn_flag = true;
 
@@ -758,9 +777,12 @@ void ABaseZombie::Tick(float DeltaTime)
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
 		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
+		
+		int min = NewBloodFX_0->blood_spawncount_cutdead_min;
+		int max = NewBloodFX_0->blood_spawncount_cutdead_max;
 
 		if (NewBloodFX_0) {
-			NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
+			NewBloodFX_0->blood_spawncount = FMath::RandRange(min, max);
 			//NewBloodFX_0->blood_spawnloop = true;
 
 			BloodFX.Add(NewBloodFX_0);
@@ -769,7 +791,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
 
 		if (NewBloodFX_1) {
-			NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
+			NewBloodFX_1->blood_spawncount = FMath::RandRange(min, max);
 			//NewBloodFX_1->blood_spawnloop = true;
 
 			BloodFX.Add(NewBloodFX_1);
@@ -1223,8 +1245,11 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		if (Weapon->WeaponName == "ButchersKnife" || Weapon->WeaponName == "FireAxe" || Weapon->WeaponName == "SashimiKnife") {	// 날붙이 무기
 			ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
 
+			int bmin = NewBloodFX_0->blood_spawncount_cutdead_min;
+			int bmax = NewBloodFX_0->blood_spawncount_cutdead_max;
+
 			if (NewBloodFX_0) {
-				NewBloodFX_0->blood_spawncount = FMath::RandRange(300, 400);
+				NewBloodFX_0->blood_spawncount = FMath::RandRange(bmin, bmax);
 				//NewBloodFX_0->blood_spawnloop = true;
 
 				BloodFX.Add(NewBloodFX_0);
@@ -1233,17 +1258,20 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 			ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
 
 			if (NewBloodFX_1) {
-				NewBloodFX_1->blood_spawncount = FMath::RandRange(300, 400);
+				NewBloodFX_1->blood_spawncount = FMath::RandRange(bmin, bmax);
 				//NewBloodFX_1->blood_spawnloop = true;
 
 				BloodFX.Add(NewBloodFX_1);
 			}
 		}
-		else {	// 그 외 타격무기
+		else {	// 그 외 타격무기 (둔기)
 			ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
 
+			int bmin = NewBloodFX->blood_spawncount_normaldead_min;
+			int bmax = NewBloodFX->blood_spawncount_normaldead_max;
+
 			if (NewBloodFX) {
-				NewBloodFX->blood_spawncount = FMath::RandRange(450, 600);
+				NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
 				//NewBloodFX->blood_spawnloop = true;
 				NewBloodFX->spawn_flag = true;
 
@@ -1278,11 +1306,23 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		//}
 
 	}
-	else {
+	else {	// 그냥 피격 당했을때
 		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
 		
 		if (NewBloodFX) {
-			NewBloodFX->blood_spawncount = FMath::RandRange(80, 100);
+			int32 bmin = 0;
+			int32 bmax = 0;
+
+			if (Weapon->WeaponName == "ButchersKnife" || Weapon->WeaponName == "FireAxe" || Weapon->WeaponName == "SashimiKnife") {	// 날붙이 무기
+				bmin = NewBloodFX->blood_spawncount_cuthit_min;
+				bmax = NewBloodFX->blood_spawncount_cuthit_max;
+			}
+			else {	// 그 외 타격무기 (둔기)
+				bmin = NewBloodFX->blood_spawncount_normalhit_min;
+				bmax = NewBloodFX->blood_spawncount_normalhit_max;
+			}
+
+			NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
 			NewBloodFX->spawn_flag = true;
 
 			BloodFX.Add(NewBloodFX);
