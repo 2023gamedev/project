@@ -1605,7 +1605,8 @@ void ABaseCharacter::InventoryOnOff()
 //	//}
 //}
 
-void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
+// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기
+void ABaseCharacter::Attack(int attack_type) // 다른 함수 둬서 어떤 무기 들었을때는 attack 힐링 아이템은 먹는 동작 이런것들 함수 호출하도록 하면 될듯
 {
 	//UE_LOG(LogTemp, Log, TEXT("Attack() - GetMyPlayerId: %u"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 	UE_LOG(LogTemp, Log, TEXT("Attack() - PlayerId: %u"), GetPlayerId());
@@ -1635,7 +1636,7 @@ void ABaseCharacter::Attack() // 다른 함수 둬서 어떤 무기 들었을때
 	}
 
 	AnimInstance->AttackStart();
-	AnimInstance->PlayAttackMontage(1);
+	AnimInstance->PlayAttackMontage(attack_type);
 	m_bIsAttacking = true;
 
 	//m_DAttackEnd.AddLambda([this]() -> void {
@@ -3164,14 +3165,15 @@ void ABaseCharacter::UpdatePlayerData(FVector Location)
 	NewLocation = Location;
 }
 
-void ABaseCharacter::SetAttack(bool bAttack)
+// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
+void ABaseCharacter::SetAttack(bool bAttack, int attack_type)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("SetAttack from %s to %s"), b_attack ? TEXT("true") : TEXT("false"), bAttack ? TEXT("true") : TEXT("false"));
 	b_attack = bAttack;
 	
 	if (b_attack)
 	{
-		Attack();
+		Attack(attack_type);
 		b_attack = false;
 	}
 }

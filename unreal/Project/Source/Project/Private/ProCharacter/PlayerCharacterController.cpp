@@ -863,6 +863,8 @@ void APlayerCharacterController::SetupInputComponent()
 				PEI->BindAction(InputActions->InputDownSTR, ETriggerEvent::Completed, this, &APlayerCharacterController::DownSTR);
 				PEI->BindAction(InputActions->InputUpSpeed, ETriggerEvent::Completed, this, &APlayerCharacterController::UpSpeed);
 				PEI->BindAction(InputActions->InputDownSpeed, ETriggerEvent::Completed, this, &APlayerCharacterController::DownSpeed);
+
+				PEI->BindAction(InputActions->InputAttack_2, ETriggerEvent::Completed, this, &APlayerCharacterController::BehaviorToItem_2);
 				 
 			}
 			else
@@ -1035,7 +1037,7 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 
 		if (basecharacter->IsNWHandIn() && !(basecharacter->IsAttack())) { // 아예 함수에 접근을 못하게 조건을 추가
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
-			Attack();
+			Attack(2);	// 가로 베기
 		}
 		else if (basecharacter->IsBHHandIn() && !(basecharacter->IsBHealing())) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
@@ -1063,10 +1065,11 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 
 }
 
-void APlayerCharacterController::Attack()
+// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기
+void APlayerCharacterController::Attack(int attack_type)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	basecharacter->SetAttack(true);
+	basecharacter->SetAttack(true, attack_type);
 	b_attack = true;
 	UE_LOG(LogTemp, Log, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }
@@ -1215,6 +1218,26 @@ void APlayerCharacterController::DownSpeed(const FInputActionValue& Value)
 	basecharacter->DownSpeed();
 }
 
+void APlayerCharacterController::BehaviorToItem_2(const FInputActionValue& Value)
+{
+	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
+
+	if (m_bIsInputEnabled) {
+		m_bIsInputEnabled = false;
+
+
+		// 타이머 설정 (따닥을 방지하기 위해 설정)
+		GetWorld()->GetTimerManager().SetTimer(InputCoolTimeHandle, this, &APlayerCharacterController::InputCoolTime, 0.2f, false);
+
+
+		if (basecharacter->IsNWHandIn() && !(basecharacter->IsAttack())) { // 아예 함수에 접근을 못하게 조건을 추가
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Attack")));
+			Attack(1);	// 세로 베기
+		}
+
+	}
+
+}
 
 void APlayerCharacterController::InputCoolTime()
 {
@@ -1226,11 +1249,11 @@ void APlayerCharacterController::DisabledControllerInput()
 	DisableInput(this);
 }
 
-void APlayerCharacterController::ServerHandleAttack()
-{
-	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetCharacter());
-	if (BaseCharacter)
-	{
-		BaseCharacter->SetAttack(true);
-	}
-}
+//void APlayerCharacterController::ServerHandleAttack()
+//{
+//	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetCharacter());
+//	if (BaseCharacter)
+//	{
+//		BaseCharacter->SetAttack(true, ???);
+//	}
+//}

@@ -45,7 +45,7 @@ public:
 	void InventoryOnOff(const FInputActionValue& Value);
 
 	void BehaviorToItem(const FInputActionValue& Value);
-	void Attack();
+	void Attack(int attack_type);	// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기
 	void Healing();
 	void BleedHealing();
 	void PlayKey();
@@ -64,13 +64,15 @@ public:
 	void UpSpeed(const FInputActionValue& Value);
 	void DownSpeed(const FInputActionValue& Value);
 
+	void BehaviorToItem_2(const FInputActionValue& Value);
+
 	FTimerHandle InputCoolTimeHandle;
 	void InputCoolTime();
 	bool m_bIsInputEnabled = true;
 
 	void DisabledControllerInput();
 
-	void ServerHandleAttack();
+	//void ServerHandleAttack();	//=> 안쓰는 듯?
 
 
 public:

@@ -251,7 +251,7 @@ public:
 	void InventoryOnOff();
 
 	FAttackEndPlayerDelegate m_DAttackEnd;
-	void Attack();
+	void Attack(int attack_type);	// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
 
 	void Healing();
 	void BleedHealing();
@@ -531,7 +531,7 @@ public:
 	void SetPlayerName(std::string NewPlayerName);
 	void UpdatePlayerData(FVector Location);
 
-	void SetAttack(bool b_attack);
+	void SetAttack(bool b_attack, int attack_type);	// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
 
 	void SetPickUp();
 
