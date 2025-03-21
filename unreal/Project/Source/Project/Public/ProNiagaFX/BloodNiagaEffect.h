@@ -61,15 +61,15 @@ public:
 	// 사망시에 파티클 생성수
 	UPROPERTY(EditAnywhere)	// 5
 	int32 blood_spawncount_normaldead_min = 5;	
-	UPROPERTY(EditAnywhere)	// 10
-	int32 blood_spawncount_normaldead_max = 10;	
-	UPROPERTY(EditAnywhere) // 30 => cutdead는 피 파티클 2개 만드는 거 유념
-	int32 blood_spawncount_cutdead_min = 30;	
-	UPROPERTY(EditAnywhere) // 50 => cutdead는 피 파티클 2개 만드는 거 유념
-	int32 blood_spawncount_cutdead_max = 50;	
+	UPROPERTY(EditAnywhere)	// 7
+	int32 blood_spawncount_normaldead_max = 7;	
+	UPROPERTY(EditAnywhere) // 40 
+	int32 blood_spawncount_cutdead_min = 40;	
+	UPROPERTY(EditAnywhere) // 60
+	int32 blood_spawncount_cutdead_max = 60;	
 
-	UPROPERTY(EditAnywhere)
-	bool spawn_flag = false;
+	UPROPERTY(EditAnywhere)	// 파티클 생성 개수 랜덤 지정하고 스폰 시키려고 사용
+	bool spawn_flag = false;	
 
 
 	FTimerHandle SpawnTimerHandle;

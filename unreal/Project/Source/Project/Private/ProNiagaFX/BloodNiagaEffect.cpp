@@ -38,16 +38,16 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-	for (UNiagaraComponent* BloodFX : BloodFXComponents)
-	{
-		if (BloodFX)
-		{
-			//BloodFX->SetWorldLocation(GetActorLocation());
-			if (ProcMesh) {
-				SetActorLocation(ProcMesh->GetComponentLocation());
-			}
-		}
-	}
+	//for (UNiagaraComponent* BloodFX : BloodFXComponents)
+	//{
+	//	if (BloodFX)
+	//	{
+	//		//BloodFX->SetWorldLocation(GetActorLocation());
+	//		if (ProcMesh) {
+	//			SetActorLocation(ProcMesh->GetComponentLocation());
+	//		}
+	//	}
+	//}
 	
 
 	if (spawn_flag) {
@@ -59,22 +59,23 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 		//GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ABloodNiagaEffect::SpawnBloodEffect, spawn_inteval, blood_spawnloop, 0.0f);
 		// spawn_duration 동안 스폰
 		//GetWorld()->GetTimerManager().SetTimer(StopSpawnTimerHandle, this, &ABloodNiagaEffect::StopSpawnBloodEffect, 1.0f, false, spawn_duration);
-		// 이거 이상하게 작동해서 주석처리;;
+		// 이거 어차피 제대로 작동해서 주석처리;;
 		
 		// 한번만 생성
 		UNiagaraComponent* NewBloodFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
 			FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z),
 			FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
-
+		
 		if (NewBloodFX)
 		{
 			NewBloodFX->SetNiagaraVariableInt(FString("User.Blood_SpawnCount"), blood_spawncount);
-
+		
 			BloodFXComponents.Add(NewBloodFX);
-
+		
 			NewBloodFX->Activate();
-
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
+		
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX play");
+			UE_LOG(LogTemp, Log, TEXT("Blood FX play"));
 		}
 
 		// destory_time 후에 액터까지 삭제
@@ -157,8 +158,10 @@ void ABloodNiagaEffect::SpawnBloodEffect()
 
 		blood_spawncount -= decrease_count;	// 시간이 지날 수록 생성되는 피 파티클 수 줄임
 		
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX play");
+		UE_LOG(LogTemp, Log, TEXT("Blood FX play"));
 	}
+	// 이거 코드 생각과는 다르게 여러번 생성 X
 }
 
 void ABloodNiagaEffect::StopSpawnBloodEffect()

@@ -40,8 +40,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "FX")
 	UNiagaraComponent* ResurrectFXComponent;
 
-	UPROPERTY(EditAnywhere)
-	bool spawn_flag = false;
+	UPROPERTY(EditAnywhere)	// 부활 이펙터가 두개라서 둘중 어느 이펙트를 재생 시킬지 정하고 스폰하려고 사용
+	bool spawn_flag = false;	
 
 
 	FTimerHandle EndTimerHandle;

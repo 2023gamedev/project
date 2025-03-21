@@ -690,7 +690,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 		FRotator RandRotate;
 
-		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);//sync_cutImpulse.X;
 		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
@@ -798,15 +798,15 @@ void ABaseZombie::Tick(float DeltaTime)
 			BloodFX.Add(NewBloodFX_0);
 		}
 
-		ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
-
-		if (NewBloodFX_1) {
-			NewBloodFX_1->blood_spawncount = FMath::RandRange(bmin, bmax);
-			//NewBloodFX_1->blood_spawnloop = true;
-
-			BloodFX.Add(NewBloodFX_1);
-		}
-		// 절단 사망시에는 왜 이펙트를 두개 따로 생성하는지? => 절단 된 부분들에서 따로 피 생성되도록 (예전에는 절단후 딱 2개만 생성됬으니까)
+		//ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
+		//
+		//if (NewBloodFX_1) {
+		//	NewBloodFX_1->blood_spawncount = FMath::RandRange(bmin, bmax);
+		//	//NewBloodFX_1->blood_spawnloop = true;
+		//
+		//	BloodFX.Add(NewBloodFX_1);
+		//}
+		// 절단 사망시에는 왜 이펙트를 두개 따로 생성했는지? => 절단 된 부분들에서 따로 피 생성되도록 (예전에는 절단후 딱 2개만 생성됬으니까)
 
 		CutZombie(sync_cutPlane, sync_cutNormal, false);
 	}
@@ -1279,15 +1279,15 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 				BloodFX.Add(NewBloodFX_0);
 			}
 
-			ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
-
-			if (NewBloodFX_1) {
-				NewBloodFX_1->blood_spawncount = FMath::RandRange(bmin, bmax);
-				//NewBloodFX_1->blood_spawnloop = true;
-
-				BloodFX.Add(NewBloodFX_1);
-			}
-			// 절단 사망시에는 왜 이펙트를 두개 따로 생성하는지? => 절단 된 부분들에서 따로 피 생성되도록 (예전에는 절단후 딱 2개만 생성됬으니까)
+			//ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
+			//
+			//if (NewBloodFX_1) {
+			//	NewBloodFX_1->blood_spawncount = FMath::RandRange(bmin, bmax);
+			//	//NewBloodFX_1->blood_spawnloop = true;
+			//
+			//	BloodFX.Add(NewBloodFX_1);
+			//}
+			// 절단 사망시에는 왜 이펙트를 두개 따로 생성했는지? => 절단 된 부분들에서 따로 피 생성되도록 (예전에는 절단후 딱 2개만 생성됬으니까)
 		}
 		else {	// 그 외 타격무기 (둔기)
 			ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
@@ -1682,18 +1682,24 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			CutProceduralMesh_2->SetSimulatePhysics(true);
 
 			TArray<FVector> CutSectionVertices;  // 절단된 단면 버텍스 저장
+			
+			bool spawned = false;
 
-			if (BloodFX.Num() >= 2) {
-				if (BloodFX[0] && BloodFX[1]) {
-					BloodFX[0]->ProcMesh = CutProceduralMesh_1;
-					BloodFX[1]->ProcMesh = CutProceduralMesh_2;
-					BloodFX[0]->spawn_flag = true;
-					BloodFX[1]->spawn_flag = true;
-				}
+			//for (int num = 0; num < BloodFX.Num(); num++) {
+			//	//BloodFX[num]->ProcMesh = CutProceduralMesh_?;	// 만약 미래에 피 이펙트를 여러개 생성 할 생각이라면... 이 코드 사용
+			//	BloodFX[num]->spawn_flag = true;
+			//	spawned = true;
+			//}
+
+			if (BloodFX.Num() == 1) {
+				//BloodFX[0]->ProcMesh = CutProceduralMesh_1;
+				BloodFX[0]->spawn_flag = true;
+				spawned = true;
 			}
-			else {
-				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX.Num() < 2 => BloodFX spawn failed!!!")));
-				UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX.Num() < 2 => BloodFX spawn failed!!!"));
+
+			if (spawned == false) {
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX.Num() != 1 => BloodFX spawn failed!!!")));
+				UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX.Num() != 1 => BloodFX spawn failed!!!"));
 			}
 
 			//병합부분! ----------------------------------
