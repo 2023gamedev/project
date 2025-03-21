@@ -762,6 +762,8 @@ class Character_Attack final :
     kPacketTypeFieldNumber = 1,
     kPlayeridFieldNumber = 2,
     kAttackFieldNumber = 3,
+    kAttacktypeFieldNumber = 4,
+    kAimoffsetFieldNumber = 5,
   };
   // uint32 packet_type = 1;
   void clear_packet_type();
@@ -790,6 +792,24 @@ class Character_Attack final :
   void _internal_set_attack(bool value);
   public:
 
+  // uint32 attacktype = 4;
+  void clear_attacktype();
+  uint32_t attacktype() const;
+  void set_attacktype(uint32_t value);
+  private:
+  uint32_t _internal_attacktype() const;
+  void _internal_set_attacktype(uint32_t value);
+  public:
+
+  // float aimoffset = 5;
+  void clear_aimoffset();
+  float aimoffset() const;
+  void set_aimoffset(float value);
+  private:
+  float _internal_aimoffset() const;
+  void _internal_set_aimoffset(float value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.Character_Attack)
  private:
   class _Internal;
@@ -801,6 +821,8 @@ class Character_Attack final :
     uint32_t packet_type_;
     uint32_t playerid_;
     bool attack_;
+    uint32_t attacktype_;
+    float aimoffset_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -6384,6 +6406,46 @@ inline void Character_Attack::_internal_set_attack(bool value) {
 inline void Character_Attack::set_attack(bool value) {
   _internal_set_attack(value);
   // @@protoc_insertion_point(field_set:Protocol.Character_Attack.attack)
+}
+
+// uint32 attacktype = 4;
+inline void Character_Attack::clear_attacktype() {
+  _impl_.attacktype_ = 0u;
+}
+inline uint32_t Character_Attack::_internal_attacktype() const {
+  return _impl_.attacktype_;
+}
+inline uint32_t Character_Attack::attacktype() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character_Attack.attacktype)
+  return _internal_attacktype();
+}
+inline void Character_Attack::_internal_set_attacktype(uint32_t value) {
+  
+  _impl_.attacktype_ = value;
+}
+inline void Character_Attack::set_attacktype(uint32_t value) {
+  _internal_set_attacktype(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character_Attack.attacktype)
+}
+
+// float aimoffset = 5;
+inline void Character_Attack::clear_aimoffset() {
+  _impl_.aimoffset_ = 0;
+}
+inline float Character_Attack::_internal_aimoffset() const {
+  return _impl_.aimoffset_;
+}
+inline float Character_Attack::aimoffset() const {
+  // @@protoc_insertion_point(field_get:Protocol.Character_Attack.aimoffset)
+  return _internal_aimoffset();
+}
+inline void Character_Attack::_internal_set_aimoffset(float value) {
+  
+  _impl_.aimoffset_ = value;
+}
+inline void Character_Attack::set_aimoffset(float value) {
+  _internal_set_aimoffset(value);
+  // @@protoc_insertion_point(field_set:Protocol.Character_Attack.aimoffset)
 }
 
 // -------------------------------------------------------------------

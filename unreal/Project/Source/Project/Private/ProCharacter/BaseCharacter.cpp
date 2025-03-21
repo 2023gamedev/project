@@ -1625,12 +1625,15 @@ void ABaseCharacter::Attack(int attack_type) // 다른 함수 둬서 어떤 무�
 		FRotator CameraRot = Camera->GetComponentRotation();
 
 		// 공격 각도 설정
-		SetSpringArmPitch( -(FMath::Clamp(CameraRot.Pitch, -30.0f, 10.0f)));
-		m_fPitch = FMath::GetMappedRangeValueClamped(
-			FVector2D(-10, 30), // 입력 범위 (-10 ~ 30)
-			FVector2D(-30, 30), // 출력 범위 (-30 ~ 30)
-			m_fPitch // 현재 Pitch 값
-		);
+		
+		SetSpringArmPitch(-(FMath::Clamp(CameraRot.Pitch, -30.0f, 10.0f)));
+		if (PlayerId == 99) {
+			m_fPitch = FMath::GetMappedRangeValueClamped(
+				FVector2D(-10, 30), // 입력 범위 (-10 ~ 30)
+				FVector2D(-30, 30), // 출력 범위 (-30 ~ 30)
+				m_fPitch // 현재 Pitch 값
+			);
+		}
 		UE_LOG(LogTemp, Log, TEXT("m_fPitch: %.2f"), m_fPitch);
 		AnimInstance->SetPitch(m_fPitch);
 	}
@@ -3166,13 +3169,14 @@ void ABaseCharacter::UpdatePlayerData(FVector Location)
 }
 
 // attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
-void ABaseCharacter::SetAttack(bool bAttack, int attack_type)
+void ABaseCharacter::SetAttack(bool bAttack, int attack_type, float aimoffset)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("SetAttack from %s to %s"), b_attack ? TEXT("true") : TEXT("false"), bAttack ? TEXT("true") : TEXT("false"));
 	b_attack = bAttack;
 	
 	if (b_attack)
 	{
+		m_fPitch = aimoffset;
 		Attack(attack_type);
 		b_attack = false;
 	}
@@ -3580,4 +3584,9 @@ void ABaseCharacter::Send_DetachItem(uint32 itemtype)
 	detachPacket.SerializeToString(&serializedData);
 
 	bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+}
+
+float ABaseCharacter::Get_AimOffSet()
+{
+	return m_fPitch;
 }

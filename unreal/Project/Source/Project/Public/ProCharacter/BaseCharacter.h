@@ -531,7 +531,7 @@ public:
 	void SetPlayerName(std::string NewPlayerName);
 	void UpdatePlayerData(FVector Location);
 
-	void SetAttack(bool b_attack, int attack_type);	// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
+	void SetAttack(bool b_attack, int attack_type, float aimoffset);	// attack_type = 1: 세로-대각 베기 / = 2: 가로 베기 
 
 	void SetPickUp();
 
@@ -556,6 +556,8 @@ public:
 	void Send_OpenRoot(uint32 itemid, uint32 carid);
 
 	void Send_DetachItem(uint32 itemtype);
+
+	float Get_AimOffSet();
 
 
 private:
