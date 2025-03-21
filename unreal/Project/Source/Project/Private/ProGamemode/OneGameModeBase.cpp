@@ -918,7 +918,6 @@ void AOneGameModeBase::UpdatePlayerAttack(uint32 PlayerID, bool battack, uint32 
         if (BasePlayer && BasePlayer->GetPlayerId() == PlayerID)
         {
             BasePlayer->SetAttack(battack, attacktype, aimoffset);      
-            // ********************************************************************* 공격 모션 1 / 2 인지 동기화 해줘야 함!! *********************************************************************
             
             //UE_LOG(LogTemp, Warning, TEXT("real update attack: %d, %s"), PlayerID, battack ? TEXT("true") : TEXT("false"));
 

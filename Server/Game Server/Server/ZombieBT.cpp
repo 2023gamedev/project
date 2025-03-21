@@ -18,10 +18,10 @@
 #include "MoveTo.h"
 
 
-//======[[Á»ºñ BT »ı¼º]]======//
+//======[[ì¢€ë¹„ BT ìƒì„±]]======//
 ZombieBT::ZombieBT()
 {
-	//======[Task] ¸Ş¸ğ¸® ÇÒ´ç======//
+	//======[Task] ë©”ëª¨ë¦¬ í• ë‹¹======//
 
 	//<Detect-Selector>
 	sel_detect = new Sel_Detect;
@@ -55,48 +55,48 @@ ZombieBT::ZombieBT()
 	//==========================//
 }
 
-//======== Æ®¸® ÀÛ¼º (ÀÛ¾÷ ÇÒ´ç) ========//
+//======== íŠ¸ë¦¬ ì‘ì„± (ì‘ì—… í• ë‹¹) ========//
 void ZombieBT::MakeZombieBT()
 {
-	//<Selector-Detect> ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
-	//sel_detect->AddChild(sel_canseeplayer);
-	//sel_detect->AddChild(seq_hasshouting);
-	//sel_detect->AddChild(seq_hasfootsound);
-	//sel_detect->AddChild(seq_hordeaction);
-	//sel_detect->AddChild(seq_hasinvestigated);
-	//sel_detect->AddChild(seq_nothaslastknownplayerlocation);
+	//<Selector-Detect> í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
+	sel_detect->AddChild(sel_canseeplayer);
+	sel_detect->AddChild(seq_hasshouting);
+	sel_detect->AddChild(seq_hasfootsound);
+	sel_detect->AddChild(seq_hordeaction);
+	sel_detect->AddChild(seq_hasinvestigated);
+	sel_detect->AddChild(seq_nothaslastknownplayerlocation);
 
-	//<Selector-CanSeePlayer> ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
+	//<Selector-CanSeePlayer> í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	sel_canseeplayer->AddChild(seq_canattack);
 	sel_canseeplayer->AddChild(seq_cannotattack);
 
-	//{Sequence-CanAttack} ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-CanAttack} í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_canattack->AddChild(t_attack);
 
-	//{Sequence-CanNotAttack} ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-CanNotAttack} í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_cannotattack->AddChild(t_moveto);
 
-	//{Sequence-HasShouting} ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-HasShouting} í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_hasshouting->AddChild(t_moveto);
 
-	//{Sequence-HasFootSound} ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-HasFootSound} í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_hasfootsound->AddChild(t_moveto);
 
-	//{Sequence-HordeAction} ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-HordeAction} í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_hordeaction->AddChild(t_moveto);
 
-	//{Sequence-HasInvestigated} ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-HasInvestigated} í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_hasinvestigated->AddChild(t_moveto);
 
-	//{Sequence-NotHasLastKnownPlayerLocation} ÇÒ´ç -> ÇÊ¿ä ÀÚ½Ä³ëµåµé '¼ø¼­´ë·Î' »ğÀÔ
+	//{Sequence-NotHasLastKnownPlayerLocation} í• ë‹¹ -> í•„ìš” ìì‹ë…¸ë“œë“¤ 'ìˆœì„œëŒ€ë¡œ' ì‚½ì…
 	seq_nothaslastknownplayerlocation->AddChild(t_moveto);
 }
 
 ZombieBT::~ZombieBT()
 {
-	if (sel_detect) {	// ÀÌ¹Ì ÇØÁ¦µÈ ¸Ş¸ğ¸® ´Ù½Ã deleteÇÏÁö ¾Êµµ·Ï ¿¹¿ÜÃ³¸®
+	if (sel_detect) {	// ì´ë¯¸ í•´ì œëœ ë©”ëª¨ë¦¬ ë‹¤ì‹œ deleteí•˜ì§€ ì•Šë„ë¡ ì˜ˆì™¸ì²˜ë¦¬
 		delete(sel_detect);
-		sel_detect = nullptr;	// nullptr·Î ÃÊ±âÈ­ (³ªÁß¿¡ new·Î ´Ù½Ã »ç¿ë °¡´É)
+		sel_detect = nullptr;	// nullptrë¡œ ì´ˆê¸°í™” (ë‚˜ì¤‘ì— newë¡œ ë‹¤ì‹œ ì‚¬ìš© ê°€ëŠ¥)
 	}
 	if (sel_canseeplayer) {
 		delete(sel_canseeplayer);

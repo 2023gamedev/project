@@ -1625,7 +1625,6 @@ void ABaseCharacter::Attack(int attack_type) // 다른 함수 둬서 어떤 무�
 		FRotator CameraRot = Camera->GetComponentRotation();
 
 		// 공격 각도 설정
-		
 		SetSpringArmPitch(-(FMath::Clamp(CameraRot.Pitch, -30.0f, 10.0f)));
 		if (PlayerId == 99) {
 			m_fPitch = FMath::GetMappedRangeValueClamped(
@@ -1634,9 +1633,12 @@ void ABaseCharacter::Attack(int attack_type) // 다른 함수 둬서 어떤 무�
 				m_fPitch // 현재 Pitch 값
 			);
 		}
-		UE_LOG(LogTemp, Log, TEXT("m_fPitch: %.2f"), m_fPitch);
 		AnimInstance->SetPitch(m_fPitch);
 	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("Attack() - 실행 PlayerId: %d -> Camera 객체가 없음!"), PlayerId);
+	}
+	UE_LOG(LogTemp, Log, TEXT("Attack PlayerId: %d, m_fPitch: %.2f"), PlayerId, m_fPitch);
 
 	AnimInstance->AttackStart();
 	AnimInstance->PlayAttackMontage(attack_type);

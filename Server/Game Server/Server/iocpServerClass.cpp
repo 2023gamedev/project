@@ -793,7 +793,8 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					// path 보낼 필요 없는 좀비들 예외처리 (최적화)
 					if (zom->GetHP() <= 0.f
 						|| zom->path.empty() 
-						|| zom->ZombiePathIndex >= zom->path.size() || zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/
+						|| (zom->ZombiePathIndex >= zom->path.size() || (zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/))
+						&& (zom->IsStandingStill == true && zom->targetType == zom->PATROL)	// 숨고르기 할때'만' 패킷 보내지 X -> 제자리 걸음 방지 & 숨고르기에서 피격 당하고 블랙보드 클리어 할때는 보내야 하니까
 						//|| zom->HaveToWait == true	/* 이러면, 다른 층에서 있던 플레이어 애니메이션 재생 중이던 좀비 위치를 갱신 못 받아서 이상함 */
 						) {
 						continue;

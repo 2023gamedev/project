@@ -284,6 +284,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	ANormalWeaponActor* PlayerWeapon;
 
+	UPROPERTY(EditAnywhere)	// 맞은 위치 기억 => 좀비 해당 방향으로 쳐다보게 하려고
+	FVector HitLocation;
+
+	UPROPERTY(EditAnywhere)	// 맞은 시간 기억 (겜시간'GetWorld()->GetTimeSeconds()'->일시정지하면 같이 멈춤)
+	double HitTime;	
+
 
 
 	TSharedPtr<FZBoneStructure> RootBone;  // **트리 루트 (최상위 본)**

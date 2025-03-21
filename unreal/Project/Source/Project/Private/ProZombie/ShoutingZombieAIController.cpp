@@ -224,6 +224,8 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 			zombieDest.X = Char->GetActorLocation().X;
 			zombieDest.Y = Char->GetActorLocation().Y;
 			zombieDest.Z = Char->GetActorLocation().Z;
+
+			OwnerZombie->SetTurningSpeed(90.f);	// 기본값
 		}
 	}
 	// 좀비가 샤우팅 중일때 => 플레이어 쪽으로 시선 돌리기
@@ -261,7 +263,21 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 			zombieDest.X = Char->GetActorLocation().X;
 			zombieDest.Y = Char->GetActorLocation().Y;
 			zombieDest.Z = Char->GetActorLocation().Z;
+
+			OwnerZombie->SetTurningSpeed(90.f);	// 기본값
 		}
+	}
+	// 좀비가 피격 중일때 => 맞은 방향 쪽으로(무기의 위치) 시선 돌리기
+	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->BeAttackedMontage) == true // 피격 애니메이션 재생중이고
+		&& OwnerZombie->targetType != OwnerZombie->PLAYER	// targetType이 플레이어가 아닌 경우(피격 당시 바로 앞에 플레이어 있는 경우에는 뒤돌 필요X)
+		&& GetWorld()->GetTimeSeconds() - OwnerZombie->HitTime >= 1.0f) {	// 피격 후 1초가 지났을때 (자연스럽게 고개 돌리도록)
+
+		// 맞은/피격 당한 쪽으로 회전시키기
+		zombieDest.X = OwnerZombie->HitLocation.X;
+		zombieDest.Y = OwnerZombie->HitLocation.Y;
+		zombieDest.Z = OwnerZombie->HitLocation.Z;
+
+		OwnerZombie->SetTurningSpeed(150.f);	// 고개 빨리 돌리도록
 	}
 	// 좀비가 idle 상태일때 => 고개 그대로
 	else if (OwnerZombie->CachedAnimInstance->m_fCurrentPawnSpeed == 0) {
@@ -275,6 +291,8 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 				zombieDest.X = get<0>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx + 1]);
+
+				OwnerZombie->SetTurningSpeed(90.f);	// 기본값
 			}
 			else {
 				return;
@@ -285,6 +303,8 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 				zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+			
+				OwnerZombie->SetTurningSpeed(90.f);	// 기본값
 			}
 			else {
 				return;
@@ -323,11 +343,8 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-	// 좀비 사망시 => 그대로 멈춤
+	// 좀비 사망시 => 고대로오오 어어얼으으음!!!
 	if (OwnerZombie->GetHP() <= 0) { return; }
-
-	// 좀비가 피격 중일때 => 잠시 멈춤
-	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->BeAttackedMontage) == true) { return; }
 
 	// 좀비가 샤우팅 중일때 => 잠시 멈춤
 	else if (OwnerZombie->m_bIsShouting) { 
@@ -342,8 +359,10 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 
 
 	// 초기에는 Detect하지 않도록 => 맵 로딩 전에 벽 뚫고 Detect하는 거 방지
-	if (OwnerZombie->bCanDetectPlayer == false)
-		return;
+	if (OwnerZombie->bCanDetectPlayer == false) { return; }
+
+	// 피격 애니메이션 중이라면 시야 검사 X => 서버에서 좀비 피격 애니메이션 재생 후 블랙보드 초기화하는 거랑 꼬이면서, 숨고르기 상태에서 피격 당해서 뒤돌아보고 플레이어 무시 하는 버그 생길 수 있음;;
+	if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->BeAttackedMontage) == true) { return; }
 
 
 	FVector ZombieForward = OwnerZombie->GetActorForwardVector(); // 좀비의 전방 벡터
@@ -358,6 +377,7 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 
 
 	// 좀비들의 시야 검사 "나 자신"에 대해서만 실시==========================
+	// (즉, 로컬인 플레이어만 포착! - 원격 플레이어는 무시!)
 	PlayerPawn = Cast<APawn>(OwnerZombie->MyChar);
 
 	if (PlayerPawn == nullptr) {

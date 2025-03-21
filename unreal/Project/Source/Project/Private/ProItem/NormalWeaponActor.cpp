@@ -67,7 +67,7 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 		//}
 
 
-		// 나 자신 플레이어만 검사
+		// 나 자신 플레이어만 검사 (즉, 때린 플레이어가 로컬 일때만 작동! - 원격 플레이어가 때리는 거는 무시!)
 		if (OwnerCharacter) {
 			if (OwnerCharacter->GetPlayerId() != 99) {
 				UE_LOG(LogTemp, Log, TEXT("Not a local player hit the zombie. PlayerId = %d"), OwnerCharacter->GetPlayerId());
@@ -75,13 +75,16 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 			}
 		}
 		else {
-			UE_LOG(LogTemp, Error, TEXT("OwnerCharacter is nullptr!! PlayerId = %d"), OwnerCharacter->GetPlayerId());
+			UE_LOG(LogTemp, Error, TEXT("OwnerCharacter is nullptr!! NONSENSE!!!!!"));
 		}
 
 		float characterSTR = OwnerCharacter->GetSTR();
 
 		UE_LOG(LogTemp, Log, TEXT("[Weapon Hit] 캐릭터 기본 공격력: %f, 무기 기본 공격력: %f, 최종 데미지: %f"), characterSTR, m_fWeaponSTR, characterSTR * m_fWeaponSTR);
 
+		Zombie->HitLocation = GetActorLocation();	// 맞은 위치 저장 => 좀비 해당 방향으로 쳐다보게 하려고
+		Zombie->HitTime = GetWorld()->GetTimeSeconds();	// 맞은 시간 저장 => 1초 후에 쳐다보게 하려고 (애니메이션 자연스럽게 보이게)
+		
 		FDamageEvent DamageEvent;
 		Zombie->TakeDamage(characterSTR * m_fWeaponSTR, DamageEvent, GetInstigatorController(), this);
 
