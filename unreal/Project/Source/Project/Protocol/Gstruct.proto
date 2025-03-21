@@ -28,6 +28,8 @@ message Character_Attack {
     uint32 packet_type = 1;
     uint32 playerid = 2;
     bool attack = 3;
+    uint32 attacktype = 4;
+    float aimoffset = 5;
 }
 
 message Zombie {

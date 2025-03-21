@@ -150,7 +150,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		{
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
-				MyGameMode->UpdatePlayerAttack(recvPlayerAttack.PlayerId, recvPlayerAttack.b_attack);
+				MyGameMode->UpdatePlayerAttack(recvPlayerAttack.PlayerId, recvPlayerAttack.b_attack, recvPlayerAttack.attacktype, recvPlayerAttack.aimoffset);
 				UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
 			}
 		}
@@ -665,12 +665,16 @@ void APlayerCharacterController::CheckAndSendMovement()
 void APlayerCharacterController::Send_Attack()
 {
 	if (b_attack) {
+		APawn* MyPawn = GetPawn();
+		ABaseCharacter* MyBaseCharacter = Cast<ABaseCharacter>(MyPawn);
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 
 		Protocol::Character_Attack packet;
 		packet.set_playerid(MyPlayerId);
 		packet.set_packet_type(4);
 		packet.set_attack(b_attack);
+		packet.set_attacktype(m_attacktype);
+		packet.set_aimoffset(MyBaseCharacter->Get_AimOffSet());
 
 		// 직렬화
 		std::string serializedData;
@@ -1069,7 +1073,8 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 void APlayerCharacterController::Attack(int attack_type)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
-	basecharacter->SetAttack(true, attack_type);
+	basecharacter->Attack(attack_type);
+	m_attacktype = attack_type;
 	b_attack = true;
 	UE_LOG(LogTemp, Log, TEXT("AttackStart: %d"), GameInstance->ClientSocketPtr->GetMyPlayerId());
 }

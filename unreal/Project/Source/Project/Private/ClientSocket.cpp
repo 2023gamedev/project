@@ -341,7 +341,7 @@ void ClientSocket::ProcessPacket(const std::vector<char>& buffer)
 				Protocol::Character_Attack AttackPacket;
 				if (AttackPacket.ParseFromArray(buffer.data(), buffer.size()))
 				{
-					Q_pattack.push(PlayerAttack(AttackPacket.playerid(), AttackPacket.attack()));
+					Q_pattack.push(PlayerAttack(AttackPacket.playerid(), AttackPacket.attack(), AttackPacket.attacktype(), AttackPacket.aimoffset()));
 				}
 				break;
 			}

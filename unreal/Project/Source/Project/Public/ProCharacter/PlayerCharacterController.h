@@ -140,6 +140,7 @@ public:
 	//FVector NewLocation;
 	//std::atomic <bool> b_attack{ false };
 	bool b_attack = false;
+	uint32 m_attacktype;
 	std::atomic <bool> b_GetItem{ false };
 	bool e_NWeapon = false;
 	bool e_TWeapon = false;

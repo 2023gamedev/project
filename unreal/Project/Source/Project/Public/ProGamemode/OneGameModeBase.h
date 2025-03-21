@@ -203,7 +203,7 @@ public:
 
     void UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, std::string username, float hp);
 
-    void UpdatePlayerAttack(uint32 PlayerID, bool battack);
+    void UpdatePlayerAttack(uint32 PlayerID, bool battack, uint32 attacktype, float aimoffset);
 
     void UpdateEquipItem(uint32 PlayerID, const FString& Itemname, uint32 itemtype);
 

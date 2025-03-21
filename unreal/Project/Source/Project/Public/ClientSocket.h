@@ -63,11 +63,13 @@ struct PlayerAttack
 {
 	uint32 PlayerId;
 	bool b_attack;
+	uint32 attacktype;
+	float aimoffset;
 
-	PlayerAttack() : PlayerId(0), b_attack(false) {}
+	PlayerAttack() : PlayerId(0), b_attack(false), attacktype(0), aimoffset(0.f) {}
 
-	PlayerAttack(uint32 InPlayerId, bool Inb_attack)
-		: PlayerId(InPlayerId), b_attack(Inb_attack) {}
+	PlayerAttack(uint32 InPlayerId, bool Inb_attack, uint32 Inattacktype, float Inaimoffset)
+		: PlayerId(InPlayerId), b_attack(Inb_attack), attacktype(Inattacktype), aimoffset(Inaimoffset) {}
 };
 
 struct EquipItem
