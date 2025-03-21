@@ -48,6 +48,7 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 	//		}
 	//	}
 	//}
+	// 위치 실시간 갱신 코드 -> 절단 부위 따라가게
 	
 
 	if (spawn_flag) {
