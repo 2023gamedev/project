@@ -788,13 +788,10 @@ void ABaseZombie::Tick(float DeltaTime)
 
 		BloodFX.Empty();
 
-		FRotator RandRotate;//SyncRotate
+		// 피 생성 방향 동기화
+		FRotator SyncRotate = sync_cutImpulse.Rotation();	// sync_cutImpulse 에는 FVector WeaponForward = GetActorRotation().Vector() 가 담겨 있음 (NormalWeaponActor에서 패킷 설정)
 
-		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);//sync_cutImpulse.X;
-		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);//sync_cutImpulse.Y;
-		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);//sync_cutImpulse.Z;
-
-		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), SyncRotate);
 
 		int bmin = NewBloodFX->blood_spawncount_cutdead_min;
 		int bmax = NewBloodFX->blood_spawncount_cutdead_max;
