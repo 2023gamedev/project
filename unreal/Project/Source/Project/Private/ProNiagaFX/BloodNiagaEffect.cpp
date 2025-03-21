@@ -60,7 +60,7 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 		//GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ABloodNiagaEffect::SpawnBloodEffect, spawn_inteval, blood_spawnloop, 0.0f);
 		// spawn_duration 동안 스폰
 		//GetWorld()->GetTimerManager().SetTimer(StopSpawnTimerHandle, this, &ABloodNiagaEffect::StopSpawnBloodEffect, 1.0f, false, spawn_duration);
-		// 이거 어차피 제대로 작동해서 주석처리;;
+		// 절단 사망시 좀비 시체에서 반복해서 피 이펙트 뿜어 낼려면 사용 (대신, blood_spawnloop = true; 해줘야함) 
 		
 		// 한번만 생성
 		UNiagaraComponent* NewBloodFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
@@ -75,8 +75,8 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 		
 			NewBloodFX->Activate();
 		
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX play");
-			UE_LOG(LogTemp, Log, TEXT("Blood FX play"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX spawn");
+			UE_LOG(LogTemp, Log, TEXT("Blood FX spawn"));
 		}
 
 		// destory_time 후에 액터까지 삭제
@@ -117,7 +117,7 @@ void ABloodNiagaEffect::SpawnBloodEffect()
 
 	//UE_LOG(LogTemp, Log, TEXT("BloodFXSpawn Location: %s"), *GetActorLocation().ToString());
 	//UE_LOG(LogTemp, Log, TEXT("BloodFXSpawn Rotation: %s"), *GetActorRotation().ToString());
-
+	//
 	//DrawDebugPoint(
 	//	GetWorld(),
 	//	GetActorLocation(),
@@ -127,7 +127,7 @@ void ABloodNiagaEffect::SpawnBloodEffect()
 	//	20.0f,
 	//	0
 	//);
-
+	//
 	//DrawDebugLine(
 	//	GetWorld(),
 	//	GetActorLocation(),
@@ -159,8 +159,8 @@ void ABloodNiagaEffect::SpawnBloodEffect()
 
 		blood_spawncount -= decrease_count;	// 시간이 지날 수록 생성되는 피 파티클 수 줄임
 		
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX play");
-		UE_LOG(LogTemp, Log, TEXT("Blood FX play"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX spawn");
+		UE_LOG(LogTemp, Log, TEXT("Blood FX spawn"));
 	}
 	// 이거 코드 생각과는 다르게 여러번 생성 X
 }

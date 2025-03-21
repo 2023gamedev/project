@@ -690,7 +690,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 		FRotator RandRotate;
 
-		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);//sync_cutImpulse.X;
+		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
 		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
 		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
 
@@ -717,6 +717,10 @@ void ABaseZombie::Tick(float DeltaTime)
 			NewBloodFX->spawn_flag = true;
 
 			BloodFX.Add(NewBloodFX);
+		}
+		else {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX spawn failed!!!")));
+			UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX spawn failed!!!"));
 		}
 	}
 
@@ -759,6 +763,10 @@ void ABaseZombie::Tick(float DeltaTime)
 
 			BloodFX.Add(NewBloodFX);
 		}
+		else {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX spawn failed!!!")));
+			UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX spawn failed!!!"));
+		}
 	}
 
 	// cut dead 동기화
@@ -780,33 +788,28 @@ void ABaseZombie::Tick(float DeltaTime)
 
 		BloodFX.Empty();
 
-		FRotator RandRotate;
+		FRotator RandRotate;//SyncRotate
 
-		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);
-		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);
-		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);
+		RandRotate.Yaw = FMath::FRandRange(0.f, 1.f);//sync_cutImpulse.X;
+		RandRotate.Roll = FMath::FRandRange(0.f, 1.f);//sync_cutImpulse.Y;
+		RandRotate.Pitch = FMath::FRandRange(0.f, 1.f);//sync_cutImpulse.Z;
 
-		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
+		ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
 
-		int bmin = NewBloodFX_0->blood_spawncount_cutdead_min;
-		int bmax = NewBloodFX_0->blood_spawncount_cutdead_max;
+		int bmin = NewBloodFX->blood_spawncount_cutdead_min;
+		int bmax = NewBloodFX->blood_spawncount_cutdead_max;
 
-		if (NewBloodFX_0) {
-			NewBloodFX_0->blood_spawncount = FMath::RandRange(bmin, bmax);
-			//NewBloodFX_0->blood_spawnloop = true;
+		if (NewBloodFX) {
+			NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
+			//NewBloodFX->blood_spawnloop = true;
+			NewBloodFX->spawn_flag = true;
 
-			BloodFX.Add(NewBloodFX_0);
+			BloodFX.Add(NewBloodFX);
 		}
-
-		//ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
-		//
-		//if (NewBloodFX_1) {
-		//	NewBloodFX_1->blood_spawncount = FMath::RandRange(bmin, bmax);
-		//	//NewBloodFX_1->blood_spawnloop = true;
-		//
-		//	BloodFX.Add(NewBloodFX_1);
-		//}
-		// 절단 사망시에는 왜 이펙트를 두개 따로 생성했는지? => 절단 된 부분들에서 따로 피 생성되도록 (예전에는 절단후 딱 2개만 생성됬으니까)
+		else {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX spawn failed!!!")));
+			UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX spawn failed!!!"));
+		}
 
 		CutZombie(sync_cutPlane, sync_cutNormal, false);
 	}
@@ -1265,29 +1268,24 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 
 	BloodFX.Empty();
 
-	if (GetHP() <= 0) {	// 죽을때(절단 될 때)는 피가 더 많이 튀도록 & 절단 된 부분들에서 따로 피 생성되도록
+	if (GetHP() <= 0) {	// 죽을때(절단 될 때)는 피가 더 많이 튀도록 /*& 절단 된 부분들에서 따로 피 생성되도록*/
 		if (Weapon->WeaponName == "ButchersKnife" || Weapon->WeaponName == "FireAxe" || Weapon->WeaponName == "SashimiKnife") {	// 날붙이 무기
-			ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
+			ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
 
-			int bmin = NewBloodFX_0->blood_spawncount_cutdead_min;
-			int bmax = NewBloodFX_0->blood_spawncount_cutdead_max;
+			int bmin = NewBloodFX->blood_spawncount_cutdead_min;
+			int bmax = NewBloodFX->blood_spawncount_cutdead_max;
 
-			if (NewBloodFX_0) {
-				NewBloodFX_0->blood_spawncount = FMath::RandRange(bmin, bmax);
-				//NewBloodFX_0->blood_spawnloop = true;
+			if (NewBloodFX) {
+				NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
+				//NewBloodFX->blood_spawnloop = true;
+				NewBloodFX->spawn_flag = true;
 
-				BloodFX.Add(NewBloodFX_0);
+				BloodFX.Add(NewBloodFX);
 			}
-
-			//ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
-			//
-			//if (NewBloodFX_1) {
-			//	NewBloodFX_1->blood_spawncount = FMath::RandRange(bmin, bmax);
-			//	//NewBloodFX_1->blood_spawnloop = true;
-			//
-			//	BloodFX.Add(NewBloodFX_1);
-			//}
-			// 절단 사망시에는 왜 이펙트를 두개 따로 생성했는지? => 절단 된 부분들에서 따로 피 생성되도록 (예전에는 절단후 딱 2개만 생성됬으니까)
+			else {
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX spawn failed!!!")));
+				UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX spawn failed!!!"));
+			}
 		}
 		else {	// 그 외 타격무기 (둔기)
 			ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성
@@ -1301,6 +1299,10 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 				NewBloodFX->spawn_flag = true;
 
 				BloodFX.Add(NewBloodFX);
+			}
+			else {
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX spawn failed!!!")));
+				UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX spawn failed!!!"));
 			}
 		}
 
@@ -1351,6 +1353,10 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 			NewBloodFX->spawn_flag = true;
 
 			BloodFX.Add(NewBloodFX);
+		}
+		else {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX spawn failed!!!")));
+			UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX spawn failed!!!"));
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 피격 클라 직접 실행!")));
@@ -1682,25 +1688,23 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			CutProceduralMesh_2->SetSimulatePhysics(true);
 
 			TArray<FVector> CutSectionVertices;  // 절단된 단면 버텍스 저장
-			
-			bool spawned = false;
 
+
+			// 만약 미래에 절단 된 부분들에서 따로 피 생성되도록 -> 피 이펙트를 여러개 생성 할 생각이라면... => 이 코드 사용!
+			//bool spawned = false;
+			//
 			//for (int num = 0; num < BloodFX.Num(); num++) {
-			//	//BloodFX[num]->ProcMesh = CutProceduralMesh_?;	// 만약 미래에 피 이펙트를 여러개 생성 할 생각이라면... 이 코드 사용
+			//	//BloodFX[num]->ProcMesh = CutProceduralMesh_?;	
+			//	BloodFX[num]->blood_spawnloop = true;
 			//	BloodFX[num]->spawn_flag = true;
 			//	spawned = true;
 			//}
+			//
+			//if (spawned == false) {
+			//	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX.Num() < 0 => BloodFX spawn failed!!!")));
+			//	UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX.Num() < 0 => BloodFX spawn failed!!!"));
+			//}
 
-			if (BloodFX.Num() == 1) {
-				//BloodFX[0]->ProcMesh = CutProceduralMesh_1;
-				BloodFX[0]->spawn_flag = true;
-				spawned = true;
-			}
-
-			if (spawned == false) {
-				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("[Error] BloodFX.Num() != 1 => BloodFX spawn failed!!!")));
-				UE_LOG(LogTemp, Error, TEXT("[Error] BloodFX.Num() != 1 => BloodFX spawn failed!!!"));
-			}
 
 			//병합부분! ----------------------------------
 			//CutPro1 단면 bone 구하는 부분
