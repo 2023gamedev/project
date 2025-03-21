@@ -710,9 +710,9 @@ void ABaseZombie::Tick(float DeltaTime)
 			//}	
 			// ===> 동기화에서는 피격 당시에 좀비를 때린 무기를 알수가 없네;;
 
-			int32 bmin = 25;
-			int32 bmax = 50;
-
+			int32 bmin = NewBloodFX->blood_spawncount_awaysynchit_min;
+			int32 bmax = NewBloodFX->blood_spawncount_awaysynchit_max;
+			
 			NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
 			NewBloodFX->spawn_flag = true;
 
@@ -788,11 +788,11 @@ void ABaseZombie::Tick(float DeltaTime)
 
 		ABloodNiagaEffect* NewBloodFX_0 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
 
-		int min = NewBloodFX_0->blood_spawncount_cutdead_min;
-		int max = NewBloodFX_0->blood_spawncount_cutdead_max;
+		int bmin = NewBloodFX_0->blood_spawncount_cutdead_min;
+		int bmax = NewBloodFX_0->blood_spawncount_cutdead_max;
 
 		if (NewBloodFX_0) {
-			NewBloodFX_0->blood_spawncount = FMath::RandRange(min, max);
+			NewBloodFX_0->blood_spawncount = FMath::RandRange(bmin, bmax);
 			//NewBloodFX_0->blood_spawnloop = true;
 
 			BloodFX.Add(NewBloodFX_0);
@@ -801,12 +801,12 @@ void ABaseZombie::Tick(float DeltaTime)
 		ABloodNiagaEffect* NewBloodFX_1 = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), GetActorLocation(), RandRotate);
 
 		if (NewBloodFX_1) {
-			NewBloodFX_1->blood_spawncount = FMath::RandRange(min, max);
+			NewBloodFX_1->blood_spawncount = FMath::RandRange(bmin, bmax);
 			//NewBloodFX_1->blood_spawnloop = true;
 
 			BloodFX.Add(NewBloodFX_1);
 		}
-
+		// 절단 사망시에는 왜 이펙트를 두개 따로 생성하는지? => 절단 된 부분들에서 따로 피 생성되도록 (예전에는 절단후 딱 2개만 생성됬으니까)
 
 		CutZombie(sync_cutPlane, sync_cutNormal, false);
 	}
@@ -1287,6 +1287,7 @@ float ABaseZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 
 				BloodFX.Add(NewBloodFX_1);
 			}
+			// 절단 사망시에는 왜 이펙트를 두개 따로 생성하는지? => 절단 된 부분들에서 따로 피 생성되도록 (예전에는 절단후 딱 2개만 생성됬으니까)
 		}
 		else {	// 그 외 타격무기 (둔기)
 			ABloodNiagaEffect* NewBloodFX = GetWorld()->SpawnActor<ABloodNiagaEffect>(ABloodNiagaEffect::StaticClass(), Weapon->GetActorLocation(), Weapon->GetActorRotation()); // 무기가 닿은 위치에서 무기가 바라보는 방향으로 피 이펙트 생성

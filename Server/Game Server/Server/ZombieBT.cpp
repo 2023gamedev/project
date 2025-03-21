@@ -59,12 +59,12 @@ ZombieBT::ZombieBT()
 void ZombieBT::MakeZombieBT()
 {
 	//<Selector-Detect> 할당 -> 필요 자식노드들 '순서대로' 삽입
-	sel_detect->AddChild(sel_canseeplayer);
-	sel_detect->AddChild(seq_hasshouting);
-	sel_detect->AddChild(seq_hasfootsound);
-	sel_detect->AddChild(seq_hordeaction);
-	sel_detect->AddChild(seq_hasinvestigated);
-	sel_detect->AddChild(seq_nothaslastknownplayerlocation);
+	//sel_detect->AddChild(sel_canseeplayer);
+	//sel_detect->AddChild(seq_hasshouting);
+	//sel_detect->AddChild(seq_hasfootsound);
+	//sel_detect->AddChild(seq_hordeaction);
+	//sel_detect->AddChild(seq_hasinvestigated);
+	//sel_detect->AddChild(seq_nothaslastknownplayerlocation);
 
 	//<Selector-CanSeePlayer> 할당 -> 필요 자식노드들 '순서대로' 삽입
 	sel_canseeplayer->AddChild(seq_canattack);

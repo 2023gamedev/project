@@ -51,14 +51,32 @@ void ABloodNiagaEffect::Tick(float DeltaTime)
 	
 
 	if (spawn_flag) {
-		const float spawn_inteval = 0.5f;
-		const float spawn_duration = 3.0f;
-		const float destory_time = 5.0f;
+		//const float spawn_inteval = 0.5f;
+		//const float spawn_duration = 3.0f;
+		const float destory_time = 15.0f;
 
 		// spawn_inteval 간격으로 스폰
-		GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ABloodNiagaEffect::SpawnBloodEffect, spawn_inteval, blood_spawnloop, 0.0f);
+		//GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ABloodNiagaEffect::SpawnBloodEffect, spawn_inteval, blood_spawnloop, 0.0f);
 		// spawn_duration 동안 스폰
-		GetWorld()->GetTimerManager().SetTimer(StopSpawnTimerHandle, this, &ABloodNiagaEffect::StopSpawnBloodEffect, 1.0f, false, spawn_duration);
+		//GetWorld()->GetTimerManager().SetTimer(StopSpawnTimerHandle, this, &ABloodNiagaEffect::StopSpawnBloodEffect, 1.0f, false, spawn_duration);
+		// 이거 이상하게 작동해서 주석처리;;
+		
+		// 한번만 생성
+		UNiagaraComponent* NewBloodFX = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodFXSystem,
+			FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z),
+			FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
+
+		if (NewBloodFX)
+		{
+			NewBloodFX->SetNiagaraVariableInt(FString("User.Blood_SpawnCount"), blood_spawncount);
+
+			BloodFXComponents.Add(NewBloodFX);
+
+			NewBloodFX->Activate();
+
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Blood FX played");
+		}
+
 		// destory_time 후에 액터까지 삭제
 		GetWorld()->GetTimerManager().SetTimer(EndTimerHandle, this, &ABloodNiagaEffect::EndBloodEffect, 1.0f, false, destory_time);
 
