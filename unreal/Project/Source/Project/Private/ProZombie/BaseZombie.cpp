@@ -1655,15 +1655,13 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 {
 	if (CutProceduralMesh_1)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
+		double ALLStartTime = FPlatformTime::Seconds();
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest START")));
 
 		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh_1);
 
 
-		if (CutProceduralMesh_2) {
-			CutProceduralMesh_2->DestroyComponent();
-			CutProceduralMesh_2 = nullptr;
-		}
 
 		UKismetProceduralMeshLibrary::SliceProceduralMesh(
 			procHit,
@@ -1780,7 +1778,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			TMap<int, FVector> ClusterCenters;
 
 
-			double ALLStartTime = FPlatformTime::Seconds();
+
 
 			StartTime = FPlatformTime::Seconds();
 
@@ -2434,8 +2432,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("SliceProceduralmeshTest END")));
 
-			double AllEndTime = FPlatformTime::Seconds();
-			UE_LOG(LogTemp, Warning, TEXT("NSlice took: %f seconds"), AllEndTime - ALLStartTime);
 
 
 			//병합부분! ----------------------------------
@@ -2487,6 +2483,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			//  ----------------------------------
 		}
 
+		double AllEndTime = FPlatformTime::Seconds();
+		UE_LOG(LogTemp, Warning, TEXT("NSlice took: %f seconds"), AllEndTime - ALLStartTime);
 
 
 	}
