@@ -1658,7 +1658,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh_1);
 
-
+		// 이전 CutProceduralMesh_2 초기화 => 다시 자를때 Array Out of Bounds 크래시 에러 발생 방지
+		if (CutProceduralMesh_2) {
+			CutProceduralMesh_2->DestroyComponent();
+			CutProceduralMesh_2 = nullptr;
+		}
 
 		UKismetProceduralMeshLibrary::SliceProceduralMesh(
 			procHit,
