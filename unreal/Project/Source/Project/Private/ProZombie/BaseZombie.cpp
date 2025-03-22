@@ -1665,13 +1665,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			CutProceduralMesh_2 = nullptr;
 		}
 
-		ProceduralMeshes.Empty();
-		ProcMeshMergeStartLocation.Empty();
-		ProcMeshMergeTargetLocation.Empty();
-		ProcMeshMergeStartRotation.Empty();
-		ProcMeshMergeTargetRotation.Empty();
-
-
 		UKismetProceduralMeshLibrary::SliceProceduralMesh(
 			procHit,
 			planeposition,
