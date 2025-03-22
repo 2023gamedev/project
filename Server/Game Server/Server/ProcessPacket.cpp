@@ -276,6 +276,10 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
         string serializedData;
         Packet.SerializeToString(&serializedData);
 
+#ifdef ENABLE_PACKET_LOG
+        cout << "에임 오프셋: " << Packet.aimoffset() << endl;
+#endif
+
         // 모든 연결된 클라이언트에게 패킷 전송 (브로드캐스팅)
         int roomId = clientInfo->roomid;
 

@@ -775,14 +775,20 @@ void ABaseZombie::Tick(float DeltaTime)
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("좀비 절단 사망 클라 동기화 작업실행!")));
 		UE_LOG(LogTemp, Log, TEXT("좀비 사망 동기화 작업실행! - (cut dead) 좀비 아이디: %d"), ZombieId);
 
+		doAction_setIsCuttingDead_onTick = false;	// 딱 한번만 실행 시키도록
+
 		m_bIsCuttingDead = true;
+		m_bIsStanding = true;
 		auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 		if (nullptr != CharacterAnimInstance) {
 			CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
+			CharacterAnimInstance->SetIsStanding(m_bIsStanding);	// 누운 상태로 시작하도록 (결합 후 부활때 한틱 죽는 애니메이션 재생 안되도록)
+			GetMesh()->GlobalAnimRateScale = 0.1f;	// 일단 전체 애니메이션 정지 시켜 놓기 (배속을 느리게해서 정지와 비슷하게 -> 완전 정지시켜 놓으면 어차피 다시 키면서 순간 강제 전환 때문에 깜빡임)
+			// 0.01배속이 딱임 => 초반 애니메이션 강제 전환시에 깜빡임을 넘겨주고 동시에 보이지 않는 상태(백그라운드)에서 쓰러지는 애니메이션 느리게 재생되면서 딱 누워 있는 상태일때가 10초후! 그럼 이제 다시 보이게 하면 딱 맞음
 		}
 		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-		doAction_setIsCuttingDead_onTick = false;	// 딱 한번만 실행 시키도록
+		PlayBeAttackedSound();
 
 		StartResurrectionTimer();
 
@@ -1392,8 +1398,8 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	if (nullptr != CharacterAnimInstance) {
 		CharacterAnimInstance->SetIsCuttingDead(m_bIsCuttingDead);
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);	// 누운 상태로 시작하도록 (결합 후 부활때 한틱 죽는 애니메이션 재생 안되도록)
-		GetMesh()->GlobalAnimRateScale = 0.08f;	// 일단 전체 애니메이션 정지 시켜 놓기 (배속을 느리게해서 정지와 비슷하게 -> 완전 정지시켜 놓으면 어차피 다시 키면서 순간 강제 전환 때문에 깜빡임)
-		// 0.08초가 딱임 => 초반 애니메이션 강제 전환시에 깜빡임을 넘겨주고 동시에 보이지 않는 상태에서 쓰러지는 애니메이션 느리게 재생되면서 딱 누워 있는 상태일때가 10초후! 그럼 이제 다시 보이게 하면 딱 맞음
+		GetMesh()->GlobalAnimRateScale = 0.1f;	// 일단 전체 애니메이션 정지 시켜 놓기 (배속을 느리게해서 정지와 비슷하게 -> 완전 정지시켜 놓으면 어차피 다시 키면서 순간 강제 전환 때문에 깜빡임)
+		// 0.01배속이 딱임 => 초반 애니메이션 강제 전환시에 깜빡임을 넘겨주고 동시에 보이지 않는 상태(백그라운드)에서 쓰러지는 애니메이션 느리게 재생되면서 딱 누워 있는 상태일때가 10초후! 그럼 이제 다시 보이게 하면 딱 맞음
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
@@ -4308,7 +4314,7 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {
-		CharacterAnimInstance->SetIsStanding(m_bIsStanding);
+		CharacterAnimInstance->SetIsStanding(m_bIsStanding);	// 되살아나는 - 일어나는 애니메이션 재생 (블루프린트가 해당 플래그 값을 통해 자동 전환해줌)
 	}
 
 	// 다시 기존 SkeletalMesh 보이도록 설정

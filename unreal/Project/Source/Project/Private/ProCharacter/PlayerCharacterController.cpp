@@ -152,6 +152,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			{
 				MyGameMode->UpdatePlayerAttack(recvPlayerAttack.PlayerId, recvPlayerAttack.b_attack, recvPlayerAttack.attacktype, recvPlayerAttack.aimoffset);
 				UE_LOG(LogNet, Display, TEXT("Update Other Player: PlayerId=%d"), recvPlayerData.PlayerId);
+				UE_LOG(LogTemp, Warning, TEXT("Q_pattack.try_pop(recvPlayerAttack) aimoffset: %f"), recvPlayerAttack.aimoffset);
 			}
 		}
 
