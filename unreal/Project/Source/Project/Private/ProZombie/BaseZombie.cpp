@@ -1727,6 +1727,8 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			//}
 
 			//  ----------------------------------
+			double StartTime = FPlatformTime::Seconds();
+			double EndTime = FPlatformTime::Seconds();
 
 			if (CutProceduralMesh_1) {
 				CutPro_1TargetLocation = CutProceduralMesh_1->GetComponentLocation();
@@ -1745,19 +1747,15 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				CutPro_1TargetLocation += ForwardVector * 50.f;
 				CutPro_1TargetLocation.Z += 20.f;
 
-				FVector MeshForwardVector = GetActorForwardVector();
-				FVector MeshForwardVectorCut1 = CutProceduralMesh_1->GetForwardVector();
-				UE_LOG(LogTemp, Warning, TEXT("MeshForwardVector Cut_1: X: %f , Y : %f, Z: %f"), MeshForwardVector.X, MeshForwardVector.Y, MeshForwardVector.Z);
-				UE_LOG(LogTemp, Warning, TEXT("MeshForwardVectorCut1 Cut_1: X: %f , Y : %f, Z: %f"), MeshForwardVectorCut1.X, MeshForwardVectorCut1.Y, MeshForwardVectorCut1.Z);
 			}
+
+			EndTime = FPlatformTime::Seconds();
+			UE_LOG(LogTemp, Warning, TEXT("MergeTime took: %f seconds"), EndTime - StartTime);
 
 			TMap<FVector, FVertexBoneData> VertexBoneMap;
 			TMap<FName, FVector> BoneAveragePos;
-			double StartTime = FPlatformTime::Seconds();
 			InitVertexBoneMap(VertexBoneMap, BoneAveragePos);
 
-			double EndTime = FPlatformTime::Seconds();
-			UE_LOG(LogTemp, Warning, TEXT("InitVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
 			TArray<FVector> CutSectionVertices2;
 
@@ -1852,24 +1850,24 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			}
 
 
-			StartTime = FPlatformTime::Seconds();
+			//StartTime = FPlatformTime::Seconds();
 
 			GetVerticesByCluster(ClusteredVertices, ClusterCenters);
 
 
-			EndTime = FPlatformTime::Seconds();
+			//EndTime = FPlatformTime::Seconds();
 
-			UE_LOG(LogTemp, Warning, TEXT("GetVerticesByCluster took: %f seconds"), EndTime - StartTime);
+			//UE_LOG(LogTemp, Warning, TEXT("GetVerticesByCluster took: %f seconds"), EndTime - StartTime);
 
 
 
-			StartTime = FPlatformTime::Seconds();
+			//StartTime = FPlatformTime::Seconds();
 
 			MergeClustersBasedOnBoneName(ClusteredVertices, ClusterCenters, BoneAveragePos);
 
-			EndTime = FPlatformTime::Seconds();
+			//EndTime = FPlatformTime::Seconds();
 
-			UE_LOG(LogTemp, Warning, TEXT("MergeClustersBasedOnBoneName took: %f seconds"), EndTime - StartTime);
+			//UE_LOG(LogTemp, Warning, TEXT("MergeClustersBasedOnBoneName took: %f seconds"), EndTime - StartTime);
 
 
 			ClusterCenters.Empty();
@@ -1879,7 +1877,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			//TMap<FVector, FVertexBoneData> VertexBoneMap;
 			//TMap<FName, FVector> BoneAveragePos;
 			TMap<int32, TMap<int32, FName>> SectionVertexBoneMap;
-
+			StartTime = FPlatformTime::Seconds();
 			if (ClusterCenters.Num() <= 1) {
 				//병합부분!
 				m_bIsCutProceduralMesh_2Visibility = true;
@@ -1900,15 +1898,12 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 					CutPro_2TargetRotation = NewRotation;
 					//CutPro_2TargetRotation = CutProceduralMesh_2->GetComponentRotation() + NewRotation;
 
-					FVector MeshForwardVector = GetActorForwardVector();
-					FVector MeshForwardVectorCut2 = CutProceduralMesh_2->GetForwardVector();
-
+				
 					CutPro_2TargetLocation += ForwardVector * 50.f;
 					CutPro_2TargetLocation.Z += 20.f;
 
-					UE_LOG(LogTemp, Warning, TEXT("MeshForwardVector Cut_2: X: %f , Y : %f, Z: %f"), MeshForwardVector.X, MeshForwardVector.Y, MeshForwardVector.Z);
-					UE_LOG(LogTemp, Warning, TEXT("MeshForwardVectorCut2 Cut_2: X: %f , Y : %f, Z: %f"), MeshForwardVectorCut2.X, MeshForwardVectorCut2.Y, MeshForwardVectorCut2.Z);
 				}
+
 
 				GetWorld()->GetTimerManager().SetTimer(ZombieMergeWattingHandle, this, &ABaseZombie::StartMergiingTimerNew, 5.f, false);
 				/*FVector CutPro_2ClusterCenter(0, 0, 0);
@@ -1927,6 +1922,10 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				
 				return; // CutProceduralMesh_2 그대로 사용
 			}
+			EndTime = FPlatformTime::Seconds();
+
+			UE_LOG(LogTemp, Warning, TEXT("MergeTime2 took: %f seconds"), EndTime - StartTime);
+
 
 			//StartTime = FPlatformTime::Seconds();
 			//InitVertexBoneMap(VertexBoneMap, BoneAveragePos);
@@ -1934,11 +1933,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			//EndTime = FPlatformTime::Seconds();
 			//UE_LOG(LogTemp, Warning, TEXT("InitVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
-			StartTime = FPlatformTime::Seconds();
+			//StartTime = FPlatformTime::Seconds();
 			FillSectionVertexBoneMap(VertexBoneMap, SectionVertexBoneMap, BoneAveragePos);
 
-			EndTime = FPlatformTime::Seconds();
-			UE_LOG(LogTemp, Warning, TEXT("FillSectionVertexBoneMap took: %f seconds"), EndTime - StartTime);
+			//EndTime = FPlatformTime::Seconds();
+			//UE_LOG(LogTemp, Warning, TEXT("FillSectionVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
 			//병합부분! ----------------------------------
 
@@ -2442,6 +2441,7 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 
 			//병합부분! ----------------------------------
+			StartTime = FPlatformTime::Seconds();
 
 			m_bIsCutProceduralMesh_2Visibility = false;
 			ProcMeshMergeTargetLocation.SetNum(ProceduralMeshes.Num());
@@ -2472,6 +2472,9 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 				ProcMeshMergeTargetLocation[MeshIndex].Z += 20.f;
 
 			}
+			EndTime = FPlatformTime::Seconds();
+			UE_LOG(LogTemp, Warning, TEXT("MergeTimeProc took: %f seconds"), EndTime - StartTime);
+
 			//StartTime = FPlatformTime::Seconds();
 		
 
