@@ -1756,6 +1756,11 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 			TArray<FVector> CutSectionVertices2;
 
+			if (CutProceduralMesh_2->GetNumSections() <= 0) {
+				UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->GetNumSections() <= 0"));
+				return;
+			}
+
 			FProcMeshSection* CutSection2 = CutProceduralMesh_2->GetProcMeshSection(CutProceduralMesh_2->GetNumSections() - 1);
 			if (CutSection2)
 			{
