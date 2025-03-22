@@ -1659,6 +1659,19 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 
 		UProceduralMeshComponent* procHit = Cast<UProceduralMeshComponent>(CutProceduralMesh_1);
 
+
+		if (CutProceduralMesh_2) {
+			CutProceduralMesh_2->DestroyComponent();
+			CutProceduralMesh_2 = nullptr;
+		}
+
+		ProceduralMeshes.Empty();
+		ProcMeshMergeStartLocation.Empty();
+		ProcMeshMergeTargetLocation.Empty();
+		ProcMeshMergeStartRotation.Empty();
+		ProcMeshMergeTargetRotation.Empty();
+
+
 		UKismetProceduralMeshLibrary::SliceProceduralMesh(
 			procHit,
 			planeposition,
@@ -1755,11 +1768,6 @@ void ABaseZombie::SliceProceduralmeshTest(FVector planeposition, FVector planeno
 			UE_LOG(LogTemp, Warning, TEXT("InitVertexBoneMap took: %f seconds"), EndTime - StartTime);
 
 			TArray<FVector> CutSectionVertices2;
-
-			if (CutProceduralMesh_2->GetNumSections() <= 0) {
-				UE_LOG(LogTemp, Warning, TEXT("CutProceduralMesh_2->GetNumSections() <= 0"));
-				return;
-			}
 
 			FProcMeshSection* CutSection2 = CutProceduralMesh_2->GetProcMeshSection(CutProceduralMesh_2->GetNumSections() - 1);
 			if (CutSection2)
