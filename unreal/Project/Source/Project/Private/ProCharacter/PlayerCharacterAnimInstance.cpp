@@ -216,7 +216,7 @@ void UPlayerCharacterAnimInstance::PlayFootstepRunSound()
 		{
 			FootstepRunAudioComponent->Play();
 
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Run PLAY} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Run PLAY} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
 			UE_LOG(LogTemp, Log, TEXT("[FootstepRun PLAY]: player %d"), OwnerCharacter->GetPlayerId());
 		}
 	}
@@ -228,7 +228,7 @@ void UPlayerCharacterAnimInstance::StopFootstepRunSound()
 	{
 		FootstepRunAudioComponent->Stop();
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Run STOP} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Run STOP} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
 		UE_LOG(LogTemp, Log, TEXT("[FootstepRun STOP]: player %d"), OwnerCharacter->GetPlayerId());
 	}
 }
@@ -245,7 +245,7 @@ void UPlayerCharacterAnimInstance::PlayFootstepWalkSound()
 		{
 			FootstepWalkAudioComponent->Play();
 			
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Walk PLAY} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Walk PLAY} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
 			UE_LOG(LogTemp, Log, TEXT("[FootstepWalk PLAY]: player %d"), OwnerCharacter->GetPlayerId());
 		}
 	}
@@ -257,7 +257,7 @@ void UPlayerCharacterAnimInstance::StopFootstepWalkSound()
 	{
 		FootstepWalkAudioComponent->Stop();
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Walk STOP} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Walk STOP} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
 		UE_LOG(LogTemp, Log, TEXT("[FootstepWalk STOP]: player %d"), OwnerCharacter->GetPlayerId());
 	}
 }
@@ -288,26 +288,26 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 						StopFootstepRunSound();  // 멈추면 뛰기소리 정지
 					}
 				}
-				else {	// 다른 클라의 경우
-					if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
-					{
-						PlayFootstepRunSound();  // 이동 중이면 뛰기소리 재생
-
-						float currentTime = GetWorld()->GetTimeSeconds();
-						LastStopRunTime = currentTime; // 시간 다시 갱신 시켜 놓기
-					}
-					else
-					{
-						// 사운드 전환 딜레이 적용 (0.5초) -> 발소리를 부드럽게 보간작업!
-						float currentTime = GetWorld()->GetTimeSeconds();
-						if (currentTime - LastStopRunTime > 0.5f) {
-							PlayFootstepRunSound();	// 최소 0.5초 동안은 발소리 재생시키기
-						}
-						else {
-							StopFootstepRunSound();  // 멈추면 뛰기소리 정지
-						}
-					}
-				}
+				//else {	// 원격 클라의 경우
+				//	if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
+				//	{
+				//		PlayFootstepRunSound();  // 이동 중이면 뛰기소리 재생
+				//
+				//		float currentTime = GetWorld()->GetTimeSeconds();
+				//		LastStopRunTime = currentTime; // 시간 다시 갱신 시켜 놓기
+				//	}
+				//	else
+				//	{
+				//		// 사운드 전환 딜레이 적용 (0.5초) -> 발소리를 부드럽게 보간작업!
+				//		float currentTime = GetWorld()->GetTimeSeconds();
+				//		if (currentTime - LastStopRunTime > 0.5f) {
+				//			PlayFootstepRunSound();	// 최소 0.5초 동안은 발소리 재생시키기
+				//		}
+				//		else {
+				//			StopFootstepRunSound();  // 멈추면 뛰기소리 정지
+				//		}
+				//	}
+				//}
 
 				StopFootstepWalkSound();  // 걷기소리는 정지
 			}
@@ -324,26 +324,26 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 						StopFootstepWalkSound();  // 멈추면 걷기소리 정지
 					}
 				}
-				else {	// 다른 클라의 경우
-					if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
-					{
-						PlayFootstepWalkSound();  // 이동 중이면 걷기소리 재생
-
-						float currentTime = GetWorld()->GetTimeSeconds();
-						LastStopWalkTime = currentTime; // 시간 다시 갱신 시켜 놓기
-					}
-					else
-					{
-						// 사운드 전환 딜레이 적용 (0.5초) -> 발소리를 부드럽게 보간작업!
-						float currentTime = GetWorld()->GetTimeSeconds();
-						if (currentTime - LastStopWalkTime > 0.5f) {
-							PlayFootstepWalkSound();	// 최소 0.5초 동안은 발소리 재생시키기
-						}
-						else {
-							StopFootstepWalkSound();  // 멈추면 걷기소리 정지
-						}
-					}
-				}
+				//else {	// 원격 클라의 경우
+				//	if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
+				//	{
+				//		PlayFootstepWalkSound();  // 이동 중이면 걷기소리 재생
+				//
+				//		float currentTime = GetWorld()->GetTimeSeconds();
+				//		LastStopWalkTime = currentTime; // 시간 다시 갱신 시켜 놓기
+				//	}
+				//	else
+				//	{
+				//		// 사운드 전환 딜레이 적용 (0.5초) -> 발소리를 부드럽게 보간작업!
+				//		float currentTime = GetWorld()->GetTimeSeconds();
+				//		if (currentTime - LastStopWalkTime > 0.5f) {
+				//			PlayFootstepWalkSound();	// 최소 0.5초 동안은 발소리 재생시키기
+				//		}
+				//		else {
+				//			StopFootstepWalkSound();  // 멈추면 걷기소리 정지
+				//		}
+				//	}
+				//}
 
 				StopFootstepRunSound();  // 뛰기소리는 정지
 			}
@@ -354,11 +354,6 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 			StopFootstepWalkSound();  // 걷기소리는 정지
 			StopFootstepRunSound();  // 뛰기소리는 정지
 		}
-
-		//// 다른 클라 OldLocation 갱신 (원격 플레이어는 OldLocation 갱신작업이 따로 안되어서 - 원래는 BaseCharacter Tick에서 해줌)
-		//if (OwnerCharacter->GetPlayerId() != 99) {
-		//	OwnerCharacter->OldLocation = OwnerCharacter->NewLocation;
-		//}
 
 	}
 

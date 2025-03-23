@@ -607,6 +607,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
+	// 원격 클라 애니메이션 동기화
 	if (PlayerId != 99) {
 		if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
 			float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
