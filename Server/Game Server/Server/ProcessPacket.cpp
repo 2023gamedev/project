@@ -464,7 +464,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
             if (z->ZombieData.zombieID == recvzombieid) {
                 z->zombieHP = max(0, z->zombieHP - Packet.damage());
 
-                if (z->zombieHP < z->NormalZombieStartHP) {
+                if (z->zombieHP < z->ZombieStartHP) { // * 이거 혹시 클라에서 좀비 최초로 때릴때 데미지 0으로 때리면 그럼 어떻게 되는 거지? (서버는 BT 그냥 돌아가나?)
                     z->IsBeingAttacked = true;  // 좀비 피격중으로 변경
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
                     z->waitAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간

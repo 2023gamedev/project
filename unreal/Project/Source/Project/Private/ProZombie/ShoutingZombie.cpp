@@ -36,7 +36,7 @@ AShoutingZombie::AShoutingZombie()
 	float speed = ShoutingZombieSpeed;
 	SetSpeed(speed);
 	GetCharacterMovement()->MaxWalkSpeed = ShoutingZombieSpeed;
-	SetSTR(FMath::RandRange(4, 8)); // 수정 필요 4 ~ 8
+	SetSTR(FMath::RandRange(5, 10)); 
 	SetSpecialAbility(true);
 	SetZombieName("ShoutingZombie");
 	SetTurningSpeed(GetTurningSpeed());

@@ -42,7 +42,7 @@ ANormalZombie::ANormalZombie()
 	float speed = NormalZombieSpeed;
 	SetSpeed(speed);
 	GetCharacterMovement()->MaxWalkSpeed = NormalZombieSpeed;
-	SetSTR(FMath::RandRange(4, 8));
+	SetSTR(FMath::RandRange(3, 6));
 	SetSpecialAbility(false);
 	SetZombieName("NormalZombie");
 	SetTurningSpeed(GetTurningSpeed());
