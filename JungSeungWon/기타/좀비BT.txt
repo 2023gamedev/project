@@ -1,12 +1,19 @@
-{detect}
- -{cansee}
-  -canattack
-  -cannotattack 
- -hasshout
- -hasfootsound
- -hordeaction
- -hasinvestigated
- -hasnotthing
+{Detect}
+ -{CanSee}
+  -CanAttack
+  -CanNotAttack 
+ -HasShout
+ -HasFootsound
+ -HordeAction
+ -HasInvestigated
+ -HasNothing
+
+
+★☆★☆ 참고로 Flee, Wait, Resurrect와 같은 task들은 위에 Detect와는 달리 약간 다르게 비선형적으로 동작함
+즉, Flee, Wait, Resurrect은 외부의 자극(통신, 이벤트)이 잡히면 그때 다음 BT 턴에 실행하는 방식인데
+Detect는 일정한 간격(BT 회전)을 유지하며 일정한 싸이클로 반복 작동함 
+(즉, Detect는 주기적으로 반복 검사하는데 Flee, Wait, Resurrect은 이벤트 중심 방식으로 작동함)
+(그래서 Flee, Wait, Resurrect 얘네는 따로 ZombieBT 클래스로 안 만들고 함수로 만듬;; - 그러고 필요할때 불러 쓰도록)
 
 
 (단위 m) //-> [1cm = 1UU (Unreal unit) / 10m = 1000UU]
@@ -35,12 +42,12 @@
 // 2. 발소리 탐지 실수 추가 (정확한 위치로 못 찾아감) -> [샤우팅 좀비는 더 멀리 그리고 더 정확히 찾게 만들기]
 //  2.1. 발소리 탐지 거리 지금은 너무 짧으니 더 늘리고 대신 멀리서 포착할 수록 실수 범위 더 크게 
 //3. 무리행동 (다른 좀비가 무언가에 반응하면 같이 반응하기)
-* 4. 좀비 체력이 낮으면 도망가기(일정확률 주고) & 자동 체력회복하고 다시 복귀하기 -> [러닝좀비는 체력이 절반 이하면 바로 도망]
+* 4. 좀비 체력이 낮으면 도망가기(일정확률 주고) & 자동 체력회복하고 다시 복귀하기 -> [러닝좀비는 더 자주 도망가게]
 //5. 시야 탐지 실패 확률 추가
 
 
 //[+] 탐지에 확률 넣기 (발소리, 시야)
-// - 시야: 거리에 따라 탐지 확률
+// - 시야: 거리에 따라 탐지 확률 (+ 참고로, 좀비의 시야각은 전방 120도)
 //  - 근방 25~20 => 10% (4초)
 //  - 근방 20~15 => 30% (3초)
 //  - 근방 15~10 => 60% (2초)

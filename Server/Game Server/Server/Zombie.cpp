@@ -11,6 +11,8 @@
 using std::cout;
 using std::endl;
 
+constexpr double PI = 3.14159265358979323846;
+
 
 Zombie::Zombie()
 	: pathfinder(0,0,0,1,1,1)
@@ -1085,7 +1087,7 @@ bool Zombie::PlayerInSight_Update_Check()
 
 
 			if (really_detected) {
-#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG) || defined(ENABLE_BT_FLEE_LOG)
 				cout << "좀비 #" << ZombieData.zombieID << " 시야에 플레이어 #" << distTo_playerinsight.first << " 를 확인! --- 거리: " << distTo_playerinsight.second << endl;
 				spacing = true;
 #endif
@@ -1096,7 +1098,7 @@ bool Zombie::PlayerInSight_Update_Check()
 	}
 
 
-#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG) || defined(ENABLE_BT_FLEE_LOG)
 	if (result == false) {
 		cout << "좀비 #" << ZombieData.zombieID << " 가 그 어떤 새로운 플레이어도 포착 못함! (PlayerInSight_Update_Check() == false)" << endl;
 		spacing = true;
@@ -1708,6 +1710,8 @@ void Zombie::Resurrect()
 	IsBeingAttacked = false;
 	IsAttacking = false;
 	IsShouting = false;
+	
+	IsRunaway = false;
 
 	CanSeePlayer_result = false;
 	detectCanSeePlayer_randomChance = false;
@@ -1719,4 +1723,135 @@ void Zombie::Resurrect()
 		ShoutingZombie* sz = dynamic_cast<ShoutingZombie*>(this);  // 다운 캐스팅 사용!
 		sz->bShouted = false;
 	}
+}
+
+void Zombie::FleeRandChance()
+{
+#if defined(ENABLE_BT_FLEE_LOG) || defined(ENABLE_BT_LOG)
+	cout << "(Flee Decorator) 호출" << endl;
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 도망가기 랜덤확률 계산" << endl << endl;
+#endif
+
+	float randChance_below80p = 0.f;	// 체력이 80% 이하일때 도망갈 확률
+	float randChance_below50p = 0.f;	// 체력이 50% 이하일때 도망갈 확률
+	float randChance_below30p = 0.f;	// 체력이 30% 이하일때 도망갈 확률
+	float randChance_below10p = 0.f;	// 체력이 10% 이하일때 도망갈 확률
+
+	switch (ZombieType) {
+	case NORMAL_ZOMBIE:
+		randChance_below80p = 5.f;
+		randChance_below50p = 30.f;
+		randChance_below30p = 60.f;
+		randChance_below10p = 70.f;
+		break;
+	case RUNNING_ZOMBIE:
+		randChance_below80p = 10.f;
+		randChance_below50p = 50.f;
+		randChance_below30p = 70.f;
+		randChance_below10p = 100.f;
+		break;
+	case SHOUTING_ZOMBIE:
+		randChance_below80p = 3.f;
+		randChance_below50p = 10.f;
+		randChance_below30p = 30.f;
+		randChance_below10p = 50.f;
+		break;
+	}
+
+	float currentZHP_percent = (GetHP() / ZombieStartHP) * 100.f;
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+
+	std::uniform_int_distribution<int> random_chance(0, 100);		// 0~100
+
+	float the_chance = (float)random_chance(mt);		// random_chance(mt)는 부르는 매 순간 바뀌어서 이렇게 변수에 미리 넣고 사용
+
+#ifdef ENABLE_BT_FLEE_LOG
+	cout << "DoRunaway chance: " << the_chance << ", currentZHP_percent: " << currentZHP_percent << endl;
+#endif
+
+	if (currentZHP_percent <= 10.f) {	// 체력이 10% 이하일때
+		if (the_chance <= randChance_below10p)
+			IsRunaway = true;
+	}
+	else if (currentZHP_percent <= 30.f) {	// 체력이 30% 이하일때
+		if (the_chance <= randChance_below30p)
+			IsRunaway = true;
+	}
+	else if (currentZHP_percent <= 50.f) {	// 체력이 50% 이하일때
+		if (the_chance <= randChance_below50p)
+			IsRunaway = true;
+	}
+	else if (currentZHP_percent <= 80.f) {	// 체력이 80% 이하일때
+		if (the_chance <= randChance_below80p)
+			IsRunaway = true;
+	}
+}
+
+void Zombie::Flee()
+{
+#if defined(ENABLE_BT_FLEE_LOG) || defined(ENABLE_BT_LOG)
+	cout << "=== Sequence {Flee} 호출" << endl;
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 도망치기 중!" << endl << endl;
+#endif
+
+	Flee_CanSeePlayer();
+
+}
+
+// 사실 시퀀스로 따로 클래스 만들어서 사용해야 하는데 귀찮고 Flee에서만 사용할 꺼고 간단하니까 그냥 여기서 구현;;
+void Zombie::Flee_CanSeePlayer()
+{
+#if defined(ENABLE_BT_FLEE_LOG) || defined(ENABLE_BT_LOG)
+	cout << "{Flee}의 (CanSeePlayer Decorator) 호출" << endl;
+#endif
+
+	bool d_result = PlayerInSight_Update_Check();
+#ifdef ENABLE_BT_FLEE_LOG
+	cout << "좀비 \'#" << ZombieData.zombieID << "\' 의 시야에 플레이어가 있는가?: " << boolalpha << d_result << endl;
+#endif
+
+	if (d_result == true) {
+		vector<vector<vector<float>>> closest_player_pos = {};
+		float dist = SearchClosestPlayer(closest_player_pos, 1);
+#ifdef ENABLE_BT_FLEE_LOG
+		cout << "좀비 \'#" << ZombieData.zombieID << "\' 와 가장 가까운 플레이어 사이의 거리: " << dist << endl;
+#endif
+
+		if (dist <= 1000.f) {	// 시야에 플레이어가 존재하며 10m 이내라면
+			bool rp_result;
+			
+			rp_result = RandomPatrol();
+				
+			if (rp_result == true) {
+				Vector2 zombiePos = { ZombieData.x, ZombieData.y };         // 좀비 위치
+				Vector2 zombieForward = { TargetLocation[0][0][0], TargetLocation[0][0][1] };     // 좀비가 바라보는 방향 (오른쪽)
+				Vector2 playerPos = { 1, 1 };         // 플레이어 위치
+				float viewAngle = 120.0f;            // 시야각 (FOV)
+
+				if (CheckFleeRandomPoint(zombiePos, zombieForward, playerPos, viewAngle)) {
+
+				}
+				else {
+
+				}
+			}
+		}
+
+	}
+	
+}
+
+// 좀비의 새로운 도망지점이 플레이어쪽 방향인지 아닌지 체크
+bool Zombie::CheckFleeRandomPoint(Vector2 zombiePos, Vector2 zombieForward, Vector2 playerPos, float viewAngle) {
+	Vector2 playerDir = { playerPos.x - zombiePos.x, playerPos.y - zombiePos.y };  // 좀비 → 플레이어 벡터
+	playerDir = playerDir.Normalize();  // 정규화
+
+	zombieForward = zombieForward.Normalize();  // 정규화
+
+	float dot = zombieForward.Dot(playerDir);  // 점곱
+	float cosHalfFOV = std::cos(viewAngle * 0.5f * (PI / 180.0f)); // FOV의 절반 각도를 cos 값으로 변환
+
+	return dot >= cosHalfFOV;  // dot 값이 cos(절반 FOV)보다 크면 시야 안에 있음
 }

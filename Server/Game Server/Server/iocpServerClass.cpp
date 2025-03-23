@@ -704,6 +704,16 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 				continue;
 			}
 
+			// 좀비 도망가기 상태
+			if (zom->IsRunaway == true) {
+				zom->Flee();
+#ifdef	ENABLE_BT_LOG
+				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
+				cout << endl;
+#endif
+				continue;
+			}
+
 			// 좀비가 대기상태라면 해당 좀비 BT 잠시 대기
 			if (zom->HaveToWait == true) {
 				zom->Wait();

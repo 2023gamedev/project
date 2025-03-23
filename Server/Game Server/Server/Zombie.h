@@ -56,6 +56,7 @@ public:
         INVESTIGATED,
         PATROL,
         HORDESOUND,
+        RUNAWAY,
 
         BLACKBOARDCLEARED = 69
     };
@@ -65,6 +66,28 @@ public:
         NORMAL_ZOMBIE,
         RUNNING_ZOMBIE,
         SHOUTING_ZOMBIE
+    };
+
+
+    struct Vector2 {
+        float x, y;
+
+        // 벡터 정규화 (길이를 1로 만들기)
+        Vector2 Normalize() const {
+            float length = std::sqrt(x * x + y * y);
+            if (length == 0) return { 0, 0 };
+            return { x / length, y / length };
+        }
+
+        // 벡터 점곱 (Dot Product)
+        float Dot(const Vector2& other) const {
+            return x * other.x + y * other.y;
+        }
+
+        // 벡터 길이 (Magnitude)
+        float Length() const {
+            return std::sqrt(x * x + y * y);
+        }
     };
 
 
@@ -149,6 +172,8 @@ public:
     bool IsStandingStill;   // 해당 좀비가 잠시 가만히 서있는 상태인가? (숨고르기)
 
     bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
+
+    bool IsRunaway = false; // 좀비가 도망가기 상태인가?
 
     FLOOR z_floor;          // 좀비가 스폰 된 층
 
@@ -248,5 +273,13 @@ public:
     void TakeABreak();
 
     void Resurrect();
+
+    void FleeRandChance();
+
+    void Flee();
+
+    void Flee_CanSeePlayer();
+
+    bool CheckFleeRandomPoint(Vector2 zombiePos, Vector2 zombieForward, Vector2 playerPos, float viewAngle);
 
 };

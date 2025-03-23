@@ -10,7 +10,7 @@
 std::mutex roomPlayersMutex;
 
 
-bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
+bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string& packet) {
     // g_players에서 클라이언트 정보 검색
     auto it = g_players.find(id);
     if (it == g_players.end()) {
@@ -440,7 +440,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
     {
         Protocol::Zombie_hp Packet;
         Packet.ParseFromArray(packet.data(), packet.size());
-#ifdef ENABLE_PACKET_LOG
+#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_FLEE_LOG)
         cout << "recv zombie #" << Packet.zombieid() << " HP Packet" << endl;
 #endif
         string serializedData;
@@ -469,10 +469,12 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                     z->HaveToWait = true;	// 좀비 BT 대기상태로 변경
                     z->waitAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
 
-#ifdef ENABLE_PACKET_LOG
+#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_FLEE_LOG)
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
                     cout << endl;
 #endif
+
+                    //z->FleeRandChance();   // 도망가기 랜덤 가챠 돌리기
                 }
 
                 // 좀비 사망시에
@@ -481,7 +483,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
                     z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
 
-#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG)
+#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG) || defined(ENABLE_BT_FLEE_LOG)
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!! - (Normal Dead)" << endl;
                     cout << endl;
 #endif
@@ -681,7 +683,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
                 }
             }
         }
-       
+
         return true;
     }
 
@@ -708,7 +710,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string &packet) {
 
                 z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
 
-#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG)
+#if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG) || defined(ENABLE_BT_FLEE_LOG)
                 cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!! - (Cut Dead)" << endl;
                 cout << endl;
 #endif
