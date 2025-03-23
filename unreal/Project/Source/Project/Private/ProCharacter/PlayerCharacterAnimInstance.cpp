@@ -355,10 +355,10 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 			StopFootstepRunSound();  // 뛰기소리는 정지
 		}
 
-		// 다른 클라 OldLocation 갱신 (원격 플레이어는 OldLocation 갱신작업이 따로 안되어서 - 원래는 BaseCharacter Tick에서 해줌)
-		if (OwnerCharacter->GetPlayerId() != 99) {
-			OwnerCharacter->OldLocation = OwnerCharacter->NewLocation;
-		}
+		//// 다른 클라 OldLocation 갱신 (원격 플레이어는 OldLocation 갱신작업이 따로 안되어서 - 원래는 BaseCharacter Tick에서 해줌)
+		//if (OwnerCharacter->GetPlayerId() != 99) {
+		//	OwnerCharacter->OldLocation = OwnerCharacter->NewLocation;
+		//}
 
 	}
 

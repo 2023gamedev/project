@@ -607,7 +607,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
-	if (!GetVelocity().Size()) {
+	if (PlayerId != 99) {
 		if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
 			float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
 			Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
