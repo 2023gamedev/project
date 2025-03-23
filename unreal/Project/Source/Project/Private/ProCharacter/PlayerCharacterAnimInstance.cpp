@@ -216,7 +216,8 @@ void UPlayerCharacterAnimInstance::PlayFootstepRunSound()
 		{
 			FootstepRunAudioComponent->Play();
 
-			UE_LOG(LogTemp, Log, TEXT("[FootstepRun play]: player %d"), OwnerCharacter->GetPlayerId());
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Run PLAY} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+			UE_LOG(LogTemp, Log, TEXT("[FootstepRun PLAY]: player %d"), OwnerCharacter->GetPlayerId());
 		}
 	}
 }
@@ -226,6 +227,9 @@ void UPlayerCharacterAnimInstance::StopFootstepRunSound()
 	if (FootstepRunAudioComponent && FootstepRunAudioComponent->IsPlaying())
 	{
 		FootstepRunAudioComponent->Stop();
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Run STOP} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+		UE_LOG(LogTemp, Log, TEXT("[FootstepRun STOP]: player %d"), OwnerCharacter->GetPlayerId());
 	}
 }
 
@@ -240,8 +244,9 @@ void UPlayerCharacterAnimInstance::PlayFootstepWalkSound()
 		if (FootstepWalkAudioComponent && !FootstepWalkAudioComponent->IsPlaying())
 		{
 			FootstepWalkAudioComponent->Play();
-
-			UE_LOG(LogTemp, Log, TEXT("[FootstepWalk play]: player %d"), OwnerCharacter->GetPlayerId());
+			
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Walk PLAY} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+			UE_LOG(LogTemp, Log, TEXT("[FootstepWalk PLAY]: player %d"), OwnerCharacter->GetPlayerId());
 		}
 	}
 }
@@ -251,6 +256,9 @@ void UPlayerCharacterAnimInstance::StopFootstepWalkSound()
 	if (FootstepWalkAudioComponent && FootstepWalkAudioComponent->IsPlaying())
 	{
 		FootstepWalkAudioComponent->Stop();
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Walk STOP} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
+		UE_LOG(LogTemp, Log, TEXT("[FootstepWalk STOP]: player %d"), OwnerCharacter->GetPlayerId());
 	}
 }
 
@@ -282,8 +290,6 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 				else {	// 다른 클라의 경우
 					if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
 					{
-						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Run Play} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
-
 						PlayFootstepRunSound();  // 이동 중이면 뛰기소리 재생
 
 						float currentTime = GetWorld()->GetTimeSeconds();
@@ -297,8 +303,6 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 							PlayFootstepRunSound();	// 최소 0.5초 동안은 발소리 재생시키기
 						}
 						else {
-							//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Run Stop} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
-
 							StopFootstepRunSound();  // 멈추면 뛰기소리 정지
 						}
 					}
@@ -321,8 +325,6 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 				else {	// 다른 클라의 경우
 					if (OwnerCharacter->OldLocation != OwnerCharacter->NewLocation)
 					{
-						//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Walk Play} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
-
 						PlayFootstepWalkSound();  // 이동 중이면 걷기소리 재생
 
 						float currentTime = GetWorld()->GetTimeSeconds();
@@ -336,8 +338,6 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 							PlayFootstepWalkSound();	// 최소 0.5초 동안은 발소리 재생시키기
 						}
 						else {
-							//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Walk Stop} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
-
 							StopFootstepWalkSound();  // 멈추면 걷기소리 정지
 						}
 					}
