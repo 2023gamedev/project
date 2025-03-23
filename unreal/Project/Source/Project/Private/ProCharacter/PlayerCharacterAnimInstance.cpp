@@ -275,6 +275,7 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 		}
 
 		if (OwnerCharacter->GetHP() > 0) {	// 살아 있을때만
+			
 			if (OwnerCharacter->IsRun() == true) {		// 뛰는 중
 
 				if (OwnerCharacter->GetPlayerId() == 99) {	// 로컬의 경우
@@ -310,6 +311,7 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 
 				StopFootstepWalkSound();  // 걷기소리는 정지
 			}
+
 			else {	// 걷는 중
 
 				if (OwnerCharacter->GetPlayerId() == 99) {	// 로컬의 경우
@@ -345,12 +347,21 @@ void UPlayerCharacterAnimInstance::UpdateFootstepSound()
 
 				StopFootstepRunSound();  // 뛰기소리는 정지
 			}
+
 		}
+
 		else {	// 만약 죽었다면
 			StopFootstepWalkSound();  // 걷기소리는 정지
 			StopFootstepRunSound();  // 뛰기소리는 정지
 		}
+
+		// 다른 클라 OldLocation 갱신 (원격 플레이어는 OldLocation 갱신작업이 따로 안되어서 - 원래는 BaseCharacter Tick에서 해줌)
+		if (OwnerCharacter->GetPlayerId() != 99) {
+			OwnerCharacter->OldLocation = OwnerCharacter->NewLocation;
+		}
+
 	}
+
 }
 
 //void UPlayerCharacterAnimInstance::AnimNotify_OnFootstep()
