@@ -515,6 +515,10 @@ void IOCP_CORE::ServerOn()
 	cout << "<< 발소리 탐지 랜덤 위치 관련 로그 츨력 ON >>" << endl;
 #endif
 
+#ifdef 	ENABLE_BT_FLEE_LOG
+	cout << "<< 좀비 BT 도망치기 관련 로그 츨력 ON >>" << endl; 
+#endif
+
 	//for (const auto player : playerDB) {
 	//	float p_x = player.second.x;
 	//	float p_y = player.second.y;
