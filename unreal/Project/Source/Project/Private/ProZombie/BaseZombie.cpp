@@ -2743,31 +2743,119 @@ float ABaseZombie::CalculateDynamicEps(const TArray<FVector>& Vertices, int K)
 	Distances.Sort();
 	return (Distances.Num() > 0) ? Distances[Distances.Num() / 2] : 0.0f;
 }
+//
+//void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices)
+//{
+//	int ClusterId = 0;
+//	Labels.SetNumUninitialized(Vertices.Num());
+//
+//	for (int i = 0; i < Labels.Num(); ++i)
+//	{
+//		Labels[i] = -1;
+//	}
+//
+//	// 평균 거리 계산
+//	float AvgDistance = CalculateAverageDistance(Vertices);
+//	//float Eps = AvgDistance * 0.3f;
+//	float Eps = CalculateDynamicEps(Vertices, MinPts) * 3.f;
+//	UE_LOG(LogTemp, Warning, TEXT("DBSCANWithAverageDistance  - EPS: %f"), Eps);
+//	// DBSCAN 알고리즘
+//	for (int i = 0; i < Vertices.Num(); ++i)
+//	{
+//		if (Labels[i] != -1) continue;
+//
+//		TArray<int> Neighbors;
+//		for (int j = 0; j < Vertices.Num(); ++j)
+//		{
+//			if (i != j && CalculateEuclideanDistance(Vertices[i], Vertices[j]) <= Eps)
+//			{
+//				Neighbors.Add(j);
+//			}
+//		}
+//
+//		if (Neighbors.Num() >= MinPts)
+//		{
+//			ClusterId++;
+//			Labels[i] = ClusterId;
+//			ClusteredVertices.FindOrAdd(ClusterId).Add(TPair<int, FVector>(i, Vertices[i])); // 인덱스 포함 추가
+//
+//			TArray<int> SeedSet = Neighbors;
+//			int Index = 0;
+//
+//			while (Index < SeedSet.Num())
+//			{
+//				int CurrentIdx = SeedSet[Index];
+//				if (Labels[CurrentIdx] == -1)
+//				{
+//					Labels[CurrentIdx] = ClusterId;
+//					ClusteredVertices.FindOrAdd(ClusterId).Add(TPair<int, FVector>(CurrentIdx, Vertices[CurrentIdx])); // 인덱스 포함 추가
+//				}
+//
+//				TArray<int> NewNeighbors;
+//				for (int j = 0; j < Vertices.Num(); ++j)
+//				{
+//					if (CurrentIdx != j && CalculateEuclideanDistance(Vertices[CurrentIdx], Vertices[j]) <= Eps)
+//					{
+//						NewNeighbors.Add(j);
+//					}
+//				}
+//
+//				if (NewNeighbors.Num() >= MinPts)
+//				{
+//					for (int NewIdx : NewNeighbors)
+//					{
+//						if (!SeedSet.Contains(NewIdx))
+//						{
+//							SeedSet.Add(NewIdx);
+//						}
+//					}
+//				}
+//
+//				Index++;
+//			}
+//		}
+//	}
+//
+//	//// 클러스터 개수 및 클러스터별 버텍스 출력
+//	//int ClusterCount = 0;
+//	//for (const auto& Cluster : ClusteredVertices)
+//	//{
+//	//	UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, Cluster.Value.Num());
+//	//	ClusterCount = FMath::Max(ClusterCount, Cluster.Key);
+//
+//	//	for (const TPair<int, FVector>& VertexData : Cluster.Value)
+//	//	{
+//	//		UE_LOG(LogTemp, Warning, TEXT("Index: %d, Vertex: %s"), VertexData.Key, *VertexData.Value.ToString());
+//	//	}
+//	//}
+//
+//	//UE_LOG(LogTemp, Warning, TEXT("Number of Clusters: %d"), ClusterCount);
+//}
+// 
 
 void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int MinPts, TArray<int>& Labels, TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices)
 {
 	int ClusterId = 0;
 	Labels.SetNumUninitialized(Vertices.Num());
-
-	for (int i = 0; i < Labels.Num(); ++i)
+	for (int& Label : Labels)
 	{
-		Labels[i] = -1;
+		Label = -1;
 	}
 
-	// 평균 거리 계산
-	float AvgDistance = CalculateAverageDistance(Vertices);
-	//float Eps = AvgDistance * 0.3f;
+	// Eps 계산 및 제한
 	float Eps = CalculateDynamicEps(Vertices, MinPts) * 3.f;
-	UE_LOG(LogTemp, Warning, TEXT("DBSCANWithAverageDistance  - EPS: %f"), Eps);
-	// DBSCAN 알고리즘
+	float EpsSquared = Eps * Eps;
+	UE_LOG(LogTemp, Warning, TEXT("DBSCANWithAverageDistance - Eps: %f"), Eps);
+
 	for (int i = 0; i < Vertices.Num(); ++i)
 	{
 		if (Labels[i] != -1) continue;
 
+		// 이웃 탐색 (DistSquared 사용)
 		TArray<int> Neighbors;
 		for (int j = 0; j < Vertices.Num(); ++j)
 		{
-			if (i != j && CalculateEuclideanDistance(Vertices[i], Vertices[j]) <= Eps)
+			if (i != j && FVector::DistSquared(Vertices[i], Vertices[j]) <= EpsSquared)
 			{
 				Neighbors.Add(j);
 			}
@@ -2777,24 +2865,29 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 		{
 			ClusterId++;
 			Labels[i] = ClusterId;
-			ClusteredVertices.FindOrAdd(ClusterId).Add(TPair<int, FVector>(i, Vertices[i])); // 인덱스 포함 추가
+			ClusteredVertices.FindOrAdd(ClusterId).Add(TPair<int, FVector>(i, Vertices[i]));
 
+			// TSet 사용하여 SeedSet 관리
+			TSet<int> Visited;
 			TArray<int> SeedSet = Neighbors;
-			int Index = 0;
+			Visited.Append(Neighbors);
 
+			int Index = 0;
 			while (Index < SeedSet.Num())
 			{
 				int CurrentIdx = SeedSet[Index];
+
 				if (Labels[CurrentIdx] == -1)
 				{
 					Labels[CurrentIdx] = ClusterId;
-					ClusteredVertices.FindOrAdd(ClusterId).Add(TPair<int, FVector>(CurrentIdx, Vertices[CurrentIdx])); // 인덱스 포함 추가
+					ClusteredVertices.FindOrAdd(ClusterId).Add(TPair<int, FVector>(CurrentIdx, Vertices[CurrentIdx]));
 				}
 
+				// 새로운 이웃 탐색
 				TArray<int> NewNeighbors;
 				for (int j = 0; j < Vertices.Num(); ++j)
 				{
-					if (CurrentIdx != j && CalculateEuclideanDistance(Vertices[CurrentIdx], Vertices[j]) <= Eps)
+					if (CurrentIdx != j && FVector::DistSquared(Vertices[CurrentIdx], Vertices[j]) <= EpsSquared)
 					{
 						NewNeighbors.Add(j);
 					}
@@ -2804,9 +2897,10 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 				{
 					for (int NewIdx : NewNeighbors)
 					{
-						if (!SeedSet.Contains(NewIdx))
+						if (!Visited.Contains(NewIdx))
 						{
 							SeedSet.Add(NewIdx);
+							Visited.Add(NewIdx);
 						}
 					}
 				}
@@ -2815,21 +2909,6 @@ void ABaseZombie::DBSCANWithAverageDistance(const TArray<FVector>& Vertices, int
 			}
 		}
 	}
-
-	//// 클러스터 개수 및 클러스터별 버텍스 출력
-	//int ClusterCount = 0;
-	//for (const auto& Cluster : ClusteredVertices)
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("Cluster %d has %d vertices"), Cluster.Key, Cluster.Value.Num());
-	//	ClusterCount = FMath::Max(ClusterCount, Cluster.Key);
-
-	//	for (const TPair<int, FVector>& VertexData : Cluster.Value)
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("Index: %d, Vertex: %s"), VertexData.Key, *VertexData.Value.ToString());
-	//	}
-	//}
-
-	//UE_LOG(LogTemp, Warning, TEXT("Number of Clusters: %d"), ClusterCount);
 }
 
 void ABaseZombie::MergeClustersBasedOnBoneName(TMap<int, TArray<TPair<int, FVector>>>& ClusteredVertices, TMap<int, FVector>& ClusterCenters, TMap<FName, FVector>& BoneAveragePos)
