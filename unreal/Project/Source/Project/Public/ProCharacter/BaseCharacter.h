@@ -706,7 +706,6 @@ private:
 	uint32 PlayerId = 99;		// 나 자신은 99번(초기값) 고정이고 ,다른 클라는 실제 서버에서 관리하는 플레이어 DB에 인덱스를 따름 (+ 그래서 나 자신의 실제 서버 DB의 인덱스 알고 싶으면 ClientSocket->MyPlayerId 사용)
 	std::string PlayerName;
 
-	float Speed;
 	float PreviousSpeed;
 
 public:
@@ -717,6 +716,8 @@ public:
 
 	FVector NewLocation;
 	FVector OldLocation = FVector(0.0f, 0.0f, 0.0f);
+
+	float Speed;
 
 	uint32 ItemBoxId = 0;
 

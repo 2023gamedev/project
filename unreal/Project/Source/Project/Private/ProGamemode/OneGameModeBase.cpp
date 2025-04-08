@@ -827,7 +827,7 @@ void AOneGameModeBase::SpawnInterActorStaticClasses()
 
 }
 
-void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, std::string username, float hp)
+void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, FRotator NewRotation, uint32 charactertype, std::string username, float hp, float DeltaSeconds)
 {
     UWorld* World = GetWorld();
 
@@ -845,14 +845,34 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
         {
             FVector OldLocation = BasePlayer->GetActorLocation();
 
-            // 기존 캐릭터 위치 업데이트
-            FVector SmoothedLocation = FMath::VInterpTo(BasePlayer->GetActorLocation(), NewLocation, GetWorld()->GetDeltaSeconds(), 10.0f);     // 보간 (부드럽게 보이게)
-            FRotator SmoothedRotation = FMath::RInterpTo(BasePlayer->GetActorRotation(), NewRotation, GetWorld()->GetDeltaSeconds(), 10.0f);    // 보간 (부드럽게 보이게)
+            FVector MoveDir = (NewLocation - OldLocation);
+            const float DistToDest = MoveDir.Length();
+            MoveDir.Normalize();
 
-            BasePlayer->SetActorLocation(SmoothedLocation);
-            BasePlayer->SetActorRotation(SmoothedRotation);
+            float MoveDist = 0.f;
 
-            BasePlayer->UpdatePlayerData(SmoothedLocation);
+            if (BasePlayer->IsRun() == true) {
+                MoveDist = (MoveDir * (BasePlayer->GetBasicSpeed() * 100.f) * DeltaSeconds).Length();
+            }
+            else {
+                MoveDist = (MoveDir * (BasePlayer->GetBasicSpeed() / 2 * 100.f) * DeltaSeconds).Length();
+            }
+            MoveDist = FMath::Min(MoveDist, DistToDest);
+            FVector NextLocation = OldLocation + MoveDir * MoveDist;
+
+            BasePlayer->SetActorLocation(NextLocation);
+            BasePlayer->SetActorRotation(NewRotation);
+            BasePlayer->UpdatePlayerData(NextLocation);
+
+
+            //// 기존 캐릭터 위치 업데이트
+            //FVector SmoothedLocation = FMath::VInterpTo(BasePlayer->GetActorLocation(), NewLocation, GetWorld()->GetDeltaSeconds(), 10.0f);     // 보간 (부드럽게 보이게)
+            //FRotator SmoothedRotation = FMath::RInterpTo(BasePlayer->GetActorRotation(), NewRotation, GetWorld()->GetDeltaSeconds(), 10.0f);    // 보간 (부드럽게 보이게)
+
+            //BasePlayer->SetActorLocation(SmoothedLocation);
+            //BasePlayer->SetActorRotation(SmoothedRotation);
+
+            //BasePlayer->UpdatePlayerData(SmoothedLocation);
 
             BasePlayer->SetHP(hp);
 

@@ -79,7 +79,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-	void CheckAndSendMovement();
+	void CheckAndSendMovement(float DeltaTime);
 
 	void Send_Attack();
 
