@@ -99,8 +99,11 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	// ClientSocketPtr 큐에 쌓인 명령들 실행(pop)
 	if (GameInstance && GameInstance->ClientSocketPtr)
 	{
+		PlayerData latestData;
+
 		if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 		{
+			latestData = recvPlayerData;
 
 			// 현재 GameMode 인스턴스를 얻기
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld())))
@@ -171,8 +174,8 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		}
 		else {
 			if (AOneGameModeBase* MyGameMode = Cast<AOneGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))) {
-				MyGameMode->UpdateOtherPlayer(recvPlayerData.PlayerId, recvPlayerData.Location, recvPlayerData.Rotation, recvPlayerData.charactertype,
-					recvPlayerData.username, recvPlayerData.hp, DeltaTime);
+				MyGameMode->UpdateOtherPlayer(latestData.PlayerId, latestData.Location, latestData.Rotation, latestData.charactertype,
+					latestData.username, latestData.hp, DeltaTime);
 			}
 		}
 
