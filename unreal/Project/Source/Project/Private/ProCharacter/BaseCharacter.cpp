@@ -231,6 +231,8 @@ ABaseCharacter::ABaseCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.f, 0.f);
 	GetCharacterMovement()->JumpZVelocity = 500.f;
+	
+	GetCharacterMovement()->bRunPhysicsWithNoController = true;
 
 	CurrentWeapon = nullptr;
 	CurrentThrowWeapon = nullptr;
@@ -609,42 +611,34 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	// 원격 클라 애니메이션 동기화
 	if (PlayerId != 99) {
-		if (OldLocation != FVector(0.0f, 0.0f, 0.0f)) {
-			float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
-			Speed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
-		}
+		float DistanceMoved = FVector::Dist(OldLocation, NewLocation);
+		float TargetSpeed = (DeltaTime > 0) ? (DistanceMoved / DeltaTime) : 0;
 
-		// 애니메이션 인스턴스에 속도 파라미터 설정
-		if ((Speed == 0 && PreviousSpeed != 0) || (Speed == 0 && PreviousSpeed == 0))	// 정지 애니메이션 전환 => 얘만 0.3초 쿨다운 적용 
+		if (DistanceMoved < 1.0f)
 		{
-			// 애니메이션 전환 쿨타임 적용 (0.3초) -> 걷기-뛰기 애니메이션 부드럽게 보간작업!
-			float currentTime = GetWorld()->GetTimeSeconds();
-
-			if (currentTime - LastStopAnimTime > 0.3f) {
-				if (AnimInstance) {
-					AnimInstance->SetCurrentPawnSpeed(Speed);
-
-					LastStopAnimTime = currentTime;
-				}
-			}
+			Speed = 0.0f;
 		}
-		else if (Speed != 0 && PreviousSpeed == 0) {	// 걷는 애니메이션 전환
-
-			if (AnimInstance) {
-				AnimInstance->SetCurrentPawnSpeed(Speed);
-			}
+		else
+		{
+			Speed = FMath::FInterpTo(PreviousSpeed, TargetSpeed, DeltaTime, 10.0f);
 		}
 
-		if (m_bJump == true) {
-			if (AnimInstance)
+		if (Speed < 5.0f)
+		{
+			Speed = 0.0f;
+		}
+
+		if (AnimInstance)
+		{
+			AnimInstance->SetCurrentPawnSpeed(Speed);
+			AnimInstance->SetIsPawnRun(m_bRun);
+
+			if (m_bJump)
 			{
 				AnimInstance->PlayJumpMontage();
+				m_bJump = false;
 			}
-			m_bJump = false;
 		}
-
-		AnimInstance->SetIsPawnRun(m_bRun);
-
 
 		PreviousSpeed = Speed;
 		OldLocation = NewLocation;

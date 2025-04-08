@@ -99,7 +99,6 @@ void APlayerCharacterController::Tick(float DeltaTime)
 	// ClientSocketPtr 큐에 쌓인 명령들 실행(pop)
 	if (GameInstance && GameInstance->ClientSocketPtr)
 	{
-		PlayerData latestData;
 
 		if (GameInstance->ClientSocketPtr->Q_player.try_pop(recvPlayerData))
 		{
@@ -656,9 +655,24 @@ void APlayerCharacterController::CheckAndSendMovement(float DeltaTime)
 	ABaseCharacter* MyBaseCharacter = Cast<ABaseCharacter>(MyPawn);
 	uint32 ItemBoxId = MyBaseCharacter->ItemBoxId;
 	float hp = MyBaseCharacter->GetHP();
+
+	bool bShouldSend = false;
+
+	if (TimeSinceLastSend >= 0.1f || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp || sendRun || sendjump) {
+		bShouldSend = true;
+		bSentWhileStopped = false; // 뭔가 변했으니까 다시 전송 가능
+	}
+	else if (PreviousLocation == CurrentLocation && !bSentWhileStopped) {
+		// 멈춰있는 상태지만 아직 안 보냈다면 이번에 보내기
+		bShouldSend = true;
+		bSentWhileStopped = true; // 한 번 보냈으니 다음 틱에 또 안 보내게
+	}
 	
 	// 이전 위치와 현재 위치 비교 (움직임 감지)
-	if (TimeSinceLastSend >= 0.2f || PreviousRotation != CurrentRotation || b_GetItem || PreviouHP != hp || sendRun || sendjump || PreviousLocation == CurrentLocation) {
+	if (bShouldSend) {
+		
+		TimeSinceLastSend = 0.f;
+
 		uint32 MyPlayerId = GameInstance->ClientSocketPtr->GetMyPlayerId();
 		uint32 MyRoomId = GameInstance->ClientSocketPtr->MyRoomId;
 		MyCharacterNumber = GameInstance->GetChoicedCharacterNumber();

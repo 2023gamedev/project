@@ -113,6 +113,7 @@ private:
 public:
 	UProGameInstance* GameInstance;
 	PlayerData recvPlayerData;
+	PlayerData latestData;
 	PlayerAttack recvPlayerAttack;
 	EquipItem recvEquipItem;
 	PlayerRun recvRun;
@@ -155,7 +156,9 @@ public:
 	bool sendRun = false;
 	bool sendjump = false;
 	bool b_clear = false;
+	bool bSentWhileStopped = false;
 	
 	float TimeSinceLastSend;
+
 
 };
