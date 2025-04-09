@@ -862,18 +862,16 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
 
             FRotator SmoothedRotation = FMath::RInterpTo(BasePlayer->GetActorRotation(), NewRotation, DeltaSeconds, 10.0f);
 
-            BasePlayer->SetActorLocation(NextLocation);
+            if (DistToDest > 200.f){
+                // 너무 멀면 그냥 순간이동
+                BasePlayer->TeleportTo(NewLocation, NewRotation);
+            }
+            else {
+                BasePlayer->SetActorLocation(NextLocation);
+            }
             BasePlayer->SetActorRotation(SmoothedRotation);
             BasePlayer->UpdatePlayerData(NextLocation);
 
-            //// 기존 캐릭터 위치 업데이트
-            //FVector SmoothedLocation = FMath::VInterpTo(BasePlayer->GetActorLocation(), NewLocation, GetWorld()->GetDeltaSeconds(), 10.0f);     // 보간 (부드럽게 보이게)
-            //FRotator SmoothedRotation = FMath::RInterpTo(BasePlayer->GetActorRotation(), NewRotation, GetWorld()->GetDeltaSeconds(), 10.0f);    // 보간 (부드럽게 보이게)
-
-            //BasePlayer->SetActorLocation(SmoothedLocation);
-            //BasePlayer->SetActorRotation(SmoothedRotation);
-
-            //BasePlayer->UpdatePlayerData(SmoothedLocation);
 
             BasePlayer->SetHP(hp);
 
