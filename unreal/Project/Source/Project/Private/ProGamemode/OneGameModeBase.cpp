@@ -866,11 +866,6 @@ void AOneGameModeBase::UpdateOtherPlayer(uint32 PlayerID, FVector NewLocation, F
             BasePlayer->SetActorRotation(SmoothedRotation);
             BasePlayer->UpdatePlayerData(NextLocation);
 
-            float RealSpeed = BasePlayer->GetBasicSpeed() * 100.f;
-            UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), RealSpeed);
-            UE_LOG(LogTemp, Warning, TEXT("DeltaSeconds: %f"), DeltaSeconds);
-
-
             //// 기존 캐릭터 위치 업데이트
             //FVector SmoothedLocation = FMath::VInterpTo(BasePlayer->GetActorLocation(), NewLocation, GetWorld()->GetDeltaSeconds(), 10.0f);     // 보간 (부드럽게 보이게)
             //FRotator SmoothedRotation = FMath::RInterpTo(BasePlayer->GetActorRotation(), NewRotation, GetWorld()->GetDeltaSeconds(), 10.0f);    // 보간 (부드럽게 보이게)
