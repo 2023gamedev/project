@@ -140,7 +140,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed();
 
-		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(0.95f);
+		OwnerZombie->CachedAnimInstance->SetPlayAnimSpeed(1.1f);
 	}
 	else if (OwnerZombie->targetType == OwnerZombie->TARGET::BLACKBOARDCLEARED) {
 		return;
