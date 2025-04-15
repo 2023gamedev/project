@@ -217,7 +217,7 @@ void UPlayerCharacterAnimInstance::PlayFootstepRunSound()
 			FootstepRunAudioComponent->Play();
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Run PLAY} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
-			UE_LOG(LogTemp, Log, TEXT("[FootstepRun PLAY]: player %d"), OwnerCharacter->GetPlayerId());
+			//UE_LOG(LogTemp, Log, TEXT("[FootstepRun PLAY]: player %d"), OwnerCharacter->GetPlayerId());
 		}
 	}
 }
@@ -229,7 +229,7 @@ void UPlayerCharacterAnimInstance::StopFootstepRunSound()
 		FootstepRunAudioComponent->Stop();
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Run STOP} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
-		UE_LOG(LogTemp, Log, TEXT("[FootstepRun STOP]: player %d"), OwnerCharacter->GetPlayerId());
+		//UE_LOG(LogTemp, Log, TEXT("[FootstepRun STOP]: player %d"), OwnerCharacter->GetPlayerId());
 	}
 }
 
@@ -246,7 +246,7 @@ void UPlayerCharacterAnimInstance::PlayFootstepWalkSound()
 			FootstepWalkAudioComponent->Play();
 			
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("{FootStep Walk PLAY} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
-			UE_LOG(LogTemp, Log, TEXT("[FootstepWalk PLAY]: player %d"), OwnerCharacter->GetPlayerId());
+			//UE_LOG(LogTemp, Log, TEXT("[FootstepWalk PLAY]: player %d"), OwnerCharacter->GetPlayerId());
 		}
 	}
 }
@@ -258,7 +258,7 @@ void UPlayerCharacterAnimInstance::StopFootstepWalkSound()
 		FootstepWalkAudioComponent->Stop();
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("{FootStep Walk STOP} PlayerId: %d"), OwnerCharacter->GetPlayerId()));
-		UE_LOG(LogTemp, Log, TEXT("[FootstepWalk STOP]: player %d"), OwnerCharacter->GetPlayerId());
+		//UE_LOG(LogTemp, Log, TEXT("[FootstepWalk STOP]: player %d"), OwnerCharacter->GetPlayerId());
 	}
 }
 

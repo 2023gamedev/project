@@ -599,7 +599,8 @@ void Zombie::Attack(int roomid)
 
 void Zombie::MoveTo(float deltasecond)
 {
-	if (IsStandingStill == true && IsRunaway == false) {	// 숨고르기 상태라면 MoveTo 바로 종료 => ReachFinalDestionation 들어가서 ClearBlackBoard 하는거 방지해야함 (숨고르기 할때 계속 초기화해주니까 플레이어를 못 볼 수 있음)
+	if (IsStandingStill == true // 숨고르기 상태라면 MoveTo 바로 종료 => ReachFinalDestionation 들어가서 ClearBlackBoard 하는거 방지해야함 (숨고르기 할때 계속 초기화해주니까 플레이어를 못 볼 수 있음)
+		&& IsRunaway == false) {	// 다만 도망치기 중에 하는 숨고르기는 계속 작동해야하므로
 #if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
 		cout << "좀비 #" << ZombieData.zombieID << " 숨고르기 상태. (MoveTo 바로 종료)" << endl;
 		cout << endl;
@@ -930,7 +931,7 @@ void Zombie::ReachFinalDestination()
 		IsStandingStill = true;
 
 #ifdef	ENABLE_BT_LOG
-		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '호드 사운드'" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '도망치기' => '숨어서 숨고르기 발동!'" << endl;
 #endif
 		break;
 	}
@@ -1579,8 +1580,10 @@ void Zombie::MakeNoise()
 // wait(애니메이션) 실행 우선순위: 피격 > 공격 > 샤우팅
 void Zombie::Wait()
 {
-	//cout << "좀비 '#" << ZombieData.zombieID << "' BT 잠시 대기." << endl;
-	//cout << endl;
+#ifdef ENABLE_BT_LOG
+	cout << "### [Wait] 호출" << endl;
+	cout << "좀비 '#" << ZombieData.zombieID << "' BT 잠시 대기." << endl << endl;
+#endif
 
 
 	// 피격이 공격 보다 위에 => 공격 중에 피격 당하면 공격 캔슬되고 피격만 되게 하게 
@@ -1749,7 +1752,7 @@ void Zombie::Resurrect()
 void Zombie::FleeRandChance()
 {
 #if defined(ENABLE_BT_FLEE_LOG) || defined(ENABLE_BT_LOG)
-	cout << "(Flee Decorator) 호출" << endl;
+	cout << "### (Flee Decorator) 호출" << endl;
 	cout << "좀비 \'#" << ZombieData.zombieID << "\' 도망가기 랜덤확률 계산" << endl << endl;
 #endif
 
@@ -1849,6 +1852,7 @@ void Zombie::Flee_CanSeePlayer()
 #ifdef ENABLE_BT_FLEE_LOG
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 도망가기 포인트 최초 설정!" << endl;
 #endif
+		runawayHealthRegenLastTime = std::chrono::high_resolution_clock::now();	// 체력 회복 시작 시간
 		RandomPatrol();
 	}
 		
@@ -1901,7 +1905,7 @@ void Zombie::Flee_CanSeePlayer()
 #endif
 
 	if (d_result == true) {
-		//HealthRegenerate();
+		HealthRegenerate();
 		Runaway();
 	}
 	
@@ -1929,4 +1933,67 @@ void Zombie::Runaway()
 	SetTargetLocation(Zombie::TARGET::RUNAWAY);
 
 	MoveTo(IOCP_CORE::BT_deltaTime.count());
+}
+
+void Zombie::HealthRegenerate()
+{
+#if defined(ENABLE_BT_FLEE_LOG) || defined(ENABLE_BT_LOG)
+	cout << "{Flee_CanSeePlayer}의 [HealthRegenerate] 호출" << endl;
+#endif
+
+	auto waitAfterTime = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> deltaTime = waitAfterTime - runawayHealthRegenLastTime;
+
+	if (deltaTime.count() >= runawayHealthRegenInterval) {
+		float hpRegen = 1.0f;
+		SetHP(GetHP() + hpRegen);	// +1씩 체력 회복 
+
+
+		// 좀비 도망치기 체력 회복 동기화 통신 작업
+		if (GetHP() >= 0) {	// 혹시 모를 좀비 체력관련 데이터 레이스 발생 방지하기 위해 => (이벤트 방식-비동기적으로)피격으로 좀비 체력을 같이 수정하니까 ===> 좀비 죽고 시체 상태로 안 움직이도록 방지
+			int ZombieId = ZombieData.zombieID;
+
+			Protocol::Zombie_hp packet;
+			packet.set_zombieid(ZombieId);
+			packet.set_damage(hpRegen * (-1.f));	// 계산은 '원래HP - 데미지' 이런식이니까, -hpRegen 이렇게 넘겨줘서 오히려 체력이 회복되는 효과를 봄
+			packet.set_packet_type(12);
+
+			std::string serializedData;
+			packet.SerializeToString(&serializedData);
+
+			for (const auto& player : playerDB_BT[roomid]) {
+				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
+			}
+		}
+
+
+		runawayHealthRegenLastTime = std::chrono::high_resolution_clock::now();	// 시간 다시 초기화
+
+#ifdef ENABLE_BT_FLEE_LOG
+		cout << "좀비 \'#" << ZombieData.zombieID << "\' 체력 회복:" << GetHP() << endl;
+#endif
+	}
+	else {
+
+#ifdef ENABLE_BT_FLEE_LOG
+		cout << "좀비 \'#" << ZombieData.zombieID << "\' 체력 회복 중 - 다음 회복까지 남은 시간:" << runawayHealthRegenInterval - deltaTime.count() << "s" << endl;
+#endif
+	}
+
+	float currentZHP_percent = (GetHP() / ZombieStartHP) * 100.f;
+
+	if (currentZHP_percent >= runawayHealthRegenMaxPercent) {	// 일정 체력 이상을 회복하면 
+		IsRunaway = false;	// 도망치기 끝내기
+		IsStandingStill = false;	// 숨고르기 하고 있었다면 초기화
+		RandPatrolSet = false;	// 다시 패트롤 하도록
+
+#ifdef ENABLE_BT_FLEE_LOG
+		cout << "좀비 \'#" << ZombieData.zombieID << "\' 체력 회복 완료!!! - " << GetHP() << " => 도망치기 종료" << endl;
+#endif
+	}
+
+#if defined(ENABLE_BT_FLEE_LOG) || defined(ENABLE_BT_LOG)
+	cout << endl;
+#endif
+
 }

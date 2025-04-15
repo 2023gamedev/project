@@ -685,12 +685,17 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 				auto deadAfterTime = std::chrono::high_resolution_clock::now();
 				std::chrono::duration<float> deltaTime = deadAfterTime - zom->resurrectionStartTime;
 
+#ifdef ENABLE_BT_LOG
+				cout << "### [Resurrect] 호출" << endl;
+#endif
+
 				if (deltaTime.count() >= zom->resurrectionTimer) {
 					zom->Resurrect();
 					continue;
 				}
 				else {
 #ifdef ENABLE_BT_LOG
+					cout << "좀비 '#" << ZombieData.zombieID << "' 부활중" << endl;
 					cout << "부활 남은 시간: " << zom->resurrectionTimer - deltaTime.count() << "s" << endl;
 #endif
 				}

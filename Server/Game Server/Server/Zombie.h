@@ -201,6 +201,10 @@ public:
     std::chrono::steady_clock::time_point resurrectionStartTime;    // 좀비 부활 타이머 시작 시간
     const float resurrectionTimer = 15.f + 0.5f; // 좀비 부활 타이머 세팅 (15.5초 - 원래는 15초인데 +0.5초 해서 네트워크 딜레이까지 고려)
 
+    std::chrono::steady_clock::time_point runawayHealthRegenLastTime;   // 좀비 도망치기 체력회복 마지막(직전) 시간
+    const float runawayHealthRegenInterval = 2.0f; // 좀비 도망치기 체력회복 인터벌 (+1씩 2초간격)
+    const float runawayHealthRegenMaxPercent = 50.0f; // 좀비 도망치기 최대 체력회복 퍼센트 (50%)
+
     TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 69-BLACKBOARDCLEARED)
 
     int ZombiePathIndex = 0;

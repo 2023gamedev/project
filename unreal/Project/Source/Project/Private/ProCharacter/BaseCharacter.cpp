@@ -2945,21 +2945,28 @@ void ABaseCharacter::ProGameEnd()
 
 void ABaseCharacter::StartBleedingTimer()
 {
-	SetSTR(GetSTR() - 2);
-	SetBasicSpeed(GetBasicSpeed() - 1);
+	float str = GetSTR() - 2;
+	if (str <= 0)	// 마이너스 값이 되서 좀비 체력을 회복 시키지 않도록
+		str = 0;
+	SetSTR(str);
+	float speed = GetBasicSpeed() - 1;
+	if (speed <= 0)	// 마이너스 값이 되지 않도록
+		speed = 0;
+	SetBasicSpeed(speed);
 	GetWorld()->GetTimerManager().SetTimer(BleedingHandle, this, &ABaseCharacter::BleedingTimerElapsed, 2.0f, true, 1.0f);
 }
 
 void ABaseCharacter::BleedingTimerElapsed()
 {
-	if (!m_bBleeding) {
+	if (!m_bBleeding) {	// 지혈 했을때
 		GetWorld()->GetTimerManager().ClearTimer(BleedingHandle);
 		SetSTR(GetSTR() + 2);
 		SetBasicSpeed(GetBasicSpeed() + 1);
 		return;
 	}
-	SetHP(GetHP() - 1);
 
+
+	SetHP(GetHP() - 1);
 
 	if (GetHP() <= 0 && !IsDeadPlay()) {
 		SetDeadPlay(true);
