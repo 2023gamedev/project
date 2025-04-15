@@ -606,6 +606,19 @@ void ABaseCharacter::Tick(float DeltaTime)
 		PlayDead();
 	}
 
+	// 점프 도중 죽었을 경우 바닥에 닿고 나서 NoCollision으로 바꾸기 위해 사용 (바닥을 뚫고 계속 떨어져 크래시 발생하는 거 방지)
+	if (IsDead() == true && GetCharacterMovement()->IsMovingOnGround() && IsDeadNoCollision() == false) {	
+		SetDeadNoCollision(true);
+		
+		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+
+		GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+
+		if (PlayerId == 99) {	// 바닥에 닿고 나서 먹고 있던 아이템 주변에 흩뿌리기
+			SpawnAllOnGround();
+		}
+	}
+
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -644,6 +657,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 		OldLocation = NewLocation;
 	}
 
+	// 로컬의 경우
 	else {
 		if (nullptr != AnimInstance) {
 			AnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
@@ -743,16 +757,6 @@ void ABaseCharacter::PlayDead()
 
 	FText KText = FText::FromString(TEXT("당신은 죽었습니다."));
 	ShowDeathActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
-	
-	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
-	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-
-
-	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-
-	if (PlayerId == 99) {
-		SpawnAllOnGround();
-	}
 
 	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 	if (controller != nullptr) {
