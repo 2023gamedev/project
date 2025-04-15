@@ -384,7 +384,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string& packet) {
                     float dist = z->SetDistance(Packet.playerid(), 1);   // DistanceTo_PlayerInsight 맵 에 해당 플레이어와 거리 데이터 새로 추가하기 (생성) / 이미 있었다면 갱신하기
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_NODE_LOG)
-                    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!! - 거리: " << dist << endl;
+                    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ";
+                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에 - 플레이어 \'#" << id << "\' 포착!!! - 거리: " << dist << endl;
 #endif
 
                     // 샤우팅 좀비일 경우에
@@ -409,7 +410,8 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string& packet) {
                     z->DistanceTo_PlayerInsight[Packet.playerid()] = z->CanSeePlayerDistance + 6969.f;     // 탐지 거리 밖 표시
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_NODE_LOG)
-                    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!" << endl;
+                    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ";
+                    cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 의 시야에서 - 플레이어 \'#" << id << "\' 놓침!!!" << endl;
 #endif
 
                     break;
@@ -470,11 +472,12 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string& packet) {
                     z->waitAnimStartTime = std::chrono::high_resolution_clock::now();		// 좀비 피격 시작 시간
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_FLEE_LOG)
+                    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ";
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 피격!! 남은 HP: " << z->GetHP() << endl;
                     cout << endl;
 #endif
 
-                    //z->FleeRandChance();   // 도망가기 랜덤 가챠 돌리기
+                    z->FleeRandChance();   // 도망가기 랜덤 가챠 돌리기
                 }
 
                 // 좀비 사망시에
@@ -484,6 +487,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string& packet) {
                     z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG) || defined(ENABLE_BT_FLEE_LOG)
+                    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ";
                     cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!! - (Normal Dead)" << endl;
                     cout << endl;
 #endif
@@ -711,6 +715,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string& packet) {
                 z->resurrectionStartTime = std::chrono::high_resolution_clock::now();		// 좀비 부활 타이머 시작 시간
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_LOG) || defined(ENABLE_BT_FLEE_LOG)
+                cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ";
                 cout << "좀비 \'#" << z->ZombieData.zombieID << "\' 사망!!! - (Cut Dead)" << endl;
                 cout << endl;
 #endif

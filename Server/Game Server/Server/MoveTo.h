@@ -29,8 +29,6 @@ public:
         // 플레이어를 보고 있으니, 계속 따라오게 해야되니까 => 매 틱마다 위치 갱신
         zom.SetTargetLocation(Zombie::TARGET::PLAYER);
 
-        zom.UpdatePath();
-
         zom.IsStandingStill = false;    // (만약 이전에 숨고르기 상태였으면) MoveTo 다시 작동하도록
 
         zom.MoveTo(IOCP_CORE::BT_deltaTime.count());

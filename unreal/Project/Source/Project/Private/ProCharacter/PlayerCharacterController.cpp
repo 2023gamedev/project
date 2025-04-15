@@ -497,6 +497,9 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 7:
 			prevType = TEXT("[HordeSound]");
 			break;
+		case 8:
+			prevType = TEXT("[Runaway]");
+			break;
 		case 69:
 			prevType = TEXT("[BlackboardClear]");
 			break;
@@ -573,6 +576,15 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 
 			(*zombie)->targetType = (*zombie)->TARGET::HORDESOUND;
+			break;
+
+		case 8:
+			if ((*zombie)->targetType != (*zombie)->TARGET::RUNAWAY) {
+				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %s -> [Runaway]"), tmp_path.ZombieId, *prevType);
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %s -> [Runaway]"), tmp_path.ZombieId, *prevType));
+			}
+
+			(*zombie)->targetType = (*zombie)->TARGET::RUNAWAY;
 			break;
 
 

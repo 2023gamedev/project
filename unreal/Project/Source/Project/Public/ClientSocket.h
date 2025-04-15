@@ -133,7 +133,7 @@ struct ZombiePath
 	std::vector<std::tuple<float, float, float>> Path1;
 	std::vector<std::tuple<float, float, float>> Path2;
 	FVector Location;
-	uint32 targetType;	// 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL)
+	uint32 targetType;	// 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 69-BLACKBOARDCLEARED)
 
 	ZombiePath() : ZombieId(0), Path1(), Path2(), Location(FVector::ZeroVector), targetType(0) {}
 

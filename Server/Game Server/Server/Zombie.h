@@ -171,7 +171,7 @@ public:
 
     bool IsStandingStill;   // 해당 좀비가 잠시 가만히 서있는 상태인가? (숨고르기)
 
-    bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별
+    bool HaveToWait;        // BT가 대기상태를 해야 하는지 판별 => 애니메이션 재생 상태일때
 
     bool IsRunaway = false; // 좀비가 도망가기 상태인가?
 
@@ -201,7 +201,7 @@ public:
     std::chrono::steady_clock::time_point resurrectionStartTime;    // 좀비 부활 타이머 시작 시간
     const float resurrectionTimer = 15.f + 0.5f; // 좀비 부활 타이머 세팅 (15.5초 - 원래는 15초인데 +0.5초 해서 네트워크 딜레이까지 고려)
 
-    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HordeSound)
+    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 69-BLACKBOARDCLEARED)
 
     int ZombiePathIndex = 0;
 
@@ -281,5 +281,9 @@ public:
     void Flee_CanSeePlayer();
 
     bool CheckFleeRandomPoint(Vector2 zombiePos, Vector2 zombieForward, Vector2 playerPos, float viewAngle);
+
+    void Runaway();
+
+    void HealthRegenerate();
 
 };

@@ -135,7 +135,7 @@ void AZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	}
 	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING 
 		|| OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND || OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED
-		|| OwnerZombie->targetType == OwnerZombie->TARGET::HORDESOUND) {	// 뛰기
+		|| OwnerZombie->targetType == OwnerZombie->TARGET::HORDESOUND || OwnerZombie->targetType == OwnerZombie->TARGET::RUNAWAY) {	// 뛰기
 
 		OwnerZombie->SetSpeed(OwnerZombie->NormalZombieSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed();
