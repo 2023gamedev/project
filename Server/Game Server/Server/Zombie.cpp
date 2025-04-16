@@ -1132,7 +1132,7 @@ bool Zombie::PlayerInSight_Update_Check()
 
 
 			if (really_detected) {
-#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG) || defined(ENABLE_BT_FLEE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG) /*|| defined(ENABLE_BT_FLEE_LOG)*/
 				cout << "좀비 #" << ZombieData.zombieID << " 시야에 플레이어 #" << distTo_playerinsight.first << " 를 확인! --- 거리: " << distTo_playerinsight.second << endl;
 				spacing = true;
 #endif
@@ -1143,7 +1143,7 @@ bool Zombie::PlayerInSight_Update_Check()
 	}
 
 
-#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG) || defined(ENABLE_BT_FLEE_LOG)
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG) /*|| defined(ENABLE_BT_FLEE_LOG)*/
 	if (result == false) {
 		cout << "좀비 #" << ZombieData.zombieID << " 가 그 어떤 새로운 플레이어도 포착 못함! (PlayerInSight_Update_Check() == false)" << endl;
 		spacing = true;
@@ -1151,7 +1151,7 @@ bool Zombie::PlayerInSight_Update_Check()
 #endif
 
 
-#if defined(ENABLE_BT_LOG)	|| defined(ENABLE_BT_FLEE_LOG)
+#if defined(ENABLE_BT_LOG) /*|| defined(ENABLE_BT_FLEE_LOG)*/
 	if (spacing)
 		cout << endl;
 #endif
