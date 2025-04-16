@@ -246,38 +246,56 @@ float Zombie::SetDistance(int playerid, int distanceType)
 
 bool Zombie::RandomPatrol()
 {
-	//cout << "New RandomPatrol!!!" << endl;
-
 	float px, py, pz;
 
 	std::random_device rd;
 	std::mt19937 mt(rd());
 
-	std::uniform_int_distribution<int> dist(-1500, 1500);		//현 위치에서 반경 1500 +-
+	float max_radius = 0;
+	float min_radius = 0;
 
-	px = ZombieData.x + dist(mt);
-	py = ZombieData.y + dist(mt);
+	if (IsRunaway == true) {
+		max_radius = 2500;
+		min_radius = 1500;
+	}
+	else {
+		max_radius = 1500;
+	}
+
+	std::uniform_int_distribution<int> dist(-max_radius, max_radius);		//현 위치에서 반경 radius 만큼
+
+	float offset_x = dist(mt);
+	while (offset_x <= min_radius && offset_x >= -min_radius) {	// 최소 radius 설정
+		offset_x = dist(mt);
+	}
+
+	float offset_y = dist(mt);
+	while (offset_y <= min_radius && offset_y >= -min_radius) {	// 최소 radius 설정
+		offset_y = dist(mt);
+	}
+	
+	px = ZombieData.x + offset_x;
+	py = ZombieData.y + offset_y;
 	pz = ZombieData.z;
 
-	while (px >= 2366.f) {		// 좀비가 계단 쪽, 그리고 그쪽 벽 넘어로 자주 넘어가는 오류가 있어 이를 일단 방지하기 위해 (맵 수정 전까지는)
-		px = ZombieData.x + dist(mt);
-
-		if (ZombieData.x >= 2366.f) {
-			cout << "좀비 #" << ZombieData.zombieID << " - ";
-			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!! (계단 쪽을 넘어감)" << endl;
-			return false;
-		}
+	//while (px >= 2366.f) {		// 좀비가 계단 쪽, 그리고 그쪽 벽 넘어로 자주 넘어가는 오류가 있어 이를 일단 방지하기 위해 (맵 수정 전까지는) 
+	//									=> X 굳이? 어차피 CheckPath에서 계단 너머 쪽 포인트를 찍더라도 가장 가까운 실제 걸을 수 있는 지점을 찍을 꺼니까
+	//	px = ZombieData.x + dist(mt);
+	if (ZombieData.x >= 2366.f) {
+		cout << "좀비 #" << ZombieData.zombieID << " - ";
+		cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!! (계단 쪽을 넘어감)" << endl;
+		return false;
 	}
+	//}
 
-	while (py <= -1200.f) {		// 좀비가 화장실 뒤쪽 너머 빈 공간으로 자주 넘어가서 일단 막음
-		py = ZombieData.y + dist(mt);
-
-		if (ZombieData.x <= -1200.f) {
-			cout << "좀비 #" << ZombieData.zombieID << " - ";
-			cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!! (화장실 뒤쪽을 넘어)" << endl;
-			return false;
-		}
+	//while (py <= -1200.f) {		// 좀비가 화장실 뒤쪽 너머 빈 공간으로 자주 넘어가서 일단 막음
+	//	py = ZombieData.y + dist(mt);
+	if (ZombieData.x <= -1200.f) {
+		cout << "좀비 #" << ZombieData.zombieID << " - ";
+		cout << "[ERROR] 현재 좀비 걸을 수 있는 지형을 벗어남!!! (화장실 뒤쪽을 넘어감)" << endl;
+		return false;
 	}
+	//}
 
 	vector<tuple<float, float, float>> dest_test;
 
@@ -292,6 +310,13 @@ bool Zombie::RandomPatrol()
 	if (dest_test.size() < 3) {
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 새로운 패트롤 찾기 실패!!! => dest_test.size() < 3 -> 현재 지점과 너무 가까운 점" << endl;
+#endif		
+		return false;
+	}
+
+	if (IsRunaway == true && dest_test.size() < 5) {
+#ifdef	ENABLE_BT_FLEE_LOG
+		cout << "좀비 #" << ZombieData.zombieID << " 새로운 도망치기 패트롤 포인트 찾기 실패!!! => dest_test.size() < 5 -> 현재 지점과 너무 가까운 점" << endl;
 #endif		
 		return false;
 	}
@@ -1852,8 +1877,25 @@ void Zombie::Flee_CanSeePlayer()
 #ifdef ENABLE_BT_FLEE_LOG
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 도망가기 포인트 최초 설정!" << endl;
 #endif
+
 		runawayHealthRegenLastTime = std::chrono::high_resolution_clock::now();	// 체력 회복 시작 시간
-		RandomPatrol();
+
+		bool result = false;
+		int try_cnt = 0;
+		while (result == false) {
+			try_cnt++;
+#ifdef	ENABLE_BT_FLEE_LOG
+			cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 시도 - #" << try_cnt << endl;
+#endif
+			result = RandomPatrol();
+
+			if (try_cnt >= 5 && result == false) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
+#ifdef	ENABLE_BT_FLEE_LOG
+				cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...) => 좀비 해당 한 틱동안 멍때림!!" << endl;
+#endif
+				break;
+			}
+		}
 	}
 		
 	bool pis_result = PlayerInSight_Update_Check();
