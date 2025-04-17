@@ -31,6 +31,7 @@ DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
 class ABloodNiagaEffect;
 class AShoutingNiagaEffect;
 class AResurrectNiagaEffect;
+class AHealingNiagaEffect;
 
 // Zombie 클래스의 부모 클래스
 UCLASS()
@@ -280,6 +281,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	AResurrectNiagaEffect* ResurrectFX;
 
+	UPROPERTY(EditAnywhere)
+	AHealingNiagaEffect* HealingFX;
+
 	float SetImpulseByWeight(float targetWeight, float baseImpulse);
 
 	UPROPERTY(EditAnywhere)
@@ -450,7 +454,7 @@ public:
 	const float ZombieInvestigatedSpeed_Offset = 40.f;     // 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +40.f 스피드
 	const float ZombieHeardFootSoundSpeed_Offset = -20.f;   // 발소리를 들었을 때는 뛰기 스피드에서 -20.f 스피드
 
-	TARGET	targetType = NULL_TARGET;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND)
+	TARGET	targetType = NULL_TARGET;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 69-BLACKBOARDCLEARED)
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GrowlSound", Transient)
 	TObjectPtr<USoundBase> GrowlSound;
@@ -470,6 +474,8 @@ public:
 
 	void PlayScaredSound();
 
+	void Runaway();
+
 	bool IsGrowlSoundPlaying = false;   // 사운드 중복 재생 방지용 플래그
 	FTimerHandle GrowlSoundTimerHandle;     
 
@@ -480,4 +486,7 @@ public:
 
 	bool bCanDetectPlayer = false;  // 초기에는 탐지 불가능
 	FTimerHandle DetectionTimerHandle;
+
+	bool IsRunaway = false;
+
 };

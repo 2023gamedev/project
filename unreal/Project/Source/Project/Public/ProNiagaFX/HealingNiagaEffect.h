@@ -36,9 +36,15 @@ public:
 	UNiagaraComponent* HealingFXComponent;
 
 	UPROPERTY(EditAnywhere)
-	ABaseCharacter* OwnerChar;
+	ACharacter* OwnerChar;
 
 	UPROPERTY(EditAnywhere)
-	FVector spawn_offset = FVector(0, 0, 20.f);
+	FVector spawn_offset = FVector(0, 0, 0.f);
+
+	UPROPERTY(EditAnywhere)	// 1-플레이어(초록), 2-좀비(빨강)
+	int materialType = 0;	
+
+	UPROPERTY(EditAnywhere)	
+	bool spawn_flag = false;
 
 };

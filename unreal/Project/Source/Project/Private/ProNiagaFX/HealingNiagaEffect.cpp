@@ -32,20 +32,6 @@ AHealingNiagaEffect::AHealingNiagaEffect()
 void AHealingNiagaEffect::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (HealingFXSystem) {
-		HealingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HealingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z) + spawn_offset);
-	}
-	else {
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Healing FX System is nullptr!");
-		UE_LOG(LogTemp, Error, TEXT("Healing FX System is nullptr!"));
-	}
-
-	if (HealingFXComponent)
-	{
-		HealingFXComponent->Activate();
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX played");
-	}
 
 }
 
@@ -54,6 +40,43 @@ void AHealingNiagaEffect::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (spawn_flag) {
+		spawn_flag = false;
+
+		if (HealingFXSystem) {
+			HealingFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HealingFXSystem, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z) + spawn_offset);
+		
+			if (materialType == 1) {
+				UMaterialInterface* HealingMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Mesh/healing.healing"));
+
+				if (HealingMat && HealingFXComponent)
+				{
+					HealingFXComponent->SetVariableMaterial(TEXT("HealingMaterialParam"), HealingMat);
+				}
+			}
+			if (materialType == 2) {
+				UMaterialInterface* HealingMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Mesh/zombiehealing.zombiehealing"));
+
+				if (HealingMat && HealingFXComponent)
+				{
+					HealingFXComponent->SetVariableMaterial(TEXT("HealingMaterialParam"), HealingMat);
+				}
+			}
+		}
+		else {
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Healing FX System is nullptr!");
+			UE_LOG(LogTemp, Error, TEXT("Healing FX System is nullptr!"));
+		}
+
+		if (HealingFXComponent)
+		{
+			HealingFXComponent->Activate();
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Healing FX played");
+		}
+	}
+
+
+	// 캐릭터 위치 따라 이펙트 생성 위치 갱신
 	if (OwnerChar && HealingFXComponent) {
 		HealingFXComponent->SetWorldLocation(OwnerChar->GetActorLocation() + spawn_offset);
 	}
@@ -62,7 +85,7 @@ void AHealingNiagaEffect::Tick(float DeltaTime)
 
 void AHealingNiagaEffect::EndPlay(EEndPlayReason::Type type)
 {
-	if(HealingFXComponent) {
+	if (HealingFXComponent) {
 		HealingFXComponent->Deactivate(); // 비활성화
 		HealingFXComponent->DestroyComponent();  // 컴포넌트 제거
 	}

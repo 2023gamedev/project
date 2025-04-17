@@ -1743,6 +1743,20 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 	
 	HealingFX = GetWorld()->SpawnActor<AHealingNiagaEffect>(AHealingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
 	HealingFX->OwnerChar = this;
+	HealingFX->materialType = 1;
+	if (GetCharacterName() == "GirlCharacter") {
+		HealingFX->spawn_offset.Z = 20.f;
+	}
+	else if (GetCharacterName() == "IdolCharacter") {
+		HealingFX->spawn_offset.Z = 22.f;
+	}
+	else if (GetCharacterName() == "FireFighterCharacter") {
+		HealingFX->spawn_offset.Z = 27.f;
+	}
+	else if (GetCharacterName() == "EmployeeCharacter") {
+		HealingFX->spawn_offset.Z = 24.f;
+	}
+	HealingFX->spawn_flag = true;
 
 	if (CurrentHealingItem != nullptr) {
 

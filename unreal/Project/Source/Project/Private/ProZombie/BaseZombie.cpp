@@ -16,6 +16,7 @@
 #include "ProNiagaFX/BloodNiagaEffect.h"
 #include "ProNiagaFX/ShoutingNiagaEffect.h"
 #include "ProNiagaFX/ResurrectNiagaEffect.h"
+#include "ProNiagaFX/HealingNiagaEffect.h"
 
 #include "Rendering/SkeletalMeshRenderData.h"
 #include "Rendering/SkeletalMeshLODRenderData.h"
@@ -51,6 +52,8 @@ ABaseZombie::ABaseZombie()
 
 	ShoutingFX = nullptr;
 	
+	HealingFX = nullptr;
+
 	ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/Mesh/SlicedBloodMaterial.SlicedBloodMaterial"));
 	if (MaterialFinder.Succeeded())
 	{
@@ -724,7 +727,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 			int32 bmin = NewBloodFX->blood_spawncount_awaysynchit_min;
 			int32 bmax = NewBloodFX->blood_spawncount_awaysynchit_max;
-			
+
 			NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
 			NewBloodFX->spawn_flag = true;
 
@@ -1193,6 +1196,19 @@ void ABaseZombie::Tick(float DeltaTime)
 	//	double EndTime = FPlatformTime::Seconds();
 	//	UE_LOG(LogTemp, Warning, TEXT("bIsMergingInProgressVertex took: %f seconds"), EndTime - StartTime);
 	//}
+
+	// 좀비 도망가기 체력회복 이펙트 생성/파괴
+	if (targetType == RUNAWAY && IsRunaway == false) {
+		IsRunaway = true;
+		Runaway();
+	}
+	else if ((IsRunaway == true && (targetType != RUNAWAY && targetType != BLACKBOARDCLEARED)) || GetHP() <= 0.f) {
+		IsRunaway = false;
+		if (HealingFX != NULL) {
+			HealingFX->EndPlay(EEndPlayReason::Destroyed);
+		}
+	}
+
 
 	Super::Tick(DeltaTime);
 
@@ -4563,4 +4579,21 @@ void ABaseZombie::PlayScaredSound()
 
 		UGameplayStatics::PlaySoundAtLocation(world, ScaredSound.Get(), GetActorLocation(), GetActorRotation(), 1.0f);
 	}
+}
+
+void ABaseZombie::Runaway()
+{
+	HealingFX = GetWorld()->SpawnActor<AHealingNiagaEffect>(AHealingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
+	HealingFX->OwnerChar = this;
+	HealingFX->materialType = 2;
+	if (GetZombieName() == "NormalZombie") {
+		HealingFX->spawn_offset.Z = 23.f;
+	}
+	else if (GetZombieName() == "RunningZombie") {
+		HealingFX->spawn_offset.Z = 24.f;
+	}
+	else if (GetZombieName() == "ShoutingZombie") {
+		HealingFX->spawn_offset.Z = 27.f;
+	}
+	HealingFX->spawn_flag = true;
 }
