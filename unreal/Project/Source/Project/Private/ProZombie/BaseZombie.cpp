@@ -433,10 +433,22 @@ void ABaseZombie::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("GrowlSound failed to load in BeginPlay!"));
 	}
 
-	BeAttackedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieBeAttacked.ZombieBeAttacked"));
-	if (!BeAttackedSound)
+	//BeAttackedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieBeAttacked.ZombieBeAttacked"));
+	//if (!BeAttackedSound)
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("BeAttackedSound failed to load in BeginPlay!"));
+	//}
+
+	DeathSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/zombie-death.zombie-death"));
+	if (!DeathSound)
 	{
-		UE_LOG(LogTemp, Error, TEXT("BeAttackedSound failed to load in BeginPlay!"));
+		UE_LOG(LogTemp, Error, TEXT("DeathSound failed to load in BeginPlay!"));
+	}
+
+	ScaredSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/zombie-scared.zombie-scared"));
+	if (!ScaredSound)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ScaredSound failed to load in BeginPlay!"));
 	}
 
 	// 5초 후에 EnablePlayerDetection() 호출
@@ -788,7 +800,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		}
 		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-		PlayBeAttackedSound();
+		PlayDeathSound();
 
 		StartResurrectionTimer();
 
@@ -1403,7 +1415,7 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-	PlayBeAttackedSound();
+	PlayDeathSound();	// 커팅데드는 애니메이션에 묶어놓은 사운드 큐가 재생 안되어 따로 재생시켜줌
 
 	StartResurrectionTimer();
 }
@@ -4475,8 +4487,11 @@ void ABaseZombie::Ressurect()
 	procMesh_AddImpulse_1 = false;
 	procMesh_AddImpulse_2 = false;
 
-	m_bIsShouting = false;
-	m_bIsShouted = false;	// 소리쳤는지
+	m_bIsShouting = false;	// 샤우팅 좀비 소리치는 중인지
+	m_bIsShouted = false;	// 샤우팅 좀비 소리쳤는지
+
+	IsGrowlSoundPlaying = false;	// 부활한 직후에 바로 눈 앞에 플레이어 있으면 곧바로 소리치도록 
+	GetWorld()->GetTimerManager().ClearTimer(GrowlSoundTimerHandle);	// 타이머도 초기화시져주고
 
 	procMesh_AddImpulse_1 = false;
 	procMesh_AddImpulse_2 = false;
@@ -4492,7 +4507,7 @@ void ABaseZombie::PlayGrowlSound()
 		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId));
 
-		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.4f);
+		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.8f);
 
 		IsGrowlSoundPlaying = true;
 
@@ -4509,14 +4524,26 @@ void ABaseZombie::PlayGrowlSound()
 	}
 }
 
-void ABaseZombie::PlayBeAttackedSound()
+void ABaseZombie::PlayDeathSound()
 {
 	auto* world = GetWorld();
-	if (IsValid(world) && BeAttackedSound)
+	if (IsValid(world) && DeathSound)
 	{
-		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing BeAttackedSound at Location! - ZombieID: %d"), ZombieId);
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing BeAttackedSound at Location! - ZombieID: %d"), ZombieId));
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing DeathSound at Location! - ZombieID: %d"), ZombieId);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing DeathSound at Location! - ZombieID: %d"), ZombieId));
 
-		UGameplayStatics::PlaySoundAtLocation(world, BeAttackedSound.Get(), GetActorLocation(), GetActorRotation(), 0.75f);
+		UGameplayStatics::PlaySoundAtLocation(world, DeathSound.Get(), GetActorLocation(), GetActorRotation(), 1.0f);
+	}
+}
+
+void ABaseZombie::PlayScaredSound()
+{
+	auto* world = GetWorld();
+	if (IsValid(world) && ScaredSound)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing ScaredSound at Location! - ZombieID: %d"), ZombieId);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing ScaredSound at Location! - ZombieID: %d"), ZombieId));
+
+		UGameplayStatics::PlaySoundAtLocation(world, ScaredSound.Get(), GetActorLocation(), GetActorRotation(), 1.0f);
 	}
 }

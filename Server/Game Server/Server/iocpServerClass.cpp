@@ -819,10 +819,11 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 						|| (zom->ZombiePathIndex >= zom->path.size() || (zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1]))	 // 이미 도착지점에 있는 좀비
 						|| (zom->IsStandingStill == true && zom->targetType == zom->PATROL)	// 숨고르기 할때'만' 패킷 보내지 X -> 제자리 걸음 방지 & 숨고르기에서 피격 당하고 블랙보드 클리어 할때는 보내야 하니까
 						|| (zom->IsStandingStill == true && zom->targetType == zom->RUNAWAY)	// 도망치기 이후 숨어서 숨고르기 하는 중인 좀비
-						&& zom->targetType != zom->BLACKBOARDCLEARED	// 다만 블랙보드 클리어는 보내야 하니 제외
 						//|| zom->HaveToWait == true	/* 이러면, 다른 층에서 있던 플레이어 애니메이션 재생 중이던 좀비 위치를 갱신 못 받아서 이상함 */
 						) {
-						continue;
+						if (zom->targetType != zom->BLACKBOARDCLEARED) {	// 다만 블랙보드 클리어는 보내야 하니 제외)
+							continue;
+						}
 					}
 
 					if (zom->HaveToWait == true) {
