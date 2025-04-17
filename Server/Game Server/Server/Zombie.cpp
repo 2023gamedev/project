@@ -1993,8 +1993,7 @@ void Zombie::HealthRegenerate()
 	std::chrono::duration<float> deltaTime = waitAfterTime - runawayHealthRegenLastTime;
 
 	if (deltaTime.count() >= runawayHealthRegenInterval) {
-		float hpRegen = 1.0f;
-		SetHP(GetHP() + hpRegen);	// +1씩 체력 회복 
+		SetHP(GetHP() + runawayHealthRegenPoint);
 
 
 		// 좀비 도망치기 체력 회복 동기화 통신 작업
@@ -2003,7 +2002,7 @@ void Zombie::HealthRegenerate()
 
 			Protocol::Zombie_hp packet;
 			packet.set_zombieid(ZombieId);
-			packet.set_damage(hpRegen * (-1.f));	// 계산은 '원래HP - 데미지' 이런식이니까, -hpRegen 이렇게 넘겨줘서 오히려 체력이 회복되는 효과를 봄
+			packet.set_damage(runawayHealthRegenPoint * (-1.f));	// 계산은 '원래HP - 데미지' 이런식이니까, -hpRegen 이렇게 넘겨줘서 오히려 체력이 회복되는 효과를 봄
 			packet.set_packet_type(12);
 
 			std::string serializedData;

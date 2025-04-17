@@ -22,4 +22,7 @@ RunningZombie::RunningZombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 
 	SetZombieType(ZOMBIE_TYPE::RUNNING_ZOMBIE);
 
+	runawayHealthRegenInterval = 1;
+	runawayHealthRegenPoint = 1;
+
 }
