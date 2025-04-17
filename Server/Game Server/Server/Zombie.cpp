@@ -1571,19 +1571,25 @@ void Zombie::MakeNoise()
 		cout << "HearGrowlSoundRandomChance: " << the_chance << ", dist: " << dist << endl;
 #endif
 
-		if (dist <= 300.f) {
+		float shoutingZombieAttribute = 0.f;
+
+		if (ZombieData.zombietype == 2) {	// 샤우팅 좀비는 더 큰 호드 사운드를 만들어내므로 (추가 특성)
+			shoutingZombieAttribute = 500.0f;
+		}
+
+		if (dist <= 300.f + shoutingZombieAttribute) {
 			// 100퍼센트의 확률
 			bHear = true;
 		}
-		else if (dist <= 500.f) {
+		else if (dist <= 500.f + shoutingZombieAttribute) {
 			if (the_chance >= (100 - 80)) 	// 80퍼센트의 확률
 				bHear = true;
 		}
-		else if (dist <= 800.f) {
+		else if (dist <= 800.f + shoutingZombieAttribute) {
 			if (the_chance >= (100 - 60)) 	// 60퍼센트의 확률
 				bHear = true;
 		}
-		else if (dist <= CanHearHordeSoundDistance) {
+		else if (dist <= CanHearHordeSoundDistance + shoutingZombieAttribute) {
 			if (the_chance >= (100 - 40)) 	// 40퍼센트의 확률
 				bHear = true;
 		}

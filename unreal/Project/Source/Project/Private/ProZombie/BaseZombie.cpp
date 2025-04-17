@@ -4504,10 +4504,24 @@ void ABaseZombie::PlayGrowlSound()
 	auto* world = GetWorld();
 	if (IsValid(world) && GrowlSound && !IsGrowlSoundPlaying)
 	{
+		if (GetZombieName() == TEXT("ShoutingZombie") && m_bIsShouted == true) { // 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게
+			UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound is skipped for Shouting! - ZombieID: %d"), ZombieId);
+
+			IsGrowlSoundPlaying = true;	// 게임 서버는 이렇게 돌아가니 맞춰준거임
+			
+			GetWorld()->GetTimerManager().SetTimer(GrowlSoundTimerHandle, [this]()	// 그래도 20초 딜레이 타이머는 켜 놓고
+				{
+					IsGrowlSoundPlaying = false;
+				}, 20.0f, false);
+		}
+
 		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId));
 
-		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.8f);
+		if(GetZombieName() == TEXT("ShoutingZombie"))
+			UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 1.6f);
+		else
+			UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.8f);
 
 		IsGrowlSoundPlaying = true;
 
