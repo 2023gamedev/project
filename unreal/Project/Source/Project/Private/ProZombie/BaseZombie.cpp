@@ -4170,7 +4170,7 @@ void ABaseZombie::StartMergiingTimerNew()
 	if (NiagaraSystem)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Resurrect FX!");
-		UE_LOG(LogTemp, Log, TEXT("Found Resurrect FX!"));
+		UE_LOG(LogTemp, Log, TEXT("Found Cutting Dead Resurrect FX!"));
 
 		ResurrectFX = GetWorld()->SpawnActor<AResurrectNiagaEffect>(AResurrectNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
 
@@ -4399,10 +4399,7 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	// 혹시 남아 있는 타이머가 있으면 제거
 	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
 
-	m_bIsCuttingDead = false;
-	m_bIsNormalDead = false;
-	m_bIsStanding = true;
-	
+	m_bIsStanding = true;	
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);	// 되살아나는 - 일어나는 애니메이션 재생 (블루프린트가 해당 플래그 값을 통해 자동 전환해줌)
@@ -4419,20 +4416,24 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	UNiagaraSystem* NiagaraSystem = LoadObject<UNiagaraSystem>(nullptr, TEXT("/Script/Niagara.NiagaraSystem'/Game/Basic_VFX/Niagara/NS_Basic_4.NS_Basic_4'"));
 	if (NiagaraSystem)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Resurrect FX!");
-		UE_LOG(LogTemp, Log, TEXT("Found Resurrect FX!"));
+		if (m_bIsCuttingDead == false && m_bIsNormalDead == true) {	// 이펙트 중복 생성 방지
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Resurrect FX!");
+			UE_LOG(LogTemp, Log, TEXT("Found Normal Dead Resurrect FX!"));
 
-		ResurrectFX = GetWorld()->SpawnActor<AResurrectNiagaEffect>(AResurrectNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
+			ResurrectFX = GetWorld()->SpawnActor<AResurrectNiagaEffect>(AResurrectNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
 
-		ResurrectFX->ResurrectFXSystem = NiagaraSystem;
+			ResurrectFX->ResurrectFXSystem = NiagaraSystem;
 
-		ResurrectFX->spawn_flag = true;
+			ResurrectFX->spawn_flag = true;
+		}
 	}
 	else {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Couldn't Find Resurrect FX!");
 		UE_LOG(LogTemp, Error, TEXT("Couldn't Find Resurrect FX!"));
 	}
 
+	m_bIsCuttingDead = false;
+	m_bIsNormalDead = false;
 }
 
 // 되살아나기 애니메이션 워이팅 타이머
@@ -4504,7 +4505,7 @@ void ABaseZombie::PlayGrowlSound()
 	auto* world = GetWorld();
 	if (IsValid(world) && GrowlSound && !IsGrowlSoundPlaying)
 	{
-		if (GetZombieName() == TEXT("ShoutingZombie") && m_bIsShouted == true) { // 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게
+		if (GetZombieName() == TEXT("ShoutingZombie") && m_bIsShouting == true) { // 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게
 			UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound is skipped for Shouting! - ZombieID: %d"), ZombieId);
 
 			IsGrowlSoundPlaying = true;	// 게임 서버는 이렇게 돌아가니 맞춰준거임
@@ -4513,6 +4514,8 @@ void ABaseZombie::PlayGrowlSound()
 				{
 					IsGrowlSoundPlaying = false;
 				}, 20.0f, false);
+
+			return;
 		}
 
 		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId);
