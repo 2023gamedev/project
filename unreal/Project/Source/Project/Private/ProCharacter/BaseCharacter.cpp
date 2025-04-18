@@ -699,18 +699,19 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	float newHP = GetHP() - Damage;
+	if (newHP <= 0)
+		newHP = 0;	// 음수가 되지는 않도록 방지
 
-	if (GetHP() > 0) {
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("new HP %f"), newHP));
+	UE_LOG(LogTemp, Log, TEXT("[Player#%u] TakeDamage - HP: %f -> %f"), GetPlayerId(), GetHP(), newHP);
 
-		SetHP(GetHP() - Damage);
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("new HP %f"), GetHP() - Damage));
-		UE_LOG(LogTemp, Log, TEXT("[Player#%u] TakeDamage - HP: %f -> %f"), GetPlayerId(), GetHP(), GetHP() - Damage);
-	}
-	else if (GetHP() <= 0 && !IsDeadPlay()) {
+	SetHP(newHP);
+
+	if (GetHP() <= 0 && !IsDeadPlay()) {
 		SetDeadPlay(true);
 	}
-
 
 	if (IsDeadPlay() && !IsDead()) {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("TakeDamage -> PlayDead!")));
@@ -719,8 +720,6 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		PlayDead();
 	}
 
-
-	
 	if (!m_bBleeding) {
 		m_bBleeding = RandomBleeding();
 
@@ -731,11 +730,8 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 				ConditionUIWidget->BloodImageVisible(ESlateVisibility::Visible);
 				StartBleedingTimer();
 			}
-
 		}
 	}
-
-
 
 	return Damage;
 }

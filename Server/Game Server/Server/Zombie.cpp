@@ -314,9 +314,9 @@ bool Zombie::RandomPatrol()
 		return false;
 	}
 
-	if (IsRunaway == true && dest_test.size() < 5) {
+	if (IsRunaway == true && dest_test.size() < 8) {
 #ifdef	ENABLE_BT_FLEE_LOG
-		cout << "좀비 #" << ZombieData.zombieID << " 새로운 도망치기 패트롤 포인트 찾기 실패!!! => dest_test.size() < 5 -> 현재 지점과 너무 가까운 점" << endl;
+		cout << "좀비 #" << ZombieData.zombieID << " 새로운 도망치기 패트롤 포인트 찾기 실패!!! => dest_test.size() < 8 -> 현재 지점과 너무 가까운 점" << endl;
 #endif		
 		return false;
 	}
@@ -1132,7 +1132,7 @@ bool Zombie::PlayerInSight_Update_Check()
 
 
 			if (really_detected) {
-#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG) /*|| defined(ENABLE_BT_FLEE_LOG)*/
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_DETECT_RANDOMCHANCE_LOG) || defined(ENABLE_BT_FLEE_LOG)
 				cout << "좀비 #" << ZombieData.zombieID << " 시야에 플레이어 #" << distTo_playerinsight.first << " 를 확인! --- 거리: " << distTo_playerinsight.second << endl;
 				spacing = true;
 #endif
@@ -1151,7 +1151,7 @@ bool Zombie::PlayerInSight_Update_Check()
 #endif
 
 
-#if defined(ENABLE_BT_LOG) /*|| defined(ENABLE_BT_FLEE_LOG)*/
+#if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_FLEE_LOG)
 	if (spacing)
 		cout << endl;
 #endif
@@ -1767,6 +1767,7 @@ void Zombie::Resurrect()
 	IsShouting = false;
 	
 	IsRunaway = false;
+	runawayFailCount = 0;	// 도망치기 실패 카운트 초기화
 
 	CanSeePlayer_result = false;
 	detectCanSeePlayer_randomChance = false;
@@ -1879,27 +1880,33 @@ void Zombie::Flee_CanSeePlayer()
 
 	bool d_result = false;
 
-	if (RandPatrolSet == false) { // 도망치기를 이제 시작했다면 먼저 
+	int maxInSightFailCount = 3;	// 시야 검사 최대 실패 허용 횟수
+	int maxFailCount = 2;			// 도망가기 랜덤 패트롤 찾기 최대 실패 허용 횟수
+
+	if (RandPatrolSet == false) { // 도망치기를 이제 시작했다면 먼저 랜덤 패트롤 지정 -> 밑에 시야체크 후 아무도 포착 안 될시에는 랜덤 패트롤을 안 할 수도 있어서
 #ifdef ENABLE_BT_FLEE_LOG
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 도망가기 포인트 최초 설정!" << endl;
 #endif
 
 		runawayHealthRegenLastTime = std::chrono::high_resolution_clock::now();	// 체력 회복 시작 시간
+		runawayFailCount = 0;	// 도망치기 실패 카운트 초기화
 
-		bool result = false;
+		bool rp_result = false;
 		int try_cnt = 0;
-		while (result == false) {
+		while (rp_result == false) {
 			try_cnt++;
 #ifdef	ENABLE_BT_FLEE_LOG
-			cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 시도 - #" << try_cnt << endl;
+			cout << "좀비 #" << ZombieData.zombieID << " 도망가기 최초 랜덤 패트롤 찾기 시도 - #" << try_cnt << endl;
 #endif
-			result = RandomPatrol();
+			rp_result = RandomPatrol();
 
-			if (try_cnt >= 5 && result == false) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
+			if (try_cnt >= 5 && rp_result == false) {					// 랜덤 패트롤 목표점 찾기 5번까지만 시도
 #ifdef	ENABLE_BT_FLEE_LOG
-				cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...) => 좀비 해당 한 틱동안 멍때림!!" << endl;
+				cout << "좀비 #" << ZombieData.zombieID << " 도망가기 최초 랜덤 패트롤 찾기 결국 실패!!! (연속 5번 실패...) => 좀비 해당 한 틱동안 멍때림!!" << endl;
 #endif
-				break;
+
+				RandPatrolSet = false;	// 다시 최초 랜덤 패트롤 찾도록...
+				return;
 			}
 		}
 	}
@@ -1916,33 +1923,67 @@ void Zombie::Flee_CanSeePlayer()
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 와 가장 가까운 플레이어 사이의 거리: " << dist << endl;
 #endif
 
-		/*if (dist <= 1000.f) {	// 시야에 플레이어가 존재하며 10m 이내라면 => 다시 다른 방향으로 도망가기
-			bool rp_result;
-			
-			rp_result = RandomPatrol();
-				
-			if (rp_result == true) {
-				Vector2 zombiePos = { ZombieData.x, ZombieData.y };         // 좀비 위치
-				Vector2 zombieForward = { TargetLocation[0][0][0], TargetLocation[0][0][1] };     // 좀비가 바라보는 방향 (오른쪽)
-				Vector2 playerPos = { 1, 1 };         // 플레이어 위치
-				float viewAngle = 120.0f;            // 시야각 (FOV)
+		if (dist <= 1000.f) {	// 시야에 플레이어가 존재하며 10m 이내라면 => 다시 다른 방향으로 도망가기
 
-				if (CheckFleeRandomPoint(zombiePos, zombieForward, playerPos, viewAngle) == true) {	// 좀비의 시야각 120도이내에 플레이어가 위치하는 경우 다시 RandomPatrol 수행
-					RandPatrolSet = false;	// RandomPatrol 마지막에 무조건 'RandPatrolSet = true;' 하는 코드 들어가 있어서;
-					d_result = false;
+			bool rp_insight_result = false;
+			int try_cnt = 0;
+			while (rp_insight_result == false) {
+
+				try_cnt++;
+#ifdef	ENABLE_BT_FLEE_LOG
+				cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 시도 - #" << try_cnt << endl;
+#endif
+
+				rp_insight_result = RandomPatrol();
+
+				if (rp_insight_result == true) {
+					Vector2 zombiePos = { ZombieData.x, ZombieData.y };         // 좀비 위치
+					Vector2 zombieForward = { TargetLocation[0][0][0], TargetLocation[0][0][1] };     // 좀비가 바라볼 방향 (랜덤 패트롤 지점)
+					Vector2 playerPos = { 0, 0 };         // 플레이어 위치
+					float viewAngle = 180.0f;            // 시야각 (FOV) => 실제로는 120도가 시야각이지만 도망가기 지점은 정반대 방향을 바라보도록 하기위해 그냥 전방 180도로 설정
+					
+					for (auto player : playerDB_BT[roomid]) {
+						if (DistanceTo_PlayerInsight.find(player.first) != DistanceTo_PlayerInsight.end()) {	
+							// DistanceTo_PlayerInsight에 저장된 값이 있다면 = 해당 플레이어가 시야에 존재했다면 => 다시는 그방향으로 도망가지 않도록
+							playerPos.x = player.second.x;
+							playerPos.y = player.second.y;
+
+							// 좀비가 바라볼 방향 (랜덤 패트롤 지점)이 좀비의 시야각 120도이내에 플레이어가 위치하는 경우 다시 RandomPatrol 수행	
+							if (CheckFleeRandomPoint(zombiePos, zombieForward, playerPos, viewAngle) == true) {
+								RandPatrolSet = false;	// RandomPatrol 마지막에 무조건 'RandPatrolSet = true;' 하는 코드 들어가 있어서;
+								rp_insight_result = false;
+
+#ifdef	ENABLE_BT_FLEE_LOG
+								cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 실패! (새로운 찾은 패트롤 포인트 방향에 플레이어 이미 존재함!)" << endl; 
+								cout << "=> 플레이어 위치 : (" << playerPos.x << ", " << playerPos.y << ") , 좀비 위치: (" << ZombieData.x << ", " << ZombieData.y
+									<< ") , 새로운 찾은 패트롤 포인트 : (" << TargetLocation[0][0][0] << ", " << TargetLocation[0][0][1] << ")" << endl;
+#endif
+
+								break;
+							}
+							else {
+								//RandPatrolSet = true;
+								rp_insight_result = true;
+
+								IsStandingStill = false;	// 이전에 숨고르기를 하고 있던 상태였다면 초기화 해야 하니
+							}
+						}
+					}
 				}
-				else {
-					//RandPatrolSet = true;
-					d_result = true;
+				else { }
+
+				if (try_cnt >= maxInSightFailCount && rp_insight_result == false) {					// 시야범위 밖 랜덤 패트롤 목표점 찾기 3번까지만 시도
+#ifdef	ENABLE_BT_FLEE_LOG
+					cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 결국 실패!!! (연속 " << maxInSightFailCount <<"번 실패...) = > 좀비 해당 한 틱동안 멍때림!!" << endl;
+#endif
+
+					break;
 				}
 			}
-			else {
-				continue;
-			}
-		}*/
 
-		//RandomPatrol();
-		d_result = true;
+			d_result = rp_insight_result;
+
+		}
 	}
 	else {
 		d_result = true;
@@ -1952,9 +1993,41 @@ void Zombie::Flee_CanSeePlayer()
 	cout << endl;
 #endif
 
-	if (d_result == true) {
+	if (d_result == true) {	// 유효한 랜덤 패트롤 지점임과 동시에 플레이어가 없는 방향으로 패트롤을 찍었을때 
 		HealthRegenerate();
 		Runaway();
+
+		runawayFailCount = 0;	// 도망치기 실패 카운트 초기화
+	}
+	else if (d_result == false) {	// 유효한 패트롤 지점을 못 찾았을때
+		runawayFailCount++;
+
+		if (runawayFailCount < maxFailCount) {
+			HealthRegenerate();	// 길찾기 실패하면 움직이지는 않고 체력 회복만
+			// 클라에서도 MoveTo가 움직이지 않도록 하기 위해서
+			TargetLocation[0][0][0] = ZombieData.x;
+			TargetLocation[0][0][1] = ZombieData.y;
+			SetTargetLocation(Zombie::TARGET::RUNAWAY);
+
+#ifdef	ENABLE_BT_FLEE_LOG
+			cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 총 연속 " << runawayFailCount * maxInSightFailCount << "번 실패!!!" << endl;
+#endif
+		}
+		else if (runawayFailCount >= maxFailCount) {
+			IsRunaway = false;	// 도망치기 끝내기
+			IsStandingStill = false;	// 숨고르기 하고 있었다면 초기화
+			RandPatrolSet = false;	// 다시 패트롤 하도록
+
+			makeHordeSound_StartTime = std::chrono::high_resolution_clock::now() - std::chrono::seconds(30);	// 호드 사운드 강제로 실행시키려고 30초 전에 시간을 넣음
+			MakeNoise(); // 호드 사운드 내기 => 도움 요청! & 플레이어에게 더이상 도망가는 상태가 아님을 알림
+
+			runawayFailCount = 0;	// 도망치기 실패 카운트 초기화
+
+#ifdef	ENABLE_BT_FLEE_LOG
+			cout << "좀비 #" << ZombieData.zombieID << " 도망가기 랜덤 패트롤 찾기 결국 실패!!! (총 연속 "<< maxInSightFailCount * runawayFailCount  << "번(= " <<
+				maxInSightFailCount << "번x" << runawayFailCount << "번) 실패...) => 좀비 코너에 몰림 ===> 도망가지 않고 맞서 싸움!!!!!" << endl;
+#endif
+		}
 	}
 	
 }
@@ -1992,25 +2065,31 @@ void Zombie::HealthRegenerate()
 	auto waitAfterTime = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float> deltaTime = waitAfterTime - runawayHealthRegenLastTime;
 
-	if (deltaTime.count() >= runawayHealthRegenInterval) {
+	if (deltaTime.count() >= runawayHealthRegenInterval
+		&& GetHP() > 0) {	// 좀비 체력관련 데이터 레이스 발생 방지 코드 => (이벤트 방식-비동기적으로)피격으로 좀비 체력을 같이 수정하니까 ===> 좀비 죽고 시체 상태로 안 움직이도록 방지 / 이미 죽었는데 체력이 회복되는 거 방지
+		
 		SetHP(GetHP() + runawayHealthRegenPoint);
+		
+		float sendDamage = runawayHealthRegenPoint;
 
+		if (GetHP() > ZombieStartHP) {	// 어차피 100%가 기준점이니까 100% 이상은 체력 회복 안되도록
+			sendDamage = GetHP() - ZombieStartHP;
+			SetHP(ZombieStartHP);
+		}
 
 		// 좀비 도망치기 체력 회복 동기화 통신 작업
-		if (GetHP() >= 0) {	// 혹시 모를 좀비 체력관련 데이터 레이스 발생 방지하기 위해 => (이벤트 방식-비동기적으로)피격으로 좀비 체력을 같이 수정하니까 ===> 좀비 죽고 시체 상태로 안 움직이도록 방지
-			int ZombieId = ZombieData.zombieID;
+		int ZombieId = ZombieData.zombieID;
 
-			Protocol::Zombie_hp packet;
-			packet.set_zombieid(ZombieId);
-			packet.set_damage(runawayHealthRegenPoint * (-1.f));	// 계산은 '원래HP - 데미지' 이런식이니까, -hpRegen 이렇게 넘겨줘서 오히려 체력이 회복되는 효과를 봄
-			packet.set_packet_type(12);
+		Protocol::Zombie_hp packet;
+		packet.set_zombieid(ZombieId);
+		packet.set_damage(sendDamage * (-1.f));	// 계산은 '원래HP - 데미지' 이런식이니까, -hpRegen 이렇게 넘겨줘서 오히려 체력이 회복되는 효과를 봄
+		packet.set_packet_type(12);
 
-			std::string serializedData;
-			packet.SerializeToString(&serializedData);
+		std::string serializedData;
+		packet.SerializeToString(&serializedData);
 
-			for (const auto& player : playerDB_BT[roomid]) {
-				iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
-			}
+		for (const auto& player : playerDB_BT[roomid]) {
+			iocpServer->IOCP_SendPacket(player.first, serializedData.data(), serializedData.size());
 		}
 
 
@@ -2021,7 +2100,6 @@ void Zombie::HealthRegenerate()
 #endif
 	}
 	else {
-
 #ifdef ENABLE_BT_FLEE_LOG
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 체력 회복 중 - 다음 회복까지 남은 시간:" << runawayHealthRegenInterval - deltaTime.count() << "s" << endl;
 #endif
@@ -2029,10 +2107,15 @@ void Zombie::HealthRegenerate()
 
 	float currentZHP_percent = (GetHP() / ZombieStartHP) * 100.f;
 
-	if (currentZHP_percent >= runawayHealthRegenMaxPercent) {	// 일정 체력 이상을 회복하면 
+	if (currentZHP_percent >= runawayHealthRegenMaxPercent	// 일정 체력 이상을 회복하면 
+		|| GetHP() >= ZombieStartHP) {	// 어차피 100%가 기준점이니까 (이상하게 체력 100% 이상으로도 계속 회복하길래 방지코드로 넣음)
+		SetHP(ZombieStartHP);
+
 		IsRunaway = false;	// 도망치기 끝내기
 		IsStandingStill = false;	// 숨고르기 하고 있었다면 초기화
 		RandPatrolSet = false;	// 다시 패트롤 하도록
+
+		runawayFailCount = 0;	// 도망치기 실패 카운트 초기화
 
 #ifdef ENABLE_BT_FLEE_LOG
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 체력 회복 완료!!! - " << GetHP() << " => 도망치기 종료" << endl;

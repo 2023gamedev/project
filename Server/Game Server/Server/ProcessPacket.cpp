@@ -464,7 +464,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string& packet) {
 
         for (auto& z : zombieDB[roomId]) {
             if (z->ZombieData.zombieID == recvzombieid) {
-                float newZombieHP = max(0, z->zombieHP - Packet.damage());
+                float newZombieHP = max(0, z->zombieHP - Packet.damage());  // 0이하로 안 떨어짐
 
                 // 좀비 사망시에
                 if (newZombieHP <= 0) {

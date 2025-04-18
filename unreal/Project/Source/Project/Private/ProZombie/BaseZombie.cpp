@@ -4487,7 +4487,7 @@ void ABaseZombie::WaittingTimerElapsed()
 	}
 }
 
-void ABaseZombie::Ressurect()
+void ABaseZombie::Resurrect()
 {
 	// 다시 충돌 설정 ON
 	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
@@ -4507,13 +4507,13 @@ void ABaseZombie::Ressurect()
 	m_bIsShouting = false;	// 샤우팅 좀비 소리치는 중인지
 	m_bIsShouted = false;	// 샤우팅 좀비 소리쳤는지
 
-	IsGrowlSoundPlaying = false;	// 부활한 직후에 바로 눈 앞에 플레이어 있으면 곧바로 소리치도록 
-	GetWorld()->GetTimerManager().ClearTimer(GrowlSoundTimerHandle);	// 타이머도 초기화시져주고
+	IsGrowlSoundPlaying = false;	// 부활한 직후에 바로 눈 앞에 플레이어가 있으면 곧바로 소리치도록 
+	GetWorld()->GetTimerManager().ClearTimer(GrowlSoundTimerHandle);	// 타이머도 초기화시켜주고
 
 	procMesh_AddImpulse_1 = false;
 	procMesh_AddImpulse_2 = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("[Ressurect] Ressurect Zombie ID: %d"), ZombieId);
+	UE_LOG(LogTemp, Warning, TEXT("[Resurrect] Resurrect Zombie ID: %d"), ZombieId);
 }
 
 void ABaseZombie::PlayGrowlSound()
@@ -4526,7 +4526,7 @@ void ABaseZombie::PlayGrowlSound()
 
 			IsGrowlSoundPlaying = true;	// 게임 서버는 이렇게 돌아가니 맞춰준거임
 			
-			GetWorld()->GetTimerManager().SetTimer(GrowlSoundTimerHandle, [this]()	// 그래도 20초 딜레이 타이머는 켜 놓고
+			GetWorld()->GetTimerManager().SetTimer(GrowlSoundTimerHandle, [this]()	// 그래서 20초 딜레이 타이머도 켜 놓고
 				{
 					IsGrowlSoundPlaying = false;
 				}, 20.0f, false);
@@ -4579,6 +4579,21 @@ void ABaseZombie::PlayScaredSound()
 
 		UGameplayStatics::PlaySoundAtLocation(world, ScaredSound.Get(), GetActorLocation(), GetActorRotation(), 1.0f);
 	}
+}
+
+void ABaseZombie::IgnorePlayer()
+{
+	// 도망가기때 플레이어 잠시 무시하기 (1초) -> 고개 돌리는 시간 기다려주기
+	IgnorePlayerForFewSecond = true;
+
+	// 혹시 모르니 이전 타이머 초기화 시켜주고
+	GetWorld()->GetTimerManager().ClearTimer(IgnorePlayerTimerHandle);
+
+	// 1초 뒤에는 다시 플레이어를 포착하도록
+	GetWorld()->GetTimerManager().SetTimer(IgnorePlayerTimerHandle, [this]()
+		{
+			IgnorePlayerForFewSecond = false;
+		}, 1.0f, false);
 }
 
 void ABaseZombie::Runaway()

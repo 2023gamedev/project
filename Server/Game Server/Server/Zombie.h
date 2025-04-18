@@ -205,6 +205,7 @@ public:
     float runawayHealthRegenInterval = 9999.0f; // 좀비 도망치기 체력회복 인터벌 (노말좀비: +1씩 2초간격, 러닝좀비: +1씩 1초간격, 샤우팅좀비: +4씩 3초간격)
     float runawayHealthRegenPoint = 0.0f;   // 좀비 도망치기 체력회복 크기 (노말좀비: +1씩 2초간격, 러닝좀비: +1씩 1초간격, 샤우팅좀비: +4씩 3초간격)
     float runawayHealthRegenMaxPercent = 100.0f; // 좀비 도망치기 최대 체력회복 퍼센트 (100%)
+    int runawayFailCount = 0;   // 도망가기 랜덤 패트롤 찾기 실패 카운트 
 
     TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 69-BLACKBOARDCLEARED)
 

@@ -1287,9 +1287,11 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
             if (NewHP <= 0.f)   // 체력이 음수가 되지는 않도록
                 NewHP = 0.f;
 
-            if (PrevHP == 0 && NewHP == zombie->GetStartHP()) {
-                // 좀비 부활시키기
-                zombie->Ressurect();
+            if (PrevHP == 0) {  // 데이터 레이스 방지 => 좀비 도망치기 중 사망했을때 체력 0이 되고 체력이 회복되어 부활이 정상적으로 안 이루어 지는 버그 방지
+                if (NewHP == zombie->GetStartHP()) {
+                    // 좀비 부활시키기
+                    zombie->Resurrect();
+                }
             }
             else {
                 //좀비의 체력상태 업데이트
@@ -1302,6 +1304,7 @@ void AOneGameModeBase::UpdateZombieHP(uint32 ZombieId, float Damage)
                     }
                 }
             }
+
             UE_LOG(LogTemp, Log, TEXT("[UpdateZombieHP] Updated Zombie ID: %d, HP: %f -> %f"), ZombieId, PrevHP, NewHP);
         }
     }

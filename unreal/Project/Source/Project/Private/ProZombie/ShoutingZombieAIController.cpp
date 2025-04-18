@@ -292,7 +292,10 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx + 1]);
 
-				OwnerZombie->SetTurningSpeed(90.f);	// 기본값
+				if (OwnerZombie->targetType == OwnerZombie->RUNAWAY)
+					OwnerZombie->SetTurningSpeed(150.f);	// 고개 빨리 돌리도록
+				else
+					OwnerZombie->SetTurningSpeed(90.f);	// 기본값
 			}
 			else {
 				return;
@@ -304,7 +307,10 @@ void AShoutingZombieAIController::ZombieTurn(float deltasecond, int& indx)
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
 			
-				OwnerZombie->SetTurningSpeed(90.f);	// 기본값
+				if (OwnerZombie->targetType == OwnerZombie->RUNAWAY)
+					OwnerZombie->SetTurningSpeed(150.f);	// 고개 빨리 돌리도록
+				else
+					OwnerZombie->SetTurningSpeed(90.f);	// 기본값
 			}
 			else {
 				return;
@@ -405,14 +411,16 @@ void AShoutingZombieAIController::Tick(float DeltaTime)
 
 		if (PlayerPawn && Distance <= OwnerZombie->MaxSightRange && LineOfSightTo_Player && InZombieSight)
 		{
-			NearestPawn = PlayerPawn;
+			if (OwnerZombie->IgnorePlayerForFewSecond == false) {	// 도망가기때 고개 돌리는 시간 필요
+				NearestPawn = PlayerPawn;
 
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player!!!")));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player!!!")));
 
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
-			//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
+				//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
+			}
 		}
 
 		// NearestPawn에 따라 상태 변경

@@ -187,7 +187,7 @@ public:
 
 	void WaittingTimerElapsed();
 
-	void Ressurect();
+	void Resurrect();
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsStanding = false;
@@ -488,5 +488,10 @@ public:
 	FTimerHandle DetectionTimerHandle;
 
 	bool IsRunaway = false;
+
+	bool IgnorePlayerForFewSecond = false;	// (1초) => 좀비가 도망가기 상태일때 플레이어가 정면에 있으면 고개를 돌리기 전에 계속 시야에 들어 왔다 판단해서, 플레이어를 마주보고 이상하게 움직임 치는 거 방지하려고 
+	FTimerHandle IgnorePlayerTimerHandle;
+
+	void IgnorePlayer();	// 도망가기때 플레이어 포착 검사 잠시 무시하기 -> 고개 돌리는 시간 기다려주기
 
 };

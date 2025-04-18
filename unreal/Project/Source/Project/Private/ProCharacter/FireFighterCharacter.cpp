@@ -64,8 +64,14 @@ void AFireFighterCharacter::LimitSmoking()
 		//UE_LOG(LogTemp, Log, TEXT("SmokeTimer ON -> My Client is a FireFighter (PlayerId: 99)"));
 
 		LimitSmokingIcon();
-		SetSTR(GetSTR() - 2);
-		SetBasicSpeed(GetBasicSpeed() - 1);
+		float str = GetSTR() - 1;
+		if (str <= 0)	// 마이너스 값이 되서 좀비 체력을 회복 시키지 않도록
+			str = 0;
+		SetSTR(str);
+		float speed = GetBasicSpeed() - 1;
+		if (speed <= 0)	// 마이너스 값이 되지 않도록
+			speed = 0;
+		SetBasicSpeed(speed);
 		GetWorld()->GetTimerManager().SetTimer(DyingHandle, this, &AFireFighterCharacter::NoSmokeIsDying, 2.0f, true, 1.0f);	// 2초 간격으로 체력 빠짐
 	}
 	else {
@@ -113,12 +119,8 @@ void AFireFighterCharacter::Smoking(AHealingItemActor* smokeActor)
 	SmokingIcon();
 	GetWorld()->GetTimerManager().ClearTimer(SmokeHandle);
 	GetWorld()->GetTimerManager().ClearTimer(DyingHandle);
-	if (GetSTR() < 7) {
-		SetSTR(GetSTR() + 2);
-	}
-	if (GetBasicSpeed() < 5) {
-		SetBasicSpeed(GetBasicSpeed() + 1);
-	}
+	SetSTR(GetSTR() + 1);
+	SetBasicSpeed(GetBasicSpeed() + 1);
 	SmokeTimer();
 }
 
