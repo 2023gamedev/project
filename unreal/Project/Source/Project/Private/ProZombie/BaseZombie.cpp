@@ -16,6 +16,7 @@
 #include "ProNiagaFX/BloodNiagaEffect.h"
 #include "ProNiagaFX/ShoutingNiagaEffect.h"
 #include "ProNiagaFX/ResurrectNiagaEffect.h"
+#include "ProNiagaFX/HealingNiagaEffect.h"
 
 #include "Rendering/SkeletalMeshRenderData.h"
 #include "Rendering/SkeletalMeshLODRenderData.h"
@@ -51,6 +52,8 @@ ABaseZombie::ABaseZombie()
 
 	ShoutingFX = nullptr;
 	
+	HealingFX = nullptr;
+
 	ConstructorHelpers::FObjectFinder<UMaterial> MaterialFinder(TEXT("/Game/Mesh/SlicedBloodMaterial.SlicedBloodMaterial"));
 	if (MaterialFinder.Succeeded())
 	{
@@ -433,10 +436,22 @@ void ABaseZombie::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("GrowlSound failed to load in BeginPlay!"));
 	}
 
-	BeAttackedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieBeAttacked.ZombieBeAttacked"));
-	if (!BeAttackedSound)
+	//BeAttackedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/ZombieBeAttacked.ZombieBeAttacked"));
+	//if (!BeAttackedSound)
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("BeAttackedSound failed to load in BeginPlay!"));
+	//}
+
+	DeathSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/zombie-death.zombie-death"));
+	if (!DeathSound)
 	{
-		UE_LOG(LogTemp, Error, TEXT("BeAttackedSound failed to load in BeginPlay!"));
+		UE_LOG(LogTemp, Error, TEXT("DeathSound failed to load in BeginPlay!"));
+	}
+
+	ScaredSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/zombie-scared.zombie-scared"));
+	if (!ScaredSound)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ScaredSound failed to load in BeginPlay!"));
 	}
 
 	// 5초 후에 EnablePlayerDetection() 호출
@@ -712,7 +727,7 @@ void ABaseZombie::Tick(float DeltaTime)
 
 			int32 bmin = NewBloodFX->blood_spawncount_awaysynchit_min;
 			int32 bmax = NewBloodFX->blood_spawncount_awaysynchit_max;
-			
+
 			NewBloodFX->blood_spawncount = FMath::RandRange(bmin, bmax);
 			NewBloodFX->spawn_flag = true;
 
@@ -788,7 +803,7 @@ void ABaseZombie::Tick(float DeltaTime)
 		}
 		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-		PlayBeAttackedSound();
+		PlayDeathSound();
 
 		StartResurrectionTimer();
 
@@ -1182,6 +1197,19 @@ void ABaseZombie::Tick(float DeltaTime)
 	//	UE_LOG(LogTemp, Warning, TEXT("bIsMergingInProgressVertex took: %f seconds"), EndTime - StartTime);
 	//}
 
+	// 좀비 도망가기 체력회복 이펙트 생성/파괴
+	if (targetType == RUNAWAY && IsRunaway == false) {
+		IsRunaway = true;
+		Runaway();
+	}
+	else if ((IsRunaway == true && (targetType != RUNAWAY && targetType != BLACKBOARDCLEARED)) || GetHP() <= 0.f) {
+		IsRunaway = false;
+		if (HealingFX != NULL) {
+			HealingFX->EndPlay(EEndPlayReason::Destroyed);
+		}
+	}
+
+
 	Super::Tick(DeltaTime);
 
 }
@@ -1403,7 +1431,7 @@ void ABaseZombie::SetCuttingDeadWithAnim()
 	}
 	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
 
-	PlayBeAttackedSound();
+	PlayDeathSound();	// 커팅데드는 애니메이션에 묶어놓은 사운드 큐가 재생 안되어 따로 재생시켜줌
 
 	StartResurrectionTimer();
 }
@@ -4158,7 +4186,7 @@ void ABaseZombie::StartMergiingTimerNew()
 	if (NiagaraSystem)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Resurrect FX!");
-		UE_LOG(LogTemp, Log, TEXT("Found Resurrect FX!"));
+		UE_LOG(LogTemp, Log, TEXT("Found Cutting Dead Resurrect FX!"));
 
 		ResurrectFX = GetWorld()->SpawnActor<AResurrectNiagaEffect>(AResurrectNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
 
@@ -4387,10 +4415,7 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	// 혹시 남아 있는 타이머가 있으면 제거
 	GetWorld()->GetTimerManager().ClearTimer(ResurrectionHandle);
 
-	m_bIsCuttingDead = false;
-	m_bIsNormalDead = false;
-	m_bIsStanding = true;
-	
+	m_bIsStanding = true;	
 	auto CharacterAnimInstance = Cast<UZombieAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr != CharacterAnimInstance) {
 		CharacterAnimInstance->SetIsStanding(m_bIsStanding);	// 되살아나는 - 일어나는 애니메이션 재생 (블루프린트가 해당 플래그 값을 통해 자동 전환해줌)
@@ -4407,20 +4432,24 @@ void ABaseZombie::ResurrectionTimerElapsed()
 	UNiagaraSystem* NiagaraSystem = LoadObject<UNiagaraSystem>(nullptr, TEXT("/Script/Niagara.NiagaraSystem'/Game/Basic_VFX/Niagara/NS_Basic_4.NS_Basic_4'"));
 	if (NiagaraSystem)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Resurrect FX!");
-		UE_LOG(LogTemp, Log, TEXT("Found Resurrect FX!"));
+		if (m_bIsCuttingDead == false && m_bIsNormalDead == true) {	// 이펙트 중복 생성 방지
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, "Found Resurrect FX!");
+			UE_LOG(LogTemp, Log, TEXT("Found Normal Dead Resurrect FX!"));
 
-		ResurrectFX = GetWorld()->SpawnActor<AResurrectNiagaEffect>(AResurrectNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
+			ResurrectFX = GetWorld()->SpawnActor<AResurrectNiagaEffect>(AResurrectNiagaEffect::StaticClass(), GetActorLocation(), FRotator::ZeroRotator);
 
-		ResurrectFX->ResurrectFXSystem = NiagaraSystem;
+			ResurrectFX->ResurrectFXSystem = NiagaraSystem;
 
-		ResurrectFX->spawn_flag = true;
+			ResurrectFX->spawn_flag = true;
+		}
 	}
 	else {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, "Couldn't Find Resurrect FX!");
 		UE_LOG(LogTemp, Error, TEXT("Couldn't Find Resurrect FX!"));
 	}
 
+	m_bIsCuttingDead = false;
+	m_bIsNormalDead = false;
 }
 
 // 되살아나기 애니메이션 워이팅 타이머
@@ -4458,7 +4487,7 @@ void ABaseZombie::WaittingTimerElapsed()
 	}
 }
 
-void ABaseZombie::Ressurect()
+void ABaseZombie::Resurrect()
 {
 	// 다시 충돌 설정 ON
 	GetCapsuleComponent()->SetCollisionProfileName("ZombieCol");
@@ -4475,13 +4504,16 @@ void ABaseZombie::Ressurect()
 	procMesh_AddImpulse_1 = false;
 	procMesh_AddImpulse_2 = false;
 
-	m_bIsShouting = false;
-	m_bIsShouted = false;	// 소리쳤는지
+	m_bIsShouting = false;	// 샤우팅 좀비 소리치는 중인지
+	m_bIsShouted = false;	// 샤우팅 좀비 소리쳤는지
+
+	IsGrowlSoundPlaying = false;	// 부활한 직후에 바로 눈 앞에 플레이어가 있으면 곧바로 소리치도록 
+	GetWorld()->GetTimerManager().ClearTimer(GrowlSoundTimerHandle);	// 타이머도 초기화시켜주고
 
 	procMesh_AddImpulse_1 = false;
 	procMesh_AddImpulse_2 = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("[Ressurect] Ressurect Zombie ID: %d"), ZombieId);
+	UE_LOG(LogTemp, Warning, TEXT("[Resurrect] Resurrect Zombie ID: %d"), ZombieId);
 }
 
 void ABaseZombie::PlayGrowlSound()
@@ -4489,10 +4521,26 @@ void ABaseZombie::PlayGrowlSound()
 	auto* world = GetWorld();
 	if (IsValid(world) && GrowlSound && !IsGrowlSoundPlaying)
 	{
+		if (GetZombieName() == TEXT("ShoutingZombie") && m_bIsShouting == true) { // 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게
+			UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound is skipped for Shouting! - ZombieID: %d"), ZombieId);
+
+			IsGrowlSoundPlaying = true;	// 게임 서버는 이렇게 돌아가니 맞춰준거임
+			
+			GetWorld()->GetTimerManager().SetTimer(GrowlSoundTimerHandle, [this]()	// 그래서 20초 딜레이 타이머도 켜 놓고
+				{
+					IsGrowlSoundPlaying = false;
+				}, 20.0f, false);
+
+			return;
+		}
+
 		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing GrowlSound at Location! - ZombieID: %d"), ZombieId));
 
-		UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.4f);
+		if(GetZombieName() == TEXT("ShoutingZombie"))
+			UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 1.6f);
+		else
+			UGameplayStatics::PlaySoundAtLocation(world, GrowlSound.Get(), GetActorLocation(), GetActorRotation(), 0.8f);
 
 		IsGrowlSoundPlaying = true;
 
@@ -4509,14 +4557,58 @@ void ABaseZombie::PlayGrowlSound()
 	}
 }
 
-void ABaseZombie::PlayBeAttackedSound()
+void ABaseZombie::PlayDeathSound()
 {
 	auto* world = GetWorld();
-	if (IsValid(world) && BeAttackedSound)
+	if (IsValid(world) && DeathSound)
 	{
-		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing BeAttackedSound at Location! - ZombieID: %d"), ZombieId);
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing BeAttackedSound at Location! - ZombieID: %d"), ZombieId));
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing DeathSound at Location! - ZombieID: %d"), ZombieId);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing DeathSound at Location! - ZombieID: %d"), ZombieId));
 
-		UGameplayStatics::PlaySoundAtLocation(world, BeAttackedSound.Get(), GetActorLocation(), GetActorRotation(), 0.75f);
+		UGameplayStatics::PlaySoundAtLocation(world, DeathSound.Get(), GetActorLocation(), GetActorRotation(), 1.0f);
 	}
+}
+
+void ABaseZombie::PlayScaredSound()
+{
+	auto* world = GetWorld();
+	if (IsValid(world) && ScaredSound)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[PlaySoundLog] Playing ScaredSound at Location! - ZombieID: %d"), ZombieId);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("[PlaySoundLog] Playing ScaredSound at Location! - ZombieID: %d"), ZombieId));
+
+		UGameplayStatics::PlaySoundAtLocation(world, ScaredSound.Get(), GetActorLocation(), GetActorRotation(), 1.0f);
+	}
+}
+
+void ABaseZombie::IgnorePlayer()
+{
+	// 도망가기때 플레이어 잠시 무시하기 (1초) -> 고개 돌리는 시간 기다려주기
+	IgnorePlayerForFewSecond = true;
+
+	// 혹시 모르니 이전 타이머 초기화 시켜주고
+	GetWorld()->GetTimerManager().ClearTimer(IgnorePlayerTimerHandle);
+
+	// 1초 뒤에는 다시 플레이어를 포착하도록
+	GetWorld()->GetTimerManager().SetTimer(IgnorePlayerTimerHandle, [this]()
+		{
+			IgnorePlayerForFewSecond = false;
+		}, 1.0f, false);
+}
+
+void ABaseZombie::Runaway()
+{
+	HealingFX = GetWorld()->SpawnActor<AHealingNiagaEffect>(AHealingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
+	HealingFX->OwnerChar = this;
+	HealingFX->materialType = 2;
+	if (GetZombieName() == "NormalZombie") {
+		HealingFX->spawn_offset.Z = 23.f;
+	}
+	else if (GetZombieName() == "RunningZombie") {
+		HealingFX->spawn_offset.Z = 24.f;
+	}
+	else if (GetZombieName() == "ShoutingZombie") {
+		HealingFX->spawn_offset.Z = 27.f;
+	}
+	HealingFX->spawn_flag = true;
 }

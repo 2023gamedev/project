@@ -23,6 +23,9 @@ ShoutingZombie::ShoutingZombie(IOCP_CORE* mainServer, Zombie_Data z_d)
 	
 	bShouted = false;
 
+	runawayHealthRegenInterval = 3;
+	runawayHealthRegenPoint = 4;
+
 }
 
 void ShoutingZombie::Shout(int playerid, int roomid)

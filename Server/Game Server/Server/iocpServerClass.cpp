@@ -685,12 +685,17 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 				auto deadAfterTime = std::chrono::high_resolution_clock::now();
 				std::chrono::duration<float> deltaTime = deadAfterTime - zom->resurrectionStartTime;
 
+#ifdef ENABLE_BT_LOG
+				cout << "### [Resurrect] 호출" << endl;
+#endif
+
 				if (deltaTime.count() >= zom->resurrectionTimer) {
 					zom->Resurrect();
 					continue;
 				}
 				else {
 #ifdef ENABLE_BT_LOG
+					cout << "좀비 '#" << ZombieData.zombieID << "' 부활중" << endl;
 					cout << "부활 남은 시간: " << zom->resurrectionTimer - deltaTime.count() << "s" << endl;
 #endif
 				}
@@ -708,9 +713,9 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 				continue;
 			}
 
-			// 좀비 도망가기 상태
-			if (zom->IsRunaway == true) {
-				zom->Flee();
+			// 좀비가 대기상태라면 해당 좀비 BT 잠시 대기
+			if (zom->HaveToWait == true) {
+				zom->Wait();
 #ifdef	ENABLE_BT_LOG
 				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
 				cout << endl;
@@ -718,9 +723,12 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 				continue;
 			}
 
-			// 좀비가 대기상태라면 해당 좀비 BT 잠시 대기
-			if (zom->HaveToWait == true) {
-				zom->Wait();
+			// 좀비 도망가기 상태
+			if (zom->IsRunaway == true) {
+				zom->Flee();
+#ifdef	ENABLE_BT_FLEE_LOG
+				cout << endl;
+#endif
 #ifdef	ENABLE_BT_LOG
 				cout << "==========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 종료========//" << endl;
 				cout << endl;
@@ -805,13 +813,17 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					//cout << "<<방 #" << roomid << " - 좀비 #" << zom->ZombieData.zombieID << ">>" << endl;
 
 					// path 보낼 필요 없는 좀비들 예외처리 (최적화)
-					if (zom->GetHP() <= 0.f
-						|| zom->path.empty() 
-						|| (zom->ZombiePathIndex >= zom->path.size() || (zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1] /*&& ZombieData.z == TargetLocation[0][0][2]*/))
-						&& (zom->IsStandingStill == true && zom->targetType == zom->PATROL)	// 숨고르기 할때'만' 패킷 보내지 X -> 제자리 걸음 방지 & 숨고르기에서 피격 당하고 블랙보드 클리어 할때는 보내야 하니까
+					if (
+						zom->GetHP() <= 0.f	// 죽은 좀비
+						|| zom->path.empty() // path가 설정 안된 좀비
+						|| (zom->ZombiePathIndex >= zom->path.size() || (zom->ZombieData.x == zom->TargetLocation[0][0][0] && zom->ZombieData.y == zom->TargetLocation[0][0][1]))	 // 이미 도착지점에 있는 좀비
+						|| (zom->IsStandingStill == true && zom->targetType == zom->PATROL)	// 숨고르기 할때'만' 패킷 보내지 X -> 제자리 걸음 방지 & 숨고르기에서 피격 당하고 블랙보드 클리어 할때는 보내야 하니까
+						|| (zom->IsStandingStill == true && zom->targetType == zom->RUNAWAY)	// 도망치기 이후 숨어서 숨고르기 하는 중인 좀비
 						//|| zom->HaveToWait == true	/* 이러면, 다른 층에서 있던 플레이어 애니메이션 재생 중이던 좀비 위치를 갱신 못 받아서 이상함 */
 						) {
-						continue;
+						if (zom->targetType != zom->BLACKBOARDCLEARED) {	// 다만 블랙보드 클리어는 보내야 하니 제외)
+							continue;
+						}
 					}
 
 					if (zom->HaveToWait == true) {

@@ -141,7 +141,7 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 	}
 	else if (OwnerZombie->targetType == OwnerZombie->TARGET::PLAYER || OwnerZombie->targetType == OwnerZombie->TARGET::SHOUTING 
 		|| OwnerZombie->targetType == OwnerZombie->TARGET::FOOTSOUND || OwnerZombie->targetType == OwnerZombie->TARGET::INVESTIGATED
-		|| OwnerZombie->targetType == OwnerZombie->TARGET::HORDESOUND) {	// 뛰기
+		|| OwnerZombie->targetType == OwnerZombie->TARGET::HORDESOUND || OwnerZombie->targetType == OwnerZombie->TARGET::RUNAWAY) {	// 뛰기
 
 		OwnerZombie->SetSpeed(OwnerZombie->RunningZombieSpeed);
 		ZombieSpeed = OwnerZombie->GetSpeed();
@@ -264,7 +264,10 @@ void ARunningZombieAIController::ZombieTurn(float deltasecond, int& indx)
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx + 1]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx + 1]);
 
-				OwnerZombie->SetTurningSpeed(90.f);	// 기본값
+				if (OwnerZombie->targetType == OwnerZombie->RUNAWAY)
+					OwnerZombie->SetTurningSpeed(150.f);	// 고개 빨리 돌리도록
+				else
+					OwnerZombie->SetTurningSpeed(90.f);	// 기본값
 			}
 			else {
 				return;
@@ -276,7 +279,10 @@ void ARunningZombieAIController::ZombieTurn(float deltasecond, int& indx)
 				zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
 				zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
 
-				OwnerZombie->SetTurningSpeed(90.f);	// 기본값
+				if (OwnerZombie->targetType == OwnerZombie->RUNAWAY)
+					OwnerZombie->SetTurningSpeed(150.f);	// 고개 빨리 돌리도록
+				else
+					OwnerZombie->SetTurningSpeed(90.f);	// 기본값
 			}
 			else {
 				return;
@@ -363,12 +369,14 @@ void ARunningZombieAIController::Tick(float DeltaTime)
 
 		if (PlayerPawn && Distance <= OwnerZombie->MaxSightRange && LineOfSightTo(PlayerPawn) && InZombieSight)
 		{
-			NearestPawn = PlayerPawn;
+			if (OwnerZombie->IgnorePlayerForFewSecond == false) {	// 도망가기때 고개 돌리는 시간 필요
+				NearestPawn = PlayerPawn;
 
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
-			//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Detected Player ID #%d"), Char->GetPlayerId()));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("My Player ID #%d"), myPlayerId));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, FString::Printf(TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId()));
+				//UE_LOG(LogNet, Display, TEXT("Detected Zombie ID #%d"), OwnerZombie->GetZombieId());
+			}
 		}
 
 		// NearestPawn에 따라 상태 변경

@@ -606,6 +606,19 @@ void ABaseCharacter::Tick(float DeltaTime)
 		PlayDead();
 	}
 
+	// 점프 도중 죽었을 경우 바닥에 닿고 나서 NoCollision으로 바꾸기 위해 사용 (바닥을 뚫고 계속 떨어져 크래시 발생하는 거 방지)
+	if (IsDead() == true && GetCharacterMovement()->IsMovingOnGround() && IsDeadNoCollision() == false) {	
+		SetDeadNoCollision(true);
+		
+		GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+
+		GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+
+		if (PlayerId == 99) {	// 바닥에 닿고 나서 먹고 있던 아이템 주변에 흩뿌리기
+			SpawnAllOnGround();
+		}
+	}
+
 
 	auto AnimInstance = Cast<UPlayerCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -644,6 +657,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 		OldLocation = NewLocation;
 	}
 
+	// 로컬의 경우
 	else {
 		if (nullptr != AnimInstance) {
 			AnimInstance->SetCurrentPawnSpeed(GetVelocity().Size());
@@ -685,18 +699,19 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	float newHP = GetHP() - Damage;
+	if (newHP <= 0)
+		newHP = 0;	// 음수가 되지는 않도록 방지
 
-	if (GetHP() > 0) {
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("new HP %f"), newHP));
+	UE_LOG(LogTemp, Log, TEXT("[Player#%u] TakeDamage - HP: %f -> %f"), GetPlayerId(), GetHP(), newHP);
 
-		SetHP(GetHP() - Damage);
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Hit Character")));
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("new HP %f"), GetHP() - Damage));
-		UE_LOG(LogTemp, Log, TEXT("[Player#%u] TakeDamage - HP: %f -> %f"), GetPlayerId(), GetHP(), GetHP() - Damage);
-	}
-	else if (GetHP() <= 0 && !IsDeadPlay()) {
+	SetHP(newHP);
+
+	if (GetHP() <= 0 && !IsDeadPlay()) {
 		SetDeadPlay(true);
 	}
-
 
 	if (IsDeadPlay() && !IsDead()) {
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("TakeDamage -> PlayDead!")));
@@ -705,8 +720,6 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		PlayDead();
 	}
 
-
-	
 	if (!m_bBleeding) {
 		m_bBleeding = RandomBleeding();
 
@@ -717,11 +730,8 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 				ConditionUIWidget->BloodImageVisible(ESlateVisibility::Visible);
 				StartBleedingTimer();
 			}
-
 		}
 	}
-
-
 
 	return Damage;
 }
@@ -743,16 +753,6 @@ void ABaseCharacter::PlayDead()
 
 	FText KText = FText::FromString(TEXT("당신은 죽었습니다."));
 	ShowDeathActionText(KText, FSlateColor(FLinearColor(1.0f, 0.0f, 0.0f)), 5.f);
-	
-	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
-	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-
-
-	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-
-	if (PlayerId == 99) {
-		SpawnAllOnGround();
-	}
 
 	APlayerCharacterController* controller = Cast<APlayerCharacterController>(this->GetController());
 	if (controller != nullptr) {
@@ -1739,6 +1739,20 @@ void ABaseCharacter::HealingMontageEnded(UAnimMontage* Montage, bool interrup)
 	
 	HealingFX = GetWorld()->SpawnActor<AHealingNiagaEffect>(AHealingNiagaEffect::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator);
 	HealingFX->OwnerChar = this;
+	HealingFX->materialType = 1;
+	if (GetCharacterName() == "GirlCharacter") {
+		HealingFX->spawn_offset.Z = 20.f;
+	}
+	else if (GetCharacterName() == "IdolCharacter") {
+		HealingFX->spawn_offset.Z = 22.f;
+	}
+	else if (GetCharacterName() == "FireFighterCharacter") {
+		HealingFX->spawn_offset.Z = 27.f;
+	}
+	else if (GetCharacterName() == "EmployeeCharacter") {
+		HealingFX->spawn_offset.Z = 24.f;
+	}
+	HealingFX->spawn_flag = true;
 
 	if (CurrentHealingItem != nullptr) {
 
@@ -2945,21 +2959,28 @@ void ABaseCharacter::ProGameEnd()
 
 void ABaseCharacter::StartBleedingTimer()
 {
-	SetSTR(GetSTR() - 2);
-	SetBasicSpeed(GetBasicSpeed() - 1);
+	float str = GetSTR() - 2;
+	if (str <= 0)	// 마이너스 값이 되서 좀비 체력을 회복 시키지 않도록
+		str = 0;
+	SetSTR(str);
+	float speed = GetBasicSpeed() - 1;
+	if (speed <= 0)	// 마이너스 값이 되지 않도록
+		speed = 0;
+	SetBasicSpeed(speed);
 	GetWorld()->GetTimerManager().SetTimer(BleedingHandle, this, &ABaseCharacter::BleedingTimerElapsed, 2.0f, true, 1.0f);
 }
 
 void ABaseCharacter::BleedingTimerElapsed()
 {
-	if (!m_bBleeding) {
+	if (!m_bBleeding) {	// 지혈 했을때
 		GetWorld()->GetTimerManager().ClearTimer(BleedingHandle);
 		SetSTR(GetSTR() + 2);
 		SetBasicSpeed(GetBasicSpeed() + 1);
 		return;
 	}
-	SetHP(GetHP() - 1);
 
+
+	SetHP(GetHP() - 1);
 
 	if (GetHP() <= 0 && !IsDeadPlay()) {
 		SetDeadPlay(true);

@@ -349,6 +349,9 @@ public:
 	bool IsThrowWHandIn() { return m_bThrowWHandIn; }
 	void SetThrowWHandIn(bool handin) { m_bThrowWHandIn = handin; }
 
+	bool IsDeadNoCollision() { return m_bIsDead_NoCol; }
+	void SetDeadNoCollision(bool no_col) { m_bIsDead_NoCol = no_col; }
+
 	bool IsDead() { return m_bIsDead; }
 	void SetDead(bool dead) { m_bIsDead = dead; }
 
@@ -666,10 +669,13 @@ private:
 	bool m_bIsBringCurrentKeyItem;
 
 	UPROPERTY(EditAnywhere)
-	bool m_bIsDead;
+	bool m_bIsDead_NoCol = false;
 
 	UPROPERTY(EditAnywhere)
-	bool m_bIsDeadPlay;
+	bool m_bIsDead = false;
+
+	UPROPERTY(EditAnywhere)
+	bool m_bIsDeadPlay = false;
 
 	UPROPERTY(EditAnywhere)
 	int m_iHealingMontageFlag;

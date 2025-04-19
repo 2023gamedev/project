@@ -497,6 +497,9 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 7:
 			prevType = TEXT("[HordeSound]");
 			break;
+		case 8:
+			prevType = TEXT("[Runaway]");
+			break;
 		case 69:
 			prevType = TEXT("[BlackboardClear]");
 			break;
@@ -518,10 +521,14 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 		case 2:
 			if ((*zombie)->targetType != (*zombie)->TARGET::PLAYER) {	// 좀비 플레이어를 처음 발견 또는 놓쳤다가 다시 발견했을 때 호드 사운드 재생
-				if (((*zombie)->GetZombieName() == TEXT("ShoutingZombie") && (*zombie)->m_bIsShouted == true)	// 샤우팅 좀비의 경우, 샤우팅이랑 소리 안 겹치게 
-					|| ((*zombie)->GetZombieName() == TEXT("NormalZombie") || (*zombie)->GetZombieName() == TEXT("RunningZombie"))) {
-					(*zombie)->PlayGrowlSound();
+
+				// 도망치기가 끝나고 바로 플레이어를 발견? => 코너에 몰려서 도망치기를 포기하고 맞서 싸울때이다!!! ===> 호드 사운드로 주위에 도움 요청 & 플레이어에게 상태가 바뀜을 알림
+				if ((*zombie)->targetType == (*zombie)->TARGET::RUNAWAY) {
+					(*zombie)->IsGrowlSoundPlaying = false;	// 도망치기가 끝난 직후에 바로 눈 앞에 플레이어 있으면 곧바로 소리치도록
+					GetWorld()->GetTimerManager().ClearTimer((*zombie)->GrowlSoundTimerHandle);	// 타이머도 초기화시켜주고
 				}
+
+				(*zombie)->PlayGrowlSound();
 
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %s -> [Player]"), tmp_path.ZombieId, *prevType);
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %s -> [Player]"), tmp_path.ZombieId, *prevType));
@@ -575,6 +582,19 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			(*zombie)->targetType = (*zombie)->TARGET::HORDESOUND;
 			break;
 
+		case 8:
+			if ((*zombie)->targetType != (*zombie)->TARGET::RUNAWAY) {
+				(*zombie)->IgnorePlayer();
+
+				(*zombie)->PlayScaredSound();
+
+				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %s -> [Runaway]"), tmp_path.ZombieId, *prevType);
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %s -> [Runaway]"), tmp_path.ZombieId, *prevType));
+			}
+
+			(*zombie)->targetType = (*zombie)->TARGET::RUNAWAY;
+			break;
+
 
 		case 69:	// 서버에서 블랙보드가 클리어 됨을 알려줬을때 (애니메이션 재생 끝난 후)
 			UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %s -> [BlackboardClear]"), tmp_path.ZombieId, *prevType);
@@ -582,7 +602,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 			(*zombie)->targetType = (*zombie)->TARGET::BLACKBOARDCLEARED;
 			UE_LOG(LogTemp, Warning, TEXT("Detect 패킷 리셋!(m_bPlayerInSight = false;)"));
-			(*zombie)->m_bPlayerInSight = false;
+			(*zombie)->m_bPlayerInSight = false;	// Detect 패킷 초기화 (다시 플레이어가 시야에 있는지 없는지 판단하도록)
 			break;
 
 		default:

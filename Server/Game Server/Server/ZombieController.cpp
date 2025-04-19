@@ -31,7 +31,6 @@ ZombieController::ZombieController(IOCP_CORE* mainServer, int roomid)
     SpawnZombies(31, 2, Vector3(600.f, 500.f, 90.212f), Rotator(0.f, 0.f, 0.f));
     SpawnZombies(34, 2, Vector3(180.f, 2400.f, 90.212f), Rotator(0.f, 90.f, 0.f));
     SpawnZombies(37, 0, Vector3(570.f, 2120.f, 90.212f), Rotator(0.f, 180.f, 0.f));
-    SpawnZombies(38, 0, Vector3(1600.f, 2000.f, 90.212f), Rotator(0.f, -120.f, 0.f));
     SpawnZombies(40, 0, Vector3(800.f, 2800.f, 90.212f), Rotator(0.f, 60.f, 0.f));
 
 

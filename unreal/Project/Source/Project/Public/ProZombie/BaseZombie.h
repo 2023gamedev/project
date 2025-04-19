@@ -31,6 +31,7 @@ DECLARE_MULTICAST_DELEGATE(FShoutingEndDelegate);
 class ABloodNiagaEffect;
 class AShoutingNiagaEffect;
 class AResurrectNiagaEffect;
+class AHealingNiagaEffect;
 
 // Zombie 클래스의 부모 클래스
 UCLASS()
@@ -186,7 +187,7 @@ public:
 
 	void WaittingTimerElapsed();
 
-	void Ressurect();
+	void Resurrect();
 
 	UPROPERTY(EditAnywhere)
 	bool m_bIsStanding = false;
@@ -279,6 +280,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AResurrectNiagaEffect* ResurrectFX;
+
+	UPROPERTY(EditAnywhere)
+	AHealingNiagaEffect* HealingFX;
 
 	float SetImpulseByWeight(float targetWeight, float baseImpulse);
 
@@ -450,17 +454,27 @@ public:
 	const float ZombieInvestigatedSpeed_Offset = 40.f;     // 플레이어 마지막 발견 위치로 움직일 때는 걷기 스피드에서 +40.f 스피드
 	const float ZombieHeardFootSoundSpeed_Offset = -20.f;   // 발소리를 들었을 때는 뛰기 스피드에서 -20.f 스피드
 
-	TARGET	targetType = NULL_TARGET;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET,	2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND)
+	TARGET	targetType = NULL_TARGET;		// 현재 쫓아가고 있는 타겟의 타입	(1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 69-BLACKBOARDCLEARED)
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GrowlSound", Transient)
 	TObjectPtr<USoundBase> GrowlSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeAttackedSound", Transient)
-	TObjectPtr<USoundBase> BeAttackedSound;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeAttackedSound", Transient)
+	//TObjectPtr<USoundBase> BeAttackedSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DeathSound", Transient)
+	TObjectPtr<USoundBase> DeathSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ScaredSound", Transient)
+	TObjectPtr<USoundBase> ScaredSound;
 
 	void PlayGrowlSound();
 
-	void PlayBeAttackedSound();
+	void PlayDeathSound();
+
+	void PlayScaredSound();
+
+	void Runaway();
 
 	bool IsGrowlSoundPlaying = false;   // 사운드 중복 재생 방지용 플래그
 	FTimerHandle GrowlSoundTimerHandle;     
@@ -472,4 +486,12 @@ public:
 
 	bool bCanDetectPlayer = false;  // 초기에는 탐지 불가능
 	FTimerHandle DetectionTimerHandle;
+
+	bool IsRunaway = false;
+
+	bool IgnorePlayerForFewSecond = false;	// (1초) => 좀비가 도망가기 상태일때 플레이어가 정면에 있으면 고개를 돌리기 전에 계속 시야에 들어 왔다 판단해서, 플레이어를 마주보고 이상하게 움직임 치는 거 방지하려고 
+	FTimerHandle IgnorePlayerTimerHandle;
+
+	void IgnorePlayer();	// 도망가기때 플레이어 포착 검사 잠시 무시하기 -> 고개 돌리는 시간 기다려주기
+
 };
