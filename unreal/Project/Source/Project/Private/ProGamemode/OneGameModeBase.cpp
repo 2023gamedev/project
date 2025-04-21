@@ -46,8 +46,6 @@ AOneGameModeBase::AOneGameModeBase()
 
 
     // 변수들
-    m_iItemBoxNumber = 0;
-
     m_iZombieNumber = 0;
     m_iShoutingZombieNumber = 0;
     m_iRunningZombieNumber = 0;
@@ -356,8 +354,8 @@ int32 AOneGameModeBase::RandomCarKey()
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos)
 {
     int32 itembindex = itemboxindex - 1;
-    if (itembindex >= 60 || m_iItemBoxNumber >= 60) {
-        UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: 60 over!!!! itemboxindex : %d, m_iItemBoxNumber : %d"), itemboxindex, m_iItemBoxNumber);
+    if (itembindex >= 60) {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> itemboxindex: 60 over!!!! itemboxindex : %d"), itemboxindex);
         return;
     }
 
@@ -414,8 +412,8 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
         SpawnedItemBox->Count = count;
         SpawnedItemBox->ItemBoxId = itembindex;
     }
-    ++m_iItemBoxNumber;
-    UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> m_iItemBoxNumber: %d"), m_iItemBoxNumber);
+    
+    UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> ItemBoxClasses.Num(): %d"), ItemBoxClasses.Num());
 }
 
 void AOneGameModeBase::NullPtrItemBoxesIndex(int32 itemboxindex)
@@ -465,9 +463,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     if (!bAdded)
     {
         // 빈 자리가 없으면 새로 추가
-        ItemBoxClasses.Add(AItemBoxActor::StaticClass());
-        newindex = m_iItemBoxNumber;
-        ++m_iItemBoxNumber;
+        newindex = ItemBoxClasses.Add(AItemBoxActor::StaticClass());
     }
     
     //UE_LOG(LogTemp, Warning, TEXT("SelectedItemBoxClassBefore!!!!!!"));
@@ -493,7 +489,6 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         SpawnedItemBox->ItemBoxId = newindex;
     }
 
-    ++m_iItemBoxNumber;
     UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 
    uint32 iclass{};
@@ -573,9 +568,7 @@ void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemcla
     if (!bAdded)
     {
         // 빈 자리가 없으면 새로 추가
-        ItemBoxClasses.Add(AItemBoxActor::StaticClass());
-        newindex = m_iItemBoxNumber;
-        ++m_iItemBoxNumber;
+        newindex = ItemBoxClasses.Add(AItemBoxActor::StaticClass());
     }
 
     //UE_LOG(LogTemp, Warning, TEXT("SelectedItemBoxClassBefore!!!!!!"));
@@ -587,7 +580,13 @@ void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemcla
         UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem IndexERROR"));
         return;
     }
-    TSubclassOf<AItemBoxActor> SelectedItemBoxClass = ItemBoxClasses[newindex];
+    TSubclassOf<AItemBoxActor> SelectedItemBoxClass;
+    if (ItemBoxClasses.IsValidIndex(newindex)) {    // 접근 가능한 인덱스인지 먼저 확인
+        SelectedItemBoxClass = ItemBoxClasses[newindex];
+    }
+    else {
+        UE_LOG(LogTemp, Error, TEXT("ItemBoxClasses.IsValidIndex(newindex) == false!!!!!! -> newindex: %d"), newindex);
+    }
     FVector itemboxpos = DropPos + FVector(0.f, 0.f, -60.149886f);
 
     //UE_LOG(LogTemp, Warning, TEXT("SpawnedItemBoxBefore!!!!!!"));
@@ -601,7 +600,6 @@ void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemcla
         SpawnedItemBox->ItemBoxId = newindex;
     }
 
-    ++m_iItemBoxNumber;
     UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 
     uint32 iclass{};
@@ -656,17 +654,16 @@ void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemcla
 void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, FVector itempos)
 {
     // 두 if문에 들어가는경우 문제가 있는것 
-    if (itemboxindex >= m_iItemBoxNumber) {
+    if (itemboxindex >= ItemBoxClasses.Num()) {
         // 빈 자리가 없으면 새로 추가
         ItemBoxClasses.SetNum(itemboxindex + 1);
-        m_iItemBoxNumber = itemboxindex + 1;
 
         if (ItemBoxClasses.IsValidIndex(itemboxindex)) {
             if (!ItemBoxClasses[itemboxindex]) {
                 ItemBoxClasses[itemboxindex] = AItemBoxActor::StaticClass();
             }
         }
-        UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes -> itemboxindex >= m_iItemBoxNumber !!!!!"));
+        UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes -> itemboxindex >= ItemBoxClasses.Num() !!!!!"));
     }
     else if (ItemBoxClasses[itemboxindex] != nullptr) {
         ItemBoxClasses[itemboxindex] = nullptr;

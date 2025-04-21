@@ -83,9 +83,6 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = "ItemBox")
     TArray<TSubclassOf<AItemBoxActor>> ItemBoxClasses;
 
-    UPROPERTY(VisibleAnywhere, Category = "ItemBox")
-    int32 m_iItemBoxNumber;
-
 
     // 캐릭터를 저장할 배열
     UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter")
@@ -183,8 +180,6 @@ public:
     void UpdateShoutingZombie(uint32 ZombieId, uint32 PlayerId);
 
     void DestroyItem(uint32 Itemid, uint32 Playerid);
-
-    int32 GetItemBoxNumber() { return m_iItemBoxNumber; }
 
     void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
     

@@ -29,8 +29,8 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     SpawnItemBoxes(14, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_B1);
     SpawnItemBoxes(15, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_B1);
     SpawnItemBoxes(16, "Drink", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDrink.InvenDrink", 2, FLOOR::FLOOR_B1);
-    SpawnItemBoxes(17, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_B1); // 수정 필요
-    SpawnItemBoxes(18, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_B1);
+    SpawnItemBoxes(17, "Bag", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_B1); // 수정 필요
+    SpawnItemBoxes(18, "BigBag", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_B1);
 
     SpawnItemBoxes(19, "CarKey1", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey1.InvenCarKey1", 1, FLOOR::FLOOR_B1);
     SpawnItemBoxes(20, "RoofKey1", EItemClass::KEYITEM, "/Game/InvenPng/InvenRoofKey1.InvenRoofKey1", 1, FLOOR::FLOOR_B1);
@@ -54,7 +54,7 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     SpawnItemBoxes(35, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F1);
     SpawnItemBoxes(36, "Disinfectant", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenDisinfectant.InvenDisinfectant", 2, FLOOR::FLOOR_F1);
     SpawnItemBoxes(37, "Ointment", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenOintment.InvenOintment", 2, FLOOR::FLOOR_F1);
-    SpawnItemBoxes(38, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F1);
+    SpawnItemBoxes(38, "BigBag", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F1);
 
     SpawnItemBoxes(39, "CarKey2", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey1.InvenCarKey1", 1, FLOOR::FLOOR_F1);
     SpawnItemBoxes(40, "RoofKey2", EItemClass::KEYITEM, "/Game/InvenPng/InvenRoofKey2.InvenRoofKey2", 1, FLOOR::FLOOR_F1);
@@ -77,8 +77,8 @@ ItemController::ItemController(IOCP_CORE& mainServer)
     SpawnItemBoxes(54, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F2);
     SpawnItemBoxes(55, "Water", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenWater.InvenWater", 2, FLOOR::FLOOR_F2);
     SpawnItemBoxes(56, "Smoke", EItemClass::HEALINGITEM, "/Game/InvenPng/InvenSmoke.InvenSmoke", 2, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(57, "BagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_F2);
-    SpawnItemBoxes(58, "BigBagActor", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(57, "Bag", EItemClass::BAGITEM, "/Game/InvenPng/InvenBag.InvenBag", 1, FLOOR::FLOOR_F2);
+    SpawnItemBoxes(58, "BigBag", EItemClass::BAGITEM, "/Game/InvenPng/InvenBigBag.InvenBigBag", 1, FLOOR::FLOOR_F2);
 
     SpawnItemBoxes(59, "CarKey3", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);
     SpawnItemBoxes(60, "CarKey4", EItemClass::KEYITEM, "/Game/InvenPng/InvenCarKey2.InvenCarKey2", 1, FLOOR::FLOOR_F2);

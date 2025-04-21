@@ -48,11 +48,11 @@ void AEmployeeCharacter::BeginPlay()
 	// 회사원 캐릭 시작시 아이템 (회사원 캐릭 특성)
 	if (Inventory.Num() > 0) {
 		Inventory[0].Type = EItemType::ITEM_USEABLE;
-		Inventory[0].Name = "BagActor";
+		Inventory[0].Name = "SuitCase";
 		Inventory[0].ItemClassType = EItemClass::BAGITEM;
-		Inventory[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"));	// 나중에 서류 케이스 이미지 새로 받아서 서류 케이스로 바꿔주기
-		Inventory[0].Count = 0;
-
+		Inventory[0].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSuitCase.InvenSuitCase"));
+		Inventory[0].Count = 1;
+		
 		GameUIUpdate();
 	}	// 이니셜라이저에 넣으니 초기화 안된 메모리 엑세스 에러 발생해서 여기에서 
 

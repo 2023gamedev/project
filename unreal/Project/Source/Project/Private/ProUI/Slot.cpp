@@ -257,7 +257,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 		}
 
 		switch (Character->Inventory[SlotIndex].ItemClassType) {
-		
+
 			// 0번: 출혈회복, 1번: 상처회복 2번: 투척무기 3번: 키 4번: 노말무기
 		case EItemClass::BLEEDINGHEALINGITEM:
 			if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_NONE) {
@@ -351,7 +351,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 
 				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
-				
+
 				if (Character->IsBringCurrentThrowWeapon()) {
 					Character->DestroyThrowWeapon();
 					Character->SetThrowWHandIn(false);
@@ -432,60 +432,67 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			Character->GameUIUpdate();
 			break;
 		case EItemClass::BAGITEM:
-			if (Character->GetCarryBagName() == "BigBagActor") {
-
+			if (Character->GetCarryBagName() == "BigBag") {	// 이미 큰가방을 먹어 인벤토리가 다 열린 상태
 				break;
 			}
-			else if (Character->GetCarryBagName() == "BagActor") {
+			else if (Character->GetCarryBagName() == "Bag" || Character->GetCarryBagName() == "SuitCase") {
+				if (Character->Inventory[SlotIndex].Name == "BigBag") {	// 이전에 들고 있던 가방이 중간크기 가방이였고 이제는 큰 가방을 든 상태 => 중간 크기 가방은 다시 가방안으로 돌아와서 다른 사람에게 줄 수 있음
 
-				if (Character->Inventory[SlotIndex].Name == "BigBagActor") {
-					Character->Inventory[SlotIndex].Name = "BagActor";
+					if (Character->GetCarryBagName() == "Bag")
+						Character->Inventory[SlotIndex].Name = "Bag";
+					else if (Character->GetCarryBagName() == "SuitCase")
+						Character->Inventory[SlotIndex].Name = "SuitCase";
 					Character->Inventory[SlotIndex].ItemClassType = EItemClass::BAGITEM;
-					Character->Inventory[SlotIndex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"));
+					if (Character->GetCarryBagName() == "Bag")
+						Character->Inventory[SlotIndex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenBag.InvenBag"));
+					else if (Character->GetCarryBagName() == "SuitCase")
+						Character->Inventory[SlotIndex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Game/InvenPng/InvenSuitCase.InvenSuitCase"));
 					Character->Inventory[SlotIndex].Count = 1;
-
 					Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
 
-					Character->SetCarryBagName("BigBagActor");
+					Character->SetCarryBagName("BigBag");
 					Character->SetInvenSize(20);
 
 					for (int i = 10; i < 20; ++i) {
 						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 					}
-
 				}
 			}
-			else {
-				if (Character->Inventory[SlotIndex].Name == "BigBagActor") {
+			else {	// 이전에 가방을 아예 안 들고 있었던 상태
+				if (Character->Inventory[SlotIndex].Name == "BigBag") {
+
 					Character->Inventory[SlotIndex].Name = "nullptr";
 					Character->Inventory[SlotIndex].ItemClassType = EItemClass::NONE;
 					Character->Inventory[SlotIndex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 					Character->Inventory[SlotIndex].Count = 0;
-
 					Character->Inventory[SlotIndex].Type = EItemType::ITEM_NONE;
 
-					Character->SetCarryBagName("BigBagActor");
+					Character->SetCarryBagName("BigBag");
 					Character->SetInvenSize(20);
 
 					for (int i = 5; i < 20; ++i) {
 						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 					}
 				}
-				else if (Character->Inventory[SlotIndex].Name == "BagActor") {
+				else if (Character->Inventory[SlotIndex].Name == "Bag" || Character->Inventory[SlotIndex].Name == "SuitCase") {
+
+					auto prevBagName = Character->Inventory[SlotIndex].Name;
+
 					Character->Inventory[SlotIndex].Name = "nullptr";
 					Character->Inventory[SlotIndex].ItemClassType = EItemClass::NONE;
 					Character->Inventory[SlotIndex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 					Character->Inventory[SlotIndex].Count = 0;
-
 					Character->Inventory[SlotIndex].Type = EItemType::ITEM_NONE;
 
-					Character->SetCarryBagName("BagActor");
+					if (prevBagName == "Bag") 
+						Character->SetCarryBagName("Bag");
+					else if (prevBagName == "SuitCase") 
+						Character->SetCarryBagName("SuitCase");
 					Character->SetInvenSize(10);
 
 					for (int i = 5; i < 10; ++i) {
 						Character->Inventory[i].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 					}
-
 				}
 			}
 
