@@ -1101,7 +1101,9 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
-	if (m_bIsInputEnabled) {
+	if (m_bIsInputEnabled
+		&& basecharacter->IsInventory() == false) {	// 인벤토리를 열고 있는 상태에서는 공격/아이템 사용 X
+
 		m_bIsInputEnabled = false;
 
 
@@ -1116,14 +1118,12 @@ void APlayerCharacterController::BehaviorToItem(const FInputActionValue& Value)
 		else if (basecharacter->IsBHHandIn() && !(basecharacter->IsBHealing())) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController BH")));
 			BleedHealing();
-
 		}
 		else if (basecharacter->IsHealHandIn() && !(basecharacter->IsHealing())) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH")));
 
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController HHHHHHHHH22222")));
 			Healing();
-
 		}
 		else if (basecharacter->IsKeyHandIn()) {
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerController Key")));
@@ -1297,7 +1297,9 @@ void APlayerCharacterController::BehaviorToItem_2(const FInputActionValue& Value
 {
 	ABaseCharacter* basecharacter = Cast<ABaseCharacter>(GetCharacter());
 
-	if (m_bIsInputEnabled) {
+	if (m_bIsInputEnabled
+		&& basecharacter->IsInventory() == false) {	// 인벤토리를 열고 있는 상태에서는 공격/아이템 사용 X) 
+
 		m_bIsInputEnabled = false;
 
 

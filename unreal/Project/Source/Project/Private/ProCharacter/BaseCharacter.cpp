@@ -1569,7 +1569,6 @@ void ABaseCharacter::InventoryOnOff()
 			controller->SetInputMode(InputModeUIOnly);
 			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/invenclose.invenclose")); // 에셋 경로
 			PlaySoundForPlayer(Sound);
-
 		}
 	}
 
