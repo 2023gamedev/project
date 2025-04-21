@@ -1640,7 +1640,7 @@ void Zombie::Wait()
 
 
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
-			bool clear_flag[6] = { true, true, true, true, true, true };
+			bool clear_flag[6] = { true, true, true, true, false, true };
 			ClearBlackBoard(clear_flag);
 			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
@@ -1674,7 +1674,7 @@ void Zombie::Wait()
 
 
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
-			bool clear_flag[6] = { true, true, true, true, true, true };
+			bool clear_flag[6] = { true, true, true, true, false, true };
 			ClearBlackBoard(clear_flag);
 			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 
@@ -1706,7 +1706,7 @@ void Zombie::Wait()
 
 
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사
-			bool clear_flag[6] = { true, true, true, true, true, true };
+			bool clear_flag[6] = { true, true, true, true, false, true };
 			ClearBlackBoard(clear_flag);
 			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])
 		
