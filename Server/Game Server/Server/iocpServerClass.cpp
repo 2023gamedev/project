@@ -695,7 +695,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 				}
 				else {
 #ifdef ENABLE_BT_LOG
-					cout << "좀비 '#" << ZombieData.zombieID << "' 부활중" << endl;
+					cout << "좀비 '#" << zom->ZombieData.zombieID << "' 부활중" << endl;
 					cout << "부활 남은 시간: " << zom->resurrectionTimer - deltaTime.count() << "s" << endl;
 #endif
 				}
@@ -827,7 +827,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 					}
 
 					if (zom->HaveToWait == true) {
-						zom->path[zom->ZombiePathIndex] = { 9999.f,9999.f,9999.f };	// 애니메이션 재생 중임을 알리기 위해
+						zom->targetType = zom->TARGET::WAIT;	// 현재 애니메이션 재생 중임을 알림
 					}
 
 					Protocol::ZombiePath* zPath = zPathList.add_zombiepaths();

@@ -500,6 +500,10 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 8:
 			prevType = TEXT("[Runaway]");
 			break;
+		case 9:
+			prevType = TEXT("[HaveToWait]");
+			break;
+
 		case 69:
 			prevType = TEXT("[BlackboardClear]");
 			break;
@@ -511,7 +515,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		switch (tmp_path.targetType) {
 
 		case 1:
-			if ((*zombie)->targetType != (*zombie)->TARGET::NULL_TARGET) {	
+			if ((*zombie)->targetType != (*zombie)->TARGET::NULL_TARGET) {
 				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %s -> [NULL]"), tmp_path.ZombieId, *prevType);
 				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %s -> [NULL]"), tmp_path.ZombieId, *prevType));
 			}
@@ -595,6 +599,15 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			(*zombie)->targetType = (*zombie)->TARGET::RUNAWAY;
 			break;
 
+		case 9:
+			if ((*zombie)->targetType != (*zombie)->TARGET::WAIT) {
+				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %s -> [HaveToWait]"), tmp_path.ZombieId, *prevType);
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %s -> [HaveToWait]"), tmp_path.ZombieId, *prevType));
+			}
+
+			(*zombie)->targetType = (*zombie)->TARGET::WAIT;
+			break;
+
 
 		case 69:	// 서버에서 블랙보드가 클리어 됨을 알려줬을때 (애니메이션 재생 끝난 후)
 			UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %s -> [BlackboardClear]"), tmp_path.ZombieId, *prevType);
@@ -634,23 +647,12 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 			// 좀비 목적지 설정
 			if (tmp_path.Path1.empty() == false) {
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID=%d, Path=(%.2f , %.2f , %.2f)"), 
+				//	tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId, get<0>(*(tmp_path.Path1.begin())), get<1>(*(tmp_path.Path1.begin())), get<2>(*(tmp_path.Path1.begin()))));
 
-				// 서버에서 해당 좀비 애니메이션 재생중이면 path1 에 { 9999.f, 9999.f, 9999.f } 담아서 보냄
-				if (*(tmp_path.Path1.begin()) == std::tuple{ 9999.f, 9999.f, 9999.f }) {
-					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID=%d (HaveToWait)"/*, NextPath=(%.2f , %.2f , %.2f)"*/), tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId));
+				(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
 
-					// + MontageEnded 보다 먼저 실행되서 ZombieMoveTo 실행됨 => ZombieMoveTo 내에 path1 { 9999.f, 9999.f, 9999.f } 면 return하는 예외처리!
-					(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
-				}
-				else {
-					//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("Update Zombie path: ZombieID=%d, PlayerID=%d, Path=(%.2f , %.2f , %.2f)"), 
-					//	tmp_path.ZombieId, GameInstance->ClientSocketPtr->MyPlayerId, get<0>(*(tmp_path.Path1.begin())), get<1>(*(tmp_path.Path1.begin())), get<2>(*(tmp_path.Path1.begin()))));
-
-					(*zombie)->NextPath[0] = *(tmp_path.Path1.begin());
-
-					(*zombie)->afterAnim_idleDuration = 0.f;	// 서버로부터 새로운 ZombiePath를 받으면 실행 => ZombieMoveTo idle 상태 초기화 => 다시 움직이게 함!
-				}
-
+				(*zombie)->afterAnim_idleDuration = 0.f;	// 서버로부터 새로운 ZombiePath를 받으면 실행 => ZombieMoveTo idle 상태 초기화 => 다시 움직이게 함!
 			}
 			else
 				(*zombie)->NextPath[0] = std::tuple<float, float, float>();

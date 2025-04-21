@@ -57,6 +57,7 @@ public:
         PATROL,
         HORDESOUND,
         RUNAWAY,
+        WAIT,
 
         BLACKBOARDCLEARED = 69
     };
@@ -207,7 +208,7 @@ public:
     float runawayHealthRegenMaxPercent = 100.0f; // 좀비 도망치기 최대 체력회복 퍼센트 (100%)
     int runawayFailCount = 0;   // 도망가기 랜덤 패트롤 찾기 실패 카운트 
 
-    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 69-BLACKBOARDCLEARED)
+    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 9-WAIT, 69-BLACKBOARDCLEARED)
 
     int ZombiePathIndex = 0;
 

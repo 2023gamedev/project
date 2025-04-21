@@ -100,7 +100,7 @@ void AShoutingZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		OwnerZombie->CachedAnimInstance->SetIsStandingStill(false);		// 다시 초기화
 	}
 
-	if (PathX == 9999.f && PathY == 9999.f) {	// 서버 좀비 HaveToWait 상태일때 (애니메이션 재생 중일 떄)
+	if (OwnerZombie->targetType == OwnerZombie->TARGET::WAIT) {	// 서버 좀비 HaveToWait 상태일때 (애니메이션 재생 중일 떄)
 		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("Zombie #%d HaveToWait!"), OwnerZombie->ZombieId));
 		//UE_LOG(LogTemp, Log, TEXT("Zombie #%d HaveToWait!"), OwnerZombie->ZombieId);
 
