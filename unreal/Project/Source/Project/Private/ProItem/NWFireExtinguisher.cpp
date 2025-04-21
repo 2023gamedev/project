@@ -27,7 +27,7 @@ ANWFireExtinguisher::ANWFireExtinguisher()
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
-	m_fWeaponSTR = 3.f;
+	m_fWeaponSTR = 4.5f;
 	m_fWeaponDurability = 10.f;
 	m_fWeaponRange = 2.f;
 	WeaponName = "FireExtinguisher";

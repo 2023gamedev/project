@@ -28,8 +28,8 @@ ANWSquareWood::ANWSquareWood()
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision")); // 충돌 프리셋은 변경될 수도 있다.
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
-	m_fWeaponSTR		= 2.f;
-	m_fWeaponDurability = 8.f;
+	m_fWeaponSTR		= 2.5f;
+	m_fWeaponDurability = 5.f;
 	m_fWeaponRange		= 3.f;
 	WeaponName = "SquareWood";
 }

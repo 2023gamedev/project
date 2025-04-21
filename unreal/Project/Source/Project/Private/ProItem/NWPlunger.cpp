@@ -26,7 +26,7 @@ ANWPlunger::ANWPlunger()
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR		= 2.f;
-	m_fWeaponDurability = 6.f;
+	m_fWeaponDurability = 7.f;
 	m_fWeaponRange		= 3.f;
 	WeaponName = "Plunger";
 }

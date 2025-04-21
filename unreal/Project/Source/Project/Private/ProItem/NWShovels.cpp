@@ -26,7 +26,7 @@ ANWShovels::ANWShovels()
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR		= 6.f;
-	m_fWeaponDurability = 10.f;
+	m_fWeaponDurability = 9.f;
 	m_fWeaponRange		= 3.f;
 	WeaponName = "Shovels";
 }

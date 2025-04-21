@@ -26,8 +26,8 @@ ANWGolfClub::ANWGolfClub()
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
-	m_fWeaponSTR = 6.f;
-	m_fWeaponDurability = 8.f;
+	m_fWeaponSTR = 5.f;
+	m_fWeaponDurability = 7.f;
 	m_fWeaponRange = 3.f;
 	WeaponName = "GolfClub";
 }

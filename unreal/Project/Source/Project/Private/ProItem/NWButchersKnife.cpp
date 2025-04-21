@@ -41,6 +41,6 @@ ANWButchersKnife::ANWButchersKnife()
 
 	m_fWeaponSTR = 4.f;
 	m_fWeaponDurability = 7.f;
-	m_fWeaponRange = 1.f;
+	m_fWeaponRange = 1.5f;
 	WeaponName = "ButchersKnife";
 }

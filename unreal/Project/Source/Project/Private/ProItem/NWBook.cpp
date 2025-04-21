@@ -25,9 +25,9 @@ ANWBook::ANWBook()
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
-	m_fWeaponSTR = 3.f;
-	m_fWeaponDurability = 7.f;
-	m_fWeaponRange = 1.f;
+	m_fWeaponSTR = 2.f;
+	m_fWeaponDurability = 4.f;
+	m_fWeaponRange = 0.5f;
 	WeaponName = "Book";
 
 }

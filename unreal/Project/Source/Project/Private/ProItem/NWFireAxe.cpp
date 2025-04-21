@@ -40,6 +40,6 @@ ANWFireAxe::ANWFireAxe()
 
 	m_fWeaponSTR = 5.f;
 	m_fWeaponDurability = 10.f;
-	m_fWeaponRange = 2.f;
+	m_fWeaponRange = 2.5f;
 	WeaponName = "FireAxe";
 }

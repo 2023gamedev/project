@@ -27,8 +27,8 @@ ANWMagicStick::ANWMagicStick()
 	NormalWeapon->SetCollisionProfileName(TEXT("NoCollision"));
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
-	m_fWeaponSTR		= 2.f;
-	m_fWeaponDurability = 5.f;
-	m_fWeaponRange		= 2.f;
+	m_fWeaponSTR		= 4.5f;
+	m_fWeaponDurability = 6.f;
+	m_fWeaponRange		= 1.5f;
 	WeaponName = "MagicStick";
 }

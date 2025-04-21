@@ -39,7 +39,7 @@ ANWSashimiKnife::ANWSashimiKnife()
 	PlaneComponent->SetHiddenInGame(true);
 
 	m_fWeaponSTR		= 3.f;
-	m_fWeaponDurability = 9.f;
+	m_fWeaponDurability = 5.f;
 	m_fWeaponRange		= 1.f;
 	WeaponName = "SashimiKnife";
 }
