@@ -195,6 +195,8 @@ void ANormalWeaponActor::WeaponBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 		// 무기 내구도 가감
 		--m_fWeaponDurability;
+		OwnerCharacter->UpdateNormalWeaponSlot();
+		UE_LOG(LogTemp, Warning, TEXT("무기 내구도 가감!!! m_fWeaponDurability - %f"), m_fWeaponDurability);
 		if (m_fWeaponDurability <= 0) {
 			OwnerCharacter->DestroyNormalWepaonItemSlot();
 			USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/break.break")); // 에셋 경로

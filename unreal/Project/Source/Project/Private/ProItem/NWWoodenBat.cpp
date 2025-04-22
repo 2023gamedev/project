@@ -26,7 +26,8 @@ ANWWoodenBat::ANWWoodenBat()
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR		= 3.5f;
-	m_fWeaponDurability = 7.f;
+	m_fWeaponDurability = WeaponDurability::WoodenBat;
+	m_fWeaponDurability_Max = m_fWeaponDurability;
 	m_fWeaponRange		= 2.5f;
 	WeaponName = "WoodenBat";
 }

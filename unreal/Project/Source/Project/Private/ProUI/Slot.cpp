@@ -5,6 +5,7 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "ProUI/DragOnSlot.h"
 #include "ProGamemode/OneGameModeBase.h"
+#include "ProItem/NormalWeaponActor.h"
 
 void USlot::Init()
 {
@@ -48,6 +49,8 @@ void USlot::Refresh()
 		}
 
 		ItemCount = data.Count;
+		WeaponDurability = data.Durability;
+		WeaponDurability_Max = data.Durability_Max;
 
 		if (ItemCount <= 1) {
 			Text->SetVisibility(ESlateVisibility::Hidden);
@@ -56,11 +59,19 @@ void USlot::Refresh()
 			Text->SetVisibility(ESlateVisibility::Visible);
 			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
 		}
+
+		if (WeaponDurability <= 0) {
+			ProgressBar->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else {
+			ProgressBar->SetVisibility(ESlateVisibility::Visible);
+			ProgressBar->SetPercent(GetWeaponDurabilityPercent());
+		}
+
 		break;
 	}
 	case ESlotType::SLOT_QUICK:
 	{
-
 		FItemDataStructure& dataquick = Character->QuickSlot[SlotIndex];
 
 		if (dataquick.Texture != nullptr) {
@@ -68,6 +79,8 @@ void USlot::Refresh()
 		}
 
 		ItemCount = dataquick.Count;
+		WeaponDurability = dataquick.Durability;
+		WeaponDurability_Max = dataquick.Durability_Max;
 
 		if (ItemCount <= 1) {
 			Text->SetVisibility(ESlateVisibility::Hidden);
@@ -76,18 +89,28 @@ void USlot::Refresh()
 			Text->SetVisibility(ESlateVisibility::Visible);
 			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
 		}
+
+		if (WeaponDurability <= 0) {
+			ProgressBar->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else {
+			ProgressBar->SetVisibility(ESlateVisibility::Visible);
+			ProgressBar->SetPercent(GetWeaponDurabilityPercent());
+		}
+
 		break;
 	}
 	case ESlotType::SLOT_PICK_UP:
 	{
+		FItemDataStructure& datapick = Character->PickUpSlot[0];
 
-		FItemDataStructure& dataquick = Character->PickUpSlot[0];
-
-		if (dataquick.Texture != nullptr) {
-			SetTexture(dataquick.Texture);
+		if (datapick.Texture != nullptr) {
+			SetTexture(datapick.Texture);
 		}
 
-		ItemCount = dataquick.Count;
+		ItemCount = datapick.Count;
+		WeaponDurability = datapick.Durability;
+		WeaponDurability_Max = datapick.Durability_Max;
 
 		if (ItemCount <= 1) {
 			Text->SetVisibility(ESlateVisibility::Hidden);
@@ -96,10 +119,20 @@ void USlot::Refresh()
 			Text->SetVisibility(ESlateVisibility::Visible);
 			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
 		}
+
+		if (WeaponDurability <= 0) {
+			ProgressBar->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else {
+			ProgressBar->SetVisibility(ESlateVisibility::Visible);
+			ProgressBar->SetPercent(GetWeaponDurabilityPercent());
+		}
+
 		break;
 	}
 
 	}
+
 }
 
 void USlot::RefreshOPU(int otherplayeruiindex)
@@ -227,14 +260,14 @@ void USlot::NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOp
 	}
 }
 
-void USlot::SpawnOnGround(int slotindex)
-{
-	if (Character) {
-		if (Character->GetPlayerId() == 99) {
-			Character->SpawnOnGround(slotindex);
-		}
-	}
-}
+//void USlot::SpawnOnGround(int slotindex)	// 이건 왜 있는 거야...
+//{
+//	if (Character) {
+//		if (Character->GetPlayerId() == 99) {
+//			Character->SpawnOnGround(slotindex);
+//		}
+//	}
+//}
 
 
 
@@ -405,6 +438,8 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].Texture = Character->Inventory[SlotIndex].Texture;
 				Character->QuickSlot[4].Count = Character->Inventory[SlotIndex].Count;
 				Character->QuickSlot[4].SlotReference = SlotIndex;
+				Character->QuickSlot[4].Durability = Character->Inventory[SlotIndex].Durability;
+				Character->QuickSlot[4].Durability_Max = Character->Inventory[SlotIndex].Durability_Max;
 
 				Character->Inventory[SlotIndex].Type = EItemType::ITEM_EQUIPMENT;
 
@@ -417,9 +452,10 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				Character->QuickSlot[4].Count = 0;
 				Character->QuickSlot[4].SlotReference = -1;
+				Character->QuickSlot[4].Durability = 0;
+				Character->QuickSlot[4].Durability_Max = 0;
 
 				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
-
 
 				if (Character->IsBringCurrentWeapon()) {
 					Character->DestroyNormalWeapon();

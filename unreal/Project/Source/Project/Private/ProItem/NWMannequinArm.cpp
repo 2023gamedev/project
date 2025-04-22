@@ -27,7 +27,8 @@ ANWMannequinArm::ANWMannequinArm()
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR		= 2.f;
-	m_fWeaponDurability = 6.f;
+	m_fWeaponDurability = WeaponDurability::MannequinArm;
+	m_fWeaponDurability_Max = m_fWeaponDurability;
 	m_fWeaponRange		= 2.f;
 	WeaponName = "MannequinArm";
 }

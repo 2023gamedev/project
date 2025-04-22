@@ -181,9 +181,9 @@ public:
 
     void DestroyItem(uint32 Itemid, uint32 Playerid);
 
-    void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count);
+    void SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count, float durability, float durability_max);
     
-    void SpawnOnDeathGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector playerlocation);
+    void SpawnOnDeathGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count, float durability, float durability_max, FVector playerlocation);
 
     void CarActorRandomLocationSetting();
 

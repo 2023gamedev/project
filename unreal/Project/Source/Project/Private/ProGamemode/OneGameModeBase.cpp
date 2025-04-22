@@ -351,6 +351,7 @@ int32 AOneGameModeBase::RandomCarKey()
     return -1;
 }
 
+// 최초로 맵에 아이템 생성시 (월드에 아이템 박스 생성)
 void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, uint32 itemfloor, FVector itempos)
 {
     int32 itembindex = itemboxindex - 1;
@@ -411,6 +412,67 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
         SpawnedItemBox->Texture = texture;
         SpawnedItemBox->Count = count;
         SpawnedItemBox->ItemBoxId = itembindex;
+
+        float durability;
+        if (itemclass == 0) {  // 생성하는 박스가 무기일때 내구도 최초 설정
+            if (itemname == "Book") { 
+                durability = WeaponDurability::Book;
+            }
+            else if (itemname == "Bottle") {
+                durability = WeaponDurability::Bottle;
+            }
+            else if (itemname == "ButchersKnife") {
+                durability = WeaponDurability::ButchersKnife;
+            }
+            else if (itemname == "FireAxe") {
+                durability = WeaponDurability::FireAxe;
+            }
+            else if (itemname == "FireExtinguisher") { 
+                durability = WeaponDurability::FireExtinguisher;
+            }
+            else if (itemname == "FryingPan") { 
+                durability = WeaponDurability::FryingPan;
+            }        
+            else if (itemname == "GolfClub") {
+                durability = WeaponDurability::GolfClub;
+            }       
+            else if (itemname == "Iron") { 
+                durability = WeaponDurability::Iron;
+            }        
+            else if (itemname == "MagicStick") { 
+                durability = WeaponDurability::MagicStick;
+            }        
+            else if (itemname == "MannequinArm") { 
+                durability = WeaponDurability::MannequinArm;
+            }       
+            else if (itemname == "MannequinLeg") { 
+                durability = WeaponDurability::MannequinLeg;
+            }        
+            else if (itemname == "Pipe") {
+                durability = WeaponDurability::Pipe;
+            }        
+            else if (itemname == "Plunger") { 
+                durability = WeaponDurability::Plunger;
+            }
+            else if (itemname == "SashimiKnife") {
+                durability = WeaponDurability::SashimiKnife;
+            }
+            else if (itemname == "Scissors") {
+                durability = WeaponDurability::Scissors;
+            }
+            else if (itemname == "Shovels") {
+                durability = WeaponDurability::Shovels;
+            }
+            else if (itemname == "SquareWood") {
+                durability = WeaponDurability::SquareWood;
+            }
+            else if (itemname == "WoodenBat") {
+                durability = WeaponDurability::WoodenBat;
+            }
+        }
+
+        SpawnedItemBox->Durability = durability;
+        SpawnedItemBox->Durability_Max = SpawnedItemBox->Durability;
     }
     
     UE_LOG(LogTemp, Warning, TEXT("SpawnItemBoxes -> ItemBoxClasses.Num(): %d"), ItemBoxClasses.Num());
@@ -423,7 +485,8 @@ void AOneGameModeBase::NullPtrItemBoxesIndex(int32 itemboxindex)
     }
 }
 
-void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count)
+// 플레이어가 아이템을 떨굴때 (월드에 아이템 박스 생성, 패킷 전송)
+void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count, float durability, float durability_max)
 {
     ABaseCharacter* DefaultPawn = nullptr;
 
@@ -442,30 +505,30 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         }
     }
 
-   // UE_LOG(LogTemp, Warning, TEXT("DropPosBefore!!!!!!"));
-   FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
-   // UE_LOG(LogTemp, Warning, TEXT("ItemBoxClassesBefore!!!!!!"));
-   //ItemBoxClasses.Add(AItemBoxActor::StaticClass()); // spawn시 .add하지 말고 비어있는 인덱스에다가 아이템 다시 넣어주기
-    
+    // UE_LOG(LogTemp, Warning, TEXT("DropPosBefore!!!!!!"));
+    FVector DropPos = DefaultPawn->GetActorForwardVector() * 100.f;
+    // UE_LOG(LogTemp, Warning, TEXT("ItemBoxClassesBefore!!!!!!"));
+    //ItemBoxClasses.Add(AItemBoxActor::StaticClass()); // spawn시 .add하지 말고 비어있는 인덱스에다가 아이템 다시 넣어주기
+
     int32 newindex = INDEX_NONE;
     bool bAdded = false;
     for (int32 i = 0; i < ItemBoxClasses.Num(); ++i)
     {
-        if (ItemBoxClasses[i] == nullptr) 
+        if (ItemBoxClasses[i] == nullptr)
         {
-            ItemBoxClasses[i] = AItemBoxActor::StaticClass(); 
+            ItemBoxClasses[i] = AItemBoxActor::StaticClass();
             newindex = i;
             bAdded = true;
             break;
         }
     }
-    
+
     if (!bAdded)
     {
         // 빈 자리가 없으면 새로 추가
         newindex = ItemBoxClasses.Add(AItemBoxActor::StaticClass());
     }
-    
+
     //UE_LOG(LogTemp, Warning, TEXT("SelectedItemBoxClassBefore!!!!!!"));
     //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem -> ItemBoxClasses.Num(): %d"), ItemBoxClasses.Num());
    // UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItem ->  GetItemBoxNumber(): %d"), GetItemBoxNumber());
@@ -486,62 +549,65 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
         SpawnedItemBox->ItemClassType = itemclass;
         SpawnedItemBox->Texture = texture;
         SpawnedItemBox->Count = count;
+        SpawnedItemBox->Durability = durability;
+        SpawnedItemBox->Durability_Max = durability_max;
         SpawnedItemBox->ItemBoxId = newindex;
     }
 
-    UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
+    //UE_LOG(LogTemp, Warning, TEXT("SpawnOnGroundItemEND!!!!!!!"));
 
-   uint32 iclass{};
+    uint32 iclass{};
 
-   if (itemclass == EItemClass::NORMALWEAPON) {
-       iclass = 1;
-   }
-   else if (itemclass == EItemClass::THROWINGWEAPON) {
-       iclass = 2;
-   }
-   else if (itemclass == EItemClass::HEALINGITEM) {
-       iclass = 3;
-   }
-   else if (itemclass == EItemClass::BLEEDINGHEALINGITEM) {
-       iclass = 4;
-   }
-   else if (itemclass == EItemClass::KEYITEM) {
-       iclass = 5;
-   }
-   else if (itemclass == EItemClass::BAGITEM) {
-       iclass = 6;
-   }
-   else if (itemclass == EItemClass::NONE) {
-       iclass = 7;
-   }
+    if (itemclass == EItemClass::NORMALWEAPON) {
+        iclass = 1;
+    }
+    else if (itemclass == EItemClass::THROWINGWEAPON) {
+        iclass = 2;
+    }
+    else if (itemclass == EItemClass::HEALINGITEM) {
+        iclass = 3;
+    }
+    else if (itemclass == EItemClass::BLEEDINGHEALINGITEM) {
+        iclass = 4;
+    }
+    else if (itemclass == EItemClass::KEYITEM) {
+        iclass = 5;
+    }
+    else if (itemclass == EItemClass::BAGITEM) {
+        iclass = 6;
+    }
+    else if (itemclass == EItemClass::NONE) {
+        iclass = 7;
+    }
 
 
-   Protocol::drop_item droppacket;
+    Protocol::drop_item droppacket;
 
-   droppacket.set_packet_type(22);
-   std::string ItemNameStr(TCHAR_TO_UTF8(*itemname.ToString()));
-   droppacket.set_itemname(ItemNameStr);
-   droppacket.set_itemclass(iclass);
-   droppacket.set_count(count);
-   if (texture) {
-       FString TexturePath = texture->GetPathName();
-       std::string TexturePathStr(TCHAR_TO_UTF8(*TexturePath));
-       droppacket.set_texture_path(TexturePathStr);
-   }
-   droppacket.set_itemid(newindex + 1);
-   droppacket.set_posx(itemboxpos.X);
-   droppacket.set_posy(itemboxpos.Y);
-   droppacket.set_posz(itemboxpos.Z);
+    droppacket.set_packet_type(22);
+    std::string ItemNameStr(TCHAR_TO_UTF8(*itemname.ToString()));
+    droppacket.set_itemname(ItemNameStr);
+    droppacket.set_itemclass(iclass);
+    droppacket.set_count(count);
+    if (texture) {
+        FString TexturePath = texture->GetPathName();
+        std::string TexturePathStr(TCHAR_TO_UTF8(*TexturePath));
+        droppacket.set_texture_path(TexturePathStr);
+    }
+    droppacket.set_itemid(newindex + 1);
+    droppacket.set_posx(itemboxpos.X);
+    droppacket.set_posy(itemboxpos.Y);
+    droppacket.set_posz(itemboxpos.Z);
 
-   std::string serializedData;
-   droppacket.SerializeToString(&serializedData);
+    std::string serializedData;
+    droppacket.SerializeToString(&serializedData);
 
-   // 직렬화된 데이터를 서버로 전송
-   bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
+    // 직렬화된 데이터를 서버로 전송
+    bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 
 }
 
-void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count, FVector playerlocation)
+// 플레이어가 죽을때 바닥에 아이템을 모두 떨구는 것 (월드에 아이템 박스 생성, 패킷 전송)
+void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemclass, UTexture2D* texture, int count, float durability, float durability_max, FVector playerlocation)
 {
 
     FVector DropPos = playerlocation;
@@ -597,6 +663,8 @@ void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemcla
         SpawnedItemBox->ItemClassType = itemclass;
         SpawnedItemBox->Texture = texture;
         SpawnedItemBox->Count = count;
+        SpawnedItemBox->Durability = durability;
+        SpawnedItemBox->Durability_Max = durability_max;
         SpawnedItemBox->ItemBoxId = newindex;
     }
 

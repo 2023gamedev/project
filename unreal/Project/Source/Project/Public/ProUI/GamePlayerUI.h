@@ -32,5 +32,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (BindWidget)) // 업데이트 필요
 	UQuickSlotUI* QuickSlot;
 
-
 };

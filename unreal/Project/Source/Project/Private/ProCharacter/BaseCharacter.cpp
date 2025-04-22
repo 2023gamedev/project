@@ -1050,6 +1050,7 @@ bool ABaseCharacter::SwapInven(int from, int to)
 	return true;
 }
 
+// 플레이어가 아이템을 떨굴때 (퀵슬롯 초기화, 인벤토리 초기화)
 void ABaseCharacter::SpawnOnGround(int slotindex)
 {
 	UE_LOG(LogTemp, Log, TEXT("SpawnOnGround!!!!!!!!!!"));
@@ -1058,7 +1059,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 		return;
 	}
 	auto CurrentInvenSlot = this->Inventory[slotindex];
-	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {
+	if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {	// 가방을 제외한 아이템 떨구기
 		if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
 			DestroyBleedingHealingItem();
 			QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
@@ -1109,6 +1110,8 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 			QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 			QuickSlot[4].Count = 0;
 			QuickSlot[4].SlotReference = -1;
+			QuickSlot[4].Durability = 0;
+			QuickSlot[4].Durability_Max = 0;
 
 		}
 
@@ -1117,12 +1120,15 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 		Inventory[slotindex].ItemClassType = EItemClass::NONE;
 		Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 		Inventory[slotindex].Count = 0;
+		Inventory[slotindex].Durability = 0;
+		Inventory[slotindex].Durability_Max = 0;
 
 		GameUIUpdate();
 		UE_LOG(LogTemp, Warning, TEXT("ThrowOnGround.ExecuteIfBound!!!!!!!!!!!!!"));
-		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
+		UE_LOG(LogTemp, Warning, TEXT("ThrowWeaponOnGround - CurrentInvenSlot.Durability: %f"), CurrentInvenSlot.Durability);
+		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count, CurrentInvenSlot.Durability, CurrentInvenSlot.Durability_Max);
 	}
-	else if (CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
+	else if (CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {	// 가방 떨굴때
 		Inventory[slotindex].Type = EItemType::ITEM_NONE;
 		Inventory[slotindex].Name = "nullptr";
 		Inventory[slotindex].ItemClassType = EItemClass::NONE;
@@ -1131,7 +1137,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 
 		GameUIUpdate();
 		UE_LOG(LogTemp, Warning, TEXT("ThrowOnGround.ExecuteIfBound!!!!!!!!!!!!!"));
-		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count);
+		ThrowOnGround.ExecuteIfBound(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count, CurrentInvenSlot.Durability, CurrentInvenSlot.Durability_Max);
 	}
 
 
@@ -1154,6 +1160,7 @@ void ABaseCharacter::SpawnOnGround(int slotindex)
 	}*/
 }
 
+// 플레이어가 죽었을때 아이템 모두 떨구는 것 (퀵슬롯 초기화)
 void ABaseCharacter::SpawnAllOnGround()
 {
 	for (int i = 0; i < 20; ++i) {
@@ -1162,7 +1169,7 @@ void ABaseCharacter::SpawnAllOnGround()
 		}
 		auto CurrentInvenSlot = this->Inventory[i];
 		if (CurrentInvenSlot.Type == EItemType::ITEM_EQUIPMENT) {
-			if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
+			/*if (CurrentInvenSlot.ItemClassType == EItemClass::BLEEDINGHEALINGITEM) {
 				DestroyBleedingHealingItem();
 				QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
 				QuickSlot[0].Name = "nullptr";
@@ -1212,22 +1219,25 @@ void ABaseCharacter::SpawnAllOnGround()
 				QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				QuickSlot[4].Count = 0;
 				QuickSlot[4].SlotReference = -1;
+				QuickSlot[4].Durability = 0;
+				QuickSlot[4].Durability_Max = 0;
 
-			}
+			}*/
+			// 사실상 안해줘도 됨;; -> 죽었는데 어차피
 
 			AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
 
 			if (GameMode) {
-				GameMode->SpawnOnDeathGroundItem(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count, GetActorLocation());
+				GameMode->SpawnOnDeathGroundItem(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count, CurrentInvenSlot.Durability, CurrentInvenSlot.Durability_Max, GetActorLocation());
 			}
 
 		}
-		else if (CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) {
+		else if (CurrentInvenSlot.Type == EItemType::ITEM_USEABLE) { // <- 이미 사용해버린 가방은 죽을때 안 떨구는 이유;; (인벤토리에는 없으니까)
 
 			AOneGameModeBase* GameMode = Cast<AOneGameModeBase>(GetWorld()->GetAuthGameMode());
 
 			if (GameMode) {
-				GameMode->SpawnOnDeathGroundItem(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count, GetActorLocation());
+				GameMode->SpawnOnDeathGroundItem(CurrentInvenSlot.Name, CurrentInvenSlot.ItemClassType, CurrentInvenSlot.Texture, CurrentInvenSlot.Count, CurrentInvenSlot.Durability, CurrentInvenSlot.Durability_Max, GetActorLocation());
 			}
 		}
 	}
@@ -1368,6 +1378,8 @@ void ABaseCharacter::GetItem()
 					Inventory[i].ItemClassType = itembox->ItemClassType;
 					Inventory[i].Texture = itembox->Texture;
 					Inventory[i].Count = itembox->Count;
+					Inventory[i].Durability = itembox->Durability;
+					Inventory[i].Durability_Max = itembox->Durability_Max;
 					GameUIWidget->Update();
 					break;
 				}
@@ -1378,6 +1390,8 @@ void ABaseCharacter::GetItem()
 			PickUpSlot[0].ItemClassType = itembox->ItemClassType;
 			PickUpSlot[0].Texture = itembox->Texture;
 			PickUpSlot[0].Count = itembox->Count;
+			PickUpSlot[0].Durability = itembox->Durability;
+			PickUpSlot[0].Durability_Max = itembox->Durability_Max;
 			PickUpUIWidget->Update();
 			OnPickUPUISlot();
 
@@ -2139,8 +2153,17 @@ void ABaseCharacter::UpdateKeySlot()
 	}
 }
 
-void ABaseCharacter::UpdateThrowWSlot() // throwweapon 생성 시 작성 필요
+void ABaseCharacter::UpdateNormalWeaponSlot() 
 {
+	QuickSlot[4].Durability = QuickSlot[4].Durability - 1;
+	int slotindex = QuickSlot[4].SlotReference;
+	Inventory[slotindex].Durability = Inventory[slotindex].Durability - 1;
+	if (QuickSlot[4].Count <= 0) {
+		//DestroyNormalWepaonItemSlot();	// NormalWeaponActor에서 해주고 있음
+	}
+	else {
+		GameUIUpdate();
+	}	
 }
 
 void ABaseCharacter::PickUp()
@@ -2524,6 +2547,7 @@ void ABaseCharacter::SpawnNormalWeapon()
 			return;
 		}
 
+		CurrentWeapon->m_fWeaponDurability = QuickSlot[4].Durability;	// 내구도 리셋 안되게 
 		CurrentWeapon->OwnerCharacter = this;
 		UE_LOG(LogTemp, Log, TEXT("[SpawnNormalWeapon] 무기 기본 공격력: %f, 내구도: %f, 사거리: %f"), CurrentWeapon->m_fWeaponSTR, CurrentWeapon->m_fWeaponDurability, CurrentWeapon->m_fWeaponRange);
 	}
@@ -2747,6 +2771,7 @@ void ABaseCharacter::DestroyNormalWepaonItemSlot()
 	QuickSlot[4].ItemClassType = EItemClass::NONE;
 	QuickSlot[4].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 	QuickSlot[4].Count = 0;
+	QuickSlot[4].Durability = 0;
 
 	int slotindex = QuickSlot[4].SlotReference;
 	QuickSlot[4].SlotReference = -1;
@@ -2756,6 +2781,7 @@ void ABaseCharacter::DestroyNormalWepaonItemSlot()
 	Inventory[slotindex].ItemClassType = EItemClass::NONE;
 	Inventory[slotindex].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 	Inventory[slotindex].Count = 0;
+	Inventory[slotindex].Durability = 0;
 
 	GameUIUpdate();
 }

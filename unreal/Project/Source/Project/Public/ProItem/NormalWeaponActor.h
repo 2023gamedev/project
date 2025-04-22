@@ -13,11 +13,34 @@
  * 
  */
 
-// 무기 액터
+
+enum WeaponDurability {
+	Book = 4,
+	Bottle = 3,
+	ButchersKnife = 7,
+	FireAxe = 10,
+	FireExtinguisher = 10,
+	FryingPan = 5,
+	GolfClub = 7,
+	Iron = 6,
+	MagicStick = 6,
+	MannequinArm = 6,
+	MannequinLeg = 6,
+	Pipe = 8,
+	Plunger = 7,
+	SashimiKnife = 5,
+	Scissors = 5,
+	Shovels = 9,
+	SquareWood = 5,
+	WoodenBat = 7
+};
+
+
 class ABaseCharacter;
 
+
 UCLASS()
-class PROJECT_API ANormalWeaponActor : public AItemActor
+class PROJECT_API ANormalWeaponActor : public AItemActor	// 무기 액터
 {
 	GENERATED_BODY()
 
@@ -63,7 +86,9 @@ public:
 	float m_fWeaponSTR;
 
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
-	float m_fWeaponDurability;
+	float m_fWeaponDurability;		// 현재 내구도
+	UPROPERTY(EditAnywhere, Category = "ItemStat")
+	float m_fWeaponDurability_Max;	// 본래 내구도
 
 	UPROPERTY(EditAnywhere, Category = "ItemStat")
 	float m_fWeaponRange;

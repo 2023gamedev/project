@@ -29,7 +29,8 @@ ANWSquareWood::ANWSquareWood()
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR		= 2.5f;
-	m_fWeaponDurability = 5.f;
+	m_fWeaponDurability = WeaponDurability::SquareWood;
+	m_fWeaponDurability_Max = m_fWeaponDurability;
 	m_fWeaponRange		= 3.f;
 	WeaponName = "SquareWood";
 }

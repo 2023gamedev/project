@@ -26,7 +26,8 @@ ANWIron::ANWIron()
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR			= 4.f;
-	m_fWeaponDurability		= 6.f;
+	m_fWeaponDurability		= WeaponDurability::Iron;
+	m_fWeaponDurability_Max = m_fWeaponDurability;
 	m_fWeaponRange			= 1.f;
 	WeaponName = "Iron";
 }

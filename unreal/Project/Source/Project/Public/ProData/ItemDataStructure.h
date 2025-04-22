@@ -42,10 +42,9 @@ enum class EItemClass : uint8
 	NONE					UMETA(DisplayName = "None"),
 };
 
-USTRUCT(Atomic, BlueprintType)
+USTRUCT(Atomic, BlueprintType)		// (인벤토리)슬롯에 사용되는 구조체
 struct FItemDataStructure
 {
-	// 슬롯에 사용되는 구조체
 	GENERATED_USTRUCT_BODY()
 
 public:
@@ -66,6 +65,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) // 퀵슬롯만 해당
 	int SlotReference;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)	// 현재 무기 내구도 저장
+	float Durability = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)	// 원래 무기 내구도 저장
+	float Durability_Max = 0;
 };
 
 UENUM(BlueprintType)

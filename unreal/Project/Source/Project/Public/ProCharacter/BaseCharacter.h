@@ -38,7 +38,7 @@ class UGameChatUI;
 class AInterActor;
 
 
-DECLARE_DELEGATE_FourParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int);
+DECLARE_DELEGATE_SixParams(FThrowOnGround, FName, EItemClass, UTexture2D*, int, float, float);
 DECLARE_MULTICAST_DELEGATE(FAttackEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FPickUpEndPlayerDelegate);
 DECLARE_MULTICAST_DELEGATE(FBleedHealingEndPlayerDelegate);
@@ -261,7 +261,7 @@ public:
 	void UpdateHealingSlot();
 	void UpdateBHealingSlot();
 	void UpdateKeySlot();
-	void UpdateThrowWSlot();
+	void UpdateNormalWeaponSlot();
 
 	FPickUpEndPlayerDelegate m_DPickUpEnd;
 	void PickUp();

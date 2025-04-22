@@ -39,7 +39,8 @@ ANWFireAxe::ANWFireAxe()
 	PlaneComponent->SetHiddenInGame(true);
 
 	m_fWeaponSTR = 5.f;
-	m_fWeaponDurability = 10.f;
+	m_fWeaponDurability = WeaponDurability::FireAxe;
+	m_fWeaponDurability_Max = m_fWeaponDurability;
 	m_fWeaponRange = 2.5f;
 	WeaponName = "FireAxe";
 }

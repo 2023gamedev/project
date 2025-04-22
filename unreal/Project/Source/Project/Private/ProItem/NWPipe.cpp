@@ -27,7 +27,8 @@ ANWPipe::ANWPipe()
 	BoxComponent->SetCollisionProfileName(TEXT("NoCollision"));
 
 	m_fWeaponSTR		= 4.f;
-	m_fWeaponDurability = 8.f;
+	m_fWeaponDurability = WeaponDurability::Pipe;
+	m_fWeaponDurability_Max = m_fWeaponDurability;
 	m_fWeaponRange		= 2.f;
 	WeaponName = "Pipe";
 }

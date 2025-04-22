@@ -40,7 +40,8 @@ ANWButchersKnife::ANWButchersKnife()
 	PlaneComponent->SetHiddenInGame(true);
 
 	m_fWeaponSTR = 4.f;
-	m_fWeaponDurability = 7.f;
+	m_fWeaponDurability = WeaponDurability::ButchersKnife;
+	m_fWeaponDurability_Max = m_fWeaponDurability;
 	m_fWeaponRange = 1.5f;
 	WeaponName = "ButchersKnife";
 }

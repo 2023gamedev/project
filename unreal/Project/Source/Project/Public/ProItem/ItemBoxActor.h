@@ -11,8 +11,8 @@
 class ANormalWeaponActor;
 class ABaseCharacter;
 
-UCLASS()
-class PROJECT_API AItemBoxActor : public AActor
+UCLASS()	// 월드에 스폰되는 아이템 박스 클래스
+class PROJECT_API AItemBoxActor : public AActor	
 {
 	GENERATED_BODY()
 	
@@ -68,6 +68,14 @@ public:
 	// 들고있는 갯수
 	UPROPERTY(EditAnywhere, Category = item)
 	int Count;
+
+	// 현재 무기 내구도
+	UPROPERTY(EditAnywhere, Category = item)
+	float Durability = 0;
+
+	// 원래 무기 내구도
+	UPROPERTY(EditAnywhere, Category = item)
+	float Durability_Max = 0;
 
 public:
 	uint32 ItemBoxId = 0;
