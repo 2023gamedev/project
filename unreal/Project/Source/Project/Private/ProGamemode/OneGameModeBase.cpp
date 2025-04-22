@@ -53,8 +53,6 @@ AOneGameModeBase::AOneGameModeBase()
     // 플레이어를 선택한 것을 받아서 넘겨주려고 할 예정
     CharacterIconIndex = EPlayerCharacter::EMPLOYEE;
 
-    //ItemRandomLocationSetting();
-
     CarActorRandomLocationSetting();
 
     CarKeyRandomSetting();
@@ -413,7 +411,7 @@ void AOneGameModeBase::SpawnItemBoxes(int32 itemboxindex, FName itemname, uint32
         SpawnedItemBox->Count = count;
         SpawnedItemBox->ItemBoxId = itembindex;
 
-        float durability;
+        float durability = 0;
         if (itemclass == 0) {  // 생성하는 박스가 무기일때 내구도 최초 설정
             if (itemname == "Book") { 
                 durability = WeaponDurability::Book;
@@ -597,6 +595,8 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     droppacket.set_posx(itemboxpos.X);
     droppacket.set_posy(itemboxpos.Y);
     droppacket.set_posz(itemboxpos.Z);
+    droppacket.set_durability(durability);
+    droppacket.set_durability(durability_max);
 
     std::string serializedData;
     droppacket.SerializeToString(&serializedData);
@@ -711,6 +711,8 @@ void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemcla
     droppacket.set_posx(itemboxpos.X);
     droppacket.set_posy(itemboxpos.Y);
     droppacket.set_posz(itemboxpos.Z);
+    droppacket.set_durability(durability);
+    droppacket.set_durability(durability_max);
 
     std::string serializedData;
     droppacket.SerializeToString(&serializedData);
@@ -719,7 +721,8 @@ void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemcla
     bool bIsSent = GameInstance->ClientSocketPtr->Send(serializedData.size(), (void*)serializedData.data());
 }
 
-void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, FVector itempos)
+// 다른 플레이어가 아이템 떨군거 동기화
+void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName itemname, uint32 itemclass, UTexture2D* texture, int count, FVector itempos, float durability, float durability_max)
 {
     // 두 if문에 들어가는경우 문제가 있는것 
     if (itemboxindex >= ItemBoxClasses.Num()) {
@@ -776,6 +779,8 @@ void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName i
         SpawnedItemBox->ItemClassType = itemcl;
         SpawnedItemBox->Texture = texture;
         SpawnedItemBox->Count = count;
+        SpawnedItemBox->Durability = durability;
+        SpawnedItemBox->Durability_Max = durability_max;
         SpawnedItemBox->ItemBoxId = itemboxindex;
     }
     UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes    Item Details:"));
@@ -783,9 +788,9 @@ void AOneGameModeBase::SpawnOtherCharGroundItemBoxes(int32 itemboxindex, FName i
     UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  ItemName: %s"), *itemname.ToString());
     UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  ItemClass: %d"), itemclass);
     UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  Count: %d"), count);
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  Durability: %f"), durability);
+    UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  Durability_Max: %f"), durability_max);
     UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes  ItemPos: X=%.2f, Y=%.2f, Z=%.2f"), itempos.X, itempos.Y, itempos.Z);
-
-
 
     UE_LOG(LogTemp, Warning, TEXT("SpawnOtherCharGroundItemBoxes END !!!!!"));
 }

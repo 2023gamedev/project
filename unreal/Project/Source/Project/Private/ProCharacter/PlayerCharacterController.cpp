@@ -285,7 +285,7 @@ void APlayerCharacterController::Tick(float DeltaTime)
 
 				UE_LOG(LogNet, Display, TEXT("queue try pop Q_dropitem"));
 
-				MyGameMode->SpawnOtherCharGroundItemBoxes((recvDropItem.itemid - 1), Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos);
+				MyGameMode->SpawnOtherCharGroundItemBoxes((recvDropItem.itemid - 1), Fitemname, recvDropItem.itemclass, LoadedTexture, recvDropItem.count, recvDropItem.itempos, recvDropItem.durability, recvDropItem.durability_max);
 			}
 		}
 

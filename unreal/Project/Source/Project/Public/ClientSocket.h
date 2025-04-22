@@ -203,11 +203,13 @@ struct Drop_Item
 	std::string texture_path;
 	uint32 count;
 	FVector itempos;
+	float durability;
+	float durability_max;
 
-	Drop_Item() : itemid(0), itemname(""), itemclass(0), texture_path(""), count(0), itempos(FVector::ZeroVector) {}
+	Drop_Item() : itemid(0), itemname(""), itemclass(0), texture_path(""), count(0), itempos(FVector::ZeroVector), durability(0), durability_max(0) {}
 
-	Drop_Item(uint32 Initemid, std::string Initemname, uint32 Initemclass, std::string Intexture_path, uint32 Incount, FVector Initempos)
-		: itemid(Initemid), itemname(Initemname), itemclass(Initemclass), texture_path(Intexture_path), count(Incount), itempos(Initempos) {}
+	Drop_Item(uint32 Initemid, std::string Initemname, uint32 Initemclass, std::string Intexture_path, uint32 Incount, FVector Initempos, float Durability, float Durability_Max)
+		: itemid(Initemid), itemname(Initemname), itemclass(Initemclass), texture_path(Intexture_path), count(Incount), itempos(Initempos), durability(Durability), durability_max(Durability_Max) {}
 };
 
 struct Destroy_Item
