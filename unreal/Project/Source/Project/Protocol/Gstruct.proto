@@ -175,6 +175,8 @@ message drop_item{
     float posx = 7;
     float posy = 8;
     float posz = 9;
+    float Durability = 10;
+    float Durability_Max = 11;
 }
 
 message detach_item{

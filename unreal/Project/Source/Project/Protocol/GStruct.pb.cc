@@ -394,6 +394,8 @@ PROTOBUF_CONSTEXPR drop_item::drop_item(
   , /*decltype(_impl_.posx_)*/0
   , /*decltype(_impl_.posy_)*/0
   , /*decltype(_impl_.posz_)*/0
+  , /*decltype(_impl_.durability_)*/0
+  , /*decltype(_impl_.durability_max_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct drop_itemDefaultTypeInternal {
   PROTOBUF_CONSTEXPR drop_itemDefaultTypeInternal()
@@ -769,6 +771,8 @@ const uint32_t TableStruct_Gstruct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.posx_),
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.posy_),
   PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.posz_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.durability_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::drop_item, _impl_.durability_max_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::detach_item, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -866,13 +870,13 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 213, -1, -1, sizeof(::Protocol::CarDataList)},
   { 221, -1, -1, sizeof(::Protocol::destroy_item)},
   { 230, -1, -1, sizeof(::Protocol::drop_item)},
-  { 245, -1, -1, sizeof(::Protocol::detach_item)},
-  { 254, -1, -1, sizeof(::Protocol::get_key)},
-  { 264, -1, -1, sizeof(::Protocol::escape)},
-  { 274, -1, -1, sizeof(::Protocol::game_clear)},
-  { 288, -1, -1, sizeof(::Protocol::send_complete)},
-  { 296, -1, -1, sizeof(::Protocol::slice_vector)},
-  { 308, -1, -1, sizeof(::Protocol::chatting)},
+  { 247, -1, -1, sizeof(::Protocol::detach_item)},
+  { 256, -1, -1, sizeof(::Protocol::get_key)},
+  { 266, -1, -1, sizeof(::Protocol::escape)},
+  { 276, -1, -1, sizeof(::Protocol::game_clear)},
+  { 290, -1, -1, sizeof(::Protocol::send_complete)},
+  { 298, -1, -1, sizeof(::Protocol::slice_vector)},
+  { 310, -1, -1, sizeof(::Protocol::chatting)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -963,34 +967,35 @@ const char descriptor_table_protodef_Gstruct_2eproto[] PROTOBUF_SECTION_VARIABLE
   "e\030\n \001(\t\"C\n\013CarDataList\022\023\n\013packet_type\030\001 "
   "\001(\r\022\037\n\004cars\030\002 \003(\0132\021.Protocol.set_car\"E\n\014"
   "destroy_item\022\023\n\013packet_type\030\001 \001(\r\022\016\n\006ite"
-  "mid\030\002 \001(\r\022\020\n\010playerid\030\003 \001(\r\"\244\001\n\tdrop_ite"
+  "mid\030\002 \001(\r\022\020\n\010playerid\030\003 \001(\r\"\320\001\n\tdrop_ite"
   "m\022\023\n\013packet_type\030\001 \001(\r\022\016\n\006itemid\030\002 \001(\r\022\020"
   "\n\010itemname\030\003 \001(\t\022\021\n\titemclass\030\004 \001(\r\022\024\n\014t"
   "exture_path\030\005 \001(\t\022\r\n\005count\030\006 \001(\r\022\014\n\004posx"
-  "\030\007 \001(\002\022\014\n\004posy\030\010 \001(\002\022\014\n\004posz\030\t \001(\002\"F\n\013de"
-  "tach_item\022\023\n\013packet_type\030\001 \001(\r\022\020\n\010player"
-  "id\030\002 \001(\r\022\020\n\010itemtype\030\003 \001(\r\"S\n\007get_key\022\023\n"
-  "\013packet_type\030\001 \001(\r\022\016\n\006itemid\030\002 \001(\r\022\021\n\tit"
-  "emboxid\030\003 \001(\r\022\020\n\010playerid\030\004 \001(\r\"L\n\006escap"
-  "e\022\023\n\013packet_type\030\001 \001(\r\022\020\n\010playerid\030\002 \001(\r"
-  "\022\014\n\004root\030\003 \001(\r\022\r\n\005carid\030\004 \001(\r\"\271\001\n\ngame_c"
-  "lear\022\023\n\013packet_type\030\001 \001(\r\022\014\n\004root\030\002 \001(\r\022"
-  "\025\n\ralive_players\030\003 \001(\r\022\024\n\014dead_players\030\004"
-  " \001(\r\022\023\n\013open_player\030\005 \001(\t\022\024\n\014my_killcoun"
-  "t\030\006 \001(\r\022\030\n\020best_kill_player\030\007 \001(\t\022\026\n\016bes"
-  "t_killcount\030\010 \001(\r\";\n\rsend_complete\022\023\n\013pa"
-  "cket_type\030\001 \001(\r\022\025\n\rcomplete_type\030\002 \001(\r\"\306"
-  "\001\n\014slice_vector\022\023\n\013packet_type\030\001 \001(\r\022\020\n\010"
-  "zombieid\030\002 \001(\r\022#\n\010location\030\003 \001(\0132\021.Proto"
-  "col.Vector3\022#\n\010position\030\004 \001(\0132\021.Protocol"
-  ".Vector3\022!\n\006normal\030\005 \001(\0132\021.Protocol.Vect"
-  "or3\022\"\n\007impulse\030\006 \001(\0132\021.Protocol.Vector3\""
-  "\?\n\010chatting\022\023\n\013packet_type\030\001 \001(\r\022\020\n\010play"
-  "erid\030\002 \001(\r\022\014\n\004chat\030\003 \001(\tb\006proto3"
+  "\030\007 \001(\002\022\014\n\004posy\030\010 \001(\002\022\014\n\004posz\030\t \001(\002\022\022\n\nDu"
+  "rability\030\n \001(\002\022\026\n\016Durability_Max\030\013 \001(\002\"F"
+  "\n\013detach_item\022\023\n\013packet_type\030\001 \001(\r\022\020\n\010pl"
+  "ayerid\030\002 \001(\r\022\020\n\010itemtype\030\003 \001(\r\"S\n\007get_ke"
+  "y\022\023\n\013packet_type\030\001 \001(\r\022\016\n\006itemid\030\002 \001(\r\022\021"
+  "\n\titemboxid\030\003 \001(\r\022\020\n\010playerid\030\004 \001(\r\"L\n\006e"
+  "scape\022\023\n\013packet_type\030\001 \001(\r\022\020\n\010playerid\030\002"
+  " \001(\r\022\014\n\004root\030\003 \001(\r\022\r\n\005carid\030\004 \001(\r\"\271\001\n\nga"
+  "me_clear\022\023\n\013packet_type\030\001 \001(\r\022\014\n\004root\030\002 "
+  "\001(\r\022\025\n\ralive_players\030\003 \001(\r\022\024\n\014dead_playe"
+  "rs\030\004 \001(\r\022\023\n\013open_player\030\005 \001(\t\022\024\n\014my_kill"
+  "count\030\006 \001(\r\022\030\n\020best_kill_player\030\007 \001(\t\022\026\n"
+  "\016best_killcount\030\010 \001(\r\";\n\rsend_complete\022\023"
+  "\n\013packet_type\030\001 \001(\r\022\025\n\rcomplete_type\030\002 \001"
+  "(\r\"\306\001\n\014slice_vector\022\023\n\013packet_type\030\001 \001(\r"
+  "\022\020\n\010zombieid\030\002 \001(\r\022#\n\010location\030\003 \001(\0132\021.P"
+  "rotocol.Vector3\022#\n\010position\030\004 \001(\0132\021.Prot"
+  "ocol.Vector3\022!\n\006normal\030\005 \001(\0132\021.Protocol."
+  "Vector3\022\"\n\007impulse\030\006 \001(\0132\021.Protocol.Vect"
+  "or3\"\?\n\010chatting\022\023\n\013packet_type\030\001 \001(\r\022\020\n\010"
+  "playerid\030\002 \001(\r\022\014\n\004chat\030\003 \001(\tb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Gstruct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Gstruct_2eproto = {
-    false, false, 3112, descriptor_table_protodef_Gstruct_2eproto,
+    false, false, 3156, descriptor_table_protodef_Gstruct_2eproto,
     "Gstruct.proto",
     &descriptor_table_Gstruct_2eproto_once, nullptr, 0, 30,
     schemas, file_default_instances, TableStruct_Gstruct_2eproto::offsets,
@@ -7557,6 +7562,8 @@ drop_item::drop_item(const drop_item& from)
     , decltype(_impl_.posx_){}
     , decltype(_impl_.posy_){}
     , decltype(_impl_.posz_){}
+    , decltype(_impl_.durability_){}
+    , decltype(_impl_.durability_max_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -7577,8 +7584,8 @@ drop_item::drop_item(const drop_item& from)
       _this->GetArenaForAllocation());
   }
   ::memcpy(&_impl_.packet_type_, &from._impl_.packet_type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.posz_) -
-    reinterpret_cast<char*>(&_impl_.packet_type_)) + sizeof(_impl_.posz_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.durability_max_) -
+    reinterpret_cast<char*>(&_impl_.packet_type_)) + sizeof(_impl_.durability_max_));
   // @@protoc_insertion_point(copy_constructor:Protocol.drop_item)
 }
 
@@ -7596,6 +7603,8 @@ inline void drop_item::SharedCtor(
     , decltype(_impl_.posx_){0}
     , decltype(_impl_.posy_){0}
     , decltype(_impl_.posz_){0}
+    , decltype(_impl_.durability_){0}
+    , decltype(_impl_.durability_max_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.itemname_.InitDefault();
@@ -7636,8 +7645,8 @@ void drop_item::Clear() {
   _impl_.itemname_.ClearToEmpty();
   _impl_.texture_path_.ClearToEmpty();
   ::memset(&_impl_.packet_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.posz_) -
-      reinterpret_cast<char*>(&_impl_.packet_type_)) + sizeof(_impl_.posz_));
+      reinterpret_cast<char*>(&_impl_.durability_max_) -
+      reinterpret_cast<char*>(&_impl_.packet_type_)) + sizeof(_impl_.durability_max_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -7719,6 +7728,22 @@ const char* drop_item::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
       case 9:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
           _impl_.posz_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float Durability = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 85)) {
+          _impl_.durability_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float Durability_Max = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 93)) {
+          _impl_.durability_max_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
@@ -7826,6 +7851,26 @@ uint8_t* drop_item::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_posz(), target);
   }
 
+  // float Durability = 10;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_durability = this->_internal_durability();
+  uint32_t raw_durability;
+  memcpy(&raw_durability, &tmp_durability, sizeof(tmp_durability));
+  if (raw_durability != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(10, this->_internal_durability(), target);
+  }
+
+  // float Durability_Max = 11;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_durability_max = this->_internal_durability_max();
+  uint32_t raw_durability_max;
+  memcpy(&raw_durability_max, &tmp_durability_max, sizeof(tmp_durability_max));
+  if (raw_durability_max != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(11, this->_internal_durability_max(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -7903,6 +7948,24 @@ size_t drop_item::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
+  // float Durability = 10;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_durability = this->_internal_durability();
+  uint32_t raw_durability;
+  memcpy(&raw_durability, &tmp_durability, sizeof(tmp_durability));
+  if (raw_durability != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float Durability_Max = 11;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_durability_max = this->_internal_durability_max();
+  uint32_t raw_durability_max;
+  memcpy(&raw_durability_max, &tmp_durability_max, sizeof(tmp_durability_max));
+  if (raw_durability_max != 0) {
+    total_size += 1 + 4;
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -7960,6 +8023,20 @@ void drop_item::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   if (raw_posz != 0) {
     _this->_internal_set_posz(from._internal_posz());
   }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_durability = from._internal_durability();
+  uint32_t raw_durability;
+  memcpy(&raw_durability, &tmp_durability, sizeof(tmp_durability));
+  if (raw_durability != 0) {
+    _this->_internal_set_durability(from._internal_durability());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_durability_max = from._internal_durability_max();
+  uint32_t raw_durability_max;
+  memcpy(&raw_durability_max, &tmp_durability_max, sizeof(tmp_durability_max));
+  if (raw_durability_max != 0) {
+    _this->_internal_set_durability_max(from._internal_durability_max());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -7988,8 +8065,8 @@ void drop_item::InternalSwap(drop_item* other) {
       &other->_impl_.texture_path_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(drop_item, _impl_.posz_)
-      + sizeof(drop_item::_impl_.posz_)
+      PROTOBUF_FIELD_OFFSET(drop_item, _impl_.durability_max_)
+      + sizeof(drop_item::_impl_.durability_max_)
       - PROTOBUF_FIELD_OFFSET(drop_item, _impl_.packet_type_)>(
           reinterpret_cast<char*>(&_impl_.packet_type_),
           reinterpret_cast<char*>(&other->_impl_.packet_type_));
