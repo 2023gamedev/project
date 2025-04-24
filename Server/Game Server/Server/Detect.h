@@ -16,7 +16,7 @@ public:
         for (const auto& child : sel_children) {
             bool task_result = child->Detect(zom);  // 다형성 이용 (함수 오버라이딩)
 
-            d_results[child->t_name] = task_result; // Selector의 데코레이터 결괴값들 저장 [데코레이터 이름-결과값]
+            d_results[child->t_name] = task_result; // Selector의 데코레이터 결과값들 저장 [데코레이터 이름-결과값]
 
             if (d_result == false)
                 d_result = task_result; // 어느 하나라도 결과값이 true이면 true

@@ -52,22 +52,6 @@ void USlot::Refresh()
 		WeaponDurability = data.Durability;
 		WeaponDurability_Max = data.Durability_Max;
 
-		if (ItemCount <= 1) {
-			Text->SetVisibility(ESlateVisibility::Hidden);
-		}
-		else {
-			Text->SetVisibility(ESlateVisibility::Visible);
-			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
-		}
-
-		if (WeaponDurability <= 0) {
-			ProgressBar->SetVisibility(ESlateVisibility::Hidden);
-		}
-		else {
-			ProgressBar->SetVisibility(ESlateVisibility::Visible);
-			ProgressBar->SetPercent(GetWeaponDurabilityPercent());
-		}
-
 		break;
 	}
 	case ESlotType::SLOT_QUICK:
@@ -81,22 +65,6 @@ void USlot::Refresh()
 		ItemCount = dataquick.Count;
 		WeaponDurability = dataquick.Durability;
 		WeaponDurability_Max = dataquick.Durability_Max;
-
-		if (ItemCount <= 1) {
-			Text->SetVisibility(ESlateVisibility::Hidden);
-		}
-		else {
-			Text->SetVisibility(ESlateVisibility::Visible);
-			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
-		}
-
-		if (WeaponDurability <= 0) {
-			ProgressBar->SetVisibility(ESlateVisibility::Hidden);
-		}
-		else {
-			ProgressBar->SetVisibility(ESlateVisibility::Visible);
-			ProgressBar->SetPercent(GetWeaponDurabilityPercent());
-		}
 
 		break;
 	}
@@ -112,57 +80,8 @@ void USlot::Refresh()
 		WeaponDurability = datapick.Durability;
 		WeaponDurability_Max = datapick.Durability_Max;
 
-		if (ItemCount <= 1) {
-			Text->SetVisibility(ESlateVisibility::Hidden);
-		}
-		else {
-			Text->SetVisibility(ESlateVisibility::Visible);
-			Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
-		}
-
-		if (WeaponDurability <= 0) {
-			ProgressBar->SetVisibility(ESlateVisibility::Hidden);
-		}
-		else {
-			ProgressBar->SetVisibility(ESlateVisibility::Visible);
-			ProgressBar->SetPercent(GetWeaponDurabilityPercent());
-		}
-
 		break;
 	}
-
-	}
-
-}
-
-void USlot::RefreshOPU(int otherplayeruiindex)
-{
-	if (otherplayeruiindex == 1) {
-		FItemDataStructure& dataquick = Character->OtherPlayerInven[SlotIndex];
-		if (dataquick.Texture != nullptr) {
-			SetTexture(dataquick.Texture);
-		}
-
-		ItemCount = dataquick.Count;
-
-
-	}
-	else if (otherplayeruiindex == 2) {
-		FItemDataStructure& dataquick = Character->OtherPlayer2Inven[SlotIndex];
-		if (dataquick.Texture != nullptr) {
-			SetTexture(dataquick.Texture);
-		}
-
-		ItemCount = dataquick.Count;
-
-	}
-	else if (otherplayeruiindex == 3) {
-		FItemDataStructure& dataquick = Character->OtherPlayer3Inven[SlotIndex];
-		if (dataquick.Texture != nullptr) {
-			SetTexture(dataquick.Texture);
-		}
-
-		ItemCount = dataquick.Count;
 
 	}
 
@@ -173,6 +92,68 @@ void USlot::RefreshOPU(int otherplayeruiindex)
 		Text->SetVisibility(ESlateVisibility::Visible);
 		Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
 	}
+
+	if (WeaponDurability <= 0) {
+		ProgressBar->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else {
+		ProgressBar->SetVisibility(ESlateVisibility::Visible);
+		ProgressBar->SetPercent(GetWeaponDurabilityPercent());
+	}
+
+}
+
+void USlot::RefreshOPU(int otherplayeruiindex)
+{
+	if (otherplayeruiindex == 1) {
+		FItemDataStructure& dataopu = Character->OtherPlayerInven[SlotIndex];
+		if (dataopu.Texture != nullptr) {
+			SetTexture(dataopu.Texture);
+		}
+
+		ItemCount = dataopu.Count;
+		//WeaponDurability = dataopu.Durability;
+		//WeaponDurability_Max = dataopu.Durability_Max;
+
+	}
+	else if (otherplayeruiindex == 2) {
+		FItemDataStructure& dataopu = Character->OtherPlayer2Inven[SlotIndex];
+		if (dataopu.Texture != nullptr) {
+			SetTexture(dataopu.Texture);
+		}
+
+		ItemCount = dataopu.Count;
+		//WeaponDurability = dataopu.Durability;
+		//WeaponDurability_Max = dataopu.Durability_Max;
+
+	}
+	else if (otherplayeruiindex == 3) {
+		FItemDataStructure& dataopu = Character->OtherPlayer3Inven[SlotIndex];
+		if (dataopu.Texture != nullptr) {
+			SetTexture(dataopu.Texture);
+		}
+
+		ItemCount = dataopu.Count;
+		//WeaponDurability = dataopu.Durability;
+		//WeaponDurability_Max = dataopu.Durability_Max;
+
+	}
+
+	if (ItemCount <= 1) {
+		Text->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else {
+		Text->SetVisibility(ESlateVisibility::Visible);
+		Text->SetText(FText::FromString(FString::FromInt(ItemCount)));
+	}
+
+	//if (WeaponDurability <= 0) {
+		ProgressBar->SetVisibility(ESlateVisibility::Hidden);	// 무기 내구도는 그냥 여기서 표시할 일이 없음 -> 다른 플레이어 아이템 표시는 키만 표시하니까
+	//}
+	//else {
+	//	ProgressBar->SetVisibility(ESlateVisibility::Visible);
+	//	ProgressBar->SetPercent(GetWeaponDurabilityPercent());
+	//}
 }
 
 // Shift + f1 마우스 커서 이런식으로 동작해서 드래그되는 과정이 안보이는지 모르겠다. 그런것 같긴 함
@@ -291,9 +272,9 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 		switch (Character->Inventory[SlotIndex].ItemClassType) {
 
-			// 0번: 출혈회복, 1번: 상처회복 2번: 투척무기 3번: 키 4번: 노말무기
+			// 0번: 출혈회복, 1번: 상처회복, 2번: 투척무기, 3번: 키, 4번: 노말무기
 		case EItemClass::BLEEDINGHEALINGITEM:
-			if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_NONE) {
+			if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_NONE) {	// 퀵슬롯이 비어 있던 상태
 				Character->QuickSlot[0].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[0].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[0].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
@@ -305,7 +286,14 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 				Character->SpawnBleedingHealingItem();
 			}
-			else if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_EQUIPMENT) {
+			else if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_EQUIPMENT) {	// 퀵슬롯에 이미 장착되어 있던 상태	
+
+				// 이전 착용중이던 아이템 인벤토리 상에서 상태 변경해주기
+				int prevItemIvenIndx = Character->QuickSlot[0].SlotReference;
+				if (Character->Inventory.IsValidIndex(prevItemIvenIndx)) {    // 접근 가능한 인덱스인지 먼저 확인
+					Character->Inventory[prevItemIvenIndx].Type = EItemType::ITEM_USEABLE;	 // 퀵슬롯 장착 중(ITEM_EQUIPMENT)->장착하고 있지 않은 상태(ITEM_USEABLE)
+				}
+
 				Character->QuickSlot[0].Type = EItemType::ITEM_QUICK_NONE;
 				Character->QuickSlot[0].Name = "nullptr";
 				Character->QuickSlot[0].ItemClassType = EItemClass::NONE;
@@ -325,8 +313,9 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			Character->GameUIUpdate();
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("BLEEDINGHEALINGITEM!"));
 			break;
+
 		case EItemClass::HEALINGITEM:
-			if (Character->QuickSlot[1].Type == EItemType::ITEM_QUICK_NONE) {
+			if (Character->QuickSlot[1].Type == EItemType::ITEM_QUICK_NONE) {	// 퀵슬롯이 비어 있던 상태
 				Character->QuickSlot[1].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[1].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[1].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
@@ -338,7 +327,14 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 				Character->SpawnHealingItem();
 			}
-			else if (Character->QuickSlot[1].Type == EItemType::ITEM_QUICK_EQUIPMENT) {
+			else if (Character->QuickSlot[1].Type == EItemType::ITEM_QUICK_EQUIPMENT) {	// 퀵슬롯에 이미 장착되어 있던 상태
+
+				// 이전 착용중이던 아이템 인벤토리 상에서 상태 변경해주기
+				int prevItemIvenIndx = Character->QuickSlot[1].SlotReference;
+				if (Character->Inventory.IsValidIndex(prevItemIvenIndx)) {    // 접근 가능한 인덱스인지 먼저 확인
+					Character->Inventory[prevItemIvenIndx].Type = EItemType::ITEM_USEABLE;	 // 퀵슬롯 장착 중(ITEM_EQUIPMENT)->장착하고 있지 않은 상태(ITEM_USEABLE)
+				}
+
 				Character->QuickSlot[1].Type = EItemType::ITEM_QUICK_NONE;
 				Character->QuickSlot[1].Name = "nullptr";
 				Character->QuickSlot[1].ItemClassType = EItemClass::NONE;
@@ -347,7 +343,6 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[1].SlotReference = -1;
 
 				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
-
 
 				if (Character->IsBringCurrentHealingItem()) {
 					Character->DestroyHealingItem();
@@ -358,10 +353,11 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			}
 
 			Character->GameUIUpdate();
-			////GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEALINGITEM!"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("HEALINGITEM!"));
 			break;
+
 		case EItemClass::THROWINGWEAPON:
-			if (Character->QuickSlot[2].Type == EItemType::ITEM_QUICK_NONE) {
+			if (Character->QuickSlot[2].Type == EItemType::ITEM_QUICK_NONE) {	// 퀵슬롯이 비어 있던 상태
 				Character->QuickSlot[2].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[2].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[2].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
@@ -371,17 +367,22 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 				Character->Inventory[SlotIndex].Type = EItemType::ITEM_EQUIPMENT;
 
-
 				Character->SpawnThrowWeapon();
 			}
-			else if (Character->QuickSlot[2].Type == EItemType::ITEM_QUICK_EQUIPMENT) {
+			else if (Character->QuickSlot[2].Type == EItemType::ITEM_QUICK_EQUIPMENT) {	// 퀵슬롯에 이미 장착되어 있던 상태
+
+				// 이전 착용중이던 아이템 인벤토리 상에서 상태 변경해주기
+				int prevItemIvenIndx = Character->QuickSlot[2].SlotReference;
+				if (Character->Inventory.IsValidIndex(prevItemIvenIndx)) {    // 접근 가능한 인덱스인지 먼저 확인
+					Character->Inventory[prevItemIvenIndx].Type = EItemType::ITEM_USEABLE;	 // 퀵슬롯 장착 중(ITEM_EQUIPMENT)->장착하고 있지 않은 상태(ITEM_USEABLE)
+				}
+
 				Character->QuickSlot[2].Type = EItemType::ITEM_QUICK_NONE;
 				Character->QuickSlot[2].Name = "nullptr";
 				Character->QuickSlot[2].ItemClassType = EItemClass::NONE;
 				Character->QuickSlot[2].Texture = LoadObject<UTexture2D>(NULL, TEXT("/Engine/ArtTools/RenderToTexture/Textures/127grey.127grey"));
 				Character->QuickSlot[2].Count = 0;
 				Character->QuickSlot[2].SlotReference = -1;
-
 
 				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
 
@@ -395,8 +396,9 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			Character->GameUIUpdate();
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("THROWINGWEAPON!"));
 			break;
+
 		case EItemClass::KEYITEM:
-			if (Character->QuickSlot[3].Type == EItemType::ITEM_QUICK_NONE) {
+			if (Character->QuickSlot[3].Type == EItemType::ITEM_QUICK_NONE) {	// 퀵슬롯이 비어 있던 상태
 				Character->QuickSlot[3].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[3].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[3].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
@@ -408,7 +410,14 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 				Character->SpawnKeyItem();
 			}
-			else if (Character->QuickSlot[3].Type == EItemType::ITEM_QUICK_EQUIPMENT) {
+			else if (Character->QuickSlot[3].Type == EItemType::ITEM_QUICK_EQUIPMENT) {	// 퀵슬롯에 이미 장착되어 있던 상태
+
+				// 이전 착용중이던 아이템 인벤토리 상에서 상태 변경해주기
+				int prevItemIvenIndx = Character->QuickSlot[3].SlotReference;
+				if (Character->Inventory.IsValidIndex(prevItemIvenIndx)) {    // 접근 가능한 인덱스인지 먼저 확인
+					Character->Inventory[prevItemIvenIndx].Type = EItemType::ITEM_USEABLE;	 // 퀵슬롯 장착 중(ITEM_EQUIPMENT)->장착하고 있지 않은 상태(ITEM_USEABLE)
+				}
+
 				Character->QuickSlot[3].Type = EItemType::ITEM_QUICK_NONE;
 				Character->QuickSlot[3].Name = "nullptr";
 				Character->QuickSlot[3].ItemClassType = EItemClass::NONE;
@@ -417,7 +426,6 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[3].SlotReference = -1;
 
 				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
-
 
 				if (Character->IsBringCurrentKeyItem()) {
 					Character->DestroyKeyItem();
@@ -430,8 +438,9 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			Character->GameUIUpdate();
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("KEYITEM!"));
 			break;
+
 		case EItemClass::NORMALWEAPON:
-			if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_NONE) {
+			if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_NONE) {	// 퀵슬롯이 비어 있던 상태
 				Character->QuickSlot[4].Type = EItemType::ITEM_QUICK_EQUIPMENT;
 				Character->QuickSlot[4].Name = Character->Inventory[SlotIndex].Name;
 				Character->QuickSlot[4].ItemClassType = Character->Inventory[SlotIndex].ItemClassType;
@@ -445,7 +454,14 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 
 				Character->SpawnNormalWeapon();
 			}
-			else if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_EQUIPMENT) {
+			else if (Character->QuickSlot[4].Type == EItemType::ITEM_QUICK_EQUIPMENT) {	// 퀵슬롯에 이미 장착되어 있던 상태
+
+				// 이전 착용중이던 아이템 인벤토리 상에서 상태 변경해주기
+				int prevItemIvenIndx = Character->QuickSlot[4].SlotReference;
+				if (Character->Inventory.IsValidIndex(prevItemIvenIndx)) {    // 접근 가능한 인덱스인지 먼저 확인
+					Character->Inventory[prevItemIvenIndx].Type = EItemType::ITEM_USEABLE;	 // 퀵슬롯 장착 중(ITEM_EQUIPMENT)->장착하고 있지 않은 상태(ITEM_USEABLE)
+				}
+
 				Character->QuickSlot[4].Type = EItemType::ITEM_QUICK_NONE;
 				Character->QuickSlot[4].Name = "nullptr";
 				Character->QuickSlot[4].ItemClassType = EItemClass::NONE;
@@ -454,8 +470,6 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[4].SlotReference = -1;
 				Character->QuickSlot[4].Durability = 0;
 				Character->QuickSlot[4].Durability_Max = 0;
-
-				Character->Inventory[SlotIndex].Type = EItemType::ITEM_USEABLE;
 
 				if (Character->IsBringCurrentWeapon()) {
 					Character->DestroyNormalWeapon();
@@ -466,7 +480,9 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			}
 
 			Character->GameUIUpdate();
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("NORMALWEAPON!"));
 			break;
+
 		case EItemClass::BAGITEM:
 			if (Character->GetCarryBagName() == "BigBag") {	// 이미 큰가방을 먹어 인벤토리가 다 열린 상태
 				break;
@@ -533,12 +549,10 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 			}
 
 			Character->GameUIUpdate();
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Normal Weapon!"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("BAG ITEM!"));
 			break;
 
 		}
-
-
 
 	}
 	else if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton) == true) {

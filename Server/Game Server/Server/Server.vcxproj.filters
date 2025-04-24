@@ -51,9 +51,6 @@
     <ClCompile Include="ZombieController.cpp">
       <Filter>소스 파일\ServerClass</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일\Zombie_BTClass</Filter>
-    </ClCompile>
     <ClCompile Include="Zombie.cpp">
       <Filter>소스 파일\Zombie_BTClass</Filter>
     </ClCompile>
@@ -74,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="ZombieBT.cpp">
       <Filter>소스 파일\Zombie_BTClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,9 +114,6 @@
       <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="NotHasLastKnownPlayerLocation.h">
-      <Filter>헤더 파일\Zombie_BTHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
       <Filter>헤더 파일\Zombie_BTHeader</Filter>
     </ClInclude>
     <ClInclude Include="Selector.h">
@@ -166,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="HordeAction.h">
       <Filter>헤더 파일\Zombie_BTHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

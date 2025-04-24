@@ -596,7 +596,7 @@ void AOneGameModeBase::SpawnOnGroundItem(FName itemname, EItemClass itemclass, U
     droppacket.set_posy(itemboxpos.Y);
     droppacket.set_posz(itemboxpos.Z);
     droppacket.set_durability(durability);
-    droppacket.set_durability(durability_max);
+    droppacket.set_durability_max(durability_max);
 
     std::string serializedData;
     droppacket.SerializeToString(&serializedData);
@@ -712,7 +712,7 @@ void AOneGameModeBase::SpawnOnDeathGroundItem(FName itemname, EItemClass itemcla
     droppacket.set_posy(itemboxpos.Y);
     droppacket.set_posz(itemboxpos.Z);
     droppacket.set_durability(durability);
-    droppacket.set_durability(durability_max);
+    droppacket.set_durability_max(durability_max);
 
     std::string serializedData;
     droppacket.SerializeToString(&serializedData);
