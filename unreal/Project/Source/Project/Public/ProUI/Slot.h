@@ -9,6 +9,7 @@
 #include "ProData/ItemDataStructure.h"
 #include "Components/ProgressBar.h"
 #include "ProItem/NormalWeaponActor.h"
+#include "Components/Border.h"
 #include "Slot.generated.h"
 
 
@@ -94,5 +95,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UProgressBar* ProgressBar;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UBorder* Border;
 
 };

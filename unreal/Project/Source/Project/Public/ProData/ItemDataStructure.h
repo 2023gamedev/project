@@ -64,7 +64,7 @@ public:
 	int Count;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) // 퀵슬롯만 해당
-	int SlotReference;
+	int SlotReference = -1;	// 초기값 - 슬롯 테두리 표시 때문에 초기값 설정해줘야 함 -> 안 그럼 인벤 0번은 항상 테두리 표시함 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)	// 현재 무기 내구도 저장
 	float Durability = 0;

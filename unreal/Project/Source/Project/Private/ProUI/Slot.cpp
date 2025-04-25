@@ -9,6 +9,10 @@
 
 void USlot::Init()
 {
+	Text->SetVisibility(ESlateVisibility::Hidden);
+	ProgressBar->SetVisibility(ESlateVisibility::Hidden);
+	Border->SetVisibility(ESlateVisibility::Hidden);
+
 	Refresh();
 }
 
@@ -42,6 +46,9 @@ void USlot::Refresh()
 	switch (Type) {
 	case ESlotType::SLOT_ITEM:
 	{
+		if (Character->Inventory.IsValidIndex(SlotIndex) == false)	// 크래시 방지
+			return;
+
 		FItemDataStructure& data = Character->Inventory[SlotIndex];
 
 		if (data.Texture != nullptr) {
@@ -56,6 +63,9 @@ void USlot::Refresh()
 	}
 	case ESlotType::SLOT_QUICK:
 	{
+		if (Character->QuickSlot.IsValidIndex(SlotIndex) == false)	// 크래시 방지
+			return;
+
 		FItemDataStructure& dataquick = Character->QuickSlot[SlotIndex];
 
 		if (dataquick.Texture != nullptr) {
@@ -70,6 +80,9 @@ void USlot::Refresh()
 	}
 	case ESlotType::SLOT_PICK_UP:
 	{
+		if (Character->PickUpSlot.IsValidIndex(0) == false)	// 크래시 방지
+			return;
+
 		FItemDataStructure& datapick = Character->PickUpSlot[0];
 
 		if (datapick.Texture != nullptr) {
@@ -100,6 +113,28 @@ void USlot::Refresh()
 		ProgressBar->SetVisibility(ESlateVisibility::Visible);
 		ProgressBar->SetPercent(GetWeaponDurabilityPercent());
 	}
+
+
+	if (Character->QuickSlot.IsValidIndex(4) == false) {	// 최초 업데이트 시에 크래시 방지 (퀵 슬롯 배열 초기화 전에 접근 방지)
+		return;
+	}
+
+	if (Type == ESlotType::SLOT_ITEM) {
+		// 퀵 슬롯에서 하나라도 해당 아이템이랑 연결되어(장착되어)있는 상태라면 
+		if (Character->QuickSlot[0].SlotReference == SlotIndex || Character->QuickSlot[1].SlotReference == SlotIndex || Character->QuickSlot[2].SlotReference == SlotIndex
+			|| Character->QuickSlot[3].SlotReference == SlotIndex || Character->QuickSlot[4].SlotReference == SlotIndex)	//=> 무지성한게 해당 슬롯은 무기인지 회복템인지 뭔지 모름
+			Border->SetVisibility(ESlateVisibility::Visible);		// 퀵슬롯에 장착한 아이템 인벤토리 슬롯 테두리 표시
+		else
+			Border->SetVisibility(ESlateVisibility::Hidden);	// 아니라면 테두리 표시 해제
+	}
+	else if (Type == ESlotType::SLOT_QUICK) {
+		if (ItemCount >= 1 || WeaponDurability > 0)
+			Border->SetVisibility(ESlateVisibility::Visible);	// 퀵 슬롯에 아이템 장착 중임을 퀵 슬롯 테두리 표시를 통해 알림
+		else
+			Border->SetVisibility(ESlateVisibility::Hidden);	// 아니라면 테두리 표시 해제
+	}
+	else if (Type == ESlotType::SLOT_PICK_UP)
+		Border->SetVisibility(ESlateVisibility::Hidden);		// 픽업 표시 슬롯은 아이템 테두리 표시 X
 
 }
 
@@ -154,6 +189,9 @@ void USlot::RefreshOPU(int otherplayeruiindex)
 	//	ProgressBar->SetVisibility(ESlateVisibility::Visible);
 	//	ProgressBar->SetPercent(GetWeaponDurabilityPercent());
 	//}
+
+	Border->SetVisibility(ESlateVisibility::Hidden);	// 테두리 표시도 마찬가지로 표시할 필요 X
+
 }
 
 // Shift + f1 마우스 커서 이런식으로 동작해서 드래그되는 과정이 안보이는지 모르겠다. 그런것 같긴 함
@@ -283,7 +321,7 @@ FReply USlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointe
 				Character->QuickSlot[0].SlotReference = SlotIndex;
 
 				Character->Inventory[SlotIndex].Type = EItemType::ITEM_EQUIPMENT;
-
+				
 				Character->SpawnBleedingHealingItem();
 			}
 			else if (Character->QuickSlot[0].Type == EItemType::ITEM_QUICK_EQUIPMENT) {	// 퀵슬롯에 이미 장착되어 있던 상태	
