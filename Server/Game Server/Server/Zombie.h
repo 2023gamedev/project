@@ -237,7 +237,7 @@ public:
 
     bool FootSound_Update_Check();
 
-    void Wait();
+    void Wait();    // 애니메이션 재생 이후 초기화 작업들을 하고 이동은 잠시 멈추는 역활이라 wait
 
     void MoveTo(float deltasecond);
 

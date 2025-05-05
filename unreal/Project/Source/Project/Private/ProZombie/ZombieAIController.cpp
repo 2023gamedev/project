@@ -235,7 +235,7 @@ void AZombieAIController::ZombieTurn(float deltasecond, int& indx)
 	}
 	// 좀비가 피격 중일때 => 맞은 방향 쪽으로(무기의 위치) 시선 돌리기
 	else if (OwnerZombie->CachedAnimInstance->Montage_IsPlaying(OwnerZombie->CachedAnimInstance->BeAttackedMontage) == true // 피격 애니메이션 재생중이고
-		&& OwnerZombie->targetType != OwnerZombie->PLAYER	// targetType이 플레이어가 아닌 경우(피격 당시 바로 앞에 플레이어 있는 경우에는 뒤돌 필요X)
+		&& OwnerZombie->m_bPlayerInSight == false	// 플레이어를 발견 못하고 있던 당시였을때 (피격 당시 바로 앞에 플레이어 있는 경우에는 뒤돌 필요X)
 		&& GetWorld()->GetTimeSeconds() - OwnerZombie->HitTime >= 1.0f) {	// 피격 후 1초가 지났을때 (자연스럽게 고개 돌리도록)
 	
 		// 맞은/피격 당한 쪽으로 회전시키기

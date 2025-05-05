@@ -11,7 +11,7 @@ public:
         cout << "{CanAttack}의 [Attack Task] 호출" << endl;
 #endif
 
-        zom.SetTargetLocation(Zombie::TARGET::PLAYER);      //좀비 공격 범위에 플레이어 있을 때도 플레이어의 최신 위치를 갱신해주는게 맞는거 같아서
+        zom.SetTargetLocation(Zombie::TARGET::PLAYER);      //좀비 공격 범위에 플레이어 있을 때도 플레이어의 최신 위치를 갱신해주는게 맞는거 같아서 (근데 공격 시작하면 플레이어 시야 검사 X - 즉, 공격하기 직전 위치를 기억)
  
         // BT 시작시에 이미 zom.HaveToWait을 이용해서 Wait으로 들어가게 구현했지만 혹시 몰라서;;
         if (zom.IsAttacking == false)
