@@ -71,6 +71,13 @@ void ARunningZombieAIController::ZombieMoveTo(float deltasecond, int& indx)
 		return;
 	}
 
+	if (OwnerZombie->targetType == OwnerZombie->LOOKINGAROUND) {	// 좀비가 현재 주위 둘러보기 상태라면 MoveTo 정지!
+		OwnerZombie->CachedAnimInstance->SetCurrentPawnSpeed(0);	// 애니메이션은 idle로 전환
+
+		return;
+	}
+
+
 	std::tuple<float, float, float> target = OwnerZombie->NextPath[indx];
 
 	// 현재 목표 노드
@@ -252,8 +259,17 @@ void ARunningZombieAIController::ZombieTurn(float deltasecond, int& indx)
 		OwnerZombie->SetTurningSpeed(150.f);	// 고개 빨리 돌리도록
 	}
 	// 좀비가 idle 상태일때 => 고개 그대로
-	else if (OwnerZombie->CachedAnimInstance->m_fCurrentPawnSpeed == 0) {
+	else if (OwnerZombie->CachedAnimInstance->m_fCurrentPawnSpeed == 0 && (OwnerZombie->targetType == OwnerZombie->PATROL || OwnerZombie->targetType == OwnerZombie->RUNAWAY)) {
 		return;
+	}
+	// 좀비가 주위 둘러보기 상태 일때 => 8초 동안 2초 간격으로 3번 고개 돌리기 (처음, 마지막 1초는 가만히)
+	else if (OwnerZombie->targetType == OwnerZombie->LOOKINGAROUND) {
+		// 해당 방향으로 회전시키기
+		zombieDest.X = get<0>(OwnerZombie->NextPath[indx]);
+		zombieDest.Y = get<1>(OwnerZombie->NextPath[indx]);
+		zombieDest.Z = get<2>(OwnerZombie->NextPath[indx]);
+
+		OwnerZombie->SetTurningSpeed(120.f);	// 고개 조금 빨리 돌리도록
 	}
 	// 아니면 이동 중이므로
 	else {

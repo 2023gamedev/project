@@ -200,6 +200,7 @@
     <ClInclude Include="HordeAction.h" />
     <ClInclude Include="iocpServerClass.h" />
     <ClInclude Include="ItemController.h" />
+    <ClInclude Include="LookAround.h" />
     <ClInclude Include="MoveTo.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NormalZombie.h" />

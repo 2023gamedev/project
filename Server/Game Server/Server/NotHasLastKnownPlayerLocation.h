@@ -44,11 +44,13 @@ public:
 
         for (const auto& child : seq_children) {
             d_result = child->NotHasLastKnownPlayerLocation(zom);
-        }
+        
+            if (d_result == false) {
+                cout << "\"Sequence NotHasLastKnownPlayerLocation [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+                cout << endl;
 
-        if (d_result == false) {
-            cout << "\"Sequence NotHasLastKnownPlayerLocation [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
-            cout << endl;
+                return d_result;
+            }
         }
 
         return d_result;

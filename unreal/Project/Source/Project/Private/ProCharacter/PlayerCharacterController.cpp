@@ -503,6 +503,9 @@ void APlayerCharacterController::Tick(float DeltaTime)
 		case 9:
 			prevType = TEXT("[HaveToWait]");
 			break;
+		case 10:
+			prevType = TEXT("[LookAround]");
+			break;
 
 		case 69:
 			prevType = TEXT("[BlackboardClear]");
@@ -606,6 +609,15 @@ void APlayerCharacterController::Tick(float DeltaTime)
 			}
 
 			(*zombie)->targetType = (*zombie)->TARGET::WAIT;
+			break;
+
+		case 10:
+			if ((*zombie)->targetType != (*zombie)->TARGET::LOOKINGAROUND) {
+				UE_LOG(LogTemp, Log, TEXT("[Q_path] Zombie %d's targetType: %s -> [LookAround]"), tmp_path.ZombieId, *prevType);
+				//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("[Q_path] Zombie %d's targetType: %s -> [LookAround]"), tmp_path.ZombieId, *prevType));
+			}
+
+			(*zombie)->targetType = (*zombie)->TARGET::LOOKINGAROUND;
 			break;
 
 

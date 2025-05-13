@@ -19,7 +19,7 @@ class Task {
 public:
     string t_name = "";
     
-    //Decorator 또는 Task 결과값 저장
+    //Decorator 또는 Task 결과값 저장 (사실 Task 결과 값은 따로 변수 만들어줘야 맞는거 같긴한데;; 같이 중복해서 써도 지금은 Decorator(true?)->Task(무조건 true) 이런식으로 순차적으로 작동해서 문제 없다만;;;ㄴ
     bool d_result = false;
 
 

@@ -407,7 +407,7 @@ bool IOCP_CORE::IOCP_ProcessPacket(int id, const std::string& packet) {
                         break;
 
                     //z->PlayerInSight = false;
-                    z->DistanceTo_PlayerInsight[Packet.playerid()] = z->CanSeePlayerDistance + 6969.f;     // 탐지 거리 밖 표시
+                    z->DistanceTo_PlayerInsight[Packet.playerid()] = z->CanSeePlayerDistance + 6969.f;     // 탐지 거리 밖 표시 => 데이터 레이스 발생시키는데 문제는 발생 안시킴
 
 #if defined(ENABLE_PACKET_LOG) || defined(ENABLE_BT_NODE_LOG)
                     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ";

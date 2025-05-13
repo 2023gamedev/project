@@ -675,6 +675,7 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 			if (zom->printLog == true) {
 				cout << endl;
 				cout << "//========좀비 \'#" << zom->ZombieData.zombieID << "\' BT 실행==========" << endl;
+				cout << "게임 경과시간: " << GameTime << "초" << endl;
 				cout << endl;
 			}
 #endif
@@ -821,7 +822,9 @@ void IOCP_CORE::Zombie_BT_Thread(int roomid)
 						|| (zom->IsStandingStill == true && zom->targetType == zom->RUNAWAY)	// 도망치기 이후 숨어서 숨고르기 하는 중인 좀비
 						//|| zom->HaveToWait == true	/* 이러면, 다른 층에서 있던 플레이어 애니메이션 재생 중이던 좀비 위치를 갱신 못 받아서 이상함 */
 						) {
-						if (zom->targetType != zom->BLACKBOARDCLEARED) {	// 다만 블랙보드 클리어는 보내야 하니 제외)
+						if (zom->targetType != zom->BLACKBOARDCLEARED	// 다만 블랙보드 클리어는 보내야 하니 제외
+							&& zom->targetType != zom->LOOKINGAROUND)	// 다만 주위 둘러보기는 보내야 하니 제외
+						{	
 							continue;
 						}
 					}

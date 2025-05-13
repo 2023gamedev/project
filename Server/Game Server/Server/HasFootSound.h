@@ -71,6 +71,7 @@ public:
             if (d_result == false)
                 cout << "좀비 플레이어 발소리 정보를 이미 가지고 있는가?: true" << endl;
 #endif
+            zom.SetTargetLocation(Zombie::TARGET::FOOTSOUND);   // 가장 가까운 플레이어의 발소리를 목표지점으로 (TargetLocation 설정)
 
             d_result = true;
         }
@@ -95,11 +96,13 @@ public:
 
         for (const auto& child : seq_children) {
             d_result = child->HasFootSound(zom);
-        }
 
-        if (d_result == false) {
-            cout << "\"Sequence HasFootSound [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
-            cout << endl;
+            if (d_result == false) {
+                cout << "\"Sequence HasFootSound [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
+                cout << endl;
+
+                return d_result;
+            }
         }
 
         return d_result;

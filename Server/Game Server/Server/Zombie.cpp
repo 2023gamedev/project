@@ -471,10 +471,15 @@ float Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_
 	float min_dist = FLT_MAX;	//float 최대값
 
 	map<int, float> searchMap = {};
-	if (distanceType == 1)
+	float detect_dist = 0;
+	if (distanceType == 1) {
 		searchMap = DistanceTo_PlayerInsight;
-	else if (distanceType == 2)
+		detect_dist = CanSeePlayerDistance;
+	}
+	else if (distanceType == 2) {
 		searchMap = DistanceTo_FootSound;
+		detect_dist = CanHearFootSoundDistance;
+	}
 
 	vector<int> closest_players = {};
 
@@ -492,7 +497,7 @@ float Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_
 			}
 
 			if (searchMap.find(player.first) != searchMap.end()) {
-				if (min_dist > searchMap.at(player.first) && searchMap.at(player.first) > 0) {
+				if (min_dist > searchMap.at(player.first) && searchMap.at(player.first) > 0 && searchMap.at(player.first) <= detect_dist) {
 					min_dist = searchMap.at(player.first);
 #ifdef	ENABLE_BT_LOG
 					if(distanceType == 1)
@@ -501,7 +506,7 @@ float Zombie::SearchClosestPlayer(vector<vector<vector<float>>>& closest_player_
 						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 에게 발소리 들킴! --- 거리: " << searchMap.at(player.first) << endl;
 #endif
 				}
-				else if (min_dist > searchMap.at(player.first) && searchMap.at(player.first) <= 0) {
+				else if (searchMap.at(player.first) > detect_dist) {
 #ifdef	ENABLE_BT_LOG
 					if (distanceType == 1)
 						cout << "플레이어 #" << player.first << " 가 좀비 #" << ZombieData.zombieID << " 의 시야에서 사라짐! --- 거리: " << searchMap.at(player.first) << endl;
@@ -773,6 +778,17 @@ void Zombie::MoveTo(float deltasecond)
 		// 타겟 방향으로 이동
 		ZombieData.x += moveX;
 		ZombieData.y += moveY;
+
+
+		// 주위 둘러보기 초기화 => 주위 둘러보기 도중에 움직였다? => 상태가 바뀜 => 초기화 필요!
+		if (IsLookingAround == true) {
+			IsLookingAround = false;
+			lookAroundCount = 0;
+
+#ifdef ENABLE_BT_NODE_LOG
+			cout << "[MoveTo] LookingAround 상태 초기화! => 움직임!" << endl;
+#endif
+		}
 	}
 
 #if defined(ENABLE_BT_LOG) || defined(ENABLE_BT_NODE_LOG)
@@ -881,11 +897,25 @@ void Zombie::ReachFinalDestination()
 	//<Selector Detect>의 Task들의 실행 조건이 되는 bool값들 초기화
 	switch (targetType) {
 	case TARGET::PLAYER:
-		// 사실상 실행될 일 없음
-		// 딱히 뭐 할 것도 없고;;
-
-		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
-		ClearBlackBoard(clear_flag);
+		// 작동할 일이 없을 것 같긴하지만;;
+		if (IsLookingAround == false && lookAroundCount == 0) {
+			IsLookingAround = true;
+			lookAroundStartTime = std::chrono::high_resolution_clock::now();	// 주위 둘러보기 시작시간 기억
+		}
+		
+		if (IsLookingAround == true) {
+			LookAround();
+		}
+		
+		if (IsLookingAround == false && lookAroundCount >= 3) {	// 주위 둘러보기 끝남
+			lookAroundCount = 0;	// 주위 둘러보기 카운트 다시 초기화
+			
+			// 주위 둘러보기 끝나고 이제 블랙보드 초기화
+			clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+			ClearBlackBoard(clear_flag);
+			// ClearBlackBoard에서 PlayerInSight를 초기화 할 경우 반드시 이걸 클라에게도 알려줘야함 (+ 반대로, Patrol의 경우에는 PlayerInSight는 초기화 안하니까 바꿀 필요X)
+			targetType = BLACKBOARDCLEARED;	// 블랙보드가 클리어 됨을 클라에게 targetType으로 전달 (클라도 detect 패킷 리셋 하도록[m_bPlayerInSight = false;[)])							
+		}
 
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '플레이어'" << endl;
@@ -895,8 +925,23 @@ void Zombie::ReachFinalDestination()
 	case TARGET::SHOUTING:
 		//HeardShouting = false;
 
-		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
-		ClearBlackBoard(clear_flag);
+		if (IsLookingAround == false && lookAroundCount == 0) {
+			IsLookingAround = true;
+			lookAroundStartTime = std::chrono::high_resolution_clock::now();	// 주위 둘러보기 시작시간 기억
+		}
+
+		if (IsLookingAround == true) {
+			LookAround();
+		}
+
+		if (IsLookingAround == false && lookAroundCount >= 3) {	// 주위 둘러보기 끝남
+			lookAroundCount = 0;	// 주위 둘러보기 카운트 다시 초기화
+
+			// 주위 둘러보기 끝나고 이제 블랙보드 초기화
+			clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+			ClearBlackBoard(clear_flag);
+			targetType = BLACKBOARDCLEARED;
+		}
 
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '샤우팅'" << endl;
@@ -906,8 +951,23 @@ void Zombie::ReachFinalDestination()
 	case TARGET::FOOTSOUND:
 		//HeardFootSound = false;
 
-		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
-		ClearBlackBoard(clear_flag);
+		if (IsLookingAround == false && lookAroundCount == 0) {
+			IsLookingAround = true;
+			lookAroundStartTime = std::chrono::high_resolution_clock::now();	// 주위 둘러보기 시작시간 기억
+		}
+
+		if (IsLookingAround == true) {
+			LookAround();
+		}
+
+		if (IsLookingAround == false && lookAroundCount >= 3) {	// 주위 둘러보기 끝남
+			lookAroundCount = 0;	// 주위 둘러보기 카운트 다시 초기화
+
+			// 주위 둘러보기 끝나고 이제 블랙보드 초기화
+			clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+			ClearBlackBoard(clear_flag);
+			targetType = BLACKBOARDCLEARED;
+		}
 
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '발소리'" << endl;
@@ -917,8 +977,23 @@ void Zombie::ReachFinalDestination()
 	case TARGET::HORDESOUND:
 		//HeardHordeSound = false;
 
-		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
-		ClearBlackBoard(clear_flag);
+		if (IsLookingAround == false && lookAroundCount == 0) {
+			IsLookingAround = true;
+			lookAroundStartTime = std::chrono::high_resolution_clock::now();	// 주위 둘러보기 시작시간 기억
+		}
+
+		if (IsLookingAround == true) {
+			LookAround();
+		}
+
+		if (IsLookingAround == false && lookAroundCount >= 3) {	// 주위 둘러보기 끝남
+			lookAroundCount = 0;	// 주위 둘러보기 카운트 다시 초기화
+
+			// 주위 둘러보기 끝나고 이제 블랙보드 초기화
+			clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+			ClearBlackBoard(clear_flag);
+			targetType = BLACKBOARDCLEARED;
+		}
 
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '호드 사운드'" << endl;
@@ -928,8 +1003,23 @@ void Zombie::ReachFinalDestination()
 	case TARGET::INVESTIGATED:
 		//KnewPlayerLocation = false;
 
-		clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
-		ClearBlackBoard(clear_flag);
+		if (IsLookingAround == false && lookAroundCount == 0) {
+			IsLookingAround = true;
+			lookAroundStartTime = std::chrono::high_resolution_clock::now();	// 주위 둘러보기 시작시간 기억
+		}
+		
+		if (IsLookingAround == true) {
+			LookAround();
+		}
+		
+		if (IsLookingAround == false && lookAroundCount >= 3) {	// 주위 둘러보기 끝남
+			lookAroundCount = 0;	// 주위 둘러보기 카운트 다시 초기화
+
+			// 주위 둘러보기 끝나고 이제 블랙보드 초기화
+			clear_flag[0] = true; clear_flag[1] = true; clear_flag[2] = true; clear_flag[3] = true; clear_flag[4] = true; clear_flag[5] = true;
+			ClearBlackBoard(clear_flag);
+			targetType = BLACKBOARDCLEARED;
+		}
 
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '이전 발견 위치'" << endl;
@@ -953,7 +1043,7 @@ void Zombie::ReachFinalDestination()
 
 	case TARGET::RUNAWAY:
 
-		IsStandingStill = true;
+		IsStandingStill = true;	// 도망치기 상태에서 도망치기 포인트에 도달하면 그자리에서 가만히 숨고르기하며 체력회복하기
 
 #ifdef	ENABLE_BT_LOG
 		cout << "좀비 #" << ZombieData.zombieID << " 의 도달 타겟: '도망치기' => '숨어서 숨고르기 발동!'" << endl;
@@ -1638,6 +1728,8 @@ void Zombie::Wait()
 			IsAttacking = false;	// 혹시 공격중이다가 피격 당했을 경우를 대비해서 -> 리셋 개념
 			IsShouting = false;		
 
+			IsLookingAround = false;	// 혹시 둘러보기 도중에 피격 당했을 경우를 대비해서 -> 다시 리셋
+			lookAroundCount = 0;
 
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사 (마지막으로 플레이어를 봤던 위치는 기억!)
 			bool clear_flag[6] = { true, true, true, true, false, true };
@@ -1672,6 +1764,8 @@ void Zombie::Wait()
 
 			IsShouting = false;		
 
+			IsLookingAround = false;
+			lookAroundCount = 0;
 
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사 (마지막으로 플레이어를 봤던 위치는 기억!)
 			bool clear_flag[6] = { true, true, true, true, false, true };
@@ -1704,6 +1798,8 @@ void Zombie::Wait()
 			IsShouting = false;
 			HaveToWait = false;
 
+			IsLookingAround = false;	
+			lookAroundCount = 0;
 
 			// 애니메이션 재생 후 블랙보드(BT 플래그값들) 전부 초기화 하고 다시 검사 (마지막으로 플레이어를 봤던 위치는 기억!)
 			bool clear_flag[6] = { true, true, true, true, false, true };
@@ -1773,6 +1869,9 @@ void Zombie::Resurrect()
 	detectCanSeePlayer_randomChance = false;
 	detectHasFootSound_randomChance = false;
 	RandomChanceBuff_CanSeePlayer = 0.f;
+
+	IsLookingAround = false;
+	lookAroundCount = 0;	// 주위 둘러보기 카운트 초기화
 
 	// 샤우팅 좀비일 경우에
 	if (ZombieData.zombietype == 1) {
@@ -1851,8 +1950,12 @@ void Zombie::FleeRandChance()
 		cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ";
 		cout << "좀비 \'#" << ZombieData.zombieID << "\' 도망치기!!!" << endl;
 #endif
+
 		RandPatrolSet = false;	// => 도망치기 랜덤 패트롤 다시 돌릴 꺼니까 초기화
 		IsStandingStill = false;	// 이미 이전에 도망치고 나서 숨어서 숨고르기 하다가 다시 피격 당한 경우가 있으니 다시 초기화
+
+		IsLookingAround = false;	// 혹시 둘러보기 도중에 피격을 당해 도망치기를 했을 경우를 대비해서 -> 다시 리셋 (도망치기 끝나고 나중에 다시 주위 둘러보기를 잘 할 수 있도록)
+		lookAroundCount = 0;
 	}
 
 #ifdef ENABLE_BT_FLEE_LOG
@@ -2151,4 +2254,82 @@ void Zombie::HealthRegenerate()
 	cout << endl;
 #endif
 
+}
+
+void Zombie::LookAround()
+{
+#ifdef ENABLE_BT_NODE_LOG
+	cout << "[LookAround] 호출!" << endl;
+#endif
+
+
+	targetType = LOOKINGAROUND;
+
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+
+	std::uniform_int_distribution<int> random_chance(-4000, 4000);		// -4000~4000 <- 맵 x,y 사이즈가 이 범위 안에 들어가서
+
+	float rand_look_x = (float)random_chance(mt);		// random_chance(mt)는 부르는 매 순간 바뀌어서 이렇게 변수에 미리 넣고 사용
+	float rand_look_y = (float)random_chance(mt);
+
+
+	auto lookaroundAfterTime = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> deltaTime = lookaroundAfterTime - lookAroundStartTime;
+
+#ifdef ENABLE_BT_NODE_LOG
+	cout << "주위 둘러보기 경과 시간: " << deltaTime.count() << "s" << endl;
+#endif
+
+	if (0.0f <= deltaTime.count() && deltaTime.count() < 1.0f) {		// 0초대에 가만히  
+#ifdef ENABLE_BT_NODE_LOG
+		cout << "주위 둘러보기 - 가만히..." << endl;
+		cout << "lookAroundCount: " << lookAroundCount << endl;
+#endif
+	}
+	else if (deltaTime.count() >= 1.0f && lookAroundCount == 0) {	// 1~3초에 1번째 주위 둘러보기  
+		get<0>(path[ZombiePathIndex]) = rand_look_x;
+		get<1>(path[ZombiePathIndex]) = rand_look_y;
+		lookAroundCount++;
+
+#ifdef ENABLE_BT_NODE_LOG
+		cout << "rand_look_x: " << rand_look_x << ", rand_look_y: " << rand_look_y << endl;
+		cout << "lookAroundCount: " << lookAroundCount << endl;
+#endif
+	}
+	else if (deltaTime.count() >= 3.0f && lookAroundCount == 1) {	// 3~5초에 2번째 주위 둘러보기  
+		get<0>(path[ZombiePathIndex]) = rand_look_x;
+		get<1>(path[ZombiePathIndex]) = rand_look_y;
+		lookAroundCount++;
+
+#ifdef ENABLE_BT_NODE_LOG
+		cout << "rand_look_x: " << rand_look_x << ", rand_look_y: " << rand_look_y << endl;
+		cout << "lookAroundCount: " << lookAroundCount << endl;
+#endif
+	}
+	else if (deltaTime.count() >= 5.0f && lookAroundCount == 2) {	// 5~7초에 3번째 주위 둘러보기  
+		get<0>(path[ZombiePathIndex]) = rand_look_x;
+		get<1>(path[ZombiePathIndex]) = rand_look_y;
+		lookAroundCount++;
+
+#ifdef ENABLE_BT_NODE_LOG
+		cout << "rand_look_x: " << rand_look_x << ", rand_look_y: " << rand_look_y << endl;
+		cout << "lookAroundCount: " << lookAroundCount << endl;
+#endif
+	}
+	else if (7.0f <= deltaTime.count()  && deltaTime.count() < 8.0f) {	// 7초대에는 그냥 가만히
+#ifdef ENABLE_BT_NODE_LOG	
+		cout << "주위 둘러보기 - 가만히..." << endl;
+		cout << "lookAroundCount: " << lookAroundCount << endl;
+#endif
+	}
+	else if (deltaTime.count() >= 8.0f) {							// 8초를 넘기면 이제 주위 둘러보기 그만
+		IsLookingAround = false;
+
+#ifdef ENABLE_BT_NODE_LOG
+		cout << "주위 둘러보기 끝!" << endl;
+		cout << "lookAroundCount: " << lookAroundCount << endl;
+#endif
+	}
 }

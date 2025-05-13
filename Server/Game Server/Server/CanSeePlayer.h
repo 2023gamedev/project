@@ -91,6 +91,9 @@ public:
         if (d_result == true) {
             zom.KnewPlayerLocation = true;
 
+            zom.HeardFootSound = false;     // 발소리를 먼저 듣고 플레이어를 발견한 경우, 좀비가 후에 플레이어를 놓치면 이전에 들은 발소리를 따라가는 게 아닌 플레이어를 마지막으로 본 위치를 탐색하도록 하기 위해서
+                                            // 문제는 없는데 이런 방식으로 작동하는게 맞는 거 같다고 생각해서 (플레이어를 눈으로 보면 발소리는 까먹는 다!)
+
             CanSeePlayer(zom);
         }
 

@@ -26,9 +26,8 @@ public:
         }
 
         if (d_result == false) {  // selector의 모든 decorator가 실패 할 경우(그럴 일은 없어야 하지만..)
-            //cout << "\"Selector Detect [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << endl;
-            //cout << endl;
-            // ********************************************************* 여기 나중에 주석 풀기 (좀비 BT 수정 다 하고) ******************************************************************
+            cout << "\"Selector Detect [ERROR]!!!\" - ZombieID #" << zom.ZombieData.zombieID << " EVERY tasks have failed!!!!!" << endl;
+            cout << endl;
         }
 
         return d_result;

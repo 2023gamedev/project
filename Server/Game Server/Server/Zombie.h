@@ -58,6 +58,7 @@ public:
         HORDESOUND,
         RUNAWAY,
         WAIT,
+        LOOKINGAROUND,
 
         BLACKBOARDCLEARED = 69
     };
@@ -176,6 +177,8 @@ public:
 
     bool IsRunaway = false; // 좀비가 도망가기 상태인가?
 
+    bool IsLookingAround = false; // 좀비가 주위를 둘러보는 상태인가?
+
     FLOOR z_floor;          // 좀비가 스폰 된 층
 
     std::chrono::steady_clock::time_point waitAnimStartTime;            // 좀비 대기 시작 시간 (애니메이션을 맞춰 대기하기 위한 용도)
@@ -208,7 +211,10 @@ public:
     float runawayHealthRegenMaxPercent = 100.0f; // 좀비 도망치기 최대 체력회복 퍼센트 (100%)
     int runawayFailCount = 0;   // 도망가기 랜덤 패트롤 찾기 실패 카운트 
 
-    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 9-WAIT, 69-BLACKBOARDCLEARED)
+    std::chrono::steady_clock::time_point lookAroundStartTime;
+    int lookAroundCount = 0;
+
+    TARGET targetType;  // 현재 쫓아가고 있는 타겟의 타입 (1-NULL_TARGET, 2-PLAYER, 3-SHOUTING, 4-FOOTSOUND, 5-INVESTIGATED, 6-PATROL, 7-HORDESOUND, 8-RUNAWAY, 9-WAIT, 10-LOOKINGAROUND, 69-BLACKBOARDCLEARED)
 
     int ZombiePathIndex = 0;
 
@@ -248,7 +254,7 @@ public:
     void ReachFinalDestination();
 
     // void ClearALLBlackBoard();
-    void ClearBlackBoard(bool clear_flag[6]);       // 0-PlayerInsight, 1-HeardShouting, 2-FootSound, 3-HordeSound, 4-KnewPlayerLocation, 5-RandPatrolSet
+    void ClearBlackBoard(bool clear_flag[6]);       // 0-PlayerInㄴight, 1-HeardShouting, 2-FootSound, 3-HordeSound, 4-KnewPlayerLocation, 5-RandPatrolSet
 
     void UpdatePath();
     // 얜 랜덤 패트롤, 랜덤 발소리 위치용 - 함수 오버로딩
@@ -292,5 +298,7 @@ public:
     void Runaway();
 
     void HealthRegenerate();
+
+    void LookAround();
 
 };
